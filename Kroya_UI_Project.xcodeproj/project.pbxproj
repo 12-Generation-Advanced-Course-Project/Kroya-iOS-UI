@@ -34,9 +34,22 @@
 		8406DAC92CA5510F0003EA40 /* Kroya_UI_ProjectUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Kroya_UI_ProjectUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		842E785D2CB5348400D7ED5D /* Exceptions for "Kroya_UI_Project" folder in "Kroya_UI_Project" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Screen/Menu/FavoriteScreen/FavoriteModel/FavoriteModel.swift,
+			);
+			target = 8406DAAE2CA5510C0003EA40 /* Kroya_UI_Project */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		8406DAB12CA5510C0003EA40 /* Kroya_UI_Project */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				842E785D2CB5348400D7ED5D /* Exceptions for "Kroya_UI_Project" folder in "Kroya_UI_Project" target */,
+			);
 			path = Kroya_UI_Project;
 			sourceTree = "<group>";
 		};
