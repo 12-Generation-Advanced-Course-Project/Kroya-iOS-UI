@@ -1,0 +1,46 @@
+/* 
+  Localizable.strings
+  Kroya_UI_Project
+
+  Created by Ounbonaliheng on 30/9/24.
+  
+*/
+"Mobile phone" = "លេខទូរស័ព្ទ";
+"Enter phone number" = "បញ្ជូលលេខទូរស័ព្ទ";
+"GET STARTED" = "ចាប់ផ្តើម";
+"Login as guest" = "ចូលជាភ្ងៀវ";
+"By clicking \"GET STARTED\" you agreed to our Terms of Service and Privacy" = "ដោយចុច \"ចាប់ផ្តើម\" អ្នកបានយល់ព្រមនឹងលក្ខខណ្ឌនៃសេវាកម្ម និងឯកជនភាពរបស់យើង";
+"Continue with password" = "បន្តជាមួយលេខសម្ងាត់";
+"Password" = "លេខសម្ងាត់";
+"Input your password" = "បញ្ជូលលេខសម្ងាត់របស់អ្នក";
+"Forget password?" = "ភ្លេចលេខសម្ងាត់?";
+"Login" = "ចូល";
+"Verification Code" = "លេខកូដផ្ទៀងផ្ទាត់";
+"Enter 6 digits code sent to your mobile number" = "សូមបញ្ជូលលេខកូដ៦ខ្ទង់ដែលបានផ្ញើទៅកាន់លេខទូរស័ព្ទរបស់អ្នក";
+"Resend code in 02:00" = "ផ្ញើលេខកូដម្តងទៀតនៅ ០២:០០";
+"Next" = "បន្ទាប់";
+"Create new password" = "បង្កើតលេខសម្ងាត់ថ្មី";
+"New password" = "លេខសម្ងាត់ថ្មី";
+"Input your password" = "បញ្ជូលលេខសម្ងាត់របស់អ្នក";
+"Confirm new password" = "បញ្ជាក់ពាក្យសម្ងាត់ថ្មី";
+"CREATE PASSWORD" = "បង្កើតលេខសម្ងាត់";
+"Basic Information" = "ព័ត៌មានមូលដ្ឋាន";
+"Username" = "ឈ្មោះអ្នកប្រើប្រាស់";
+"Full name" = "ឈ្មោះពេញ";
+"Email" = "អ៊ីម៉ែល";
+"example@mail.com" = "example@mail.com";
+"Address" = "ឤស័យដ្ឋាន";
+"St.323, Phnom Penh" = "ផ្លូវ 323 , ភ្នំពេញ";
+"Save" = "រក្សាទុក";
+"Skip" = "រំលង";
+"My Address" = "ឤស័យដ្ឋានរបស់ខ្ញុំ";
+"Add" = "បន្ថែម";
+"Select your location" = "ជ្រើសរើសទីតាំងរបស់អ្នក";
+"Address Detail" = "ឤស័យដ្ឋានលំអិត";
+"Tag this location for later" = "កំណត់ទីតាំងពេលក្រោយ";
+"Home" = "ផ្ទះ";
+"Office" = "ការិយាល័យ";
+"School" = "សាលារៀន";
+"Other" = "ផ្សេងៗ";
+"Save Address" = "រក្សាទុកឤស័យដ្ឋាន";
+
