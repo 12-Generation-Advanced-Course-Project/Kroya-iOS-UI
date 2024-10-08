@@ -14,21 +14,21 @@ struct MainScreen: View {
                         HomeView()
                     }
                     .tabItem {
-                            VStack {
-                                Image(selectedTab == 1 ? "icon-home-Color" : "ico-home")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 28, height: 28)
-                                Text("Home")
-                                    .font(.customfont(selectedTab == 1 ? .regular : .semibold, fontSize: selectedTab == 1 ? 18 : 16))
-                                    .foregroundColor(selectedTab == 1 ? PrimaryColor.normal : .black)
-                            }
+                        VStack {
+                            Image(selectedTab == 1 ? "icon-home-Color" : "ico-home")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 28, height: 28)
+                            Text("Home")
+                                .font(.customfont(selectedTab == 1 ? .regular : .semibold, fontSize: selectedTab == 1 ? 18 : 16))
+                                .foregroundColor(selectedTab == 1 ? PrimaryColor.normal : .black)
                         }
-                        .tag(1)
+                    }
+                    .tag(1)
                     
                     NavigationView {
                         FavoriteView()
-                      }.tabItem {
+                    }.tabItem {
                         VStack {
                             Image(selectedTab == 2 ? "icon-heart-Color" : "ico-heart")
                                 .resizable()
@@ -43,33 +43,33 @@ struct MainScreen: View {
                     Spacer()
                     NavigationView{
                         OrdersView()
-                          }.tabItem {
-                            VStack {
-                                Image(selectedTab == 3 ? "icon-shopbag-Color" : "ico-shopbag")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 28, height: 28)
-                                Text("Order")
-                                    .font(.customfont(selectedTab == 3 ? .bold : .semibold, fontSize: selectedTab == 3 ? 18 : 16))
-                                    .foregroundColor(selectedTab == 3 ? PrimaryColor.normal : .black)
-                            }
+                    }.tabItem {
+                        VStack {
+                            Image(selectedTab == 3 ? "icon-shopbag-Color" : "ico-shopbag")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 28, height: 28)
+                            Text("Order")
+                                .font(.customfont(selectedTab == 3 ? .bold : .semibold, fontSize: selectedTab == 3 ? 18 : 16))
+                                .foregroundColor(selectedTab == 3 ? PrimaryColor.normal : .black)
                         }
-                        .tag(3)
+                    }
+                    .tag(3)
                     NavigationView{
                         ProfileView()
                     }
-                        .tabItem {
-                            VStack {
-                                Image(selectedTab == 4 ? "icon-User-Color" : "ico-User")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 28, height: 28)
-                                Text("Me")
-                                    .font(.customfont(selectedTab == 4 ? .bold : .semibold, fontSize: selectedTab == 4 ? 18 : 16))
-                                    .foregroundColor(selectedTab == 4 ? PrimaryColor.normal : .black)
-                            }
+                    .tabItem {
+                        VStack {
+                            Image(selectedTab == 4 ? "icon-User-Color" : "ico-User")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 28, height: 28)
+                            Text("Me")
+                                .font(.customfont(selectedTab == 4 ? .bold : .semibold, fontSize: selectedTab == 4 ? 18 : 16))
+                                .foregroundColor(selectedTab == 4 ? PrimaryColor.normal : .black)
                         }
-                        .tag(4)
+                    }
+                    .tag(4)
                 }
                 .padding(.top, 20)
                 .accentColor(PrimaryColor.normal)

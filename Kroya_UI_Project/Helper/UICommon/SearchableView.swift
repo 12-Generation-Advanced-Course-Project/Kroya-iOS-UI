@@ -3,13 +3,11 @@
 
 
 import SwiftUI
-
 struct SearchScreen: View {
     @State private var searchText = ""
     @State private var isSearching = false
     @Environment(\.dismiss) var dismiss
-   
-    let recentSearches = ["Noodles", "Pizza", "Burger", "Somlor Mju Krerng", "Cha Ju Eam", "Tongyum", "Somlor Kari", "Khor", "Somlor Jab Chay", "Bay Cha", "Mi Cha"]
+    let recentSearches = ["Noodles", "Pizza", "Burger", "Somlor Mju Krerng", "Cha Ju Eam", "Tongyum", "Somlor Kari", "Khor"]
     let suggestedForYou = ["Somlor Mju Krerng", "Cha Ju Eam", "Tongyum", "Somlor Kari", "Khor", "Somlor Jab Chay"]
     
     // Define grid layout
@@ -97,7 +95,7 @@ struct SearchScreen: View {
                                         Image(systemName: "multiply")
                                             .resizable()
                                             .scaledToFit()
-                                            .frame(width: 24, height: 24)
+                                            .frame(width: 20, height: 20)
                                             .foregroundStyle(.gray)
                                             .onTapGesture {
                                                 // Remove from recent searches logic
@@ -157,9 +155,8 @@ struct SearchScreen: View {
                 }
             }
         }
-            .navigationBarBackButtonHidden(true)
-            .toolbarBackground(.white, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
+        .navigationBarBackButtonHidden(true)
+        
     }
 }
 
