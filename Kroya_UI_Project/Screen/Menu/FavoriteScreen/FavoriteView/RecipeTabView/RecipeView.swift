@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct RecipeView:View {
+    var iselected:Int?
     var body: some View {
         Text("asd")
     }

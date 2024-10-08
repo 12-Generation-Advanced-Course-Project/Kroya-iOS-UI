@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		840C1FAB2CB3BD0C0066027A /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 840C1FAA2CB3BD0C0066027A /* Alamofire */; };
+		840C1FAE2CB3BD610066027A /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 840C1FAD2CB3BD610066027A /* GoogleMaps */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		8406DAC02CA5510F0003EA40 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +57,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				840C1FAE2CB3BD610066027A /* GoogleMaps in Frameworks */,
+				840C1FAB2CB3BD0C0066027A /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +119,8 @@
 			);
 			name = Kroya_UI_Project;
 			packageProductDependencies = (
+				840C1FAA2CB3BD0C0066027A /* Alamofire */,
+				840C1FAD2CB3BD610066027A /* GoogleMaps */,
 			);
 			productName = Kroya_UI_Project;
 			productReference = 8406DAAF2CA5510C0003EA40 /* Kroya_UI_Project.app */;
@@ -192,9 +201,15 @@
 			knownRegions = (
 				en,
 				Base,
+				"km-KH",
+				km,
 			);
 			mainGroup = 8406DAA62CA5510C0003EA40;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				840C1FA92CB3BD0C0066027A /* XCRemoteSwiftPackageReference "Alamofire" */,
+				840C1FAC2CB3BD610066027A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8406DAB02CA5510C0003EA40 /* Products */;
 			projectDirPath = "";
@@ -274,6 +289,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -337,6 +353,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -398,16 +415,24 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Kroya_UI_Project/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Kroya-UI-Project-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Kroya Mobile";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Kroya needs access to your location to show it on the map.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Kroya needs access to your location to show it on the map.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LIBTOOLFLAGS = "\"-WLinkingC true\" \"-XCBuildForPre true\" \"-XCExpApple true\"";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Kroya-UI-Project";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -426,16 +451,24 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Kroya_UI_Project/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Kroya-UI-Project-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Kroya Mobile";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Kroya needs access to your location to show it on the map.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Kroya needs access to your location to show it on the map.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LIBTOOLFLAGS = "\"-WLinkingC true\" \"-XCBuildForPre true\" \"-XCExpApple true\"";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Kroya-UI-Project";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -552,6 +585,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		840C1FA92CB3BD0C0066027A /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.9.1;
+			};
+		};
+		840C1FAC2CB3BD610066027A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.1.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		840C1FAA2CB3BD0C0066027A /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 840C1FA92CB3BD0C0066027A /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		840C1FAD2CB3BD610066027A /* GoogleMaps */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 840C1FAC2CB3BD610066027A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMaps;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8406DAA72CA5510C0003EA40 /* Project object */;
 }

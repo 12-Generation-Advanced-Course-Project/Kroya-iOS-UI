@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>Privacy - Location When In Use Usage Description</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>Krorya</string>
+				<string>needs</string>
+				<string>access</string>
+				<string>to</string>
+				<string>your</string>
+				<string>location</string>
+				<string>to</string>
+				<string>show</string>
+				<string>it</string>
+				<string>on</string>
+				<string>the</string>
+				<string>map.</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>Privacy - Location Always Usage Description</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>Krorya</string>
+				<string>needs</string>
+				<string>access</string>
+				<string>to</string>
+				<string>your</string>
+				<string>location</string>
+				<string>to</string>
+				<string>show</string>
+				<string>it</string>
+				<string>on</string>
+				<string>the</string>
+				<string>map.</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>Privacy - Location Always and When In Use Usage Description</string>
+		</dict>
+	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Inter-Bold.ttf</string>
+		<string>Inter-Black.ttf</string>
+		<string>Inter-Medium.ttf</string>
+		<string>Inter-Regular.ttf</string>
+		<string>Inter-SemiBold.ttf</string>
+		<string>Inter-Light.ttf</string>
+	</array>
+</dict>
+</plist>

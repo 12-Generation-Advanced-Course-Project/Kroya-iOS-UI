@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct RecipeCardView: View {
+struct Recipe_OrderCard: View {
     // Customizable properties
     var title: String
     var subtitle: String
@@ -18,49 +18,70 @@ struct RecipeCardView: View {
     var subtitleColor: Color = Color(red: 0.4, green: 0.376, blue: 0.279)
     var width: CGFloat
     var height: CGFloat
+    var heightImage: CGFloat
+    var widthImage: CGFloat
+    var xImage:CGFloat
+    var yImage:CGFloat
  
     
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 25)
+            RoundedRectangle(cornerRadius: 16)
                 .fill(backgroundColor)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 25)
+                    RoundedRectangle(cornerRadius: 16)
                         .stroke(borderColor, lineWidth: 2)
                 )
             
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 5) {
                 Text(title)
-                    .font(.customfont(.bold, fontSize: 24))
+                    .font(.customfont(.semibold, fontSize: 18))
                     .foregroundColor(titleColor)
                 
                 Text(subtitle)
-                    .font(.customfont(.semibold, fontSize: 18))
+                    .font(.customfont(.regular, fontSize: 12))
                     .foregroundColor(subtitleColor)
                 
                 Spacer()
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.leading, 20)
+            .padding(.leading, 15)
             .padding(.top, 35)
+            .offset(y:-10)
             
             Image(imageName)
                 .resizable()
                 .scaledToFit()
-                .frame(height: 180)
-                .frame(maxWidth: .infinity, alignment: .trailing)
-                .offset(x: 35, y: 55)
+                .frame(width: widthImage,height: heightImage)
+                .offset(x: xImage, y: yImage)
         }
         .frame(width: width ,height: height)
     }
 }
 
 #Preview {
-    RecipeCardView(
-        title: "Food Order",
-        subtitle: "Order what you love",
-        imageName: "food_recipe",
-        width: .screenWidth * 0.8,
-        height: .screenHeight * 0.24
-    )
+    HStack{
+        Recipe_OrderCard(
+            title: "Food Order",
+            subtitle: "Order what you love",
+            imageName: "food_recipe",
+            width: .screenWidth * 0.45,
+            height: .screenHeight * 0.16,
+            heightImage:90,
+            widthImage: 120,
+            xImage:35,
+            yImage:40
+        )
+        Recipe_OrderCard(
+            title: "Food Recipe",
+            subtitle: "Learn how to cook",
+            imageName: "Menu",
+            width: .screenWidth * 0.45,
+            height: .screenHeight * 0.16,
+            heightImage:60,
+            widthImage: 85,
+            xImage:40,
+            yImage:33
+        )
+    }
 }

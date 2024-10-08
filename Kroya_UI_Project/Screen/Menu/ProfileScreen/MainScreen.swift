@@ -3,13 +3,17 @@ import SwiftUI
 struct MainScreen: View {
     @State private var selectedTab = 1
     @Environment(\.presentationMode) var presentationMode
-
+    init() {
+        UITabBar.appearance().backgroundColor = UIColor.white
+    }
     var body: some View {
         ZStack {
             VStack (spacing: 20) {
                 TabView(selection: $selectedTab) {
-                    HomeView()
-                        .tabItem {
+                    NavigationView{
+                        HomeView()
+                    }
+                    .tabItem {
                             VStack {
                                 Image(selectedTab == 1 ? "icon-home-Color" : "ico-home")
                                     .resizable()
@@ -22,22 +26,24 @@ struct MainScreen: View {
                         }
                         .tag(1)
                     
-                    FavoriteView()
-                        .tabItem {
-                            VStack {
-                                Image(selectedTab == 2 ? "icon-heart-Color" : "ico-heart")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 28, height: 28)
-                                Text("Favorite")
-                                    .font(.customfont(selectedTab == 2 ? .bold : .semibold, fontSize: selectedTab == 2 ? 18 : 16))
-                                    .foregroundColor(selectedTab == 2 ? PrimaryColor.normal : .black)
-                            }
+                    NavigationView {
+                        FavoriteView()
+                      }.tabItem {
+                        VStack {
+                            Image(selectedTab == 2 ? "icon-heart-Color" : "ico-heart")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 28, height: 28)
+                            Text("Favorite")
+                                .font(.customfont(selectedTab == 2 ? .bold : .semibold, fontSize: selectedTab == 2 ? 18 : 16))
+                                .foregroundColor(selectedTab == 2 ? PrimaryColor.normal : .black)
                         }
-                        .tag(2)
+                    }
+                    .tag(2)
                     Spacer()
-                    OrdersView()
-                        .tabItem {
+                    NavigationView{
+                        OrdersView()
+                          }.tabItem {
                             VStack {
                                 Image(selectedTab == 3 ? "icon-shopbag-Color" : "ico-shopbag")
                                     .resizable()
@@ -49,8 +55,9 @@ struct MainScreen: View {
                             }
                         }
                         .tag(3)
-                    
-                    ProfileView()
+                    NavigationView{
+                        ProfileView()
+                    }
                         .tabItem {
                             VStack {
                                 Image(selectedTab == 4 ? "icon-User-Color" : "ico-User")
@@ -79,30 +86,38 @@ struct MainScreen: View {
                     .animation(.easeInOut(duration: 0.3), value: selectedTab)
                 }
                 .frame(height: 2)
-                .offset(y:-75)
+                .offset(y:-70)
                 
             }
             .frame(width: .screenWidth, height: .screenHeight)
             .padding(.bottom, 50)
             
-            Button(action: {
-                print("Add button pressed")
-            }) {
-                ZStack {
-                    Rectangle()
-                        .fill(PrimaryColor.normal)
-                        .frame(width: 60, height: 60)
-                        .cornerRadius(23)
-                    Image("ChefHead")
-                        .foregroundColor(.white)
-                        .font(.system(size: 24))
+            GeometryReader { geometry in
+                VStack {
+                    Spacer()
+                    Button(action: {
+                        print("Add button pressed")
+                    }) {
+                        ZStack {
+                            Rectangle()
+                                .fill(PrimaryColor.normal)
+                                .frame(width: 60, height: 60)
+                                .cornerRadius(23)
+                            Image("ChefHead")
+                                .foregroundColor(.white)
+                                .font(.system(size: 24))
+                        }
+                    }
+                    .position(x: geometry.size.width / 2, y: geometry.size.height * 0.86)
                 }
             }
-            .offset(y: 340)
+            
+            
+            
         }
         .navigationBarBackButtonHidden(true)
     }
-
+    
     private func getSpacerWidth(for selectedTab: Int, geometry: GeometryProxy) -> CGFloat {
         switch selectedTab {
         case 2: // Favorite Tab
