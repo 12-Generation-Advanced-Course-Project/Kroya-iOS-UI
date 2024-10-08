@@ -12,8 +12,8 @@ struct SearchScreen: View {
     
     // Define grid layout
     let columns = [
-        GridItem(.flexible(minimum: 50), spacing: 10),
-        GridItem(.flexible(minimum: 50), spacing: 10)
+        GridItem(.flexible(minimum: 60), spacing: 10),
+        GridItem(.flexible(minimum: 60), spacing: 10)
     ]
     
     var body: some View {
@@ -145,7 +145,6 @@ struct SearchScreen: View {
                                 }
                                 .onTapGesture {
                                     print("Selected result: \(result)")
-                                    // Navigate to result detail screen or perform another action
                                 }
                             }
                         }
@@ -155,6 +154,7 @@ struct SearchScreen: View {
                 }
             }
         }
+        .edgesIgnoringSafeArea(.all)
         .navigationBarBackButtonHidden(true)
         
     }
