@@ -93,8 +93,8 @@ struct HomeView: View {
                                 frameheight:160,
                                 frameWImage:300,
                                 frameHImage:135,
-                                Spacing: 120,
-                                offset:-45
+                                Spacing: .screenWidth * 0.27,
+                                offset: .screenHeight * -(0.05)
                             )
                             
                             PopularDishesCard(
@@ -110,8 +110,8 @@ struct HomeView: View {
                                 frameheight:160,
                                 frameWImage:300,
                                 frameHImage:135,
-                                Spacing: 120,
-                                offset:-45
+                                Spacing: .screenWidth * 0.27,
+                                offset: .screenHeight * -(0.05)
                                 
                             )
                         }

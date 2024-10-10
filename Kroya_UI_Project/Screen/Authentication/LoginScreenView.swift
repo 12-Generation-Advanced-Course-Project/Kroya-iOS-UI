@@ -40,9 +40,11 @@ struct LoginScreenView: View {
                         .font(.customfont(.regular, fontSize: 14))
                     // Use InputField component
                     InputField(
-                        iconName: "envelope.fill",
+                        iconName: "mail.fill",
                         placeholder: "example@gmail.com",
-                        text: $phoneNumber
+                        text: $phoneNumber,
+                        frameWidth: .infinity,
+                        colorBorder: .white
                     )
                 }
                 .padding()
