@@ -4,6 +4,7 @@
 
 import SwiftUI
 import SwiftUIFlow
+
 struct SearchScreen: View {
     @State private var searchText = ""
     @State private var isSearching = false

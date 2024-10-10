@@ -29,7 +29,7 @@ struct FavoriteView: View {
                 NavigationLink(destination: SearchScreen()
                     .onAppear {
                         isTabBarHidden = true // Hide the tab bar
-                        UITabBar.appearance().isHidden = true
+                       
                     }
                     .onDisappear {
                         isTabBarHidden = false
