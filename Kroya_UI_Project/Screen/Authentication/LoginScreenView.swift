@@ -35,12 +35,13 @@ struct LoginScreenView: View {
                     .offset(y: -25)
                 
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Mobile phone")
+                    Text("Email")
+                        .foregroundStyle(.black.opacity(0.5))
                         .font(.customfont(.regular, fontSize: 14))
                     // Use InputField component
                     InputField(
-                        iconName: "phone.fill",
-                        placeholder: "Enter phone number",
+                        iconName: "envelope.fill",
+                        placeholder: "example@gmail.com",
                         text: $phoneNumber
                     )
                 }

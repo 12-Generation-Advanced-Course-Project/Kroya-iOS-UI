@@ -12,7 +12,7 @@ struct OrdersView: View {
     @State private var selectedSegment = 0
     @Environment(\.dismiss) var dismiss
     @State private var isExpanded = false
-    
+    @Binding var isTabBarHidden: Bool
     var body: some View {
         VStack(spacing: 10) {
             // Orders Text Header
@@ -27,7 +27,15 @@ struct OrdersView: View {
             Spacer().frame(height: 10)
             
             // Search Bar
-            NavigationLink(destination: SearchScreen()) {
+            NavigationLink(destination: SearchScreen()
+                .onAppear {
+                    isTabBarHidden = true // Hide the tab bar
+                }
+                .onDisappear {
+                    isTabBarHidden = false // Show the tab bar again when leaving FavoriteView
+                }
+                .toolbar(.hidden, for: .tabBar)
+            ) {
                 HStack {
                     Image("ico_search1")
                         .resizable()
@@ -37,7 +45,6 @@ struct OrdersView: View {
                     Text("Search item")
                         .font(.customfont(.medium, fontSize: 16))
                         .foregroundColor(.gray)
-                        .disabled(true)
                         .frame(width: .screenWidth * 0.26)
                         .padding(.trailing, 12)
                     
@@ -47,6 +54,8 @@ struct OrdersView: View {
                 .frame(width: .screenWidth * 0.93, height: .screenHeight * 0.05)
                 .background(Color(hex: "#F3F2F3"))
                 .cornerRadius(12)
+            }.onAppear{
+                print("search")
             }
             
             // Tab View
@@ -94,12 +103,14 @@ struct OrdersView: View {
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             
            
+        }.onAppear {
+            isTabBarHidden = false // Show the tab bar when this view appears
         }
     }
 }
 
 #Preview {
-    OrdersView()
+    OrdersView(isTabBarHidden: .constant(false))
 }
 
 

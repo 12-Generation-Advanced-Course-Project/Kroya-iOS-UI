@@ -11,8 +11,9 @@ import Combine
 struct FavoriteView: View {
     @State private var searchText = ""
     @State private var selectedSegment = 0
-    @State private var isTabBarVisible = true
+    @Binding var isTabBarHidden: Bool // Add this binding
     @Environment(\.dismiss) var dismiss
+  
     var body: some View {
         NavigationStack {
             VStack(spacing: 10) {
@@ -26,28 +27,38 @@ struct FavoriteView: View {
                 Spacer().frame(height: 10)
                 
                 NavigationLink(destination: SearchScreen()
-                   ) {
-                        HStack {
-                            Image("ico_search1")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 24, height: 24)
-                            
-                            Text("Search item")
-                                .font(.customfont(.medium, fontSize: 16))
-                                .foregroundColor(.gray)
-                                .frame(width: .screenWidth * 0.26)
-                                .padding(.trailing, 12)
-                            
-                            Spacer()
-                        }
-                        .padding(.leading, 12)
-                        .frame(width: .screenWidth * 0.93, height: .screenHeight * 0.05)
-                        .background(Color(hex: "#F3F2F3"))
-                        .cornerRadius(12)
-                    }.onAppear{
-                        print("search")
+                    .onAppear {
+                        isTabBarHidden = true // Hide the tab bar
+                        UITabBar.appearance().isHidden = true
                     }
+                    .onDisappear {
+                        isTabBarHidden = false
+                    }
+                    .toolbar(.hidden, for: .tabBar)
+                   
+                   
+                ) {
+                    HStack {
+                        Image("ico_search1")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 24, height: 24)
+                        
+                        Text("Search item")
+                            .font(.customfont(.medium, fontSize: 16))
+                            .foregroundColor(.gray)
+                            .frame(width: .screenWidth * 0.26)
+                            .padding(.trailing, 12)
+                        
+                        Spacer()
+                    }
+                    .padding(.leading, 12)
+                    .frame(width: .screenWidth * 0.93, height: .screenHeight * 0.05)
+                    .background(Color(hex: "#F3F2F3"))
+                    .cornerRadius(12)
+                }.onAppear{
+                    print("search")
+                }
                 
                 // Tab View
                 VStack {
@@ -88,7 +99,14 @@ struct FavoriteView: View {
                         .tag(1)
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+            }.onAppear {
+                isTabBarHidden = false // Show the tab bar when this view appears
             }
         }
+        
     }
+}
+
+#Preview {
+    FavoriteView(isTabBarHidden: .constant(false)) // For preview
 }
