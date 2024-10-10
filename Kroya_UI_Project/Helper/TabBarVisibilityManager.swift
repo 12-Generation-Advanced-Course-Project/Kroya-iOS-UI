@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
-import Combine
 
-class TabBarVisibilityManager: ObservableObject {
-    @Published var isTabBarVisible: Bool = true
+public enum Visibility {
+    case automatic
+    case hidden
+    case visible
 }
+
+

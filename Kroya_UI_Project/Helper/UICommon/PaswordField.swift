@@ -26,7 +26,6 @@ struct PasswordField: View {
 
     var body: some View {
         HStack {
-          
             if isSystemIcon(iconName) {
                 Image(systemName: iconName)
                     .foregroundColor(iconColor)
@@ -38,7 +37,6 @@ struct PasswordField: View {
                     .foregroundColor(iconColor)
                     .padding(.leading, 20)
             }
-            
             if isSecure {
                 SecureField(placeholder, text: $text)
                     .font(.custom("Inter", size: 18))

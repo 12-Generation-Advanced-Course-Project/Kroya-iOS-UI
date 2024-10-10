@@ -3,17 +3,19 @@
 
 
 import SwiftUI
+import SwiftUIFlow
 struct SearchScreen: View {
     @State private var searchText = ""
     @State private var isSearching = false
+    
     @Environment(\.dismiss) var dismiss
     let recentSearches = ["Noodles", "Pizza", "Burger", "Somlor Mju Krerng", "Cha Ju Eam", "Tongyum", "Somlor Kari", "Khor"]
-    let suggestedForYou = ["Somlor Mju Krerng", "Cha Ju Eam", "Tongyum", "Somlor Kari", "Khor", "Somlor Jab Chay"]
+    let suggestedForYou = ["Somlor Mju Krerng", "Cha Ju Eam", "Tongyum", "Somlor Kari", "Khor", "Somlor Jab Chay","asdasd","as33333jk3k","fkkfkkfkkf","ooososos","asdddsdasd","ssddooooooo","ddd,dmddnndn","dddosddsd"]
     
     // Define grid layout
     let columns = [
-        GridItem(.flexible(minimum: 60), spacing: 10),
-        GridItem(.flexible(minimum: 60), spacing: 10)
+        GridItem(.flexible(minimum: 50), spacing: 10),
+        GridItem(.flexible(minimum: 50), spacing: 10)
     ]
     
     var body: some View {
@@ -24,6 +26,7 @@ struct SearchScreen: View {
                     HStack {
                         Button(action: {
                             dismiss()
+                            
                         }) {
                             Image(systemName: "arrow.left")
                                 .resizable()
@@ -31,6 +34,7 @@ struct SearchScreen: View {
                                 .frame(width: 22, height: 22)
                                 .foregroundColor(.black)
                         }
+                        
                         Spacer().frame(width: 35)
                         Text("Search")
                             .font(.customfont(.bold, fontSize: 18))
@@ -80,7 +84,7 @@ struct SearchScreen: View {
                                     .font(.customfont(.semibold, fontSize: 16))
                                     .foregroundColor(.black)
                                 
-                                ForEach(recentSearches, id: \.self) { search in
+                                ForEach(Array(recentSearches.enumerated()), id: \.offset) { index, search in
                                     HStack {
                                         Image(systemName: "clock.arrow.trianglehead.counterclockwise.rotate.90")
                                             .resizable()
@@ -98,20 +102,15 @@ struct SearchScreen: View {
                                             .frame(width: 20, height: 20)
                                             .foregroundStyle(.gray)
                                             .onTapGesture {
-                                                // Remove from recent searches logic
                                                 print("Remove \(search) from recent searches")
                                             }
                                     }
                                     .frame(width: .screenWidth * 0.86, height: .screenHeight * 0.04, alignment: .leading)
                                 }
                                 
-                                // Suggested for You
-                                GeometryReader { geometry in
-                                    VStack(alignment: .leading) {
-                                        Text("Suggested for You")
-                                            .font(.customfont(.semibold, fontSize: 16))
-                                            .foregroundColor(.black)
-                                        FlowLayout(items: suggestedForYou, itemSpacing: 4, lineSpacing: 10) { suggestion in
+                                ScrollView(.vertical){
+                                    Flow(.vertical,alignment: .topLeading){
+                                        ForEach(suggestedForYou, id: \.self) { suggestion in
                                             Text(suggestion)
                                                 .font(.customfont(.medium, fontSize: 12))
                                                 .foregroundColor(PrimaryColor.normalHover)
@@ -122,14 +121,36 @@ struct SearchScreen: View {
                                                     print("Selected suggestion: \(suggestion)")
                                                 }
                                         }
-                                        .position(x: geometry.size.width * 0.49, y: geometry.size.height * -0.18)
                                     }
                                 }
-                                .frame(width: .screenWidth * 0.9, height: .screenHeight * 0.25)
+                                
+                                // Suggested for You
+                                //                                GeometryReader { geometry in
+                                //                                    VStack(alignment: .leading) {
+                                //                                        Text("Suggested for You")
+                                //                                            .font(.customfont(.semibold, fontSize: 16))
+                                //                                            .foregroundColor(.black)
+                                //                                        FlowLayout(items: suggestedForYou, itemSpacing: 4, lineSpacing: 10) { suggestion in
+                                //                                            Text(suggestion)
+                                //                                                .font(.customfont(.medium, fontSize: 12))
+                                //                                                .foregroundColor(PrimaryColor.normalHover)
+                                //                                                .padding(10)
+                                //                                                .background(PrimaryColor.lightHover)
+                                //                                                .cornerRadius(10)
+                                //                                                .onTapGesture {
+                                //                                                    print("Selected suggestion: \(suggestion)")
+                                //                                                }
+                                //                                        }
+                                //                                        .position(x: geometry.size.width * 0.49, y: geometry.size.height * -0.18)
+                                //                                    }
+                                //                                }
+                                //                                .frame(width: .screenWidth * 0.9, height: .screenHeight * 0.25)
                             }
                         } else {
                             // Search Results
-                            ForEach((recentSearches + suggestedForYou).filter { $0.localizedCaseInsensitiveContains(searchText) }, id: \.self) { result in
+                            let combinedResults = Array(Set((recentSearches + suggestedForYou).filter { $0.localizedCaseInsensitiveContains(searchText) }))
+                            
+                            ForEach(combinedResults, id: \.self) { result in
                                 VStack(alignment: .leading, spacing: 15) {
                                     Spacer().frame(height: 5)
                                     HStack {
@@ -160,3 +181,6 @@ struct SearchScreen: View {
     }
 }
 
+#Preview {
+    SearchScreen()
+}
