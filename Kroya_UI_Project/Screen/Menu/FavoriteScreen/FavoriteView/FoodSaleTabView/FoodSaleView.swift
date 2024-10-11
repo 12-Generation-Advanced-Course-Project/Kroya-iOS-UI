@@ -27,8 +27,8 @@ struct FoodSaleView: View{
                         frameheight:200,
                         frameWImage:605,
                         frameHImage:180,
-                        Spacing: 235,
-                        offset:-60
+                        Spacing: .screenWidth * 0.55,
+                        offset:.screenHeight * -(0.06)
                     )
                     PopularDishesCard(
                         imageName: "food_background",
@@ -43,8 +43,8 @@ struct FoodSaleView: View{
                         frameheight:200,
                         frameWImage:405,
                         frameHImage:180,
-                        Spacing: 235,
-                        offset:-60
+                        Spacing: .screenWidth * 0.55,
+                        offset:.screenHeight * -(0.06)
                         
                     )
                 }
