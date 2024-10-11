@@ -44,7 +44,8 @@ struct LoginScreenView: View {
                         placeholder: "example@gmail.com",
                         text: $phoneNumber,
                         frameWidth: .infinity,
-                        colorBorder: .white
+                        colorBorder: .white,
+                        isMultiline: false
                     )
                 }
                 .padding()

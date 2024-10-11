@@ -5,37 +5,42 @@
 import SwiftUI
 
 struct ChipCheckView: View {
-    @Binding var isChecked: Bool
-    var name: String
-    
+    var text: String
+    var isSelected: Bool
+    var action: () -> Void
+
     var body: some View {
         HStack {
-            if isChecked {
-                Image(systemName: "checkmark")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 10, height: 10)
+            HStack(spacing: 4) {
+                if isSelected {
+                    Image(systemName: "checkmark")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 12, height: 12)
+                        .transition(.scale) // Apply scale transition
+                }
+
+                Text(text)
             }
-            Text(name)
-                .font(.customfont(.medium, fontSize: 14))
-                .foregroundColor(.black)
-                .lineLimit(1) // Limit to a single line to prevent wrapping
-                .padding(.leading, 5) // Add padding between checkmark and text
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+            .background(isSelected ? PrimaryColor.lightActive : Color.white)
+            .font(.customfont(.medium, fontSize: 14))
+            .foregroundColor(.black)
+            .cornerRadius(8)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .strokeBorder(isSelected ? Color.clear : Color.black, lineWidth: 1)
+            )
+            .onTapGesture {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    action()
+                }
+            }
         }
-        .padding(10)
-        .background(isChecked ? PrimaryColor.lightActive : .white)
-        .cornerRadius(10)
-        .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .strokeBorder(isChecked ? .clear : .black, lineWidth: 1)
-        )
-        .fixedSize(horizontal: true, vertical: false)
-        .animation(.easeInOut(duration: 0.3), value: isChecked)
+        .animation(.easeInOut(duration: 0.3), value: isSelected)
     }
 }
 
-#Preview {
-    ChipCheckView(isChecked: .constant(false), name: "Hard")
-}
 
 

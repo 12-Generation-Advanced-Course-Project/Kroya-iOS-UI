@@ -1,7 +1,7 @@
 
 
 import SwiftUI
-import SwiftUIFlow
+
 struct AddFoodView: View {
     @Environment(\.dismiss) var dismiss
     @State var Foodname: String = ""
@@ -11,14 +11,15 @@ struct AddFoodView: View {
     @State private var selectedCuisines: Int? = nil
     @State private var selectedCategories: Int? = nil
     @State private var isChecked: Bool = false
+    
     var levels: [String] = ["Hard", "Medium", "Easy"]
-    var Cuisines: [String] = ["Soup", "Salad", "Dessert", "Grill"]
-    var Categories: [String] = ["Breakfast", "Lunch", "Dinner", "Snack"]
+    var cuisines: [String] = ["Soup", "Salad", "Dessert", "Grill"]
+    var categories: [String] = ["Breakfast", "Lunch", "Dinner", "Snack"]
     
     var body: some View {
         NavigationView {
             ScrollView(.vertical) {
-                VStack(alignment: .leading) {
+                VStack {
                     Spacer().frame(height: 15)
                     
                     // Add Photo Button
@@ -57,7 +58,7 @@ struct AddFoodView: View {
                         Text("Food Name")
                             .font(.customfont(.bold, fontSize: 16))
                         Spacer().frame(height: 15)
-                        InputField(placeholder: "Enter your name", text: $Foodname, backgroundColor: .white, frameWidth: .screenWidth * 0.9, colorBorder: Color(hex: "#D0DBEA"))
+                        InputField(placeholder: "Enter your name", text: $Foodname, backgroundColor: .white, frameWidth: .screenWidth * 0.9, colorBorder: Color(hex: "#D0DBEA"),isMultiline: false)
                     }
                     Spacer().frame(height: 15)
                     
@@ -66,7 +67,7 @@ struct AddFoodView: View {
                         Text("Description")
                             .font(.customfont(.bold, fontSize: 16))
                         Spacer().frame(height: 15)
-                        InputField(placeholder: "Tell me a little about your food", text: $Description, backgroundColor: .white, frameHeight: .screenHeight * 0.2, frameWidth: .screenWidth * 0.9, colorBorder: Color(hex: "#D0DBEA"))
+                        InputField(placeholder: "Tell me a little about your food", text: $Description, backgroundColor: .white, frameHeight: .screenHeight * 0.2, frameWidth: .screenWidth * 0.9, colorBorder: Color(hex: "#D0DBEA"),isMultiline: true)
                     }
                     Spacer().frame(height: 15)
                     
@@ -74,6 +75,7 @@ struct AddFoodView: View {
                     VStack(alignment: .leading) {
                         Text("Duration")
                             .font(.customfont(.bold, fontSize: 16))
+                            .padding(.leading,.screenWidth * 0.05)
                         Spacer().frame(height: 15)
                         HStack {
                             Text("<5")
@@ -99,93 +101,50 @@ struct AddFoodView: View {
                     
                     // Level, Cuisines, and Category Sections
                     VStack(alignment: .leading) {
-                        
-                        // Level Section
-                        VStack(alignment: .leading) {
-                            Text("Level")
-                                .font(.customfont(.bold, fontSize: 16))
-                            HStack(alignment: .top) {
+                        Text(" Level")
+                            .font(.customfont(.bold, fontSize: 15))
+                            .padding(.leading,.screenWidth * 0.02)
+                        Spacer().frame(height: 10)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
                                 ForEach(0..<levels.count, id: \.self) { index in
-                                    ChipCheckView(
-                                        isChecked: Binding<Bool>(
-                                            get: { selectedLevel == index },
-                                            set: { newValue in
-                                                if newValue {
-                                                    selectedLevel = index
-                                                } else {
-                                                    selectedLevel = nil
-                                                }
-                                            }
-                                        ),
-                                        name: levels[index]
-                                    )
-                                    .onTapGesture {
-                                        selectedLevel = index
+                                    ChipCheckView(text: levels[index], isSelected: selectedLevel == index) {
+                                        selectedLevel = selectedLevel == index ? nil : index
                                     }
                                 }
-                            }
+                            }.padding(.leading,.screenWidth * 0.02)
                         }
-                        
-                        Spacer().frame(height: 15)
-                        
-                        // Cuisines Section
-                        VStack(alignment: .leading) {
-                            Text("Cuisines")
-                                .font(.customfont(.bold, fontSize: 16))
-                            HStack(alignment: .top) {
-                                ForEach(0..<Cuisines.count, id: \.self) { index in
-                                    ChipCheckView(
-                                        isChecked: Binding<Bool>(
-                                            get: { selectedCuisines == index },
-                                            set: { newValue in
-                                                if newValue {
-                                                    selectedCuisines = index
-                                                } else {
-                                                    selectedCuisines = nil
-                                                }
-                                            }
-                                        ),
-                                        name: Cuisines[index]
-                                    )
-                                    .onTapGesture {
-                                        selectedCuisines = index
+                        Spacer().frame(height: 20)
+                        Text("Cuisines")
+                            .font(.customfont(.bold, fontSize: 15))
+                            .padding(.leading,.screenWidth * 0.02)
+                        Spacer().frame(height: 10)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                ForEach(0..<cuisines.count, id: \.self) { index in
+                                    ChipCheckView(text: cuisines[index], isSelected: selectedCuisines == index) {
+                                        selectedCuisines = selectedCuisines == index ? nil : index
                                     }
                                 }
-                            }
+                            }.padding(.leading,.screenWidth * 0.02)
                         }
-                        
-                        Spacer().frame(height: 15)
-                        
-                        // Category Section
-                        VStack(alignment: .leading) {
-                            Text("Category")
-                                .font(.customfont(.bold, fontSize: 16))
-                            Flow(.vertical,alignment: .topLeading){
-                                ForEach(0..<Categories.count, id: \.self) { index in
-                                    ChipCheckView(
-                                        isChecked: Binding<Bool>(
-                                            get: { selectedCategories == index },
-                                            set: { newValue in
-                                                if newValue {
-                                                    selectedCategories = index
-                                                } else {
-                                                    selectedCategories = nil
-                                                }
-                                            }
-                                        ),
-                                        name: Categories[index]
-                                    )
-                                    .onTapGesture {
-                                        selectedCategories = index
+                        Spacer().frame(height: 20)
+                        Text("Category")
+                            .font(.customfont(.bold, fontSize: 15))
+                            .padding(.leading,.screenWidth * 0.02)
+                        Spacer().frame(height: 10)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                ForEach(0..<categories.count, id: \.self) { index in
+                                    ChipCheckView(text: categories[index], isSelected: selectedCategories == index) {
+                                        selectedCategories = selectedCategories == index ? nil : index
                                     }
                                 }
-                            }
-                            
+                            }.padding(.leading,.screenWidth * 0.02)
                         }
-                    }
-                    .padding(.horizontal, 10)
+                    }.padding(.leading,.screenWidth * 0.02)
                     
-                    Spacer().frame(height: 30)
+                    Spacer().frame(height: 35)
                     //Next
                     NavigationLink(destination: FillPasswordScreen(), label: {
                         Text("Next")
@@ -196,11 +155,11 @@ struct AddFoodView: View {
                             .foregroundColor(.white)
                             .cornerRadius(10)
                             .padding(.horizontal)
-                      }
+                    }
                     )
-
+                    
                 }
-                .padding(.horizontal)
+ 
                 .navigationTitle("Your dishes")
                 .navigationBarBackButtonHidden(true)
                 .navigationBarTitleDisplayMode(.inline)
@@ -223,3 +182,4 @@ struct AddFoodView: View {
 #Preview {
     AddFoodView()
 }
+
