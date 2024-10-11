@@ -69,8 +69,8 @@ struct Recipe_OrderCard: View {
             height: .screenHeight * 0.16,
             heightImage:90,
             widthImage: 120,
-            xImage:35,
-            yImage:40
+            xImage:.screenWidth * 0.09,
+            yImage:.screenHeight * 0.028
         )
         Recipe_OrderCard(
             title: "Food Recipe",
@@ -80,8 +80,8 @@ struct Recipe_OrderCard: View {
             height: .screenHeight * 0.16,
             heightImage:60,
             widthImage: 85,
-            xImage:40,
-            yImage:33
+            xImage:.screenWidth * 0.1,
+            yImage:.screenHeight * 0.04
         )
     }
 }
