@@ -69,7 +69,6 @@ struct ContentView: View {
      var starSize: CGFloat = 60.0
      var activeColor: Color = Color.yellow
      var inactiveColor: Color = Color.gray
-     
      private var stars: [Bool] {
          var result = [Bool]()
          for i in 1...maxRating {
@@ -94,14 +93,13 @@ struct ContentView: View {
                         
                         HStack{
                             Text("Amok Fish")
-                                .font(.system(size: 18))
-                                .bold()
+                                .font(.customfont(.bold, fontSize: 20))
                             Spacer()
                             Button(action:{})
                             {
                                 Circle()
                                     .fill(Color(hex: "FECC03"))
-                                    .frame(width: 30, height: 30)
+                                    .frame(width: 32, height: 32)
                                     .overlay(
                                           Image(systemName: "plus")
                                               .resizable()
@@ -114,39 +112,46 @@ struct ContentView: View {
                             }
                         }
                         
-                        HStack(spacing: 10){
+                        HStack(spacing: 7){
                             Group{
                                 Text("$3.05")
+                                    .foregroundStyle(Color.yellow)
+                                Text("5 May 2023 (Morning)")
+                                    .opacity(0.4)
+                            }.font(.customfont(.regular, fontSize: 13))
                                 
-                                    .foregroundStyle(Color(hex: "FECC03"))
-                                
-                                Text("5 May 2023") +
-                                Text("(Morning)")
-                            }.font(.system(size: 13))
                         }
                        
                         HStack(spacing: 10){
                             Text("Soup")
+                            Circle().fill()
+                                .frame(width: 6, height: 6)
                             Text("60 mins")
                             
-                        }.font(.system(size: 15))
+                        }.font(.customfont(.medium, fontSize: 16))
                             .fontWeight(.medium)
-                            .foregroundStyle(Color(hex:"9FA5C0"))
+                            .foregroundStyle(Color(hex:"#9FA5C0"))
+                           
 
                         HStack(spacing: 10){
                             Image("Songvak")
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
-                                .frame(width: 35, height: 35)
+                                .frame(width: 38, height: 38)
                                 .clipShape(Circle())
                             Text("Sreng Sodane")
-                                .font(.system(size: 15))
+                                .font(.customfont(.bold, fontSize: 17))
                                 .bold()
                         }
-                        // Recipe description
+                        
+            // Recipe description
                         Text("Description")
-                            .font(.headline)
+                            .font(.customfont(.bold, fontSize: 18))
+                            .padding(.top, 15)
                         Text("Your recipe has been uploaded. You can see it on your profile. Your recipe has been uploaded. You can see it on your profile.")
+                            .font(.customfont(.regular, fontSize: 14))
+                            .opacity(0.6)
+                            
                         Divider()
                         
                         
@@ -175,8 +180,8 @@ struct ContentView: View {
                                 }
                         
                         Divider()
-                        // Steps
-                        
+                     
+          //== Steps
                         HStack{
                             Text("Steps")
                                 .font(.system(size: 17))
@@ -186,12 +191,12 @@ struct ContentView: View {
                             {
                                 Circle()
                                     .stroke(Color(hex: "FECC03"), lineWidth: 3)
-                                    .frame(width: 30, height: 30)
+                                    .frame(width: 32, height: 32)
                                     .overlay(
                                           Image(systemName: "arrow.backward.to.line")
                                               .resizable()
                                               .aspectRatio(contentMode: .fill)
-                                              .frame(width: 16, height: 16)
+                                              .frame(width: 15, height: 15)
                                               .fontWeight(.bold)
                                               .foregroundStyle(Color(hex: "FECC03"))
                                               .clipShape(Circle())
@@ -202,7 +207,7 @@ struct ContentView: View {
                             {
                                 Circle()
                                     .stroke(Color(hex: "FECC03"), lineWidth: 3)
-                                    .frame(width: 30, height: 30)
+                                    .frame(width: 32, height: 32)
                                     .overlay(
                                           Image(systemName: "arrow.right.to.line")
                                               .resizable()
@@ -216,18 +221,17 @@ struct ContentView: View {
                             }
                         }
                         HStack(spacing: 10) {
-                            Circle()
-                                .fill(Color(hex: "2E3E5C"))
-                                .frame(width: 30, height: 30)
+                            Circle().fill(Color(hex: "#2E3E5C")).frame(width: 30, height: 30)
                                 .overlay(
-                                    Text("2")
-                                        .font(.system(size: 14))
-                                          .foregroundStyle(Color.white)
-                                          .clipShape(Circle())
-                                ).padding(.bottom, 23)
+                                    Text("1")
+                                        .font(.customfont(.bold, fontSize: 14))
+                                    .foregroundColor(Color.white)
+                                )
+                               .padding(.bottom, 23)
                             Text("Your recipe has been uploaded. You can see it on your profile.")
                         }
-
+                        Divider()
+                        
                         // Ratings & Reviews section
                         VStack(alignment: .leading, spacing: 15) {
                             Text("Ratings & Review")
@@ -238,24 +242,86 @@ struct ContentView: View {
                                     .font(.largeTitle)
                                     .bold()
                                 Spacer()
-                                VStack {
-                                    
-                                                                        
-            
-                                    
-//                                                                        ForEach(0..<stars.count, id: \.self) { index in
-//                                                                                     Image(systemName: stars[index] ? "star.fill" : "star")
-//                                                                                         .resizable()
-//                                                                                         .scaledToFit()
-//                                                                                         .foregroundColor(stars[index] ? activeColor : inactiveColor)
-//                                                                                         .frame(width: starSize, height: starSize)
-//                                                                                         .accessibility(label: Text(stars[index] ? "Estrella completa" : "Estrella vacía"))
-//                                                                                 }
-                                    
-                                    Text("2346 Ratings")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                }
+                                
+                                HStack(spacing: 2) {
+                                    VStack(alignment: .trailing) {
+                                        HStack(spacing: 15){
+                                            HStack(spacing: 2){
+                                                ForEach(0..<5) { _ in
+                                                    Image(systemName: "star.fill")
+                                                        .font(.customfont(.regular, fontSize: 12))
+                                                        .foregroundColor(.yellow)
+                                                }
+                                                
+                                            }
+                                            RoundedCorner()
+                                                .foregroundStyle(Color(hex: "#C7D3EB"))
+                                                .frame(width: 150, height: 4)
+                                        }
+                                        
+                                        
+                                        HStack(spacing: 15){
+                                            HStack(spacing: 2){
+                                                ForEach(0..<4) { _ in
+                                                    Image(systemName: "star.fill")
+                                                        .font(.customfont(.regular, fontSize: 12))
+                                                        .foregroundColor(.yellow)
+                                                }
+                                                
+                                            }
+                                            RoundedCorner()
+                                                .foregroundStyle(Color(hex: "#C7D3EB"))
+                                                .frame(width: 150, height: 4)
+                                        }
+                                        
+                                        HStack(spacing: 15){
+                                            HStack(spacing: 2){
+                                                ForEach(0..<3) { _ in
+                                                    Image(systemName: "star.fill")
+                                                        .font(.customfont(.regular, fontSize: 12))
+                                                        .foregroundColor(.yellow)
+                                                }
+                                                
+                                            }
+                                            RoundedCorner()
+                                                .foregroundStyle(Color(hex: "#C7D3EB"))
+                                                .frame(width: 150, height: 4)
+                                        }
+                                        HStack(spacing: 15){
+                                            HStack(spacing: 2){
+                                                ForEach(0..<2) { _ in
+                                                    Image(systemName: "star.fill")
+                                                        .font(.customfont(.regular, fontSize: 12))
+                                                        .foregroundColor(.yellow)
+                                                }
+                                                
+                                            }
+                                            RoundedCorner()
+                                                .foregroundStyle(Color(hex: "#C7D3EB"))
+                                                .frame(width: 150, height: 4)
+                                                }
+                                        
+                                        HStack(spacing: 15){
+                                            HStack(spacing: 2){
+                                                ForEach(0..<1) { _ in
+                                                    Image(systemName: "star.fill")
+                                                        .font(.customfont(.regular, fontSize: 12))
+                                                        .foregroundColor(.yellow)
+                                                }
+                                                
+                                            }
+                                            RoundedCorner()
+                                                .foregroundStyle(Color(hex: "#C7D3EB"))
+                                                .frame(width: 150, height: 4)
+                                                }
+                                    }
+                              }
+                            }
+                            HStack{
+                                Spacer()
+                                Text("168 Ratings")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
                             }
                             Divider()
                             // User review
@@ -266,34 +332,43 @@ struct ContentView: View {
                                 HStack(spacing: 2) {
                                     ForEach(0..<5) { star in
                                         Image(systemName: "star.fill")
-                                        //.frame(width: 30, height: 30)
+                                            .font(.system(size: 20))
                                             .foregroundColor(.yellow)
                                         
                                     }
                                 }
                             }
-                            VStack(alignment: .leading){
+                            VStack(alignment: .leading, spacing: 3){
                                 Text("A very good recipe")
                                 HStack(spacing: 2) {
                                     ForEach(0..<5) { star in
                                         Image(systemName: "star.fill")
+                                            .font(.customfont(.regular, fontSize: 12))
                                             .foregroundColor(.yellow)
                                     }
-                                }
-                                Text("Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded, you can see it on your. Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded, you can see it on your. Your recipe has been uploaded, you      ")
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                            }
+                                }.padding(.bottom, 10)
+                                Text("Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded, you can see it on your. Your recipe has been uploaded, you..")
+                                    .font(.customfont(.regular, fontSize: 13))
+                                    .foregroundStyle(Color(hex: "#2E3E5C"))
+                                +
+                                Text("more") .foregroundStyle(Color.yellow)
+                                    .font(.customfont(.semibold, fontSize: 13))
+                            } .padding(.vertical, 10)
+                                .padding(.horizontal, 13)
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color(hex: "F4F5F7"))
-                                
+                                    .fill(Color(hex: "#F4F5F7"))
                             )
                         }
-                        .padding(.top)
-                      
+                        HStack{
+                            Image("note")
+                                .resizable()
+                                .frame(width: 17, height: 17)
+                            Text("Write a Review").foregroundStyle(Color.yellow)
+                                .font(.customfont(.medium, fontSize: 16))
+                        }
                     }
-                    .padding()
+                    .padding(.horizontal,20)
                     .padding(.bottom)
                 }
             }
