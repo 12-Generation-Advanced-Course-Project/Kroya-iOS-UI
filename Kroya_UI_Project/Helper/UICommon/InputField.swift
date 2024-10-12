@@ -11,12 +11,12 @@ struct InputField: View {
     var iconName: String? = nil
     var placeholder: String
     @Binding var text: String
-    var defaultIconName: String = "questionmark.circle.fill"
+//    var defaultIconName: String = "questionmark.circle.fill"
     var iconColor: Color = .gray
     var backgroundColor: Color = Color(UIColor.systemGray6)
     var frameHeight: CGFloat = 60
     var frameWidth: CGFloat = 20
-    var cornerRadius: CGFloat = 10
+    var cornerRadius: CGFloat = 15
     var colorBorder: Color = .gray
     var isMultiline: Bool = true
     
@@ -37,9 +37,9 @@ struct InputField: View {
                             .frame(width: 24, height: 24)
                             .padding(.leading, 16)
                     } else {
-                        Image(defaultIconName)
-                            .foregroundColor(.red)
-                            .padding(.leading, 16)
+//                        Image(defaultIconName)
+//                            .foregroundColor(.red)
+//                            .padding(.leading, 16)
                     }
                 }
                 

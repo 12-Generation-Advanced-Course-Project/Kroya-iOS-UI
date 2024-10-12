@@ -146,7 +146,7 @@ struct AddFoodView: View {
                     
                     Spacer().frame(height: 35)
                     //Next
-                    NavigationLink(destination: FillPasswordScreen(), label: {
+                    NavigationLink(destination: RecipeModalView(), label: {
                         Text("Next")
                             .font(.customfont(.semibold, fontSize: 16))
                             .frame(maxWidth: .infinity)
@@ -159,7 +159,6 @@ struct AddFoodView: View {
                     )
                     
                 }
- 
                 .navigationTitle("Your dishes")
                 .navigationBarBackButtonHidden(true)
                 .navigationBarTitleDisplayMode(.inline)
