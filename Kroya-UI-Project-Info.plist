@@ -67,5 +67,17 @@
 		<string>Inter-SemiBold.ttf</string>
 		<string>Inter-Light.ttf</string>
 	</array>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict/>
+	</array>
+	<key>UTTypeConformsTo</key>
+	<array>
+		<string>public.data</string>
+	</array>
+	<key>UTTypeDescription</key>
+	<string>Ingredient Object</string>
+	<key>UTTypeIdentifier</key>
+	<string>com.kroya.ingredient</string>
 </dict>
 </plist>
