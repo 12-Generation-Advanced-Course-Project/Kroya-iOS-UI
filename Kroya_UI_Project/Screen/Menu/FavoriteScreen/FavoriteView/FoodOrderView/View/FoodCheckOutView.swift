@@ -43,7 +43,7 @@ struct FoodCheckOutView: View {
                         PaymentButtomView()
                     } header: {
                         Text("Payment")
-                            .font(.system(size: 16, weight: .semibold, design: .default))
+                            .font(.customfont(.semibold, fontSize: 16))
                             .foregroundColor(.black)
                             .padding(.bottom, 15)
                     }

@@ -26,24 +26,24 @@ struct OrderCardDetailView: View {
             // Order Item Section
             VStack {
                 HStack {
-                    HStack(spacing: 20) {
+                    HStack(spacing: 15) {
                         Image("food_background")
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(width: 50, height: 50)
+                            .frame(width: 40, height: 40)
                             .cornerRadius(10)
                         
                         VStack(alignment: .leading, spacing: 5) {
                             HStack {
                                 Text(viewModel.orderItem.name)
-                                    .font(.system(size: 16, weight: .regular))
+                                    .font(.customfont(.medium, fontSize: 16))
                                 Spacer()
                                 Text("$ \(viewModel.orderItem.price, specifier: "%.2f")")
-                                    .font(.system(size: 16, weight: .regular))
+                                    .font(.customfont(.medium, fontSize: 16))
                             }
                             
                             Text(viewModel.orderItem.date)
-                                .font(.system(size: 12, weight: .medium))
+                                .font(.customfont(.light, fontSize: 10))
                                 .foregroundColor(.gray)
                         }
                     }
@@ -63,9 +63,9 @@ struct OrderCardDetailView: View {
                     .buttonStyle(PlainButtonStyle()) // Remove default button style
                     
                     Text("\(viewModel.quantity)")
-//                        .font(.system(size: 16, weight: .medium))
-                        .font(.customfont(.semibold, fontSize: 16))
+                        .font(.customfont(.medium, fontSize: 16))
                         .padding(.horizontal, 10)
+                       
                     
                     Button(action: {
                         viewModel.incrementQuantity()
@@ -85,11 +85,9 @@ struct OrderCardDetailView: View {
             HStack {
                 HStack {
                     Text("Total")
-//                        .font(.system(size: 16, weight: .semibold))
                         .font(.customfont(.semibold, fontSize: 16))
                     Spacer()
                     Text("$ \(viewModel.totalPrice, specifier: "%.2f")")
-//                        .font(.system(size: 16, weight: .semibold))
                         .font(.customfont(.semibold, fontSize: 16))
                 }
                 .padding(.horizontal)

@@ -23,7 +23,7 @@ struct PaymentButtomView: View {
                             .frame(width: 20, height: 20)
                             .foregroundColor(Color.black)
                         Text("Pay with cash")
-                            .font(.system(size: 16, weight: .regular, design: .default))
+                            .font(.customfont(.medium, fontSize: 16))
                             .foregroundColor(Color.black)
                     }
                     .padding()
@@ -47,7 +47,7 @@ struct PaymentButtomView: View {
                             .resizable()
                             .frame(width: 20, height: 20)
                         Text("Pay with KHQR")
-                            .font(.system(size: 16, weight: .regular, design: .default))
+                            .font(.customfont(.medium, fontSize: 16))
                             .foregroundColor(Color.black)
                     }
                     .padding()

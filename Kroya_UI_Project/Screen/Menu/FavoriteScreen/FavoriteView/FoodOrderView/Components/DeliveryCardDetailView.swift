@@ -16,7 +16,7 @@ struct DeliveryCardDetailView: View {
             // Title and navigation chevron
             HStack {
                 Text("Delivery to")
-                    .font(.system(size: 16, weight: .semibold, design: .default))
+                    .font(.customfont(.semibold, fontSize: 16))
                 Spacer()
                 
                 Button(action: {
@@ -34,16 +34,16 @@ struct DeliveryCardDetailView: View {
             // Delivery information
             HStack {
                 VStack(alignment: .leading, spacing: 15) {
-                    HStack {
+                    HStack(spacing: 15){
                         Image(systemName: "mappin.and.ellipse")
                             .frame(width: 20, height: 20)
                         
                         VStack(alignment: .leading, spacing: 5) {
                             Text(viewModel.deliveryInfo.locationName)
-                                .font(.system(size: 16, weight: .medium, design: .default))
+                                .font(.customfont(.medium, fontSize: 16))
                             
                             Text(viewModel.deliveryInfo.address)
-                                .font(.system(size: 12, weight: .medium, design: .default))
+                                .font(.customfont(.light, fontSize: 10))
                                 .foregroundColor(Color.gray)
                         }
                     }
@@ -54,7 +54,7 @@ struct DeliveryCardDetailView: View {
                         
                         VStack(alignment: .leading) {
                             Text("\(viewModel.deliveryInfo.recipient), \(viewModel.deliveryInfo.phoneNumber)")
-                                .font(.system(size: 16, weight: .medium, design: .default))
+                                .font(.customfont(.medium, fontSize: 16))
                         }
                     }
                 }
@@ -67,10 +67,10 @@ struct DeliveryCardDetailView: View {
             HStack {
                 HStack {
                     Text("Remarks")
-                        .font(.system(size: 16, weight: .semibold, design: .default))
+                        .font(.customfont(.medium, fontSize: 16))
                     Spacer()
                     Text(viewModel.deliveryInfo.remarks ?? "Notes (optional)")
-                        .font(.system(size: 16, weight: .semibold, design: .default))
+                        .font(.customfont(.medium, fontSize: 16))
                         .foregroundColor(viewModel.deliveryInfo.remarks == nil ? .gray : .primary)
                     Spacer()
                 }
