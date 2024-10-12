@@ -1,19 +1,18 @@
 //
-//  PaymentButtomView.swift
-//  Kroya_UI_Project
+//  PaymentButtonView.swift
+//  Kroya
 //
-//  Created by KAK-LY on 10/10/24.
+//  Created by KAK-LY on 11/10/24.
 //
+
 
 import SwiftUI
 
 struct PaymentButtomView: View {
     
     var body: some View {
-        
-//        VStack {
-            
-            HStack(spacing: 16) {
+
+            HStack(spacing: 10) {
                 
                 Button(action: {
                     // Action for cash payment
@@ -21,10 +20,10 @@ struct PaymentButtomView: View {
                     VStack(alignment: .leading, spacing: 10) {
                         Image(systemName: "dollarsign.circle")
                             .resizable()
-                            .frame(width: 24, height: 24)
+                            .frame(width: 20, height: 20)
                             .foregroundColor(Color.black)
                         Text("Pay with cash")
-                            .font(.customfont(.medium, fontSize: 16))
+                            .font(.system(size: 16, weight: .regular, design: .default))
                             .foregroundColor(Color.black)
                     }
                     .padding()
@@ -32,8 +31,10 @@ struct PaymentButtomView: View {
                     .background(Color(red: 0.995, green: 0.969, blue: 0.852))
                     .cornerRadius(10)
                 }
+                .buttonStyle(PlainButtonStyle()) // Remove default button style
+
                 .background(
-                    RoundedRectangle(cornerRadius: 10)
+                    RoundedRectangle(cornerRadius: 12)
                         .stroke(Color(red: 0.962, green: 0.941, blue: 0.854), lineWidth: 1)
                 )
                 
@@ -44,9 +45,9 @@ struct PaymentButtomView: View {
                     VStack(alignment: .leading, spacing: 10) {
                         Image("khqr")
                             .resizable()
-                            .frame(width: 24, height: 24)
+                            .frame(width: 20, height: 20)
                         Text("Pay with KHQR")
-                            .font(.customfont(.medium, fontSize: 16))
+                            .font(.system(size: 16, weight: .regular, design: .default))
                             .foregroundColor(Color.black)
                     }
                     .padding()
@@ -54,13 +55,12 @@ struct PaymentButtomView: View {
                     .background(Color.white.opacity(0.1))
                     .cornerRadius(10)
                 }
+                .buttonStyle(PlainButtonStyle()) // Remove default button style
                 .background(
-                    RoundedRectangle(cornerRadius: 10)
+                    RoundedRectangle(cornerRadius: 12)
                         .stroke(Color(red: 0.836, green: 0.875, blue: 0.924), lineWidth: 1)
                 )
             }
-//            .padding()
-//        }
     }
 }
 
