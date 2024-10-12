@@ -1,11 +1,7 @@
-
-
-
-
-
 import SwiftUI
 
 struct HomeView: View {
+    let notification = [1, 2, 3]
     var body: some View {
         ScrollView(.vertical,showsIndicators: false) {
             VStack(alignment: .leading) {
@@ -124,6 +120,7 @@ struct HomeView: View {
             }
             .padding(.leading,.screenWidth * 0.03)
             .navigationTitle("") // Empty navigation title
+            .navigationBarBackButtonHidden(true)
             .toolbar {
                 // Toolbar items
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -147,12 +144,21 @@ struct HomeView: View {
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     // Notification button
-                    Button(action: { }) {
-                        Image("notification")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 24, height: 24)
-                            .foregroundColor(.black)
+                    NavigationLink(destination: Notification() .toolbar(.hidden, for: .tabBar)){
+                        ZStack{
+                            Image("notification")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24, height: 24)
+                                .foregroundColor(.black)
+                            Text("\(notification.count)")
+                                .padding(.all,3)
+                                .font(.customfont(.semibold, fontSize: 12))
+                                .foregroundStyle(.white)
+                                .background(Color.red)
+                                .clipShape(Circle())
+                                .offset(x: 5, y: -8)
+                        }
                     }
                 }
             }

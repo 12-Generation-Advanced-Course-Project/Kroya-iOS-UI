@@ -91,30 +91,6 @@ struct FoodDetailView: View {
                 Spacer()
             }
 
-            // Bottom Sheet Content
-//            BottomSheetView(isOpen: $bottomSheetShown, maxHeight: maxSheetHeight) {
-//                VStack(alignment: .leading) {
-//                    Text("Food Details")
-//                        .font(.headline)
-//                    Text("Here you can show more detailed information about the food, reviews, or any additional content you wish to display in the bottom sheet.")
-//                    
-//                    Button(action: {
-//                        // Example button action
-//                    }) {
-//                        Text("Order Now")
-//                            .foregroundColor(.orange)
-//                            .bold()
-//                            .frame(maxWidth: .infinity)
-//                            .padding()
-//                            .background(
-//                                RoundedRectangle(cornerRadius: 10)
-//                                    .stroke(Color.orange, lineWidth: 2)
-//                            )
-//                    }
-//                }
-//                .padding()
-//            }
-            .edgesIgnoringSafeArea(.all)
         }
         .onTapGesture {
             withAnimation {
@@ -124,6 +100,6 @@ struct FoodDetailView: View {
     }
 }
 
-#Preview {
-    FoodDetailView(theMainImage: "Songvak", subImage1: "ahmok", subImage2: "brohok", subImage3: "SomlorKari", subImage4: "Songvak", frameheight: 270, offsetHeight: -150, offsetWidth: 150)
-}
+//#Preview {
+//    FoodDetailView(theMainImage: "Songvak", subImage1: "ahmok", subImage2: "brohok", subImage3: "SomlorKari", subImage4: "Songvak", frameheight: 270, offsetHeight: -155, offsetWidth: 150)
+//}
