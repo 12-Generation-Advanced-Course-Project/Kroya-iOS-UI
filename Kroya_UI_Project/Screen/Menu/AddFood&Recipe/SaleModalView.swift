@@ -11,7 +11,7 @@ import SwiftUI
 struct SaleModalView: View {
     @Environment(\.dismiss) var dismiss
     var body: some View {
-        NavigationView {
+       
             ScrollView(.vertical,showsIndicators: false){
                 VStack{
                     
@@ -37,8 +37,8 @@ struct SaleModalView: View {
                         
                         
                     }
-            }
-        }
+            }.navigationBarBackButtonHidden(true)
+        
     }
 }
 
