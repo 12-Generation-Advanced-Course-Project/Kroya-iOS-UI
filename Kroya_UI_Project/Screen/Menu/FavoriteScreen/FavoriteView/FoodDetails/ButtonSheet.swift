@@ -1,14 +1,13 @@
 import SwiftUI
 
-
 struct BottomSheetView<Content: View>: View {
     let content: Content
     @Binding var isOpen: Bool
     let maxHeight: CGFloat
     let minHeight: CGFloat
     @GestureState private var translation: CGFloat = 0
+    @State private var isDragging: Bool = false // To track if a drag gesture happened
     
-    // Calculate the default offset as 2/3 of the screen height
     private var defaultHeight: CGFloat {
         UIScreen.main.bounds.height * 7.2 / 10
     }
@@ -28,7 +27,7 @@ struct BottomSheetView<Content: View>: View {
         self.content = content()
         self._isOpen = isOpen
         self.maxHeight = maxHeight
-        self.minHeight = 600 // Minimum height when the sheet is collapsed
+        self.minHeight = 600
     }
     
     var body: some View {
@@ -41,19 +40,32 @@ struct BottomSheetView<Content: View>: View {
             .background(Color.white)
             .cornerRadius(20)
             .shadow(radius: 20)
-            .offset(y: max(self.offset + self.translation, 0))
-            .animation(.interactiveSpring(), value: isOpen)
+            .offset(y: max(self.offset + self.translation, 0)) // Move sheet with drag
             .gesture(
                 DragGesture().updating(self.$translation) { value, state, _ in
                     state = value.translation.height
-                }.onEnded { value in
+                    isDragging = true // Set dragging to true while the gesture is active
+                }
+                .onEnded { value in
                     let snapDistance = self.maxHeight * 0.25
-                    guard abs(value.translation.height) > snapDistance else {
-                        return
+                    if value.translation.height > snapDistance {
+                        // If user drags down by a significant amount, close the sheet
+                        self.isOpen = false
+                    } else if value.translation.height < -snapDistance {
+                        // If user drags up by a significant amount, open the sheet
+                        self.isOpen = true
                     }
-                    self.isOpen = value.translation.height < 0
+                    isDragging = false // Reset dragging state after gesture ends
                 }
             )
+            // Only trigger the tap gesture if a drag isn't happening
+            .onTapGesture {
+                if !isDragging {
+                    withAnimation {
+                        self.isOpen.toggle()
+                    }
+                }
+            }
         }
     }
 }
@@ -89,7 +101,7 @@ struct ContentView: View {
             // Bottom Sheet Content
             BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: 900) {
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 7) {
                         
                         HStack{
                             Text("Amok Fish")
@@ -117,10 +129,10 @@ struct ContentView: View {
                                 Text("$3.05")
                                     .foregroundStyle(Color.yellow)
                                 Text("5 May 2023 (Morning)")
-                                    .opacity(0.4)
+                                    .opacity(0.5)
                             }.font(.customfont(.regular, fontSize: 13))
                                 
-                        }
+                        }.offset(y: -5)
                        
                         HStack(spacing: 10){
                             Text("Soup")
@@ -131,8 +143,8 @@ struct ContentView: View {
                         }.font(.customfont(.medium, fontSize: 16))
                             .fontWeight(.medium)
                             .foregroundStyle(Color(hex:"#9FA5C0"))
-                           
-
+                   
+            // Profile
                         HStack(spacing: 10){
                             Image("Songvak")
                                 .resizable()
@@ -142,105 +154,116 @@ struct ContentView: View {
                             Text("Sreng Sodane")
                                 .font(.customfont(.bold, fontSize: 17))
                                 .bold()
-                        }
+                        }.padding(.top, 10)
                         
             // Recipe description
                         Text("Description")
                             .font(.customfont(.bold, fontSize: 18))
-                            .padding(.top, 15)
+                            .padding(.top, 10)
                         Text("Your recipe has been uploaded. You can see it on your profile. Your recipe has been uploaded. You can see it on your profile.")
                             .font(.customfont(.regular, fontSize: 14))
                             .opacity(0.6)
-                            
-                        Divider()
+                            .padding(.bottom, 10)
                         
-                        
-                        // Ingredients
+             // Ingredients
                         Text("Ingredients")
-                            .font(.headline)
-                        
+                            .font(.customfont(.bold, fontSize: 18))
                         VStack(alignment: .leading, spacing: 20) {
                           
                             HStack {
-                                Circle()
-                                    .fill(isHalfButterChecked ?   Color.green.opacity(0.3): Color.clear)
-                                    .stroke(Color.gray, lineWidth: 2)
-                                    .frame(width: 24, height: 24)
-                                    .overlay(
-                                        Image(systemName: "checkmark")
-                                            .foregroundColor(isHalfButterChecked ? .green : .clear)
-                                    )
+                                Button(action: {}){
+                                    Circle()
+                                        .fill(isHalfButterChecked ?   Color.green.opacity(0.3): Color.clear)
+                                        .stroke(isHalfButterChecked ? Color.clear : Color.gray, lineWidth: 1)
+                                        .frame(width: 24, height: 24)
+                                        .overlay(
+                                            Image(systemName: "checkmark")
+                                                .foregroundColor(isHalfButterChecked ? .green : .clear)
+                                        )
+                                        .onTapGesture {
+                                            isHalfButterChecked.toggle()
+                                        }
+                                   
+                                }
                                 Text("1/2 Butter")
-                                    .font(.body)
-                                    .onTapGesture {
-                                        isHalfButterChecked.toggle()
-                                    }
+                                    .font(.customfont(.regular, fontSize: 16))
+                                    .foregroundStyle(Color(hex: "#2E3E5C"))
+                                   
                             }
                             
-                                }
+                        }.padding([.bottom, .top],5)
                         
                         Divider()
                      
           //== Steps
-                        HStack{
-                            Text("Steps")
-                                .font(.system(size: 17))
-                                .bold()
-                            Spacer()
-                            Button(action:{})
-                            {
-                                Circle()
-                                    .stroke(Color(hex: "FECC03"), lineWidth: 3)
-                                    .frame(width: 32, height: 32)
-                                    .overlay(
-                                          Image(systemName: "arrow.backward.to.line")
-                                              .resizable()
-                                              .aspectRatio(contentMode: .fill)
-                                              .frame(width: 15, height: 15)
-                                              .fontWeight(.bold)
-                                              .foregroundStyle(Color(hex: "FECC03"))
-                                              .clipShape(Circle())
-                                      )
+                        VStack{
+                            HStack{
+                                Text("Steps")
+                                    .font(.system(size: 17))
+                                    .bold()
+                                Spacer()
+                                Button(action:{})
+                                {
+                                    Circle()
+                                        .stroke(Color(hex: "FECC03"), lineWidth: 2)
+                                        .frame(width: 30, height: 30)
+                                        .overlay(
+                                            Image(systemName: "arrow.backward.to.line")
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fill)
+                                                .frame(width: 15, height: 15)
+                                                .fontWeight(.bold)
+                                                .foregroundStyle(Color(hex: "FECC03"))
+                                                .clipShape(Circle())
+                                        )
+                                    
+                                }
                                 
-                            }
-                            Button(action:{})
-                            {
-                                Circle()
-                                    .stroke(Color(hex: "FECC03"), lineWidth: 3)
-                                    .frame(width: 32, height: 32)
-                                    .overlay(
-                                          Image(systemName: "arrow.right.to.line")
-                                              .resizable()
-                                              .aspectRatio(contentMode: .fill)
-                                              .frame(width: 16, height: 16)
-                                              .fontWeight(.bold)
+                                //Button Step
+                                Button(action:{})
+                                {
+                                    Circle()
+                                        .stroke(Color(hex: "FECC03"), lineWidth: 2)
+                                        .frame(width: 30, height: 30)
+                                        .overlay(
+                                            Image(systemName: "arrow.right.to.line")
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fill)
+                                                .frame(width: 16, height: 16)
+                                                .fontWeight(.bold)
                                             
-                                              .foregroundStyle(Color(hex: "FECC03"))
-                                              .clipShape(Circle())
-                                      )
+                                                .foregroundStyle(Color(hex: "FECC03"))
+                                                .clipShape(Circle())
+                                        )
+                                }
+                            }
+                            HStack(spacing: 10) {
+                                Circle().fill(Color(hex: "#2E3E5C")).frame(width: 30, height: 30)
+                                    .overlay(
+                                        Text("1")
+                                            .font(.customfont(.bold, fontSize: 14))
+                                            .foregroundColor(Color.white)
+                                    )
+                                    .padding(.bottom, 23)
+                                Text("Your recipe has been uploaded. You can see it on your profile.")
                             }
                         }
-                        HStack(spacing: 10) {
-                            Circle().fill(Color(hex: "#2E3E5C")).frame(width: 30, height: 30)
-                                .overlay(
-                                    Text("1")
-                                        .font(.customfont(.bold, fontSize: 14))
-                                    .foregroundColor(Color.white)
-                                )
-                               .padding(.bottom, 23)
-                            Text("Your recipe has been uploaded. You can see it on your profile.")
-                        }
+                    .padding([.bottom, .top],5)
                         Divider()
                         
-                        // Ratings & Reviews section
+     // Ratings & Reviews section
                         VStack(alignment: .leading, spacing: 15) {
                             Text("Ratings & Review")
                                 .font(.system(size: 17))
                                 .bold()
                             HStack {
-                                Text("4.8")
-                                    .font(.largeTitle)
-                                    .bold()
+                                VStack{
+                                    Text("3.6")
+                                        .font(.customfont(.bold, fontSize: 34))
+                                    Text("out of 5")
+                                        .font(.customfont(.semibold, fontSize: 12))
+                                       
+                                }
                                 Spacer()
                                 
                                 HStack(spacing: 2) {
@@ -249,7 +272,7 @@ struct ContentView: View {
                                             HStack(spacing: 2){
                                                 ForEach(0..<5) { _ in
                                                     Image(systemName: "star.fill")
-                                                        .font(.customfont(.regular, fontSize: 12))
+                                                        .font(.customfont(.regular, fontSize: 10))
                                                         .foregroundColor(.yellow)
                                                 }
                                                 
@@ -264,7 +287,7 @@ struct ContentView: View {
                                             HStack(spacing: 2){
                                                 ForEach(0..<4) { _ in
                                                     Image(systemName: "star.fill")
-                                                        .font(.customfont(.regular, fontSize: 12))
+                                                        .font(.customfont(.regular, fontSize: 10))
                                                         .foregroundColor(.yellow)
                                                 }
                                                 
@@ -278,7 +301,7 @@ struct ContentView: View {
                                             HStack(spacing: 2){
                                                 ForEach(0..<3) { _ in
                                                     Image(systemName: "star.fill")
-                                                        .font(.customfont(.regular, fontSize: 12))
+                                                        .font(.customfont(.regular, fontSize: 10))
                                                         .foregroundColor(.yellow)
                                                 }
                                                 
@@ -291,7 +314,7 @@ struct ContentView: View {
                                             HStack(spacing: 2){
                                                 ForEach(0..<2) { _ in
                                                     Image(systemName: "star.fill")
-                                                        .font(.customfont(.regular, fontSize: 12))
+                                                        .font(.customfont(.regular, fontSize: 10))
                                                         .foregroundColor(.yellow)
                                                 }
                                                 
@@ -305,7 +328,7 @@ struct ContentView: View {
                                             HStack(spacing: 2){
                                                 ForEach(0..<1) { _ in
                                                     Image(systemName: "star.fill")
-                                                        .font(.customfont(.regular, fontSize: 12))
+                                                        .font(.customfont(.regular, fontSize: 10))
                                                         .foregroundColor(.yellow)
                                                 }
                                                 
@@ -320,13 +343,15 @@ struct ContentView: View {
                             HStack{
                                 Spacer()
                                 Text("168 Ratings")
-                                    .font(.caption)
+                                    .font(.customfont(.medium, fontSize: 12))
                                     .foregroundColor(.gray)
                             }
                             Divider()
-                            // User review
+                            
+                // User review
                             HStack {
                                 Text("Tap to Rate")
+                                    .font(.customfont(.regular, fontSize: 18))
                                     .foregroundStyle(Color.gray)
                                 Spacer()
                                 HStack(spacing: 2) {
@@ -340,13 +365,14 @@ struct ContentView: View {
                             }
                             VStack(alignment: .leading, spacing: 3){
                                 Text("A very good recipe")
+                                    .font(.customfont(.semibold, fontSize: 13))
                                 HStack(spacing: 2) {
                                     ForEach(0..<5) { star in
                                         Image(systemName: "star.fill")
-                                            .font(.customfont(.regular, fontSize: 12))
+                                            .font(.customfont(.regular, fontSize: 10))
                                             .foregroundColor(.yellow)
                                     }
-                                }.padding(.bottom, 10)
+                                }.padding(.bottom, 3)
                                 Text("Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded, you can see it on your. Your recipe has been uploaded, you..")
                                     .font(.customfont(.regular, fontSize: 13))
                                     .foregroundStyle(Color(hex: "#2E3E5C"))
@@ -359,33 +385,35 @@ struct ContentView: View {
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color(hex: "#F4F5F7"))
                             )
-                        }
+                        }.padding([.top, .bottom], 7)
                         HStack{
-                            Image("note")
-                                .resizable()
-                                .frame(width: 17, height: 17)
+                            Button(action: {}){
+                                Image("note")
+                                    .resizable()
+                                    .frame(width: 17, height: 17)
+                            }
                             Text("Write a Review").foregroundStyle(Color.yellow)
-                                .font(.customfont(.medium, fontSize: 16))
+                                .font(.customfont(.medium, fontSize: 15))
                         }
                     }
-                    .padding(.horizontal,20)
-                    .padding(.bottom)
+                    .padding(.horizontal,17)
+                    .padding(.bottom, 10)
                 }
             }
-          .edgesIgnoringSafeArea(.all)
+    .edgesIgnoringSafeArea(.all)
         }
-        .onTapGesture {
-            withAnimation {
-                isBottomSheetOpen.toggle()
-            }
-        }
+//        .onTapGesture {
+//            withAnimation {
+//                isBottomSheetOpen.toggle()
+//            }
+//        }
     }
 }
 
 #Preview {
     ContentView(
         
-        rating: 1
+       rating: 1
         
        
     )
