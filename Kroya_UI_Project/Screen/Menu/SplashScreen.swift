@@ -10,10 +10,11 @@ import SwiftUI
 struct SplashScreen: View {
     
     @State private var isActive = false
-    
+    @StateObject private var userStore = UserStore()
     var body: some View {
         if isActive {
-            LoginScreenView()
+            LoginScreenView(userStore: userStore)
+                           .environmentObject(userStore)
         } else {
             ZStack {
                 Color(.yellow)

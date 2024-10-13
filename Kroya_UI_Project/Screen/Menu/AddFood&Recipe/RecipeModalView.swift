@@ -22,9 +22,11 @@ struct RecipeModalView: View {
                 // Ingredients Section
                 Text("Ingredients")
                     .font(.customfont(.bold, fontSize: 15))
+                    .padding(.horizontal)
                 let Columns = Array(repeating: GridItem(spacing:10), count: 1)
                 LazyVGrid(columns: Columns,spacing: 10) {
                     ForEach(ingredients.indices, id: \.self) { index in
+                        
 //                        GeometryReader{ geometry in
 //                            let size = geometry.size
 //                            RoundedRectangle(cornerRadius: 10)
@@ -74,6 +76,7 @@ struct RecipeModalView: View {
                     // Steps Section
                     Text("Steps")
                         .font(.customfont(.bold, fontSize: 15))
+                        .padding(.horizontal)
                     
                     // Loop through steps and display each entry
                     ForEach(steps.indices, id: \.self) { index in
@@ -126,3 +129,5 @@ struct RecipeModalView: View {
         }
     }
 }
+
+
