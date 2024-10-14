@@ -78,7 +78,7 @@ struct IngredientEntryView: View {
                             .font(.customfont(.medium, fontSize: 15))
                         
                         Picker("", selection: $ingredient.selectedCurrency) {
-                            ForEach(0..<currencies.count) { index in
+                            ForEach(currencies.indices, id: \.self) { index in
                                 Text(currencies[index])
                                     .tag(index)
                                     .font(.customfont(.medium, fontSize: 20))

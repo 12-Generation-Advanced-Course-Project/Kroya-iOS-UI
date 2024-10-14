@@ -43,4 +43,8 @@ class CountdownTimer: ObservableObject {
         let seconds = countdown % 60
         return String(format: "%02d:%02d", minutes, seconds)
     }
+    
+    deinit {
+        timer?.invalidate()  // Clean up the timer when the instance is deallocated
+    }
 }

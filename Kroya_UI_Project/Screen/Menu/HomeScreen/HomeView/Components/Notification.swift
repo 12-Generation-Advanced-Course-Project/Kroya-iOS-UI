@@ -44,7 +44,7 @@ struct Notification: View {
                         }
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Notification")
-                                .font(.customfont(.semibold, fontSize: 25))
+                                .font(.customfont(.semibold, fontSize: 20))
                                 .foregroundStyle(.black)
                             Group{
                                 Text("You have ")

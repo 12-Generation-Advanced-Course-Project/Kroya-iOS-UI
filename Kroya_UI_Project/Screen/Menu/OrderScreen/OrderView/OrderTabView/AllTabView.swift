@@ -17,7 +17,7 @@ struct AllTabView:View {
             VStack(alignment:.leading) {
                 DisclosureGroup("Today", isExpanded: $isExpandedToday) {
                     ScrollView(.vertical, showsIndicators: false) {
-                        VStack(alignment:.leading,spacing: 15){
+                        VStack(spacing: 15){
                             
                             OrderCard(isAccepted: true, isOrder: true)
                             OrderCard(isAccepted: false, isOrder: false)
@@ -25,15 +25,16 @@ struct AllTabView:View {
                             OrderCard(isAccepted: false, isOrder: false)
                             Spacer().frame(height: 5)
                         }
-                        .frame(height: .screenHeight * 0.5)
-                        .padding(.leading,10)
+                        .frame(maxWidth: .infinity,minHeight: .screenHeight * 0.5,alignment: .center)
+                     
                     }
                     
                 }
                 .font(.customfont(.semibold, fontSize: 16))
-                .frame(width: .screenWidth * 0.9)
+                .frame(maxWidth: .infinity)
                 .foregroundStyle(.black)
                 .accentColor(.black)
+                .padding(.horizontal)
                 
                 DisclosureGroup("Yesterday", isExpanded: $isExpandedYTD) {
                     ScrollView(.vertical, showsIndicators: false) {
@@ -51,9 +52,10 @@ struct AllTabView:View {
                     
                 }
                 .font(.customfont(.semibold, fontSize: 16))
-                .frame(width: .screenWidth * 0.9)
+                .frame(maxWidth: .infinity)
                 .foregroundStyle(.black)
                 .accentColor(.black)
+                .padding(.horizontal)
                 DisclosureGroup("Last 2 Days", isExpanded: $isExpandedLst2Day) {
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack(spacing: 15){
@@ -70,10 +72,10 @@ struct AllTabView:View {
                     
                 }
                 .font(.customfont(.semibold, fontSize: 16))
-                .frame(width: .screenWidth * 0.9)
+                .frame(maxWidth: .infinity)
                 .foregroundStyle(.black)
                 .accentColor(.black)
-                .padding(.bottom,10)
+                .padding(.horizontal)
                 Spacer()
             }
         }
