@@ -96,12 +96,12 @@ struct FoodDetailView: View {
     }
 }
 
-#Preview {
-    FoodDetailView(
-        theMainImage: "Songvak",
-        subImage1: "ahmok",
-        subImage2: "brohok",
-        subImage3: "SomlorKari",
-        subImage4: "Songvak"
-    )
-}
+//#Preview {
+//    FoodDetailView(
+//        theMainImage: "Songvak",
+//        subImage1: "ahmok",
+//        subImage2: "brohok",
+//        subImage3: "SomlorKari",
+//        subImage4: "Songvak"
+//    )
+//}
