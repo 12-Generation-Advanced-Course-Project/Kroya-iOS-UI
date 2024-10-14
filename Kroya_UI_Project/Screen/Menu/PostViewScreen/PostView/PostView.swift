@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 
-struct FavoriteView: View {
+struct PostViewScreen: View {
     @State private var searchText = ""
     @State private var selectedSegment = 0
     @Binding var isTabBarHidden: Bool // Add this binding
@@ -126,5 +126,5 @@ struct FavoriteView: View {
 }
 
 #Preview {
-    FavoriteView(isTabBarHidden: .constant(false)) // For preview
+    PostViewScreen(isTabBarHidden: .constant(false)) // For preview
 }

@@ -2,9 +2,16 @@ import SwiftUI
 
 struct HomeView: View {
     let notification = [1, 2, 3]
+    let categories = [
+        CategoryCardView(title: "Breakfast", image: "khmernoodle", color: Color(hex: "#F2F2F2"), x: 60, y: 18),
+        CategoryCardView(title: "Lunch", image: "Somlorkoko", color: Color(hex: "#E6F4E8"), x: 60, y: 18),
+        CategoryCardView(title: "Dinner", image: "DinnerPic", color: .yellow.opacity(0.2), x: 50, y: 14),
+        CategoryCardView(title: "Dessert", image: "DessertPic", color: .blue.opacity(0.2), x: 50, y: 14)
+    ]
+    
     var body: some View {
         NavigationView {
-            ScrollView(.vertical,showsIndicators: false) {
+            ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading) {
                     // Title Section
                     VStack(alignment: .leading) {
@@ -12,6 +19,7 @@ struct HomeView: View {
                             .font(.customfont(.semibold, fontSize: 24))
                         Text("to eat today ? ")
                             .font(.customfont(.semibold, fontSize: 24))
+                        
                         // Recipe Order Cards
                         HStack(spacing: 16) {
                             Recipe_OrderCard(
@@ -40,16 +48,25 @@ struct HomeView: View {
                     }
                     
                     Spacer().frame(height: 25)
+                    
                     // Category Section
-                    VStack(alignment:.leading){
+                    VStack(alignment: .leading) {
                         Text("Category")
                             .font(.customfont(.semibold, fontSize: 16))
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
-                                CategoryCardView(title: "Breakfast", image: "khmernoodle", color: Color(hex: "#F2F2F2"), x: 60, y: 18)
-                                CategoryCardView(title: "Lunch", image: "Somlorkoko", color: Color(hex: "#E6F4E8"), x: 60, y: 18)
-                                CategoryCardView(title: "Lunch", image: "Somlorkoko", color: Color(hex: "#E6F4E8"), x: 60, y: 18)
+                                ForEach(categories, id: \.title) { category in
+                                    NavigationLink(destination: destinationView(for: category.title)) {
+                                        CategoryCardView(
+                                            title: category.title,
+                                            image: category.image,
+                                            color: category.color,
+                                            x: category.x,
+                                            y: category.y
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
@@ -62,7 +79,7 @@ struct HomeView: View {
                             .font(.customfont(.semibold, fontSize: 16))
                         Spacer()
                         Button(action: {
-                            
+                            // Action for "View all"
                         }) {
                             Text("View all -->")
                                 .foregroundStyle(PrimaryColor.normal)
@@ -73,10 +90,12 @@ struct HomeView: View {
                     }
                     
                     Spacer().frame(height: 20)
+                    
                     // Scrollable Dishes
-                    HStack{
+                    HStack {
                         ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 10) { // Ensure there's spacing between cards
+                            HStack(spacing: 10) {
+                                // Example PopularDishesCard for dishes
                                 PopularDishesCard(
                                     imageName: "SomlorKari",
                                     dishName: "Somlor Kari",
@@ -86,10 +105,10 @@ struct HomeView: View {
                                     reviewCount: 200,
                                     deliveryInfo: "Free",
                                     deliveryIcon: "motorbike",
-                                    framewidth:230,
-                                    frameheight:160,
-                                    frameWImage:300,
-                                    frameHImage:135,
+                                    framewidth: 230,
+                                    frameheight: 160,
+                                    frameWImage: 300,
+                                    frameHImage: 135,
                                     Spacing: .screenWidth * 0.27,
                                     offset: .screenHeight * -(0.05)
                                 )
@@ -103,38 +122,34 @@ struct HomeView: View {
                                     reviewCount: 200,
                                     deliveryInfo: "Free",
                                     deliveryIcon: "motorbike",
-                                    framewidth:230,
-                                    frameheight:160,
-                                    frameWImage:300,
-                                    frameHImage:135,
+                                    framewidth: 230,
+                                    frameheight: 160,
+                                    frameWImage: 300,
+                                    frameHImage: 135,
                                     Spacing: .screenWidth * 0.27,
                                     offset: .screenHeight * -(0.05)
-                                    
                                 )
                             }
-                            
                         }
-                        
                     }
                     .padding(4.5)
+                    
                     Spacer()
                 }
-                .padding(.leading,.screenWidth * 0.03)
-                .navigationTitle("") // Empty navigation title
+                .padding(.leading, .screenWidth * 0.03)
+                .navigationTitle("")
                 .navigationBarBackButtonHidden(true)
                 .toolbar {
-                    // Toolbar items
                     ToolbarItem(placement: .navigationBarLeading) {
                         Image("KroyaYellowLogo")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 73, height: 73)
-                            .offset(x:-10)
+                            .offset(x: -10)
                     }
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        // Search button
-                        NavigationLink(destination: SearchScreen()){
+                        NavigationLink(destination: SearchScreen()) {
                             Image("ico_search")
                                 .resizable()
                                 .scaledToFit()
@@ -144,16 +159,14 @@ struct HomeView: View {
                     }
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        // Notification button
-                        NavigationLink(destination: Notification() .toolbar(.hidden, for: .tabBar)){
-                            ZStack{
+                        NavigationLink(destination: Notification()) {
+                            ZStack {
                                 Image("notification")
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 24, height: 24)
                                     .foregroundColor(.black)
                                 Text("\(notification.count)")
-                                    .padding(.all,3)
                                     .font(.customfont(.semibold, fontSize: 12))
                                     .foregroundStyle(.white)
                                     .background(Color.red)
@@ -166,8 +179,26 @@ struct HomeView: View {
             }
         }
     }
+    
+    // ViewBuilder function to return the correct screen based on the title
+    @ViewBuilder
+    func destinationView(for title: String) -> some View {
+        switch title {
+        case "Breakfast":
+            BreakfastScreenView()
+        case "Lunch":
+            LunchScreenView()
+        case "Dinner":
+            DinnerScreenView()
+        case "Dessert":
+            DessertScreenView()
+        default:
+            Text("Unknown Category")
+        }
+    }
 }
 
 #Preview {
     HomeView()
 }
+
