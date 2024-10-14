@@ -3,17 +3,13 @@ import SwiftUI
 struct BottomSheetView<Content: View>: View {
     let content: Content
     @Binding var isOpen: Bool
+    
     let maxHeight: CGFloat
     let minHeight: CGFloat
     @GestureState private var translation: CGFloat = 0
-    @State private var isDragging: Bool = false // To track if a drag gesture happened
-    
-    private var defaultHeight: CGFloat {
-        UIScreen.main.bounds.height * 7.2 / 10
-    }
-    
+
     private var offset: CGFloat {
-        isOpen ? 0 : maxHeight - defaultHeight
+        isOpen ? 0 : maxHeight - minHeight
     }
     
     private var indicator: some View {
@@ -27,24 +23,25 @@ struct BottomSheetView<Content: View>: View {
         self.content = content()
         self._isOpen = isOpen
         self.maxHeight = maxHeight
-        self.minHeight = 600
+        self.minHeight = 650 // Minimum height when the sheet is collapsed
     }
     
     var body: some View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
+                
                 self.indicator
                 self.content
             }
+            
             .frame(width: geometry.size.width, height: self.maxHeight, alignment: .top)
             .background(Color.white)
             .cornerRadius(20)
             .shadow(radius: 20)
-            .offset(y: max(self.offset + self.translation, 0)) // Move sheet with drag
+            .offset(y: max(self.offset + self.translation, 0)) // Move the sheet with the drag
             .gesture(
                 DragGesture().updating(self.$translation) { value, state, _ in
                     state = value.translation.height
-                    isDragging = true // Set dragging to true while the gesture is active
                 }
                 .onEnded { value in
                     let snapDistance = self.maxHeight * 0.25
@@ -55,56 +52,66 @@ struct BottomSheetView<Content: View>: View {
                         // If user drags up by a significant amount, open the sheet
                         self.isOpen = true
                     }
-                    isDragging = false // Reset dragging state after gesture ends
                 }
             )
-            // Only trigger the tap gesture if a drag isn't happening
-            .onTapGesture {
-                if !isDragging {
-                    withAnimation {
-                        self.isOpen.toggle()
-                    }
-                }
-            }
+            .onAppear {
+                          let defaultHeight = geometry.size.height  // Set the defaultHeight to 70% of the parent height
+                          print("defaultHeight: \(defaultHeight)")
+                      }
         }
     }
 }
 
-struct ContentView: View {
+struct ContentOnButtonSheet: View {
     @State private var isBottomSheetOpen: Bool = false
     @State private var isEggChecked = true
     @State private var isButterChecked = true
     @State private var isHalfButterChecked = false
     @State private var count = 0
-    var rating: Int
-     var maxRating: Int = 5
+    
+    var foodName: String
+    var price : Float
+    var date : String
+    var itemFood : String
+    var profile : String
+    var userName : String
+    var description :String
+    var ingredients :String
+    var stepNember : Int
+    var stepDetail : String
+    var percentageOfRating : Double
+    
+    var numberOfRating : Int
+    var review :String
+    var reviewDetail: String
+    
+    
+    
+    
      var starSize: CGFloat = 60.0
      var activeColor: Color = Color.yellow
      var inactiveColor: Color = Color.gray
-     private var stars: [Bool] {
-         var result = [Bool]()
-         for i in 1...maxRating {
-             result.append(i <= rating)
-         }
-         return result
-     }
-    var body: some View {
+     var body: some View {
         ZStack {
             VStack {
                 
                // Call FoodDetailView()
-                FoodDetailView(theMainImage: "ahmok", subImage1: "ahmok1", subImage2: "ahmok2", subImage3: "ahmok3", subImage4: "ahmok4", frameheight: 270, offsetHeight: -155, offsetWidth: 150)
+                FoodDetailView(theMainImage: "Songvak",
+                               subImage1: "ahmok",
+                               subImage2: "brohok",
+                               subImage3: "SomlorKari",
+                               subImage4: "Songvak")
                 Spacer()
             }
             .blur(radius: isBottomSheetOpen ? 5 : 0)
             
             // Bottom Sheet Content
-            BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: 900) {
+            BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: 950) {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 7) {
                         
                         HStack{
-                            Text("Amok Fish")
+                            Text(foodName)
                                 .font(.customfont(.bold, fontSize: 20))
                             Spacer()
                             Button(action:{})
@@ -125,17 +132,20 @@ struct ContentView: View {
                         }
                         
                         HStack(spacing: 7){
-                            Group{
-                                Text("$3.05")
+                           // Group{
+                            Text(String(format: "$%.2f", percentageOfRating))
+
                                     .foregroundStyle(Color.yellow)
-                                Text("5 May 2023 (Morning)")
+                                    .font(.customfont(.regular, fontSize: 13))
+                                Text("\(date)(Morning)")
                                     .opacity(0.5)
-                            }.font(.customfont(.regular, fontSize: 13))
+                            //}
+                        .font(.customfont(.regular, fontSize: 13))
                                 
                         }.offset(y: -5)
                        
                         HStack(spacing: 10){
-                            Text("Soup")
+                            Text(itemFood)
                             Circle().fill()
                                 .frame(width: 6, height: 6)
                             Text("60 mins")
@@ -146,12 +156,12 @@ struct ContentView: View {
                    
             // Profile
                         HStack(spacing: 10){
-                            Image("Songvak")
+                            Image(profile)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: 38, height: 38)
                                 .clipShape(Circle())
-                            Text("Sreng Sodane")
+                            Text(userName)
                                 .font(.customfont(.bold, fontSize: 17))
                                 .bold()
                         }.padding(.top, 10)
@@ -160,7 +170,7 @@ struct ContentView: View {
                         Text("Description")
                             .font(.customfont(.bold, fontSize: 18))
                             .padding(.top, 10)
-                        Text("Your recipe has been uploaded. You can see it on your profile. Your recipe has been uploaded. You can see it on your profile.")
+                        Text(description)
                             .font(.customfont(.regular, fontSize: 14))
                             .opacity(0.6)
                             .padding(.bottom, 10)
@@ -185,7 +195,7 @@ struct ContentView: View {
                                         }
                                    
                                 }
-                                Text("1/2 Butter")
+                                Text(ingredients)
                                     .font(.customfont(.regular, fontSize: 16))
                                     .foregroundStyle(Color(hex: "#2E3E5C"))
                                    
@@ -240,12 +250,12 @@ struct ContentView: View {
                             HStack(spacing: 10) {
                                 Circle().fill(Color(hex: "#2E3E5C")).frame(width: 30, height: 30)
                                     .overlay(
-                                        Text("1")
+                                        Text("\(stepNember )")
                                             .font(.customfont(.bold, fontSize: 14))
                                             .foregroundColor(Color.white)
                                     )
                                     .padding(.bottom, 23)
-                                Text("Your recipe has been uploaded. You can see it on your profile.")
+                                Text(stepDetail)
                             }
                         }
                     .padding([.bottom, .top],5)
@@ -258,7 +268,8 @@ struct ContentView: View {
                                 .bold()
                             HStack {
                                 VStack{
-                                    Text("3.6")
+                                    Text(String(format: "%.1f", percentageOfRating))
+
                                         .font(.customfont(.bold, fontSize: 34))
                                     Text("out of 5")
                                         .font(.customfont(.semibold, fontSize: 12))
@@ -342,7 +353,7 @@ struct ContentView: View {
                             }
                             HStack{
                                 Spacer()
-                                Text("168 Ratings")
+                                Text("\(numberOfRating)")
                                     .font(.customfont(.medium, fontSize: 12))
                                     .foregroundColor(.gray)
                             }
@@ -364,7 +375,7 @@ struct ContentView: View {
                                 }
                             }
                             VStack(alignment: .leading, spacing: 3){
-                                Text("A very good recipe")
+                                Text(review)
                                     .font(.customfont(.semibold, fontSize: 13))
                                 HStack(spacing: 2) {
                                     ForEach(0..<5) { star in
@@ -373,7 +384,7 @@ struct ContentView: View {
                                             .foregroundColor(.yellow)
                                     }
                                 }.padding(.bottom, 3)
-                                Text("Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded, you can see it on your. Your recipe has been uploaded, you..")
+                                Text(reviewDetail)
                                     .font(.customfont(.regular, fontSize: 13))
                                     .foregroundStyle(Color(hex: "#2E3E5C"))
                                 +
@@ -402,19 +413,17 @@ struct ContentView: View {
             }
     .edgesIgnoringSafeArea(.all)
         }
-//        .onTapGesture {
-//            withAnimation {
-//                isBottomSheetOpen.toggle()
-//            }
-//        }
+        .onTapGesture {
+            withAnimation {
+                isBottomSheetOpen.toggle()
+            }
+        }
     }
 }
 
 #Preview {
-    ContentView(
-        
-       rating: 1
-        
-       
-    )
+    ContentOnButtonSheet(foodName: "Songvak", price: 83.2,date: "5 May 2023", itemFood: "Soup", profile: "Songvak", userName: "Sreng Sodane", description: "Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded, you can see it on your", ingredients: "1/2 Sugar", stepNember: 1, stepDetail: "Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded, you can see it on your", percentageOfRating: 2.4, numberOfRating: 838, review: "A very good Recipe", reviewDetail: "Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded, you can see it on your. Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded,")
+    
+    
 }
+//let date = dateFormatter.date(from: "01/16/2023")
