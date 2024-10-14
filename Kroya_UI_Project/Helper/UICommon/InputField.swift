@@ -11,19 +11,16 @@ struct InputField: View {
     var iconName: String? = nil
     var placeholder: String
     @Binding var text: String
-//    var defaultIconName: String = "questionmark.circle.fill"
     var iconColor: Color = .gray
     var backgroundColor: Color = Color(UIColor.systemGray6)
     var frameHeight: CGFloat = 60
-    var frameWidth: CGFloat = 20
+    var frameWidth: CGFloat = 200
     var cornerRadius: CGFloat = 15
     var colorBorder: Color = .gray
     var isMultiline: Bool = true
-    
+
     var body: some View {
         ZStack(alignment: .leading) {
-           
-            
             HStack {
                 if !isMultiline {
                     if let iconName = iconName, UIImage(systemName: iconName) != nil {
@@ -36,19 +33,15 @@ struct InputField: View {
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 24, height: 24)
                             .padding(.leading, 16)
-                    } else {
-//                        Image(defaultIconName)
-//                            .foregroundColor(.red)
-//                            .padding(.leading, 16)
                     }
                 }
-                
+
                 // Switch between TextField and TextEditor based on `isMultiline`
                 if isMultiline {
                     TextEditor(text: $text)
                         .font(.customfont(.regular, fontSize: 18))
                         .frame(minHeight: frameHeight)
-                        .padding(.horizontal,8)
+                        .padding(.horizontal, 8)
                         .background(Color.clear)
                 } else {
                     TextField(placeholder, text: $text)
@@ -59,26 +52,26 @@ struct InputField: View {
             }
         }
         .padding(.vertical, 10)
-        .frame(height: frameHeight)
+        .frame(height: frameHeight)  // Ensure height is not negative
         .background(backgroundColor)
         .cornerRadius(cornerRadius)
         .overlay(
             RoundedRectangle(cornerRadius: cornerRadius)
                 .stroke(colorBorder, lineWidth: 1)
         )
-        .frame(width: frameWidth)
+        .frame(width: frameWidth)  // Ensure width is not negative
     }
 }
 
 #Preview {
     VStack {
         // Single-line example for email with icon
-        InputField(iconName: "mail.fill", placeholder: "Email", text: .constant(""), frameHeight: 60, frameWidth: .screenWidth * 0.9, colorBorder: Color(hex: "#D0DBEA"), isMultiline: false)
+        InputField(iconName: "mail.fill", placeholder: "Email", text: .constant(""), frameHeight: 60, frameWidth: 0.9 * CGFloat.screenWidth, colorBorder: Color(hex: "#D0DBEA"), isMultiline: false)
         
         Spacer().frame(height: 15)
         
         // Multiline example for description with icon
-        InputField(placeholder: "Tell me a little about your food", text: .constant(""), frameHeight: .screenHeight * 0.2, frameWidth: .screenWidth * 0.9, colorBorder: Color(hex: "#D0DBEA"), isMultiline: true)
+        InputField(placeholder: "Tell me a little about your food", text: .constant(""), frameHeight: 0.2 * CGFloat.screenHeight, frameWidth: 0.9 * CGFloat.screenWidth, colorBorder: Color(hex: "#D0DBEA"), isMultiline: true)
     }
 }
 

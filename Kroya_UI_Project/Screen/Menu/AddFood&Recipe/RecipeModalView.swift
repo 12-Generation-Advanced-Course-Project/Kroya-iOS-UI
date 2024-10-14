@@ -13,6 +13,7 @@ struct RecipeModalView: View {
         Ingredient(name: "Onion", quantity: "1", price: "0.50", selectedCurrency: 1),
         Ingredient(name: "Salt", quantity: "2", price: "1.50", selectedCurrency: 1)
     ]
+    @State private var selectedIngret = Ingret(cookDate: "", amount: "", price: "", location: "", selectedCurrency: 0)
     @State private var colors: [Color] = [.red, .blue, .green,.yellow]
     @State private var steps: [Step] = [Step(description: "")]
     @State private var dragginItem: Color?
@@ -25,35 +26,34 @@ struct RecipeModalView: View {
                 let Columns = Array(repeating: GridItem(spacing:10), count: 1)
                 LazyVGrid(columns: Columns,spacing: 10) {
                     ForEach(ingredients.indices, id: \.self) { index in
-//                        GeometryReader{ geometry in
-//                            let size = geometry.size
-//                            RoundedRectangle(cornerRadius: 10)
-//                                .fill(color.gradient)
-//                               
-//                                .draggable(color){
-//                                        
-//                                }.onAppear{
-//                                    dragginItem = color
-//                                }
-//                                .dropDestination(for: Color.self ){
-//                                    item, location in
-//                                    return false
-//                                }
-//                            isTargeted: {
-//                                status in
-//                                if let dragginItem, status, dragginItem != color{
-//                                    if let sourceIndex = colors.firstIndex(of: dragginItem), let destinationIndex = colors.firstIndex(of: color){
-//                                        withAnimation(.bouncy){
-//                                            let sourceItem = colors.remove(at: sourceIndex)
-//                                            colors.insert(sourceItem, at: destinationIndex)
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        }
+                        //                        GeometryReader{ geometry in
+                        //                            let size = geometry.size
+                        //                            RoundedRectangle(cornerRadius: 10)
+                        //                                .fill(color.gradient)
+                        //                               
+                        //                                .draggable(color){
+                        //                                        
+                        //                                }.onAppear{
+                        //                                    dragginItem = color
+                        //                                }
+                        //                                .dropDestination(for: Color.self ){
+                        //                                    item, location in
+                        //                                    return false
+                        //                                }
+                        //                            isTargeted: {
+                        //                                status in
+                        //                                if let dragginItem, status, dragginItem != color{
+                        //                                    if let sourceIndex = colors.firstIndex(of: dragginItem), let destinationIndex = colors.firstIndex(of: color){
+                        //                                        withAnimation(.bouncy){
+                        //                                            let sourceItem = colors.remove(at: sourceIndex)
+                        //                                            colors.insert(sourceItem, at: destinationIndex)
+                        //                                        }
+                        //                                    }
+                        //                                }
+                        //                            }
+                        //                        }
                         IngredientEntryView(ingredient: $ingredients[index])
                     }
-                    
                     
                     
                     // Button to add new ingredient
@@ -96,6 +96,31 @@ struct RecipeModalView: View {
                     .frame(maxWidth: .infinity, alignment: .center)
                     
                     Spacer()
+                    HStack(spacing: 10){
+                        
+                        Button(action: {}){
+                            Text("Back")
+                                .font(.customfont(.semibold, fontSize: 16))
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(.gray.opacity(0.3))
+                                )
+                                .foregroundColor(.black)
+                        }
+                        Button(action: {}){
+                            Text("Next")
+                                .font(.customfont(.semibold, fontSize: 16))
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(.yellow)
+                                )
+                                .foregroundColor(.white)
+                        }
+                    }
                 }
                 .padding()
                 .navigationBarBackButtonHidden(true)
@@ -116,7 +141,7 @@ struct RecipeModalView: View {
                     
                     // Skip Button
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        NavigationLink(destination: SaleModalView()) {
+                        NavigationLink(destination: SaleModalView(ingret: $selectedIngret)) {
                             Text("Skip")
                                 .foregroundColor(.black.opacity(0.6))
                         }
@@ -126,3 +151,4 @@ struct RecipeModalView: View {
         }
     }
 }
+

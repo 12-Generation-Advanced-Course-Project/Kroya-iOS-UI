@@ -54,7 +54,7 @@ struct FillPasswordScreen: View {
                 
             }
             Spacer().frame(height: 20)
-            NavigationLink(destination: VerificationCodeView(), label: {
+            NavigationLink(destination: MainScreen(), label: {
                 Text("Login")
                     .font(.customfont(.semibold, fontSize: 18))
                     .frame(width: .screenWidth * 0.822)
