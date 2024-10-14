@@ -30,7 +30,7 @@ struct MainScreen: View {
                             .tag(1)
                         
                         
-                        FavoriteView(isTabBarHidden: $isTabBarHidden)
+                        PostViewScreen(isTabBarHidden: $isTabBarHidden)
                             .tabItem {
                                 VStack {
                                     Image(selectedTab == 2 ? "PostVectorYellow" : "PostVector")

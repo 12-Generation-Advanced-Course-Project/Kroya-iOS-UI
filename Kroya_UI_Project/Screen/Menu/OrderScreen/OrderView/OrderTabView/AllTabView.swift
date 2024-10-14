@@ -17,7 +17,7 @@ struct AllTabView:View {
             VStack(alignment:.leading) {
                 DisclosureGroup("Today", isExpanded: $isExpandedToday) {
                     ScrollView(.vertical, showsIndicators: false) {
-                        VStack(spacing: 15){
+                        VStack{
                             
                             OrderCard(isAccepted: true, isOrder: true)
                             OrderCard(isAccepted: false, isOrder: false)
@@ -25,7 +25,8 @@ struct AllTabView:View {
                             OrderCard(isAccepted: false, isOrder: false)
                             Spacer().frame(height: 5)
                         }
-                        .frame(maxWidth: .infinity,minHeight: .screenHeight * 0.5,alignment: .center)
+                        .frame(maxWidth: .infinity,minHeight: .screenHeight * 0.5,alignment: .leading)
+                        .padding(.horizontal,5)
                      
                     }
                     
@@ -38,7 +39,7 @@ struct AllTabView:View {
                 
                 DisclosureGroup("Yesterday", isExpanded: $isExpandedYTD) {
                     ScrollView(.vertical, showsIndicators: false) {
-                        VStack(spacing: 15){
+                        VStack{
                             
                             OrderCard(isAccepted: true, isOrder: true)
                             OrderCard(isAccepted: false, isOrder: false)
@@ -46,8 +47,9 @@ struct AllTabView:View {
                             OrderCard(isAccepted: false, isOrder: false)
                             Spacer().frame(height: 5)
                         }
-                        .frame(height: .screenHeight * 0.5)
-                        .padding(.leading,10)
+                        .frame(maxWidth: .infinity,minHeight: .screenHeight * 0.5,alignment: .leading)
+                        .padding(.horizontal,5)
+                     
                     }
                     
                 }
@@ -58,7 +60,7 @@ struct AllTabView:View {
                 .padding(.horizontal)
                 DisclosureGroup("Last 2 Days", isExpanded: $isExpandedLst2Day) {
                     ScrollView(.vertical, showsIndicators: false) {
-                        VStack(spacing: 15){
+                        VStack{
                             
                             OrderCard(isAccepted: true, isOrder: true)
                             OrderCard(isAccepted: false, isOrder: false)
@@ -66,8 +68,9 @@ struct AllTabView:View {
                             OrderCard(isAccepted: false, isOrder: false)
                             Spacer().frame(height: 5)
                         }
-                        .frame(height: .screenHeight * 0.5)
-                        .padding(.leading,10)
+                        .frame(maxWidth: .infinity,minHeight: .screenHeight * 0.5,alignment: .leading)
+                        .padding(.horizontal,5)
+                     
                     }
                     
                 }
