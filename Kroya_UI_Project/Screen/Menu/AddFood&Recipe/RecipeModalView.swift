@@ -13,7 +13,7 @@ struct RecipeModalView: View {
         Ingredient(name: "Onion", quantity: "1", price: "0.50", selectedCurrency: 1),
         Ingredient(name: "Salt", quantity: "2", price: "1.50", selectedCurrency: 1)
     ]
-    @State private var selectedIngret = Ingret(cookDate: "", amount: "", price: "", location: "", selectedCurrency: 0) // Default values for Ingret
+    @State private var selectedIngret = Ingret(cookDate: "", amount: "", price: "", location: "", selectedCurrency: 0)
     @State private var colors: [Color] = [.red, .blue, .green,.yellow]
     @State private var steps: [Step] = [Step(description: "")]
     @State private var dragginItem: Color?

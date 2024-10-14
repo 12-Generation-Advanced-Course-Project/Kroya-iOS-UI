@@ -56,10 +56,10 @@ struct ResultSearchView: View {
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         .onAppear {
-            isTabBarHidden = true // Correctly hide the tab bar when this view appears
+            isTabBarHidden = true
         }
         .onDisappear {
-            isTabBarHidden = false // Optionally restore the tab bar when this view disappears
+            isTabBarHidden = false
         }
     }
 }

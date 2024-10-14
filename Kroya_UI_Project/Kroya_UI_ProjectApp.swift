@@ -14,9 +14,11 @@ struct Kroya_UI_ProjectApp: App {
 //        GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
 //    }
 //
+    @StateObject private var userStore = UserStore()
     var body: some Scene {
         WindowGroup {
-            MainScreen()
+            LoginScreenView(userStore: userStore)
+                            .environmentObject(userStore)
           
         }
     }

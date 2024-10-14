@@ -7,6 +7,6 @@
 
 // Constants.swift
 struct Constants {
-    static let KroyaAPIUrl = "https://api.example.com"
+    static let KroyaUrlAuth = "https://kroya-api.up.railway.app/api/v1/auth/"
     static let GoogleMapsAPIkeys = "AIzaSyCMUPCDeGjXm5kBNpFa-JosXCOur4SvlI8"
 }
