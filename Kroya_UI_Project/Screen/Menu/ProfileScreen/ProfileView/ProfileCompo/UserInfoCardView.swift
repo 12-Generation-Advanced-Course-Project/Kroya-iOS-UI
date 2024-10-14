@@ -17,6 +17,7 @@ struct UserInfoCardView: View {
     var subtitleColor: Color = Color(red: 0.4, green: 0.376, blue: 0.279)
     var width: CGFloat
     var height: CGFloat
+    var isTextCenter: Bool = false
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 16)
@@ -30,16 +31,18 @@ struct UserInfoCardView: View {
                 Text(title)
                     .font(.customfont(.medium, fontSize: 16))
                     .foregroundColor(titleColor)
+                    .frame(maxWidth:.infinity,alignment: isTextCenter ? .center : .leading)
                 
                 Text(subtitle)
                     .font(.customfont(.light, fontSize: 11))
                     .foregroundColor(subtitleColor)
+                    .frame(maxWidth:.infinity,alignment: isTextCenter ? .center : .leading)
                 
                 Spacer()
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.leading, 15)
-            .padding(.top, 25)
+            .padding(.top, isTextCenter ? 35 : 25)
             .offset(y:-10)
         }
         .frame(width: width ,height: height)
@@ -50,24 +53,19 @@ struct UserInfoCardView: View {
     HStack{
         UserInfoCardView( title: "Favorite",
                           subtitle: "List of their favorite dishes",
-                          width: .screenWidth * 0.45,
+                          width: .screenWidth * 0.44,
                           height: .screenHeight * 0.11
         )
         UserInfoCardView( title: "Addresses",
                           subtitle: "List of your addresses",
-                          width: .screenWidth * 0.45,
+                          width: .screenWidth * 0.44,
                           height: .screenHeight * 0.11
         )
     }
     HStack{
-        UserInfoCardView( title: "Order",
-                          subtitle: "List your order and Sale",
-                          width: .screenWidth * 0.45,
-                          height: .screenHeight * 0.11
-        )
         UserInfoCardView( title: "Sale Reports",
                           subtitle: "List of their favorite dishes",
-                          width: .screenWidth * 0.45,
+                          width: .screenWidth * 0.9,
                           height: .screenHeight * 0.11
         )
     }
