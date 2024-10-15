@@ -27,12 +27,14 @@ struct ProfileView:View {
                     )
                 }
                 HStack{
-                    UserInfoCardView( title: "Sale Reports",
-                                      subtitle: "List of their favorite dishes",
-                                      width: .screenWidth * 0.9,
-                                      height: .screenHeight * 0.11,
-                                      isTextCenter: true
-                    )
+                    NavigationLink(destination: SaleReportView()) {
+                        UserInfoCardView( title: "Sale Reports",
+                                          subtitle: "List of their favorite dishes",
+                                          width: .screenWidth * 0.9,
+                                          height: .screenHeight * 0.11,
+                                          isTextCenter: true
+                        )
+                    }
                 }
                 Spacer().frame(height:.screenHeight * 0.03)
                 VStack(alignment:.leading){
