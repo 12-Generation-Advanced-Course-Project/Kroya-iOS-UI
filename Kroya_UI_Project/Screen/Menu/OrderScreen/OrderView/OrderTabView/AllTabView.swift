@@ -85,7 +85,7 @@ struct AllTabView:View {
        
     }
 }
-
-#Preview {
-    AllTabView()
-}
+//
+//#Preview {
+//    AllTabView()
+//}

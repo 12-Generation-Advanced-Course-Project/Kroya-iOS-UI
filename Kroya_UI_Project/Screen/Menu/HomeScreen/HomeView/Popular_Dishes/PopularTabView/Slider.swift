@@ -29,16 +29,16 @@ struct Slide: View {
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
             .frame(maxWidth: .infinity, maxHeight: frameHeight) // Dynamically set height
-            .cornerRadius(14)
+            .cornerRadius(12)
             .onReceive(timer) { _ in
                 withAnimation {
                     currentPage = (currentPage + 1) % images.count
                 }
             }}
-        }
+        }.border(.cyan)
     }
 }
 
 //#Preview {
-//    Slider()
+//    Slide()
 //}
