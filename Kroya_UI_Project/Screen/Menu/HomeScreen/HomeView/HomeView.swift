@@ -22,29 +22,35 @@ struct HomeView: View {
                         
                         // Recipe Order Cards
                         HStack(spacing: 16) {
-                            Recipe_OrderCard(
-                                title: "Food Order",
-                                subtitle: "Order what you love",
-                                imageName: "food_recipe",
-                                width: .screenWidth * 0.45,
-                                height: .screenHeight * 0.16,
-                                heightImage: 90,
-                                widthImage: 120,
-                                xImage: 35,
-                                yImage: 40
-                            )
-                            Recipe_OrderCard(
-                                title: "Food Recipe",
-                                subtitle: "Learn how to cook",
-                                imageName: "Menu",
-                                width: .screenWidth * 0.45,
-                                height: .screenHeight * 0.16,
-                                heightImage: 60,
-                                widthImage: 85,
-                                xImage: 40,
-                                yImage: 33
-                            )
+                            NavigationLink(destination: FoodonOrderView()) {
+                                Recipe_OrderCard(
+                                    title: "Food Order",
+                                    subtitle: "Order what you love",
+                                    imageName: "food_recipe",
+                                    width: .screenWidth * 0.45,
+                                    height: .screenHeight * 0.16,
+                                    heightImage: 90,
+                                    widthImage: 120,
+                                    xImage: 35,
+                                    yImage: 40
+                                )
+                            }
+                            
+                            NavigationLink(destination: FoodonRecipe()) {
+                                Recipe_OrderCard(
+                                    title: "Food Recipe",
+                                    subtitle: "Learn how to cook",
+                                    imageName: "Menu",
+                                    width: .screenWidth * 0.45,
+                                    height: .screenHeight * 0.16,
+                                    heightImage: 60,
+                                    widthImage: 85,
+                                    xImage: 40,
+                                    yImage: 33
+                                )
+                            }
                         }
+
                     }
                     
                     Spacer().frame(height: 25)
@@ -166,21 +172,30 @@ struct HomeView: View {
                                     .scaledToFit()
                                     .frame(width: 24, height: 24)
                                     .foregroundColor(.black)
-                                Text("\(notification.count)")
-                                    .font(.customfont(.semibold, fontSize: 12))
-                                    .foregroundStyle(.white)
-                                    .background(Color.red)
-                                    .clipShape(Circle())
-                                    .offset(x: 5, y: -8)
+                                // Notification Badge
+                                if notification.count > 0 {
+                                    Text("\(notification.count)")
+                                        .font(.customfont(.semibold, fontSize: 12))
+                                        .foregroundColor(.white)
+                                        .padding(5)
+                                        .background(Color.red)
+                                        .clipShape(Circle())
+                                        .overlay(
+                                            Circle()
+                                                .stroke(Color.white, lineWidth: 1) // Optional white border around the badge
+                                        )
+                                        .offset(x: 10, y: -10) // Position badge on top of the notification icon
+                                }
                             }
                         }
                     }
+
                 }
             }
         }
     }
     
-    // ViewBuilder function to return the correct screen based on the title
+  
     @ViewBuilder
     func destinationView(for title: String) -> some View {
         switch title {

@@ -61,9 +61,7 @@ struct MainScreen: View {
                                 }
                             }
                             .tag(3)
-                        
                         ProfileView()
-                        
                             .tabItem {
                                 VStack {
                                     Image(selectedTab == 4 ? "icon-User-Color" : "ico-User")

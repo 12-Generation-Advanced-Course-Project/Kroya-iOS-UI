@@ -8,6 +8,16 @@
 import SwiftUI
 
 struct ProfileView:View {
+    
+    @State private var showingCredits = false
+    @State private var selectedLanguage: String? = nil
+    
+    let languages = [
+        ("English", "English"),
+        ("Khmer", "ភាសាខ្មែរ"),
+        ("Korean", "한국")
+    ]
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -27,12 +37,14 @@ struct ProfileView:View {
                     )
                 }
                 HStack{
-                    UserInfoCardView( title: "Sale Reports",
-                                      subtitle: "List of their favorite dishes",
-                                      width: .screenWidth * 0.9,
-                                      height: .screenHeight * 0.11,
-                                      isTextCenter: true
-                    )
+                    NavigationLink(destination: SaleReportView()) {
+                        UserInfoCardView( title: "Sale Reports",
+                                          subtitle: "List of their favorite dishes",
+                                          width: .screenWidth * 0.9,
+                                          height: .screenHeight * 0.11,
+                                          isTextCenter: true
+                        )
+                    }
                 }
                 Spacer().frame(height:.screenHeight * 0.03)
                 VStack(alignment:.leading){
@@ -69,18 +81,33 @@ struct ProfileView:View {
                     AppSettingView(
                         imageName: "VectorLocation", title: "Change Location",iconName: "Rightarrow"
                     )
-                    AppSettingView(
-                        imageName: "notification 1", title: "Notifications",iconName: "Rightarrow"
-                    )
-                    
-                    AppSettingView(
-                        imageName: "languageIcon", title: "Language",iconName: "Rightarrow"
-                    )
+
+                    NavigationLink {
+                        AllowNotificationView()
+                    } label: {
+                        AppSettingView(
+                            imageName: "notification 1", title: "Notifications",iconName: "Rightarrow"
+                        )
+                    }.accentColor(.black)
+
+                    Button {
+                        showingCredits.toggle()
+                    } label: {
+                       
+                        AppSettingView(
+                            imageName: "languageIcon", title: "Language",iconName: "Rightarrow"
+                        )
+                    }.sheet(isPresented: $showingCredits) {
+                        ChangeLanguageView()
+                    }.accentColor(.black)
+                   
                 }
                 Spacer().frame(height:.screenHeight * 0.04)
                 CustomButton(title: "Log out", action: {print("Logout")},backgroundColor: .red, frameWidth: .screenWidth * 0.9)
                 Spacer()
             }
+            
+            
             .navigationTitle("")
             .toolbar {
                 // Toolbar items
@@ -121,4 +148,5 @@ struct ProfileView:View {
 #Preview {
     ProfileView()
 }
+
 
