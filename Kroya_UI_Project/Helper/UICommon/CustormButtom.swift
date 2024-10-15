@@ -33,8 +33,8 @@ struct CustomButton: View {
     }
 }
 
-#Preview {
-    CustomButton(title: "GET STARTED", action: {
-        print("Button tapped!")
-    }, backgroundColor: .yellow)
-}
+//#Preview {
+//    CustomButton(title: "GET STARTED", action: {
+//        print("Button tapped!")
+//    }, backgroundColor: .yellow)
+//}

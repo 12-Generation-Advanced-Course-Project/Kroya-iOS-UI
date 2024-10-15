@@ -148,22 +148,22 @@ struct PopularDishesCard: View {
     }
 }
 
-#Preview {
-    PopularDishesCard(
-        imageName: "SomlorKari",
-        dishName: "Somlor Kari",
-        cookingDate: "30 Sep 2024",
-        price: 2.00,
-        rating: 5.0,
-        reviewCount: 200,
-        deliveryInfo: "Free",
-        deliveryIcon: "motorbike",
-        framewidth:230,
-        frameheight:160,
-        frameWImage:300,
-        frameHImage:135,
-        Spacing:120,
-        offset:-45
-    )
-}
+//#Preview {
+//    PopularDishesCard(
+//        imageName: "SomlorKari",
+//        dishName: "Somlor Kari",
+//        cookingDate: "30 Sep 2024",
+//        price: 2.00,
+//        rating: 5.0,
+//        reviewCount: 200,
+//        deliveryInfo: "Free",
+//        deliveryIcon: "motorbike",
+//        framewidth:230,
+//        frameheight:160,
+//        frameWImage:300,
+//        frameHImage:135,
+//        Spacing:120,
+//        offset:-45
+//    )
+//}
 
