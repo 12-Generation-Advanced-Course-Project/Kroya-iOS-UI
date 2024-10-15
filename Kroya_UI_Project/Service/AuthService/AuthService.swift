@@ -162,5 +162,44 @@ class AuthService {
     }
 
 
-}
-
+    // MARK: Create Password for Register
+    func createPassword(email: String,password: String,confirmPassword: String, completion: @escaping (Result<CreatePasswordResponse, Error>) -> Void) {
+        let url = Constants.KroyaUrlAuth + "register"
+        let parameters: [String: String] = ["email": email, "newPassword": password,"confirmPassword":confirmPassword]
+        print("URL: \(url)")
+        print("Parameters: \(parameters)")
+        
+        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"])
+            .validate()
+            .responseDecodable(of: CreatePasswordResponse.self) { response in
+                debugPrint(response)
+                switch response.result {
+                case .success(let ApiResponse):
+                    if let statusCode = Int(ApiResponse.statusCode) {
+                        switch statusCode {
+                        case 200:
+                            print("Succes Register account successfully!")
+                            completion(.success(ApiResponse))
+                        case 010:
+                            print("Your Password not match!!!. Please enter the match password")
+                            let error = NSError(domain: "", code: 010, userInfo: [NSLocalizedDescriptionKey: "Password not match with Confirm Password. Please enter the match password"])
+                            completion(.failure(error))
+                        default:
+                            print("Unknown error occurred. StatusCode: \(statusCode)")
+                            let unknownError = NSError(domain: "", code: statusCode, userInfo: [NSLocalizedDescriptionKey: "An unknown error occurred. Please try again."])
+                            completion(.failure(unknownError))
+                        }
+                    } else {
+                        print("Failed to parse status code.")
+                        let parseError = NSError(domain: "", code: 500, userInfo: [NSLocalizedDescriptionKey: "Failed to parse server response."])
+                        completion(.failure(parseError))
+                        completion(.success(ApiResponse))
+                    }
+                    case .failure(let error):
+                    print("Request failed with error: \(error)")
+                        completion(.failure(error))
+                    }
+                }
+            }
+        
+    }
