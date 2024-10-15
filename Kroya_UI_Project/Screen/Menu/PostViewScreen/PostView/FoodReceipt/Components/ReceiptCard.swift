@@ -1,50 +1,41 @@
 //
-//  ReceiptView.swift
-//  Kroya_UI_Project
+//  ReceiptCard.swift
+//  Kroya
 //
-//  Created by KAK-LY on 12/10/24.
+//  Created by KAK-LY on 15/10/24.
 //
 
 import SwiftUI
 
-struct ReceiptView: View {
+struct ReceiptCard: View {
+    
     // Inject the ViewModel
     @ObservedObject var viewModel = ReceiptViewModel()
+    @State var dialogShow = false
     
     var body: some View {
         NavigationView {
-            VStack(spacing: 20) {
-                // Success Header Section
-                VStack(spacing: 10) {
-                    Image(systemName: "checkmark.circle.fill")
-                        .resizable()
-                        .frame(width: 60, height: 60)
-                        .foregroundColor(Color(red: 0.242, green: 0.741, blue: 0.307))
-                    
-                    Text("Success")
-                        .font(.customfont(.medium, fontSize: 24))
-                        .foregroundColor(.black)
-                }
-                .padding(.top, 30)
-                
+            VStack {
                 // Receipt Card Section
-                ZStack {
+                ZStack{
                     Image("receipt")
                         .resizable()
                         .frame(maxWidth: .infinity)
+                        .frame(height: 550)
                         .padding(.horizontal)
                     
                     VStack(spacing: 20) {
                         // Payment Info
                         HStack(spacing: 15) {
-                            Image("Men")
+                            Image("food_background")
                                 .resizable()
                                 .frame(width: 50, height: 50)
                                 .cornerRadius(50)
                             
                             VStack(alignment: .leading, spacing: 10) {
                                 Text(viewModel.receipt.amount) // Use the amount from ViewModel
-                                    .font(.customfont(.medium, fontSize: 16))
+                                //                                    .font(.customfont(.medium, fontSize: 16))
+                                    .font(.system(size: 16, weight: .medium))
                                     .foregroundColor(.black)
                                 
                                 HStack {
@@ -54,7 +45,8 @@ struct ReceiptView: View {
                                         .foregroundColor(.red)
                                     
                                     Text(viewModel.receipt.paidTo) // Use the paidTo from ViewModel
-                                        .font(.customfont(.medium, fontSize: 14))
+                                    //                                        .font(.customfont(.medium, fontSize: 14))
+                                        .font(.system(size: 14, weight: .medium))
                                         .foregroundColor(.gray)
                                 }
                             }
@@ -75,13 +67,16 @@ struct ReceiptView: View {
                             // Seller Row with Phone Icon
                             HStack {
                                 Text("Seller")
-                                    .font(.customfont(.regular, fontSize: 16))
+                                //                                    .font(.customfont(.regular, fontSize: 16))
+                                    .font(.system(size: 16, weight: .medium))
                                 Spacer()
                                 VStack(alignment: .leading) {
                                     Text(viewModel.receipt.sellerName)
-                                        .font(.customfont(.medium, fontSize: 16))
+                                    //                                        .font(.customfont(.medium, fontSize: 16))
+                                        .font(.system(size: 16, weight: .medium))
                                     Text(viewModel.receipt.sellerPhone)
-                                        .font(.customfont(.medium, fontSize: 16))
+                                    //                                        .font(.customfont(.medium, fontSize: 16))
+                                        .font(.system(size: 16, weight: .medium))
                                 }
                                 Spacer()
                                 Image(systemName: "phone.fill")
@@ -100,29 +95,48 @@ struct ReceiptView: View {
                         // Download Receipt Button
                         HStack {
                             Spacer()
-                            Button(action: {
-                                // Action for downloading receipt
-                            }) {
+                            
+                            Button{
+                                dialogShow.toggle()
+                            }label: {
                                 HStack {
                                     Image(systemName: "arrow.down.circle.fill")
                                         .resizable()
                                         .frame(width: 20, height: 20)
                                         .foregroundColor(.yellow)
                                     
-                                    Text("Download receipt")
-                                        .font(.customfont(.medium, fontSize: 16))
+                                    Text("Download Success")
+                                        .font(.system(size: 16, weight: .bold))
                                         .foregroundColor(.yellow)
                                 }
                             }
+                            .sheet(isPresented: $dialogShow) {
+                                print("Sheet dismissed!")
+                                
+                            } content: {
+                                
+                                ZStack{
+                                    Circle()
+                                        .fill(Color.gray)
+                                        .frame(width: 32, height: 32)
+                                    
+                                    Image(systemName: "xmark")
+                                        .resizable()
+                                        .frame(width: 12, height: 12)
+                                        .foregroundColor(Color.black)
+                                }
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                .padding([.top, .trailing], 20)
+                                
+                                ReceiptCard()
+                            }
+                            
                             Spacer()
                         }
                         .padding(.horizontal)
                     }
                 }
             }
-            .padding(.bottom, 50)
-            .navigationTitle("Receipt")
-            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
@@ -152,5 +166,5 @@ struct ReceiptRow: View {
 }
 
 #Preview {
-    ReceiptView()
+    ReceiptCard()
 }
