@@ -9,7 +9,7 @@ import SwiftUI
 
 struct Success: View {
     var body: some View {
-        VStack {
+//        VStack {
             // Success Header Section
             VStack{
                 Image(systemName: "checkmark.circle.fill")
@@ -21,7 +21,7 @@ struct Success: View {
                     .font(.system(size: 24, weight: .semibold))
                     .foregroundColor(.black)
             }
-        }
+//        }
     }
 }
 
