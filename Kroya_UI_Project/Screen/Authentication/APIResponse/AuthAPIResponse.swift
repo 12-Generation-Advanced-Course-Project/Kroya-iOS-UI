@@ -19,6 +19,9 @@ struct ApiResponse<T: Decodable>: Decodable {
 typealias EmailCheckResponse = ApiResponse<String>
 typealias SendOTPResponse = ApiResponse<String>
 typealias VerificationCodeRequestResponse = ApiResponse<String>
+typealias CreatePasswordResponse = ApiResponse<TokenPayload>
+
+
 
 
 

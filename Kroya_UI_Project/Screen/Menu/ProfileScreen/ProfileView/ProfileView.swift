@@ -23,12 +23,14 @@ struct ProfileView:View {
             VStack {
                 Spacer().frame(height:.screenHeight * 0.04)
                 HStack{
-                    UserInfoCardView( title: "Favorite",
-                                      subtitle: "List of their favorite dishes",
-                                      width: .screenWidth * 0.44,
-                                      height: .screenHeight * 0.11,
-                                      isTextCenter: false
-                    )
+                    NavigationLink(destination: FavoriteViewCart()){
+                        UserInfoCardView( title: "Favorite",
+                                          subtitle: "List of their favorite dishes",
+                                          width: .screenWidth * 0.44,
+                                          height: .screenHeight * 0.11,
+                                          isTextCenter: false
+                        )
+                    }
                     UserInfoCardView( title: "Addresses",
                                       subtitle: "List of your addresses",
                                       width: .screenWidth * 0.44,

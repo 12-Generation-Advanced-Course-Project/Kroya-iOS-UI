@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ChangeLanguageView: View {
     @State private var showingCredits = false
-    @State private var selectedLanguage: String? = nil
+    @State private var selectedLanguage: String? = "English"
     
     let languages = [
         ("English", "English"),

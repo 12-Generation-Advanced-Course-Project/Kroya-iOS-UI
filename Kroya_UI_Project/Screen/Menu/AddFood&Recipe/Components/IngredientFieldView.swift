@@ -44,6 +44,8 @@ struct IngredientEntryView: View {
                     .font(.customfont(.medium, fontSize: 15))
                     .foregroundStyle(.black.opacity(0.6))
                     .cornerRadius(15)
+
+
             }
             
             // Quantity and Price Input Fields

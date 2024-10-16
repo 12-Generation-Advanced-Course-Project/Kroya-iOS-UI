@@ -13,6 +13,12 @@ struct User: Codable, Identifiable {
     var userName: String?
     var phoneNumber: String?
     var address: String?
-    var accessToken:String?
-    var refreshToken:String?
+    var accesstoken:String?
+    var refreshtoken:String?
+}
+
+// Struct for tokens as seen in the response payload
+struct TokenPayload: Decodable {
+    let access_token: String
+    let refresh_token: String
 }

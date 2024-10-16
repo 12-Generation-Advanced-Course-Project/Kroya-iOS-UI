@@ -120,7 +120,7 @@ struct VerificationCodeView: View {
                 }
                 Spacer().frame(height: 15)
                 // Next Button with OTP submission logic
-                NavigationLink(destination: CreatePasswordView(), isActive: $authVM.isOTPVerified) {
+                NavigationLink(destination: CreatePasswordView(userStore: userStore), isActive: $authVM.isOTPVerified) {
                     EmptyView()
                 }.hidden()
                 
