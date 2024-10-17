@@ -60,7 +60,8 @@ struct ProfileView:View {
                             .frame(width: 25, height: 25)
                         Text("Connected")
                             .font(.customfont(.medium, fontSize: 16))
-                        Spacer().frame(width:.screenWidth * 0.25)
+                            .frame(maxWidth: .infinity,alignment: .leading)
+                        Spacer()
                         Text("weBill365")
                             .font(.customfont(.medium, fontSize: 16))
                             .foregroundStyle(.black.opacity(0.75))
@@ -70,7 +71,8 @@ struct ProfileView:View {
                             .frame(width: 25, height: 25)
                         
                     }
-                    .frame(width: .screenWidth * 0.9,height: .screenHeight * 0.05)
+                    .frame(maxWidth: .screenWidth * 0.9, minHeight: .screenHeight * 0.05)
+                    .padding(.horizontal)
                     .background(Color(hex: "#F4F5F7"))
                     .cornerRadius(15)
                 }

@@ -33,7 +33,8 @@ struct AppSettingView: View {
                 .frame(width: 25, height: 25)
                 .padding(.trailing,8)
         }
-        .frame(width: .screenWidth * 0.9, height: .screenHeight * 0.05)
+        .frame(maxWidth: .screenWidth * 0.9, minHeight: .screenHeight * 0.05)
+        .padding(.horizontal,10)
         .background(Color(hex: "#F4F5F7"))
         .cornerRadius(15)
         

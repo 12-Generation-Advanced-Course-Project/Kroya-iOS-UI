@@ -13,13 +13,8 @@ struct VerificationCodeView: View {
     @FocusState private var focusedField: Int?
     @StateObject private var countdownTimer = CountdownTimer()
     @EnvironmentObject var userStore: UserStore
-    @StateObject private var authVM: AuthViewModel
-    
-    // Initialize the AuthViewModel in the initializer
-    init(userStore: UserStore) {
-        _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
-    }
-    
+    @ObservedObject var authVM: AuthViewModel
+   
     var body: some View {
         ZStack {
             VStack {
@@ -70,7 +65,7 @@ struct VerificationCodeView: View {
                                 .font(.customfont(.medium, fontSize: 13))
                                 .foregroundColor(Color(hex: "#777F89"))
                         } else {
-                            Text("No user account!!!")
+                            Text("No user information!")
                         }
                     }
                     .padding(.vertical, 10)
@@ -119,10 +114,6 @@ struct VerificationCodeView: View {
                     focusedField = 0
                 }
                 Spacer().frame(height: 15)
-                // Next Button with OTP submission logic
-                NavigationLink(destination: CreatePasswordView(userStore: userStore), isActive: $authVM.isOTPVerified) {
-                    EmptyView()
-                }.hidden()
                 
                 Button(action: {
                     let otpCode = code.joined() // Combine the 6 digits into a single string
@@ -142,6 +133,13 @@ struct VerificationCodeView: View {
                 .alert(isPresented: $authVM.showError) {
                     Alert(title: Text("Error"), message: Text(authVM.errorMessage), dismissButton: .default(Text("OK")))
                 }
+                // Next Button with OTP submission logic
+                NavigationLink(destination: CreatePasswordView(authVM: authVM),isActive:$authVM.isOTPVerified)
+                {
+                    EmptyView()
+                }
+                .hidden()
+               
                 
                 Spacer()
             }
@@ -154,4 +152,3 @@ struct VerificationCodeView: View {
         .navigationBarHidden(true)
     }
 }
-
