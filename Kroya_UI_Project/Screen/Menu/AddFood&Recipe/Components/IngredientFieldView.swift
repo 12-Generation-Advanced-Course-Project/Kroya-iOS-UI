@@ -32,20 +32,21 @@ struct IngredientEntryView: View {
                     .foregroundColor(.gray)
                     .padding(.leading, 10)
                 
-                TextField("Enter ingredients", text: $ingredient.name)
-                    .padding(.vertical, 15)
-                    .multilineTextAlignment(.leading)
-                    .padding(.horizontal, 15)
-                    .frame(width: .screenWidth * 0.795)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 15)
-                            .strokeBorder(Color(hex: "#D0DBEA"), lineWidth: 1)
-                    )
-                    .font(.customfont(.medium, fontSize: 15))
-                    .foregroundStyle(.black.opacity(0.6))
-                    .cornerRadius(15)
-
-
+                HStack{
+                    TextField("Enter ingredients", text: $ingredient.name)
+                        .padding(.vertical, 15)
+                        .multilineTextAlignment(.leading)
+                        .padding(.horizontal, 10)
+                        .frame(maxWidth: .infinity)
+                        .font(.customfont(.medium, fontSize: 15))
+                        .foregroundStyle(.black.opacity(0.6))
+                        .cornerRadius(15)
+                    EditDropDownButton()
+                }
+                .overlay(
+                    RoundedRectangle(cornerRadius: 15)
+                        .strokeBorder(Color(hex: "#D0DBEA"), lineWidth: 1)
+                )
             }
             
             // Quantity and Price Input Fields

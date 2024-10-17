@@ -10,19 +10,26 @@ import SwiftUI
 struct EditDropDownButton: View {
     var body: some View {
         VStack{
-            HStack{
-                Image("edit")
-                    
-                Spacer()
-                Text("Edit")
-                    .foregroundColor(Color(red: 0.18, green: 0.579, blue: 0.114))
+            Menu{
+                Button(){
+                    // Action for button
+                } label: {
+                    Label("Edit", systemImage: "pencil")
+                }
+
+                Button(role: .destructive){
+                    // Action for button
+                } label:{
+                    Label("Delete", systemImage: "trash.fill")
+                }
+
+            } label: {
+                Image("ellipsis")
+                    .padding(.trailing, 20)
             }
         }
-        .padding()
-        .background(Color.black.opacity(0.2))
     }
 }
-
 #Preview {
     EditDropDownButton()
 }
