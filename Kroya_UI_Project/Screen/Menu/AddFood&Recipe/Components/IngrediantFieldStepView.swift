@@ -34,12 +34,7 @@ struct StepEntryView: View {
                     .font(.customfont(.medium, fontSize: 15))
                     .foregroundStyle(.black.opacity(0.6))
                     .cornerRadius(15)
-                Button {
-                    
-                } label: {
-                    Image("ellipsis")
-                        .padding()
-                }
+                EditDropDownButton()
             }
             .overlay(
                 RoundedRectangle(cornerRadius: 15)
