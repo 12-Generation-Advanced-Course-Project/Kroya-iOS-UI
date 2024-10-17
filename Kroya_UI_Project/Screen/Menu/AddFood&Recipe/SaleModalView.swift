@@ -235,7 +235,9 @@ struct SaleModalView: View {
     }
 }
 
+
 #Preview {
     let sampleIngret = Ingret(cookDate: "", amount: "", price: "", location: "", selectedCurrency: 0)
     SaleModalView(ingret: .constant(sampleIngret))
 }
+

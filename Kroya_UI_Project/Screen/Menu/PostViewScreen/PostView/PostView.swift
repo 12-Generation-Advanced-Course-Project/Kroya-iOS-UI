@@ -11,7 +11,7 @@ import Combine
 struct PostViewScreen: View {
     @State private var searchText = ""
     @State private var selectedSegment = 0
-    @Binding var isTabBarHidden: Bool // Add this binding
+
     @Environment(\.dismiss) var dismiss
     var body: some View {
         NavigationView {
@@ -126,5 +126,5 @@ struct PostViewScreen: View {
 }
 
 #Preview {
-    PostViewScreen(isTabBarHidden: .constant(false)) // For preview
+    PostViewScreen() // For preview
 }
