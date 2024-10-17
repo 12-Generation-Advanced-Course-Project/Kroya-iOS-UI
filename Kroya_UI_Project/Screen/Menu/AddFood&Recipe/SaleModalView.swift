@@ -214,10 +214,9 @@ struct SaleModalView: View {
     }
 }
 
-#Preview {
-    let sampleIngret = Ingret(cookDate: "", amount: "", price: "", location: "", selectedCurrency: 0)
-    
-    @State var ingretBinding = sampleIngret
-    
-    SaleModalView(ingret: $ingretBinding)
-}
+//#Preview {
+//    @Previewable @State var ingretBinding = sampleIngret
+//    let sampleIngret = Ingret(cookDate: "", amount: "", price: "", location: "", selectedCurrency: 0)
+//    
+//    SaleModalView(ingret: $ingretBinding)
+//}

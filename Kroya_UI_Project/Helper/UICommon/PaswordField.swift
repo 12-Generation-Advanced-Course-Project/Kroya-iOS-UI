@@ -61,7 +61,7 @@ struct PasswordField: View {
         }
         .background(backgroundColor)
         .cornerRadius(cornerRadius)
-        .frame(width:frameWidth,height: frameHeight) // Allow flexible width
+        .frame(maxWidth:frameWidth,minHeight: frameHeight) // Allow flexible width
     }
 }
 

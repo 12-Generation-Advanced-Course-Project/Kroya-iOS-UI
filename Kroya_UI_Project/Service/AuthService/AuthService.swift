@@ -12,7 +12,7 @@ class AuthService {
     
     static let shared = AuthService()
     
-    // Check Email if exists in Database
+    //MARK: Check Email if exists in Database
     func checkEmailExists(email: String, completion: @escaping (Result<EmailCheckResponse, Error>) -> Void) {
         let url = Constants.KroyaUrlAuth + "check-email-exist"
         let parameters: [String: String] = ["email": email]
@@ -20,7 +20,7 @@ class AuthService {
         print("URL: \(url)")
         print("Parameters: \(parameters)")
         print("Email: \(email)") // Ensure this prints the expected email
-
+        
         // Make the GET request using Alamofire
         AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default)
             .validate()
@@ -63,10 +63,10 @@ class AuthService {
                 }
             }
     }
-
-
     
-    // Send OTP Code
+    
+    
+    // MARK: Send OTP Code
     func sendOTP(_ email: String, completion: @escaping (Result<SendOTPResponse, Error>) -> Void) {
         let url = Constants.KroyaUrlAuth + "send-otp"
         let parameters: [String: String] = ["email": email]
@@ -81,6 +81,7 @@ class AuthService {
         AF.request(url, method: .post, parameters: parameters)
             .validate()
             .responseDecodable(of: SendOTPResponse.self) { response in
+            
                 switch response.result {
                 case .success(let apiResponse):
                     // Pretty print success response
@@ -115,7 +116,7 @@ class AuthService {
                 }
             }
     }
-
+    
     
     // MARK: VerifyOTP Code Email
     func VerifyOTPCode(_ email: String, _ code: String, completion: @escaping (Result<VerificationCodeRequestResponse, Error>) -> Void) {
@@ -128,7 +129,7 @@ class AuthService {
         AF.request(url, method: .post, parameters: parameters)
             .validate()
             .responseDecodable(of: VerificationCodeRequestResponse.self) { response in
-               
+                
                 switch response.result {
                 case .success(let apiResponse):
                     print("Response: \(apiResponse)")
@@ -160,8 +161,8 @@ class AuthService {
                 }
             }
     }
-
-
+    
+    
     // MARK: Create Password for Register
     func createPassword(email: String,password: String,confirmPassword: String, completion: @escaping (Result<CreatePasswordResponse, Error>) -> Void) {
         let url = Constants.KroyaUrlAuth + "register"
@@ -195,11 +196,92 @@ class AuthService {
                         completion(.failure(parseError))
                         completion(.success(ApiResponse))
                     }
-                    case .failure(let error):
+                case .failure(let error):
                     print("Request failed with error: \(error)")
-                        completion(.failure(error))
-                    }
+                    completion(.failure(error))
                 }
             }
-        
     }
+    
+    // MARK: Login Account
+    func LoginAccount(email:String,password:String, completion: @escaping (Result<LoginAccountResponse, Error>) -> Void) {
+        let url = Constants.KroyaUrlAuth + "login"
+        let parameters: [String: String] = ["email": email, "password": password]
+        print("URL: \(url)")
+        print("Parameters: \(parameters)")
+        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"])
+            .validate()
+            .responseDecodable(of: LoginAccountResponse.self) { response in
+                debugPrint(response)
+                switch response.result {
+                case .success(let ApiResponse):
+                    if let statusCode = Int(ApiResponse.statusCode) {
+                        switch statusCode {
+                        case 200:
+                            print("Succes Login account successfully!")
+                            completion(.success(ApiResponse))
+                        case 002:
+                            print("Your Password is incorrect . Please enter the correct password")
+                            let error = NSError(domain: "", code: 002, userInfo: [NSLocalizedDescriptionKey: "Password not match with Confirm Password. Please enter the match password"])
+                            completion(.failure(error))
+                        default:
+                            print("Unknown error occurred. StatusCode: \(statusCode)")
+                            let unknownError = NSError(domain: "", code: statusCode, userInfo: [NSLocalizedDescriptionKey: "An unknown error occurred. Please try again."])
+                            completion(.failure(unknownError))
+                        }
+                    } else {
+                        print("Failed to parse status code.")
+                        let parseError = NSError(domain: "", code: 500, userInfo: [NSLocalizedDescriptionKey: "Failed to parse server response."])
+                        completion(.failure(parseError))
+                        completion(.success(ApiResponse))
+                    }
+                case .failure(let error):
+                    print("Request failed with error: \(error)")
+                    completion(.failure(error))
+                }
+            }
+    }
+    
+    // MARK: Refresh_Token
+    func refreshToken(refreshToken: String, completion: @escaping (Result<RefreshTokenResponse, Error>) -> Void) {
+        let url = Constants.KroyaUrlAuth + "refresh-token"
+        
+        // Set the Authorization header using the refresh token
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(refreshToken)",
+            "Content-Type": "application/json"
+        ]
+        
+        print("URL: \(url)")
+        
+        AF.request(url, method: .post, headers: headers)
+            .validate()
+            .responseDecodable(of: RefreshTokenResponse.self) { response in
+                switch response.result {
+                case .success(let apiResponse):
+                    if let statusCode = Int(apiResponse.statusCode), statusCode == 200 {
+                        if let tokens = apiResponse.payload {
+                            // Print the new access and refresh tokens
+                            print("New Access Token: \(tokens.access_token)")
+                            print("New Refresh Token: \(tokens.refresh_token)")
+                            
+                            // Handle success and pass the tokens in completion handler
+                            completion(.success(apiResponse))
+                        } else {
+                            let error = NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "Payload is empty."])
+                            completion(.failure(error))
+                        }
+                    } else {
+                        let error = NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "Failed to refresh token."])
+                        completion(.failure(error))
+                    }
+                case .failure(let error):
+                    print("Request failed with error: \(error)")
+                    completion(.failure(error))
+                }
+            }
+    }
+
+
+
+}

@@ -12,7 +12,6 @@ struct OrdersView: View {
     @State private var selectedSegment = 0
     @Environment(\.dismiss) var dismiss
     @State private var isExpanded = false
-    @Binding var isTabBarHidden: Bool
     var body: some View {
         NavigationView {
             VStack(spacing: 10) {
@@ -103,7 +102,7 @@ struct OrdersView: View {
 }
 
 #Preview {
-    OrdersView(isTabBarHidden: .constant(false))
+    OrdersView()
 }
 
 
