@@ -2,16 +2,17 @@
 //  ReceiptCard.swift
 //  Kroya
 //
-//  Created by KAK-LY on 15/10/24.
+//  Created by KAK-LY on 17/10/24.
 //
 
 import SwiftUI
 
 struct ReceiptCard: View {
     
-    @ObservedObject var viewModel = ReceiptViewModel()
+    @ObservedObject var viewModel: ReceiptViewModel
     @Binding var presentPopup: Bool
-
+    @State private var downloadSuccess: Bool = false  // State variable for download status
+    
     var body: some View {
         VStack {
             ZStack {
@@ -82,24 +83,41 @@ struct ReceiptCard: View {
                     
                     VStack {
                         Button {
-                            withAnimation(.linear(duration: 0.1)) {
+                            if !downloadSuccess {
                                 presentPopup = true
+                                saveImage()
                             }
                         } label: {
                             HStack {
-                                Image(systemName: "arrow.down.circle.fill")
+                                Image(systemName: downloadSuccess ? "checkmark.circle.fill" : "arrow.down.circle.fill")
                                     .resizable()
                                     .frame(width: 20, height: 20)
                                     .foregroundColor(.yellow)
                                 
-                                Text("Download Receipt")
+                                Text(downloadSuccess ? "Download Success" : "Download Receipt")
                                     .font(.system(size: 16, weight: .bold))
                                     .foregroundColor(.yellow)
                             }
                         }
+                        .disabled(downloadSuccess) // Disable the button if the download is successful
                     }
                 }
             }
+        }
+    }
+    
+    func saveImage() {
+        // Render the view as an image without a black background
+        let renderer = ImageRenderer(content: self.body)
+        renderer.scale = UIScreen.main.scale
+        
+        if let uiImage = renderer.uiImage {
+            UIImageWriteToSavedPhotosAlbum(uiImage, nil, nil, nil)
+            withAnimation {
+                downloadSuccess = true  // Update the state to indicate success
+            }
+        } else {
+            print("Failed to render the image.")
         }
     }
 }
@@ -110,21 +128,17 @@ struct ReceiptRow: View {
     var valueColor: Color = .black
     
     var body: some View {
-        HStack(spacing: 20){
+        HStack(spacing: 20) {
             Text(label)
-//                .font(.customfont(.regular, fontSize: 16))
                 .frame(minWidth: 100, alignment: .leading)
-            HStack{
+            HStack {
                 Text(value)
-//                    .font(.customfont(.medium, fontSize: 16))
                     .foregroundColor(valueColor)
             }
         }
         .padding(.horizontal)
-        // Add separator
         Rectangle()
             .fill(Color(red: 0.82, green: 0.816, blue: 0.82))
             .frame(height: 1)
     }
 }
-

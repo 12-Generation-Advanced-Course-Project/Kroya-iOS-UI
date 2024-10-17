@@ -9,28 +9,28 @@
 import SwiftUI
 
 struct ReceiptView: View {
+    
     @State private var presentPopup = false
     @ObservedObject var viewModel = ReceiptViewModel()
-    
 
     var body: some View {
         NavigationView {
-            ZStack { // Use ZStack to overlay the popup
+            ZStack {
                 VStack {
                     Success()
                         .padding(.top, 40)
                     
-                    ReceiptCard(presentPopup: $presentPopup)
+                    // Pass parameters in the correct order
+                    ReceiptCard(viewModel: viewModel, presentPopup: $presentPopup)
                 }
                 .padding(.bottom, 50)
                 .navigationTitle("Receipt")
                 .navigationBarTitleDisplayMode(.inline)
                 
-                // Show the Popup when `presentPopup` is true
                 if presentPopup {
                     Popup(isPresented: $presentPopup) {
-                        ReceiptCard(presentPopup: $presentPopup) // Or another relevant view for the popup
-                        
+                        // Display the receipt details within the popup
+                        ReceiptCard(viewModel: viewModel, presentPopup: $presentPopup)
                     }
                 }
             }
