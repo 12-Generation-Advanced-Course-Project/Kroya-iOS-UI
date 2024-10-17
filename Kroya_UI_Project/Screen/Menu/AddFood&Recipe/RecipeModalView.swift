@@ -23,6 +23,7 @@ struct RecipeModalView: View {
                 // Ingredients Section
                 Text("Ingredients")
                     .font(.customfont(.bold, fontSize: 15))
+                    .foregroundColor(.black.opacity(0.5))
                 let Columns = Array(repeating: GridItem(spacing:10), count: 1)
                 LazyVGrid(columns: Columns,spacing: 10) {
                     ForEach(ingredients.indices, id: \.self) { index in
@@ -74,7 +75,9 @@ struct RecipeModalView: View {
                     // Steps Section
                     Text("Steps")
                         .font(.customfont(.bold, fontSize: 15))
-                    
+                        .foregroundColor(.black.opacity(0.5))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
                     // Loop through steps and display each entry
                     ForEach(steps.indices, id: \.self) { index in
                         StepEntryView(step: $steps[index], index: index) // Pass 'index' instead of 'Int'

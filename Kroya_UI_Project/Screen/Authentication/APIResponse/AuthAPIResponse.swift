@@ -20,8 +20,8 @@ typealias EmailCheckResponse = ApiResponse<String>
 typealias SendOTPResponse = ApiResponse<String>
 typealias VerificationCodeRequestResponse = ApiResponse<String>
 typealias CreatePasswordResponse = ApiResponse<TokenPayload>
-
-
+typealias LoginAccountResponse = ApiResponse<TokenPayload>
+typealias RefreshTokenResponse = ApiResponse<RefreshTokenPayload>
 
 
 

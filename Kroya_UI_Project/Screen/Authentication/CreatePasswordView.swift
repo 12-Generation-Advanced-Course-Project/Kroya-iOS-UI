@@ -10,12 +10,12 @@ struct CreatePasswordView: View {
     @State private var errorMessage = ""
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var userStore: UserStore
-    @StateObject private var authVM: AuthViewModel
-    
-    // Initialize the AuthViewModel in the initializer
-    init(userStore: UserStore) {
-        _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
-    }
+    @ObservedObject var authVM: AuthViewModel
+//    
+//    // Initialize the AuthViewModel in the initializer
+//    init(userStore: UserStore) {
+//        _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
+//    }
     
     var body: some View {
         ZStack{
@@ -34,12 +34,12 @@ struct CreatePasswordView: View {
                     Spacer()
                 }
                 .padding(.leading, 0)
-
+                
                 // Title
                 Text("Create new password")
                     .font(.title3)
                     .fontWeight(.semibold)
-
+                
                 // New Password and Confirm Password Fields
                 VStack(spacing: 15) {
                     VStack(alignment: .leading, spacing: 5) {
@@ -52,7 +52,7 @@ struct CreatePasswordView: View {
                             frameWidth: .screenWidth * 0.9
                         )
                     }
-
+                    
                     VStack(alignment: .leading, spacing: 5) {
                         Text("Confirm new password ") + Text("*").foregroundStyle(.red)
                         PasswordField(
@@ -65,7 +65,7 @@ struct CreatePasswordView: View {
                     }
                 }
                 .padding(.bottom, 10)
-
+                
                 // Error message display
                 if !errorMessage.isEmpty {
                     Text(errorMessage)
@@ -73,11 +73,11 @@ struct CreatePasswordView: View {
                         .font(.caption)
                         .padding(.bottom, 10)
                 }
-
+                
                 // Create Password Button with validation logic
-                NavigationLink(destination: MainScreen().navigationBarBackButtonHidden(true), isActive: $authVM.isRegistered) {
+                NavigationLink(destination: MainScreen().navigationBarBackButtonHidden(true),isActive: $authVM.isRegistered) {
                     EmptyView()
-                }.hidden()
+                }
                 
                 Button(action: {
                     if validatePassword() {
@@ -102,7 +102,7 @@ struct CreatePasswordView: View {
             }
         }
     }
-
+    
     // Password validation logic
     func validatePassword() -> Bool {
         if password.isEmpty || confirmPassword.isEmpty {

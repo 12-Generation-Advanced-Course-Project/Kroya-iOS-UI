@@ -25,19 +25,21 @@ struct StepEntryView: View {
                 .frame(width: 24, height: 24)
                 .foregroundColor(.gray)
                 .padding(.leading, 10)
-            
-            TextField("Enter step description", text: $step.description)
-                .padding(.vertical, 15)
-                .multilineTextAlignment(.leading)
-                .padding(.horizontal, 10)
-                .frame(width: .screenWidth * 0.80)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 15)
-                        .strokeBorder(Color(hex: "#D0DBEA"), lineWidth: 1)
-                )
-                .font(.customfont(.medium, fontSize: 15))
-                .foregroundStyle(.black.opacity(0.6))
-                .cornerRadius(15)
+            HStack{
+                TextField("Enter step description", text: $step.description)
+                    .padding(.vertical, 15)
+                    .multilineTextAlignment(.leading)
+                    .padding(.horizontal, 10)
+                    .frame(maxWidth: .infinity)
+                    .font(.customfont(.medium, fontSize: 15))
+                    .foregroundStyle(.black.opacity(0.6))
+                    .cornerRadius(15)
+                EditDropDownButton()
+            }
+            .overlay(
+                RoundedRectangle(cornerRadius: 15)
+                    .strokeBorder(Color(hex: "#D0DBEA"), lineWidth: 1)
+            )
         }
         .padding(.vertical, 5)
     }

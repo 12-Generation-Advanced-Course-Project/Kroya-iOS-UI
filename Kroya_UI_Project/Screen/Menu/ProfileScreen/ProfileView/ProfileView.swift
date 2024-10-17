@@ -23,12 +23,14 @@ struct ProfileView:View {
             VStack {
                 Spacer().frame(height:.screenHeight * 0.04)
                 HStack{
-                    UserInfoCardView( title: "Favorite",
-                                      subtitle: "List of their favorite dishes",
-                                      width: .screenWidth * 0.44,
-                                      height: .screenHeight * 0.11,
-                                      isTextCenter: false
-                    )
+                    NavigationLink(destination: FavoriteViewCart()){
+                        UserInfoCardView( title: "Favorite",
+                                          subtitle: "List of their favorite dishes",
+                                          width: .screenWidth * 0.44,
+                                          height: .screenHeight * 0.11,
+                                          isTextCenter: false
+                        )
+                    }
                     UserInfoCardView( title: "Addresses",
                                       subtitle: "List of your addresses",
                                       width: .screenWidth * 0.44,
@@ -58,7 +60,8 @@ struct ProfileView:View {
                             .frame(width: 25, height: 25)
                         Text("Connected")
                             .font(.customfont(.medium, fontSize: 16))
-                        Spacer().frame(width:.screenWidth * 0.25)
+                            .frame(maxWidth: .infinity,alignment: .leading)
+                        Spacer()
                         Text("weBill365")
                             .font(.customfont(.medium, fontSize: 16))
                             .foregroundStyle(.black.opacity(0.75))
@@ -68,7 +71,8 @@ struct ProfileView:View {
                             .frame(width: 25, height: 25)
                         
                     }
-                    .frame(width: .screenWidth * 0.9,height: .screenHeight * 0.05)
+                    .frame(maxWidth: .screenWidth * 0.9, minHeight: .screenHeight * 0.05)
+                    .padding(.horizontal)
                     .background(Color(hex: "#F4F5F7"))
                     .cornerRadius(15)
                 }
