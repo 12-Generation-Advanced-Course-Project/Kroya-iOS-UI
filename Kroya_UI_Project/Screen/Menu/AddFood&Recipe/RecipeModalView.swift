@@ -27,6 +27,7 @@ struct RecipeModalView: View {
                 let Columns = Array(repeating: GridItem(spacing:10), count: 1)
                 LazyVGrid(columns: Columns,spacing: 10) {
                     ForEach(ingredients.indices, id: \.self) { index in
+                        
                         //                        GeometryReader{ geometry in
                         //                            let size = geometry.size
                         //                            RoundedRectangle(cornerRadius: 10)
