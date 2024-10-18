@@ -15,7 +15,7 @@ struct EditDropDownButton: View {
                     // Action for button
                 } label: {
                     Label("Edit", systemImage: "pencil")
-                }
+                }.accentColor(.green)
 
                 Button(role: .destructive){
                     // Action for button
