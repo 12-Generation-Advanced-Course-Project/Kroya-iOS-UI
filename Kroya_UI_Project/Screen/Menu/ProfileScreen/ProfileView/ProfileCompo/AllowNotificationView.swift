@@ -28,7 +28,7 @@ struct AllowNotificationView: View {
                     Spacer()
                 }
                 VStack{
-                    CustomButton(title: "Allow Notification", action: {print("Button Tap!")}, backgroundColor: .yellow, frameWidth: 370)
+                    CustomButton(title: "Allow Notification", action: {print("Button Tap!")}, backgroundColor: .yellow, frameWidth: .infinity)
                     CustomButton(title: "Not Now", action: {print("Button Tap!")}, backgroundColor: .clear, textColor: .yellow)
                 }
             }

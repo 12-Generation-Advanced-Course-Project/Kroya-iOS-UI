@@ -19,19 +19,12 @@ struct LoginScreenView: View {
         ZStack {
             VStack(spacing: 0) {
                 ZStack {
-                    Image("food_background")
+                    Image("image background")
                         .resizable()
                         .scaledToFill()
-                        .frame(height: 300)
-                    
-                    LinearGradient(
-                        gradient: Gradient(colors: [Color.clear, Color.white]),
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                    .frame(height: 100)
-                    .offset(y: 170)
+                        .frame(height: 260)
                 }
+
                 
                 Image("KroyaYellowLogo")
                     .resizable()
@@ -110,7 +103,7 @@ struct LoginScreenView: View {
                         }) {
                             Text("Terms of Service")
                                 .underline()
-                                .foregroundColor(.green)
+                                .foregroundColor(PrimaryColor.normal)
                         }
                         
                         Text("and")
@@ -120,7 +113,7 @@ struct LoginScreenView: View {
                         }) {
                             Text("Privacy")
                                 .underline()
-                                .foregroundColor(.green)
+                                .foregroundColor(PrimaryColor.normal)
                         }
                     }
                 }
