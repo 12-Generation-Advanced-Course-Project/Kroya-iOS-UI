@@ -31,6 +31,6 @@ struct Text_field: View {
     }
 }
 
-//#Preview {
-//    Text_field(text: .constant(""), label: "Full name:")
-//}
+#Preview {
+    Text_field(text: .constant(""), label: "Full name:")
+}
