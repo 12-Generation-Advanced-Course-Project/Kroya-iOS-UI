@@ -65,22 +65,6 @@ struct FoodCheckOutView: View {
                         .cornerRadius(12)
                 })
                 .padding(.bottom, 10)
-                
-                
-                
-//                Button(action: {
-//                            // Add your action here
-//                            print("Get Started button tapped")
-//                        }) {
-//                            Text("Place an order")
-//                                .font(.system(size: 16, weight: .bold))
-//                                .foregroundColor(.white)
-//                                .frame(maxWidth: .infinity)
-//                                .padding()
-//                                .background(Color.yellow)
-//                                .cornerRadius(12)
-//                        }
-//                        .padding(.bottom, 15)
 
             }
             .padding(.horizontal)
