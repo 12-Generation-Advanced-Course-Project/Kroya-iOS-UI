@@ -80,6 +80,7 @@ struct FoodCardView: View {
                 .stroke(Color(red: 0.836, green: 0.875, blue: 0.924), lineWidth: 1.5)
         )
         
+        
     }
 }
 #Preview {

@@ -74,6 +74,7 @@ struct WebillConnectView: View {
                 frameWidth: .screenWidth * 0.9
             )
             Spacer()
+          //  FoodItem(name: "ssd", itemsCount: 2, remarks: "ds", price: 23, paymentMethod:)
             CustomButton(title: "Save", action: {
                 print("Button tapped!")
             }, backgroundColor: PrimaryColor.normal,frameHeight: 55,frameWidth: .screenWidth * 0.9)
@@ -83,6 +84,6 @@ struct WebillConnectView: View {
     }
 }
 
-#Preview {
-    WebillConnectView()
-}
+//#Preview {
+//    WebillConnectView()
+//}
