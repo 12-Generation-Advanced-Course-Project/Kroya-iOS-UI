@@ -51,7 +51,7 @@ struct PasswordFieldd: View {
     }
 }
 
-//#Preview {
-//    PasswordFieldd(password: .constant("password123"), label: "Password")
-//}
+#Preview {
+    PasswordFieldd(password: .constant("password123"), label: "Password")
+}
 
