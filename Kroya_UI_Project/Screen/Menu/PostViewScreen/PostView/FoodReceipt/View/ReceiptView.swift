@@ -6,8 +6,9 @@
 //  Created by KAK-LY on 15/10/24.
 //
 
+import UIKit
+import Photos
 import SwiftUI
-
 struct ReceiptView: View {
     
     @State private var presentPopup = false
@@ -28,14 +29,41 @@ struct ReceiptView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 
                 if presentPopup {
+                
                     Popup(isPresented: $presentPopup) {
-                        // Display the receipt details within the popup
                         ReceiptCard(viewModel: viewModel, presentPopup: $presentPopup)
+                    }
+                }
+                
+             
+            }
+        }
+    }
+    
+    // Save the receipt as PNG
+    private func saveReceiptAsPNG() {
+        let renderer = ImageRenderer {
+            // Capture the ReceiptCard here
+            let receiptCard = ReceiptCard(viewModel: viewModel, presentPopup: $presentPopup)
+            return UIHostingController(rootView: receiptCard).view
+        }
+
+        if let image = renderer.render() {
+            if let pngData = image.pngData() {
+                // Request access to save image to Photos
+                PHPhotoLibrary.shared().performChanges({
+                    PHAssetChangeRequest.creationRequestForAsset(from: UIImage(data: pngData)!)
+                }) { success, error in
+                    if success {
+                        print("Receipt saved as PNG!")
+                    } else if let error = error {
+                        print("Error saving receipt: \(error.localizedDescription)")
                     }
                 }
             }
         }
     }
+    
 }
 
 

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Photos
 
 struct ReceiptCard: View {
     
@@ -84,8 +85,7 @@ struct ReceiptCard: View {
                     VStack {
                         Button {
                             if !downloadSuccess {
-                                presentPopup = true
-                                saveImage()
+                                saveImage()  // Save image as PNG
                             }
                         } label: {
                             HStack {
@@ -99,7 +99,8 @@ struct ReceiptCard: View {
                                     .foregroundColor(.yellow)
                             }
                         }
-                        .disabled(downloadSuccess) // Disable the button if the download is successful
+                        .buttonStyle(PlainButtonStyle())
+                        .disabled(downloadSuccess)  // Disable button if download was successful
                     }
                 }
             }
@@ -107,17 +108,35 @@ struct ReceiptCard: View {
     }
     
     func saveImage() {
-        // Render the view as an image without a black background
-        let renderer = ImageRenderer(content: self.body)
-        renderer.scale = UIScreen.main.scale
+        // Create a UIHostingController to render the SwiftUI view into a UIView
+        let hostingController = UIHostingController(rootView: self.body)
         
-        if let uiImage = renderer.uiImage {
-            UIImageWriteToSavedPhotosAlbum(uiImage, nil, nil, nil)
-            withAnimation {
-                downloadSuccess = true  // Update the state to indicate success
+        // Set the desired size of the hosting controller's view
+        hostingController.view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        
+        // Render the hosting controller's view as an image
+        let renderer = UIGraphicsImageRenderer(size: hostingController.view.bounds.size)
+        
+        let uiImage = renderer.image { _ in
+            hostingController.view.drawHierarchy(in: hostingController.view.bounds, afterScreenUpdates: true)
+        }
+        
+        // Save the image as PNG to the photo album
+        if let pngData = uiImage.pngData() {
+            PHPhotoLibrary.shared().performChanges({
+                PHAssetChangeRequest.creationRequestForAsset(from: UIImage(data: pngData)!)
+            }) { success, error in
+                if success {
+                    // Update the state to indicate download success
+                    DispatchQueue.main.async {
+                        withAnimation {
+                            downloadSuccess = true
+                        }
+                    }
+                } else if let error = error {
+                    print("Error saving receipt: \(error.localizedDescription)")
+                }
             }
-        } else {
-            print("Failed to render the image.")
         }
     }
 }
@@ -142,3 +161,4 @@ struct ReceiptRow: View {
             .frame(height: 1)
     }
 }
+
