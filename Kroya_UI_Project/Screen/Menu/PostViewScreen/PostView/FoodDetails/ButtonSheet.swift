@@ -68,7 +68,18 @@ struct ContentOnButtonSheet: View {
     @State private var isButterChecked = true
     @State private var isHalfButterChecked = false
     @State private var count = 0
+    @State private var currentStep = 1
+    @State private var isExpanded = false
+    @State private var isReviewExpanded = false
+    // Step details
+    let steps = [
+        "Cut the fish into bite sized pieces and set aside.",
+        "Clean and slice the vegetables..",
+        "In a large skillet, heat the curry seed oil, amok paste, shrimp paste, and coconut milk. Heat thoroughly, cooking until fragrant."
+    ]
     
+   // let review: String
+     //   let reviewDetail: String
     var foodName: String
     var price : Float
     var date : String
@@ -77,10 +88,7 @@ struct ContentOnButtonSheet: View {
     var userName : String
     var description :String
     var ingredients :String
-    var stepNember : Int
-    var stepDetail : String
     var percentageOfRating : Double
-    
     var numberOfRating : Int
     var review :String
     var reviewDetail: String
@@ -88,19 +96,19 @@ struct ContentOnButtonSheet: View {
     
     
     
-     var starSize: CGFloat = 60.0
-     var activeColor: Color = Color.yellow
-     var inactiveColor: Color = Color.gray
-     var body: some View {
+    var starSize: CGFloat = 60.0
+    var activeColor: Color = Color.yellow
+    var inactiveColor: Color = Color.gray
+    var body: some View {
         ZStack {
             VStack {
                 
-               // Call FoodDetailView()
-                FoodDetailView(theMainImage: "Songvak",
-                               subImage1: "ahmok",
-                               subImage2: "brohok",
-                               subImage3: "SomlorKari",
-                               subImage4: "Songvak")
+                // Call FoodDetailView()
+                FoodDetailView(theMainImage: "ahmok",
+                               subImage1: "ahmok1",
+                               subImage2: "ahmok2",
+                               subImage3: "ahmok3",
+                               subImage4: "ahmok4")
                 Spacer()
             }
             .blur(radius: isBottomSheetOpen ? 5 : 0)
@@ -120,30 +128,30 @@ struct ContentOnButtonSheet: View {
                                     .fill(Color(hex: "FECC03"))
                                     .frame(width: 32, height: 32)
                                     .overlay(
-                                          Image(systemName: "plus")
-                                              .resizable()
-                                              .aspectRatio(contentMode: .fill)
-                                              .frame(width: 18, height: 18)
-                                              .foregroundStyle(Color.white)
-                                              .clipShape(Circle())
-                                      )
+                                        Image(systemName: "plus")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 18, height: 18)
+                                            .foregroundStyle(Color.white)
+                                            .clipShape(Circle())
+                                    )
                                 
                             }
                         }
                         
                         HStack(spacing: 7){
-                           // Group{
+                            // Group{
                             Text(String(format: "$%.2f", percentageOfRating))
-
-                                    .foregroundStyle(Color.yellow)
-                                    .font(.customfont(.regular, fontSize: 13))
-                                Text("\(date)(Morning)")
-                                    .opacity(0.5)
+                            
+                                .foregroundStyle(Color.yellow)
+                                .font(.customfont(.regular, fontSize: 13))
+                            Text("\(date)(Morning)")
+                                .opacity(0.5)
                             //}
-                        .font(.customfont(.regular, fontSize: 13))
-                                
+                                .font(.customfont(.regular, fontSize: 13))
+                            
                         }.offset(y: -5)
-                       
+                        
                         HStack(spacing: 10){
                             Text(itemFood)
                             Circle().fill()
@@ -153,8 +161,8 @@ struct ContentOnButtonSheet: View {
                         }.font(.customfont(.medium, fontSize: 16))
                             .fontWeight(.medium)
                             .foregroundStyle(Color(hex:"#9FA5C0"))
-                   
-            // Profile
+                        
+                        // Profile
                         HStack(spacing: 10){
                             Image(profile)
                                 .resizable()
@@ -166,7 +174,7 @@ struct ContentOnButtonSheet: View {
                                 .bold()
                         }.padding(.top, 10)
                         
-            // Recipe description
+                        // Recipe description
                         Text("Description")
                             .font(.customfont(.bold, fontSize: 18))
                             .padding(.top, 10)
@@ -175,11 +183,11 @@ struct ContentOnButtonSheet: View {
                             .opacity(0.6)
                             .padding(.bottom, 10)
                         
-             // Ingredients
+                        // Ingredients
                         Text("Ingredients")
                             .font(.customfont(.bold, fontSize: 18))
                         VStack(alignment: .leading, spacing: 20) {
-                          
+                            
                             HStack {
                                 Button(action: {}){
                                     Circle()
@@ -193,27 +201,33 @@ struct ContentOnButtonSheet: View {
                                         .onTapGesture {
                                             isHalfButterChecked.toggle()
                                         }
-                                   
+                                    
                                 }
                                 Text(ingredients)
                                     .font(.customfont(.regular, fontSize: 16))
                                     .foregroundStyle(Color(hex: "#2E3E5C"))
-                                   
+                                
                             }
                             
                         }.padding([.bottom, .top],5)
                         
                         Divider()
-                     
-          //== Steps
-                        VStack{
-                            HStack{
+                        
+                        //== Steps
+                        VStack {
+                            HStack {
                                 Text("Steps")
                                     .font(.system(size: 17))
                                     .bold()
+                                
                                 Spacer()
-                                Button(action:{})
-                                {
+                                
+                                // Button to go to the previous step
+                                Button(action: {
+                                    if currentStep > 1 {
+                                        currentStep -= 1
+                                    }
+                                }) {
                                     Circle()
                                         .stroke(Color(hex: "FECC03"), lineWidth: 2)
                                         .frame(width: 30, height: 30)
@@ -222,16 +236,16 @@ struct ContentOnButtonSheet: View {
                                                 .resizable()
                                                 .aspectRatio(contentMode: .fill)
                                                 .frame(width: 15, height: 15)
-                                                .fontWeight(.bold)
                                                 .foregroundStyle(Color(hex: "FECC03"))
                                                 .clipShape(Circle())
                                         )
-                                    
                                 }
-                                
-                                //Button Step
-                                Button(action:{})
-                                {
+                                // Button to go to the next step
+                                Button(action: {
+                                    if currentStep < steps.count {
+                                        currentStep += 1
+                                    }
+                                }) {
                                     Circle()
                                         .stroke(Color(hex: "FECC03"), lineWidth: 2)
                                         .frame(width: 30, height: 30)
@@ -240,28 +254,33 @@ struct ContentOnButtonSheet: View {
                                                 .resizable()
                                                 .aspectRatio(contentMode: .fill)
                                                 .frame(width: 16, height: 16)
-                                                .fontWeight(.bold)
-                                            
                                                 .foregroundStyle(Color(hex: "FECC03"))
                                                 .clipShape(Circle())
                                         )
                                 }
                             }
-                            HStack(spacing: 10) {
-                                Circle().fill(Color(hex: "#2E3E5C")).frame(width: 30, height: 30)
+                            
+                            HStack(alignment: .top, spacing: 10) {
+                                Circle()
+                                    .fill(Color(hex: "#2E3E5C"))
+                                    .frame(width: 30, height: 30)
                                     .overlay(
-                                        Text("\(stepNember )")
+                                        Text("\(currentStep)")
                                             .font(.customfont(.bold, fontSize: 14))
                                             .foregroundColor(Color.white)
                                     )
                                     .padding(.bottom, 23)
-                                Text(stepDetail)
+                                // Display step detail based on the current step
+                                Text(steps[currentStep - 1])
+                                    .font(.system(size: 16))
+                                    .padding(.top, 2)
+                                Spacer()
                             }
                         }
-                    .padding([.bottom, .top],5)
+                        .padding([.bottom, .top],5)
                         Divider()
                         
-     // Ratings & Reviews section
+                        // Ratings & Reviews section
                         VStack(alignment: .leading, spacing: 15) {
                             Text("Ratings & Review")
                                 .font(.system(size: 17))
@@ -269,11 +288,11 @@ struct ContentOnButtonSheet: View {
                             HStack {
                                 VStack{
                                     Text(String(format: "%.1f", percentageOfRating))
-
+                                    
                                         .font(.customfont(.bold, fontSize: 34))
                                     Text("out of 5")
                                         .font(.customfont(.semibold, fontSize: 12))
-                                       
+                                    
                                 }
                                 Spacer()
                                 
@@ -333,7 +352,7 @@ struct ContentOnButtonSheet: View {
                                             RoundedCorner()
                                                 .foregroundStyle(Color(hex: "#C7D3EB"))
                                                 .frame(width: 150, height: 4)
-                                                }
+                                        }
                                         
                                         HStack(spacing: 15){
                                             HStack(spacing: 2){
@@ -347,19 +366,19 @@ struct ContentOnButtonSheet: View {
                                             RoundedCorner()
                                                 .foregroundStyle(Color(hex: "#C7D3EB"))
                                                 .frame(width: 150, height: 4)
-                                                }
+                                        }
                                     }
-                              }
+                                }
                             }
                             HStack{
                                 Spacer()
-                                Text("\(numberOfRating)")
+                                Text("\(numberOfRating) Ratings")
                                     .font(.customfont(.medium, fontSize: 12))
                                     .foregroundColor(.gray)
                             }
                             Divider()
                             
-                // User review
+                            // User review
                             HStack {
                                 Text("Tap to Rate")
                                     .font(.customfont(.regular, fontSize: 18))
@@ -374,56 +393,69 @@ struct ContentOnButtonSheet: View {
                                     }
                                 }
                             }
-                            VStack(alignment: .leading, spacing: 3){
-                                Text(review)
-                                    .font(.customfont(.semibold, fontSize: 13))
-                                HStack(spacing: 2) {
-                                    ForEach(0..<5) { star in
-                                        Image(systemName: "star.fill")
-                                            .font(.customfont(.regular, fontSize: 10))
-                                            .foregroundColor(.yellow)
-                                    }
-                                }.padding(.bottom, 3)
-                                Text(reviewDetail)
-                                    .font(.customfont(.regular, fontSize: 13))
-                                    .foregroundStyle(Color(hex: "#2E3E5C"))
-                                +
-                                Text("more") .foregroundStyle(Color.yellow)
-                                    .font(.customfont(.semibold, fontSize: 13))
-                            } .padding(.vertical, 10)
+                            //=============
+                            // User review section
+                                                       VStack(alignment: .leading, spacing: 3) {
+                                                           Text(review)
+                                                               .font(.customfont(.semibold, fontSize: 13))
+                                                           
+                                                           // Star rating for the user's review
+                                                           HStack(spacing: 2) {
+                                                               ForEach(0..<5) { _ in
+                                                                   Image(systemName: "star.fill")
+                                                                       .font(.customfont(.regular, fontSize: 10))
+                                                                       .foregroundColor(.yellow)
+                                                               }
+                                                           }.padding(.bottom, 3)
+                                                           
+                                                           // Review detail with "more" functionality
+                                                           Text(reviewDetail)
+                                                               .font(.customfont(.regular, fontSize: 13))
+                                                               .foregroundStyle(Color(hex: "#2E3E5C"))
+                                                               .lineLimit(isReviewExpanded ? nil : 5) // Limit to 5 lines when collapsed
+                                                         //  +
+                                                           Text(isReviewExpanded ? "less" : "more")
+                                                               .foregroundStyle(Color.yellow)
+                                                               .font(.customfont(.semibold, fontSize: 13))
+                                                               .onTapGesture {
+                                                                   withAnimation {
+                                                                       isReviewExpanded.toggle() // Toggle the state when "more" or "less" is clicked
+                                                                   }
+                                                               }
+                                                       }
+                            .padding(.vertical, 10)
                                 .padding(.horizontal, 13)
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color(hex: "#F4F5F7"))
-                            )
-                        }.padding([.top, .bottom], 7)
-                        HStack{
-                            Button(action: {}){
-                                Image("note")
-                                    .resizable()
-                                    .frame(width: 17, height: 17)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(Color(hex: "#F4F5F7"))
+                                )}
+                            HStack{
+                                Button(action: {}){
+                                    Image("note")
+                                        .resizable()
+                                        .frame(width: 17, height: 17)
+                                }
+                                Text("Write a Review").foregroundStyle(Color.yellow)
+                                    .font(.customfont(.medium, fontSize: 15))
                             }
-                            Text("Write a Review").foregroundStyle(Color.yellow)
-                                .font(.customfont(.medium, fontSize: 15))
                         }
+                        .padding(.horizontal,17)
+                        .padding(.bottom, 10)
                     }
-                    .padding(.horizontal,17)
-                    .padding(.bottom, 10)
                 }
+                .edgesIgnoringSafeArea(.all)
             }
-    .edgesIgnoringSafeArea(.all)
-        }
-        .onTapGesture {
-            withAnimation {
-                isBottomSheetOpen.toggle()
+            .onTapGesture {
+                withAnimation {
+                    isBottomSheetOpen.toggle()
+                }
             }
         }
     }
-}
 
 #Preview {
-    ContentOnButtonSheet(foodName: "Songvak", price: 83.2,date: "5 May 2023", itemFood: "Soup", profile: "Songvak", userName: "Sreng Sodane", description: "Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded, you can see it on your", ingredients: "1/2 Sugar", stepNember: 1, stepDetail: "Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded, you can see it on your", percentageOfRating: 2.4, numberOfRating: 838, review: "A very good Recipe", reviewDetail: "Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded, you can see it on your. Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded,")
+    ContentOnButtonSheet(foodName: "Amok Fish", price: 83.2,date: "5 May 2023", itemFood: "Grill", profile: "Songvak", userName: "Sreng Sodane", description: "An amok Khmer recipe is a traditional Khmer (Cambodian) dish usually made with fish, although chicken and beef amok are also popular. ", ingredients: "120 g Fresh boneless fish fillet", percentageOfRating: 2.4, numberOfRating: 838, review: "A very good Recipe", reviewDetail: "Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded, you can see it on your. Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploadedprofile. Your recipe has been uploaded, you can see it on your. Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded")
     
     
 }
-//let date = dateFormatter.date(from: "01/16/2023")
+

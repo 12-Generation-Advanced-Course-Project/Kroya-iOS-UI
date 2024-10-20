@@ -7,7 +7,7 @@ struct EditingProfileView: View {
     @State private var userInputContact = ""
     @State private var userInputPassword = ""
     @State private var userInputAddress = ""
-    @State private var showBottomSheet : Bool = false
+    @State var show: Bool = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -65,11 +65,11 @@ struct EditingProfileView: View {
                             .font(.customfont(.regular, fontSize: 14))
                         Spacer()
                     }
-                    Text_field(text: $userInputName, label: "Full Name")
-                    Text_field(text: $userInputEmail, label: "Email")
-                    Text_field(text: $userInputContact, label: "Mobile")
-                    PasswordFieldd(password: $userInputPassword, label: "Password")
-                    Text_field(text: $userInputAddress, label: "Address")
+                    Text_field(text: $userInputName, label: "Full Name:")
+                    Text_field(text: $userInputEmail, label: "Email:")
+                    Text_field(text: $userInputContact, label: "Mobile:")
+                    PasswordFieldd(password: $userInputPassword, label: "Password:")
+                    Text_field(text: $userInputAddress, label: "Address:")
                 }
                 .padding(.horizontal, 20)
                 
@@ -77,87 +77,30 @@ struct EditingProfileView: View {
                 
                 CustomButton(title: "Save", action: {
                     print("Button tapped!")
-                }, backgroundColor: PrimaryColor.normal, frameWidth: frameWidthButton * 4.7)
+                }, backgroundColor: PrimaryColor.normal,frameHeight: 55, frameWidth: frameWidthButton * 4.7)
                 
-                Spacer().frame(height: 5)
+                Spacer().frame(height: 2)
                 
+                // Button to trigger the bottom sheet
                 Button(action: {
-                    showBottomSheet.toggle()
-                }){
-                    Text("Delete account?")
-                        .font(.customfont(.medium, fontSize: 17))
-                        .foregroundStyle(Color.red)
-                }
+                                           show = true
+                                       }) {
+                                           Text("Delete account?")
+                                               .foregroundColor(.red)
+                                               
+                                       }
                 
                 Spacer()
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            //  .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             
-            // Bottom Sheet
-            if showBottomSheet {
-                VStack {
-                    Spacer()
-
-                    // The sheet content
-                    VStack(spacing: 20) {
-                        
-                        // Drag handle capsule
-                        Button(action: {}){
-                            Capsule()
-                                .frame(width: 45, height: 4)
-                                .foregroundColor(Color.gray)
-                                .opacity(0.5)
-                                .padding(.top, 10)
-                                .onTapGesture {
-                                    showBottomSheet.toggle() // Allow dismissing the bottom sheet by tapping the capsule
-                                }
-                        }
-                          
-                        
-                        HStack{
-                            Image(systemName: "trash.fill")
-                            Text("Delete your account")
-                                .font(.customfont(.medium, fontSize: 20))
-                        }
-                        .padding(.bottom, 10)
-//                        .onTapGesture {
-//                            print("Delete Account Label tapped!")
-//                        }
-
-                        // Delete Button
-                        CustomButton(title: "Delete", action: {
-                            print("Delete!")
-                            showBottomSheet.toggle() // Close the sheet after action
-                        }, backgroundColor: Color.red, frameHeight: frameHeightIcon * 1.25, frameWidth: frameWidthButton * 4.7)
-                        .onTapGesture {
-                            print("Delete Button tapped!")
-                            showBottomSheet.toggle()
-                        }
-
-                        // Cancel Button
-                        CustomButton(title: "Cancel", action: {
-                            print("Cancel!")
-                            showBottomSheet.toggle() // Close the sheet
-                        }, backgroundColor: Color.white, textColor: .black, frameHeight: frameHeightIcon * 1.25, frameWidth: frameWidthButton * 4.7)
-                        .shadow(radius: 1)
-                        .onTapGesture {
-                            print("Cancel Button tapped!")
-                            showBottomSheet.toggle() // Close the sheet
-                        }
-
-                        Spacer()
-                    }
-                    .frame(height: UIScreen.main.bounds.height / 4 * 1.1) // 1/4 of the screen height
-                    .background(Color(hex: "#F3F5F7"))
-                    .cornerRadius(20)
-                    .transition(.move(edge: .bottom))
-                    .animation(.easeInOut)
+            .confirmationDialog("Delete your account?", isPresented: $show, titleVisibility: .visible) {
+                Button("Delete", role: .destructive) {
+                    // Action for "Delete" button
                 }
-                .edgesIgnoringSafeArea(.all)
-                .onTapGesture {
-                    showBottomSheet.toggle() // Close the sheet
+                Button("Cancel", role: .cancel) {
+                    // Action for "Cancel" button
                 }
-                
             }
         }
     }
