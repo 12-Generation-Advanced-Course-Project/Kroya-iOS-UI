@@ -1,5 +1,4 @@
 import SwiftUI
-
 struct BottomSheetView<Content: View>: View {
     let content: Content
     @Binding var isOpen: Bool
@@ -7,7 +6,7 @@ struct BottomSheetView<Content: View>: View {
     let maxHeight: CGFloat
     let minHeight: CGFloat
     @GestureState private var translation: CGFloat = 0
-
+    
     private var offset: CGFloat {
         isOpen ? 0 : maxHeight - minHeight
     }
@@ -19,48 +18,46 @@ struct BottomSheetView<Content: View>: View {
             .padding(10)
     }
     
-    init(isOpen: Binding<Bool>, maxHeight: CGFloat, @ViewBuilder content: () -> Content) {
+    init(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat, @ViewBuilder content: () -> Content) {
         self.content = content()
         self._isOpen = isOpen
         self.maxHeight = maxHeight
-        self.minHeight = 650 // Minimum height when the sheet is collapsed
+        self.minHeight = minHeight
     }
     
     var body: some View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
-                
                 self.indicator
                 self.content
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 20)
             }
-            
             .frame(width: geometry.size.width, height: self.maxHeight, alignment: .top)
             .background(Color.white)
             .cornerRadius(20)
             .shadow(radius: 20)
-            .offset(y: max(self.offset + self.translation, 0)) // Move the sheet with the drag
+            .offset(y: max(self.offset + self.translation, 0)) // Adjust the sheet's position based on the drag gesture
             .gesture(
                 DragGesture().updating(self.$translation) { value, state, _ in
                     state = value.translation.height
                 }
-                .onEnded { value in
-                    let snapDistance = self.maxHeight * 0.25
-                    if value.translation.height > snapDistance {
-                        // If user drags down by a significant amount, close the sheet
-                        self.isOpen = false
-                    } else if value.translation.height < -snapDistance {
-                        // If user drags up by a significant amount, open the sheet
-                        self.isOpen = true
+                    .onEnded { value in
+                        let snapDistance = self.maxHeight * 0.25
+                        if value.translation.height > snapDistance {
+                            // Drag down beyond threshold closes the sheet
+                            self.isOpen = false
+                        } else if value.translation.height < -snapDistance {
+                            // Drag up beyond threshold opens the sheet
+                            self.isOpen = true
+                        }
                     }
-                }
             )
-            .onAppear {
-                          let defaultHeight = geometry.size.height  // Set the defaultHeight to 70% of the parent height
-                          print("defaultHeight: \(defaultHeight)")
-                      }
         }
     }
 }
+
+
 
 struct ContentOnButtonSheet: View {
     @State private var isBottomSheetOpen: Bool = false
@@ -71,15 +68,13 @@ struct ContentOnButtonSheet: View {
     @State private var currentStep = 1
     @State private var isExpanded = false
     @State private var isReviewExpanded = false
+    @Environment(\.dismiss) var dismiss
     // Step details
     let steps = [
         "Cut the fish into bite sized pieces and set aside.",
         "Clean and slice the vegetables..",
         "In a large skillet, heat the curry seed oil, amok paste, shrimp paste, and coconut milk. Heat thoroughly, cooking until fragrant."
     ]
-    
-   // let review: String
-     //   let reviewDetail: String
     var foodName: String
     var price : Float
     var date : String
@@ -92,10 +87,6 @@ struct ContentOnButtonSheet: View {
     var numberOfRating : Int
     var review :String
     var reviewDetail: String
-    
-    
-    
-    
     var starSize: CGFloat = 60.0
     var activeColor: Color = Color.yellow
     var inactiveColor: Color = Color.gray
@@ -114,16 +105,15 @@ struct ContentOnButtonSheet: View {
             .blur(radius: isBottomSheetOpen ? 5 : 0)
             
             // Bottom Sheet Content
-            BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: 950) {
-                ScrollView {
+            BottomSheetView(isOpen: $isBottomSheetOpen,maxHeight: .screenHeight * 1.03 ,minHeight: .screenHeight * 0.68) {
+                ScrollView(.vertical,showsIndicators: false) {
                     VStack(alignment: .leading, spacing: 7) {
                         
                         HStack{
                             Text(foodName)
                                 .font(.customfont(.bold, fontSize: 20))
                             Spacer()
-                            Button(action:{})
-                            {
+                            NavigationLink(destination: FoodCheckOutView()) {
                                 Circle()
                                     .fill(Color(hex: "FECC03"))
                                     .frame(width: 32, height: 32)
@@ -135,7 +125,6 @@ struct ContentOnButtonSheet: View {
                                             .foregroundStyle(Color.white)
                                             .clipShape(Circle())
                                     )
-                                
                             }
                         }
                         
@@ -395,63 +384,64 @@ struct ContentOnButtonSheet: View {
                             }
                             //=============
                             // User review section
-                                                       VStack(alignment: .leading, spacing: 3) {
-                                                           Text(review)
-                                                               .font(.customfont(.semibold, fontSize: 13))
-                                                           
-                                                           // Star rating for the user's review
-                                                           HStack(spacing: 2) {
-                                                               ForEach(0..<5) { _ in
-                                                                   Image(systemName: "star.fill")
-                                                                       .font(.customfont(.regular, fontSize: 10))
-                                                                       .foregroundColor(.yellow)
-                                                               }
-                                                           }.padding(.bottom, 3)
-                                                           
-                                                           // Review detail with "more" functionality
-                                                           Text(reviewDetail)
-                                                               .font(.customfont(.regular, fontSize: 13))
-                                                               .foregroundStyle(Color(hex: "#2E3E5C"))
-                                                               .lineLimit(isReviewExpanded ? nil : 5) // Limit to 5 lines when collapsed
-                                                         //  +
-                                                           Text(isReviewExpanded ? "less" : "more")
-                                                               .foregroundStyle(Color.yellow)
-                                                               .font(.customfont(.semibold, fontSize: 13))
-                                                               .onTapGesture {
-                                                                   withAnimation {
-                                                                       isReviewExpanded.toggle() // Toggle the state when "more" or "less" is clicked
-                                                                   }
-                                                               }
-                                                       }
-                            .padding(.vertical, 10)
-                                .padding(.horizontal, 13)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color(hex: "#F4F5F7"))
-                                )}
-                            HStack{
-                                Button(action: {}){
-                                    Image("note")
-                                        .resizable()
-                                        .frame(width: 17, height: 17)
-                                }
-                                Text("Write a Review").foregroundStyle(Color.yellow)
-                                    .font(.customfont(.medium, fontSize: 15))
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(review)
+                                    .font(.customfont(.semibold, fontSize: 13))
+                                
+                                // Star rating for the user's review
+                                HStack(spacing: 2) {
+                                    ForEach(0..<5) { _ in
+                                        Image(systemName: "star.fill")
+                                            .font(.customfont(.regular, fontSize: 10))
+                                            .foregroundColor(.yellow)
+                                    }
+                                }.padding(.bottom, 3)
+                                
+                                // Review detail with "more" functionality
+                                Text(reviewDetail)
+                                    .font(.customfont(.regular, fontSize: 13))
+                                    .foregroundStyle(Color(hex: "#2E3E5C"))
+                                    .lineLimit(isReviewExpanded ? nil : 5) // Limit to 5 lines when collapsed
+                                //  +
+                                Text(isReviewExpanded ? "less" : "more")
+                                    .foregroundStyle(Color.yellow)
+                                    .font(.customfont(.semibold, fontSize: 13))
+                                    .onTapGesture {
+                                        withAnimation {
+                                            isReviewExpanded.toggle() // Toggle the state when "more" or "less" is clicked
+                                        }
+                                    }
                             }
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 13)
+                            .background(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(Color(hex: "#F4F5F7"))
+                            )}
+                        HStack{
+                            Button(action: {}){
+                                Image("note")
+                                    .resizable()
+                                    .frame(width: 17, height: 17)
+                            }
+                            Text("Write a Review").foregroundStyle(Color.yellow)
+                                .font(.customfont(.medium, fontSize: 15))
                         }
-                        .padding(.horizontal,17)
-                        .padding(.bottom, 10)
                     }
+                    .padding(.bottom, 20)
                 }
-                .edgesIgnoringSafeArea(.all)
             }
-            .onTapGesture {
-                withAnimation {
-                    isBottomSheetOpen.toggle()
-                }
+            .frame(minHeight: .screenHeight * 0.9,maxHeight: .screenHeight * 1)
+            .edgesIgnoringSafeArea(.all)
+        }
+        .navigationBarBackButtonHidden(true)
+        .onTapGesture {
+            withAnimation {
+                isBottomSheetOpen.toggle()
             }
         }
     }
+}
 
 #Preview {
     ContentOnButtonSheet(foodName: "Amok Fish", price: 83.2,date: "5 May 2023", itemFood: "Grill", profile: "Songvak", userName: "Sreng Sodane", description: "An amok Khmer recipe is a traditional Khmer (Cambodian) dish usually made with fish, although chicken and beef amok are also popular. ", ingredients: "120 g Fresh boneless fish fillet", percentageOfRating: 2.4, numberOfRating: 838, review: "A very good Recipe", reviewDetail: "Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded, you can see it on your. Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploadedprofile. Your recipe has been uploaded, you can see it on your. Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded")

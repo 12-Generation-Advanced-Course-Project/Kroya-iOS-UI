@@ -23,7 +23,7 @@ struct OrderListView: View {
                 // Orders Text Header
                 HStack {
                     Button(action: {
-                     // dismiss()
+                      dismiss()
                     }) {
                         Image(systemName: "arrow.left")
                             .resizable()
@@ -97,14 +97,14 @@ struct OrderListView: View {
 
                 // TabView for Content
                 TabView(selection: $selectedSegment) {
-                    NewView(iselected: selectedSegment)
+                    NewItemFoodOrderCardView(iselected: selectedSegment)
                         .tag(0)
-                    OldView(iselected: selectedSegment)
+                    OldItemFoodOrderCardView(iselected: selectedSegment)
                         .tag(1)
 
                 }.padding(.top, 20)
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-            }
+            }.navigationBarBackButtonHidden(true)
         
     }
 

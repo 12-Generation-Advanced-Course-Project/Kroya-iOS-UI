@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct OldView: View {
+struct OldItemFoodOrderCardView: View {
     var iselected:Int?
     var body: some View {
         Text("Old Ordering")
@@ -15,5 +15,5 @@ struct OldView: View {
 }
 
 #Preview {
-    OldView()
+    OldItemFoodOrderCardView()
 }

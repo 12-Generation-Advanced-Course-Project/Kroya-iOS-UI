@@ -18,8 +18,9 @@ struct AllTabView:View {
                 DisclosureGroup("Today", isExpanded: $isExpandedToday) {
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack{
-                            
-                            OrderCard(isAccepted: true, isOrder: false, showIcon: true)
+                            NavigationLink(destination: OrderListView()) {
+                                OrderCard(isAccepted: true, isOrder: false, showIcon: true)
+                            }
                             OrderCard(isAccepted: false, isOrder: false, showIcon: false)
                             OrderCard(isAccepted: true, isOrder: true, showIcon: false)
                             OrderCard(isAccepted: false, isOrder: false, showIcon: false)

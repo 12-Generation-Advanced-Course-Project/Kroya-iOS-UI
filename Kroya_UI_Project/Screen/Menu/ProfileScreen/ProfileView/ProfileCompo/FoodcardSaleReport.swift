@@ -13,7 +13,7 @@ struct FoodItem: Identifiable {
 }
 
 // View for displaying a food item card with optional timeAgo and status
-struct FoodCardView: View {
+struct ItemFoodOrderCard: View {
     let item: FoodItem
     
     var body: some View {
@@ -124,7 +124,7 @@ struct FoodCardView: View {
 
 
 #Preview {
-    FoodCardView(item:  FoodItem(name: "Brohok", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: nil, timeAgo: nil))
-    FoodCardView(item:FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: "Accept", timeAgo: "35m ago"))
+    ItemFoodOrderCard(item:  FoodItem(name: "Brohok", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: nil, timeAgo: nil))
+    ItemFoodOrderCard(item:FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: "Accept", timeAgo: "35m ago"))
 }
 

@@ -71,7 +71,7 @@ struct OrderCard: View {
                                         .offset(x: 7, y: -8)
                                 }
                             }
-                            .offset(x: -10, y: -23)
+                            .offset(x: geometry.size.width * -(0.04), y: geometry.size.height * -(0.3))
                          
                         }
                     }
@@ -83,7 +83,7 @@ struct OrderCard: View {
                             .foregroundColor(isAccepted ? .green : .red)
                             .fontWeight(.medium)
                             
-                    }.offset(x: -10, y: -26)
+                    }.offset(x: geometry.size.width * -(0.04), y: geometry.size.height * -(0.3))
                 }
             }
          .padding(.horizontal, 10)

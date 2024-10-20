@@ -17,7 +17,8 @@ struct Kroya_UI_ProjectApp: App {
     @StateObject private var userStore = UserStore()
     var body: some Scene {
         WindowGroup {
-            SplashScreen().environmentObject(userStore)
+//            SplashScreen().environmentObject(userStore)
+            MainScreen()
         }
     }
 }

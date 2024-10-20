@@ -8,7 +8,7 @@ struct FoodDetailView: View {
     var subImage2: String
     var subImage3: String
     var subImage4: String
-
+    @Environment(\.dismiss) var dismiss
     // Reference height for BottomSheetView
     private let maxSheetHeight: CGFloat = 600
     
@@ -27,7 +27,7 @@ struct FoodDetailView: View {
             let screenWidth = geometry.size.width
             let frameHeight = screenHeight * 0.4 // Use 40% of screen height for the main image height
             let frameWidth = screenWidth * 1
-            let offsetHeight = -frameHeight / 2 // Adjust overlay offset
+            let offsetHeight = .screenHeight * -(0.19) // Adjust overlay offset
             let offsetWidth = screenWidth * 0.38 // Adjust overlay offset width
             
             ZStack {
@@ -39,22 +39,6 @@ struct FoodDetailView: View {
                         .frame(width: frameWidth, height: frameHeight) // Dynamically set height
                         .clipped()
                         .edgesIgnoringSafeArea(.top)
-                        .overlay(
-                            Button(action: {
-                                isFavorite.toggle()
-                            }) {
-                                Circle()
-                                    .fill(isFavorite ? Color(hex: "#FE724C") : Color.white.opacity(0.5))
-                                    .frame(width: 25, height: 25)
-                                    .overlay(
-                                        Image(systemName: "heart.fill")
-                                            .foregroundColor(.white)
-                                            .font(.system(size: 16))
-                                    )
-                            }
-                                .offset(x: offsetWidth, y: offsetHeight)
-                                .shadow(color: isFavorite ? Color.red.opacity(0.5) : Color.gray.opacity(0.5), radius: 4, x: 0, y: 4)
-                        )
                         .overlay(
                             RoundedRectangle(cornerRadius: 11)
                                 .fill(Color.white.opacity(0.5))
@@ -90,6 +74,45 @@ struct FoodDetailView: View {
                                 .offset(y: 35)
                         )
                     Spacer()
+                }
+            }
+        }
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                HStack {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Circle()
+                            .fill(.white)
+                            .frame(width: 25, height: 25)
+                            .padding(10)
+                            .overlay(
+                                Image(systemName: "arrow.left")
+                                    .foregroundColor(.black)
+                                    .font(.system(size: 16))
+                            )
+                    }
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                HStack {
+                    Button(action: {
+                        isFavorite.toggle()
+                    }) {
+                        Circle()
+                            .fill(isFavorite ? Color(hex: "#FE724C") : Color.white.opacity(0.5))
+                            .frame(width: 25, height: 25)
+                            .padding(15)
+                            .overlay(
+                                Image(systemName: "heart.fill")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 16))
+                            )
+                    }
+                    .shadow(color: isFavorite ? Color.red.opacity(0.5) : Color.gray.opacity(0.5), radius: 4, x: 0, y: 4)
+
                 }
             }
         }

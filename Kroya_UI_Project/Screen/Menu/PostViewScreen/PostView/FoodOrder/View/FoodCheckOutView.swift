@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct FoodCheckOutView: View {
+    @Environment(\.dismiss) var dismiss
     var body: some View {
-        NavigationView {
+     
             VStack {
                 List {
                     // Order Card Section
@@ -70,7 +71,27 @@ struct FoodCheckOutView: View {
             .padding(.horizontal)
             .navigationTitle("Checkout")
             .navigationBarTitleDisplayMode(.inline)
-        }
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    HStack {
+                        Button(action: {
+                            dismiss()
+                        }) {
+                            Circle()
+                                .fill(.white)
+                                .frame(width: 25, height: 25)
+                                .padding(10)
+                                .overlay(
+                                    Image(systemName: "arrow.left")
+                                        .foregroundColor(.black)
+                                        .font(.system(size: 16))
+                                )
+                        }
+                    }
+                }
+            }
+        
     }
 }
 

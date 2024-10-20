@@ -69,7 +69,7 @@ struct FoodonRecipe: View {
                     .padding(.horizontal)
                 ScrollView(.vertical,showsIndicators: false) {
                     VStack{
-                        PopularDishesCard(
+                        FoodandRecipeCardView(
                             imageName: "SomlorKari",
                             dishName: "Somlor Kari",
                             cookingDate: "30 Sep 2024",
@@ -85,7 +85,7 @@ struct FoodonRecipe: View {
                             Spacing: .screenWidth * 0.55,
                             offset:.screenHeight * -(0.06)
                         )
-                        PopularDishesCard(
+                        FoodandRecipeCardView(
                             imageName: "food_background",
                             dishName: "Khmer Food",
                             cookingDate: "30 Sep 2024",

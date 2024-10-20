@@ -11,14 +11,14 @@ struct WebillConnectView: View {
     @State private var clientId = ""
     @State private var secretId = ""
     @State private var issecretIdVisible = false
-   
+    @Environment(\.dismiss) var dismiss
   
     var body: some View {
         VStack(spacing: 15){
         
                 HStack {
                     Button(action: {
-                     // dismiss()
+                      dismiss()
                     }) {
                         Image(systemName: "arrow.left")
                             .resizable()
