@@ -7,7 +7,7 @@ struct EditingProfileView: View {
     @State private var userInputContact = ""
     @State private var userInputPassword = ""
     @State private var userInputAddress = ""
-    @State var showBottomSheet: Bool = false
+    @State var show: Bool = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -83,85 +83,25 @@ struct EditingProfileView: View {
                 
                 // Button to trigger the bottom sheet
                 Button(action: {
-                               showBottomSheet.toggle()
-                           }) {
-                               Text("Delete account?")
-                                   .foregroundColor(.red)
-                                   .font(.system(size: 17, weight: .medium))
-                           }
-                
-            
+                                           show = true
+                                       }) {
+                                           Text("Delete account?")
+                                               .foregroundColor(.red)
+                                               
+                                       }
                 
                 Spacer()
-           }
-          //  .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        
-            .sheet(isPresented: $showBottomSheet) {
-                // Custom Bottom Sheet View
-                VStack {
-                    Spacer()
-                    
-                    VStack(spacing: 20) {
-                        // Top indicator for the sheet
-                        Capsule()
-                            .frame(width: 45, height: 4)
-                            .foregroundColor(Color.gray.opacity(0.5))
-                            .padding(.top, 10)
-                        
-                        // Trash icon and title
-                        HStack(spacing: 10) {
-                            Image(systemName: "trash.fill")
-                                .foregroundColor(.black)
-                            Text("Delete your account?")
-                                .font(.system(size: 20, weight: .medium))
-                                .foregroundColor(.black)
-                        }
-                        
-                        // Delete Button
-                        Button(action: {
-                            // Handle delete action
-                            print("Delete tapped")
-                        }) {
-                            Text("Delete")
-                                .font(.system(size: 17, weight: .medium))
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.red)
-                                .cornerRadius(10)
-                        }
-                        
-                        // Cancel Button
-                        Button(action: {
-                            showBottomSheet = false
-                        }) {
-                            Text("Cancel")
-                                .font(.system(size: 17, weight: .medium))
-                                .foregroundColor(.black)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.white)
-                                .cornerRadius(10)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.gray.opacity(0.2), lineWidth: 1)
-                                )
-                        }
-                        
-                    }
-                    .padding(.horizontal, 30)
-                    //.padding(.bottom, 30)
-     .background(Color(UIColor.systemGray6))
-                    .cornerRadius(20)
-                   // .shadow(radius: 10)
-                    .frame(height: UIScreen.main.bounds.height / 4 * 1.1) // 1/3 of the screen height
-                }
-                .opacity(0.3) // Background overlay
-                
-                
             }
-   
-
+            //  .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            
+            .confirmationDialog("Delete your account?", isPresented: $show, titleVisibility: .visible) {
+                Button("Delete", role: .destructive) {
+                    // Action for "Delete" button
+                }
+                Button("Cancel", role: .cancel) {
+                    // Action for "Cancel" button
+                }
+            }
         }
     }
 }

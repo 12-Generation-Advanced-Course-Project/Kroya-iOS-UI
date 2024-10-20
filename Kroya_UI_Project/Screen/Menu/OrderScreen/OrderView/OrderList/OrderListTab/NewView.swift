@@ -12,12 +12,11 @@ struct NewView: View {
     var body: some View {
         ScrollView{
             VStack(spacing: 20){
-                FoodCardView(item: FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR"))
-                
-                FoodCardView(item: FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR"))
-                
-                FoodCardView(item: FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR"))
-            }.padding(.horizontal, 15)
+                FoodCardView(item: FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: nil, timeAgo: "10m ago"))
+                FoodCardView(item: FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: "Accept", timeAgo: "15m ago"))
+                FoodCardView(item:FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: "Reject", timeAgo: "35m ago"))
+            }
+            .padding(.horizontal, 15)
         }}
 }
 
