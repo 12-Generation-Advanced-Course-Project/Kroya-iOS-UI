@@ -20,7 +20,7 @@ struct AddFoodView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView(.vertical) {
+            ScrollView(.vertical,showsIndicators: false) {
                 VStack {
                     Spacer().frame(height: 15)
                     
@@ -119,7 +119,18 @@ struct AddFoodView: View {
                         Text("Description")
                             .font(.customfont(.bold, fontSize: 16))
                         Spacer().frame(height: 15)
-                        InputField(placeholder: "Tell me a little about your food", text: $Description, backgroundColor: .white, frameHeight: .screenHeight * 0.2, frameWidth: .screenWidth * 0.9, colorBorder: Color(hex: "#D0DBEA"), isMultiline: true)
+                
+                        TextField("Tell me a little about your food", text: $Description, axis: .vertical)
+                            .textFieldStyle(PlainTextFieldStyle())
+                            .multilineTextAlignment(.leading)
+                            .padding(10)
+                            .frame(maxWidth: .screenWidth * 0.9,minHeight: 150, alignment: .topLeading)
+                            .font(.customfont(.medium, fontSize: 15))
+                            .foregroundStyle(.black.opacity(0.6))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .strokeBorder(Color(hex: "#D0DBEA"), lineWidth: 1)
+                            )
                     }
                     
                     Spacer().frame(height: 15)

@@ -9,38 +9,39 @@ import SwiftUI
 import Photos
 
 struct ReceiptCard: View {
-    
+
     @ObservedObject var viewModel: ReceiptViewModel
     @Binding var presentPopup: Bool
     @State private var downloadSuccess: Bool = false  // State variable for download status
-    
+
     var body: some View {
         VStack {
             ZStack {
+                // Only capture this section
                 Image("receipt")
                     .resizable()
                     .frame(maxWidth: .infinity)
                     .frame(height: 550)
                     .padding(.horizontal)
-                
+
                 VStack(spacing: 20) {
                     HStack(spacing: 15) {
                         Image("food_background")
                             .resizable()
                             .frame(width: 50, height: 50)
                             .cornerRadius(50)
-                        
+
                         VStack(alignment: .leading, spacing: 10) {
                             Text(viewModel.receipt.amount)
                                 .font(.system(size: 16, weight: .medium))
                                 .foregroundColor(.black)
-                            
+
                             HStack {
                                 Image(systemName: "arrow.up.right")
                                     .resizable()
                                     .frame(width: 14, height: 14)
                                     .foregroundColor(.red)
-                                
+
                                 Text(viewModel.receipt.paidTo)
                                     .font(.system(size: 14, weight: .medium))
                                     .foregroundColor(.gray)
@@ -51,14 +52,14 @@ struct ReceiptCard: View {
                     .padding(.horizontal)
                     .padding(.leading, 20)
                     .offset(y: -7)
-                    
+
                     VStack(alignment: .leading, spacing: 18) {
                         ReceiptRow(label: "Item", value: viewModel.receipt.item, valueColor: .yellow)
                         ReceiptRow(label: "Reference#", value: viewModel.receipt.referenceNumber)
                         ReceiptRow(label: "Order date", value: viewModel.receipt.orderDate)
                         ReceiptRow(label: "Paid by", value: viewModel.receipt.paidBy)
                         ReceiptRow(label: "Payer", value: viewModel.receipt.payer)
-                        
+
                         HStack {
                             Text("Seller")
                                 .font(.system(size: 16, weight: .medium))
@@ -81,7 +82,7 @@ struct ReceiptCard: View {
                             .frame(height: 1)
                     }
                     .padding(.horizontal)
-                    
+
                     VStack {
                         Button {
                             if !downloadSuccess {
@@ -92,11 +93,11 @@ struct ReceiptCard: View {
                                 Image(systemName: downloadSuccess ? "checkmark.circle.fill" : "arrow.down.circle.fill")
                                     .resizable()
                                     .frame(width: 20, height: 20)
-                                    .foregroundColor(.yellow)
-                                
+                                    .foregroundColor(downloadSuccess ?  Color(hex: "#3FBD4E") : .yellow)
+
                                 Text(downloadSuccess ? "Download Success" : "Download Receipt")
                                     .font(.system(size: 16, weight: .bold))
-                                    .foregroundColor(.yellow)
+                                    .foregroundColor(downloadSuccess ? Color(hex: "#3FBD4E") : .yellow)
                             }
                         }
                         .buttonStyle(PlainButtonStyle())
@@ -104,42 +105,45 @@ struct ReceiptCard: View {
                     }
                 }
             }
+            .frame(maxWidth: .infinity, minHeight: 550, alignment: .center)
+            .background(Color.clear) // Set background to clear, no color
         }
     }
-    
+
     func saveImage() {
-        // Create a UIHostingController to render the SwiftUI view into a UIView
-        let hostingController = UIHostingController(rootView: self.body)
-        
-        // Set the desired size of the hosting controller's view
-        hostingController.view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-        
-        // Render the hosting controller's view as an image
-        let renderer = UIGraphicsImageRenderer(size: hostingController.view.bounds.size)
-        
-        let uiImage = renderer.image { _ in
-            hostingController.view.drawHierarchy(in: hostingController.view.bounds, afterScreenUpdates: true)
+        // Update the UI to show "Download Success" before capturing the image
+        withAnimation {
+            downloadSuccess = true
         }
-        
-        // Save the image as PNG to the photo album
-        if let pngData = uiImage.pngData() {
-            PHPhotoLibrary.shared().performChanges({
-                PHAssetChangeRequest.creationRequestForAsset(from: UIImage(data: pngData)!)
-            }) { success, error in
-                if success {
-                    // Update the state to indicate download success
-                    DispatchQueue.main.async {
-                        withAnimation {
-                            downloadSuccess = true
+        // Define the size of the receipt content you want to capture (the ZStack)
+        let receiptSize = CGSize(width: UIScreen.main.bounds.width, height: 550) // Match the ZStack height
+
+        // Capture the view inside ZStack after the state has updated
+        self.body
+            .captureUIView(size: receiptSize) { image in
+                guard let image = image else {
+                    print("Error capturing image")
+                    return
+                }
+
+                // Save the image as PNG to the photo album
+                if let pngData = image.pngData() {
+                    PHPhotoLibrary.shared().performChanges({
+                        PHAssetChangeRequest.creationRequestForAsset(from: UIImage(data: pngData)!)
+                    }) { success, error in
+                        if success {
+                            // The image was successfully saved
+                            print("Receipt saved successfully!")
+                        } else if let error = error {
+                            print("Error saving receipt: \(error.localizedDescription)")
                         }
                     }
-                } else if let error = error {
-                    print("Error saving receipt: \(error.localizedDescription)")
                 }
             }
-        }
     }
+
 }
+
 
 struct ReceiptRow: View {
     var label: String
