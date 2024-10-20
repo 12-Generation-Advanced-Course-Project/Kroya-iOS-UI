@@ -100,7 +100,7 @@ struct SaleModalView: View {
                                     TextField(selectedDate.formatted(.dateTime.day().month().year()), text: $ingret.cookDate)
                                         .multilineTextAlignment(.leading)
                                         .font(.customfont(.medium, fontSize: 15))
-                                    Button {
+                                        Button {
                                         isDatePickerVisible = true
                                     } label: {
                                         Image(systemName: "calendar")
