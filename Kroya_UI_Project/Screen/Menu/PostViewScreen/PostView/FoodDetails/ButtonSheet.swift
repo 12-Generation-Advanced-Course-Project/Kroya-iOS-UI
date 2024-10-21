@@ -68,6 +68,7 @@ struct ContentOnButtonSheet: View {
     @State private var currentStep = 1
     @State private var isExpanded = false
     @State private var isReviewExpanded = false
+    @State private var isReviewPopupOpen = false
     @Environment(\.dismiss) var dismiss
     // Step details
     let steps = [
@@ -156,11 +157,16 @@ struct ContentOnButtonSheet: View {
                         
                         // Profile
                         HStack(spacing: 10){
-                            Image(profile)
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 38, height: 38)
-                                .clipShape(Circle())
+                            NavigationLink {
+                                ViewAccount(profileImage: "Men", userName: userName, email: "ounbonaliheng@gmail.com")
+                            } label: {
+                                Image("Men")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 38, height: 38)
+                                    .clipShape(Circle())
+                            }
+
                             Text(userName)
                                 .font(.customfont(.bold, fontSize: 17))
                                 .bold()
@@ -422,7 +428,9 @@ struct ContentOnButtonSheet: View {
                                     .fill(Color(hex: "#F4F5F7"))
                             )}
                         HStack{
-                            Button(action: {}){
+                            Button(action: {
+                                isReviewPopupOpen = true
+                            }){
                                 Image("note")
                                     .resizable()
                                     .frame(width: 17, height: 17)
@@ -436,6 +444,13 @@ struct ContentOnButtonSheet: View {
             }
             .frame(minHeight: .screenHeight * 0.9,maxHeight: .screenHeight * 1)
             .edgesIgnoringSafeArea(.all)
+            if isReviewPopupOpen {
+                           PopupReview(profile: "ahmok1", userName: userName, description: "")
+                               .transition(.move(edge: .bottom))
+                               .onTapGesture {
+                                   isReviewPopupOpen = false 
+                               }.padding()
+                       }
         }
         .navigationBarBackButtonHidden(true)
         .onTapGesture {

@@ -25,9 +25,9 @@ struct PopupReview: View {
                     Image(systemName: "xmark.circle.fill")
                         .resizable()
                         .frame(width: 24, height: 24)
-                        .foregroundColor(.white)
+                        .foregroundColor(.black)
                         .padding(.bottom, 700) // Adjust to place it at the top
-                        .padding(.leading, 350)
+                        .padding(.leading, 300)
                 }
             }
             

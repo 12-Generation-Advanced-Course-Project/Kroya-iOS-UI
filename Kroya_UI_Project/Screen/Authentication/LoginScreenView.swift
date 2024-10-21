@@ -50,7 +50,7 @@ struct LoginScreenView: View {
                 .padding(.top, -70)
                 
                 Button(action: {
-                    authVM.sendOTPIfEmailNotExists(email: "hengheng123@gmail.com")
+                    authVM.sendOTPIfEmailNotExists(email: email)
                 }) {
                     Text("GET STARTED")
                         .font(.customfont(.semibold, fontSize: 16))
