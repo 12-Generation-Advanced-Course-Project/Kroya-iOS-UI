@@ -113,6 +113,6 @@ struct AllPopularTabView: View {
     }
 }
 
-//#Preview {
-//    AllPopularTabView()
-//}
+#Preview {
+    AllPopularTabView()
+}
