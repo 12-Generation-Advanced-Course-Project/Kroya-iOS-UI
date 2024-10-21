@@ -212,7 +212,7 @@ class AuthService {
         AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"])
             .validate()
             .responseDecodable(of: LoginAccountResponse.self) { response in
-                debugPrint(response)
+            
                 switch response.result {
                 case .success(let ApiResponse):
                     if let statusCode = Int(ApiResponse.statusCode) {

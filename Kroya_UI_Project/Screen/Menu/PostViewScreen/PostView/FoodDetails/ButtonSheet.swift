@@ -114,18 +114,21 @@ struct ContentOnButtonSheet: View {
                                 .font(.customfont(.bold, fontSize: 20))
                             Spacer()
                             NavigationLink(destination: FoodCheckOutView()) {
-                                Circle()
-                                    .fill(Color(hex: "FECC03"))
-                                    .frame(width: 32, height: 32)
-                                    .overlay(
-                                        Image(systemName: "plus")
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .frame(width: 18, height: 18)
-                                            .foregroundStyle(Color.white)
-                                            .clipShape(Circle())
-                                    )
+                                HStack {
+                                    Text("Order")
+                                        .font(.customfont(.regular, fontSize: 13))
+                                        .foregroundStyle(.white)
+                                    Image(systemName: "plus")
+                                        .resizable()
+                                        .frame(width: 14, height: 14)
+                                        .cornerRadius(12)
+                                        .foregroundStyle(Color.white)
+                                }
+                                .padding(10)
+                                .background(PrimaryColor.normal)
+                                .cornerRadius(12)
                             }
+
                         }
                         
                         HStack(spacing: 7){

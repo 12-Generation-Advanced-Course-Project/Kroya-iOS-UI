@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct PaymentButtomView: View {
-    @State private var isShowingQRModal = false  // State to control modal presentation
+struct PaymentButtonView: View {
+    @State private var isShowingQRModal = false
 
     var body: some View {
         HStack(spacing: 10) {
@@ -41,14 +41,14 @@ struct PaymentButtomView: View {
                 isShowingQRModal = true  // Trigger the modal sheet
             }) {
                 VStack(alignment: .leading, spacing: 10) {
-                    HStack{
+                    HStack {
                         Image("khqr")
                             .resizable()
                             .frame(width: 20, height: 20)
                         Image("webill365_logo_full 1")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 70,height: 15)
+                            .frame(width: 70, height: 15)
                     }
                     Text("Pay with KHQR")
                         .font(.customfont(.medium, fontSize: 16))
@@ -71,4 +71,8 @@ struct PaymentButtomView: View {
             }
         }
     }
+}
+
+#Preview {
+    PaymentButtonView()
 }
