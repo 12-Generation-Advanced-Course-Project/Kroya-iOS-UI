@@ -1,5 +1,5 @@
 {
-  "originHash" : "78f763eb5e8b199ffb50b46f54d5c2eb9bfc5ca74ddb1b0befbb3e6c22fef742",
+  "originHash" : "7d5d02c4b0a536564c6dd8491c6fd70c2b3dc9a83f2f8b8767c4d09dadc5b338",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -11,12 +11,12 @@
       }
     },
     {
-      "identity" : "swiftuiflow",
+      "identity" : "ios-maps-sdk",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ciaranrobrien/SwiftUIFlow",
+      "location" : "https://github.com/googlemaps/ios-maps-sdk",
       "state" : {
-        "branch" : "main",
-        "revision" : "b300d3c0110116f3520066dfb8dcf3006cf593c3"
+        "revision" : "3786e5028d868482ef88140117d33efd60828300",
+        "version" : "9.1.1"
       }
     }
   ],

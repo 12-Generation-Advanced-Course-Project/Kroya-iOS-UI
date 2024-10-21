@@ -6,7 +6,7 @@ import SwiftUI
 
 struct LoginScreenView: View {
     @State private var phoneNumber: String = ""
-    
+    //Testing
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {

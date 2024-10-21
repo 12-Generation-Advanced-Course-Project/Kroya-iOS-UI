@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		840C1FAB2CB3BD0C0066027A /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 840C1FAA2CB3BD0C0066027A /* Alamofire */; };
-		8445843A2CB6793F00CA3C01 /* SwiftUIFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 844584392CB6793F00CA3C01 /* SwiftUIFlow */; };
+		840C1FAE2CB3BD610066027A /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 840C1FAD2CB3BD610066027A /* GoogleMaps */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,9 +34,22 @@
 		8406DAC92CA5510F0003EA40 /* Kroya_UI_ProjectUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Kroya_UI_ProjectUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		842E785D2CB5348400D7ED5D /* Exceptions for "Kroya_UI_Project" folder in "Kroya_UI_Project" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Screen/Menu/FavoriteScreen/FavoriteModel/FavoriteModel.swift,
+			);
+			target = 8406DAAE2CA5510C0003EA40 /* Kroya_UI_Project */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		8406DAB12CA5510C0003EA40 /* Kroya_UI_Project */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				842E785D2CB5348400D7ED5D /* Exceptions for "Kroya_UI_Project" folder in "Kroya_UI_Project" target */,
+			);
 			path = Kroya_UI_Project;
 			sourceTree = "<group>";
 		};
@@ -57,7 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8445843A2CB6793F00CA3C01 /* SwiftUIFlow in Frameworks */,
+				840C1FAE2CB3BD610066027A /* GoogleMaps in Frameworks */,
 				840C1FAB2CB3BD0C0066027A /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -120,7 +133,7 @@
 			name = Kroya_UI_Project;
 			packageProductDependencies = (
 				840C1FAA2CB3BD0C0066027A /* Alamofire */,
-				844584392CB6793F00CA3C01 /* SwiftUIFlow */,
+				840C1FAD2CB3BD610066027A /* GoogleMaps */,
 			);
 			productName = Kroya_UI_Project;
 			productReference = 8406DAAF2CA5510C0003EA40 /* Kroya_UI_Project.app */;
@@ -208,7 +221,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				840C1FA92CB3BD0C0066027A /* XCRemoteSwiftPackageReference "Alamofire" */,
-				844584382CB6793F00CA3C01 /* XCRemoteSwiftPackageReference "SwiftUIFlow" */,
+				840C1FAC2CB3BD610066027A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8406DAB02CA5510C0003EA40 /* Products */;
@@ -426,7 +439,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -462,7 +475,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -595,12 +608,12 @@
 				minimumVersion = 5.9.1;
 			};
 		};
-		844584382CB6793F00CA3C01 /* XCRemoteSwiftPackageReference "SwiftUIFlow" */ = {
+		840C1FAC2CB3BD610066027A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ciaranrobrien/SwiftUIFlow";
+			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.1.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -611,10 +624,10 @@
 			package = 840C1FA92CB3BD0C0066027A /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
-		844584392CB6793F00CA3C01 /* SwiftUIFlow */ = {
+		840C1FAD2CB3BD610066027A /* GoogleMaps */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 844584382CB6793F00CA3C01 /* XCRemoteSwiftPackageReference "SwiftUIFlow" */;
-			productName = SwiftUIFlow;
+			package = 840C1FAC2CB3BD610066027A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMaps;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
