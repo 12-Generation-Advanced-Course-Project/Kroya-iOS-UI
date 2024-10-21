@@ -47,6 +47,9 @@ struct CategoryCardView: View {
 }
 
 #Preview {
-    CategoryCardView(title: "Lunch", image: "Somlorkoko", color: .gray, x: 60, y: 18)
+    HStack{
+        CategoryCardView(title: "Lunch", image: "Somlorkoko", color: .gray, x: 60, y: 18)
+        CategoryCardView(title: "Dinner", image: "DinnerPic", color: .gray, x: 50, y: 14)
+    }
 }
 

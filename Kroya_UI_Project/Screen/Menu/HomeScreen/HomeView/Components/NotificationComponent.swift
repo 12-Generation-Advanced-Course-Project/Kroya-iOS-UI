@@ -1,48 +1,40 @@
-//
-//  AcceptedOrder.swift
-//  Kroya_UI_Project
-//
-//  Created by PVH_003 on 9/10/24.
-//
-
 import SwiftUI
 
 struct NotificationComponent: View {
     
     var image: String = "Songvak"
     var name: String = "StoreName"
-    var status: String
-    var description: String = ""
+    var notificationType: Int
     var time: String = "14 m ago"
-    init(notificationType: Int){
-        switch notificationType{
-        case 1 :
-            self.status = "accepted order "
-            self.description = "please be patient and wait for merchant to prepare meal."
-        case 2 :
-            self.status = "has arrived "
-            self.description = "Your order "
-        case 3 :
-            self.status = "is being shipped "
-            self.description = "please be patient."
-        case 4 :
-            self.status = "rejected "
-            self.description = "please be patient."
-        default:
-            self.status = ""
-        }
-    }
     
     var body: some View {
-        VStack(alignment: .leading){
-            HStack{
-                Image("\(image)")
+        let (status, description): (String, String)
+        
+        switch notificationType {
+        case 1:
+            status = "accepted order"
+            description = "Please be patient and wait for the merchant to prepare your meal. patient and wait for the merchant to prepare your meal."
+        case 2:
+            status = "has arrived"
+            description = "Your order is ready."
+        case 3:
+            status = "is being shipped"
+            description = "Please be patient."
+        case 4:
+            status = "rejected"
+            description = "Unfortunately, your order was rejected."
+        default:
+            status = ""
+            description = ""
+        }
+        
+        return VStack(alignment: .leading) {
+            HStack(spacing: 15) {
+                Image(image)
                     .resizable()
-                   
-                    .frame(width: 50,height: 50)
-                    .cornerRadius(17)
-                
-                VStack(alignment: .leading, spacing: 10){
+                    .frame(width: 50, height: 50)
+                    .cornerRadius(8)
+                VStack(alignment: .leading, spacing: 4) {
                     HStack {
                         Text("\(name) ")
                             .font(.customfont(.medium, fontSize: 12))
@@ -52,18 +44,21 @@ struct NotificationComponent: View {
                             .font(.customfont(.medium, fontSize: 12))
                             .foregroundStyle(.black.opacity(0.6))
                     }
+                    .frame(height: 30)
                     .lineLimit(2)
                     
-                    Text("\(time)")
+                    Text(time)
                         .font(.customfont(.regular, fontSize: 10))
-                        .foregroundStyle(.black .opacity(0.6))
+                        .foregroundColor(.black.opacity(0.6))
                 }
-                .layoutPriority(1)
             }
+            .padding(.vertical, 5)
+            Divider()
         }
-        
+        .padding(.horizontal)
     }
 }
+
 #Preview {
-    NotificationComponent(notificationType: 2)
+    NotificationComponent(notificationType: 1)
 }

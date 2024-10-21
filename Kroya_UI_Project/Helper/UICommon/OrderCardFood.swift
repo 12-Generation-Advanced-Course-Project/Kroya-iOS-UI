@@ -69,7 +69,7 @@ struct OrderCard: View {
             RoundedRectangle(cornerRadius: 12)
                 .stroke(Color.gray.opacity(0.5), lineWidth: 1)
         )
-        .frame(width: .screenWidth * 0.85, height: .screenHeight * 0.1)
+        .frame(maxWidth: .infinity,minHeight: 100)
     }
 }
 

@@ -34,6 +34,7 @@ struct UserBasicInfoView: View {
                 .font(.title3)
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
+            
             //User Input
             VStack(spacing:20){
                 VStack(alignment:.leading,spacing: 5){
@@ -41,7 +42,7 @@ struct UserBasicInfoView: View {
                         .font(.callout)
                         .fontWeight(.medium)
                         .foregroundColor(.gray)
-                    InputField(iconName: "person.text.rectangle", placeholder: "Full name", text: $textName)
+                    InputField(iconName: "person.text.rectangle", placeholder: "Full name", text: $textName,frameWidth: .infinity, isMultiline: false)
                 }
                 
                 VStack(alignment: .leading, spacing: 5) {
@@ -49,7 +50,7 @@ struct UserBasicInfoView: View {
                         .font(.callout)
                         .fontWeight(.medium)
                         .foregroundColor(.gray)
-                    InputField(iconName: "mail.fill", placeholder: "example@gmail.com", text: $textEmail)
+                    InputField(iconName: "mail.fill", placeholder: "example@gmail.com", text: $textEmail,frameWidth: .infinity, isMultiline: false)
                 }
                 
                 NavigationLink(destination: MainScreen()){
