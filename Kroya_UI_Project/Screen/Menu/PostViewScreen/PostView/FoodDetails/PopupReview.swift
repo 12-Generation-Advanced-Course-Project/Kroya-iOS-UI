@@ -72,36 +72,34 @@ struct PopupReview: View {
                             .frame(maxWidth: .infinity)
                             .frame(height: 100)
                             .font(.customfont(.medium, fontSize: 15))
-                            .foregroundStyle(.black.opacity(0.6))
+                            .foregroundStyle(.gray.opacity(0.6))
                             .cornerRadius(15)
                         
                     }
                     .overlay(
                         RoundedRectangle(cornerRadius: 15)
-                            .strokeBorder(Color(hex: "#D0DBEA"), lineWidth: 1)
+                            .strokeBorder(Color.gray.opacity(0.3), lineWidth: 1)
                     )
                     .padding(.vertical,10)
                     Text("\(description.count)/300")
                         .font(.customfont(.medium, fontSize: 12))
                         .foregroundColor(.black.opacity(0.3))
-                    Spacer().frame(height: 50)
+                    Spacer().frame(height: 90)
                     Button (action: {
                         
                     }){
                         Text("Post")
-                            .padding()
-                            .font(.customfont(.medium, fontSize: 13))
-                            .foregroundColor(.white)
+                            .frame(width: 100,height: 50)
+                            .font(.customfont(.semibold, fontSize: 16))
                             .background(Color.yellow)
                             .cornerRadius(10)
-                            .frame(width: .infinity)
+                            .foregroundColor(.white)
                     }
-                    
                 }
             }
             .padding()
             .background(Color.white)
-            .cornerRadius(20)
+            .cornerRadius(10)
             .padding()
             
         }

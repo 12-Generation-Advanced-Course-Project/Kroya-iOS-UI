@@ -1,22 +1,22 @@
 {
-  "originHash" : "7d5d02c4b0a536564c6dd8491c6fd70c2b3dc9a83f2f8b8767c4d09dadc5b338",
+  "originHash" : "edbd16810a407ddae618f383134f0b7dbf8e281ed7239443ecabf7fbfd5efd49",
   "pins" : [
     {
       "identity" : "alamofire",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Alamofire/Alamofire.git",
       "state" : {
-        "revision" : "f455c2975872ccd2d9c81594c658af65716e9b9a",
-        "version" : "5.9.1"
+        "revision" : "e16d3481f5ed35f0472cb93350085853d754913f",
+        "version" : "5.10.1"
       }
     },
     {
-      "identity" : "ios-maps-sdk",
+      "identity" : "swiftuiflow",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/googlemaps/ios-maps-sdk",
+      "location" : "https://github.com/ciaranrobrien/SwiftUIFlow.git",
       "state" : {
-        "revision" : "3786e5028d868482ef88140117d33efd60828300",
-        "version" : "9.1.1"
+        "branch" : "main",
+        "revision" : "b300d3c0110116f3520066dfb8dcf3006cf593c3"
       }
     }
   ],
