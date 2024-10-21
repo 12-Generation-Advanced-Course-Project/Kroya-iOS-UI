@@ -11,7 +11,8 @@ struct ProfileView:View {
     
     @State private var showingCredits = false
     @State private var selectedLanguage: String? = nil
-    
+    @State private var islogout: Bool = false
+    @EnvironmentObject var userStore: UserStore
     let languages = [
         ("English", "English"),
         ("Khmer", "ភាសាខ្មែរ"),
@@ -111,7 +112,10 @@ struct ProfileView:View {
                    
                 }
                 Spacer().frame(height:.screenHeight * 0.04)
-                CustomButton(title: "Log out", action: {print("Logout")},backgroundColor: .red, frameWidth: .screenWidth * 0.9)
+                CustomButton(title: "Log out", action: {islogout.toggle()},backgroundColor: .red, frameWidth: .screenWidth * 0.9)
+                NavigationLink(destination: LoginScreenView(userStore: userStore),isActive: $islogout) {
+                    EmptyView()
+                }
                 Spacer()
             }
             

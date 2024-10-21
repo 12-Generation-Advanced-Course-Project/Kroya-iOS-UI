@@ -39,6 +39,39 @@ struct FoodDetailView: View {
                         .frame(width: frameWidth, height: frameHeight) // Dynamically set height
                         .clipped()
                         .edgesIgnoringSafeArea(.top)
+                        .overlay{
+                            HStack{
+                                Button(action: {
+                                    dismiss()
+                                }) {
+                                    Circle()
+                                        .fill(.white)
+                                        .frame(width: 25, height: 25)
+                                        .padding(10)
+                                        .overlay(
+                                            Image(systemName: "arrow.left")
+                                                .foregroundColor(.black)
+                                                .font(.system(size: 16))
+                                        )
+                                }
+                                Spacer()
+                                Button(action: {
+                                    isFavorite.toggle()
+                                }) {
+                                    Circle()
+                                        .fill(isFavorite ? Color(hex: "#FE724C") : Color.white.opacity(0.5))
+                                        .frame(width: 25, height: 25)
+                                        .padding(15)
+                                        .overlay(
+                                            Image(systemName: "heart.fill")
+                                                .foregroundColor(.white)
+                                                .font(.system(size: 16))
+                                        )
+                                }
+                                .shadow(color: isFavorite ? Color.red.opacity(0.5) : Color.gray.opacity(0.5), radius: 4, x: 0, y: 4)
+                            }.offset(y: -105)
+                            
+                        }
                         .overlay(
                             RoundedRectangle(cornerRadius: 11)
                                 .fill(Color.white.opacity(0.5))
@@ -74,51 +107,14 @@ struct FoodDetailView: View {
                                 .offset(y: 35)
                         )
                     Spacer()
-                }
+                }   .navigationBarBackButtonHidden(true)
+                    
+                    
             }
         }
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                HStack {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Circle()
-                            .fill(.white)
-                            .frame(width: 25, height: 25)
-                            .padding(10)
-                            .overlay(
-                                Image(systemName: "arrow.left")
-                                    .foregroundColor(.black)
-                                    .font(.system(size: 16))
-                            )
-                    }
-                }
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                HStack {
-                    Button(action: {
-                        isFavorite.toggle()
-                    }) {
-                        Circle()
-                            .fill(isFavorite ? Color(hex: "#FE724C") : Color.white.opacity(0.5))
-                            .frame(width: 25, height: 25)
-                            .padding(15)
-                            .overlay(
-                                Image(systemName: "heart.fill")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 16))
-                            )
-                    }
-                    .shadow(color: isFavorite ? Color.red.opacity(0.5) : Color.gray.opacity(0.5), radius: 4, x: 0, y: 4)
-
-                }
-            }
+     
         }
     }
-}
-
 #Preview {
     FoodDetailView(
         theMainImage: "Songvak",

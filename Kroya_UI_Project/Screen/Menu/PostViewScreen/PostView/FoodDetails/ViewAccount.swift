@@ -80,7 +80,7 @@ struct ViewAccount: View {
                                 .padding(.trailing, 28) // Adjust spacing between titles
                         }
                     }
-                    .padding(.horizontal, 20) // Aligns the text with the screen edge
+                    .padding(.horizontal, 15) // Aligns the text with the screen edge
                     .padding(.top)
 
                     // GeometryReader for underline
@@ -129,7 +129,7 @@ struct ViewAccount: View {
 
         for index in 0..<selectedSegment {
             let titleWidth = tabTitles[index].size(withAttributes: [NSAttributedString.Key.font: font]).width
-            offset += titleWidth + 22 // Add text width + spacing between titles
+            offset += titleWidth + 20 // Add text width + spacing between titles
         }
 
         return offset

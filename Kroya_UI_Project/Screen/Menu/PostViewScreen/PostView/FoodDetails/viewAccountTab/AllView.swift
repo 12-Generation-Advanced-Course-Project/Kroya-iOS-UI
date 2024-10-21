@@ -10,7 +10,7 @@ import SwiftUI
 struct AllView: View {
     var iselected:Int?
     var body: some View {
-        ScrollView{
+        ScrollView(.vertical,showsIndicators: false){
             VStack{
                 FoodandRecipeCardView(
                     imageName: "SomlorKari",
