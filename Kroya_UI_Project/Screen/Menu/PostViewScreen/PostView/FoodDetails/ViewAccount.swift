@@ -45,7 +45,7 @@ struct ViewAccount: View {
                             Image(profileImage)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
-                                .frame(width: 50, height: 52)
+                                .frame(width: 52, height: 52)
                                 .clipShape(RoundedCorner(radius: 15))
                               
 
@@ -77,7 +77,7 @@ struct ViewAccount: View {
                                 .fontWeight(.semibold)
                                 .font(.customfont(.semibold, fontSize: 16))
                                 .foregroundColor(selectedSegment == (tabTitles.firstIndex(of: title) ?? 0) ? .black.opacity(0.8) : .black.opacity(0.5))
-                                .padding(.trailing, 20) // Adjust spacing between titles
+                                .padding(.trailing, 28) // Adjust spacing between titles
                         }
                     }
                     .padding(.horizontal, 20) // Aligns the text with the screen edge
@@ -102,7 +102,9 @@ struct ViewAccount: View {
                         .tag(0)
                     FoodOnSale(iselected: selectedSegment)
                         .tag(1)
-                   // RecipeView(2)
+                    Recipe(iselected: selectedSegment)
+                        .tag(2)
+                  
 
                 }.padding(.top, 20)
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
@@ -123,11 +125,11 @@ struct ViewAccount: View {
     // Calculate the underline offset based on the width of preceding tabs
     private func underlineOffset(for selectedSegment: Int, in geometry: GeometryProxy) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 22, weight: .semibold)
-        var offset: CGFloat = 13 // Starting padding
+        var offset: CGFloat = 10 // Starting padding
 
         for index in 0..<selectedSegment {
             let titleWidth = tabTitles[index].size(withAttributes: [NSAttributedString.Key.font: font]).width
-            offset += titleWidth + 20 // Add text width + spacing between titles
+            offset += titleWidth + 22 // Add text width + spacing between titles
         }
 
         return offset

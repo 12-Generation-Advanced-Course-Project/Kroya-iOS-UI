@@ -25,7 +25,7 @@ struct AllView: View {
                     frameheight:160,
                     frameWImage:400,
                     frameHImage:135,
-                    Spacing:120,
+                    Spacing:200,
                     offset:-45
                 )
                 
@@ -42,7 +42,7 @@ struct AllView: View {
                     frameheight:160,
                     frameWImage:400,
                     frameHImage:135,
-                    Spacing:120,
+                    Spacing:200,
                     offset:-45
                 )
                 FoodandRecipeCardView(
@@ -58,7 +58,7 @@ struct AllView: View {
                     frameheight:160,
                     frameWImage:400,
                     frameHImage:135,
-                    Spacing:120,
+                    Spacing:200,
                     offset:-45
                 )
                 FoodandRecipeCardView(
@@ -74,7 +74,7 @@ struct AllView: View {
                     frameheight:160,
                     frameWImage:400,
                     frameHImage:135,
-                    Spacing:120,
+                    Spacing:200,
                     offset:-45
                 )
             }}
