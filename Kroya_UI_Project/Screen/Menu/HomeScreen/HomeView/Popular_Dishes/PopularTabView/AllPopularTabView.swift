@@ -17,7 +17,7 @@ struct AllPopularTabView: View {
                        date: "30 Sep 2024",
                        itemFood: "Somlor Kari",
                        profile: "profile_image",
-                       userName: "User Name",
+                       userName: "Sreng SoDane",
                        description: "Somlor Kari is a traditional Cambodian dish...",
                        ingredients: "Chicken, Coconut Milk, Curry Paste",
                        percentageOfRating: 4.8,
