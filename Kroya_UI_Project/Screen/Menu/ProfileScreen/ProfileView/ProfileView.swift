@@ -141,7 +141,7 @@ struct ProfileView:View {
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     // Search button
-                    Button(action: { }) {
+                    NavigationLink(destination: EditingProfileView()) {
                         Text("Edit")
                             .font(.customfont(.semibold, fontSize: 16))
                             .foregroundStyle(PrimaryColor.normal)

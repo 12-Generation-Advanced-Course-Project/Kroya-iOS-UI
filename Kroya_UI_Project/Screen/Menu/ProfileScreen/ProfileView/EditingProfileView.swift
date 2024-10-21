@@ -8,7 +8,7 @@ struct EditingProfileView: View {
     @State private var userInputPassword = ""
     @State private var userInputAddress = ""
     @State var show: Bool = false
-    
+    @Environment(\.dismiss) var dismiss
     var body: some View {
         GeometryReader { geometry in
             
@@ -100,6 +100,22 @@ struct EditingProfileView: View {
                 }
                 Button("Cancel", role: .cancel) {
                     // Action for "Cancel" button
+                }
+            }
+        }
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                HStack {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Image(systemName: "arrow.left")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 20, height: 20)
+                            .foregroundStyle(.black)
+                    }
                 }
             }
         }

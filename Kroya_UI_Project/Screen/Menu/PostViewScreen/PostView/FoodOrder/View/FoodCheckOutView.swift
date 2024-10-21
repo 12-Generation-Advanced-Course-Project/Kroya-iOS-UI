@@ -41,7 +41,7 @@ struct FoodCheckOutView: View {
                     
                     // Payment Section
                     Section {
-                        PaymentButtomView()
+                        PaymentButtonView()
                     } header: {
                         Text("Payment")
                             .font(.customfont(.semibold, fontSize: 16))
