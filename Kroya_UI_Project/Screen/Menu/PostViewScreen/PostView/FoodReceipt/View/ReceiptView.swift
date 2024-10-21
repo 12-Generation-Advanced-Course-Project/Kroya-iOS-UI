@@ -6,11 +6,12 @@
 //  Created by KAK-LY on 15/10/24.
 //
 
+import UIKit
+import Photos
 import SwiftUI
-
 struct ReceiptView: View {
-    
-    @State private var presentPopup = false
+
+    @State private var presentPopup = false  // State to control popup visibility
     @ObservedObject var viewModel = ReceiptViewModel()
 
     var body: some View {
@@ -26,19 +27,14 @@ struct ReceiptView: View {
                 .padding(.bottom, 50)
                 .navigationTitle("Receipt")
                 .navigationBarTitleDisplayMode(.inline)
-                
+
+                // Show popup if presentPopup is true
                 if presentPopup {
-                    Popup(isPresented: $presentPopup) {
-                        // Display the receipt details within the popup
+                    Popup(isPresented: $presentPopup, dismissOnTapOutside: true) {
                         ReceiptCard(viewModel: viewModel, presentPopup: $presentPopup)
                     }
                 }
             }
         }
     }
-}
-
-
-#Preview {
-    ReceiptView()
 }

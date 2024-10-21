@@ -9,28 +9,16 @@ import SwiftUI
 
 struct ViewAllPopularDishesView: View {
     @State private var selectedSegment = 0
-    @Binding var isTabBarHidden: Bool
-    
+    @Environment(\.dismiss) var dismiss
     @State private var currentPage = 0
     let images = ["slide1", "slide2", "slide3"]
     let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
     
     var body: some View {
-        NavigationView {
             GeometryReader{ geometry in 
                 VStack(spacing: 10) {
-                    // Orders Text Header
-                    HStack {
-                        Text("Popular Dishes")
-                            .font(.customfont(.bold, fontSize: 18))
-                            .opacity(0.84)
-                        Spacer()
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.leading, 16)
-                    Spacer().frame(height: 10)
-                    
                     //Slider
+                    Spacer().frame(height: 15)
                     VStack(alignment:.leading){
                         TabView(selection: $currentPage) {
                             ForEach(0..<images.count, id: \.self) { index in
@@ -41,13 +29,14 @@ struct ViewAllPopularDishesView: View {
                             }
                         }
                         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
-                        .frame(maxWidth: .infinity, maxHeight:130) // Dynamically set height
+                        .frame(maxWidth: .infinity, maxHeight:120) // Dynamically set height
                         .cornerRadius(12)
                         .onReceive(timer) { _ in
                             withAnimation {
                                 currentPage = (currentPage + 1) % images.count
                             }
-                        }}
+                        }
+                    }.padding(.horizontal)
                     
                     // Tab View
                     VStack(alignment: .leading) {
@@ -72,7 +61,7 @@ struct ViewAllPopularDishesView: View {
                                 .fill(PrimaryColor.normal)
                                 .frame(width: geometry.size.width / 7, height: 2)
                                 .offset(x: selectedSegment == 2
-                                        ? CGFloat(selectedSegment) * geometry.size.width / 4.7
+                                        ? CGFloat(selectedSegment) * geometry.size.width / 4.5
                                         : CGFloat(selectedSegment) * geometry.size.width / 5)
                                 .animation(.easeInOut(duration: 0.3), value: selectedSegment)
                         }
@@ -96,9 +85,28 @@ struct ViewAllPopularDishesView: View {
                     }
                     .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 }
-                
             }
-        }
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    HStack {
+                        Button(action: {
+                            dismiss()
+                        }) {
+                            Image(systemName: "arrow.left")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 20, height: 20)
+                                .foregroundStyle(.black)
+                        }
+                        Text("Popular Dishes")
+                            .font(.customfont(.semibold, fontSize: 16))
+                            .foregroundStyle(.black.opacity(0.8))
+                        Spacer()
+                    }
+                }
+            }
+        
     }
 }
 

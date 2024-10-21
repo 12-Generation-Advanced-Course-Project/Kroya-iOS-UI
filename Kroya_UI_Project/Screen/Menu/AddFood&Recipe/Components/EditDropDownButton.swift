@@ -1,28 +1,39 @@
-//
-//  EditDropDownButton.swift
-//  Kroya_UI_Project
-//
-//  Created by PVH_003 on 16/10/24.
-//
+
+
+
 
 import SwiftUI
 
 struct EditDropDownButton: View {
+    var onEdit: () -> Void
+    var onDelete: () -> Void
+
     var body: some View {
-        VStack{
-            Menu{
-                Button(){
-                    // Action for button
-                } label: {
-                    Label("Edit", systemImage: "pencil")
-                }.accentColor(.green)
-
-                Button(role: .destructive){
-                    // Action for button
-                } label:{
-                    Label("Delete", systemImage: "trash.fill")
+        VStack {
+            Menu {
+                Button(action: onEdit) {
+                    Label {
+                        Text("Edit")
+                            .foregroundColor(.green)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    } icon: {
+                        Image(systemName: "pencil")
+                            .foregroundColor(.green)
+                    }
                 }
+                .frame(width: 200)
 
+                Button(action: onDelete) {
+                    Label {
+                        Text("Delete")
+                            .foregroundColor(.red)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    } icon: {
+                        Image(systemName: "trash.fill")
+                            .foregroundColor(.red)
+                    }
+                }
+                .frame(width: 200)
             } label: {
                 Image("ellipsis")
                     .padding(.trailing, 20)
@@ -30,6 +41,4 @@ struct EditDropDownButton: View {
         }
     }
 }
-#Preview {
-    EditDropDownButton()
-}
+

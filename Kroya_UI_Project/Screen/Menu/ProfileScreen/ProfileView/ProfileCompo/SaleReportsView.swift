@@ -41,8 +41,10 @@ struct SaleReportView: View {
     
     let soldItems: [Date: [FoodItem]] = [
         Calendar.current.date(from: DateComponents(year: 2024, month: 10, day: 3))!: [
-            FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR"),
-            FoodItem(name: "Somlor Korko", itemsCount: 3, remarks: "Not spicy", price: 6.00, paymentMethod: "Cash")
+
+             FoodItem(name: "Brohok", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: nil, timeAgo: nil),
+             FoodItem(name: "Brohok", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: nil, timeAgo: nil)
+            
         ]
     ]
     
@@ -151,7 +153,7 @@ struct SaleReportView: View {
             if let items = soldItems[selectedDate] {
                 ScrollView(.vertical, showsIndicators: false) {
                     ForEach(items) { item in
-                        FoodCardView(item: item)
+                        ItemFoodOrderCard(item: item)
                             .padding(.vertical, 5)
                             .padding(.horizontal)
                     }

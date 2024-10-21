@@ -1,10 +1,13 @@
-
-
-
+//
+//  FoodandRecipeCardView.swift
+//  Kroya_UI_Project
+//
+//  Created by Ounbonaliheng on 20/10/24.
+//
 
 import SwiftUI
 
-struct PopularDishesCard: View {
+struct FoodandRecipeCardView: View {
     @State private var isFavorite: Bool = false
     
     var imageName: String
@@ -149,7 +152,7 @@ struct PopularDishesCard: View {
 }
 
 //#Preview {
-//    PopularDishesCard(
+//    FoodandRecipeCardView(
 //        imageName: "SomlorKari",
 //        dishName: "Somlor Kari",
 //        cookingDate: "30 Sep 2024",

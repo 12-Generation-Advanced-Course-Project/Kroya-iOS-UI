@@ -81,7 +81,7 @@ extension View {
     }
 }
 
-// Custom Shape to handle rounded corners
+//MARK: Custom Shape to handle rounded corners
 struct RoundedCorner: Shape {
     var radius: CGFloat = .infinity
     var corners: UIRectCorner = .allCorners
@@ -93,3 +93,24 @@ struct RoundedCorner: Shape {
 }
 
 
+
+
+//MARK: Using For Save Image
+
+extension View {
+    func captureUIView(size: CGSize, completion: @escaping (UIImage?) -> Void) {
+        let controller = UIHostingController(rootView: self)  // Capture current view (self)
+        let hostingView = controller.view
+
+        // Set the desired frame to match the size of the content you want to capture
+        hostingView?.frame = CGRect(origin: .zero, size: size)
+
+        // Render the view into a UIImage
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let image = renderer.image { _ in
+            hostingView?.drawHierarchy(in: hostingView!.bounds, afterScreenUpdates: true)
+        }
+
+        completion(image)
+    }
+}

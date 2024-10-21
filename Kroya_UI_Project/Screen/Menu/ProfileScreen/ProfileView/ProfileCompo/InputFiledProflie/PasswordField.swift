@@ -42,7 +42,7 @@ struct PasswordFieldd: View {
                     .foregroundColor(Color.gray)
             }
         }
-        .padding(18)
+        .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color(hex: "#F4F5F7"))
@@ -51,7 +51,7 @@ struct PasswordFieldd: View {
     }
 }
 
-//#Preview {
-//    PasswordFieldd(password: .constant("password123"), label: "Password")
-//}
+#Preview {
+    PasswordFieldd(password: .constant("password123"), label: "Password")
+}
 

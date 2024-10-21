@@ -18,7 +18,7 @@ struct Kroya_UI_ProjectApp: App {
     var body: some Scene {
         WindowGroup {
             SplashScreen().environmentObject(userStore)
-            
+          
         }
     }
 }

@@ -11,6 +11,7 @@ import SwiftUI
 struct Text_field: View {
     @Binding var text: String
     var label: String
+    var framHeight : CGFloat = 60
     
     var body: some View {
         HStack {
@@ -20,10 +21,10 @@ struct Text_field: View {
             Spacer().frame(width: 20)
 
             TextField("", text : $text)
-                .opacity(0.84)
+                .opacity(0.9)
             
         }.font(.customfont(.medium, fontSize: 18))
-        .padding(18)
+        .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color(hex: "#F4F5F7")).shadow(radius: 1)
@@ -31,6 +32,6 @@ struct Text_field: View {
     }
 }
 
-//#Preview {
-//    Text_field(text: .constant(""), label: "Full name:")
-//}
+#Preview {
+    Text_field(text: .constant(""), label: "Full name:")
+}

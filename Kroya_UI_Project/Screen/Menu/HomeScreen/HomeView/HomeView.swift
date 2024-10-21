@@ -50,7 +50,7 @@ struct HomeView: View {
                                 )
                             }
                         }
-
+                        
                     }
                     
                     Spacer().frame(height: 25)
@@ -84,15 +84,15 @@ struct HomeView: View {
                         Text("Popular Dishes")
                             .font(.customfont(.semibold, fontSize: 16))
                         Spacer()
-                        Button(action: {
-                            // Action for "View all"
-                        }) {
+                        NavigationLink {
+                            ViewAllPopularDishesView()
+                        } label: {
                             Text("View all -->")
                                 .foregroundStyle(PrimaryColor.normal)
                                 .font(.customfont(.semibold, fontSize: 16))
                                 .offset(x: -10)
                         }
-                        .buttonStyle(PlainButtonStyle())
+                        
                     }
                     
                     Spacer().frame(height: 20)
@@ -102,39 +102,69 @@ struct HomeView: View {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 10) {
                                 // Example PopularDishesCard for dishes
-                                PopularDishesCard(
-                                    imageName: "SomlorKari",
-                                    dishName: "Somlor Kari",
-                                    cookingDate: "30 Sep 2024",
+                                NavigationLink(destination: ContentOnButtonSheet(
+                                    foodName: "Somlor Kari",
                                     price: 2.00,
-                                    rating: 5.0,
-                                    reviewCount: 200,
-                                    deliveryInfo: "Free",
-                                    deliveryIcon: "motorbike",
-                                    framewidth: 230,
-                                    frameheight: 160,
-                                    frameWImage: 300,
-                                    frameHImage: 135,
-                                    Spacing: .screenWidth * 0.27,
-                                    offset: .screenHeight * -(0.05)
-                                )
+                                    date: "30 Sep 2024",
+                                    itemFood: "Somlor Kari",
+                                    profile: "profile_image",
+                                    userName: "User Name",
+                                    description: "Somlor Kari is a traditional Cambodian dish...",
+                                    ingredients: "Chicken, Coconut Milk, Curry Paste",
+                                    percentageOfRating: 4.8,
+                                    numberOfRating: 200,
+                                    review: "Delicious dish!",
+                                    reviewDetail: "The Somlor Kari was perfectly spiced and rich in flavor..."
+                                )) {
+                                    FoodandRecipeCardView(
+                                        imageName: "SomlorKari",
+                                        dishName: "Somlor Kari",
+                                        cookingDate: "30 Sep 2024",
+                                        price: 2.00,
+                                        rating: 5.0,
+                                        reviewCount: 200,
+                                        deliveryInfo: "Free",
+                                        deliveryIcon: "motorbike",
+                                        framewidth: 230,
+                                        frameheight: 160,
+                                        frameWImage: 300,
+                                        frameHImage: 135,
+                                        Spacing: .screenWidth * 0.27,
+                                        offset: .screenHeight * -(0.05)
+                                    )
+                                }
                                 
-                                PopularDishesCard(
-                                    imageName: "food_background",
-                                    dishName: "Khmer Food",
-                                    cookingDate: "30 Sep 2024",
-                                    price: 10.00,
-                                    rating: 5.0,
-                                    reviewCount: 200,
-                                    deliveryInfo: "Free",
-                                    deliveryIcon: "motorbike",
-                                    framewidth: 230,
-                                    frameheight: 160,
-                                    frameWImage: 300,
-                                    frameHImage: 135,
-                                    Spacing: .screenWidth * 0.27,
-                                    offset: .screenHeight * -(0.05)
-                                )
+                                NavigationLink(destination: ContentOnButtonSheet(
+                                    foodName: "Songvak",
+                                    price: 2.00,
+                                    date: "30 Sep 2024",
+                                    itemFood: "Songvak",
+                                    profile: "profile_image", // Assuming a profile image
+                                    userName: "User Name",
+                                    description: "Songvak is a delicious dish...",
+                                    ingredients: "Pork, Fish Sauce, Spices",
+                                    percentageOfRating: 4.7,
+                                    numberOfRating: 150,
+                                    review: "Fantastic!",
+                                    reviewDetail: "The dish was flavorful and aromatic, a great meal..."
+                                )) {
+                                    FoodandRecipeCardView(
+                                        imageName: "Songvak",
+                                        dishName: "Songvak",
+                                        cookingDate: "30 Sep 2024",
+                                        price: 2.00,
+                                        rating: 5.0,
+                                        reviewCount: 200,
+                                        deliveryInfo: "Free",
+                                        deliveryIcon: "motorbike",
+                                        framewidth: 230,
+                                        frameheight: 160,
+                                        frameWImage: 300,
+                                        frameHImage: 135,
+                                        Spacing: .screenWidth * 0.27,
+                                        offset: .screenHeight * -(0.05)
+                                    )
+                                }
                             }
                         }
                     }
@@ -189,13 +219,13 @@ struct HomeView: View {
                             }
                         }
                     }
-
+                    
                 }
             }
         }
     }
     
-  
+    
     @ViewBuilder
     func destinationView(for title: String) -> some View {
         switch title {

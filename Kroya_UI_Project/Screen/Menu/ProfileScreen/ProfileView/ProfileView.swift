@@ -49,32 +49,36 @@ struct ProfileView:View {
                     }
                 }
                 Spacer().frame(height:.screenHeight * 0.03)
-                VStack(alignment:.leading){
-                    Text("Payment Method")
-                        .font(.customfont(.medium, fontSize: 14))
-                    Spacer().frame(height:.screenHeight * 0.02)
-                    HStack(spacing:10){
-                        Image("ico_link")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 25, height: 25)
-                        Text("Connected")
-                            .font(.customfont(.medium, fontSize: 16))
-                            .frame(maxWidth: .infinity,alignment: .leading)
-                        Spacer()
-                        Text("weBill365")
-                            .font(.customfont(.medium, fontSize: 16))
-                            .foregroundStyle(.black.opacity(0.75))
-                        Image("Rightarrow")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 25, height: 25)
-                        
+                NavigationLink(destination: WebillConnectView()) {
+                    VStack(alignment:.leading){
+                        Text("Payment Method")
+                            .font(.customfont(.medium, fontSize: 14))
+                            .foregroundStyle(.black)
+                        Spacer().frame(height:.screenHeight * 0.02)
+                        HStack(spacing:10){
+                            Image("ico_link")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 25, height: 25)
+                            Text("Connected")
+                                .font(.customfont(.medium, fontSize: 16))
+                                .foregroundStyle(.black)
+                                .frame(maxWidth: .infinity,alignment: .leading)
+                            Spacer()
+                            Text("weBill365")
+                                .font(.customfont(.medium, fontSize: 16))
+                                .foregroundStyle(.black.opacity(0.75))
+                            Image("Rightarrow")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 25, height: 25)
+                            
+                        }
+                        .frame(maxWidth: .screenWidth * 0.9, minHeight: .screenHeight * 0.05)
+                        .padding(.horizontal)
+                        .background(Color(hex: "#F4F5F7"))
+                        .cornerRadius(15)
                     }
-                    .frame(maxWidth: .screenWidth * 0.9, minHeight: .screenHeight * 0.05)
-                    .padding(.horizontal)
-                    .background(Color(hex: "#F4F5F7"))
-                    .cornerRadius(15)
                 }
                 
                 Spacer().frame(height:.screenHeight * 0.03)
@@ -137,7 +141,7 @@ struct ProfileView:View {
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     // Search button
-                    Button(action: { }) {
+                    NavigationLink(destination: EditingProfileView()) {
                         Text("Edit")
                             .font(.customfont(.semibold, fontSize: 16))
                             .foregroundStyle(PrimaryColor.normal)

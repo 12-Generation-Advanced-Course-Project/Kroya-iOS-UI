@@ -18,7 +18,9 @@ struct Ingredient: Identifiable, Codable {
 
 struct IngredientEntryView: View {
     @Binding var ingredient: Ingredient
-    
+    let onEdit: () -> Void  // Action for editing
+    let onDelete: () -> Void  // Action for deleting
+
     let currencies = ["៛", "$"]
     
     var body: some View {
@@ -30,18 +32,19 @@ struct IngredientEntryView: View {
                     .scaledToFit()
                     .frame(width: 24, height: 24)
                     .foregroundColor(.gray)
-                    .padding(.leading, 10)
+                    .padding(.leading, 7)
                 
                 HStack{
                     TextField("Enter ingredients", text: $ingredient.name)
                         .padding(.vertical, 15)
                         .multilineTextAlignment(.leading)
                         .padding(.horizontal, 10)
+                        .padding(.trailing,2)
                         .frame(maxWidth: .infinity)
                         .font(.customfont(.medium, fontSize: 15))
                         .foregroundStyle(.black.opacity(0.6))
                         .cornerRadius(15)
-                    EditDropDownButton()
+                    EditDropDownButton(onEdit: onEdit, onDelete: onDelete)
                 }
                 .overlay(
                     RoundedRectangle(cornerRadius: 15)
@@ -100,7 +103,7 @@ struct IngredientEntryView: View {
                     .strokeBorder(Color(hex: "#D0DBEA"), lineWidth: 1)
             )
             .padding(.leading, .screenWidth * 0.1)
-            .padding(.bottom, .screenWidth * 0.04)
-        }
+        }.cornerRadius(15)
+            
     }
 }
