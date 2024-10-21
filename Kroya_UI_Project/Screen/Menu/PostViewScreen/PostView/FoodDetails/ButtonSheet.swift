@@ -426,9 +426,9 @@ struct ContentOnButtonSheet: View {
                                 Image("note")
                                     .resizable()
                                     .frame(width: 17, height: 17)
+                                Text("Write a Review").foregroundStyle(Color.yellow)
+                                    .font(.customfont(.medium, fontSize: 15))
                             }
-                            Text("Write a Review").foregroundStyle(Color.yellow)
-                                .font(.customfont(.medium, fontSize: 15))
                         }
                     }
                     .padding(.bottom, 20)

@@ -31,6 +31,7 @@ struct SaleModalView: View {
     @State private var isAvailableForSale: Bool? = nil
     @State private var seletedDate = Date()
     @State private var isDatePickerVisible: Bool = false
+    @State var selectedDate  = Date()
     var totalRiel: String = "12000"
     let currencies = ["៛", "$"]
     
@@ -96,41 +97,46 @@ struct SaleModalView: View {
                                         .foregroundStyle(.black.opacity(0.6))
                                         .frame(minWidth: 100, alignment: .leading)
                                     Spacer()
-                                    TextField("dd/mm/yyyy", text: $ingret.cookDate)
+                                    TextField(selectedDate.formatted(.dateTime.day().month().year()), text: $ingret.cookDate)
                                         .multilineTextAlignment(.leading)
                                         .font(.customfont(.medium, fontSize: 15))
-                                    Button {
+                                        Button {
                                         isDatePickerVisible = true
                                     } label: {
                                         Image(systemName: "calendar")
                                             .font(.customfont(.light, fontSize: 25))
                                             .foregroundColor(.gray)
+                                        
                                     }
+                                    .overlay(
+                                        DatePicker(selection: $selectedDate, displayedComponents: .date) {
+                                        }
+                                            .labelsHidden()
+                                            .colorMultiply(.clear))
                                     
                                     Spacer()
                                 }
                                 .padding(.horizontal)
                                 Divider()
                                 
-                                HStack(spacing: 10) {
+                                HStack {
                                     Text("Amount")
                                         .font(.customfont(.regular, fontSize: 15))
                                         .foregroundStyle(.black.opacity(0.6))
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                    Spacer()
+                                        .frame(maxWidth: 120, alignment: .leading)
                                     TextField("00", text: $ingret.amount)
                                         .multilineTextAlignment(.leading)
                                         .font(.customfont(.medium, fontSize: 15))
+                                        .frame(maxWidth: .infinity,alignment: .leading)
                                 }
                                 .padding(.horizontal)
                                 Divider()
                                 
-                                HStack(spacing: 10) {
+                                HStack{
                                     Text("Price")
                                         .font(.customfont(.regular, fontSize: 15))
                                         .foregroundStyle(.black.opacity(0.6))
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                    Spacer()
+                                        .frame(maxWidth: 120, alignment: .leading)
                                     HStack {
                                         TextField("0.0", text: $ingret.price)
                                             .multilineTextAlignment(.leading)
@@ -149,12 +155,11 @@ struct SaleModalView: View {
                                 .padding(.horizontal)
                                 Divider()
                                 
-                                HStack(spacing: 10) {
+                                HStack {
                                     Text("Location")
                                         .font(.customfont(.regular, fontSize: 15))
                                         .foregroundStyle(.black.opacity(0.6))
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                    Spacer()
+                                        .frame(maxWidth: 120, alignment: .leading)
                                     TextField("St323", text: $ingret.location)
                                         .multilineTextAlignment(.leading)
                                         .font(.customfont(.medium, fontSize: 15))
@@ -240,4 +245,9 @@ struct SaleModalView: View {
     let sampleIngret = Ingret(cookDate: "", amount: "", price: "", location: "", selectedCurrency: 0)
     SaleModalView(ingret: .constant(sampleIngret))
 }
+
+
+
+
+
 
