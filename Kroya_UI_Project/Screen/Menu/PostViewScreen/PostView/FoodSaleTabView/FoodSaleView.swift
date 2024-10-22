@@ -26,7 +26,7 @@ struct FoodSaleView: View{
                                percentageOfRating: 4.8,
                                numberOfRating: 200,
                                review: "Delicious dish!",
-                               reviewDetail: "The Somlor Kari was perfectly spiced and rich in flavor..."
+                               reviewDetail: "The Somlor Kari was perfectly spiced and rich in flavor"
                            )) {
                                FoodandRecipeCardView(
                                    imageName: "SomlorKari",
@@ -42,7 +42,8 @@ struct FoodSaleView: View{
                                    frameWImage: 400,
                                    frameHImage: 145,
                                    Spacing: 220,
-                                   offset: -41
+                                   offset: -41,
+                                   isRecipeorFood: true
                                )
                            }
                     
@@ -58,7 +59,7 @@ struct FoodSaleView: View{
                                 percentageOfRating: 4.7,
                                 numberOfRating: 150,
                                 review: "Fantastic!",
-                                reviewDetail: "The dish was flavorful and aromatic, a great meal..."
+                                reviewDetail: "The dish was flavorful and aromatic, a great meal"
                             )) {
                                 FoodandRecipeCardView(
                                     imageName: "food_background",
@@ -74,7 +75,8 @@ struct FoodSaleView: View{
                                     frameWImage:405,
                                     frameHImage:180,
                                     Spacing: .screenWidth * 0.55,
-                                    offset:.screenHeight * -(0.06)
+                                    offset:.screenHeight * -(0.06),
+                                    isRecipeorFood: true
                                     
                                 )
                             }

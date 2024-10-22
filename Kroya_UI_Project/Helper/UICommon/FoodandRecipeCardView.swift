@@ -24,6 +24,7 @@ struct FoodandRecipeCardView: View {
     var frameHImage: CGFloat
     var Spacing:CGFloat
     var offset:CGFloat
+    var isRecipeorFood: Bool
     
     
     private let referenceWidth: CGFloat = 375
@@ -166,7 +167,8 @@ struct FoodandRecipeCardView: View {
         frameWImage:300,
         frameHImage:135,
         Spacing:120,
-        offset:-45
+        offset:-45,
+        isRecipeorFood: true
     )
 }
 

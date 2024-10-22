@@ -39,7 +39,8 @@ struct AllPopularTabView: View {
                            frameWImage: 400,
                            frameHImage: 145,
                            Spacing: 220,
-                           offset: -41
+                           offset: -41,
+                           isRecipeorFood: true
                        )
                    }
             
@@ -71,7 +72,8 @@ struct AllPopularTabView: View {
                             frameWImage: 400,
                             frameHImage: 145,
                             Spacing: 220,
-                            offset: -41
+                            offset: -41,
+                            isRecipeorFood: true
                         )
                     }
 //            FoodandRecipeCardView(

@@ -10,7 +10,9 @@ struct HomeView: View {
     ]
     
     var body: some View {
+        
         NavigationView {
+            
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading) {
                     // Title Section
@@ -53,7 +55,7 @@ struct HomeView: View {
                         
                     }
                     
-                    Spacer().frame(height: 25)
+//                    Spacer().frame(height: 25)
                     
                     // Category Section
                     VStack(alignment: .leading) {
@@ -114,7 +116,7 @@ struct HomeView: View {
                                     percentageOfRating: 4.8,
                                     numberOfRating: 200,
                                     review: "Delicious dish!",
-                                    reviewDetail: "The Somlor Kari was perfectly spiced and rich in flavor..."
+                                    reviewDetail: "The Somlor Kari was perfectly spiced and rich in flavor"
                                 )) {
                                     FoodandRecipeCardView(
                                         imageName: "SomlorKari",
@@ -130,7 +132,7 @@ struct HomeView: View {
                                         frameWImage: 300,
                                         frameHImage: 135,
                                         Spacing: .screenWidth * 0.27,
-                                        offset: .screenHeight * -(0.05)
+                                        offset: .screenHeight * -(0.05), isRecipeorFood: true
                                     )
                                 }
                                 
@@ -162,7 +164,7 @@ struct HomeView: View {
                                         frameWImage: 300,
                                         frameHImage: 135,
                                         Spacing: .screenWidth * 0.27,
-                                        offset: .screenHeight * -(0.05)
+                                        offset: .screenHeight * -(0.05), isRecipeorFood: true
                                     )
                                 }
                             }
@@ -223,6 +225,7 @@ struct HomeView: View {
                 }
             }
         }
+        
     }
     
     

@@ -12,6 +12,8 @@ struct PopupReview: View {
     var profile: String
     var userName: String
     @State var description: String
+    @Binding var isReviewPopupOpen: Bool
+    var isPopup: Bool = false
     
     var body: some View {
         ZStack{
@@ -21,6 +23,7 @@ struct PopupReview: View {
                 // Close button
                 Button(action: {
                     // Action to dismiss the popup
+                    isReviewPopupOpen = false
                 }) {
                     Image(systemName: "xmark.circle.fill")
                         .resizable()
@@ -52,7 +55,9 @@ struct PopupReview: View {
                         }
                     }
                 }
-                .padding(.vertical,10)
+                
+                Spacer().frame(height: 35)
+//                .padding(.vertical,10)
                 HStack{
                     Button(action: {}){
                         Image("note")
@@ -62,19 +67,19 @@ struct PopupReview: View {
                             .font(.customfont(.medium, fontSize: 15))
                     }
                 }
-                Spacer().frame(height: 35)
                 VStack(alignment: .trailing){
-                    HStack{
-                        TextField("Descripe your experience", text: $description)
-                            .padding(.bottom, 45)
+                    VStack{
+                        TextField("Describe your experience", text: $description, axis: .vertical)
+                            .textFieldStyle(PlainTextFieldStyle())
                             .multilineTextAlignment(.leading)
-                            .padding(.horizontal, 15)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 100)
+                            .padding(10)
+                            .frame(maxWidth: .screenWidth * 0.9,minHeight: 150, alignment: .topLeading)
                             .font(.customfont(.medium, fontSize: 15))
-                            .foregroundStyle(.gray.opacity(0.6))
-                            .cornerRadius(15)
-                        
+                            .foregroundStyle(.black.opacity(0.6))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .strokeBorder(Color(hex: "#D0DBEA"), lineWidth: 1)
+                            )
                     }
                     .overlay(
                         RoundedRectangle(cornerRadius: 15)
@@ -97,16 +102,18 @@ struct PopupReview: View {
                     }
                 }
             }
-            .padding()
+            .padding(30)
             .background(Color.white)
             .cornerRadius(10)
+            .frame(maxWidth: .infinity,maxHeight: 500)
             .padding()
             
         }
-        
+        .edgesIgnoringSafeArea(.all)
+
     }
 }
 
-#Preview {
-    PopupReview(profile: "ahmok1", userName: "Chhoy Sreynoch", description: "")
-}
+//#Preview {
+//    PopupReview(profile: "ahmok1", userName: "Chhoy Sreynoch", description: "", isReviewPopupOpen: $isPopup)
+//}
