@@ -54,7 +54,8 @@ struct PostViewScreen: View {
                 
                 // TabView for content
                 TabView(selection: $selectedSegment) {
-                    AllPostFoodandRecipe(iselected: selectedSegment)
+//                    AllPostFoodandRecipe(iselected: selectedSegment)
+                    FoodSaleView(iselected: selectedSegment)
                         .tag(0)
                     FoodSaleView(iselected: selectedSegment)
                         .tag(1)
