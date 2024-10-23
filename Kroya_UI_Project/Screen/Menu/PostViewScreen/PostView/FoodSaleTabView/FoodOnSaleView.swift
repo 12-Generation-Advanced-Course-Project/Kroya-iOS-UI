@@ -1,13 +1,6 @@
-//
-//  RecipeView.swift
-//  Kroya_UI_Project
-//
-//  Created by Ounbonaliheng on 4/10/24.
-//
-
 import SwiftUI
 
-struct RecipeView: View {
+struct FoodOnSaleView: View {
     
     // Properties
     var iselected: Int?
@@ -17,17 +10,17 @@ struct RecipeView: View {
         List {
             ForEach(0..<3) { index in // Loop 3 times
                 ZStack {
-                    RecipeViewCell(
-                        
-                        imageName: "somlorKari",
-                        dishName: "Somlor Kari \(index + 1)", // Customize the dish name with index
+                    FoodOnSaleViewCell(
+                        imageName: "brohok",
+                        dishName: "Somlor Kari",
                         cookingDate: "30 Sep 2024",
-                        statusType: "Recipe",
+                        price: 2.00,
                         rating: 5.0,
                         reviewCount: 200,
-                        level: "Easy"
+                        deliveryInfo: "Free",
+                        deliveryIcon: "motorbike"
                     )
-                    
+                
                     // Place the NavigationLink as a background item, without using the arrow.
                     NavigationLink(destination: ContentOnButtonSheet(
                         foodName: "Somlor Kari \(index + 1)", // Customize with the index if needed
@@ -57,9 +50,6 @@ struct RecipeView: View {
     }
 }
 
-
 #Preview {
-    RecipeView(iselected: 1)
+    FoodOnSaleView(iselected: 1)
 }
-
-

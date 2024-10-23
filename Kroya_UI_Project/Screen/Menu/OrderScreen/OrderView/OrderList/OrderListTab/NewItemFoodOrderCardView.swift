@@ -10,6 +10,7 @@ import SwiftUI
 struct NewItemFoodOrderCardView: View {
     var iselected:Int?
     var body: some View {
+        
         ScrollView(.vertical,showsIndicators: false){
             VStack(spacing: 20){
                 ItemFoodOrderCard(item: FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: nil, timeAgo: "10m ago"))

@@ -1,24 +1,26 @@
 //
-//  RecipeViewCell.swift
+//  FoodOnSaleView.swift
 //  Kroya_UI_Project
 //
 //  Created by KAK-LY on 22/10/24.
 //
 
+
 import SwiftUI
 
-struct RecipeViewCell: View {
+struct FoodOnSaleViewCell: View {
     
     @State private var isFavorite: Bool = false
     
     var imageName           : String
     var dishName            : String
     var cookingDate         : String
-    var statusType          : String
+    var price               : Double
     var rating              : Double
     var reviewCount         : Int
-    var level               : String
-
+    var deliveryInfo        : String
+    var deliveryIcon        : String
+    
     
     var body: some View {
         VStack {
@@ -55,7 +57,7 @@ struct RecipeViewCell: View {
                     .shadow(color: PrimaryColor.normal.opacity(0.25),radius: 5,y:4)
                     
                     Spacer()  // Push the Favorite button to the right
-
+                    
                     // Favorite Button
                     Button(action: {
                         isFavorite.toggle()
@@ -75,14 +77,14 @@ struct RecipeViewCell: View {
                 .padding(.trailing, 10)  // Padding added for right spacing
             }
             .frame(height: 140)
-
+            
             // Content Section
             VStack(alignment: .leading, spacing: 5) {
                 // Dish Name
                 Text(dishName)
                     .font(.customfont(.medium, fontSize: 14))  // Dynamic font size
                     .foregroundColor(.black)
-
+                
                 // Cooking Date Information
                 HStack {
                     Text("It will be cooked on ")
@@ -97,16 +99,23 @@ struct RecipeViewCell: View {
                         .font(.customfont(.medium, fontSize: 9))
                         .foregroundColor(.gray)
                 }
-
+                
                 // Price and Delivery Info
-                HStack(spacing: 10){
-                    Text(statusType)
+                HStack {
+                    Text("$ \(String(format: "%.2f", price))")
                         .font(.customfont(.medium, fontSize: 14))
                         .foregroundColor(.yellow)
                     
-                    Text(level)
-                        .font(.customfont(.light, fontSize: 12))
-                        .foregroundColor(.gray)
+                    HStack(spacing: 4) {
+                        Image(deliveryIcon)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 16, height: 16)
+                            .opacity(0.60)
+                        Text(deliveryInfo)
+                            .font(.customfont(.light, fontSize: 12))
+                            .foregroundColor(.gray)
+                    }
                     Spacer()
                 }
             }
@@ -122,20 +131,19 @@ struct RecipeViewCell: View {
                 .stroke(Color(hex: "#E6E6E6"), lineWidth: 0.8)
         }
     }
-        
 }
 
 #Preview {
     
-    RecipeViewCell(
+    FoodOnSaleViewCell(
         
-        imageName           : "somlorKari",
-        dishName            : "Somlor Kari",
-        cookingDate         : "30 Sep 2024",
-        statusType          : "Recipe",
-        rating              : 5.0,
-        reviewCount         : 200,
-        level               : "Easy"
-        
+        imageName: "brohok", // Make sure this is the correct image in your assets
+        dishName: "Somlor Kari",
+        cookingDate: "30 Sep 2024",
+        price: 2.00,
+        rating: 5.0,
+        reviewCount: 200,
+        deliveryInfo: "Free",
+        deliveryIcon: "motorbike"
     )
 }

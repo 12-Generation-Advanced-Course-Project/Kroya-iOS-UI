@@ -8,10 +8,13 @@
 import SwiftUI
 
 struct AllTabView:View {
+    
     var iselected:Int?
+    
     @State private var isExpandedToday = false
     @State private var isExpandedYTD = false
     @State private var isExpandedLst2Day = false
+    
     var body: some View {
         ScrollView(.vertical,showsIndicators: false) {
             VStack(alignment:.leading) {

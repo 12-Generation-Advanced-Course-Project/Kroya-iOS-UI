@@ -12,10 +12,10 @@ struct PostViewScreen: View {
     @State private var searchText = ""
     @State private var selectedSegment = 0
     @Environment(\.dismiss) var dismiss
-
+    
     // Text titles for each tab
     let tabTitles = ["All", "Food on Sale", "Recipes"]
-
+    
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
@@ -38,7 +38,7 @@ struct PostViewScreen: View {
                     }
                     .padding(.horizontal, 15) // Leading padding to align the text with screen's edge
                     .padding(.top)
-
+                    
                     // Geometry Reader for Underline
                     GeometryReader { geometry in
                         Divider()
@@ -54,10 +54,10 @@ struct PostViewScreen: View {
                 
                 // TabView for content
                 TabView(selection: $selectedSegment) {
-//                    AllPostFoodandRecipe(iselected: selectedSegment)
+//                                        AllPostFoodandRecipe(iselected: selectedSegment)
                     FoodSaleView(iselected: selectedSegment)
                         .tag(0)
-                    FoodSaleView(iselected: selectedSegment)
+                    FoodOnSaleView(iselected: selectedSegment)
                         .tag(1)
                     RecipeView(iselected: selectedSegment)
                         .tag(2)
@@ -85,7 +85,7 @@ struct PostViewScreen: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: { }) {
                         VStack {
-                            Text("4")
+                            Text("6")
                                 .font(.customfont(.semibold, fontSize: 14))
                                 .foregroundStyle(PrimaryColor.normal)
                             Text("Post")
@@ -97,7 +97,7 @@ struct PostViewScreen: View {
             }
         }
     }
-
+    
     // Calculate the underline width dynamically based on the text width
     private func underlineWidth(for selectedSegment: Int, in geometry: GeometryProxy) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
@@ -108,20 +108,20 @@ struct PostViewScreen: View {
         let widthAdjustment: CGFloat = 10 // Adjust this value to add/subtract pixels from the underline width
         return titleWidth + widthAdjustment
     }
-
-
-
+    
+    
+    
     // Calculate the underline offset based on the cumulative width of the previous text items
     private func underlineOffset(for selectedSegment: Int, in geometry: GeometryProxy) -> CGFloat {
         // Calculate the width of the preceding tabs
         let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         var offset: CGFloat = 10 // Starting padding from the leading edge
-
+        
         for index in 0..<selectedSegment {
             let titleWidth = tabTitles[index].size(withAttributes: [NSAttributedString.Key.font: font]).width
             offset += titleWidth + 20 // Add the width of the text and the trailing padding between titles
         }
-
+        
         return offset
     }
 }

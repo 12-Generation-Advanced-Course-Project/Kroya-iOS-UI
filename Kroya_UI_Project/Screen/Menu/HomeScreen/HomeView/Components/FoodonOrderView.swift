@@ -68,7 +68,7 @@ struct FoodonOrderView: View {
                 ScrollView(.vertical,showsIndicators: false) {
                     VStack{
                         FoodandRecipeCardView(
-                            imageName: "SomlorKari",
+                            imageName: "somlorKari",
                             dishName: "Somlor Kari",
                             cookingDate: "30 Sep 2024",
                             price: 2.00,
