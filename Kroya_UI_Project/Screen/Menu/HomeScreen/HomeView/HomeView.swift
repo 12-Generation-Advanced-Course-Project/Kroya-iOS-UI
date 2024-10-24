@@ -33,8 +33,8 @@ struct HomeView: View {
                                     height: .screenHeight * 0.16,
                                     heightImage: 90,
                                     widthImage: 120,
-                                    xImage: 35,
-                                    yImage: 40
+                                    xImage: 28,
+                                    yImage: 35
                                 )
                             }
                             

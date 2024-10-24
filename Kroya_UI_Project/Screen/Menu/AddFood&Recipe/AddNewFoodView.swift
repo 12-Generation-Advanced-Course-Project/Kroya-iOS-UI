@@ -278,7 +278,7 @@ struct AddFoodView: View {
                     
                     // Navigate to next view if all fields are valid
                     if navigateToNextView {
-                        NavigationLink(destination: RecipeModalView(), isActive: $navigateToNextView) {
+                        NavigationLink(destination: RecipeModalView(dismissToRoot: dismiss), isActive: $navigateToNextView) {
                             EmptyView()
                         }
                     }
@@ -305,8 +305,5 @@ struct AddFoodView: View {
     }
 }
 
-#Preview {
-    AddFoodView()
-}
 
 
