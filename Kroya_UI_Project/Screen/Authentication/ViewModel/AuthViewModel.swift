@@ -19,33 +19,107 @@ class AuthViewModel: ObservableObject {
     @Published var isOTPVerified: Bool = false
     @Published var isRegistered: Bool = false
     @Published var isLoggedIn: Bool = false
- 
+    @Published var countdownTimer: Timer?
+    @Published var islogout: Bool = false
+    @Published var isUserSave: Bool = false
     
-    private var userStore: UserStore
+    @ObservedObject var userStore: UserStore
     init(userStore: UserStore) {
-           self.userStore = userStore
-       }
-
-
+        self.userStore = userStore
+        self.isLoggedIn = Auth.shared.loggedIn
+    }
+    
+    //    func scheduleTokenRefresh() {
+    //        guard let accessToken = KeychainHelper.shared.read(service: "com.Kroya-UI-Project.accessToken", account: userStore.user?.email ?? ""),
+    //              let expirationDate = getExpirationTime(from: accessToken) else {
+    //            print("Invalid token or expiration time")
+    //            return
+    //        }
+    //
+    //        let timeUntilExpiration = expirationDate.timeIntervalSinceNow
+    //        if timeUntilExpiration > 0 {
+    //            // Schedule token refresh just before it expires
+    //            let refreshTime = timeUntilExpiration - 60 // Refresh 1 minute before expiration
+    //            if refreshTime > 0 {
+    //                countdownTimer = Timer.scheduledTimer(withTimeInterval: refreshTime, repeats: false) { _ in
+    //                    self.refreshTokenIfNeeded()
+    //                }
+    //            }
+    //        }
+    //    }
+    //
+    //    func getExpirationTime(from token: String) -> Date? {
+    //        // Split the token into its parts
+    //        let parts = token.split(separator: ".")
+    //        guard parts.count == 3 else { return nil }
+    //
+    //        // Base64 decode the middle part (payload)
+    //        let payload = parts[1]
+    //        guard let decodedData = Data(base64Encoded: String(payload)) else { return nil }
+    //
+    //        // Try to decode it as a JSON dictionary
+    //        guard let json = try? JSONSerialization.jsonObject(with: decodedData, options: []),
+    //              let dict = json as? [String: Any],
+    //              let exp = dict["exp"] as? TimeInterval else {
+    //            return nil
+    //        }
+    //
+    //        // Return the expiration date
+    //        return Date(timeIntervalSince1970: exp)
+    //    }
+    //
+    //
+    //    func startTokenRefreshCountdown() {
+    //        countdownTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { _ in
+    //            self.refreshTokenIfNeeded()
+    //        }
+    //    }
+    //    func refreshTokenIfNeeded() {
+    //        guard let refreshToken = KeychainHelper.shared.read(service: "com.Kroya-UI-Project.refreshToken", account: userStore.user?.email ?? "") else {
+    //            print("Refresh token not found")
+    //            return
+    //        }
+    //
+    //        AuthService.shared.refreshToken(refreshToken: refreshToken) { result in
+    //            switch result {
+    //            case .success(let response):
+    //                print("Access token refreshed successfully.")
+    //                if let newAccessToken = response.payload?.access_token {
+    //                    KeychainHelper.shared.save(newAccessToken, service: "com.Kroya-UI-Project.accessToken", account: self.userStore.user?.email ?? "")
+    //                }
+    //            case .failure(let error):
+    //                print("Failed to refresh token: \(error.localizedDescription)")
+    //            }
+    //        }
+    //    }
+    //
+    //
+    //    func stopTokenRefreshCountdown() {
+    //        countdownTimer?.invalidate()
+    //        countdownTimer = nil
+    //    }
+    
     
     // MARK: Check if email exists, and send OTP if it doesn't
     func sendOTPIfEmailNotExists(email: String) {
         self.isLoading = true
         let normalizedEmail = email
         print("Checking if email exists: \(normalizedEmail)")
-
+        
         AuthService.shared.checkEmailExists(email: email) { [weak self] result in
             DispatchQueue.main.async {
                 self?.isLoading = false
-
+                
                 switch result {
                 case .success(let response):
                     if response.statusCode == "200" {
-                        // Email exists
+                        // Email exists, navigate to FillPasswordScreen
                         self?.isEmailExist = true
+                        self?.isOTPSent = false // Ensure OTP flag is false
                         self?.showError = false
                         self?.successMessage = response.message
                         print("Email exists: \(response.message)")
+                        // Update user data
                         self?.userStore.setUser(email: email)
                     }
                     
@@ -71,8 +145,9 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
-
-
+    
+    
+    
     // MARK: Function to send OTP
     func sendOTP(email: String, completion: @escaping (Bool) -> Void) {
         self.isLoading = true
@@ -86,7 +161,8 @@ class AuthViewModel: ObservableObject {
                     self?.successMessage = "OTP sent successfully. Please check your email."
                     self?.isOTPSent = true
                     self?.showError = false
-                    
+                    self?.isRegistered = false
+                    self?.isOTPVerified = false
                     completion(true)
                 case .failure(let error):
                     self?.showError = true
@@ -97,14 +173,14 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
-
-
-
+    
+    
+    
     // MARK: VerifyOTPcode
-    func verifyOTPcode(_ email: String, _ code: String) {
+    func verifyOTPcode(_ email: String, _ code: String,completion: @escaping() -> Void) {
         self.isLoading = true
         print("Verifying OTP code: \(code)")
-
+        
         AuthService.shared.VerifyOTPCode(email, code) { [weak self] result in
             DispatchQueue.main.async {
                 self?.isLoading = false
@@ -115,10 +191,14 @@ class AuthViewModel: ObservableObject {
                         self?.successMessage = "OTP verified successfully."
                         self?.showError = false
                         self?.isOTPVerified = true
-                        self?.errorMessage = ""  // Clear previous errors
+                        self?.errorMessage = ""
+                        self?.userStore.setUser(email: email)
+                        self?.isRegistered = false
                     } else {
                         self?.showError = true
                         self?.errorMessage = response.message
+                        self?.isOTPVerified = false
+                        
                         print("OTP verification failed: \(response.message)")
                     }
                 case .failure(let error):
@@ -129,182 +209,144 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
-
+    
+    
+    
     
     // MARK: Register Create Password
-    func register(_ email: String, _ newPassword: String, _ confirmPassword: String) {
-//        guard newPassword == confirmPassword else {
-//            self.showError = true
-//            self.successMessage = "Passwords do not match."
-//            return
-//        }
-//        guard !email.isEmpty, !newPassword.isEmpty, isValidEmail(email) else {
-//            self.showError = true
-//            self.successMessage = "Please enter a valid email and password."
-//            return
-//        }
+    func register(_ email: String, _ newPassword: String, completion: @escaping () -> Void) {
         self.isLoading = true
         print("Passwords match. Proceeding to create the password...")
-        AuthService.shared.createPassword(email: email, password: newPassword, confirmPassword: confirmPassword) { [weak self] result in
+        
+        AuthService.shared.createPassword(email: email, password: newPassword) { [weak self] result in
             DispatchQueue.main.async {
                 self?.isLoading = false
-               
                 switch result {
                 case .success(let response):
                     if response.statusCode == "200" {
-                        if let tokenPayload = response.payload {
-                            let accessToken = tokenPayload.access_token
-                            // Store only the accessToken in UserStore
-                            self?.userStore.setUser(
-                                email: email,
-                                accesstoken: accessToken
-                            )
+                        if let register = response.payload {
+                            let accessToken = register.access_token
+                            let refreshToken = register.refresh_token
+                            // Update userStore and state
+                            self?.userStore.setUser(email: email, accesstoken: accessToken,password: newPassword)
                             self?.isRegistered = true
-                            // Optionally, save the access token in Keychain
-                            KeychainHelper.shared.save(accessToken, service: "com.Kroya-UI-Project.accessToken", account: email)
+                            
                         }
                         self?.successMessage = "Register account successful"
                         self?.showError = false
+                        completion()
                     } else {
                         print("Error: \(response.message)")
+                        self?.isOTPVerified = false
                         self?.showError = true
                         self?.successMessage = response.message
+                        completion()
                     }
                 case .failure(let error):
                     print("Error: \(error)")
+                    completion()
                 }
             }
         }
     }
-
-
+    
+    
+    
     // MARK: Login Account Email
-       func loginAccountEmail(email: String, password: String) {
-           self.isLoading = true
-           AuthService.shared.LoginAccount(email: email, password: password) { [weak self] result in
-               DispatchQueue.main.async {
-                   self?.isLoading = false
-                   switch result {
-                   case .success(let response):
-                       if response.statusCode == "200", let token = response.payload {
-                           // Update user store and Keychain
-                           let accessToken = token.access_token
-                           let refreshToken = token.refresh_token
-                           self?.userStore.setUser(email: email, accesstoken: accessToken, refreshtoken: refreshToken)
-                           
-                           // Save tokens in Keychain (optional)
-//                           KeychainHelper.shared.save(accessToken, service: "com.Kroya-UI-Project.accessToken", account: email)
-//                           KeychainHelper.shared.save(refreshToken, service: "com.Kroya-UI-Project.refreshToken", account: email)
-                           
-                           self?.isLoggedIn = true
-                           self?.successMessage = "Successfully logged in"
-                           self?.showError = false
-                       } else {
-                           self?.successMessage = "Invalid email or password"
-                           self?.showError = true
-                       }
-                   case .failure(_):
-                       self?.successMessage = "Please enter a valid email and password"
-                       self?.showError = true
-                   }
-                   print("isLoggedIn: \(self?.isLoggedIn ?? false)")  // Debug print
-               }
-           }
-       }
-
+    func loginAccountEmail(email: String, password: String) {
+        self.isLoading = true
+        AuthService.shared.LoginAccount(email: email, password: password) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                switch result {
+                case .success(let response):
+                    if response.statusCode == "200", let token = response.payload, let Email = response.payload {
+                        // Save tokens using Auth class
+                        let accessToken = token.access_token
+                        let refreshToken = token.refresh_token
+                        let Email = Email.email
+                        // Update userStore and state
+                        self?.userStore.setUser(email: Email ?? "", accesstoken: accessToken, refreshtoken: refreshToken, password: password)
+                        Auth.shared.setCredentials(accessToken: accessToken, refreshToken: refreshToken,email: email,password: self?.userStore.user?.password ?? "")
+                    
+                        self?.successMessage = "Successfully logged in"
+                        self?.showError = false
+                    }
+                    if response.statusCode == "002"{
+                            self?.showError = true
+                            self?.errorMessage = "Password is incorrect. Please try again"
+                        }
+                case .failure:
+                    self?.successMessage = "Please enter a valid email and password"
+                    self?.showError = true
+                }
+                print("isLoggedIn: \(self?.isLoggedIn ?? false)")  // Debug print
+            }
+        }
+    }
+    
+    //MARK: Save UserInfo
+    func saveUserInfo(email: String, userName: String, phoneNumber: String, address: String, accessToken: String, refreshToken: String) {
+        self.isLoading = true
+        print("Email : \(email), UserName : \(userName), PhoneNumber : \(phoneNumber), Address : \(address)")
+        AuthService.shared.saveUserInfo(email: email, userName: userName, phoneNumber: phoneNumber, address: address) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                switch result {
+                case .success(_):
+                    // Success scenario
+                    self?.successMessage = "User information saved successfully."
+                    self?.showError = false
+                    
+                    Auth.shared.setCredentials(accessToken: accessToken, refreshToken: refreshToken,email: email,password: self?.userStore.user?.password ?? "")
+                    self?.userStore.setUser(email: email,userName: userName, phoneNumber: phoneNumber, address: address)
+                    self?.isUserSave = true
+                case .failure(let error):
+                    // Failure scenario
+                    self?.successMessage = "Email not found. Please register before updating info."
+                    self?.showError = true
+                    print("Error: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
+    
     //MARK: Validate Email
     func isValidEmail(_ email: String) -> Bool {
         let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         let predicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
         return predicate.evaluate(with: email)
     }
-//
-//   
-//
-//    func makeAuthorizedRequest(email: String) {
-//        guard let accessToken = KeychainHelper.shared.read(service: "com.Kroya-UI-Project.accessToken", account: email),
-//              let refreshToken = KeychainHelper.shared.read(service: "com.Kroya-UI-Project.refreshToken", account: email) else {
-//            print("No tokens found, user needs to log in.")
-//            return
-//        }
-//
-//        // Simulate checking if the access token is expired
-//        if isAccessTokenExpired(accessToken) {
-//            // Refresh the access token using the refresh token
-//            refreshAccessToken(email: email, refreshToken: refreshToken) { [weak self] success in
-//                if success {
-//                    // Now make the actual request using the new access token
-//                    self?.performAPIRequest(email: email)
-//                } else {
-//                    print("Failed to refresh token, user may need to log in again.")
-//                }
-//            }
-//        } else {
-//            // Access token is valid, proceed with the request
-//            performAPIRequest(email: email)
-//        }
-//    }
-//
-//    func performAPIRequest(email: String) {
-//        guard let accessToken = KeychainHelper.shared.read(service: "com.Kroya-UI-Project.accessToken", account: email) else {
-//            print("No access token found.")
-//            return
-//        }
-//
-//        let headers: HTTPHeaders = [
-//            "Authorization": "Bearer \(accessToken)",
-//            "Content-Type": "application/json"
-//        ]
-//        
-//        let url = Constants.KroyaUrlAuth + "/some-protected-endpoint"
-//        
-//        AF.request(url, method: .get, headers: headers).response { response in
-//            // Handle the response
-//        }
-//    }
-//
-//    func isAccessTokenExpired(_ token: String) -> Bool {
-//        // Logic to check if the token is expired (you can decode the token to check the expiry time)
-//        return false // Replace with actual check
-//    }
-//
-//    // Function to refresh access token
-//    func refreshAccessToken(email: String, refreshToken: String, completion: @escaping (Bool) -> Void) {
-//        AuthService.shared.refreshToken(refreshToken: refreshToken) { [weak self] result in
-//            DispatchQueue.main.async {
-//                switch result {
-//                case .success(let response):
-//                    if response.statusCode == "200", let tokenPayload = response.payload {
-//                        let newAccessToken = tokenPayload.access_token
-//                        let newRefreshToken = tokenPayload.refresh_token
-//                        
-//                        // Update the tokens in UserStore and Keychain
-//                        self?.userStore.setUser(
-//                            email: email,
-//                            accesstoken: newAccessToken,
-//                            refreshtoken: newRefreshToken
-//                        )
-//
-//                        // Replace both tokens
-//                        KeychainHelper.shared.save(newAccessToken, service: "com.Kroya-UI-Project.accessToken", account: email)
-//                        KeychainHelper.shared.save(newRefreshToken, service: "com.Kroya-UI-Project.refreshToken", account: email)
-//
-//                        print("Access token refreshed successfully.")
-//                        completion(true)
-//                    } else {
-//                        print("Failed to refresh access token: \(response.message)")
-//                        completion(false)
-//                    }
-//                case .failure(let error):
-//                    print("Error refreshing access token: \(error.localizedDescription)")
-//                    completion(false)
-//                }
-//            }
-//        }
-//    }
-//
+    
+    
+    // MARK: Logout Email Account
+    func logout() {
+        isLoading = true
+        isLoggedIn = false
+        Auth.shared.logout()
+        print("Tokens and access token deleted from Keychain.")
+        if let email = userStore.user?.email {
+            print("This email is logged out: \(email)")
+        } else {
+            print("No email found")
+        }
+        
+        // Clear the user-related data from UserStore
+        userStore.clearUser()
+        
+        // Reset app state after logout
+        isOTPVerified = false
+        isRegistered = false
+        
+        // Simulate a delay to show the progress indicator (optional)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.isLoading = false // Stop the loading indicator
+        }
+    }
 
-
-
-
+    
+    
+    
+    
 }

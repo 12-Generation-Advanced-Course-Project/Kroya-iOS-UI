@@ -10,7 +10,9 @@ struct HomeView: View {
     ]
     
     var body: some View {
+        
         NavigationView {
+            
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading) {
                     // Title Section
@@ -31,8 +33,8 @@ struct HomeView: View {
                                     height: .screenHeight * 0.16,
                                     heightImage: 90,
                                     widthImage: 120,
-                                    xImage: 35,
-                                    yImage: 40
+                                    xImage: 28,
+                                    yImage: 35
                                 )
                             }
                             
@@ -53,7 +55,7 @@ struct HomeView: View {
                         
                     }
                     
-                    Spacer().frame(height: 25)
+//                    Spacer().frame(height: 25)
                     
                     // Category Section
                     VStack(alignment: .leading) {
@@ -115,7 +117,7 @@ struct HomeView: View {
                                     percentageOfRating: 4.8,
                                     numberOfRating: 200,
                                     review: "Delicious dish!",
-                                    reviewDetail: "The Somlor Kari was perfectly spiced and rich in flavor..."
+                                    reviewDetail: "The Somlor Kari was perfectly spiced and rich in flavor"
                                 )) {
                                     FoodOnSaleViewCell(
                                         
@@ -216,6 +218,7 @@ struct HomeView: View {
                 }
             }
         }
+        
     }
     
     

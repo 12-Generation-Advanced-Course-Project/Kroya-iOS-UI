@@ -70,6 +70,7 @@ struct ContentOnButtonSheet: View {
     @State private var isReviewExpanded = false
     @State private var isReviewPopupOpen = false
     @Environment(\.dismiss) var dismiss
+    
     // Step details
     let steps = [
         "Cut the fish into bite sized pieces and set aside.",
@@ -106,7 +107,7 @@ struct ContentOnButtonSheet: View {
             .blur(radius: isBottomSheetOpen ? 5 : 0)
             
             // Bottom Sheet Content
-            BottomSheetView(isOpen: $isBottomSheetOpen,maxHeight: .screenHeight * 1.03 ,minHeight: .screenHeight * 0.68) {
+            BottomSheetView(isOpen: $isBottomSheetOpen,maxHeight: .screenHeight * 1.00 ,minHeight: .screenHeight * 0.68) {
                 ScrollView(.vertical,showsIndicators: false) {
                     VStack(alignment: .leading, spacing: 7) {
                         
@@ -117,7 +118,7 @@ struct ContentOnButtonSheet: View {
                             NavigationLink(destination: FoodCheckOutView()) {
                                 HStack {
                                     Text("Order")
-                                        .font(.customfont(.regular, fontSize: 13))
+                                        .font(.customfont(.medium, fontSize: 13))
                                         .foregroundStyle(.white)
                                     Image(systemName: "plus")
                                         .resizable()
@@ -445,11 +446,12 @@ struct ContentOnButtonSheet: View {
             .frame(minHeight: .screenHeight * 0.9,maxHeight: .screenHeight * 1)
             .edgesIgnoringSafeArea(.all)
             if isReviewPopupOpen {
-                           PopupReview(profile: "ahmok1", userName: userName, description: "")
+                PopupReview(profile: "ahmok1", userName: userName, description: "",isReviewPopupOpen: $isReviewPopupOpen, isPopup: true  )
                                .transition(.move(edge: .bottom))
-                               .onTapGesture {
-                                   isReviewPopupOpen = false 
-                               }.padding()
+//                               .onTapGesture {
+//                                   isReviewPopupOpen = false 
+//                               }
+                    .edgesIgnoringSafeArea(.all)
                        }
         }
         .navigationBarBackButtonHidden(true)

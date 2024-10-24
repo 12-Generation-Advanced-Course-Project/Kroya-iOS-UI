@@ -26,15 +26,21 @@ struct CurrencyConverter {
 }
 
 struct SaleModalView: View {
+//    @Binding var shouldPopToRootView : Bool
     @Environment(\.dismiss) var dismiss
     @Binding var ingret: Ingret
     @State private var isAvailableForSale: Bool? = nil
     @State private var seletedDate = Date()
     @State private var isDatePickerVisible: Bool = false
     @State var selectedDate  = Date()
+    @State var amount: String = ""
+    @State var price: String = ""
+    @State var location: String = ""
+
     var totalRiel: String = "12000"
     let currencies = ["៛", "$"]
-    
+    let dismissToRoot : DismissAction
+
     var body: some View {
         
         let converter = CurrencyConverter(totalRiel: totalRiel)
@@ -109,7 +115,7 @@ struct SaleModalView: View {
                                         
                                     }
                                     .overlay(
-                                        DatePicker(selection: $selectedDate, displayedComponents: .date) {
+                                        DatePicker(selection: $selectedDate, in: Date()..., displayedComponents: .date) {
                                         }
                                             .labelsHidden()
                                             .colorMultiply(.clear))
@@ -124,7 +130,7 @@ struct SaleModalView: View {
                                         .font(.customfont(.regular, fontSize: 15))
                                         .foregroundStyle(.black.opacity(0.6))
                                         .frame(maxWidth: 120, alignment: .leading)
-                                    TextField("00", text: $ingret.amount)
+                                    TextField("00", text: $amount)
                                         .multilineTextAlignment(.leading)
                                         .font(.customfont(.medium, fontSize: 15))
                                         .frame(maxWidth: .infinity,alignment: .leading)
@@ -138,7 +144,7 @@ struct SaleModalView: View {
                                         .foregroundStyle(.black.opacity(0.6))
                                         .frame(maxWidth: 120, alignment: .leading)
                                     HStack {
-                                        TextField("0.0", text: $ingret.price)
+                                        TextField("0.0", text: $price)
                                             .multilineTextAlignment(.leading)
                                             .font(.customfont(.medium, fontSize: 15))
                                         Picker("", selection: $ingret.selectedCurrency) {
@@ -160,7 +166,7 @@ struct SaleModalView: View {
                                         .font(.customfont(.regular, fontSize: 15))
                                         .foregroundStyle(.black.opacity(0.6))
                                         .frame(maxWidth: 120, alignment: .leading)
-                                    TextField("St323", text: $ingret.location)
+                                    TextField("St323", text: $location)
                                         .multilineTextAlignment(.leading)
                                         .font(.customfont(.medium, fontSize: 15))
                                 }
@@ -172,6 +178,16 @@ struct SaleModalView: View {
                                 RoundedRectangle(cornerRadius: 15)
                                     .strokeBorder(Color(hex: "#D0DBEA"), lineWidth: 1)
                             )
+                            // Error message if any required fields are empty
+                            if amount.isEmpty || price.isEmpty || location.isEmpty {
+                                HStack {
+                                    Image(systemName: "exclamationmark.triangle.fill")
+                                        .foregroundColor(.red)
+                                    Text("Detail information cannot be empty")
+                                        .foregroundColor(.red)
+                                        .font(.caption)
+                                }
+                            }
                         }
                         
                         
@@ -228,9 +244,8 @@ struct SaleModalView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: {
-                    dismiss()
-                }) {
+               
+                NavigationLink(destination: RecipeModalView(dismissToRoot: dismiss)) {
                     Image(systemName: "xmark")
                         .resizable()
                         .frame(width: 20, height: 20)
@@ -243,10 +258,10 @@ struct SaleModalView: View {
 }
 
 
-#Preview {
-    let sampleIngret = Ingret(cookDate: "", amount: "", price: "", location: "", selectedCurrency: 0)
-    SaleModalView(ingret: .constant(sampleIngret))
-}
+//#Preview {
+//    let sampleIngret = Ingret(cookDate: "", amount: "", price: "", location: "", selectedCurrency: 0)
+//    SaleModalView(ingret: .constant(sampleIngret))
+//}
 
 
 

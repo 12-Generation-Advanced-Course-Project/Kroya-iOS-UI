@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+
+import SwiftUI
+
 struct CustomButton: View {
     var title: String
     var action: () -> Void
@@ -15,7 +18,7 @@ struct CustomButton: View {
     var frameHeight: CGFloat = 60
     var cornerRadius: CGFloat = 10
     var fontSize: CGFloat = 18
-    var frameWidth: CGFloat = .screenWidth
+    var frameWidth: CGFloat? = nil  // Make frameWidth optional
     
     var body: some View {
         Button(action: {
@@ -23,8 +26,8 @@ struct CustomButton: View {
         }) {
             Text(title)
                 .font(.customfont(.semibold, fontSize: fontSize))
-                .frame(maxWidth: .infinity)
-                .frame(width: frameWidth,height: frameHeight)
+                .frame(maxWidth: frameWidth ?? .infinity) // Use the available width
+                .frame(height: frameHeight)
                 .background(backgroundColor)
                 .foregroundColor(textColor)
                 .cornerRadius(cornerRadius)
@@ -33,8 +36,3 @@ struct CustomButton: View {
     }
 }
 
-//#Preview {
-//    CustomButton(title: "GET STARTED", action: {
-//        print("Button tapped!")
-//    }, backgroundColor: .yellow)
-//}
