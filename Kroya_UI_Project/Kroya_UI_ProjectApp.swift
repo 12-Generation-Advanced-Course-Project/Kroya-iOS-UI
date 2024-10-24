@@ -29,14 +29,33 @@ import GoogleMaps
 struct Kroya_UI_ProjectApp: App {
 //    @StateObject var addressViewModel = AddressViewModel()
     @StateObject private var userStore = UserStore()
+
     init() {
         GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
     }
     
     var body: some Scene {
         WindowGroup {
-            SplashScreen().environmentObject(userStore)
-                .environmentObject(Auth.shared)
+            Group {
+                if Auth.shared.getAccessToken() != nil {
+                    NavigationView {
+                        MainScreen().environmentObject(userStore).environmentObject(Auth.shared)
+                    }
+                }else {
+                    if Auth.shared.loggedIn != true {
+                        NavigationView {
+                            LoginScreenView(userStore: userStore)
+                                .environmentObject(userStore).environmentObject(Auth.shared)
+                        }
+                    }else {
+                        
+                    }
+                   
+                }
+                
+            }
+//            SplashScreen().environmentObject(userStore)
+//                .environmentObject(Auth.shared)
            
         }
     }

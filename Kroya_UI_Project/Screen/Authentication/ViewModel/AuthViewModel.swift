@@ -280,7 +280,6 @@ class AuthViewModel: ObservableObject {
                     self?.successMessage = "Please enter a valid email and password"
                     self?.showError = true
                 }
-                print("isLoggedIn: \(self?.isLoggedIn ?? false)")  // Debug print
             }
         }
     }
@@ -323,7 +322,7 @@ class AuthViewModel: ObservableObject {
     // MARK: Logout Email Account
     func logout() {
         isLoading = true
-        isLoggedIn = false
+//        isLoggedIn = false
         Auth.shared.logout()
         print("Tokens and access token deleted from Keychain.")
         if let email = userStore.user?.email {
@@ -331,18 +330,16 @@ class AuthViewModel: ObservableObject {
         } else {
             print("No email found")
         }
-        
         // Clear the user-related data from UserStore
         userStore.clearUser()
-        
         // Reset app state after logout
         isOTPVerified = false
         isRegistered = false
-        
         // Simulate a delay to show the progress indicator (optional)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.isLoading = false // Stop the loading indicator
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+            self.isLoading = false
         }
+        islogout = true
     }
 
     

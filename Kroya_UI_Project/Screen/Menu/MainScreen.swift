@@ -5,6 +5,7 @@ struct MainScreen: View {
     @State var isActive : Bool = false
     @Environment(\.presentationMode) var presentationMode
     @State private var isModalPresented: Bool = false
+    @EnvironmentObject var userStore: UserStore
     var body: some View {
         NavigationStack {
             ZStack {
@@ -52,7 +53,7 @@ struct MainScreen: View {
                                 }
                             }
                             .tag(3)
-                        ProfileView()
+                        ProfileView().environmentObject(userStore)
                             .tabItem {
                                 VStack {
                                     Image(selectedTab == 4 ? "icon-User-Color" : "ico-User")
@@ -80,9 +81,10 @@ struct MainScreen: View {
                         .animation(.easeInOut(duration: 0.3), value: selectedTab)
                     }
                     .frame(height: 2)
-                    .offset(y:-70)
+                    .offset(y:-62)
                     
                 }
+//                .ignoresSafeArea(.all)
                 .frame(width: .screenWidth, height: .screenHeight)
                 .padding(.bottom, 50)
                 GeometryReader { geometry in
@@ -114,6 +116,7 @@ struct MainScreen: View {
             })
        
         }
+//        .ignoresSafeArea(.all)
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
     }

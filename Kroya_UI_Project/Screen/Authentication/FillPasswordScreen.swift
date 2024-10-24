@@ -122,13 +122,10 @@ struct FillPasswordScreen: View {
                 }
                 
                 // Navigate to MainScreen on successful login
-//                NavigationLink(destination: MainScreen().navigationBarBackButtonHidden(true).environmentObject(userStore), isActive: $authVM.isLoggedIn) {
-//                    EmptyView()
-//                }
-                
-                NavigationLink(destination: SplashScreen(),isActive: $authVM.isLoggedIn) {
+                NavigationLink(destination: MainScreen().navigationBarBackButtonHidden(true).environmentObject(userStore), isActive: $authVM.isLoggedIn) {
                     EmptyView()
                 }
+                
                 
                 // Show Progress Indicator while loading
                 if authVM.isLoading {

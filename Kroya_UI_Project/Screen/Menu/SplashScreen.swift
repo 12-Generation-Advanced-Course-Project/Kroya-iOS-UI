@@ -11,7 +11,6 @@ struct SplashScreen: View {
             if isActive {
                 if  auth.getAccessToken() != nil {
                     //MARK: Token found in Keychaien, navigate to MainScreen
-                    
                     MainScreen()
                         .environmentObject(userStore)
                         .onAppear {
@@ -19,13 +18,15 @@ struct SplashScreen: View {
                         }
                 }
                 else {
-                    //MARK: No token found, navigate to LoginScreen
                     LoginScreenView(userStore: userStore)
                         .environmentObject(userStore)
                         .onAppear {
                             print("No access token found, navigating to LoginScreen.\(String(describing: userStore.user?.email))")
                         }
                 }
+                //MARK: No token found, navigate to LoginScreen
+                
+                
             } else {
                 ZStack {
                     Color(.yellow).edgesIgnoringSafeArea(.all)

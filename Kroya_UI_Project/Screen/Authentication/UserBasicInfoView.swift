@@ -7,7 +7,7 @@ struct UserBasicInfoView: View {
     @State private var isLoading = false
     @State private var showSuccessAlert = false
     @State private var selectedAddress: Address?
-    
+    @State private var isSkip = false
     // Validation flags
     @State private var isNameEmpty = false
     @State private var isPhoneNumberEmpty = false
@@ -150,17 +150,26 @@ struct UserBasicInfoView: View {
                         .padding(.horizontal)
                 }
                 
-                NavigationLink(destination: MainScreen().environmentObject(userStore), label: {
+                
+            
+                Button(action: {
+                    isSkip = true
+                }) {
                     Text("Skip")
                         .font(.customfont(.semibold, fontSize: 16))
                         .foregroundColor(.green)
-                    
+                    NavigationLink(destination: MainScreen().environmentObject(userStore),isActive: $isSkip, label: {
+                        EmptyView()
+                    })
                 }
-                )
+                
+             
+                
                 
                 Spacer()
             }
             .padding(.horizontal, 20)
+       
             NavigationLink(destination: MainScreen().environmentObject(userStore),isActive: $authVM.isUserSave, label: {
                 EmptyView()
             })

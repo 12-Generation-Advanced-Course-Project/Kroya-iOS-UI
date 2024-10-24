@@ -73,6 +73,7 @@ struct HomeView: View {
                                             x: category.x,
                                             y: category.y
                                         )
+                                   
                                     }
                                 }
                             }
@@ -121,7 +122,7 @@ struct HomeView: View {
                                 )) {
                                     FoodOnSaleViewCell(
                                         
-                                        imageName: "brohok", // Make sure this is the correct image in your assets
+                                        imageName: "brohok",
                                         dishName: "Somlor Kari",
                                         cookingDate: "30 Sep 2024",
                                         price: 2.00,

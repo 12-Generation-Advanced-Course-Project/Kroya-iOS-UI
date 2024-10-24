@@ -10,7 +10,7 @@ import SwiftUI
 struct ProgressIndicator: View {
     var body: some View {
         ZStack {
-            Color.black.opacity(0.5)
+            Color.black.opacity(0.45)
                 .edgesIgnoringSafeArea(.all)
             
             ProgressView()

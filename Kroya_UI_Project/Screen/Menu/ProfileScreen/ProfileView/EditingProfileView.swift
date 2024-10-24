@@ -8,7 +8,8 @@ struct EditingProfileView: View {
     @State private var userInputPassword = ""
     @State private var userInputAddress = ""
     @State private var showImagePicker = false
-    @State private var selectedImages: [UIImage] = [] // Store selected images
+    @State private var selectedImages: [UIImage] = []
+    @State private var isShowingNavigation = false
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -30,9 +31,7 @@ struct EditingProfileView: View {
                 
                 // Profile Image and Edit Icon
                 ZStack(alignment: .bottomTrailing) {
-                    
                     if selectedImages.isEmpty {
-                        // Show default profile icon if no images are selected
                         Circle()
                             .fill(Color(hex: "#D9D9D9"))
                             .frame(width: frameHeightCircle, height: frameHeightCircle)
@@ -43,7 +42,7 @@ struct EditingProfileView: View {
                                     .foregroundStyle(Color.white)
                             )
                     } else {
-                        // Display the first selected image as profile
+                    
                         Image(uiImage: selectedImages.first!)
                             .resizable()
                             .scaledToFill()
@@ -52,9 +51,9 @@ struct EditingProfileView: View {
                             .overlay(Circle().stroke(Color.gray, lineWidth: 1))
                     }
                     
-                    // Edit Button to open ImagePicker
+      
                     Button(action: {
-                        showImagePicker = true // Trigger the image picker
+                        showImagePicker = true
                     }) {
                         Circle()
                             .fill(Color(hex: "#FECD36"))
@@ -97,7 +96,6 @@ struct EditingProfileView: View {
                 Spacer()
             }
             .sheet(isPresented: $showImagePicker) {
-                // ImagePicker that allows multiple selection
                 ImagePicker(selectedImages: $selectedImages)
             }
         }

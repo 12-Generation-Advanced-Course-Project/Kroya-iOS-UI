@@ -106,17 +106,11 @@ struct ProfileView: View {
                     
                     // Logout Button
                     CustomButton(title: "Log out", action: {
-                        isLoading = true  // Start showing the loading indicator
+                        isLoading = true
                         authVM.logout()
-                        
-                        // Delay navigation to show progress for 1 second
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            isLoading = false  // Stop showing the loading indicator
-                            isLogout = true   // This will trigger navigation to LoginScreen after progress is shown
-                            showLogoutSuccessAlert = true
-                        }
-                    }, backgroundColor: .red, frameWidth: .screenWidth * 0.9)
 
+                    }, backgroundColor: .red, frameWidth: .screenWidth * 0.9)
+                    
                     
                     // NavigationLink to go to LoginScreenView on logout
                     NavigationLink(destination: LoginScreenView(userStore: userStore), isActive: $authVM.islogout) {
@@ -135,7 +129,7 @@ struct ProfileView: View {
                                 .frame(width: 40, height: 40)
                             
                             VStack(alignment: .leading) {
-                                Text("Oun Bonaliheng")
+                                Text(userStore.user?.userName ?? "")
                                     .font(.customfont(.bold, fontSize: 16))
                                     .foregroundStyle(.black)
                                 Spacer().frame(height: 5)
@@ -154,26 +148,9 @@ struct ProfileView: View {
                         }
                     }
                 }
-                
-                // Show Circular Progress Indicator while logging out
                 if isLoading {
-                    ZStack {
-                        Color.black.opacity(0.4)
-                            .edgesIgnoringSafeArea(.all)
-                        VStack {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                                .scaleEffect(1.5)
-                        }
-                    }
+                    ProgressIndicator()
                 }
-            }
-            .alert(isPresented: $showLogoutSuccessAlert) {
-                Alert(
-                    title: Text("Logout Successful"),
-                    message: Text("Logout was successful."),
-                    dismissButton: .default(Text("OK"))
-                )
             }
         }
     }
