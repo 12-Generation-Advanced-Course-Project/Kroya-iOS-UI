@@ -14,9 +14,11 @@ struct FoodItem: Identifiable {
 
 // View for displaying a food item card with optional timeAgo and status
 struct ItemFoodOrderCard: View {
+    
     let item: FoodItem
     
     var body: some View {
+        
         VStack(alignment: .leading, spacing: 10) {
             // Top HStack containing image, title, and other info
             HStack(spacing: 12) {

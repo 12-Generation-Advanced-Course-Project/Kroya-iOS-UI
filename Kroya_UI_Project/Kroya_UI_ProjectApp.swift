@@ -37,9 +37,6 @@ struct Kroya_UI_ProjectApp: App {
         WindowGroup {
             SplashScreen().environmentObject(userStore)
                 .environmentObject(Auth.shared)
-//            PopupMessage()
-//            MainScreen().environmentObject(userStore)
-//                .environmentObject(Auth.shared)
            
         }
     }

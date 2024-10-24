@@ -70,6 +70,7 @@ struct ContentOnButtonSheet: View {
     @State private var isReviewExpanded = false
     @State private var isReviewPopupOpen = false
     @Environment(\.dismiss) var dismiss
+    
     // Step details
     let steps = [
         "Cut the fish into bite sized pieces and set aside.",
@@ -445,11 +446,12 @@ struct ContentOnButtonSheet: View {
             .frame(minHeight: .screenHeight * 0.9,maxHeight: .screenHeight * 1)
             .edgesIgnoringSafeArea(.all)
             if isReviewPopupOpen {
-                           PopupReview(profile: "ahmok1", userName: userName, description: "")
+                PopupReview(profile: "ahmok1", userName: userName, description: "",isReviewPopupOpen: $isReviewPopupOpen, isPopup: true  )
                                .transition(.move(edge: .bottom))
-                               .onTapGesture {
-                                   isReviewPopupOpen = false 
-                               }.padding()
+//                               .onTapGesture {
+//                                   isReviewPopupOpen = false 
+//                               }
+                    .edgesIgnoringSafeArea(.all)
                        }
         }
         .navigationBarBackButtonHidden(true)

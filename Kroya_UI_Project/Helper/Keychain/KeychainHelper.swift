@@ -50,7 +50,7 @@ class Auth: ObservableObject {
         keychain.set(password, forKey: KeychainKey.password.rawValue)
         
         loggedIn = true
-        startTokenRefreshTimer() // Start the timer after setting the credentials
+        startTokenRefreshTimer()
     }
     
     func hasAccessToken() -> Bool {

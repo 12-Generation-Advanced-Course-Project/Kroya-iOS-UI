@@ -6,6 +6,7 @@ struct OrderCard: View {
     var showIcon: Bool = false 
     
     var body: some View {
+        
         GeometryReader { geometry in
             HStack {
                 // Image on the left
