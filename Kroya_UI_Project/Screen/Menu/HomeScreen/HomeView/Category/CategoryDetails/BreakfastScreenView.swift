@@ -141,7 +141,7 @@ struct BreakfastScreenView: View {
                     Divider()
                     
                     Rectangle()
-                        .fill(Color.blue)  // Replace with `PrimaryColor.normal` if you have it defined
+                        .fill(Color.yellow)  // Replace with `PrimaryColor.normal` if you have it defined
                         .frame(width: selectedSegment == 0 ? geometry.size.width / 3 : geometry.size.width / 4, height: 2)
                         .offset(x: selectedSegment == 1 ? geometry.size.width / 1.65 : geometry.size.width / 6.5)
                         .animation(.easeInOut(duration: 0.3), value: selectedSegment)

@@ -23,6 +23,7 @@ struct FoodOnSaleViewCell: View {
     
     
     var body: some View {
+        
         VStack {
             ZStack(alignment: .topLeading) {  // Aligns everything to the top leading (left)
                 
@@ -100,8 +101,9 @@ struct FoodOnSaleViewCell: View {
                         .foregroundColor(.gray)
                 }
                 
+               
                 // Price and Delivery Info
-                HStack {
+                HStack(spacing: 10){
                     Text("$ \(String(format: "%.2f", price))")
                         .font(.customfont(.medium, fontSize: 14))
                         .foregroundColor(.yellow)
@@ -115,12 +117,16 @@ struct FoodOnSaleViewCell: View {
                         Text(deliveryInfo)
                             .font(.customfont(.light, fontSize: 12))
                             .foregroundColor(.gray)
+                        
                     }
-                    Spacer()
+//                    Spacer()
+                   
                 }
+               
             }
             .padding(10)
-            .frame(maxWidth: .infinity)
+//            .frame(maxWidth: .infinity)
+            .frame(width: 300)
         }
        
         .background(Color.white)

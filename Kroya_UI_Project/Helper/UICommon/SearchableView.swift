@@ -353,9 +353,11 @@ struct SearchScreen: View {
 }
 
 struct SearchResultView: View {
+    
     let result: String
     
     var body: some View {
+        
         Text("Showing result for \(result)")
             .font(.title)
             .padding()

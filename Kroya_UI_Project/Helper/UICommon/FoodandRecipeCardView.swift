@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct FoodandRecipeCardView: View {
+    
     @State private var isFavorite: Bool = false
     
     var imageName: String
