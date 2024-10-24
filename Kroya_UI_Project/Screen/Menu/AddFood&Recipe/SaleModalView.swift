@@ -26,6 +26,7 @@ struct CurrencyConverter {
 }
 
 struct SaleModalView: View {
+//    @Binding var shouldPopToRootView : Bool
     @Environment(\.dismiss) var dismiss
     @Binding var ingret: Ingret
     @State private var isAvailableForSale: Bool? = nil
@@ -34,7 +35,8 @@ struct SaleModalView: View {
     @State var selectedDate  = Date()
     var totalRiel: String = "12000"
     let currencies = ["៛", "$"]
-    
+    let dismissToRoot : DismissAction
+
     var body: some View {
         
         let converter = CurrencyConverter(totalRiel: totalRiel)
@@ -226,9 +228,8 @@ struct SaleModalView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: {
-                    dismiss()
-                }) {
+               
+                NavigationLink(destination: RecipeModalView(dismissToRoot: dismiss)) {
                     Image(systemName: "xmark")
                         .resizable()
                         .frame(width: 20, height: 20)
@@ -241,10 +242,10 @@ struct SaleModalView: View {
 }
 
 
-#Preview {
-    let sampleIngret = Ingret(cookDate: "", amount: "", price: "", location: "", selectedCurrency: 0)
-    SaleModalView(ingret: .constant(sampleIngret))
-}
+//#Preview {
+//    let sampleIngret = Ingret(cookDate: "", amount: "", price: "", location: "", selectedCurrency: 0)
+//    SaleModalView(ingret: .constant(sampleIngret))
+//}
 
 
 

@@ -56,7 +56,7 @@ struct FoodCheckOutView: View {
                 
                 
                 //Next
-                NavigationLink(destination: RecipeModalView(), label: {
+                NavigationLink(destination: EmptyView(), label: {
                     Text("Place an order")
                         .font(.customfont(.semibold, fontSize: 16))
                         .frame(maxWidth: .infinity)

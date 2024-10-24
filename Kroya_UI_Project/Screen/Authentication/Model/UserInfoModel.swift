@@ -15,15 +15,27 @@ struct User: Codable, Identifiable {
     var address: String?
     var accesstoken: String?
     var refreshtoken: String?
+    var password: String?
 }
 
-// Struct for tokens as seen in the response payload
-struct TokenPayload: Decodable {
+//MARK: Struct for tokens as seen in the response payload
+struct LoginandRegisterResponse: Decodable {
     let access_token: String
     let refresh_token: String
+    let profile_image: String?
+    let full_name: String?
+    let email: String?
+    let created_date: String?
 }
 
-struct RefreshTokenPayload: Decodable {
-    let access_token: String
-    let refresh_token: String
+struct RefreshTokenPay: Decodable {
+    let accessToken: String
+    let refreshToken: String
+}
+// MARK: - Payload for User Info
+struct Payload: Codable {
+    let email: String
+    let fullName: String
+    let phoneNumber: String
+    let address: String
 }

@@ -3,6 +3,7 @@
 import SwiftUI
 
 struct AddFoodView: View {
+    @Binding var rootIsActive1 : Bool
     @Environment(\.dismiss) var dismiss
     @State var Foodname: String = ""
     @State var Description: String = ""
@@ -213,7 +214,8 @@ struct AddFoodView: View {
                     Spacer().frame(height: 35)
                     
                     // Next Button
-                    NavigationLink(destination: RecipeModalView(), label: {
+                    NavigationLink(destination: RecipeModalView(dismissToRoot: dismiss),
+                     label: {
                         Text("Next")
                             .font(.customfont(.semibold, fontSize: 16))
                             .frame(maxWidth: .infinity)
@@ -246,6 +248,6 @@ struct AddFoodView: View {
     }
 }
 
-#Preview {
-    AddFoodView()
-}
+//#Preview {
+//    AddFoodView()
+//}

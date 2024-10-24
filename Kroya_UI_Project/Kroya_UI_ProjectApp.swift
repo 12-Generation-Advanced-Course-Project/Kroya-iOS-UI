@@ -6,18 +6,41 @@
 //
 
 import SwiftUI
-//import GoogleMaps
+import GoogleMaps
+//
+//@main
+//struct Kroya_UI_ProjectApp: App {
+//    @StateObject var addressViewModel = AddressViewModel(userStore: UserStore())
+//    @StateObject private var userStore = UserStore()
+//        init() {
+//            GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
+//        }
+//    var body: some Scene {
+//        WindowGroup {
+//            UserBasicInfoView()
+//                .environmentObject(userStore)
+//                .environmentObject(addressViewModel) // Inject AddressViewModel here
+//        }
+//    }
+//}
+
+
 @main
 struct Kroya_UI_ProjectApp: App {
 //    @StateObject var addressViewModel = AddressViewModel()
-//    init() {
-//        GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
-//    }
-//
     @StateObject private var userStore = UserStore()
+    init() {
+        GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
+    }
+    
     var body: some Scene {
         WindowGroup {
             SplashScreen().environmentObject(userStore)
+                .environmentObject(Auth.shared)
+//            PopupMessage()
+//            MainScreen().environmentObject(userStore)
+//                .environmentObject(Auth.shared)
+           
         }
     }
 }
