@@ -14,7 +14,7 @@ struct StepEntryView: View {
     let index: Int
     let onEdit: () -> Void
     let onDelete: () -> Void
-
+    
     var body: some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading) {
@@ -35,7 +35,7 @@ struct StepEntryView: View {
                             .padding(.bottom, 20)
                         Spacer().frame(height: 10)
                     }
-
+                    
                     ZStack(alignment: .trailing) {
                         // Multi-line TextField
                         TextField("Enter ingredients", text: $step.description, axis: .vertical)
@@ -49,12 +49,21 @@ struct StepEntryView: View {
                                 RoundedRectangle(cornerRadius: 15)
                                     .strokeBorder(Color(hex: "#D0DBEA"), lineWidth: 1)
                             )
-
+                        
                         // Dropdown menu for Edit and Delete options, placed inside the text field
                         EditDropDownButton(onEdit: onEdit, onDelete: onDelete)
                             .padding(.bottom, .screenHeight * 0.08)
                     }
                     .frame(maxWidth: .infinity)
+                }
+                if step.description == ""{
+                    HStack{
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundColor(.red)
+                        Text("description cannot be empty")
+                            .foregroundColor(.red)
+                            .font(.caption)
+                    }
                 }
             }
             .frame(maxWidth: .infinity)

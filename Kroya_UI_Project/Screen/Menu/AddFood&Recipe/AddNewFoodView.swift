@@ -1,5 +1,5 @@
-
-
+//
+//
 import SwiftUI
 
 struct AddFoodView: View {
@@ -7,14 +7,15 @@ struct AddFoodView: View {
     @Environment(\.dismiss) var dismiss
     @State var Foodname: String = ""
     @State var Description: String = ""
-    @State var DurationValure: Double = 39
+    @State private var DurationValure: Double = 50 // Initial value
     @State private var selectedLevel: Int? = nil
     @State private var selectedCuisines: Int? = nil
     @State private var selectedCategories: Int? = nil
     @State private var isChecked: Bool = false
     @State private var isImagePickerPresented = false
     @State private var selectedImages: [UIImage] = []
-    
+    @State private var showValidationMessage: Bool = false
+    @State private var navigateToNextView: Bool = false
     var levels: [String] = ["Hard", "Medium", "Easy"]
     var cuisines: [String] = ["Soup", "Salad", "Dessert", "Grill"]
     var categories: [String] = ["Breakfast", "Lunch", "Dinner", "Snack"]
@@ -52,10 +53,10 @@ struct AddFoodView: View {
                                                 .onTapGesture{
                                                     isImagePickerPresented.toggle()
                                                 }
-                                                
+                                            
                                         }.frame(width: 100, height: 100)
-                                         .cornerRadius(16)
-                                         .overlay(
+                                            .cornerRadius(16)
+                                            .overlay(
                                                 RoundedRectangle(cornerRadius: 16)
                                                     .strokeBorder(
                                                         Color(PrimaryColor.normal),
@@ -67,8 +68,8 @@ struct AddFoodView: View {
                                             )
                                         
                                     }
-                                     .padding()
-                                     
+                                    .padding()
+                                    
                                 }
                                 .frame(maxWidth: .infinity)
                             } else {
@@ -100,18 +101,51 @@ struct AddFoodView: View {
                                     )
                                 )
                         )
-                        
+                    }
+                    // If validation fails, show error message
+                    if isImagePickerPresented {
+                        HStack{
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundColor(.red)
+                            Text("Please add an image of the dish.")
+                                .font(.customfont(.medium, fontSize: 12))
+                                .foregroundColor(.red)
+                                .padding(.top, 5)
+                        }
                     }
                     
                     Spacer().frame(height: 15)
                     
                     // Food Name Section
+                    //                    VStack(alignment: .leading) {
+                    //                        Text("Food Name")
+                    //                            .font(.customfont(.bold, fontSize: 16))
+                    //                        Spacer().frame(height: 15)
+                    //                        InputField(placeholder: "Enter your name", text: $Foodname, backgroundColor: .white, frameWidth: .screenWidth * 0.9, colorBorder: Color(hex: "#D0DBEA"), isMultiline: false)
+                    //                    }
                     VStack(alignment: .leading) {
                         Text("Food Name")
                             .font(.customfont(.bold, fontSize: 16))
+                        
                         Spacer().frame(height: 15)
+                        
+                        // InputField for food name
                         InputField(placeholder: "Enter your name", text: $Foodname, backgroundColor: .white, frameWidth: .screenWidth * 0.9, colorBorder: Color(hex: "#D0DBEA"), isMultiline: false)
+                        
+                        // Validation message under TextField
+                        if showValidationMessage && Foodname.isEmpty {
+                            HStack {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .foregroundColor(.red)
+                                Text("Food name cannot be empty")
+                                    .foregroundColor(.red)
+                                    .font(.caption)
+                            }
+                        }
+                        
+                        Spacer().frame(height: 15)
                     }
+                    
                     
                     Spacer().frame(height: 15)
                     
@@ -120,7 +154,7 @@ struct AddFoodView: View {
                         Text("Description")
                             .font(.customfont(.bold, fontSize: 16))
                         Spacer().frame(height: 15)
-                
+                        
                         TextField("Tell me a little about your food", text: $Description, axis: .vertical)
                             .textFieldStyle(PlainTextFieldStyle())
                             .multilineTextAlignment(.leading)
@@ -132,6 +166,16 @@ struct AddFoodView: View {
                                 RoundedRectangle(cornerRadius: 15)
                                     .strokeBorder(Color(hex: "#D0DBEA"), lineWidth: 1)
                             )
+                        // Validation message under TextField
+                        if showValidationMessage && Description.isEmpty {
+                            HStack {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .foregroundColor(.red)
+                                Text("Description cannot be empty")
+                                    .foregroundColor(.red)
+                                    .font(.caption)
+                            }
+                        }
                     }
                     
                     Spacer().frame(height: 15)
@@ -145,21 +189,21 @@ struct AddFoodView: View {
                         HStack {
                             Text("<5")
                                 .font(.customfont(.bold, fontSize: 16))
-                                .foregroundStyle(PrimaryColor.normal)
+                                .foregroundStyle(DurationValure < 5 ? PrimaryColor.light : PrimaryColor.normal)
                             Spacer()
-                            Text("50")
+                            Text("\(Int(DurationValure))")  // Dynamically updating text
                                 .font(.customfont(.bold, fontSize: 16))
                                 .foregroundStyle(PrimaryColor.normal)
                             Spacer()
                             Text(">100")
                                 .font(.customfont(.bold, fontSize: 16))
-                                .foregroundStyle(PrimaryColor.normal)
+                                .foregroundStyle(DurationValure > 100 ? PrimaryColor.light : PrimaryColor.normal)
                         }.padding(.horizontal, 20)
                         
                         Slider(value: $DurationValure, in: 0...100, step: 1)
                             .accentColor(PrimaryColor.normal)
                             .padding(.horizontal, 20)
-                            .onTapGesture {
+                            .onChange(of: DurationValure) {
                                 print(DurationValure)
                             }
                     }
@@ -213,18 +257,31 @@ struct AddFoodView: View {
                     
                     Spacer().frame(height: 35)
                     
-                    // Next Button
-                    NavigationLink(destination: RecipeModalView(dismissToRoot: dismiss),
-                     label: {
+                    Button(action: {
+                        // Show validation message if fields are empty
+                        if Foodname.isEmpty || Description.isEmpty {
+                            showValidationMessage = true
+                        } else {
+                            showValidationMessage = false
+                            navigateToNextView = true
+                        }
+                    }) {
                         Text("Next")
                             .font(.customfont(.semibold, fontSize: 16))
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color.yellow)
+                            .background(PrimaryColor.normal)
                             .foregroundColor(.white)
                             .cornerRadius(10)
                             .padding(.horizontal)
-                    })
+                    }
+                    
+                    // Navigate to next view if all fields are valid
+                    if navigateToNextView {
+                        NavigationLink(destination: RecipeModalView(), isActive: $navigateToNextView) {
+                            EmptyView()
+                        }
+                    }
                 }
                 .navigationTitle("Your dishes")
                 .navigationBarBackButtonHidden(true)
@@ -248,6 +305,8 @@ struct AddFoodView: View {
     }
 }
 
-//#Preview {
-//    AddFoodView()
-//}
+#Preview {
+    AddFoodView()
+}
+
+

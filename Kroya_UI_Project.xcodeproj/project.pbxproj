@@ -59,7 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8445843A2CB6793F00CA3C01 /* SwiftUIFlow in Frameworks */,
+				FDFFEDAF2CC60F1C004297F2 /* SwiftUIFlow in Frameworks */,
 				840C1FAB2CB3BD0C0066027A /* Alamofire in Frameworks */,
 				84B927C02CC7EBA800CB6940 /* SwiftKeychainWrapper in Frameworks */,
 				845C864F2CC696F900F53037 /* GoogleMaps in Frameworks */,
@@ -436,7 +436,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -474,7 +474,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -607,9 +607,9 @@
 				minimumVersion = 5.9.1;
 			};
 		};
-		844584382CB6793F00CA3C01 /* XCRemoteSwiftPackageReference "SwiftUIFlow" */ = {
+		FDFFEC7E2CC60CCC004297F2 /* XCRemoteSwiftPackageReference "SwiftUIFlow" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ciaranrobrien/SwiftUIFlow";
+			repositoryURL = "https://github.com/ciaranrobrien/SwiftUIFlow.git";
 			requirement = {
 				branch = main;
 				kind = branch;
@@ -639,9 +639,9 @@
 			package = 840C1FA92CB3BD0C0066027A /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
-		844584392CB6793F00CA3C01 /* SwiftUIFlow */ = {
+		FDFFEDAE2CC60F1C004297F2 /* SwiftUIFlow */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 844584382CB6793F00CA3C01 /* XCRemoteSwiftPackageReference "SwiftUIFlow" */;
+			package = FDFFEC7E2CC60CCC004297F2 /* XCRemoteSwiftPackageReference "SwiftUIFlow" */;
 			productName = SwiftUIFlow;
 		};
 		845C864E2CC696F900F53037 /* GoogleMaps */ = {
