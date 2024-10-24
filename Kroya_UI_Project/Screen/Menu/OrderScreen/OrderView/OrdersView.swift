@@ -18,7 +18,6 @@ struct OrdersView: View {
                     Text("Orders")
                         .font(.customfont(.bold, fontSize: 18))
                         .padding(.leading, 16)
-                    Spacer()
                 }
                 .frame(maxWidth: .infinity)
 

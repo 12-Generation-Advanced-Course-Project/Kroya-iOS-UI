@@ -1,6 +1,5 @@
 import SwiftUI
 
-// Data model for food items
 struct FoodItem: Identifiable {
     let id = UUID()
     let name: String
@@ -12,10 +11,10 @@ struct FoodItem: Identifiable {
     let timeAgo: String? // Optional timeAgo to display time like "15m ago"
 }
 
-// View for displaying a food item card with optional timeAgo and status
 struct ItemFoodOrderCard: View {
     
     let item: FoodItem
+    @State private var showPopup = false // State to control popup visibility
     
     var body: some View {
         
@@ -35,23 +34,55 @@ struct ItemFoodOrderCard: View {
                         Text(item.name)
                             .font(.customfont(.semibold, fontSize: 17))
                         
-                        
-                        // Status tag (e.g., "Accept" or "Reject"), shown only if provided
-                        if let status = item.status {
-                            Text(status)
-                                .font(.customfont(.semibold, fontSize: 12))
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(RoundedRectangle(cornerRadius: 5).fill(status == "Accept" ? Color.green.opacity(0.2) : Color.red.opacity(0.2)))
-                                .foregroundColor(status == "Accept" ? .green : .red)
-                        }
                         Spacer()
+                        
                         // Time ago (e.g., "15m ago"), shown only if provided
                         if let timeAgo = item.timeAgo {
                             Text(timeAgo)
                                 .font(.customfont(.medium, fontSize: 12))
                                 .foregroundColor(.gray)
                         }
+                        
+                        // Button with ellipsis that triggers the popup
+                        Button(action: {
+                            showPopup.toggle() // Toggle the popup visibility
+                        }) {
+                            Image(systemName: "ellipsis")
+                                .rotationEffect(.degrees(90)) // Rotate to make it vertical
+                                .font(.system(size: 18))
+                                .foregroundColor(.gray)
+                        }
+                        .overlay(
+                            // Custom popup positioned over the ellipsis
+                            Group {
+                                if showPopup {
+                                    VStack(spacing: 10) {
+                                        Button(action: {
+                                            print("Accept tapped")
+                                            showPopup = false // Dismiss popup
+                                        }) {
+                                            Text("Accept")
+                                                .font(.customfont(.semibold, fontSize: 16))
+                                                .foregroundColor(.green)
+                                        }
+                                        
+                                        Button(action: {
+                                            print("Reject tapped")
+                                            showPopup = false // Dismiss popup
+                                        }) {
+                                            Text("Reject")
+                                                .font(.customfont(.semibold, fontSize: 16))
+                                                .foregroundColor(.red)
+                                        }
+                                    }
+                                    .frame(width: 100, height: 70)
+                                    .background(Color.white)
+                                    .cornerRadius(10)
+                                    .shadow(radius: 5)
+                                    .padding(.top, 35)
+                                }
+                            }
+                        ).padding(.leading,40)
                     }
                     
                     // Item count
@@ -100,7 +131,6 @@ struct ItemFoodOrderCard: View {
                     .foregroundStyle(Color(hex: "#0A0019"))
                     .font(.customfont(.semibold, fontSize: 14))
                 
-                    
                     HStack {
                         Text("Pay with \(item.paymentMethod)")
                         Spacer()
@@ -124,9 +154,7 @@ struct ItemFoodOrderCard: View {
     }
 }
 
-
-#Preview {
-    ItemFoodOrderCard(item:  FoodItem(name: "Brohok", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: nil, timeAgo: nil))
-    ItemFoodOrderCard(item:FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: "Accept", timeAgo: "35m ago"))
-}
-
+//#Preview {
+//    ItemFoodOrderCard(item:  FoodItem(name: "Brohok", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: nil, timeAgo: nil))
+//    ItemFoodOrderCard(item:FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: "Accept", timeAgo: "35m ago"))
+//}

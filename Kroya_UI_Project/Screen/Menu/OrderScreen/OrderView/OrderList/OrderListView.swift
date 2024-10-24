@@ -31,8 +31,12 @@ struct OrderListView: View {
                             .frame(width: 23, height: 23)
                             .foregroundColor(.black)
                     }
-                    Spacer()
-                    
+                     
+                        Text("Orders request")
+                            .font(.customfont(.bold, fontSize: 18))
+                    .frame(maxWidth: .infinity)
+
+                    Spacer().frame(height: 10)
                     Button(action : {})
                     {
                         Image("ico_note")
@@ -54,11 +58,9 @@ struct OrderListView: View {
                             )
                         
                     }
-                    Spacer()
                         .frame(width: 2)
                     
                 }
-                .frame(maxWidth: .infinity)
                 .padding(.horizontal, 20)
                 Spacer().frame(height: 10)
 

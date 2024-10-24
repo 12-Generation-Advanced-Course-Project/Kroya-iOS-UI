@@ -139,7 +139,9 @@ struct FoodDetailView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.white)
-            .presentationDetents([ .fraction(0.8), .height(550)]) // Sheet size options
+            //.presentationDetents([ .fraction(0.8), .height(550)]) // Sheet size options
+            .presentationDetents([.medium, .large])
+                            .presentationBackgroundInteraction(.enabled(upThrough: .medium))
         }
     }
 }
