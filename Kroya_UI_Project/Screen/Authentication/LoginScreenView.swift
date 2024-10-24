@@ -6,15 +6,16 @@ import SwiftUI
 
 struct LoginScreenView: View {
     @State private var email: String = ""
+    @State private var isEmailInvalid: Bool = false
     @EnvironmentObject var userStore: UserStore
     @StateObject private var countdownTimer = CountdownTimer()
-  
+    
     @StateObject private var authVM: AuthViewModel
-
+    
     init(userStore: UserStore) {
         _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
     }
-
+    
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
@@ -24,7 +25,6 @@ struct LoginScreenView: View {
                         .scaledToFill()
                         .frame(height: 260)
                 }
-
                 
                 Image("KroyaYellowLogo")
                     .resizable()
@@ -45,6 +45,15 @@ struct LoginScreenView: View {
                         colorBorder: .white,
                         isMultiline: false
                     )
+                    .onChange(of: email, perform: { newValue in
+                        validateEmail(email: newValue) // Call validation function on email change
+                    })
+                    
+                    if isEmailInvalid {
+                        Text("Please enter a valid email address.")
+                            .font(.caption)
+                            .foregroundColor(.red)
+                    }
                 }
                 .padding()
                 .padding(.top, -70)
@@ -62,21 +71,15 @@ struct LoginScreenView: View {
                         .padding(.horizontal)
                 }
                 .padding(.top, 10)
+                .disabled(isEmailInvalid || email.isEmpty) // Disable if email is invalid or empty
                 
-                // Navigation Logic based on OTP status
+                // Navigation Logic based on OTP status or Email existence
                 NavigationLink(
-                    destination: destinationView(),
-                    isActive: $authVM.isOTPSent,
-                    label: {
-                        EmptyView()
-                    }
-                )
-                .hidden()
-                
-                // Handle email existence with additional NavigationLink if needed
-                NavigationLink(
-                    destination: FillPasswordScreen(authVM:authVM).environmentObject(userStore),
-                    isActive: $authVM.isEmailExist, // Navigate when email exists
+                    destination: destinationView(), // Use dynamic destination based on logic
+                    isActive: Binding(
+                        get: { authVM.isOTPSent || authVM.isEmailExist },  // Triggered on either state
+                        set: { _ in }
+                    ),
                     label: {
                         EmptyView()
                     }
@@ -93,6 +96,8 @@ struct LoginScreenView: View {
                 .padding(.top, 15)
                 
                 Spacer()
+                
+                // Terms and Privacy Policy Text
                 VStack(spacing: 2) {
                     Text("By clicking “ GET STARTED ” you agreed to our")
                         .font(.customfont(.regular, fontSize: 12))
@@ -119,9 +124,11 @@ struct LoginScreenView: View {
                 }
                 .font(.customfont(.regular, fontSize: 12))
                 .padding(.bottom, 20)
+                
+                Spacer()
             }
             .navigationBarHidden(true)
-        
+            
             // Show Progress Indicator while loading
             if authVM.isLoading {
                 ProgressIndicator()
@@ -129,10 +136,21 @@ struct LoginScreenView: View {
         }
     }
     
+    // Validation function to check email format
+    private func validateEmail(email: String) {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
+        isEmailInvalid = !emailPredicate.evaluate(with: email)
+    }
+    
     @ViewBuilder
     private func destinationView() -> some View {
         if authVM.isOTPSent {
+            // OTP sent, navigate to VerificationCodeView
             VerificationCodeView(authVM: authVM).environmentObject(userStore)
+        } else if authVM.isEmailExist {
+            // Email exists, navigate to FillPasswordScreen
+            FillPasswordScreen(authVM: authVM, email: email).environmentObject(userStore)
         } else {
             EmptyView()
         }

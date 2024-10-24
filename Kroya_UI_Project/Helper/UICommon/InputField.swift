@@ -59,7 +59,7 @@ struct InputField: View {
             RoundedRectangle(cornerRadius: cornerRadius)
                 .stroke(colorBorder, lineWidth: 1)
         )
-        .frame(width: frameWidth)  // Ensure width is not negative
+        .frame(maxWidth: frameWidth)  // Ensure width is not negative
     }
 }
 

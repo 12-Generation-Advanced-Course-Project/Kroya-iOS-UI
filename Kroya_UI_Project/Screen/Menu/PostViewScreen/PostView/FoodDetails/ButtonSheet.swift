@@ -106,7 +106,7 @@ struct ContentOnButtonSheet: View {
             .blur(radius: isBottomSheetOpen ? 5 : 0)
             
             // Bottom Sheet Content
-            BottomSheetView(isOpen: $isBottomSheetOpen,maxHeight: .screenHeight * 1.03 ,minHeight: .screenHeight * 0.68) {
+            BottomSheetView(isOpen: $isBottomSheetOpen,maxHeight: .screenHeight * 1.00 ,minHeight: .screenHeight * 0.68) {
                 ScrollView(.vertical,showsIndicators: false) {
                     VStack(alignment: .leading, spacing: 7) {
                         
@@ -117,7 +117,7 @@ struct ContentOnButtonSheet: View {
                             NavigationLink(destination: FoodCheckOutView()) {
                                 HStack {
                                     Text("Order")
-                                        .font(.customfont(.regular, fontSize: 13))
+                                        .font(.customfont(.medium, fontSize: 13))
                                         .foregroundStyle(.white)
                                     Image(systemName: "plus")
                                         .resizable()

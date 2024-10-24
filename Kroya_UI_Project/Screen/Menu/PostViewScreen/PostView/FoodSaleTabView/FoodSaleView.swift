@@ -37,12 +37,12 @@ struct FoodSaleView: View{
                                    reviewCount: 200,
                                    deliveryInfo: "Free",
                                    deliveryIcon: "motorbike",
-                                   framewidth: 340,
-                                   frameheight: 160,
-                                   frameWImage: 400,
-                                   frameHImage: 145,
-                                   Spacing: 220,
-                                   offset: -41
+                                   framewidth:340,
+                                   frameheight:210,
+                                   frameWImage:405,
+                                   frameHImage:180,
+                                   Spacing: .screenWidth * 0.55,
+                                   offset:.screenHeight * -(0.06)
                                )
                            }
                     
@@ -70,7 +70,7 @@ struct FoodSaleView: View{
                                     deliveryInfo: "Free",
                                     deliveryIcon: "motorbike",
                                     framewidth:340,
-                                    frameheight:200,
+                                    frameheight:210,
                                     frameWImage:405,
                                     frameHImage:180,
                                     Spacing: .screenWidth * 0.55,
