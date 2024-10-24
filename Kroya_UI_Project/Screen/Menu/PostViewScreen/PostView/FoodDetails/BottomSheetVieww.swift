@@ -1,4 +1,5 @@
 import SwiftUI
+
 struct BottomSheetView<Content: View>: View {
     let content: Content
     @Binding var isOpen: Bool
@@ -13,9 +14,10 @@ struct BottomSheetView<Content: View>: View {
     
     private var indicator: some View {
         RoundedRectangle(cornerRadius: 8)
-            .fill(Color.gray)
+            .fill(Color(hex: "#D0DBEA"))
             .frame(width: 40, height: 5)
-            .padding(10)
+//            .padding(10)
+//            .padding(.bottom, 20)
     }
     
     init(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat, @ViewBuilder content: () -> Content) {
@@ -30,8 +32,8 @@ struct BottomSheetView<Content: View>: View {
             VStack(spacing: 0) {
                 self.indicator
                 self.content
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 20)
+//                    .padding(.horizontal, 20)
+//                    .padding(.bottom, 20)
             }
             .frame(width: geometry.size.width, height: self.maxHeight, alignment: .top)
             .background(Color.white)
@@ -39,9 +41,10 @@ struct BottomSheetView<Content: View>: View {
             .shadow(radius: 20)
             .offset(y: max(self.offset + self.translation, 0)) // Adjust the sheet's position based on the drag gesture
             .gesture(
-                DragGesture().updating(self.$translation) { value, state, _ in
-                    state = value.translation.height
-                }
+                DragGesture()
+                    .updating(self.$translation) { value, state, _ in
+                        state = value.translation.height
+                    }
                     .onEnded { value in
                         let snapDistance = self.maxHeight * 0.25
                         if value.translation.height > snapDistance {
@@ -58,44 +61,48 @@ struct BottomSheetView<Content: View>: View {
 }
 
 
-
 struct ContentOnButtonSheet: View {
-    @State private var isBottomSheetOpen: Bool = false
-    @State private var isEggChecked = true
-    @State private var isButterChecked = true
-    @State private var isHalfButterChecked = false
-    @State private var count = 0
-    @State private var currentStep = 1
-    @State private var isExpanded = false
-    @State private var isReviewExpanded = false
-    @State private var isReviewPopupOpen = false
+    
+    @State private var isBottomSheetOpen    : Bool = false
+    @State private var isEggChecked         = true
+    @State private var isButterChecked      = true
+    @State private var isHalfButterChecked  = false
+    @State private var count                = 0
+    @State private var currentStep          = 1
+    @State private var isExpanded           = false
+    @State private var isReviewExpanded     = false
+    @State private var isReviewPopupOpen    = false
+    
+    @State private var selectedRating       : Int = 0
     @Environment(\.dismiss) var dismiss
+    
     // Step details
     let steps = [
         "Cut the fish into bite sized pieces and set aside.",
         "Clean and slice the vegetables..",
         "In a large skillet, heat the curry seed oil, amok paste, shrimp paste, and coconut milk. Heat thoroughly, cooking until fragrant."
     ]
-    var foodName: String
-    var price : Float
-    var date : String
-    var itemFood : String
-    var profile : String
-    var userName : String
-    var description :String
-    var ingredients :String
-    var percentageOfRating : Double
-    var numberOfRating : Int
-    var review :String
+    
+    //@Environment(\.dismiss) var dismiss
+    
+    // Data properties
+    var foodName    : String
+    var price       : Float
+    var date        : String
+    var itemFood    : String
+    var profile     : String
+    var userName    : String
+    var description : String
+    var ingredients : String
+    var percentageOfRating: Double
+    var numberOfRating: Int
+    var review: String
     var reviewDetail: String
-    var starSize: CGFloat = 60.0
-    var activeColor: Color = Color.yellow
-    var inactiveColor: Color = Color.gray
+    
     var body: some View {
         ZStack {
             VStack {
-                
-                // Call FoodDetailView()
+                // Your FoodDetailView
                 FoodDetailView(theMainImage: "ahmok",
                                subImage1: "ahmok1",
                                subImage2: "ahmok2",
@@ -103,14 +110,18 @@ struct ContentOnButtonSheet: View {
                                subImage4: "ahmok4")
                 Spacer()
             }
-            .blur(radius: isBottomSheetOpen ? 5 : 0)
+            // .blur(radius: isBottomSheetOpen ? 5 : 0)
             
             // Bottom Sheet Content
-            BottomSheetView(isOpen: $isBottomSheetOpen,maxHeight: .screenHeight * 1.03 ,minHeight: .screenHeight * 0.68) {
-                ScrollView(.vertical,showsIndicators: false) {
+            BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1.03, minHeight: .screenHeight * 0.68) {
+                
+                //                ScrollViewReader { proxy in
+                
+                ScrollView(.vertical, showsIndicators: false) {
                     VStack(alignment: .leading, spacing: 7) {
                         
-                        HStack{
+                        // Food Name and Order Button
+                        HStack {
                             Text(foodName)
                                 .font(.customfont(.bold, fontSize: 20))
                             Spacer()
@@ -129,50 +140,48 @@ struct ContentOnButtonSheet: View {
                                 .background(PrimaryColor.normal)
                                 .cornerRadius(12)
                             }
-
                         }
                         
-                        HStack(spacing: 7){
-                            // Group{
-                            Text(String(format: "$%.2f", percentageOfRating))
-                            
+                        // Rating and Date
+                        HStack(spacing: 7) {
+                            Text(String(format: "$%.2f", price))
                                 .foregroundStyle(Color.yellow)
                                 .font(.customfont(.regular, fontSize: 13))
                             Text("\(date)(Morning)")
                                 .opacity(0.5)
-                            //}
                                 .font(.customfont(.regular, fontSize: 13))
-                            
-                        }.offset(y: -5)
+                        }
+                        .offset(y: -5)
                         
-                        HStack(spacing: 10){
+                        // Item Food and Time
+                        HStack(spacing: 10) {
                             Text(itemFood)
                             Circle().fill()
                                 .frame(width: 6, height: 6)
                             Text("60 mins")
-                            
-                        }.font(.customfont(.medium, fontSize: 16))
-                            .fontWeight(.medium)
-                            .foregroundStyle(Color(hex:"#9FA5C0"))
+                        }
+                        .font(.customfont(.medium, fontSize: 16))
+                        .fontWeight(.medium)
+                        .foregroundStyle(Color(hex: "#9FA5C0"))
                         
-                        // Profile
-                        HStack(spacing: 10){
+                        // Profile and Name
+                        HStack(spacing: 10) {
                             NavigationLink {
-                                ViewAccount(profileImage: "Men", userName: userName, email: "ounbonaliheng@gmail.com")
+                                ViewAccount(profileImage: profile, userName: userName, email: "ounbonaliheng@gmail.com")
                             } label: {
-                                Image("Men")
+                                Image(profile)
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: 38, height: 38)
                                     .clipShape(Circle())
                             }
-
                             Text(userName)
                                 .font(.customfont(.bold, fontSize: 17))
                                 .bold()
-                        }.padding(.top, 10)
+                        }
+                        .padding(.top, 10)
                         
-                        // Recipe description
+                        // Description
                         Text("Description")
                             .font(.customfont(.bold, fontSize: 18))
                             .padding(.top, 10)
@@ -181,7 +190,8 @@ struct ContentOnButtonSheet: View {
                             .opacity(0.6)
                             .padding(.bottom, 10)
                         
-                        // Ingredients
+                        
+                        
                         Text("Ingredients")
                             .font(.customfont(.bold, fontSize: 18))
                         VStack(alignment: .leading, spacing: 20) {
@@ -207,10 +217,10 @@ struct ContentOnButtonSheet: View {
                                 
                             }
                             
-                        }.padding([.bottom, .top],5)
+                        }
+                       // .padding([.bottom, .top],5)
                         
                         Divider()
-                        
                         //== Steps
                         VStack {
                             HStack {
@@ -267,7 +277,7 @@ struct ContentOnButtonSheet: View {
                                             .font(.customfont(.bold, fontSize: 14))
                                             .foregroundColor(Color.white)
                                     )
-                                    .padding(.bottom, 23)
+                                  //  .padding(.bottom, 23)
                                 // Display step detail based on the current step
                                 Text(steps[currentStep - 1])
                                     .font(.system(size: 16))
@@ -275,7 +285,7 @@ struct ContentOnButtonSheet: View {
                                 Spacer()
                             }
                         }
-                        .padding([.bottom, .top],5)
+                       // .padding([.bottom, .top],5)
                         Divider()
                         
                         // Ratings & Reviews section
@@ -376,21 +386,30 @@ struct ContentOnButtonSheet: View {
                             }
                             Divider()
                             
+                            
+                            
+                            
                             // User review
+                            //  VStack {
+                            // Star rating view
                             HStack {
                                 Text("Tap to Rate")
                                     .font(.customfont(.regular, fontSize: 18))
                                     .foregroundStyle(Color.gray)
                                 Spacer()
                                 HStack(spacing: 2) {
-                                    ForEach(0..<5) { star in
-                                        Image(systemName: "star.fill")
+                                    ForEach(1..<6) { star in
+                                        Image(systemName: selectedRating >= star ? "star.fill" : "star")
                                             .font(.system(size: 20))
-                                            .foregroundColor(.yellow)
-                                        
+                                            .foregroundColor(selectedRating >= star ? .yellow : .gray)
+                                            .onTapGesture {
+                                                // Update the rating based on the tapped star
+                                                selectedRating = star
+                                            }
                                     }
                                 }
                             }
+                           // .padding()
                             //=============
                             // User review section
                             VStack(alignment: .leading, spacing: 3) {
@@ -404,7 +423,8 @@ struct ContentOnButtonSheet: View {
                                             .font(.customfont(.regular, fontSize: 10))
                                             .foregroundColor(.yellow)
                                     }
-                                }.padding(.bottom, 3)
+                                }
+                                //.padding(.bottom, 3)
                                 
                                 // Review detail with "more" functionality
                                 Text(reviewDetail)
@@ -421,8 +441,8 @@ struct ContentOnButtonSheet: View {
                                         }
                                     }
                             }
-                            .padding(.vertical, 10)
-                            .padding(.horizontal, 13)
+//                            .padding(.vertical, 10)
+//                            .padding(.horizontal, 13)
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color(hex: "#F4F5F7"))
@@ -439,31 +459,33 @@ struct ContentOnButtonSheet: View {
                             }
                         }
                     }
-                    .padding(.bottom, 20)
+                 //   .padding(.bottom, 40)
                 }
+                //                }
+                .disabled(
+                    false
+                )
+                
+                
+                //end sheet
+                
+                .onAppear {
+                    withAnimation {
+                        isBottomSheetOpen = false
+                    }
+                }
+                
             }
-            .frame(minHeight: .screenHeight * 0.9,maxHeight: .screenHeight * 1)
-            .edgesIgnoringSafeArea(.all)
-            if isReviewPopupOpen {
-                           PopupReview(profile: "ahmok1", userName: userName, description: "")
-                               .transition(.move(edge: .bottom))
-                               .onTapGesture {
-                                   isReviewPopupOpen = false 
-                               }.padding()
-                       }
+            .frame(minHeight: .screenHeight * 0.98, maxHeight: .screenHeight )
+            //.edgesIgnoringSafeArea(.all)
         }
         .navigationBarBackButtonHidden(true)
-        .onTapGesture {
-            withAnimation {
-                isBottomSheetOpen.toggle()
-            }
-        }
     }
 }
 
 #Preview {
     ContentOnButtonSheet(foodName: "Amok Fish", price: 83.2,date: "5 May 2023", itemFood: "Grill", profile: "Songvak", userName: "Sreng Sodane", description: "An amok Khmer recipe is a traditional Khmer (Cambodian) dish usually made with fish, although chicken and beef amok are also popular. ", ingredients: "120 g Fresh boneless fish fillet", percentageOfRating: 2.4, numberOfRating: 838, review: "A very good Recipe", reviewDetail: "Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded, you can see it on your. Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploadedprofile. Your recipe has been uploaded, you can see it on your. Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded")
-    
-    
 }
+
+
 

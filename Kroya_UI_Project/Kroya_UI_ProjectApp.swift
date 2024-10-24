@@ -17,7 +17,10 @@ struct Kroya_UI_ProjectApp: App {
     @StateObject private var userStore = UserStore()
     var body: some Scene {
         WindowGroup {
-            SplashScreen().environmentObject(userStore)
+//            BottomSheetView( isOpen: .constant(false), maxHeight: .screenHeight * 0.95 ,minHeight: .screenHeight * 0.68)
+          //  SplashScreen().environmentObject(userStore)
+//            MainView()
+
         }
     }
 }
