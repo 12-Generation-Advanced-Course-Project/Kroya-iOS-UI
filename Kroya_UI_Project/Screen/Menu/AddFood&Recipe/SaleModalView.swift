@@ -224,7 +224,9 @@ struct SaleModalView: View {
                     .foregroundColor(.black)
             }
             
-            Button(action: {}) {
+            Button(action: {
+                
+            }) {
                 Text("Post")
                     .font(.customfont(.semibold, fontSize: 16))
                     .frame(maxWidth: .infinity)

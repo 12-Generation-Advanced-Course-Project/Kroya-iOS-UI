@@ -154,7 +154,7 @@ struct FoodandRecipeCardView: View {
 
 #Preview {
     FoodandRecipeCardView(
-        imageName: "SomlorKari",
+        imageName: "somlorKari",
         dishName: "Somlor Kari",
         cookingDate: "30 Sep 2024",
         price: 2.00,

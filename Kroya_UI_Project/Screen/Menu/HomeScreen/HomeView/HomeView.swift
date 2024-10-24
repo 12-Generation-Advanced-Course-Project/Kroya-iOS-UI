@@ -103,9 +103,10 @@ struct HomeView: View {
                     HStack {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 10) {
+                        
                                 // Example PopularDishesCard for dishes
                                 NavigationLink(destination: ContentOnButtonSheet(
-                                    foodName: "Somlor Kari",
+                                    foodName: "somlor Kari",
                                     price: 2.00,
                                     date: "30 Sep 2024",
                                     itemFood: "Somlor Kari",
@@ -118,21 +119,16 @@ struct HomeView: View {
                                     review: "Delicious dish!",
                                     reviewDetail: "The Somlor Kari was perfectly spiced and rich in flavor"
                                 )) {
-                                    FoodandRecipeCardView(
-                                        imageName: "SomlorKari",
+                                    FoodOnSaleViewCell(
+                                        
+                                        imageName: "brohok", // Make sure this is the correct image in your assets
                                         dishName: "Somlor Kari",
                                         cookingDate: "30 Sep 2024",
                                         price: 2.00,
                                         rating: 5.0,
                                         reviewCount: 200,
                                         deliveryInfo: "Free",
-                                        deliveryIcon: "motorbike",
-                                        framewidth: 230,
-                                        frameheight: 160,
-                                        frameWImage: 300,
-                                        frameHImage: 135,
-                                        Spacing: .screenWidth * 0.27,
-                                        offset: .screenHeight * -(0.05), isRecipeorFood: true
+                                        deliveryIcon: "motorbike"
                                     )
                                 }
                                 
@@ -150,23 +146,20 @@ struct HomeView: View {
                                     review: "Fantastic!",
                                     reviewDetail: "The dish was flavorful and aromatic, a great meal..."
                                 )) {
-                                    FoodandRecipeCardView(
-                                        imageName: "Songvak",
-                                        dishName: "Songvak",
-                                        cookingDate: "30 Sep 2024",
-                                        price: 2.00,
-                                        rating: 5.0,
-                                        reviewCount: 200,
-                                        deliveryInfo: "Free",
-                                        deliveryIcon: "motorbike",
-                                        framewidth: 230,
-                                        frameheight: 160,
-                                        frameWImage: 300,
-                                        frameHImage: 135,
-                                        Spacing: .screenWidth * 0.27,
-                                        offset: .screenHeight * -(0.05), isRecipeorFood: true
+                                    RecipeViewCell(
+                                        
+                                        imageName           : "somlorKari",
+                                        dishName            : "Somlor Kari",
+                                        cookingDate         : "30 Sep 2024",
+                                        statusType          : "Recipe",
+                                        rating              : 5.0,
+                                        reviewCount         : 200,
+                                        level               : "Easy"
+                                        
                                     )
                                 }
+                                
+                                
                             }
                         }
                     }
