@@ -94,6 +94,7 @@ struct DeliveryCardDetailView: View {
 }
 
 #Preview {
+    
     DeliveryCardDetailView(viewModel: DeliveryCardDetailViewModel(deliveryInfo: DeliveryInfo(
         locationName: "HRD Center",
         address: "St 323 - Toul Kork",
