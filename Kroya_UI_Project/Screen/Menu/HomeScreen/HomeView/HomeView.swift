@@ -100,11 +100,13 @@ struct HomeView: View {
                     
                     Spacer().frame(height: 20)
                     
+                    
                     // Scrollable Dishes
                     HStack {
+            
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 10) {
-                        
+
                                 // Example PopularDishesCard for dishes
                                 NavigationLink(destination: ContentOnButtonSheet(
                                     foodName: "somlor Kari",
@@ -165,10 +167,10 @@ struct HomeView: View {
                         }
                     }
                     .padding(4.5)
-                    
                     Spacer()
                 }
-                .padding(.leading, .screenWidth * 0.03)
+//                .padding(.leading, .screenWidth * 0.03)
+                .padding(.horizontal)
                 .navigationTitle("")
                 .navigationBarBackButtonHidden(true)
                 .toolbar {
