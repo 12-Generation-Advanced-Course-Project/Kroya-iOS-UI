@@ -1,11 +1,11 @@
 {
   "images" : [
     {
+      "filename" : "dot.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Vector.svg",
       "idiom" : "universal",
       "scale" : "2x"
     },

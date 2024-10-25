@@ -8,19 +8,17 @@
 import SwiftUI
 
 struct SaleReportView: View {
-    @State private var selectedDate: Date = Calendar.current.date(from: DateComponents(year: 2024, month: 10, day: 1))!
+    @State private var selectedDate: Date = Date()
+
     @Environment(\.dismiss) var dismiss
-    
-    // Formatter for displaying the day and month
+
     let dateFormatter = DateFormatter()
     
-    // All available years for the picker
     let years = Array(2020...2100)
     
-    // All months for the picker
+   
     let months = Calendar.current.monthSymbols
-    
-    // Generate days based on the selected month and year
+   
     var daysInSelectedMonth: [Date] {
         var dates = [Date]()
         let calendar = Calendar.current
@@ -87,11 +85,12 @@ struct SaleReportView: View {
                         .frame(width: 18, height: 18)
                 }
                 .overlay(
-                    DatePicker(selection: $selectedDate, displayedComponents: .date) {
+                    DatePicker(selection: $selectedDate, in: ...Date(), displayedComponents: .date) {
                     }
                     .labelsHidden()
                     .colorMultiply(.clear)
                 )
+
                 
                 Spacer()
                 Text("$\(String(format: "%.2f", totalSalesForSelectedMonth))")
@@ -104,15 +103,18 @@ struct SaleReportView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 20) {
                     ForEach(daysInSelectedMonth, id: \.self) { date in
+                        let isFutureDate = date > Date()
+                        
                         VStack {
                             Text(dateFormatter.string(from: date).components(separatedBy: " ").first!)
                                 .font(.customfont(.semibold, fontSize: 16))
-                                .foregroundStyle(date == selectedDate ? PrimaryColor.normal : .black.opacity(0.6))
+                                .foregroundStyle(isFutureDate ? Color.gray : (date == selectedDate ? PrimaryColor.normal : .black.opacity(0.6)))
                             
                             Text(dateFormatter.string(from: date).components(separatedBy: " ").last!)
                                 .font(.customfont(.semibold, fontSize: 16))
-                                .foregroundStyle(date == selectedDate ? PrimaryColor.normal : .black.opacity(0.6))
-                            if date == selectedDate {
+                                .foregroundStyle(isFutureDate ? Color.gray : (date == selectedDate ? PrimaryColor.normal : .black.opacity(0.8)))
+                            
+                            if date == selectedDate && !isFutureDate {
                                 Image("pyramid")
                                     .resizable()
                                     .scaledToFit()
@@ -126,13 +128,17 @@ struct SaleReportView: View {
                             
                         }
                         .onTapGesture {
-                            selectedDate = date
+                            if !isFutureDate {
+                                selectedDate = date
+                            }
                         }
                         .padding(.horizontal, 5)
+                        .disabled(isFutureDate)
                     }
                 }
                 .padding(.horizontal)
             }
+
             
             HStack {
                 Text("Earning")

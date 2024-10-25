@@ -27,9 +27,9 @@ import GoogleMaps
 
 @main
 struct Kroya_UI_ProjectApp: App {
-//    @StateObject var addressViewModel = AddressViewModel()
-    @StateObject private var userStore = UserStore()
-
+    @UIApplicationDelegateAdaptor var appdelegate: AppDelegateForLocalNotification
+    @StateObject var userStore = UserStore()
+    @StateObject var addressViewModel = AddressViewModel(userStore: UserStore())
     init() {
         GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
     }
@@ -39,23 +39,30 @@ struct Kroya_UI_ProjectApp: App {
             Group {
                 if Auth.shared.getAccessToken() != nil {
                     NavigationView {
-                        MainScreen().environmentObject(userStore).environmentObject(Auth.shared)
+                        MainScreen(userStore: userStore)
+                            .environmentObject(userStore)
+                            .environmentObject(Auth.shared)
+                            .environmentObject(addressViewModel)
+                            .onAppear{
+                                UNUserNotificationCenter.current().delegate = appdelegate
+                            }
                     }
                 }else {
                     if Auth.shared.loggedIn != true {
                         NavigationView {
                             LoginScreenView(userStore: userStore)
-                                .environmentObject(userStore).environmentObject(Auth.shared)
+                                .environmentObject(userStore)
+                                .environmentObject(Auth.shared)
+                                .environmentObject(addressViewModel)
                         }
-                    }else {
+                    }
+                    else {
                         
                     }
                    
                 }
                 
             }
-//            SplashScreen().environmentObject(userStore)
-//                .environmentObject(Auth.shared)
            
         }
     }

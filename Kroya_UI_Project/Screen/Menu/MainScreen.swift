@@ -5,7 +5,15 @@ struct MainScreen: View {
     @State var isActive : Bool = false
     @Environment(\.presentationMode) var presentationMode
     @State private var isModalPresented: Bool = false
+    
     @EnvironmentObject var userStore: UserStore
+    @StateObject var authVM: AuthViewModel
+    @StateObject var addressViewModel: AddressViewModel
+
+    init(userStore: UserStore) {
+           _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
+           _addressViewModel = StateObject(wrappedValue: AddressViewModel(userStore: userStore))
+       }
     var body: some View {
         NavigationStack {
             ZStack {
@@ -53,7 +61,9 @@ struct MainScreen: View {
                                 }
                             }
                             .tag(3)
-                        ProfileView().environmentObject(userStore)
+                        ProfileView(authVM: authVM)
+                           .environmentObject(addressViewModel)
+                           .environmentObject(userStore)
                             .tabItem {
                                 VStack {
                                     Image(selectedTab == 4 ? "icon-User-Color" : "ico-User")
@@ -84,7 +94,6 @@ struct MainScreen: View {
                     .offset(y:-62)
                     
                 }
-//                .ignoresSafeArea(.all)
                 .frame(width: .screenWidth, height: .screenHeight)
                 .padding(.bottom, 50)
                 GeometryReader { geometry in
@@ -116,7 +125,6 @@ struct MainScreen: View {
             })
        
         }
-//        .ignoresSafeArea(.all)
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
     }
@@ -133,8 +141,4 @@ struct MainScreen: View {
             return (geometry.size.width / 3.30) * CGFloat(selectedTab - 1)
         }
     }
-}
-
-#Preview {
-    MainScreen()
 }

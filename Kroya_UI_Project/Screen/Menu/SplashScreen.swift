@@ -11,7 +11,7 @@ struct SplashScreen: View {
             if isActive {
                 if  auth.getAccessToken() != nil {
                     //MARK: Token found in Keychaien, navigate to MainScreen
-                    MainScreen()
+                    MainScreen(userStore: userStore)
                         .environmentObject(userStore)
                         .onAppear {
                             print("Token found in Keychain, navigating to MainScreen.")

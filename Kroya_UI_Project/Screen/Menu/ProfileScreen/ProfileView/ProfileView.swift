@@ -9,10 +9,12 @@ struct ProfileView: View {
     @State private var selectedLanguage: String? = nil
     @State private var isLogout = false
     @State private var isLoading = false
-    @EnvironmentObject var userStore: UserStore
     @State private var showLogoutSuccessAlert = false
-    @ObservedObject var authVM = AuthViewModel(userStore: UserStore())
-    
+    @ObservedObject var authVM : AuthViewModel
+    @State private var selectedAddress: Address?
+    @EnvironmentObject var addressVM: AddressViewModel
+    @EnvironmentObject var userStore: UserStore
+    @State private var showMapSheet = false
     var body: some View {
         NavigationView {
             ZStack {
@@ -28,13 +30,15 @@ struct ProfileView: View {
                                 isTextCenter: false
                             )
                         }
-                        UserInfoCardView(
-                            title: "Addresses",
-                            subtitle: "List of your addresses",
-                            width: .screenWidth * 0.44,
-                            height: .screenHeight * 0.11,
-                            isTextCenter: false
-                        )
+                        NavigationLink(destination: AddressView(viewModel: addressVM, selectedAddress: $selectedAddress)) {
+                            UserInfoCardView(
+                                title: "Addresses",
+                                subtitle: "List of your addresses",
+                                width: .screenWidth * 0.44,
+                                height: .screenHeight * 0.11,
+                                isTextCenter: false
+                            )
+                        }
                     }
                     HStack {
                         NavigationLink(destination: SaleReportView()) {
@@ -84,7 +88,11 @@ struct ProfileView: View {
                         Text("App Settings")
                             .font(.customfont(.medium, fontSize: 14))
                         Spacer().frame(height: .screenHeight * 0.02)
-                        AppSettingView(imageName: "VectorLocation", title: "Change Location", iconName: "Rightarrow")
+                        NavigationLink {
+                            MapSelectionView(viewModel: addressVM, showMapSheet: $showMapSheet)
+                        } label: {
+                            AppSettingView(imageName: "VectorLocation", title: "Change Location", iconName: "Rightarrow")
+                        }.accentColor(.black)
                         
                         NavigationLink {
                             AllowNotificationView()
@@ -129,7 +137,7 @@ struct ProfileView: View {
                                 .frame(width: 40, height: 40)
                             
                             VStack(alignment: .leading) {
-                                Text(userStore.user?.userName ?? "")
+                                Text("Oun Bonaliheng1")
                                     .font(.customfont(.bold, fontSize: 16))
                                     .foregroundStyle(.black)
                                 Spacer().frame(height: 5)
@@ -156,6 +164,6 @@ struct ProfileView: View {
     }
 }
 
-#Preview {
-    ProfileView()
-}
+//#Preview {
+//    ProfileView()
+//}

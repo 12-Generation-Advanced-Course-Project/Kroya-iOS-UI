@@ -20,7 +20,6 @@ struct FillPasswordScreen: View {
         NavigationView {
             ZStack {
                 VStack {
-                    // Header
                     HStack {
                         Button(action: {
                             dismiss()
@@ -45,7 +44,7 @@ struct FillPasswordScreen: View {
                     }
                     .padding()
                     
-                    // Password Input Section
+                 
                     VStack(alignment: .leading) {
                         Text("Password")
                             .foregroundStyle(.black.opacity(0.8))
@@ -100,10 +99,7 @@ struct FillPasswordScreen: View {
                     Spacer().frame(height: 20)
                     
                     Button(action: {
-                        // Validate the password again before login
                         validatePassword(password)
-                        
-                        // If the password is valid, proceed with login
                         if !password.isEmpty && isPasswordValid {
                             authVM.loginAccountEmail(email: email, password: password)
                         }
@@ -122,12 +118,9 @@ struct FillPasswordScreen: View {
                 }
                 
                 // Navigate to MainScreen on successful login
-                NavigationLink(destination: MainScreen().navigationBarBackButtonHidden(true).environmentObject(userStore), isActive: $authVM.isLoggedIn) {
+                NavigationLink(destination: MainScreen(userStore: userStore).navigationBarBackButtonHidden(true).environmentObject(userStore), isActive: $authVM.isLoggedIn) {
                     EmptyView()
                 }
-                
-                
-                // Show Progress Indicator while loading
                 if authVM.isLoading {
                     ProgressIndicator()
                 }

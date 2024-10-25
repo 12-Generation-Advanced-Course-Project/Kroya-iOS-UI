@@ -7,11 +7,11 @@ import SwiftUI
 struct LoginScreenView: View {
     @State private var email: String = ""
     @State private var isEmailInvalid: Bool = false
-    @EnvironmentObject var userStore: UserStore
+   
     @StateObject private var countdownTimer = CountdownTimer()
     
     @StateObject private var authVM: AuthViewModel
-    
+    @EnvironmentObject var userStore: UserStore
     init(userStore: UserStore) {
         _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
     }
@@ -77,7 +77,7 @@ struct LoginScreenView: View {
                 NavigationLink(
                     destination: destinationView(), // Use dynamic destination based on logic
                     isActive: Binding(
-                        get: { authVM.isOTPSent || authVM.isEmailExist },  // Triggered on either state
+                        get: { authVM.isOTPSent || authVM.isEmailExist },
                         set: { _ in }
                     ),
                     label: {

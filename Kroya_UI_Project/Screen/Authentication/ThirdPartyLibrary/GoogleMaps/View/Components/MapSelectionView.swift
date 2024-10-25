@@ -9,7 +9,7 @@ struct MapSelectionView: View {
     @State private var markerCoordinate: CLLocationCoordinate2D? // To track where the marker is dropped
     @State private var addressDetail = ""
     @State private var selectedTag: String?
-    
+    @Environment(\.dismiss) var dismiss
     @ObservedObject private var locationManager = LocationManager()
 
     var body: some View {
@@ -19,19 +19,15 @@ struct MapSelectionView: View {
                     .edgesIgnoringSafeArea(.all)
 
                 Button(action: {
-                    showMapSheet = false // Close the map view
+                    showMapSheet = false
                 }) {
                     Image(systemName: "xmark.circle.fill")
                         .foregroundColor(.gray)
                         .font(.system(size: 30))
                         .padding()
                 }
-
-                // Use a VStack to move the button to the bottom center of the map
                 VStack {
                     Spacer()
-
-                    // Custom "My Location" button styled like the one in the image
                     Button(action: {
                         if let location = locationManager.location {
                             // Remove marker when getting the current location
@@ -131,7 +127,11 @@ struct MapSelectionView: View {
                         specificLocation: markerCoordinate != nil ? locationManager.pinAddress ?? "" : locationManager.address ?? "",
                         tag: selectedTag ?? "Other"
                     )
-                    showMapSheet = false // Close the sheet after saving
+                    showMapSheet = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                        dismiss()
+                    }
+                  )
                 }) {
                     Text("Save Address")
                         .font(.system(size: 16, weight: .medium, design: .rounded))
@@ -147,6 +147,22 @@ struct MapSelectionView: View {
             .background(Color.white)
             .clipShape(RoundedCornerShape(corners: [.topLeft, .topRight], radius: 20))
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                HStack {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Image(systemName: "arrow.left")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 20, height: 20)
+                            .foregroundStyle(.black)
+                    }
+                }
+            }
+        }
+        .navigationBarBackButtonHidden(true)
         .edgesIgnoringSafeArea(.top)
     }
     
@@ -156,7 +172,7 @@ struct MapSelectionView: View {
         if let googleMapsURL = URL(string: url), UIApplication.shared.canOpenURL(googleMapsURL) {
             UIApplication.shared.open(googleMapsURL)
         } else {
-            // Fallback to open Google Maps in the browser if the app is not installed
+          
             let browserURL = "https://www.google.com/maps/search/?api=1&query=\(coordinate.latitude),\(coordinate.longitude)"
             if let url = URL(string: browserURL) {
                 UIApplication.shared.open(url)

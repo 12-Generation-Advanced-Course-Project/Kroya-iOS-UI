@@ -23,8 +23,8 @@ class ProfileViewModel: ObservableObject {
                 switch result {
                 case .success(let response):
                     if response.statusCode == "200" {
-                        if let userProfile = response.payload {
-                            self?.userProfile = userProfile
+                        if let grandUserProfile = response.payload {
+                            self?.userProfile = grandUserProfile
                         }
                         self?.successMessage = "Profile fetched successfully."
                         self?.showError = false

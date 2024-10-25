@@ -11,7 +11,7 @@ struct AddressRowView: View {
     var address: Address
     var onUpdate: () -> Void
     var onDelete: () -> Void
-
+    @State var isShowPopup  : Bool = false
     var body: some View {
         VStack {
             HStack {
@@ -30,27 +30,20 @@ struct AddressRowView: View {
                 Text(address.tag)
                     .foregroundColor(PrimaryColor.normal)
                     .font(.system(size: 15, weight: .semibold, design: .rounded))
-                // Replacing context menu with Menu
-                Menu {
-                    Button(action: {
-                        onUpdate() // Trigger update action
-                    }) {
-                        Label("Update", systemImage: "square.and.pencil")
-                    }
-
-                    Button(role: .destructive , action: {
-                        onDelete() // Trigger delete action
-                    }) {
-                        Label("Delete", systemImage: "trash")
-                    }
-                } label: {
-                    Image(.more)
+                Button(action: {
+                    print("Button tapped")
+                    isShowPopup.toggle()
+                }) {
+                    Image("dot")
                         .resizable()
                         .scaledToFit()
-                        .frame(height: 16)
-                        .foregroundColor(.gray)
-                        .padding(.leading, 10)
+                        .frame(width: 18, height: 18)
                 }
+                .popover(isPresented: $isShowPopup ,attachmentAnchor: .point(.topTrailing), arrowEdge: .top) {
+                    CustomMenuView(showPopup: $isShowPopup, onUpdate: onUpdate, onDelete: onDelete)
+                        .presentationCompactAdaptation(.none)
+                }
+
             }
             .padding(.vertical, 5)
             Divider()

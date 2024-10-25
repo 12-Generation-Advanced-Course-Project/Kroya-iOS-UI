@@ -25,6 +25,7 @@ class UserService {
                 case .success(let apiResponse):
                     if let statusCode = Int(apiResponse.statusCode), statusCode == 200 {
                         print("User profile retrieved successfully.")
+                        print("This is the user profile:\(String(describing: apiResponse.payload))")
                         completion(.success(apiResponse))
                     } else {
                         print("Failed to retrieve user profile.")

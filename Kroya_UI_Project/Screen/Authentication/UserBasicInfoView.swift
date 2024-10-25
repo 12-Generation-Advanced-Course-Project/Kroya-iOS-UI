@@ -8,10 +8,10 @@ struct UserBasicInfoView: View {
     @State private var showSuccessAlert = false
     @State private var selectedAddress: Address?
     @State private var isSkip = false
-    // Validation flags
+   
     @State private var isNameEmpty = false
     @State private var isPhoneNumberEmpty = false
-    @State private var isPhoneNumberInvalid = false // New flag for invalid phone number
+    @State private var isPhoneNumberInvalid = false
     @State private var isAddressEmpty = false
     
     @Environment(\.dismiss) var dismiss
@@ -34,7 +34,7 @@ struct UserBasicInfoView: View {
                     }
                     Spacer()
                 }
-                // Title
+               
                 Text("Basic Information")
                     .font(.title3)
                     .fontWeight(.semibold)
@@ -99,7 +99,7 @@ struct UserBasicInfoView: View {
                             .font(.customfont(.medium, fontSize: 14))
                             .foregroundColor(.gray)
                         
-                        // Address Selection NavigationLink
+                       
                         NavigationLink(destination: AddressView(viewModel: addressVM, selectedAddress: $selectedAddress)) {
                             HStack {
                                 Image("pinmap")
@@ -158,7 +158,7 @@ struct UserBasicInfoView: View {
                     Text("Skip")
                         .font(.customfont(.semibold, fontSize: 16))
                         .foregroundColor(.green)
-                    NavigationLink(destination: MainScreen().environmentObject(userStore),isActive: $isSkip, label: {
+                    NavigationLink(destination: MainScreen(userStore: userStore).environmentObject(userStore),isActive: $isSkip, label: {
                         EmptyView()
                     })
                 }
@@ -170,7 +170,7 @@ struct UserBasicInfoView: View {
             }
             .padding(.horizontal, 20)
        
-            NavigationLink(destination: MainScreen().environmentObject(userStore),isActive: $authVM.isUserSave, label: {
+            NavigationLink(destination: MainScreen(userStore: userStore).environmentObject(userStore),isActive: $authVM.isUserSave, label: {
                 EmptyView()
             })
             .hidden()
