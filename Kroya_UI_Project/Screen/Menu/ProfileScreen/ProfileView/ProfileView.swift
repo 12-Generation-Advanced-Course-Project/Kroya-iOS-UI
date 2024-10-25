@@ -15,6 +15,8 @@ struct ProfileView: View {
     @EnvironmentObject var addressVM: AddressViewModel
     @EnvironmentObject var userStore: UserStore
     @State private var showMapSheet = false
+
+
     var body: some View {
         NavigationView {
             ZStack {
@@ -137,11 +139,11 @@ struct ProfileView: View {
                                 .frame(width: 40, height: 40)
                             
                             VStack(alignment: .leading) {
-                                Text("Oun Bonaliheng1")
+                                Text("Oun Bonaliheng")
                                     .font(.customfont(.bold, fontSize: 16))
                                     .foregroundStyle(.black)
                                 Spacer().frame(height: 5)
-                                Text("Since Oct, 2024")
+                                Text("Since Oct 2024")
                                     .font(.customfont(.light, fontSize: 12))
                                     .foregroundStyle(.black)
                             }

@@ -5,7 +5,7 @@ struct MainScreen: View {
     @State var isActive : Bool = false
     @Environment(\.presentationMode) var presentationMode
     @State private var isModalPresented: Bool = false
-    
+
     @EnvironmentObject var userStore: UserStore
     @StateObject var authVM: AuthViewModel
     @StateObject var addressViewModel: AddressViewModel
@@ -13,6 +13,7 @@ struct MainScreen: View {
     init(userStore: UserStore) {
            _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
            _addressViewModel = StateObject(wrappedValue: AddressViewModel(userStore: userStore))
+        
        }
     var body: some View {
         NavigationStack {

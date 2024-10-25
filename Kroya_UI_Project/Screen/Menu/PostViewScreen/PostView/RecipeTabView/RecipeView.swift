@@ -15,12 +15,12 @@ struct RecipeView: View {
     var body: some View {
         
         List {
-            ForEach(0..<3) { index in // Loop 3 times
+            ForEach(0..<3) { index in
                 ZStack {
                     RecipeViewCell(
                         
                         imageName: "somlorKari",
-                        dishName: "Somlor Kari \(index + 1)", // Customize the dish name with index
+                        dishName: "Somlor Kari \(index + 1)",
                         cookingDate: "30 Sep 2024",
                         statusType: "Recipe",
                         rating: 5.0,
@@ -28,9 +28,9 @@ struct RecipeView: View {
                         level: "Easy"
                     )
                     
-                    // Place the NavigationLink as a background item, without using the arrow.
+                  
                     NavigationLink(destination: ContentOnButtonSheet(
-                        foodName: "Somlor Kari \(index + 1)", // Customize with the index if needed
+                        foodName: "Somlor Kari \(index + 1)",
                         price: 2.00,
                         date: "30 Sep 2024",
                         itemFood: "Somlor Kari",
@@ -43,12 +43,12 @@ struct RecipeView: View {
                         review: "Delicious dish!",
                         reviewDetail: "The Somlor Kari was perfectly spiced and rich in flavor..."
                     )) {
-                        EmptyView() // Empty view to prevent showing the default arrow
+                        EmptyView()
                     }
-                    .opacity(0) // Make the navigation link invisible (but still tappable)
+                    .opacity(0)
                 }
                 .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden) // Hide separator line for this cell
+                .listRowSeparator(.hidden)
                 .padding(.vertical, -6)
             }
         }
