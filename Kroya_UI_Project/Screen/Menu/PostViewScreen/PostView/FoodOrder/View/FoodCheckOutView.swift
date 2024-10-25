@@ -8,9 +8,13 @@
 import SwiftUI
 
 struct FoodCheckOutView: View {
+    
+    // properties
     @Environment(\.dismiss) var dismiss
+    @State private var isReceipViewActive = false
+
     var body: some View {
-     
+        NavigationStack {
             VStack {
                 List {
                     // Order Card Section
@@ -50,28 +54,49 @@ struct FoodCheckOutView: View {
                     }
                     .listRowInsets(EdgeInsets())
                     .listRowSeparator(.hidden)
+                    
+                    
+                
                 }
                 .listStyle(PlainListStyle())
                 .scrollContentBackground(.hidden)
                 
+               
+                Button("Place an order") {
+                    self.isReceipViewActive = true
+                }
+                .font(.customfont(.semibold, fontSize: 16))
+                .frame(maxWidth: .infinity , maxHeight: 44) 
+//                .padding(.bottom, 10)
+                .background(Color.yellow)
+                .foregroundColor(.white)
+                .cornerRadius(12)
+           
+                // Navigation to ReceiptView with isPresented binding
+                .navigationDestination(isPresented: $isReceipViewActive) {
+                    ReceiptView(isPresented: $isReceipViewActive)
+                }
                 
-                //Next
-                NavigationLink(destination: EmptyView(), label: {
-                    Text("Place an order")
-                        .font(.customfont(.semibold, fontSize: 16))
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.yellow)
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
-                })
-                .padding(.bottom, 10)
+                // Next Button to navigate to ReceiptView
+//                NavigationLink(destination: ReceiptView()) {
+//                    Text("Place an order")
+//                        .font(.customfont(.semibold, fontSize: 16))
+//                        .frame(maxWidth: .infinity)
+//                        .padding()
+//                        .background(Color.yellow)
+//                        .foregroundColor(.white)
+//                        .cornerRadius(12)
+//                }
 
+                
             }
             .padding(.horizontal)
             .navigationTitle("Checkout")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
+            
+        }
+                        
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     HStack {
