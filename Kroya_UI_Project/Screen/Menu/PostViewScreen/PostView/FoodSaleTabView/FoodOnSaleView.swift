@@ -45,6 +45,7 @@ struct FoodOnSaleView: View {
                 .padding(.vertical, -6)
             }
         }
+        .scrollIndicators(.hidden)
         .buttonStyle(PlainButtonStyle())
         .listStyle(.plain)
     }
