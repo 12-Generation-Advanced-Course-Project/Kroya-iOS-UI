@@ -119,14 +119,16 @@ struct FoodOnSaleViewCell: View {
                             .foregroundColor(.gray)
                         
                     }
-//                    Spacer()
-                   
+                    Spacer()
+                    
+//                    .frame(maxWidth: .infinity, alignment: .leading)
+                    
                 }
                
             }
             .padding(10)
 //            .frame(maxWidth: .infinity)
-            .frame(width: 300)
+            .frame(width: 350)
         }
        
         .background(Color.white)
