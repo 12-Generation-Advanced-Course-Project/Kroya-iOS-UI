@@ -166,8 +166,8 @@ struct HomeView: View {
                             }
                         }
                     }
-                    .padding(4.5)
-                    Spacer()
+//                    .padding(4.5)
+//                    Spacer()x
                 }
 //                .padding(.leading, .screenWidth * 0.03)
                 .padding(.horizontal)
