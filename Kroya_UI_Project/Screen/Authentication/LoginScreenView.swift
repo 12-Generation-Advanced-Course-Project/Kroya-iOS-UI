@@ -11,8 +11,10 @@ struct LoginScreenView: View {
     @StateObject private var countdownTimer = CountdownTimer()
     
     @StateObject private var authVM: AuthViewModel
+    @Binding var lang: String
     
-    init(userStore: UserStore) {
+    init(userStore: UserStore,lang: Binding<String> ) {
+        self._lang = lang
         _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
     }
     
@@ -147,10 +149,10 @@ struct LoginScreenView: View {
     private func destinationView() -> some View {
         if authVM.isOTPSent {
             // OTP sent, navigate to VerificationCodeView
-            VerificationCodeView(authVM: authVM).environmentObject(userStore)
+            VerificationCodeView(authVM: authVM, lang: $lang).environmentObject(userStore)
         } else if authVM.isEmailExist {
             // Email exists, navigate to FillPasswordScreen
-            FillPasswordScreen(authVM: authVM, email: email).environmentObject(userStore)
+            FillPasswordScreen(authVM: authVM, email: email, lang: $lang).environmentObject(userStore)
         } else {
             EmptyView()
         }

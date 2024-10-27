@@ -18,6 +18,7 @@ struct UserBasicInfoView: View {
     @EnvironmentObject var userStore: UserStore
     @EnvironmentObject var addressVM: AddressViewModel
     @ObservedObject var authVM = AuthViewModel(userStore: UserStore())
+    @Binding var lang: String
     
     var body: some View {
         NavigationView{
@@ -150,7 +151,7 @@ struct UserBasicInfoView: View {
                         .padding(.horizontal)
                 }
                 
-                NavigationLink(destination: MainScreen().environmentObject(userStore), label: {
+                NavigationLink(destination: MainScreen(lang: $lang).environmentObject(userStore), label: {
                     Text("Skip")
                         .font(.customfont(.semibold, fontSize: 16))
                         .foregroundColor(.green)
@@ -161,7 +162,7 @@ struct UserBasicInfoView: View {
                 Spacer()
             }
             .padding(.horizontal, 20)
-            NavigationLink(destination: MainScreen().environmentObject(userStore),isActive: $authVM.isUserSave, label: {
+            NavigationLink(destination: MainScreen(lang: $lang).environmentObject(userStore),isActive: $authVM.isUserSave, label: {
                 EmptyView()
             })
             .hidden()

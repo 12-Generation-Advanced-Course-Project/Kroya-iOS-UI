@@ -15,6 +15,7 @@ struct FillPasswordScreen: View {
     @EnvironmentObject var userStore: UserStore
     @ObservedObject var authVM: AuthViewModel
     @State var email: String
+    @Binding var lang: String
     
     var body: some View {
         NavigationView {
@@ -126,7 +127,7 @@ struct FillPasswordScreen: View {
 //                    EmptyView()
 //                }
                 
-                NavigationLink(destination: SplashScreen(),isActive: $authVM.isLoggedIn) {
+                NavigationLink(destination: SplashScreen(lang: $lang),isActive: $authVM.isLoggedIn) {
                     EmptyView()
                 }
                 

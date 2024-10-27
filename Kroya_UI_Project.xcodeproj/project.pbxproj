@@ -208,7 +208,7 @@
 				en,
 				Base,
 				"km-KH",
-				km,
+				ko,
 			);
 			mainGroup = 8406DAA62CA5510C0003EA40;
 			minimizedProjectReferenceProxies = 1;

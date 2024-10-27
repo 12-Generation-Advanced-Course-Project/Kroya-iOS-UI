@@ -10,7 +10,7 @@ import SwiftUI
 struct AppSettingView: View {
     
     var imageName: String
-    var title: String
+    var title: LocalizedStringKey
     var iconName: String
     
     var body: some View {
@@ -45,7 +45,7 @@ struct AppSettingView: View {
 #Preview {
     VStack {
         AppSettingView(
-            imageName: "VectorLocation", title: "Change Location", iconName: "Rightarrow"
+            imageName: "VectorLocation", title: "Change location", iconName: "Rightarrow"
         )
         AppSettingView(
             imageName: "notification 1", title: "Notifications", iconName: "Rightarrow"

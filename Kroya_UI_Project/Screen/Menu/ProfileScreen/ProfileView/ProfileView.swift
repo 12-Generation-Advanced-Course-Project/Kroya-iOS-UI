@@ -12,6 +12,7 @@ struct ProfileView: View {
     @EnvironmentObject var userStore: UserStore
     @State private var showLogoutSuccessAlert = false
     @ObservedObject var authVM = AuthViewModel(userStore: UserStore())
+    @Binding var lang: String
     
     var body: some View {
         NavigationView {
@@ -21,8 +22,8 @@ struct ProfileView: View {
                     HStack {
                         NavigationLink(destination: FavoriteViewCart()) {
                             UserInfoCardView(
-                                title: "Favorite",
-                                subtitle: "List of their favorite dishes",
+                                title: LocalizedStringKey("Favorite"),
+                                subtitle: LocalizedStringKey("List of their favorite dishes"),
                                 width: .screenWidth * 0.44,
                                 height: .screenHeight * 0.11,
                                 isTextCenter: false
@@ -84,21 +85,21 @@ struct ProfileView: View {
                         Text("App Settings")
                             .font(.customfont(.medium, fontSize: 14))
                         Spacer().frame(height: .screenHeight * 0.02)
-                        AppSettingView(imageName: "VectorLocation", title: "Change Location", iconName: "Rightarrow")
+                        AppSettingView(imageName: "VectorLocation", title: LocalizedStringKey("Change location"), iconName: "Rightarrow")
                         
                         NavigationLink {
                             AllowNotificationView()
                         } label: {
-                            AppSettingView(imageName: "notification 1", title: "Notifications", iconName: "Rightarrow")
+                            AppSettingView(imageName: "notification 1", title: LocalizedStringKey("Notifications"), iconName: "Rightarrow")
                         }.accentColor(.black)
                         
                         Button {
                             showingCredits.toggle()
                         } label: {
-                            AppSettingView(imageName: "languageIcon", title: "Language", iconName: "Rightarrow")
+                            AppSettingView(imageName: "languageIcon", title: LocalizedStringKey("Language"), iconName: "Rightarrow")
                         }
                         .sheet(isPresented: $showingCredits) {
-                            ChangeLanguageView()
+                            ChangeLanguageView(lang: $lang)
                         }
                         .accentColor(.black)
                     }
@@ -119,7 +120,7 @@ struct ProfileView: View {
 
                     
                     // NavigationLink to go to LoginScreenView on logout
-                    NavigationLink(destination: LoginScreenView(userStore: userStore), isActive: $authVM.islogout) {
+                    NavigationLink(destination: LoginScreenView(userStore: userStore,lang: $lang), isActive: $authVM.islogout) {
                         EmptyView()
                     }.hidden()
                     
@@ -148,7 +149,7 @@ struct ProfileView: View {
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
                         NavigationLink(destination: EditingProfileView()) {
-                            Text("Edit")
+                            Text(LocalizedStringKey("Edit"))
                                 .font(.customfont(.semibold, fontSize: 16))
                                 .foregroundStyle(PrimaryColor.normal)
                         }
@@ -179,6 +180,6 @@ struct ProfileView: View {
     }
 }
 
-#Preview {
-    ProfileView()
-}
+//#Preview {
+//    ProfileView()
+//}

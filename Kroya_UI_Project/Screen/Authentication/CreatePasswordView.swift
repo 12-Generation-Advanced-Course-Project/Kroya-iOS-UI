@@ -148,6 +148,7 @@ struct CreatePasswordView: View {
     @ObservedObject var authVM: AuthViewModel
     @StateObject var addressViewModel = AddressViewModel(userStore: UserStore())
     @State private var isNavigating = false
+    @Binding var lang: String
 
     var body: some View {
         NavigationView {
@@ -246,7 +247,7 @@ struct CreatePasswordView: View {
                 }
                 
              
-                NavigationLink(destination: UserBasicInfoView(authVM: authVM).environmentObject(userStore).environmentObject(addressViewModel), isActive: $isNavigating) {
+                NavigationLink(destination: UserBasicInfoView(authVM: authVM, lang: $lang).environmentObject(userStore).environmentObject(addressViewModel), isActive: $isNavigating) {
                     EmptyView()
                 }
                 .hidden()

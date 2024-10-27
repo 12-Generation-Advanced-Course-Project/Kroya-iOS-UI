@@ -5,6 +5,7 @@ struct MainScreen: View {
     @State var isActive : Bool = false
     @Environment(\.presentationMode) var presentationMode
     @State private var isModalPresented: Bool = false
+    @Binding var lang: String
     var body: some View {
         NavigationStack {
             ZStack {
@@ -52,7 +53,7 @@ struct MainScreen: View {
                                 }
                             }
                             .tag(3)
-                        ProfileView()
+                        ProfileView(lang: $lang)
                             .tabItem {
                                 VStack {
                                     Image(selectedTab == 4 ? "icon-User-Color" : "ico-User")
@@ -132,6 +133,6 @@ struct MainScreen: View {
     }
 }
 
-#Preview {
-    MainScreen()
-}
+//#Preview {
+//    MainScreen()
+//}

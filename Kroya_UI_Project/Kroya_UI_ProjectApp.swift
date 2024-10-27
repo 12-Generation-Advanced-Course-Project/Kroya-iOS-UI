@@ -32,11 +32,13 @@ struct Kroya_UI_ProjectApp: App {
     init() {
         GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
     }
+    @State var lang: String = UserDefaults.standard.string(forKey: "AppLanguage") ?? "en"
     
     var body: some Scene {
         WindowGroup {
-            SplashScreen().environmentObject(userStore)
+            SplashScreen(lang: $lang).environmentObject(userStore)
                 .environmentObject(Auth.shared)
+                .environment(\.locale, .init (identifier: lang))
            
         }
     }

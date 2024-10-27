@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct UserInfoCardView: View {
-    var title: String
-    var subtitle: String
+    var title: LocalizedStringKey
+    var subtitle: LocalizedStringKey
     
     var backgroundColor: Color = Color(hex: "#FFFBEB")
     var borderColor: Color = Color(hex: "#F2EEDF")
@@ -28,7 +28,7 @@ struct UserInfoCardView: View {
                 )
             
             VStack(alignment: .leading, spacing: 5) {
-                Text(title)
+                Text((title))
                     .font(.customfont(.medium, fontSize: 16))
                     .foregroundColor(titleColor)
                     .frame(maxWidth:.infinity,alignment: isTextCenter ? .center : .leading)
