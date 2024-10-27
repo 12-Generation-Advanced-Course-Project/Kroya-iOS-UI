@@ -23,7 +23,7 @@ struct EditDropDownButton: View {
                 }
                 .frame(width: 200)
 
-                Button(action: onDelete) {
+                Button(role: .destructive ,action: onDelete) {
                     Label {
                         Text("Delete")
                             .foregroundColor(.red)

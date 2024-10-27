@@ -1,6 +1,10 @@
 import SwiftUI
-
+//class NavigationVM : ObservableObject
+//{
+//    @Published var dismissToRott = false
+//}
 struct RecipeModalView: View {
+//    @Binding var rootIsActive2 : Bool
     @State private var draggedIngredient: Ingredient?
     @State private var ingredients: [Ingredient] = [
         Ingredient(name: "Tomato", quantity: "2", price: "1.00", selectedCurrency: 0),
@@ -9,13 +13,14 @@ struct RecipeModalView: View {
     ]
     @State private var newIngredient = Ingredient(name: "", quantity: "", price: "", selectedCurrency: 0)
     
-    @Environment(\.dismiss) var dismiss
-    
+    @State private var ingret = Ingret(cookDate: "", amount: "", price: "", location: "", selectedCurrency: 0)
     @State private var steps: [Step] = [Step(description: "Noodle"),
                                         Step(description: "Fried Rice"),
                                         Step(description: "Bread")]
     @State private var draggedStep: Step?
-    
+    let dismissToRoot : DismissAction
+    @Environment(\.dismiss) var dismiss
+//    @StateObject private var navState = NavigationVM()
     var body: some View {
         VStack {
             ScrollView(.vertical, showsIndicators: false) {
@@ -119,7 +124,8 @@ struct RecipeModalView: View {
                                 )
                                 .foregroundColor(.black)
                         }
-                        Button(action: {}){
+                        Button(action: {
+                        }){
                             Text("Next")
                                 .font(.customfont(.semibold, fontSize: 16))
                                 .frame(maxWidth: .infinity)
@@ -138,10 +144,15 @@ struct RecipeModalView: View {
         .navigationBarBackButtonHidden(true)
         .navigationTitle("Recipe")
         .navigationBarTitleDisplayMode(.inline)
+//        .onChange(of: navState.dismissToRott) { shouldDimiss in
+//            if shouldDimiss {
+//                dismiss()
+//            }
+//        }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    dismiss()
+                    self.dismissToRoot()
                 }) {
                     Image(systemName: "xmark")
                         .resizable()
@@ -151,7 +162,7 @@ struct RecipeModalView: View {
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination: EmptyView()) {
+                NavigationLink(destination: SaleModalView(ingret: $ingret,dismissToRoot: dismiss)) {
                     Text("Skip")
                         .foregroundColor(.black.opacity(0.6))
                 }

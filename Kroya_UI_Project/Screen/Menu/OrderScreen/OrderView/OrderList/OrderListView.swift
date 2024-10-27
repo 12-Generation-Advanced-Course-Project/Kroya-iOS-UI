@@ -99,10 +99,10 @@ struct OrderListView: View {
 
                 // TabView for Content
                 TabView(selection: $selectedSegment) {
-                    NewItemFoodOrderCardView(iselected: selectedSegment)
-                        .tag(0)
+//                    NewItemFoodOrderCardView(iselected: selectedSegment, status: <#Binding<String?>#>)
+//                        .tag(0)
                     OldItemFoodOrderCardView(iselected: selectedSegment)
-                        .tag(1)
+                        .tag(0)
 
                 }.padding(.top, 20)
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))

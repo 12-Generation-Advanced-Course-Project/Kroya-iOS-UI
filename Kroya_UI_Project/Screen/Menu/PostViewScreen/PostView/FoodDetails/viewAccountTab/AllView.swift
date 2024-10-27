@@ -26,7 +26,8 @@ struct AllView: View {
                     frameWImage:400,
                     frameHImage:135,
                     Spacing:200,
-                    offset:-45
+                    offset:-45,
+                    isRecipeorFood: true
                 )
                 
                 FoodandRecipeCardView(
@@ -43,7 +44,8 @@ struct AllView: View {
                     frameWImage:400,
                     frameHImage:135,
                     Spacing:200,
-                    offset:-45
+                    offset:-45,
+                    isRecipeorFood: true
                 )
                 FoodandRecipeCardView(
                     imageName: "SomlorKari",
@@ -59,7 +61,8 @@ struct AllView: View {
                     frameWImage:400,
                     frameHImage:135,
                     Spacing:200,
-                    offset:-45
+                    offset:-45,
+                    isRecipeorFood: true
                 )
                 FoodandRecipeCardView(
                     imageName: "SomlorKari",
@@ -75,7 +78,8 @@ struct AllView: View {
                     frameWImage:400,
                     frameHImage:135,
                     Spacing:200,
-                    offset:-45
+                    offset:-45,
+                    isRecipeorFood: true
                 )
             }}
     }

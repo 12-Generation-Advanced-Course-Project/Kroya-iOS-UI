@@ -19,6 +19,8 @@ struct DescriptionView: View {
                     .font(.customfont(.regular, fontSize: 14))
                     .opacity(0.6)
                 
+                
+                
             }}
     }
 }

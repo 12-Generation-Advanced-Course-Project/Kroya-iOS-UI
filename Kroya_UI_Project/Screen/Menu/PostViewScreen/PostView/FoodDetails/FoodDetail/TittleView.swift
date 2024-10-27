@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct TittleView: View {
+    @State private var isEggChecked = true
+    @State private var isButterChecked = true
+    @State private var isHalfButterChecked = false
     var body: some View {
         
         GeometryReader { geometry in
@@ -79,6 +82,41 @@ struct TittleView: View {
                         .font(.customfont(.bold, fontSize: 17))
                         .bold()
                 }
+        //Description
+                Text("Description")
+                    .font(.customfont(.bold, fontSize: 18))
+                Text("In the dynamic world of iOS development, harnessing the power of both SwiftUI and UIKit opens up a realm of possibilities. In this tutorial, we’ll delve into the seamless integration of UIKit’s UITableView in SwiftUI, exploring step-by-step how to create a robust and interactive TableView within your SwiftUI project.")
+                    .lineLimit(3)
+                    .font(.customfont(.regular, fontSize: 14))
+                    .opacity(0.6)
+                
+        //Ingredients
+                Text("Ingredients")
+                    .font(.customfont(.bold, fontSize: 18))
+                VStack(alignment: .leading, spacing: 20) {
+                    
+                    HStack {
+                        Button(action: {}){
+                            Circle()
+                                .fill(isHalfButterChecked ?   Color.green.opacity(0.3): Color.clear)
+                                .stroke(isHalfButterChecked ? Color.clear : Color.gray, lineWidth: 1)
+                                .frame(width: geometry.size.width * 0.06)
+                                .overlay(
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(isHalfButterChecked ? .green : .clear)
+                                )
+                                .onTapGesture {
+                                    isHalfButterChecked.toggle()
+                                }
+                            
+                        }
+                        Text("Egg")
+                            .font(.customfont(.regular, fontSize: 17))
+                            .foregroundStyle(Color(hex: "#2E3E5C"))
+                        
+                    }
+                    
+                }
             }
             
             
@@ -86,6 +124,6 @@ struct TittleView: View {
     }
 }
 
-//#Preview {
-//    TittleView()
-//}
+#Preview {
+    TittleView()
+}

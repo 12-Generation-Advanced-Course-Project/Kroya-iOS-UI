@@ -99,13 +99,13 @@ struct PaywithKHQRModalView: View {
             downloadSuccess = true
         }
         
-        let image = ImageRendererQR.renderView(view: VStack(alignment: .leading) {
-            Image("webill365_logo_full 1")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 70, height: 15)
-            
+        let image = ImageRendererQR.renderView(view:
+    VStack(alignment: .leading) {
             VStack {
+                Image("webill365_logo_full 1")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 70, height: 15)
                 Text("Scan QR Code")
                     .font(.customfont(.semibold, fontSize: 24))
                 Spacer().frame(height: 10)
@@ -116,7 +116,7 @@ struct PaywithKHQRModalView: View {
                 
                 // QR Code
                 QRCodeView(text: "00020101021130450016abaakhppxxx@abaa01090045514050208ABA Bank40390006abaP2P0112B7A47E5B00EA02090045514055204000053031165802KH5914OUN BONALIHENG6010Phnom Penh6304AFE1", size: 200)
-                
+              
                 Spacer()
             }
         })

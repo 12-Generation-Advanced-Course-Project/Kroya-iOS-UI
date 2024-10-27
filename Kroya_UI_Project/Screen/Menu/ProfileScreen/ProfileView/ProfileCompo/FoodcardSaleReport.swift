@@ -7,19 +7,17 @@ struct FoodItem: Identifiable {
     let remarks: String
     let price: Double
     let paymentMethod: String
-    var status: String? // For optional status like "Accept" or "Reject"
-    let timeAgo: String? // Optional timeAgo to display time like "15m ago"
+    var status: String?
+    let timeAgo: String?
 }
+
 
 struct ItemFoodOrderCard: View {
     
-    let item: FoodItem
-    @State private var showPopup = false // State to control popup visibility
-    
+    @Binding var item: FoodItem
+    @State private var showPopover = false
     var body: some View {
-        
         VStack(alignment: .leading, spacing: 10) {
-            // Top HStack containing image, title, and other info
             HStack(spacing: 12) {
                 // Food image
                 Image("brohok")
@@ -29,60 +27,60 @@ struct ItemFoodOrderCard: View {
                     .cornerRadius(8)
                 
                 VStack(alignment: .leading, spacing: 5) {
-                    HStack {
+                    HStack(spacing: 7) {
                         // Food name
                         Text(item.name)
                             .font(.customfont(.semibold, fontSize: 17))
                         
+                        // Status with conditional background and text color
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(item.status == "Accept" ? Color(hex: "#DDF6C3") : (item.status == "Reject" ? Color(hex: "#FFD8E4") : Color.clear))
+                                .frame(width: 50, height: 23) // Adjust dimensions as needed
+                            
+                            // Status text with conditional color
+                            Text(item.status != nil ? (item.status == "Accept" ? "Accept" : "Reject") : "")
+                                .font(.customfont(.regular, fontSize: 12))
+                                .foregroundColor(item.status == "Accept" ? .green : (item.status == "Reject" ? .red : .clear))
+                        }
+                        
                         Spacer()
                         
-                        // Time ago (e.g., "15m ago"), shown only if provided
+                        // Time
                         if let timeAgo = item.timeAgo {
                             Text(timeAgo)
                                 .font(.customfont(.medium, fontSize: 12))
                                 .foregroundColor(.gray)
                         }
                         
-                        // Button with ellipsis that triggers the popup
+                        // Ellipsis button for popover
                         Button(action: {
-                            showPopup.toggle() // Toggle the popup visibility
-                        }) {
+                            showPopover = true
+                        }, label: {
                             Image(systemName: "ellipsis")
                                 .rotationEffect(.degrees(90)) // Rotate to make it vertical
                                 .font(.system(size: 18))
                                 .foregroundColor(.gray)
-                        }
-                        .overlay(
-                            // Custom popup positioned over the ellipsis
-                            Group {
-                                if showPopup {
-                                    VStack(spacing: 10) {
-                                        Button(action: {
-                                            print("Accept tapped")
-                                            showPopup = false // Dismiss popup
-                                        }) {
-                                            Text("Accept")
-                                                .font(.customfont(.semibold, fontSize: 16))
-                                                .foregroundColor(.green)
-                                        }
+                                .popover(isPresented: $showPopover,
+                                         attachmentAnchor: .point(.topLeading),
+                                         content: {
+                                    VStack(spacing: 8) {
+                                        Button("Accept", action: {
+                                            item.status = "Accept"
+                                            showPopover = false
+                                        })
+                                        .foregroundStyle(Color(hex: "#00941D"))
                                         
-                                        Button(action: {
-                                            print("Reject tapped")
-                                            showPopup = false // Dismiss popup
-                                        }) {
-                                            Text("Reject")
-                                                .font(.customfont(.semibold, fontSize: 16))
-                                                .foregroundColor(.red)
-                                        }
+                                        Button("Reject", action: {
+                                            item.status = "Reject"
+                                            showPopover = false
+                                        })
+                                        .foregroundStyle(Color(hex: "#FF3B30"))
                                     }
-                                    .frame(width: 100, height: 70)
-                                    .background(Color.white)
-                                    .cornerRadius(10)
-                                    .shadow(radius: 5)
-                                    .padding(.top, 35)
-                                }
-                            }
-                        ).padding(.leading,40)
+                                    .frame(width: 130, height: 80)
+                                    .presentationCompactAdaptation(.popover)
+                                })
+                        })
                     }
                     
                     // Item count
@@ -130,7 +128,7 @@ struct ItemFoodOrderCard: View {
                     }
                     .foregroundStyle(Color(hex: "#0A0019"))
                     .font(.customfont(.semibold, fontSize: 14))
-                
+                    
                     HStack {
                         Text("Pay with \(item.paymentMethod)")
                         Spacer()
@@ -150,11 +148,5 @@ struct ItemFoodOrderCard: View {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color(red: 0.836, green: 0.875, blue: 0.924), lineWidth: 1.5)
         )
-
     }
 }
-
-//#Preview {
-//    ItemFoodOrderCard(item:  FoodItem(name: "Brohok", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: nil, timeAgo: nil))
-//    ItemFoodOrderCard(item:FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: "Accept", timeAgo: "35m ago"))
-//}

@@ -81,20 +81,3 @@ struct OrderCard: View {
     }
 }
 
-//
-//
-//#Preview {
-//    VStack {
-//        // Preview with the clipboard icon
-//        OrderCard(isAccepted: true, isOrder: false, showIcon: true)
-//            .frame(width: 400, height: 120) // Adjust to see the responsive behavior
-//
-//        // Preview with "Order" and "Accept" text
-//        OrderCard(isAccepted: true, isOrder: true, showIcon: false)
-//            .frame(width: 400, height: 120) // Adjust to see the responsive behavior
-//
-//        // Preview with "Order" and "Reject" text
-//        OrderCard(isAccepted: false, isOrder: true, showIcon: false)
-//            .frame(width: 400, height: 120) // Adjust to see the responsive behavior
-//    }
-//}

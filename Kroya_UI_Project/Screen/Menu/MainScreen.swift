@@ -2,6 +2,7 @@ import SwiftUI
 
 struct MainScreen: View {
     @State private var selectedTab = 1
+    @State var isActive : Bool = false
     @Environment(\.presentationMode) var presentationMode
     @State private var isModalPresented: Bool = false
     var body: some View {
@@ -66,9 +67,6 @@ struct MainScreen: View {
                     }
                     .padding(.top, 20)
                     .accentColor(PrimaryColor.normal)
-//                    if !isTabBarHidden {
-//                       
-//                    }
                     GeometryReader { geometry in
                         Divider().frame(height: 0.1).background(.black.opacity(0.1))
                         HStack {
@@ -87,10 +85,6 @@ struct MainScreen: View {
                 }
                 .frame(width: .screenWidth, height: .screenHeight)
                 .padding(.bottom, 50)
-                
-//                if !isTabBarHidden{
-//                   
-//                }
                 GeometryReader { geometry in
                     VStack {
                         Spacer()
@@ -116,10 +110,12 @@ struct MainScreen: View {
                 
             }
             .fullScreenCover(isPresented: $isModalPresented, content: {
-                AddFoodView()
+                AddFoodView(rootIsActive1: self.$isActive)
             })
-            .navigationBarBackButtonHidden(true)
+       
         }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
     }
     
     private func getSpacerWidth(for selectedTab: Int, geometry: GeometryProxy) -> CGFloat {
