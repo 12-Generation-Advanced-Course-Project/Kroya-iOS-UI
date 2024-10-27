@@ -35,8 +35,15 @@ struct Kroya_UI_ProjectApp: App {
     
     var body: some Scene {
         WindowGroup {
-            SplashScreen().environmentObject(userStore)
-                .environmentObject(Auth.shared)
+//            SplashScreen().environmentObject(userStore)
+//                .environmentObject(Auth.shared)
+            FoodDetailView(
+                theMainImage: "Songvak",
+                subImage1: "ahmok",
+                subImage2: "brohok",
+                subImage3: "SomlorKari",
+                subImage4: "Songvak"
+            )
 
         }
     }

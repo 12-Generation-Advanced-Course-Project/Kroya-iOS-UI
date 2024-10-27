@@ -1,6 +1,5 @@
 import SwiftUI
 
-
 struct BottomSheetView<Content: View>: View {
     let content: Content
     @Binding var isOpen: Bool
@@ -11,6 +10,10 @@ struct BottomSheetView<Content: View>: View {
     
     private var offset: CGFloat {
         isOpen ? 0 : maxHeight - minHeight
+    }
+    
+    private var isFullyExpanded: Bool {
+        isOpen && translation == 0
     }
     
     private var indicator: some View {
@@ -32,14 +35,13 @@ struct BottomSheetView<Content: View>: View {
             VStack(spacing: 0) {
                 self.indicator
                 self.content
-                //                    .padding(.horizontal, 20)
-                .padding(.top, 20)
+                    .padding(.top, 20)
             }
             .frame(width: geometry.size.width, height: self.maxHeight, alignment: .top)
             .background(Color.white)
             .cornerRadius(20)
-            .shadow(radius: 20)
-            .offset(y: max(self.offset + self.translation, 0)) // Adjust the sheet's position based on the drag gesture
+            .shadow(radius: 10)
+            .offset(y: max(self.offset + self.translation, 0))
             .gesture(
                 DragGesture()
                     .updating(self.$translation) { value, state, _ in
@@ -48,10 +50,8 @@ struct BottomSheetView<Content: View>: View {
                     .onEnded { value in
                         let snapDistance = self.maxHeight * 0.25
                         if value.translation.height > snapDistance {
-                            // Drag down beyond threshold closes the sheet
                             self.isOpen = false
                         } else if value.translation.height < -snapDistance {
-                            // Drag up beyond threshold opens the sheet
                             self.isOpen = true
                         }
                     }
@@ -63,8 +63,7 @@ struct BottomSheetView<Content: View>: View {
 struct FoodDetailView: View {
     @State private var isFavorite: Bool = false
     @State private var currentImage: String
-    @State private var showBottomSheet = true // State to control the sheet
-    @State private var isBottomSheetOpen    : Bool = false
+    @State private var isBottomSheetOpen: Bool = false
     var theMainImage: String
     var subImage1: String
     var subImage2: String
@@ -87,7 +86,7 @@ struct FoodDetailView: View {
             let screenHeight = geometry.size.height
             let screenWidth = geometry.size.width
             let frameHeight = screenHeight * 0.4
-         
+            
             ZStack {
                 // Main Food Detail Content
                 VStack {
@@ -127,7 +126,7 @@ struct FoodDetailView: View {
                                 .shadow(color: isFavorite ? Color.red.opacity(0.5) : Color.gray.opacity(0.5), radius: 4, x: 0, y: 4)
                             }
                             .offset(y: -screenHeight * 0.2)
-                            .padding(.horizontal, screenWidth * 0.04)
+                            .padding(.horizontal, screenWidth * 0.045)
                         }
                         .overlay(
                             RoundedRectangle(cornerRadius: 11)
@@ -164,53 +163,37 @@ struct FoodDetailView: View {
                                 .offset(y: screenHeight * 0.04)
                         )
                     Spacer()
-                    // Bottom Sheet Content
-                   
-                    }
-                BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.737) {
-//                    NavigationStack{
-                        List{
-                            TittleView()
-                                .frame(maxWidth: .infinity, minHeight: .screenHeight*0.31, maxHeight: .screenHeight * 0.9)
-                            StepView()
-                                .frame(maxWidth: .infinity, minHeight: .screenHeight * 0.1,maxHeight: .screenHeight * 0.9)
-                            RatingView()
-                                .frame(maxWidth: .infinity, minHeight: .screenHeight * 0.14)
-                            Review()
-                                .frame(maxWidth: .infinity, minHeight: .screenHeight * 0.21)
-                        
-                            
-                  
-                            
-                            //
-//  //  .listStyle(PlainListStyle())
-//                             //   .listRowSeparator(.hidden)
-//                                .frame(maxWidth: .infinity, minHeight: .screenHeight * 0.13)
-                            
-                        }
-//                        .padding()
-                      .buttonStyle(PlainButtonStyle())
-                        .listStyle(PlainListStyle())
-                        .listRowSeparator(.hidden)
-                        
-                        
-//                    }
-                    
-                    
-                    
-                    
-                 }
-                    
                 }
-            //.edgesIgnoringSafeArea(.all)
-                .navigationBarBackButtonHidden(true)
-            }
-      
-    }
-    
-    
-}
+                
+                // Blur background when the sheet is fully expanded
+                if isBottomSheetOpen {
+                    Color.black.opacity(0.3)
+                        .ignoresSafeArea()
+                        .transition(.opacity)
+                        .blur(radius: isBottomSheetOpen ? 10 : 0)
+                }
 
+                // Bottom Sheet Content
+                BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.74) {
+                    List {
+                        TittleView()
+                            .frame(maxWidth: .infinity, minHeight: .screenHeight * 0.4)
+                        StepView()
+                            .frame(maxWidth: .infinity, minHeight: .screenHeight * 0.1, maxHeight: .screenHeight * 0.9)
+                        RatingView()
+                            .frame(maxWidth: .infinity, minHeight: .screenHeight * 0.135)
+                        Review()
+                            .frame(maxWidth: .infinity, minHeight: .screenHeight * 0.4)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .listStyle(PlainListStyle())
+                    .listRowSeparator(.hidden)
+                }
+            }
+            .navigationBarBackButtonHidden(true)
+        }
+    }
+}
 
 #Preview {
     FoodDetailView(
