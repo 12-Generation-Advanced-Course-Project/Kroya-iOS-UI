@@ -7,10 +7,11 @@
 
 import Foundation
 
-struct ApiResponse1<T: Codable>: Codable {
-    var payload: T
+struct AddressResponse<T: Codable>: Codable {
+    var payload: T?
     var message: String
-    var code: Int
-    var error: Bool
-    var date: String
+    var statusCode: String
+    var timestamp: String?
 }
+
+typealias AddressResponseApi = AddressResponse<Address>

@@ -7,37 +7,45 @@
 
 import SwiftUI
 import GoogleMaps
-//
-//@main
-//struct Kroya_UI_ProjectApp: App {
-//    @StateObject var addressViewModel = AddressViewModel(userStore: UserStore())
-//    @StateObject private var userStore = UserStore()
-//        init() {
-//            GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
-//        }
-//    var body: some Scene {
-//        WindowGroup {
-//            UserBasicInfoView()
-//                .environmentObject(userStore)
-//                .environmentObject(addressViewModel) // Inject AddressViewModel here
-//        }
-//    }
-//}
-
 
 @main
 struct Kroya_UI_ProjectApp: App {
-//    @StateObject var addressViewModel = AddressViewModel()
-    @StateObject private var userStore = UserStore()
+    @UIApplicationDelegateAdaptor var appdelegate: AppDelegateForLocalNotification
+    @StateObject var userStore = UserStore()
+    @StateObject var addressViewModel = AddressViewModel(userStore: UserStore())
     init() {
         GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
     }
+    @State var lang: String = UserDefaults.standard.string(forKey: "AppLanguage") ?? "en"
     
     var body: some Scene {
         WindowGroup {
-            SplashScreen().environmentObject(userStore)
-                .environmentObject(Auth.shared)
-           
+            Group {
+                if Auth.shared.getAccessToken() != nil {
+                    NavigationView {
+                        MainScreen(userStore: userStore, lang: $lang)
+                            .environmentObject(userStore)
+                            .environmentObject(Auth.shared)
+                            .environmentObject(addressViewModel)
+                            .environment(\.locale, .init(identifier: lang))
+                            .onAppear {
+                                UNUserNotificationCenter.current().delegate = appdelegate
+                            }
+                    }
+                } else {
+                    if Auth.shared.loggedIn != true {
+                        NavigationView {
+                            LoginScreenView(userStore: userStore, lang: $lang)
+                                .environmentObject(userStore)
+                                .environmentObject(Auth.shared)
+                                .environmentObject(addressViewModel)
+                                .environment(\.locale, .init(identifier: lang))
+                        }
+                    } else {
+                       
+                    }
+                }
+            }
         }
     }
 }

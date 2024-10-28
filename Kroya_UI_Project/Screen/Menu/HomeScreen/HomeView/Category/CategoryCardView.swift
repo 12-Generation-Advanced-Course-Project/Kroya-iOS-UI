@@ -37,12 +37,14 @@ struct CategoryCardView: View {
                 .offset(x: x, y: y)
                 .clipped()
         }
+      
         .background(color)
         .cornerRadius(13)
         .overlay {
             RoundedRectangle(cornerRadius: 13)
                 .stroke(Color(hex: "#E6E6E6"), lineWidth: 0.8)
         }
+        
     }
 }
 

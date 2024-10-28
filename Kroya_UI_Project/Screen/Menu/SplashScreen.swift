@@ -6,26 +6,28 @@ struct SplashScreen: View {
     @State private var isActive = false
     @StateObject private var userStore = UserStore()
     @EnvironmentObject var auth: Auth
+    @Binding var lang: String
     var body: some View {
         NavigationView {
             if isActive {
                 if  auth.getAccessToken() != nil {
                     //MARK: Token found in Keychaien, navigate to MainScreen
-                    
-                    MainScreen()
+                    MainScreen(userStore: userStore,lang: $lang)
                         .environmentObject(userStore)
                         .onAppear {
                             print("Token found in Keychain, navigating to MainScreen.")
                         }
                 }
                 else {
-                    //MARK: No token found, navigate to LoginScreen
-                    LoginScreenView(userStore: userStore)
+                    LoginScreenView(userStore: userStore,lang: $lang)
                         .environmentObject(userStore)
                         .onAppear {
                             print("No access token found, navigating to LoginScreen.\(String(describing: userStore.user?.email))")
                         }
                 }
+                //MARK: No token found, navigate to LoginScreen
+                
+                
             } else {
                 ZStack {
                     Color(.yellow).edgesIgnoringSafeArea(.all)

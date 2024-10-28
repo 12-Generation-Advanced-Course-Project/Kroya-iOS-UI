@@ -119,7 +119,7 @@ struct RecipeViewCell: View {
         .shadow(color: Color.gray.opacity(0.2), radius: 5, x: 0, y: 4)
         .overlay {
             RoundedRectangle(cornerRadius: 15)
-                .stroke(Color(hex: "#E6E6E6"), lineWidth: 0.8)
+                .stroke(Color(hex: "#E6E6E6"), lineWidth: 0.5)
         }
     }
         

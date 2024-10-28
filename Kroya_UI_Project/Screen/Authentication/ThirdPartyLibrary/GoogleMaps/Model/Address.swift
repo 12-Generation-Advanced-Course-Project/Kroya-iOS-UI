@@ -11,5 +11,8 @@ struct Address: Codable, Identifiable, Equatable {
     var addressDetail: String
     var specificLocation: String
     var tag: String
+    var latitude: Double
+    var longitude: Double
 }
+
 

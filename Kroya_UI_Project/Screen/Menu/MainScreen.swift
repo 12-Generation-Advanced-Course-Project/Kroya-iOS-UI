@@ -5,8 +5,18 @@ struct MainScreen: View {
     @State var isActive : Bool = false
     @Environment(\.presentationMode) var presentationMode
     @State private var isModalPresented: Bool = false
+    @EnvironmentObject var userStore: UserStore
+    @StateObject var authVM: AuthViewModel
+    @StateObject var addressViewModel: AddressViewModel
+    @Binding var lang: String
+    init(userStore: UserStore, lang: Binding<String>) {
+           _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
+           _addressViewModel = StateObject(wrappedValue: AddressViewModel(userStore: userStore))
+           self._lang = lang
+       }
+
     var body: some View {
-        NavigationStack {
+        NavigationStack{
             ZStack {
                 VStack (spacing: 10) {
                     TabView(selection: $selectedTab) {
@@ -33,7 +43,9 @@ struct MainScreen: View {
                                     Text("Post")
                                         .font(.customfont(selectedTab == 2 ? .bold : .semibold, fontSize: selectedTab == 2 ? 18 : 16))
                                         .foregroundColor(selectedTab == 2 ? PrimaryColor.normal : .black)
+                                        
                                 }
+                              
                                 
                             }
                             .tag(2)
@@ -52,7 +64,9 @@ struct MainScreen: View {
                                 }
                             }
                             .tag(3)
-                        ProfileView()
+                        ProfileView(authVM: authVM,lang: $lang)
+                           .environmentObject(addressViewModel)
+                           .environmentObject(userStore)
                             .tabItem {
                                 VStack {
                                     Image(selectedTab == 4 ? "icon-User-Color" : "ico-User")
@@ -63,6 +77,7 @@ struct MainScreen: View {
                                         .font(.customfont(selectedTab == 4 ? .bold : .semibold, fontSize: selectedTab == 4 ? 18 : 16))
                                         .foregroundColor(selectedTab == 4 ? PrimaryColor.normal : .black)
                                 }
+                               
                             }.tag(4)
                     }
                     .padding(.top, 20)
@@ -80,7 +95,7 @@ struct MainScreen: View {
                         .animation(.easeInOut(duration: 0.3), value: selectedTab)
                     }
                     .frame(height: 2)
-                    .offset(y:-70)
+                    .offset(y:-62)
                     
                 }
                 .frame(width: .screenWidth, height: .screenHeight)
@@ -109,13 +124,13 @@ struct MainScreen: View {
                 }
                 
             }
+            .navigationBarHidden(true)
+            .navigationBarBackButtonHidden(true)
             .fullScreenCover(isPresented: $isModalPresented, content: {
                 AddFoodView(rootIsActive1: self.$isActive)
             })
-       
         }
-        .navigationBarHidden(true)
-        .navigationBarBackButtonHidden(true)
+       
     }
     
     private func getSpacerWidth(for selectedTab: Int, geometry: GeometryProxy) -> CGFloat {
@@ -132,6 +147,6 @@ struct MainScreen: View {
     }
 }
 
-#Preview {
-    MainScreen()
-}
+//#Preview {
+//    MainScreen()
+//}

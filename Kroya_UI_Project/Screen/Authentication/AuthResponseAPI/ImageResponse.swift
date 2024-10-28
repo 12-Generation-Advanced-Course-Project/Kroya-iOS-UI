@@ -6,7 +6,7 @@
 //
 
 struct ImageResponse: Codable {
-    let imageName: String?
-    let type: String
-    let size: Int
+    let payload: [String]
+    let message: String
+    let status: Int
 }

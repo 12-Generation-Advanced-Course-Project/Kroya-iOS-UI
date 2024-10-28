@@ -18,6 +18,7 @@ struct DeliveryCardDetailView: View {
                 Text("Delivery to")
                     .font(.customfont(.semibold, fontSize: 16))
                 Spacer()
+//                AddressView()
   
                 Button(action: {
                     // Action for cash payment
@@ -94,6 +95,7 @@ struct DeliveryCardDetailView: View {
 }
 
 #Preview {
+    
     DeliveryCardDetailView(viewModel: DeliveryCardDetailViewModel(deliveryInfo: DeliveryInfo(
         locationName: "HRD Center",
         address: "St 323 - Toul Kork",

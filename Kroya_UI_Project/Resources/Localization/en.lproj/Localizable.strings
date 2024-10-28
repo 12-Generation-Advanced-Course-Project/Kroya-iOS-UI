@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   Kroya_UI_Project
 
@@ -6,6 +6,8 @@
   
 */
 
+
+//Authentication to English
 
 "Mobile phone" = "Mobile phone";
 "Enter phone number" = "Enter phone number";
@@ -27,6 +29,8 @@
 "Confirm New password" = "Confirm New password";
 "Input your password" = "Input your password" ;
 "CREATE PASSWORD" = "CREATE PASSWORD" ;
+"SUCCESS" = "SUCCESS";
+"Your account have been successful create." = "Your account have been successful create.";
 "Basic Information" = "Basic Information" ;
 "Username" = "Username";
 "Full name" = "Full name";
@@ -47,3 +51,158 @@
 "Other" = "Other";
 "Save Address" = "Save Address";
 
+//Home
+"What would you like to eat today?" = "What would you like to eat today?";
+"Food Order" = "Food Order";
+"Order what you love" = "Order what you love";
+"Food Recipe" = "Food Recipe";
+"Learn how to cook" = "Learn how to cook";
+"Category" = "Category";
+"Breakfast" = "Breakfast";
+"Lunch" = " Lunch";
+"Dinner" = "Dinner";
+"Dessert" = "Dessert";
+"Popular Dishes" = "Popular Dishes";
+"View all -->" = "View all -->";
+"Home" = "Home";
+"Favorite" = "Favorite";
+"Order" = "Order";
+"Me" = "Me";
+
+//Favorite
+"Favorite" = "Favorite";
+"Search foods" = "Search foods";
+"Food on sale" = "Food on sale";
+"Recipes" = "Recipes";
+
+//Orders
+"Orders" = "Orders";
+"Search item" = "Search item";
+"All" = "All";
+"Order" = "Order";
+"Sale" = "Sale";
+"Today" = "Today";
+"Yesterday" = "Yesterday";
+"Last 2 days" = "Last 2 days";
+
+//About me
+
+"Meng Chantha" = "Meng Chantha";
+"Since Oct,2021" = "Since Oct,2021";
+"Favorite" = "Favorite";
+"List of their favorite dishes" = "List of their favorite dishes";
+"Addresses" = "Addresses";
+"List of your addresses" = "List of your addresses";
+"Orders" = "Orders";
+"List your order and Sale" = "List your order and Sale";
+"Sale Reports" = "Sale Reports";
+"List of their favorite dishes" = "List of their favorite dishes";
+"Payment Method" = "Payment Method";
+"Connected" = "Connected";
+"App Settings" = "App Settings";
+"Change location" = "Change location";
+"Notifications" = "Notifications";
+"Language" = "Language";
+"Log out" = "Log out";
+ 
+//Search
+
+"Search" = "Search";
+"Search items" = "Search items";
+"Resent searches" = "Resent searches";
+"Suggested for you" = "Suggested for you";
+
+//Add new food
+
+"Your dishes" = "Your dishes";
+"Add dishes Photo" = "Add dishes Photo";
+"up to 12 Mb" = "up to 12 Mb";
+"Food Name" = "Food Name";
+"Enter food name" = "Enter food name";
+"Description" = "Description";
+"Tell me a little about your food" = "Tell me a little about your food";
+"Duration" = "Duration";
+"Level" = "Level";
+"Hard" = "Hard";
+"Medium" = "Medium";
+"Easy" = "Easy";
+"Cuisines" = "Cuisines";
+"Soup" = "Soup";
+"Salad" = "Salad";
+"Grill" = "Grill";
+"Dessert" = "Dessert";
+"Category" = "Category";
+"Breakfast" = "Breakfast";
+"Lunch" = "Lunch";
+"Dinner" = "Dinner";
+"Snack" = "Snack";
+"Next" = "Next";
+
+//Recipe
+
+"Recipe" = "Recipe";
+"Skip" = "Skip";
+"Incredients" = "Incredients";
+"Enter incredients" = "Enter incredients";
+"Quantity" = "Quantity";
+"Input" = "Input";
+"Price" = "Price";
+"Input" = "Input";
+"Steps" = "Steps";
+"Enter incredients" = "Enter incredients";
+"Back" = "Back";
+"Next" = "Next";
+
+//Sale
+"Yes" = "Yes";
+"No" = "No";
+"Details" = "Details";
+"Cook date" = "Cook date";
+"Amount" = "Amount";
+"Price" = "Price";
+"Location" = "Location";
+"Ingredient" = "Ingreadient";
+"Back"= "Back";
+"Post" = "Post";
+
+//Popup Sale
+"Save this as a draft?" = "Save this as a draft?";
+"If you choose discard post, you'll lose this post that can't edit again" = "If you choose discard post, you'll lose this post that can't edit again.";
+"Save Draft" = "Save Draft";
+"Discard Post" = "Discard Post";
+
+//Food Details
+"Order" = "Order";
+"Description" = "Description";
+"Ingredients" = "Ingredients";
+"Steps" = "Steps";
+"Ratings & Review" = "Rating & Review";
+"Tap to Rate" = "Tap to Rate";
+"More" = "More";
+"Write a Review" = "Write a Review";
+
+//PopUp Food Details
+"Describe your experience" = "Describe your experience";
+"Cancle" = "Cancle";
+"Post" =" Post";
+
+//Edit Profile
+"Edit profile" = "Edit profile";
+"Personal info" = "Personal info";
+"Full name" = "Full name";
+"Email" = "Email";
+"Mobile" = "Mobile";
+"Password" = "Password";
+"Address" = "Address";
+"Save" = "Save";
+"Delete account?" = "Delete account?";
+
+//Delete account popup
+"Delete your account?" = "Delete your account?";
+"Delete" = "Delete";
+"Cancle" = "Cancle";
+"View all sales" = "View all sales";
+"Edit" = "Edit";
+"All" = "All";
+"Food on Sale" = "Food on Sale";
+"Recipes" = "Recipes";

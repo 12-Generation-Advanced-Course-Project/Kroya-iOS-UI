@@ -8,6 +8,7 @@
 import Foundation
 
 struct DeliveryInfo: Identifiable {
+    
     let id = UUID()
     let locationName: String
     let address: String

@@ -7,20 +7,68 @@
 
 import SwiftUI
 import Combine
-
+import Kingfisher
 struct PostViewScreen: View {
     @State private var searchText = ""
     @State private var selectedSegment = 0
+    var urlImagePost: String = "https://kroya-api.up.railway.app/api/v1/fileView/"
     @Environment(\.dismiss) var dismiss
-    
+    @StateObject  var Profile =  ProfileViewModel()
     // Text titles for each tab
     let tabTitles = ["All", "Food on Sale", "Recipes"]
     
     var body: some View {
-        NavigationView {
-            VStack(spacing: 0) {
-                Spacer().frame(height: 10)
-                
+        ZStack{
+            VStack {
+                HStack {
+                    HStack {
+                        if let profileImageUrl = Profile.userProfile?.profileImage, !profileImageUrl.isEmpty {
+                          
+                            KFImage(URL(string: "\(urlImagePost)\(profileImageUrl)"))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 40, height: 40)
+                                .clipShape(Rectangle())
+                                .cornerRadius(10)
+                        } else {
+                            Rectangle()
+                                .fill(Color(hex: "#D9D9D9"))
+                                .frame(width: 40, height: 40)
+                                .cornerRadius(10)
+                                .overlay(
+                                    Image(systemName: "person.fill")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 20, height: 20)
+                                        .foregroundStyle(Color.white)
+                                )
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            Text(Profile.userProfile?.fullName ?? "")
+                                .font(.customfont(.bold, fontSize: 16))
+                                .foregroundStyle(.black)
+                            Spacer().frame(height: 5)
+                            Text("\(Profile.formatDate(from: Profile.userProfile?.createdAt ?? ""))")
+                                .font(.customfont(.light, fontSize: 12))
+                                .foregroundStyle(.black)
+                        }
+                    }
+                    Spacer()
+                    Button(action: { }) {
+                        VStack {
+                            Text("6")
+                                .font(.customfont(.semibold, fontSize: 14))
+                                .foregroundStyle(PrimaryColor.normal)
+                            Text("Post")
+                                .font(.customfont(.medium, fontSize: 14))
+                                .foregroundStyle(.black)
+                        }
+                    }
+                    
+                }
+                .padding(.horizontal,20)
+                Spacer().frame(height: .screenHeight * 0.01)
                 // Tab View
                 VStack(alignment: .leading) {
                     // HStack for the Tab Titles
@@ -36,7 +84,7 @@ struct PostViewScreen: View {
                                 .padding(.trailing, 10) // Spacing between titles
                         }
                     }
-                    .padding(.horizontal, 15) // Leading padding to align the text with screen's edge
+                    .padding(.horizontal, 15) 
                     .padding(.top)
                     
                     // Geometry Reader for Underline
@@ -54,7 +102,7 @@ struct PostViewScreen: View {
                 
                 // TabView for content
                 TabView(selection: $selectedSegment) {
-//                                        AllPostFoodandRecipe(iselected: selectedSegment)
+//                   AllPostFoodandRecipe(iselected: selectedSegment)
                     FoodSaleView(iselected: selectedSegment)
                         .tag(0)
                     FoodOnSaleView(iselected: selectedSegment)
@@ -64,38 +112,12 @@ struct PostViewScreen: View {
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    HStack {
-                        Image("Men")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 40, height: 40)
-                        VStack(alignment: .leading) {
-                            Text("Oun Bonaliheng")
-                                .font(.customfont(.bold, fontSize: 16))
-                                .foregroundStyle(.black)
-                            Spacer().frame(height: 5)
-                            Text("Since Oct, 2024")
-                                .font(.customfont(.light, fontSize: 12))
-                                .foregroundStyle(.black)
-                        }
-                    }
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: { }) {
-                        VStack {
-                            Text("6")
-                                .font(.customfont(.semibold, fontSize: 14))
-                                .foregroundStyle(PrimaryColor.normal)
-                            Text("Post")
-                                .font(.customfont(.medium, fontSize: 14))
-                                .foregroundStyle(.black)
-                        }
-                    }
-                }
-            }
         }
+        .onAppear{
+            Profile.fetchUserProfile()
+        }
+       
+        
     }
     
     // Calculate the underline width dynamically based on the text width
@@ -124,8 +146,4 @@ struct PostViewScreen: View {
         
         return offset
     }
-}
-
-#Preview {
-    PostViewScreen() // For preview
 }
