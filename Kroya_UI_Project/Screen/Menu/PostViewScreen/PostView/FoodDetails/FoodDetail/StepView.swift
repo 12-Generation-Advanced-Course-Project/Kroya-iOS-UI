@@ -8,12 +8,14 @@ struct StepView: View {
     let steps = [
         "Cut the fish into bite sized pieces and set aside.",
         "Clean and slice the vegetables.",
-        "In a large skillet, heat the curry seed oil, amok paste, shrimp paste, and coconut milk. Heat thoroughly, cooking until fragrant."
+        "In a large skillet, heat the curry seed oil, amok paste, shrimp paste, and coconut milk. Heat thoroughly, cooking until fragrant.In a large skillet, heat the curry seed oil, amok paste, shrimp paste, and coconut milk. Heat thoroughly, cooking until fragrant.In a large skillet, heat the curry seed oil, amok paste, shrimp paste, and coconut milk. Heat thoroughly, cooking until fragrant.In a large skillet, heat the curry seed oil, amok paste, shrimp paste, and coconut milk. Heat thoroughly, cooking until fragrant."
+    
     ]
     
     var body: some View {
         GeometryReader { geometry in
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 7) {
+                Spacer().frame(height: geometry.size.height * 0.0015)
                 HStack {
                     Text("Steps")
                         .font(.system(size: 17))
@@ -82,7 +84,7 @@ struct StepView: View {
                             Text(steps[step - 1])
                                 .font(.system(size: 16))
                                 .multilineTextAlignment(.leading)
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .frame(maxWidth: .infinity,maxHeight: .screenHeight * 0.8, alignment: .leading)
                         }
                         .tag(step) // Tag for each step to track the selected Tab
                     }
@@ -90,8 +92,7 @@ struct StepView: View {
                 .tabViewStyle(.page(indexDisplayMode: .never)) // Page style without dots
                 .disabled(true) // Disable swipe gestures
             }
-            .padding(.horizontal)
-            .frame(maxHeight: .infinity, alignment: .top) // Ensures content stays at the top
+
         }
     }
 }

@@ -17,10 +17,38 @@ struct BottomSheetView<Content: View>: View {
     }
     
     private var indicator: some View {
-        RoundedRectangle(cornerRadius: 8)
-            .fill(Color(hex: "#D0DBEA"))
-            .frame(width: 40, height: 5)
-            .padding(.top, 10)
+        VStack(spacing: 10){
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color(hex: "#D0DBEA"))
+                .frame(width: 40, height: 5)
+                .padding(.top,15)
+            HStack{
+                Text("Somlor Mju")
+                    .font(.customfont(.bold, fontSize: 20))
+                Spacer()
+                
+                
+                Button(action : {
+                    // navigateToCheckout = true // Set to true to trigger navigation
+                })
+                {
+                    HStack {
+                        Text("Order")
+                            .font(.customfont(.medium, fontSize: 16))
+                            .foregroundStyle(.white)
+                        Image(systemName: "plus")
+                            .resizable()
+                            .frame(width: 14, height: 14)
+                            .foregroundStyle(Color.white)
+                    }
+                    .frame(width: .screenWidth * 0.25, height: .screenHeight * 0.04)
+                    .background(PrimaryColor.normal)
+                    .cornerRadius(.screenWidth * 0.022)
+                }
+                
+            }.padding(.horizontal, 15)
+                .padding(.top, 3)
+        }
     }
     
     init(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat, @ViewBuilder content: () -> Content) {
@@ -35,7 +63,7 @@ struct BottomSheetView<Content: View>: View {
             VStack(spacing: 0) {
                 self.indicator
                 self.content
-                    .padding(.top, 20)
+                 //   .padding(.top, 20)
             }
             .frame(width: geometry.size.width, height: self.maxHeight, alignment: .top)
             .background(Color.white)
@@ -125,7 +153,7 @@ struct FoodDetailView: View {
                                 }
                                 .shadow(color: isFavorite ? Color.red.opacity(0.5) : Color.gray.opacity(0.5), radius: 4, x: 0, y: 4)
                             }
-                            .offset(y: -screenHeight * 0.2)
+                            .offset(y: -screenHeight * 0.18)
                             .padding(.horizontal, screenWidth * 0.045)
                         }
                         .overlay(
@@ -174,20 +202,13 @@ struct FoodDetailView: View {
                 }
 
                 // Bottom Sheet Content
-                BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.74) {
-                    List {
-                        TittleView()
-                            .frame(maxWidth: .infinity, minHeight: .screenHeight * 0.4)
-                        StepView()
-                            .frame(maxWidth: .infinity, minHeight: .screenHeight * 0.1, maxHeight: .screenHeight * 0.9)
-                        RatingView()
-                            .frame(maxWidth: .infinity, minHeight: .screenHeight * 0.135)
-                        Review()
-                            .frame(maxWidth: .infinity, minHeight: .screenHeight * 0.4)
+                BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.73) {
+                    //List {
+                    ScrollView(showsIndicators: false){
+                        ContentView()
+                        .padding(.horizontal, 15)
                     }
-                    .buttonStyle(PlainButtonStyle())
-                    .listStyle(PlainListStyle())
-                    .listRowSeparator(.hidden)
+
                 }
             }
             .navigationBarBackButtonHidden(true)

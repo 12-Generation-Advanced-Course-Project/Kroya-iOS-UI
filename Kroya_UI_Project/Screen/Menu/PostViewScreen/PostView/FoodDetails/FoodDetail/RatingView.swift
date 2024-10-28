@@ -61,7 +61,6 @@ struct RatingView: View {
                         .foregroundColor(.gray)
                 }
             }
-            .padding(.horizontal)
         }
     }
 }

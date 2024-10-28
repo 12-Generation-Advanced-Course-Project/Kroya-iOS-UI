@@ -93,13 +93,16 @@ struct TittleView: View {
         //Description
                 Text("Description")
                     .font(.customfont(.bold, fontSize: 18))
-                Text("In the dynamic world of iOS development, harnessing the power of both SwiftUI and UIKit opens up a realm of possibilities. In this tutorial, we’ll delve into the seamless integration of UIKit’s UITableView in SwiftUI, exploring step-by-step how to create project.")
+                Text("In the dynamic world of iOS development, harnessing the power of both SwiftUI and UIKit opens up a realm of possibilities. In this tutorial, we’ll delve into the seamless integration of UIKit’s UITableView in SwiftUI, exploring step-by-step how to create project.In the dynamic world of iOS development, harnessing the power of both SwiftUI and UIKit opens up a realm of possibilities. In this tutorial, we’ll delve into the seamless integration of UIKit’s UITableView in SwiftUI, exploring step-by-step how to create project.In the dynamic world of iOS development, harnessing the power of both SwiftUI and UIKit opens up a realm of possibilities. In this tutorial, we’ll delve into the seamless integration of UIKit’s UITableView in SwiftUI, exploring step-by-step how to create project.")
                     .font(.customfont(.regular, fontSize: 14))
+                    .multilineTextAlignment(.leading)
+                    .lineLimit(10, reservesSpace: true)
                     .opacity(0.6)
                 Spacer().frame(height: geometry.size.height * 0.008)
         //Ingredients
                 Text("Ingredients")
                     .font(.customfont(.bold, fontSize: 18))
+                Spacer().frame(height: geometry.size.height * 0.003)
                 VStack(alignment: .leading, spacing: 20) {
                     
                     HStack {
