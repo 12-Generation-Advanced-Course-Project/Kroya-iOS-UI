@@ -7,23 +7,6 @@
 
 import SwiftUI
 import GoogleMaps
-//
-//@main
-//struct Kroya_UI_ProjectApp: App {
-//    @StateObject var addressViewModel = AddressViewModel(userStore: UserStore())
-//    @StateObject private var userStore = UserStore()
-//        init() {
-//            GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
-//        }
-//    var body: some Scene {
-//        WindowGroup {
-//            UserBasicInfoView()
-//                .environmentObject(userStore)
-//                .environmentObject(addressViewModel)
-//        }
-//    }
-//}
-
 
 @main
 struct Kroya_UI_ProjectApp: App {
@@ -33,37 +16,36 @@ struct Kroya_UI_ProjectApp: App {
     init() {
         GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
     }
+    @State var lang: String = UserDefaults.standard.string(forKey: "AppLanguage") ?? "en"
     
     var body: some Scene {
         WindowGroup {
             Group {
                 if Auth.shared.getAccessToken() != nil {
                     NavigationView {
-                        MainScreen(userStore: userStore)
+                        MainScreen(userStore: userStore, lang: $lang)
                             .environmentObject(userStore)
                             .environmentObject(Auth.shared)
                             .environmentObject(addressViewModel)
-                            .onAppear{
+                            .environment(\.locale, .init(identifier: lang))
+                            .onAppear {
                                 UNUserNotificationCenter.current().delegate = appdelegate
                             }
                     }
-                }else {
+                } else {
                     if Auth.shared.loggedIn != true {
                         NavigationView {
-                            LoginScreenView(userStore: userStore)
+                            LoginScreenView(userStore: userStore, lang: $lang)
                                 .environmentObject(userStore)
                                 .environmentObject(Auth.shared)
                                 .environmentObject(addressViewModel)
+                                .environment(\.locale, .init(identifier: lang))
                         }
+                    } else {
+                       
                     }
-                    else {
-                        
-                    }
-                   
                 }
-                
             }
-           
         }
     }
 }

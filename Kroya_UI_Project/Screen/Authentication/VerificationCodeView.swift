@@ -14,7 +14,7 @@ struct VerificationCodeView: View {
     @StateObject private var countdownTimer = CountdownTimer()
     @EnvironmentObject var userStore: UserStore
     @ObservedObject var authVM: AuthViewModel
-
+    @Binding var lang:String
     var body: some View {
         ZStack {
             VStack {
@@ -155,7 +155,7 @@ struct VerificationCodeView: View {
                 Spacer()
             }
             
-            NavigationLink(destination: CreatePasswordView(authVM: authVM).environmentObject(userStore), isActive: $authVM.isOTPVerified) {
+            NavigationLink(destination: CreatePasswordView(authVM: authVM, lang: $lang).environmentObject(userStore), isActive: $authVM.isOTPVerified) {
                 EmptyView()
             }
             .hidden()

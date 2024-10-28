@@ -18,7 +18,7 @@ struct UserBasicInfoView: View {
     @EnvironmentObject var userStore: UserStore
     @EnvironmentObject var addressVM: AddressViewModel
     @ObservedObject var authVM = AuthViewModel(userStore: UserStore())
-    
+    @Binding var lang:String
     var body: some View {
         VStack(spacing: 20) {
             HStack {
@@ -160,14 +160,14 @@ struct UserBasicInfoView: View {
                     .foregroundColor(PrimaryColor.normal)
             }
             Spacer()
-            NavigationLink(destination: MainScreen(userStore: userStore).environmentObject(userStore),isActive: $authVM.isUserSave, label: {
+            NavigationLink(destination:  MainScreen(userStore: userStore,lang:$lang).environmentObject(userStore),isActive: $authVM.isUserSave, label: {
                 EmptyView()
             })
             .hidden()
         }
         .padding(.horizontal, 20)
         .navigationDestination(isPresented: $isSkip, destination: {
-            MainScreen(userStore: userStore).environmentObject(userStore).navigationBarHidden(true).navigationBarHidden(true)
+            MainScreen(userStore: userStore,lang:$lang).environmentObject(userStore).navigationBarHidden(true)
         })
         .navigationBarHidden(true)
         
@@ -198,3 +198,4 @@ struct UserBasicInfoView: View {
         isLoading = false
     }
 }
+

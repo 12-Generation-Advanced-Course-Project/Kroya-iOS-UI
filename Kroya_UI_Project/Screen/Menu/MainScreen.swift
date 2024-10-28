@@ -5,17 +5,16 @@ struct MainScreen: View {
     @State var isActive : Bool = false
     @Environment(\.presentationMode) var presentationMode
     @State private var isModalPresented: Bool = false
-
     @EnvironmentObject var userStore: UserStore
     @StateObject var authVM: AuthViewModel
     @StateObject var addressViewModel: AddressViewModel
- 
-    init(userStore: UserStore) {
+    @Binding var lang: String
+    init(userStore: UserStore, lang: Binding<String>) {
            _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
            _addressViewModel = StateObject(wrappedValue: AddressViewModel(userStore: userStore))
-         
-        
+           self._lang = lang
        }
+
     var body: some View {
         NavigationStack{
             ZStack {
@@ -65,7 +64,7 @@ struct MainScreen: View {
                                 }
                             }
                             .tag(3)
-                        ProfileView(authVM: authVM)
+                        ProfileView(authVM: authVM,lang: $lang)
                            .environmentObject(addressViewModel)
                            .environmentObject(userStore)
                             .tabItem {
@@ -147,3 +146,7 @@ struct MainScreen: View {
         }
     }
 }
+
+//#Preview {
+//    MainScreen()
+//}

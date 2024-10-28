@@ -20,6 +20,8 @@ struct ProfileView: View {
     @State private var isEdit: Bool = false
     @State private var addressToUpdate: Address? = nil
     var urlImagePrefix: String = "https://kroya-api.up.railway.app/api/v1/fileView/"
+    @Binding var lang: String
+    
     var body: some View {
         ZStack {
             VStack {
@@ -153,22 +155,22 @@ struct ProfileView: View {
                     NavigationLink {
                         MapSelectionView(viewModel: addressVM, showMapSheet: $showMapSheet,addressToUpdate: addressToUpdate)
                     } label: {
-                        AppSettingView(imageName: "VectorLocation", title: "Change Location", iconName: "Rightarrow")
+                        AppSettingView(imageName: "VectorLocation", title: LocalizedStringKey("Change location"), iconName: "Rightarrow")
                     }.accentColor(.black)
                     
                     NavigationLink {
                         AllowNotificationView()
                     } label: {
-                        AppSettingView(imageName: "notification 1", title: "Notifications", iconName: "Rightarrow")
+                        AppSettingView(imageName: "notification 1", title: LocalizedStringKey("Notifications"), iconName: "Rightarrow")
                     }.accentColor(.black)
                     
                     Button {
                         showingCredits.toggle()
                     } label: {
-                        AppSettingView(imageName: "languageIcon", title: "Language", iconName: "Rightarrow")
+                        AppSettingView(imageName: "languageIcon", title: LocalizedStringKey("Language"), iconName: "Rightarrow")
                     }
                     .sheet(isPresented: $showingCredits) {
-                        ChangeLanguageView()
+                        ChangeLanguageView(lang: $lang)
                     }
                     .accentColor(.black)
                 }
@@ -183,7 +185,7 @@ struct ProfileView: View {
                 
                 
                 // NavigationLink to go to LoginScreenView on logout
-                NavigationLink(destination: LoginScreenView(userStore: userStore), isActive: $authVM.islogout) {
+                NavigationLink(destination: LoginScreenView(userStore: userStore,lang: $lang), isActive: $authVM.islogout) {
                     EmptyView()
                 }.hidden()
                 
@@ -202,3 +204,7 @@ struct ProfileView: View {
     }
     
 }
+
+//#Preview {
+//    ProfileView()
+//}

@@ -9,23 +9,27 @@ struct HomeView: View {
         CategoryCardView(title: "Dessert", image: "DessertPic", color: .blue.opacity(0.2), x: 50, y: 14)
     ]
     @State var isSearching: Bool = false
+    @Environment(\.locale) var locale
+    
     var body: some View {
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading) {
                     // Title Section
                     VStack(alignment: .leading) {
-                        Text("What would you like ")
+                        Text(LocalizedStringKey("What would you like to eat today ?"))
+                            .frame(width: locale.identifier == "ko" ? 170 : locale.identifier == "km-KH" ? 120 :
+                                   250)
                             .font(.customfont(.semibold, fontSize: 24))
-                        Text("to eat today ? ")
-                            .font(.customfont(.semibold, fontSize: 24))
-                        
+//                        Text(LocalizedStringKey("to eat today ? "))
+//                            .font(.customfont(.semibold, fontSize: 24))
+//                        
                         // Recipe Order Cards
                         HStack(spacing: 16) {
                             NavigationLink(destination: FoodonOrderView()) {
                                 Recipe_OrderCard(
-                                    title: "Food Order",
-                                    subtitle: "Order what you love",
+                                    title: LocalizedStringKey("Food Order"),
+                                    subtitle: LocalizedStringKey("Order what you love"),
                                     imageName: "food_recipe",
                                     width: .screenWidth * 0.45,
                                     height: .screenHeight * 0.16,
@@ -38,8 +42,8 @@ struct HomeView: View {
                             
                             NavigationLink(destination: FoodonRecipe()) {
                                 Recipe_OrderCard(
-                                    title: "Food Recipe",
-                                    subtitle: "Learn how to cook",
+                                    title: LocalizedStringKey("Food Recipe"),
+                                    subtitle: LocalizedStringKey("Learn how to cook"),
                                     imageName: "Menu",
                                     width: .screenWidth * 0.45,
                                     height: .screenHeight * 0.16,
@@ -57,7 +61,7 @@ struct HomeView: View {
                     
                     // Category Section
                     VStack(alignment: .leading) {
-                        Text("Category")
+                        Text(LocalizedStringKey("Category"))
                             .font(.customfont(.semibold, fontSize: 16))
                         
                         ScrollView(.horizontal, showsIndicators: false) {

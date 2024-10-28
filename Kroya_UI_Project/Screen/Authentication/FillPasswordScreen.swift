@@ -15,6 +15,7 @@ struct FillPasswordScreen: View {
     @EnvironmentObject var userStore: UserStore
     @ObservedObject var authVM: AuthViewModel
     @State var email: String
+    @Binding var lang: String
     
     var body: some View {
         ZStack {
@@ -43,7 +44,7 @@ struct FillPasswordScreen: View {
                 }
                 .padding()
                 
-             
+                
                 VStack(alignment: .leading) {
                     Text("Password")
                         .foregroundStyle(.black.opacity(0.8))
@@ -117,20 +118,19 @@ struct FillPasswordScreen: View {
             }
             
             // Navigate to MainScreen on successful login
-            NavigationLink(destination: MainScreen(userStore: userStore).navigationBarBackButtonHidden(true).environmentObject(userStore), isActive: $authVM.isLoggedIn) {
+            NavigationLink(destination: MainScreen(userStore: userStore,lang: $lang).navigationBarBackButtonHidden(true).environmentObject(userStore), isActive: $authVM.isLoggedIn) {
                 EmptyView()
             }
             .hidden()
             if authVM.isLoading {
                 ProgressIndicator()
             }
-        }
-        .navigationBarHidden(true)
+        } .navigationBarHidden(true)
     }
-    
     // Password validation function
     func validatePassword(_ password: String) {
         isPasswordValid = password.count >= 6
     }
 }
+
 

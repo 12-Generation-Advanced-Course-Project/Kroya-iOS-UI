@@ -14,6 +14,7 @@ struct CreatePasswordView: View {
     @ObservedObject var authVM: AuthViewModel
     @StateObject var addressViewModel = AddressViewModel(userStore: UserStore())
     @State private var isNavigating = false
+    @Binding var lang: String
 
     var body: some View {
         ZStack {
@@ -112,13 +113,30 @@ struct CreatePasswordView: View {
                     .transition(.scale)
             }
             
-            NavigationLink(destination: UserBasicInfoView(authVM: authVM).environmentObject(userStore).environmentObject(addressViewModel), isActive: $isNavigating) {
+            NavigationLink(destination: UserBasicInfoView(authVM: authVM, lang: $lang).environmentObject(userStore).environmentObject(addressViewModel), isActive: $isNavigating) {
                 EmptyView()
             }
             .hidden()
             
             if authVM.isLoading {
                 ProgressIndicator()
+                .padding(.horizontal, 20)
+                
+              
+                if showPopupMessage {
+                    PopupMessage()
+                        .transition(.scale)
+                }
+                
+             
+                NavigationLink(destination: UserBasicInfoView(authVM: authVM, lang: $lang).environmentObject(userStore).environmentObject(addressViewModel), isActive: $isNavigating) {
+                    EmptyView()
+                }
+                .hidden()
+                
+                if authVM.isLoading {
+                    ProgressIndicator()
+                }
             }
         }
         .navigationBarBackButtonHidden(true)
