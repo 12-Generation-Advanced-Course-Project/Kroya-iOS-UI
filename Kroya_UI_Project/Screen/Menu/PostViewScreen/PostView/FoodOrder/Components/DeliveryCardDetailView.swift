@@ -18,6 +18,7 @@ struct DeliveryCardDetailView: View {
                 Text("Delivery to")
                     .font(.customfont(.semibold, fontSize: 16))
                 Spacer()
+//                AddressView()
   
                 Button(action: {
                     // Action for cash payment

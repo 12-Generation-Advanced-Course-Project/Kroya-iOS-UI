@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    let notification = [1, 2, 3]
+    let notification = [1, 2, 3, 4, 5]
     let categories = [
         CategoryCardView(title: "Breakfast", image: "khmernoodle", color: Color(hex: "#F2F2F2"), x: 60, y: 18),
         CategoryCardView(title: "Lunch", image: "Somlorkoko", color: Color(hex: "#E6F4E8"), x: 60, y: 18),
@@ -53,7 +53,7 @@ struct HomeView: View {
                         
                     }
                     
-//                    Spacer().frame(height: 25)
+                    Spacer().frame(height: 25)
                     
                     // Category Section
                     VStack(alignment: .leading) {

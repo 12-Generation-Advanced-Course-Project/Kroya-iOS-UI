@@ -10,6 +10,7 @@ import SwiftUI
 struct Popup<Content: View>: View {
     
     @Binding var isPresented: Bool
+    @Environment(\.dismiss) private var dismiss // Environment dismiss for navigation stack
     let content: Content
     let dismissOnTapOutside: Bool
 
@@ -31,8 +32,10 @@ struct Popup<Content: View>: View {
                     Spacer()
                     Button(action: {
                         withAnimation {
-                            isPresented = false
+                            isPresented = false // Dismiss the popup
+                            dismiss() // Dismiss ReceiptView and go back to FoodCheckOutView
                         }
+                    
                     }) {
                         ZStack {
                             Circle()

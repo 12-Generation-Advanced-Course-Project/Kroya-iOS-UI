@@ -153,6 +153,7 @@ struct SaleReportView: View {
             .frame(maxWidth: .infinity)
             .background(PrimaryColor.normalHover)
             
+            
             Spacer()
             
             // Sold food items for the selected day
