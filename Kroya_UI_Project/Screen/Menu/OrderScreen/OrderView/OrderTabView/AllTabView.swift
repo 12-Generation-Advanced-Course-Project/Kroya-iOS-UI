@@ -62,7 +62,7 @@ struct AllTabView:View {
                 .foregroundStyle(.black)
                 .accentColor(.black)
                 .padding(.horizontal)
-                DisclosureGroup("Last 2 Days", isExpanded: $isExpandedLst2Day) {
+                DisclosureGroup("Last 2 days", isExpanded: $isExpandedLst2Day) {
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack{
                             

@@ -5,7 +5,7 @@ struct Notification: View {
     @Environment(\.dismiss) var dismiss
     let notification = [1, 2, 3, 4, 5]
     
-
+    
     var body: some View {
         NavigationView {
             List {
@@ -43,14 +43,21 @@ struct Notification: View {
                                 .foregroundStyle(.black)
                         }
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("Notification")
+                            Text(LocalizedStringKey("Notification"))
                                 .font(.customfont(.semibold, fontSize: 20))
                                 .foregroundStyle(.black)
                             Group{
-                                Text("You have ")
-                                + Text("\(notification.count) Notifications ")
-                                    .foregroundStyle(.yellow)
-                                + Text("today")
+                                //                                Text(LocalizedStringKey("You have "))
+                                //                                + Text(LocalizedStringKey("\(notification.count) Notifications "))
+                                //                                    .foregroundStyle(.yellow)
+                                //                                + Text(LocalizedStringKey("today"))
+                                HStack{
+                                    Text(LocalizedStringKey("You have"))
+                                    Text(LocalizedStringKey("\(notification.count) Notification"))
+                                        .foregroundStyle(.yellow)
+                                    Text(LocalizedStringKey("Today"))
+                                    
+                                }
                             }
                             .font(.customfont(.regular, fontSize: 12))
                             .foregroundStyle(.black.opacity(0.6))

@@ -276,7 +276,7 @@ struct SearchScreen: View {
                         VStack {
                             if searchText.isEmpty {
                                 VStack(alignment: .leading, spacing: geometry.size.height * 0.01) {
-                                    Text("Recent Searches")
+                                    Text(LocalizedStringKey("Recent Searches"))
                                         .font(.customfont(.semibold, fontSize: geometry.size.width * 0.045))
                                         .foregroundColor(.black)
                                     

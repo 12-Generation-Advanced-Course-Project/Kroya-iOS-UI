@@ -53,7 +53,7 @@ struct LoginScreenView: View {
                         })
                         
                         if isEmailInvalid {
-                            Text("Please enter a valid email address.")
+                            Text(LocalizedStringKey("Please enter a valid email address."))
                                 .font(.caption)
                                 .foregroundColor(.red)
                         }

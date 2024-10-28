@@ -16,6 +16,7 @@ struct AddFoodView: View {
     @State private var selectedImages: [UIImage] = []
     @State private var showValidationMessage: Bool = false
     @State private var navigateToNextView: Bool = false
+    @State var placeholder = "Enter food name"
     var levels: [String] = ["Hard", "Medium", "Easy"]
     var cuisines: [String] = ["Soup", "Salad", "Dessert", "Grill"]
     var categories: [String] = ["Breakfast", "Lunch", "Dinner", "Snack"]
@@ -129,9 +130,20 @@ struct AddFoodView: View {
                         
                         Spacer().frame(height: 15)
                         
-                        // InputField for food name
-                        InputField(placeholder: "Enter your name", text: $Foodname, backgroundColor: .white, frameWidth: .screenWidth * 0.9, colorBorder: Color(hex: "#D0DBEA"), isMultiline: false)
                         
+                        // InputField for food name
+//                        InputField(placeholder: placeholder, text: $Foodname, backgroundColor: .white, frameWidth: .screenWidth * 0.9, colorBorder: Color(hex: "#D0DBEA"), isMultiline: false)
+                        
+                        TextField("Enter food name", text: $Foodname, axis: .vertical)
+                            .frame(maxWidth: .screenWidth * 0.9,minHeight: 50 , alignment: .leading)
+                            .padding(.leading, 15)
+                            .font(.customfont(.medium, fontSize: 15))
+                            .foregroundStyle(.black.opacity(0.6))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .strokeBorder(Color(hex: "#D0DBEA"), lineWidth: 1)
+                            )
+                            
                         // Validation message under TextField
                         if showValidationMessage && Foodname.isEmpty {
                             HStack {
@@ -171,7 +183,7 @@ struct AddFoodView: View {
                             HStack {
                                 Image(systemName: "exclamationmark.triangle.fill")
                                     .foregroundColor(.red)
-                                Text("Description cannot be empty")
+                                Text(LocalizedStringKey("Description cannot be empty"))
                                     .foregroundColor(.red)
                                     .font(.caption)
                             }
@@ -302,6 +314,7 @@ struct AddFoodView: View {
                 }
             }
         }
+        
     }
 }
 

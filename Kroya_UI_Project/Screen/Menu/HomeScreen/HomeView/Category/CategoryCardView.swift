@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CategoryCardView: View {
-    var title: String
+    var title: LocalizedStringKey
     var image: String
     var color: Color
     var x: CGFloat

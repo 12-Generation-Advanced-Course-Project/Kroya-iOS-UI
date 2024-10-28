@@ -18,11 +18,11 @@ struct PopupMessage: View {
                     .scaledToFit()
                     .frame(width: 50, height: 50, alignment: .center
                     )
-                Text("Successfully")
+                Text(LocalizedStringKey("Successfully"))
                     .font(.customfont(.bold, fontSize: 20))
                     .foregroundStyle(.green)
                 Spacer().frame(height: 10)
-                Text("Your account have been created successfully")
+                Text(LocalizedStringKey("Your account have been created successfully"))
                     .font(.customfont(.regular, fontSize: 12))
                     .foregroundStyle(.gray)
             }

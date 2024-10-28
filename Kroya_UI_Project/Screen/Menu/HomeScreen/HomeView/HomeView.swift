@@ -1,16 +1,26 @@
 import SwiftUI
 
+struct Category {
+    let title: String
+    let image: String
+    let color: Color
+    let x: CGFloat
+    let y: CGFloat
+}
+
 struct HomeView: View {
     let notification = [1, 2, 3, 4, 5]
-    let categories = [
-        CategoryCardView(title: "Breakfast", image: "khmernoodle", color: Color(hex: "#F2F2F2"), x: 60, y: 18),
-        CategoryCardView(title: "Lunch", image: "Somlorkoko", color: Color(hex: "#E6F4E8"), x: 60, y: 18),
-        CategoryCardView(title: "Dinner", image: "DinnerPic", color: .yellow.opacity(0.2), x: 50, y: 14),
-        CategoryCardView(title: "Dessert", image: "DessertPic", color: .blue.opacity(0.2), x: 50, y: 14)
+    
+    let categories: [Category] = [
+        Category(title: "Breakfast", image: "khmernoodle", color: Color(hex: "#F2F2F2"), x: 60, y: 18),
+        Category(title: "Lunch", image: "Somlorkoko", color: Color(hex: "#E6F4E8"), x: 60, y: 18),
+        Category(title: "Dinner", image: "DinnerPic", color: .yellow.opacity(0.2), x: 50, y: 14),
+        Category(title: "Dessert", image: "DessertPic", color: .blue.opacity(0.2), x: 50, y: 14)
     ]
+
     @State var isSearching: Bool = false
     @Environment(\.locale) var locale
-    
+
     var body: some View {
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
@@ -18,12 +28,9 @@ struct HomeView: View {
                     // Title Section
                     VStack(alignment: .leading) {
                         Text(LocalizedStringKey("What would you like to eat today ?"))
-                            .frame(width: locale.identifier == "ko" ? 170 : locale.identifier == "km-KH" ? 120 :
-                                   250)
+                            .frame(width: locale.identifier == "ko" ? 170 : locale.identifier == "km-KH" ? 120 : 250)
                             .font(.customfont(.semibold, fontSize: 24))
-//                        Text(LocalizedStringKey("to eat today ? "))
-//                            .font(.customfont(.semibold, fontSize: 24))
-//                        
+
                         // Recipe Order Cards
                         HStack(spacing: 16) {
                             NavigationLink(destination: FoodonOrderView()) {
@@ -39,7 +46,7 @@ struct HomeView: View {
                                     yImage: 35
                                 )
                             }
-                            
+
                             NavigationLink(destination: FoodonRecipe()) {
                                 Recipe_OrderCard(
                                     title: LocalizedStringKey("Food Recipe"),
@@ -54,124 +61,107 @@ struct HomeView: View {
                                 )
                             }
                         }
-                        
                     }
-                    
+
                     Spacer().frame(height: 25)
-                    
+
                     // Category Section
                     VStack(alignment: .leading) {
                         Text(LocalizedStringKey("Category"))
                             .font(.customfont(.semibold, fontSize: 16))
-                        
+
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
                                 ForEach(categories, id: \.title) { category in
                                     NavigationLink(destination: destinationView(for: category.title)) {
                                         CategoryCardView(
-                                            title: category.title,
+                                            title: LocalizedStringKey(category.title),
                                             image: category.image,
                                             color: category.color,
                                             x: category.x,
                                             y: category.y
                                         )
-                                   
                                     }
                                 }
                             }
                         }
                     }
-                    
+
                     Spacer().frame(height: 30)
-                    
+
                     // Popular Dishes Section
                     HStack {
-                        Text("Popular Dishes")
+                        Text(LocalizedStringKey("Popular Dishes"))
                             .font(.customfont(.semibold, fontSize: 16))
                         Spacer()
                         NavigationLink {
                             ViewAllPopularDishesView()
                         } label: {
-                            Text("View all -->")
+                            Text(LocalizedStringKey("View all -->"))
                                 .foregroundStyle(PrimaryColor.normal)
                                 .font(.customfont(.semibold, fontSize: 16))
                                 .offset(x: -10)
                         }
-                        
                     }
-                    
-                    Spacer().frame(height: 20)
-                    
-                    
-                    // Scrollable Dishes
-                    HStack {
-            
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 10) {
 
-                                // Example PopularDishesCard for dishes
-                                NavigationLink(destination: ContentOnButtonSheet(
-                                    foodName: "somlor Kari",
+                    Spacer().frame(height: 20)
+
+                    // Scrollable Dishes
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 10) {
+                            NavigationLink(destination: ContentOnButtonSheet(
+                                foodName: "somlor Kari",
+                                price: 2.00,
+                                date: "30 Sep 2024",
+                                itemFood: "Somlor Kari",
+                                profile: "profile_image",
+                                userName: "User Name",
+                                description: "Somlor Kari is a traditional Cambodian dish...",
+                                ingredients: "Chicken, Coconut Milk, Curry Paste",
+                                percentageOfRating: 4.8,
+                                numberOfRating: 200,
+                                review: "Delicious dish!",
+                                reviewDetail: "The Somlor Kari was perfectly spiced and rich in flavor"
+                            )) {
+                                FoodOnSaleViewCell(
+                                    imageName: "brohok",
+                                    dishName: "Somlor Kari",
+                                    cookingDate: "30 Sep 2024",
                                     price: 2.00,
-                                    date: "30 Sep 2024",
-                                    itemFood: "Somlor Kari",
-                                    profile: "profile_image",
-                                    userName: "User Name",
-                                    description: "Somlor Kari is a traditional Cambodian dish...",
-                                    ingredients: "Chicken, Coconut Milk, Curry Paste",
-                                    percentageOfRating: 4.8,
-                                    numberOfRating: 200,
-                                    review: "Delicious dish!",
-                                    reviewDetail: "The Somlor Kari was perfectly spiced and rich in flavor"
-                                )) {
-                                    FoodOnSaleViewCell(
-                                        
-                                        imageName: "brohok",
-                                        dishName: "Somlor Kari",
-                                        cookingDate: "30 Sep 2024",
-                                        price: 2.00,
-                                        rating: 5.0,
-                                        reviewCount: 200,
-                                        deliveryInfo: "Free",
-                                        deliveryIcon: "motorbike"
-                                    )
-                                }
-                                
-                                NavigationLink(destination: ContentOnButtonSheet(
-                                    foodName: "Songvak",
-                                    price: 2.00,
-                                    date: "30 Sep 2024",
-                                    itemFood: "Songvak",
-                                    profile: "profile_image", // Assuming a profile image
-                                    userName: "User Name",
-                                    description: "Songvak is a delicious dish...",
-                                    ingredients: "Pork, Fish Sauce, Spices",
-                                    percentageOfRating: 4.7,
-                                    numberOfRating: 150,
-                                    review: "Fantastic!",
-                                    reviewDetail: "The dish was flavorful and aromatic, a great meal..."
-                                )) {
-                                    RecipeViewCell(
-                                        
-                                        imageName           : "somlorKari",
-                                        dishName            : "Somlor Kari",
-                                        cookingDate         : "30 Sep 2024",
-                                        statusType          : "Recipe",
-                                        rating              : 5.0,
-                                        reviewCount         : 200,
-                                        level               : "Easy"
-                                        
-                                    )
-                                }
-                                
-                                
+                                    rating: 5.0,
+                                    reviewCount: 200,
+                                    deliveryInfo: "Free",
+                                    deliveryIcon: "motorbike"
+                                )
+                            }
+
+                            NavigationLink(destination: ContentOnButtonSheet(
+                                foodName: "Songvak",
+                                price: 2.00,
+                                date: "30 Sep 2024",
+                                itemFood: "Songvak",
+                                profile: "profile_image",
+                                userName: "User Name",
+                                description: "Songvak is a delicious dish...",
+                                ingredients: "Pork, Fish Sauce, Spices",
+                                percentageOfRating: 4.7,
+                                numberOfRating: 150,
+                                review: "Fantastic!",
+                                reviewDetail: "The dish was flavorful and aromatic, a great meal..."
+                            )) {
+                                RecipeViewCell(
+                                    imageName: "somlorKari",
+                                    dishName: "Somlor Kari",
+                                    cookingDate: "30 Sep 2024",
+                                    statusType: "Recipe",
+                                    rating: 5.0,
+                                    reviewCount: 200,
+                                    level: "Easy"
+                                )
                             }
                         }
                     }
-//                    .padding(4.5)
-//                    Spacer()x
                 }
-//                .padding(.leading, .screenWidth * 0.03)
                 .padding(.horizontal)
                 .navigationTitle("")
                 .navigationBarBackButtonHidden(true)
@@ -183,7 +173,7 @@ struct HomeView: View {
                             .frame(width: 73, height: 73)
                             .offset(x: -10)
                     }
-                    
+
                     ToolbarItem(placement: .navigationBarTrailing) {
                         NavigationLink(destination: SearchScreen()) {
                             Image("ico_search")
@@ -193,7 +183,7 @@ struct HomeView: View {
                                 .foregroundColor(.black)
                         }
                     }
-                    
+
                     ToolbarItem(placement: .navigationBarTrailing) {
                         NavigationLink(destination: Notification()) {
                             ZStack {
@@ -202,6 +192,7 @@ struct HomeView: View {
                                     .scaledToFit()
                                     .frame(width: 24, height: 24)
                                     .foregroundColor(.black)
+
                                 // Notification Badge
                                 if notification.count > 0 {
                                     Text("\(notification.count)")
@@ -219,14 +210,10 @@ struct HomeView: View {
                             }
                         }
                     }
-                    
-                    
                 }
             }
         }
-        
     }
-    
     
     @ViewBuilder
     func destinationView(for title: String) -> some View {
@@ -248,4 +235,3 @@ struct HomeView: View {
 #Preview {
     HomeView()
 }
-

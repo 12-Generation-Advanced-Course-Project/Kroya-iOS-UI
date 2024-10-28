@@ -34,7 +34,7 @@ struct EditingProfileView: View {
 
                 VStack(spacing: 10) {
                     HStack {
-                        Text("Edit Profile")
+                        Text(LocalizedStringKey("Edit Profile"))
                             .font(.customfont(.bold, fontSize: 18))
                             .opacity(0.84)
                             .padding(.bottom, 20)

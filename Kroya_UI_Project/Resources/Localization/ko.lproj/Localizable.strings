@@ -14,7 +14,7 @@
 "Continue with password" = "비밀번호로 계속하기";
 "Password" = "비밀번호";
 "Input your password" = "비밀번호를 입력하세요";
-"Forget password?" = "비밀번호를 잊으셨나요?";
+"Forget Password?" = "비밀번호를 잊으셨나요?";
 "Login" = "로그인";
 "Verification Code" = "인증코드";
 "Enter 6 digits code sent to your mobile number" = "휴대폰 번호로 전송된 6자리 코드를 입력하세요";
@@ -46,6 +46,9 @@
 "School" = "학교";
 "Other" = "다른";
 "Save Address" = "주소 저장";
+"Please enter a valid email address." = "유효한 이메일 주소를 입력해 주세요.";
+"Please input a valid password" = "유효한 비밀번호를 입력해 주세요";
+"Password is Incorrect" = "비밀번호가 틀렸습니다";
 
 //Home
 "What would you like to eat today ?" = "오늘 무엇을 드시고 싶으세요?";
@@ -79,6 +82,9 @@
 "Today" = "오늘";
 "Yesterday" = "어제";
 "Last 2 days" = "지난 2일";
+"This Week" = "이번 주";
+"Notification" = "알림";
+"You have" = "អ្នកមាន";
 
 //About me
 "Meng Chantha" = "멩 찬타";
@@ -111,7 +117,7 @@
 "Food Name" = "음식 이름";
 "Enter food name" = "음식 이름을 입력하세요";
 "Description" = "설명";
-"Tell me a little about your food" = "당신의 음식에 대해 조금 알려주세요";
+"Tell me a little about your food" = "당신의 요리에 대해 설명해 주세요";
 "Duration" = "지속";
 "Level" = "수준";
 "Hard" = "딱딱한";
@@ -128,6 +134,9 @@
 "Dinner" = "저녁";
 "Snack" = "간식";
 "Next" = "다음";
+"Food name cannot be empty" = "음식 이름은 비워둘 수 없습니다" ;
+"Description cannot be empty" = "설명은 비워둘 수 없습니다";
+"Sale Report" = "판매 보고서";
 
 //Recipe
 "Recipe" = "레시피";
@@ -141,6 +150,7 @@
 "Enter incredients" = "성분을 입력하세요";
 "Back" = "뒤쪽에";
 "Next" = "다음";
+"No items sold on this day" = "이 날에는 판매된 상품이 없습니다";
 
 //Sale
 "Yes" = "예";
@@ -153,6 +163,8 @@
 "Ingredient" = "재료";
 "Back" = "뒤쪽에";
 "Post" = "우편";
+"Is this food available for sale?" = "이 음식은 판매 가능한가요?";
+"Earning" = "수익";
 
 //Popup Sale
 "Save this as a draft?" = "초안으로 저장하시겠습니까?";
@@ -196,3 +208,11 @@
 "Food on Sale" = "세일 중인 음식";
 "Recipes" = "레시피";
 
+//SearchView
+"Recent Searches" = "최근 검색";
+
+//PopupMessage
+"Successfully" = "성공적으로";
+"Your account have been created successfully." = "귀하의 계정이 성공적으로 생성되었습니다.";
+"Allow Notification" = "알림 허용";
+"Not Now" = " 지금 아님";

@@ -38,7 +38,7 @@ struct IngredientEntryView: View {
                     .padding(.leading, 7)
                 VStack(alignment: .leading){
                     HStack{
-                        TextField("Enter ingredients", text: $ingredient.name)
+                        TextField("Enter incredients", text: $ingredient.name)
                             .padding(.vertical, 15)
                             .multilineTextAlignment(.leading)
                             .padding(.horizontal, 10)

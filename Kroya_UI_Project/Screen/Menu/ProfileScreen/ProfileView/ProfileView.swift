@@ -177,7 +177,7 @@ struct ProfileView: View {
                 Spacer().frame(height: .screenHeight * 0.04)
                 
                 // Logout Button
-                CustomButton(title: "Log out", action: {
+                CustomButton(title: LocalizedStringKey("Log out"), action: {
                     isLoading = true
                     authVM.logout()
                     

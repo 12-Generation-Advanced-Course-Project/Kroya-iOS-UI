@@ -114,7 +114,7 @@ struct BreakfastScreenView: View {
                 HStack {
                     Spacer()
                     
-                    Text("Food on Sale")
+                    Text(LocalizedStringKey("Food on Sale"))
                         .fontWeight(.semibold)
                         .font(.system(size: 16))  // Replace with your custom font method if you have one
                         .foregroundColor(selectedSegment == 0 ? .black.opacity(0.8) : .black.opacity(0.5))
@@ -124,7 +124,7 @@ struct BreakfastScreenView: View {
                     
                     Spacer()
                     
-                    Text("Recipes")
+                    Text(LocalizedStringKey("Recipes"))
                         .fontWeight(.semibold)
                         .font(.system(size: 16))  // Replace with your custom font method if you have one
                         .foregroundColor(selectedSegment == 1 ? .black.opacity(0.8) : .black.opacity(0.5))
