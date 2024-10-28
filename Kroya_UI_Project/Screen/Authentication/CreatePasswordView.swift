@@ -117,26 +117,8 @@ struct CreatePasswordView: View {
                 EmptyView()
             }
             .hidden()
-            
             if authVM.isLoading {
                 ProgressIndicator()
-                .padding(.horizontal, 20)
-                
-              
-                if showPopupMessage {
-                    PopupMessage()
-                        .transition(.scale)
-                }
-                
-             
-                NavigationLink(destination: UserBasicInfoView(authVM: authVM, lang: $lang).environmentObject(userStore).environmentObject(addressViewModel), isActive: $isNavigating) {
-                    EmptyView()
-                }
-                .hidden()
-                
-                if authVM.isLoading {
-                    ProgressIndicator()
-                }
             }
         }
         .navigationBarBackButtonHidden(true)
