@@ -11,4 +11,6 @@ struct AddressRequest: Codable {
     var addressDetail: String
     var specificLocation: String
     var tag: String
+    var latitude: Double
+    var longitude: Double
 }

@@ -1,33 +1,35 @@
 import SwiftUI
 
 struct HomeView: View {
-    let notification = [1, 2, 3]
+    let notification = [1, 2, 3, 4, 5]
     let categories = [
         CategoryCardView(title: "Breakfast", image: "khmernoodle", color: Color(hex: "#F2F2F2"), x: 60, y: 18),
         CategoryCardView(title: "Lunch", image: "Somlorkoko", color: Color(hex: "#E6F4E8"), x: 60, y: 18),
         CategoryCardView(title: "Dinner", image: "DinnerPic", color: .yellow.opacity(0.2), x: 50, y: 14),
         CategoryCardView(title: "Dessert", image: "DessertPic", color: .blue.opacity(0.2), x: 50, y: 14)
     ]
+    @State var isSearching: Bool = false
+    @Environment(\.locale) var locale
     
     var body: some View {
-        
         NavigationView {
-            
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading) {
                     // Title Section
                     VStack(alignment: .leading) {
-                        Text("What would you like ")
+                        Text(LocalizedStringKey("What would you like to eat today ?"))
+                            .frame(width: locale.identifier == "ko" ? 170 : locale.identifier == "km-KH" ? 120 :
+                                   250)
                             .font(.customfont(.semibold, fontSize: 24))
-                        Text("to eat today ? ")
-                            .font(.customfont(.semibold, fontSize: 24))
-                        
+//                        Text(LocalizedStringKey("to eat today ? "))
+//                            .font(.customfont(.semibold, fontSize: 24))
+//                        
                         // Recipe Order Cards
                         HStack(spacing: 16) {
                             NavigationLink(destination: FoodonOrderView()) {
                                 Recipe_OrderCard(
-                                    title: "Food Order",
-                                    subtitle: "Order what you love",
+                                    title: LocalizedStringKey("Food Order"),
+                                    subtitle: LocalizedStringKey("Order what you love"),
                                     imageName: "food_recipe",
                                     width: .screenWidth * 0.45,
                                     height: .screenHeight * 0.16,
@@ -40,8 +42,8 @@ struct HomeView: View {
                             
                             NavigationLink(destination: FoodonRecipe()) {
                                 Recipe_OrderCard(
-                                    title: "Food Recipe",
-                                    subtitle: "Learn how to cook",
+                                    title: LocalizedStringKey("Food Recipe"),
+                                    subtitle: LocalizedStringKey("Learn how to cook"),
                                     imageName: "Menu",
                                     width: .screenWidth * 0.45,
                                     height: .screenHeight * 0.16,
@@ -55,11 +57,11 @@ struct HomeView: View {
                         
                     }
                     
-//                    Spacer().frame(height: 25)
+                    Spacer().frame(height: 25)
                     
                     // Category Section
                     VStack(alignment: .leading) {
-                        Text("Category")
+                        Text(LocalizedStringKey("Category"))
                             .font(.customfont(.semibold, fontSize: 16))
                         
                         ScrollView(.horizontal, showsIndicators: false) {
@@ -73,6 +75,7 @@ struct HomeView: View {
                                             x: category.x,
                                             y: category.y
                                         )
+                                   
                                     }
                                 }
                             }
@@ -99,11 +102,13 @@ struct HomeView: View {
                     
                     Spacer().frame(height: 20)
                     
+                    
                     // Scrollable Dishes
                     HStack {
+            
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 10) {
-                        
+
                                 // Example PopularDishesCard for dishes
                                NavigationLink(destination: ContentOnButtonSheet(
                                     foodName: "somlor Kari",
@@ -122,7 +127,7 @@ struct HomeView: View {
                                 {
                                     FoodOnSaleViewCell(
                                         
-                                        imageName: "brohok", // Make sure this is the correct image in your assets
+                                        imageName: "brohok",
                                         dishName: "Somlor Kari",
                                         cookingDate: "30 Sep 2024",
                                         price: 2.00,
@@ -164,11 +169,11 @@ struct HomeView: View {
                             }
                         }
                     }
-                    .padding(4.5)
-                    
-                    Spacer()
+//                    .padding(4.5)
+//                    Spacer()x
                 }
-                .padding(.leading, .screenWidth * 0.03)
+//                .padding(.leading, .screenWidth * 0.03)
+                .padding(.horizontal)
                 .navigationTitle("")
                 .navigationBarBackButtonHidden(true)
                 .toolbar {
@@ -215,6 +220,7 @@ struct HomeView: View {
                             }
                         }
                     }
+                    
                     
                 }
             }

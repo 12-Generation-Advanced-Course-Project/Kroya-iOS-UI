@@ -9,8 +9,8 @@ import SwiftUI
 
 struct Recipe_OrderCard: View {
     // Customizable properties
-    var title: String
-    var subtitle: String
+    var title: LocalizedStringKey
+    var subtitle: LocalizedStringKey
     var imageName: String
     var backgroundColor: Color = Color(red: 0.999, green: 0.935, blue: 0.694)
     var borderColor: Color = Color(red: 0.952, green: 0.888, blue: 0.656)

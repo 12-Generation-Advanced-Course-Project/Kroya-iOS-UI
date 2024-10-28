@@ -76,7 +76,9 @@ struct WebillConnectView: View {
             Spacer()
           //  FoodItem(name: "ssd", itemsCount: 2, remarks: "ds", price: 23, paymentMethod:)
             CustomButton(title: "Save", action: {
-                print("Button tapped!")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.80) {
+                    dismiss()
+                }
             }, backgroundColor: PrimaryColor.normal,frameHeight: 55,frameWidth: .screenWidth * 0.9)
             
         }  .navigationBarHidden(true)

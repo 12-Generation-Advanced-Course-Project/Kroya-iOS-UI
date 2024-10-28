@@ -24,6 +24,7 @@ struct PopupReview: View {
                 Button(action: {
                     // Action to dismiss the popup
                     isReviewPopupOpen = false
+                    
                 }) {
                     Image(systemName: "xmark.circle.fill")
                         .resizable()

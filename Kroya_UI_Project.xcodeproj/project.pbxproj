@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2686122F2CCA222300DE1F6F /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 2686122E2CCA222300DE1F6F /* GoogleMaps */; };
+		268612322CCA226400DE1F6F /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 268612312CCA226400DE1F6F /* SwiftKeychainWrapper */; };
 		840C1FAB2CB3BD0C0066027A /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 840C1FAA2CB3BD0C0066027A /* Alamofire */; };
 		8445843A2CB6793F00CA3C01 /* SwiftUIFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 844584392CB6793F00CA3C01 /* SwiftUIFlow */; };
-		FA70E8662CCB28D20034DEFB /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = FA70E8652CCB28D20034DEFB /* SwiftKeychainWrapper */; };
-		FA70E8692CCB28F20034DEFB /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = FA70E8682CCB28F20034DEFB /* GoogleMaps */; };
+		8494AC232CCB533E00FB8206 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 8494AC222CCB533E00FB8206 /* Kingfisher */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,7 +63,9 @@
 				FA70E8692CCB28F20034DEFB /* GoogleMaps in Frameworks */,
 				8445843A2CB6793F00CA3C01 /* SwiftUIFlow in Frameworks */,
 				840C1FAB2CB3BD0C0066027A /* Alamofire in Frameworks */,
-				FA70E8662CCB28D20034DEFB /* SwiftKeychainWrapper in Frameworks */,
+				268612322CCA226400DE1F6F /* SwiftKeychainWrapper in Frameworks */,
+				2686122F2CCA222300DE1F6F /* GoogleMaps in Frameworks */,
+				8494AC232CCB533E00FB8206 /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,8 +128,9 @@
 			packageProductDependencies = (
 				840C1FAA2CB3BD0C0066027A /* Alamofire */,
 				844584392CB6793F00CA3C01 /* SwiftUIFlow */,
-				FA70E8652CCB28D20034DEFB /* SwiftKeychainWrapper */,
-				FA70E8682CCB28F20034DEFB /* GoogleMaps */,
+				2686122E2CCA222300DE1F6F /* GoogleMaps */,
+				268612312CCA226400DE1F6F /* SwiftKeychainWrapper */,
+				8494AC222CCB533E00FB8206 /* Kingfisher */,
 			);
 			productName = Kroya_UI_Project;
 			productReference = 8406DAAF2CA5510C0003EA40 /* Kroya_UI_Project.app */;
@@ -209,14 +213,16 @@
 				Base,
 				"km-KH",
 				km,
+				ko,
 			);
 			mainGroup = 8406DAA62CA5510C0003EA40;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				840C1FA92CB3BD0C0066027A /* XCRemoteSwiftPackageReference "Alamofire" */,
 				844584382CB6793F00CA3C01 /* XCRemoteSwiftPackageReference "SwiftUIFlow" */,
-				FA70E8642CCB28D20034DEFB /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
-				FA70E8672CCB28F20034DEFB /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
+				2686122D2CCA222300DE1F6F /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
+				268612302CCA226400DE1F6F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
+				8494AC212CCB533E00FB8206 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8406DAB02CA5510C0003EA40 /* Products */;
@@ -597,6 +603,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		2686122D2CCA222300DE1F6F /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.1.1;
+			};
+		};
+		268612302CCA226400DE1F6F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jrendel/SwiftKeychainWrapper";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.1;
+			};
+		};
 		840C1FA92CB3BD0C0066027A /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -613,12 +635,12 @@
 				kind = branch;
 			};
 		};
-		FA70E8642CCB28D20034DEFB /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */ = {
+		8494AC212CCB533E00FB8206 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/jrendel/SwiftKeychainWrapper";
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 4.0.1;
+				minimumVersion = 8.1.0;
 			};
 		};
 		FA70E8672CCB28F20034DEFB /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
@@ -632,6 +654,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		2686122E2CCA222300DE1F6F /* GoogleMaps */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2686122D2CCA222300DE1F6F /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMaps;
+		};
+		268612312CCA226400DE1F6F /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 268612302CCA226400DE1F6F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
 		840C1FAA2CB3BD0C0066027A /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 840C1FA92CB3BD0C0066027A /* XCRemoteSwiftPackageReference "Alamofire" */;
@@ -642,10 +674,10 @@
 			package = 844584382CB6793F00CA3C01 /* XCRemoteSwiftPackageReference "SwiftUIFlow" */;
 			productName = SwiftUIFlow;
 		};
-		FA70E8652CCB28D20034DEFB /* SwiftKeychainWrapper */ = {
+		8494AC222CCB533E00FB8206 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = FA70E8642CCB28D20034DEFB /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
-			productName = SwiftKeychainWrapper;
+			package = 8494AC212CCB533E00FB8206 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 		FA70E8682CCB28F20034DEFB /* GoogleMaps */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -9,10 +9,8 @@ struct OrdersView: View {
     let tabTitles = ["All", "Order", "Sale"]
 
     var body: some View {
-    
             VStack(spacing: 0) {
                 Spacer().frame(height: 10)
-
                 // Orders Text Header
                 HStack {
                     Text("Orders")
@@ -87,6 +85,7 @@ struct OrdersView: View {
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
+            .navigationBarHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     HStack {

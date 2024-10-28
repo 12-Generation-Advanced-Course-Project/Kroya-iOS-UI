@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct AllowNotificationView: View {
-    
+    var localNotification = LocalNotificationManager.shared
     @Environment(\.dismiss) var dismiss
-    
+    @State var seletedDate = Date()
+    @State private var notificationAllowed = false
     var body: some View {
         VStack {
             VStack {
@@ -27,8 +28,14 @@ struct AllowNotificationView: View {
                 Spacer()
             }
             VStack {
-                CustomButton(title: "Allow Notification", action: { print("Button Tap!") }, backgroundColor: .yellow)
-                CustomButton(title: "Not Now", action: { print("Button Tap!") }, backgroundColor: .clear, textColor: .yellow)
+                CustomButton(title: "Allow Notification", action: {    LocalNotificationManager.shared.askForNotificationPermission()
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        LocalNotificationManager.shared.sendImmediateNotification()
+                    }
+                    
+                }, backgroundColor: .yellow)
+                CustomButton(title: "Not Now", action: { dismiss() }, backgroundColor: .clear, textColor: .yellow)
             }
         }
         .navigationBarBackButtonHidden(true)

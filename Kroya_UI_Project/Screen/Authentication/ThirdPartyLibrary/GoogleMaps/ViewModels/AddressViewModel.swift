@@ -8,6 +8,7 @@
 import Foundation
 import Alamofire
 import SwiftUI
+import Combine
 
 class AddressViewModel: ObservableObject {
     
@@ -18,71 +19,83 @@ class AddressViewModel: ObservableObject {
         self.userStore = userStore
     }
 
-    func addNewAddress(addressDetail: String, specificLocation: String, tag: String) {
-        let newAddress = Address(id: addresses.count + 1, addressDetail: addressDetail, specificLocation: specificLocation, tag: tag)
-        addresses.append(newAddress)
-        
-        // Ensure that userStore.user is not nil before updating the address
-        if userStore.user == nil {
-            userStore.setUser(email: "default@user.com")
-        }
-        
-        // Update UserStore with the selected address
-        userStore.user?.address = specificLocation
-        print("This is Address: \(String(describing: userStore.user?.address))")
-        print("Address Added Locally: \(newAddress)")
-        
-        // Optionally, sync the new address with the backend API
-        // saveAddressToBackend(addressDetail: addressDetail, specificLocation: specificLocation, tag: tag)
-    }
+    // Save address through the service
+    func saveAddress(addressDetail: String, specificLocation: String, tag: String, latitude: Double, longitude: Double) {
+        let addressRequest = AddressRequest(addressDetail: addressDetail, specificLocation: specificLocation, tag: tag, latitude: latitude, longitude: longitude)
 
-
-    
-    // Save address to backend API using Alamofire
-    func saveAddressToBackend(addressDetail: String, specificLocation: String, tag: String) {
-        let addressRequest = AddressRequest(addressDetail: addressDetail, specificLocation: specificLocation, tag: tag)
-        
-        let endpoint = "https://your-backend-api.com/api/v1/addAddressDelivery"
-        
-        AF.request(endpoint, method: .post, parameters: addressRequest, encoder: JSONParameterEncoder.default)
-            .validate()
-            .response { response in
-                switch response.result {
-                case .success:
-                    print("Address saved successfully to backend!")
-                case .failure(let error):
-                    print("Failed to save address to backend: \(error)")
+        GoogleMapsService.shared.saveAddressToBackend(addressRequest: addressRequest) { [weak self] result in
+            switch result {
+            case .success(let response):
+                if let savedAddress = response.payload {
+                    DispatchQueue.main.async {
+                        self?.addresses.append(savedAddress)
+                        print("Address saved successfully: \(savedAddress)")
+                    }
                 }
+            case .failure(let error):
+                print("Failed to save address: \(error.localizedDescription)")
             }
+        }
     }
-    
-    // Fetch all addresses from the backend
+
+    // Fetch all addresses through the service
     func fetchAllAddresses() {
-        let endpoint = "https://your-backend-api.com/api/v1/addresses"
-        
-        AF.request(endpoint, method: .get)
-            .validate()
-            .responseDecodable(of: ApiResponse1<[Address]>.self) { response in
-                switch response.result {
-                case .success(let apiResponse):
-                    self.addresses = apiResponse.payload
-                    print("Fetched Addresses: \(self.addresses)")
-                case .failure(let error):
-                    print("Failed to fetch addresses: \(error)")
+        GoogleMapsService.shared.fetchAllAddresses{ [weak self] result in
+            switch result {
+            case .success(let fetchedAddresses):
+                DispatchQueue.main.async {
+                    self?.addresses = fetchedAddresses
+                    print("Fetched addresses: \(fetchedAddresses)")
                 }
+            case .failure(let error):
+                print("Failed to fetch addresses: \(error.localizedDescription)")
             }
-    }
-    
-    // Simulate fetching addresses (for now, local fetch)
-    func fetchLocalAddresses() {
-        print("Fetched Addresses: \(addresses)")
-    }
-    
-    // Method to delete an address
-    func deleteAddress(id: Int) {
-        if let index = addresses.firstIndex(where: { $0.id == id }) {
-            addresses.remove(at: index)
-            print("Address \(id) deleted.")
         }
     }
+    
+    //MARK: Delete an address locally
+    func deleteAddress(id: Int) {
+        GoogleMapsService.shared.deleteAddress(id: id) { [weak self] result in
+            switch result {
+            case .success:
+                DispatchQueue.main.async {
+                    if let index = self?.addresses.firstIndex(where: { $0.id == id }) {
+                        self?.addresses.remove(at: index)
+                        print("Address deleted successfully: ID \(id)")
+                    }
+                }
+            case .failure(let error):
+                print("Failed to delete address: \(error.localizedDescription)")
+            }
+        }
+    }
+    //MARK: Update Address by Id
+    func updateAddress(id: Int, address: Address) {
+        let addressRequest = AddressRequest(
+            addressDetail: address.addressDetail,
+            specificLocation: address.specificLocation,
+            tag: address.tag,
+            latitude: address.latitude,
+            longitude: address.longitude
+        )
+        
+        //MARK: Call the updateGoogleMaps function to update the address in the backend
+        GoogleMapsService.shared.updateGoogleMaps(id: id, addressRequest: addressRequest) { [weak self] result in
+            switch result {
+            case .success:
+                DispatchQueue.main.async {
+                    //MARK: Update the local address list with the new address details
+                    if let index = self?.addresses.firstIndex(where: { $0.id == id }) {
+                        self?.addresses[index] = address
+                        print("Address updated successfully.")
+                    } else {
+                        print("Address not found in the list.")
+                    }
+                }
+            case .failure(let error):
+                print("Failed to update address: \(error.localizedDescription)")
+            }
+        }
+    }
+
 }
