@@ -9,14 +9,15 @@ struct MainScreen: View {
     @EnvironmentObject var userStore: UserStore
     @StateObject var authVM: AuthViewModel
     @StateObject var addressViewModel: AddressViewModel
-
+ 
     init(userStore: UserStore) {
            _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
            _addressViewModel = StateObject(wrappedValue: AddressViewModel(userStore: userStore))
+         
         
        }
     var body: some View {
-        NavigationStack {
+        NavigationStack{
             ZStack {
                 VStack (spacing: 10) {
                     TabView(selection: $selectedTab) {
@@ -43,7 +44,9 @@ struct MainScreen: View {
                                     Text("Post")
                                         .font(.customfont(selectedTab == 2 ? .bold : .semibold, fontSize: selectedTab == 2 ? 18 : 16))
                                         .foregroundColor(selectedTab == 2 ? PrimaryColor.normal : .black)
+                                        
                                 }
+                              
                                 
                             }
                             .tag(2)
@@ -75,6 +78,7 @@ struct MainScreen: View {
                                         .font(.customfont(selectedTab == 4 ? .bold : .semibold, fontSize: selectedTab == 4 ? 18 : 16))
                                         .foregroundColor(selectedTab == 4 ? PrimaryColor.normal : .black)
                                 }
+                               
                             }.tag(4)
                     }
                     .padding(.top, 20)
@@ -121,13 +125,13 @@ struct MainScreen: View {
                 }
                 
             }
+            .navigationBarHidden(true)
+            .navigationBarBackButtonHidden(true)
             .fullScreenCover(isPresented: $isModalPresented, content: {
                 AddFoodView(rootIsActive1: self.$isActive)
             })
-       
         }
-        .navigationBarHidden(true)
-        .navigationBarBackButtonHidden(true)
+       
     }
     
     private func getSpacerWidth(for selectedTab: Int, geometry: GeometryProxy) -> CGFloat {

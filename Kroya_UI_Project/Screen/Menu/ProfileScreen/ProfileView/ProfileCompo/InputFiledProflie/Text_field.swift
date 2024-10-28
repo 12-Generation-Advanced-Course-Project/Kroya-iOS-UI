@@ -12,7 +12,8 @@ struct Text_field: View {
     @Binding var text: String
     var label: String
     var framHeight : CGFloat = 60
-    
+    var backgroundColor: Color = .white
+    var fontcolor: Color = .black
     var body: some View {
         HStack {
             Text(label)
@@ -22,12 +23,13 @@ struct Text_field: View {
 
             TextField("", text : $text)
                 .opacity(0.9)
+                .foregroundStyle(fontcolor)
             
         }.font(.customfont(.medium, fontSize: 18))
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .fill(Color(hex: "#F4F5F7")).shadow(radius: 1)
+                .fill(backgroundColor).shadow(radius: 1)
         )
     }
 }

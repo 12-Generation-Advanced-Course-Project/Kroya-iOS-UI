@@ -28,77 +28,7 @@ class AuthViewModel: ObservableObject {
         self.userStore = userStore
         self.isLoggedIn = Auth.shared.loggedIn
     }
-    
-    //    func scheduleTokenRefresh() {
-    //        guard let accessToken = KeychainHelper.shared.read(service: "com.Kroya-UI-Project.accessToken", account: userStore.user?.email ?? ""),
-    //              let expirationDate = getExpirationTime(from: accessToken) else {
-    //            print("Invalid token or expiration time")
-    //            return
-    //        }
-    //
-    //        let timeUntilExpiration = expirationDate.timeIntervalSinceNow
-    //        if timeUntilExpiration > 0 {
-    //            // Schedule token refresh just before it expires
-    //            let refreshTime = timeUntilExpiration - 60 // Refresh 1 minute before expiration
-    //            if refreshTime > 0 {
-    //                countdownTimer = Timer.scheduledTimer(withTimeInterval: refreshTime, repeats: false) { _ in
-    //                    self.refreshTokenIfNeeded()
-    //                }
-    //            }
-    //        }
-    //    }
-    //
-    //    func getExpirationTime(from token: String) -> Date? {
-    //        // Split the token into its parts
-    //        let parts = token.split(separator: ".")
-    //        guard parts.count == 3 else { return nil }
-    //
-    //        // Base64 decode the middle part (payload)
-    //        let payload = parts[1]
-    //        guard let decodedData = Data(base64Encoded: String(payload)) else { return nil }
-    //
-    //        // Try to decode it as a JSON dictionary
-    //        guard let json = try? JSONSerialization.jsonObject(with: decodedData, options: []),
-    //              let dict = json as? [String: Any],
-    //              let exp = dict["exp"] as? TimeInterval else {
-    //            return nil
-    //        }
-    //
-    //        // Return the expiration date
-    //        return Date(timeIntervalSince1970: exp)
-    //    }
-    //
-    //
-    //    func startTokenRefreshCountdown() {
-    //        countdownTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { _ in
-    //            self.refreshTokenIfNeeded()
-    //        }
-    //    }
-    //    func refreshTokenIfNeeded() {
-    //        guard let refreshToken = KeychainHelper.shared.read(service: "com.Kroya-UI-Project.refreshToken", account: userStore.user?.email ?? "") else {
-    //            print("Refresh token not found")
-    //            return
-    //        }
-    //
-    //        AuthService.shared.refreshToken(refreshToken: refreshToken) { result in
-    //            switch result {
-    //            case .success(let response):
-    //                print("Access token refreshed successfully.")
-    //                if let newAccessToken = response.payload?.access_token {
-    //                    KeychainHelper.shared.save(newAccessToken, service: "com.Kroya-UI-Project.accessToken", account: self.userStore.user?.email ?? "")
-    //                }
-    //            case .failure(let error):
-    //                print("Failed to refresh token: \(error.localizedDescription)")
-    //            }
-    //        }
-    //    }
-    //
-    //
-    //    func stopTokenRefreshCountdown() {
-    //        countdownTimer?.invalidate()
-    //        countdownTimer = nil
-    //    }
-    
+
     
     // MARK: Check if email exists, and send OTP if it doesn't
     func sendOTPIfEmailNotExists(email: String) {
@@ -230,7 +160,6 @@ class AuthViewModel: ObservableObject {
                             // Update userStore and state
                             self?.userStore.setUser(email: email, accesstoken: accessToken,password: newPassword)
                             self?.isRegistered = true
-                            
                         }
                         self?.successMessage = "Register account successful"
                         self?.showError = false
@@ -266,8 +195,8 @@ class AuthViewModel: ObservableObject {
                         let refreshToken = token.refresh_token
                         let Email = Email.email
                         // Update userStore and state
-                        self?.userStore.setUser(email: Email ?? "", accesstoken: accessToken, refreshtoken: refreshToken, password: password)
-                        Auth.shared.setCredentials(accessToken: accessToken, refreshToken: refreshToken,email: email,password: self?.userStore.user?.password ?? "")
+                        self?.userStore.setUser(email: Email ?? "",accesstoken: accessToken, refreshtoken: refreshToken)
+                        Auth.shared.setCredentials(accessToken: accessToken, refreshToken: refreshToken,email: Email!)
                     
                         self?.successMessage = "Successfully logged in"
                         self?.showError = false
@@ -296,9 +225,8 @@ class AuthViewModel: ObservableObject {
                     // Success scenario
                     self?.successMessage = "User information saved successfully."
                     self?.showError = false
-                    
-                    Auth.shared.setCredentials(accessToken: accessToken, refreshToken: refreshToken,email: email,password: self?.userStore.user?.password ?? "")
                     self?.userStore.setUser(email: email,userName: userName, phoneNumber: phoneNumber, address: address)
+                    Auth.shared.setCredentials(accessToken: accessToken, refreshToken: refreshToken,email: email)
                     self?.isUserSave = true
                 case .failure(let error):
                     // Failure scenario

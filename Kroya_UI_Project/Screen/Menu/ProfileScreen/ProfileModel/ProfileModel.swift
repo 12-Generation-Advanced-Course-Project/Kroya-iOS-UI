@@ -14,17 +14,16 @@ struct UserProfileResponse: Codable {
     let timestamp: String?
 }
 
-// MARK: - Profile Model (Payload)
 struct ProfileModel: Codable {
-    let id: Int
-    let fullName: String?
-    let email: String
-    let profileImage: String?
-    let phoneNumber: String?
-    let password: String
-    let location: String?
-    let role: String
-    let createdAt: String
-    let emailVerifiedAt: String?
-    let emailVerified: Bool
+    var id: Int?
+    var fullName: String?
+    var email: String?
+    var profileImage: String?
+    var phoneNumber: String?
+    var password: String?
+    var location: String?
+    var role: String?
+    var createdAt: String?
+    var emailVerifiedAt: String?
+    var emailVerified: Bool?
 }

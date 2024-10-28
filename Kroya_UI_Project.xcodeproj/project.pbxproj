@@ -11,6 +11,7 @@
 		268612322CCA226400DE1F6F /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 268612312CCA226400DE1F6F /* SwiftKeychainWrapper */; };
 		840C1FAB2CB3BD0C0066027A /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 840C1FAA2CB3BD0C0066027A /* Alamofire */; };
 		8445843A2CB6793F00CA3C01 /* SwiftUIFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 844584392CB6793F00CA3C01 /* SwiftUIFlow */; };
+		8494AC232CCB533E00FB8206 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 8494AC222CCB533E00FB8206 /* Kingfisher */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 				840C1FAB2CB3BD0C0066027A /* Alamofire in Frameworks */,
 				268612322CCA226400DE1F6F /* SwiftKeychainWrapper in Frameworks */,
 				2686122F2CCA222300DE1F6F /* GoogleMaps in Frameworks */,
+				8494AC232CCB533E00FB8206 /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,6 +129,7 @@
 				844584392CB6793F00CA3C01 /* SwiftUIFlow */,
 				2686122E2CCA222300DE1F6F /* GoogleMaps */,
 				268612312CCA226400DE1F6F /* SwiftKeychainWrapper */,
+				8494AC222CCB533E00FB8206 /* Kingfisher */,
 			);
 			productName = Kroya_UI_Project;
 			productReference = 8406DAAF2CA5510C0003EA40 /* Kroya_UI_Project.app */;
@@ -217,6 +220,7 @@
 				844584382CB6793F00CA3C01 /* XCRemoteSwiftPackageReference "SwiftUIFlow" */,
 				2686122D2CCA222300DE1F6F /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
 				268612302CCA226400DE1F6F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
+				8494AC212CCB533E00FB8206 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8406DAB02CA5510C0003EA40 /* Products */;
@@ -629,6 +633,14 @@
 				kind = branch;
 			};
 		};
+		8494AC212CCB533E00FB8206 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -651,6 +663,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 844584382CB6793F00CA3C01 /* XCRemoteSwiftPackageReference "SwiftUIFlow" */;
 			productName = SwiftUIFlow;
+		};
+		8494AC222CCB533E00FB8206 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8494AC212CCB533E00FB8206 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

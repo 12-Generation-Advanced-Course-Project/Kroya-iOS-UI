@@ -35,7 +35,7 @@ struct AllowNotificationView: View {
                     }
                     
                 }, backgroundColor: .yellow)
-                CustomButton(title: "Not Now", action: { print("Button Tap!") }, backgroundColor: .clear, textColor: .yellow)
+                CustomButton(title: "Not Now", action: { dismiss() }, backgroundColor: .clear, textColor: .yellow)
             }
         }
         .navigationBarBackButtonHidden(true)

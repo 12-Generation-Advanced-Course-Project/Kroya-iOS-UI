@@ -11,8 +11,8 @@ struct AddressView: View {
     @StateObject var viewModel: AddressViewModel
     @Binding var selectedAddress: Address?
     @State private var showMapSheet = false
+    @State private var addressToUpdate: Address? = nil
     @Environment(\.dismiss) private var dismiss
-    
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -36,6 +36,7 @@ struct AddressView: View {
                 Spacer()
                 
                 Button(action: {
+                    addressToUpdate = nil
                     showMapSheet = true
                 }) {
                     HStack {
@@ -61,7 +62,8 @@ struct AddressView: View {
                             address: address,
                             onUpdate: {
                                 print("Update address \(address.id)")
-                                // Implement the update logic here
+                                addressToUpdate = address
+                                showMapSheet = true
                             },
                             onDelete: {
                                 print("Delete address \(address.id)")
@@ -78,13 +80,16 @@ struct AddressView: View {
         .padding()
         .navigationBarHidden(true)
         .onDisappear {
-            // Assign the first address from the list to `selectedAddress` when view disappears
             if let lastAddress = viewModel.addresses.last {
                 selectedAddress = lastAddress
             }
         }
         .fullScreenCover(isPresented: $showMapSheet) {
-            MapSelectionView(viewModel: viewModel, showMapSheet: $showMapSheet)
+            MapSelectionView(
+                viewModel: viewModel,
+                showMapSheet: $showMapSheet,
+                addressToUpdate: addressToUpdate
+            )
         }
     }
 }

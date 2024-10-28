@@ -1,3 +1,6 @@
+
+
+
 import Foundation
 import CoreLocation
 
@@ -6,8 +9,8 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private let geocoder = CLGeocoder()
     
     @Published var location: CLLocationCoordinate2D?
-    @Published var address: String? // For current location
-    @Published var pinAddress: String? // For pin location
+    @Published var address: String?
+    @Published var pinAddress: String?
     
     override init() {
         super.init()
@@ -24,8 +27,9 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.first {
             self.location = location.coordinate
-            // Reverse geocode to get the current location address
-            reverseGeocodeCurrentLocation(location)
+            reverseGeocodeCurrentLocation(location) {
+                // Handle completion if needed
+            }
         }
     }
     
@@ -34,10 +38,11 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     // Reverse geocode to get the full address for the current location
-    func reverseGeocodeCurrentLocation(_ location: CLLocation) {
+    func reverseGeocodeCurrentLocation(_ location: CLLocation, completion: (() -> Void)? = nil) {
         geocoder.reverseGeocodeLocation(location) { [weak self] (placemarks, error) in
             if let error = error {
                 print("Reverse geocode failed: \(error.localizedDescription)")
+                completion?()
                 return
             }
             
@@ -46,16 +51,18 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
                 
                 DispatchQueue.main.async {
                     self?.address = addressString // Update current location address
+                    completion?()
                 }
             }
         }
     }
     
     // Reverse geocode to get the full address for a pin's location
-    func reverseGeocodePinLocation(_ location: CLLocation) {
+    func reverseGeocodePinLocation(_ location: CLLocation, completion: (() -> Void)? = nil) {
         geocoder.reverseGeocodeLocation(location) { [weak self] (placemarks, error) in
             if let error = error {
                 print("Reverse geocode for pin location failed: \(error.localizedDescription)")
+                completion?()
                 return
             }
             
@@ -64,6 +71,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
                 
                 DispatchQueue.main.async {
                     self?.pinAddress = addressString // Update pin location address
+                    completion?() // Call completion handler
                 }
             }
         }
@@ -73,7 +81,6 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private func buildFullAddress(from placemark: CLPlacemark, coordinate: CLLocationCoordinate2D) -> String {
         var addressString = ""
         
-        // Name of the building or landmark
         if let name = placemark.name {
             addressString += name
         }
@@ -90,9 +97,6 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         if let subAdministrativeArea = placemark.subAdministrativeArea {
             addressString += ", \(subAdministrativeArea)"
         }
-//        if let administrativeArea = placemark.administrativeArea {
-//            addressString += ", \(administrativeArea)"
-//        }
         if let postalCode = placemark.postalCode {
             addressString += ", \(postalCode)"
         }
@@ -105,5 +109,4 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         
         return addressString
     }
-
 }

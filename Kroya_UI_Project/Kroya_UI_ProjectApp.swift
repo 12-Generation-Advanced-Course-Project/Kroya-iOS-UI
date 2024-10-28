@@ -19,7 +19,7 @@ import GoogleMaps
 //        WindowGroup {
 //            UserBasicInfoView()
 //                .environmentObject(userStore)
-//                .environmentObject(addressViewModel) // Inject AddressViewModel here
+//                .environmentObject(addressViewModel)
 //        }
 //    }
 //}

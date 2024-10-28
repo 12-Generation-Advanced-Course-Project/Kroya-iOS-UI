@@ -10,6 +10,7 @@ import SwiftUI
 struct PasswordFieldd: View {
     @Binding var password: String
     @State private var isSecure: Bool = true
+    var backgroundColor: Color = .white
     var label: String
     
     var body: some View {
@@ -45,7 +46,7 @@ struct PasswordFieldd: View {
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .fill(Color(hex: "#F4F5F7"))
+                .fill(backgroundColor)
                 .shadow(radius: 1)
         )
     }

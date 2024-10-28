@@ -8,11 +8,9 @@ struct HomeView: View {
         CategoryCardView(title: "Dinner", image: "DinnerPic", color: .yellow.opacity(0.2), x: 50, y: 14),
         CategoryCardView(title: "Dessert", image: "DessertPic", color: .blue.opacity(0.2), x: 50, y: 14)
     ]
-    
+    @State var isSearching: Bool = false
     var body: some View {
-        
         NavigationView {
-            
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading) {
                     // Title Section
@@ -217,6 +215,7 @@ struct HomeView: View {
                             }
                         }
                     }
+                    
                     
                 }
             }

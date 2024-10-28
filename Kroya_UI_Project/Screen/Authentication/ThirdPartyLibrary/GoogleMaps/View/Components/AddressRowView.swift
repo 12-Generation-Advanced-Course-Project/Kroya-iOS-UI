@@ -51,10 +51,10 @@ struct AddressRowView: View {
     }
 }
 
-#Preview {
-    AddressRowView(
-        address: Address(id: 1, addressDetail: "HRD Center, St232", specificLocation: "Russian federation blvd. (#110)", tag: "Office"),
-        onUpdate: { print("Update Address") },
-        onDelete: { print("Delete Address") }
-    )
-}
+//#Preview {
+//    AddressRowView(
+//        address: Address(id: 1, addressDetail: "HRD Center, St232", specificLocation: "Russian federation blvd. (#110)", tag: "Office"),
+//        onUpdate: { print("Update Address") },
+//        onDelete: { print("Delete Address") }
+//    )
+//}
