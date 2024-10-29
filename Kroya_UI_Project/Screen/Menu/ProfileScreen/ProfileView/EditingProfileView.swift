@@ -98,7 +98,7 @@ struct EditingProfileView: View {
                         Text_field(text: $userInputName, label: "Full Name:", backgroundColor: .white.opacity(0.8),fontcolor: .black)
                         Text_field(text: $userInputEmail, label: "Email:", backgroundColor: .white.opacity(0.8),fontcolor: .black.opacity(0.5)).disabled(true)
                         Text_field(text: $userInputContact, label: "Mobile:", backgroundColor: .white.opacity(0.8),fontcolor: .black)
-                        PasswordFieldd(password: $userInputPassword, backgroundColor: .white.opacity(0.8), label: "Password:")
+                        PasswordFieldd(password: $userInputPassword, backgroundColor: .white.opacity(0.8), label: "Password:").lineLimit(1)
                         // Address Field linked to the selectedAddress
                         Text_field(text: $userInputAddress, label: "Address:", backgroundColor: .white.opacity(0.8),fontcolor: .black.opacity(0.5)).disabled(true)
                     }
@@ -162,6 +162,7 @@ struct EditingProfileView: View {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             dismiss()
                         }
+                     
                     }, backgroundColor: PrimaryColor.normal, frameHeight: 55)
 
                     Spacer().frame(height: 2)
@@ -183,6 +184,10 @@ struct EditingProfileView: View {
 //                    if let  lastAddress = viewModel.addresses.last {
 //                        selectedAddress = lastAddress
 //                    }
+                }
+                .onDisappear{
+                    viewModel.fetchAllAddresses()
+                    profile.fetchUserProfile()
                 }
                 .navigationBarBackButtonHidden(true)
                 .toolbar {

@@ -142,6 +142,7 @@ struct UserBasicInfoView: View {
             // Save Button
             Button(action: {
                 validateAndSaveUserInfo()
+                Auth.shared.loggedIn = true
             }) {
                 Text("Save")
                     .font(.customfont(.semibold, fontSize: 16))
@@ -154,11 +155,14 @@ struct UserBasicInfoView: View {
             }
             Button(action: {
                 isSkip.toggle()
+                Auth.shared.loggedIn = true
+               
             }) {
                 Text("Skip")
                     .font(.customfont(.semibold, fontSize: 16))
                     .foregroundColor(PrimaryColor.normal)
             }
+
             Spacer()
             NavigationLink(destination:  MainScreen(userStore: userStore,lang:$lang).environmentObject(userStore),isActive: $authVM.isUserSave, label: {
                 EmptyView()

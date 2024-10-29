@@ -153,17 +153,16 @@ class AuthViewModel: ObservableObject {
                 self?.isLoading = false
                 switch result {
                 case .success(let response):
-                    if response.statusCode == "200" {
-                        if let register = response.payload {
-                            let accessToken = register.access_token
-                            let refreshToken = register.refresh_token
-                            // Update userStore and state
-                            self?.userStore.setUser(email: email, accesstoken: accessToken,password: newPassword)
-                            self?.isRegistered = true
-                        }
+                    if response.statusCode == "200", let register = response.payload {
+                        let accessToken = register.access_token
+                        let refreshToken = register.refresh_token
+                        Auth.shared.setCredentials(accessToken: accessToken, refreshToken: refreshToken, email: email)
+                        self?.userStore.setUser(email: email, accesstoken: accessToken, password: newPassword)
+
                         self?.successMessage = "Register account successful"
                         self?.showError = false
-                        completion()
+                        Auth.shared.isRegistering = true
+                        completion() // Trigger navigation check
                     } else {
                         print("Error: \(response.message)")
                         self?.isOTPVerified = false
@@ -178,6 +177,8 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
+
+
     
     
     
@@ -197,9 +198,10 @@ class AuthViewModel: ObservableObject {
                         // Update userStore and state
                         self?.userStore.setUser(email: Email ?? "",accesstoken: accessToken, refreshtoken: refreshToken)
                         Auth.shared.setCredentials(accessToken: accessToken, refreshToken: refreshToken,email: Email!)
-                    
+                     
                         self?.successMessage = "Successfully logged in"
                         self?.showError = false
+                        Auth.shared.loggedIn = true
                     }
                     if response.statusCode == "002"{
                             self?.showError = true
@@ -225,8 +227,8 @@ class AuthViewModel: ObservableObject {
                     // Success scenario
                     self?.successMessage = "User information saved successfully."
                     self?.showError = false
-                    self?.userStore.setUser(email: email,userName: userName, phoneNumber: phoneNumber, address: address)
-                    Auth.shared.setCredentials(accessToken: accessToken, refreshToken: refreshToken,email: email)
+                    self?.userStore.setUser(email: email, userName: userName, phoneNumber: phoneNumber, address: address)
+
                     self?.isUserSave = true
                 case .failure(let error):
                     // Failure scenario
@@ -237,6 +239,7 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
+
     
     
     //MARK: Validate Email

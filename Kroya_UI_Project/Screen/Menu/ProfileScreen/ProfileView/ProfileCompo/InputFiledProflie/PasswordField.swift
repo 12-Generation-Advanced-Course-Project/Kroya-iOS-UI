@@ -26,22 +26,24 @@ struct PasswordFieldd: View {
             if isSecure {
                 SecureField("", text: $password)
                     .font(.customfont(.medium, fontSize: 18))
+                    .lineLimit(1)
                     .foregroundColor(Color.black.opacity(0.84))
             } else {
                 TextField("", text: $password)
                     .font(.customfont(.medium, fontSize: 18))
                     .foregroundColor(Color.black.opacity(0.84))
+                    .lineLimit(1)
             }
             
             Spacer()
             
            
-            Button(action: {
-                isSecure.toggle()
-            }) {
-                Image(systemName: isSecure ?  "eye.fill" : "eye.slash.fill")
-                    .foregroundColor(Color.gray)
-            }
+//            Button(action: {
+//                isSecure.toggle()
+//            }) {
+//                Image(systemName: isSecure ?  "eye.fill" : "eye.slash.fill")
+//                    .foregroundColor(Color.gray)
+//            }
         }
         .padding(16)
         .background(
