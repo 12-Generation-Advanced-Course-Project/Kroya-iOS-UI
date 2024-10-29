@@ -1,3 +1,8 @@
+// New Code
+// 29/10/24
+// Hengly
+
+
 import SwiftUI
 
 struct FoodOnSaleView: View {
@@ -11,8 +16,8 @@ struct FoodOnSaleView: View {
             ForEach(0..<3) { index in // Loop 3 times
                 ZStack {
                     FoodOnSaleViewCell(
-                        imageName: "brohok",
-                        dishName: "Somlor Kari",
+                        imageName: "food7",
+                        dishName: "BayChar Loklak",
                         cookingDate: "30 Sep 2024",
                         price: 2.00,
                         rating: 5.0,

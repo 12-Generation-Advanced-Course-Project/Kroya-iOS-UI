@@ -13,6 +13,7 @@ struct FoodDetailView: View {
     private let maxSheetHeight: CGFloat = 600
     
     init(theMainImage: String, subImage1: String, subImage2: String, subImage3: String, subImage4: String) {
+        
         self.theMainImage = theMainImage
         self.subImage1 = subImage1
         self.subImage2 = subImage2
@@ -69,7 +70,7 @@ struct FoodDetailView: View {
                                         )
                                 }
                                 .shadow(color: isFavorite ? Color.red.opacity(0.5) : Color.gray.opacity(0.5), radius: 4, x: 0, y: 4)
-                            }.offset(y: -105)
+                            }.offset(y: -135)
                             
                         }
                         .overlay(
@@ -120,7 +121,7 @@ struct FoodDetailView: View {
         theMainImage: "Songvak",
         subImage1: "ahmok",
         subImage2: "brohok",
-        subImage3: "SomlorKari",
+        subImage3: "somlorKari",
         subImage4: "Songvak"
     )
 }

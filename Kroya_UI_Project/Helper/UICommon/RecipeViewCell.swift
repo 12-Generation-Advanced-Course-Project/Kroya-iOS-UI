@@ -111,7 +111,8 @@ struct RecipeViewCell: View {
                 }
             }
             .padding(10)
-            .frame(maxWidth: .infinity)
+//            .frame(maxWidth: .infinity)
+            .frame(width: 350)
         }
        
         .background(Color.white)
@@ -129,8 +130,8 @@ struct RecipeViewCell: View {
     
     RecipeViewCell(
         
-        imageName           : "somlorKari",
-        dishName            : "Somlor Kari",
+        imageName           : "slide3",
+        dishName            : "Amork",
         cookingDate         : "30 Sep 2024",
         statusType          : "Recipe",
         rating              : 5.0,

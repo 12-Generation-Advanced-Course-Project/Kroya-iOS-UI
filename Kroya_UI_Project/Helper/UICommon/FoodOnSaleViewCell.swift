@@ -145,8 +145,8 @@ struct FoodOnSaleViewCell: View {
     
     FoodOnSaleViewCell(
         
-        imageName: "brohok", // Make sure this is the correct image in your assets
-        dishName: "Somlor Kari",
+        imageName: "food7", // Make sure this is the correct image in your assets
+        dishName: "Baycha Loklak",
         cookingDate: "30 Sep 2024",
         price: 2.00,
         rating: 5.0,

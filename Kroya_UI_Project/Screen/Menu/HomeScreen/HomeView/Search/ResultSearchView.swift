@@ -1,3 +1,9 @@
+
+
+// New Code
+// 29/10/24
+// Hengly
+
 import SwiftUI
 
 struct ResultSearchView: View {
@@ -25,7 +31,7 @@ struct ResultSearchView: View {
                         Spacer()
                     }
                     .padding(.top)
-                    // Geometry Reader for Dynamic Line Under the Selected Tab
+                    
                     GeometryReader { geometry in
                         Divider()
                         Rectangle()
@@ -35,17 +41,15 @@ struct ResultSearchView: View {
                             .animation(.easeInOut(duration: 0.3), value: selectedSegment)
                     }
                     .frame(height: 2)
-                    
-                    
                 }
                 .padding(.top, 5)
                 
                 TabView(selection: $selectedSegment) {
                     FoodSaleView(iselected: selectedSegment)
                         .tag(0)
-                    RecipeView(iselected: selectedSegment)
+                    FoodOnSaleView(iselected: selectedSegment)
                         .tag(1)
-                    FoodSaleView(iselected: selectedSegment)
+                    RecipeView(iselected: selectedSegment)
                         .tag(2)
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
@@ -60,46 +64,39 @@ struct ResultSearchView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 20, height: 20)
-                                .foregroundStyle(.black)
+                                .foregroundColor(.black)
                         }
                         VStack(alignment: .leading, spacing: 4) {
                             Text(menuName)
                                 .font(.customfont(.semibold, fontSize: 20))
-                                .foregroundStyle(.black)
+                                .foregroundColor(.black)
                         }
                     }
                 }
             }
         }
-        
+        .navigationBarBackButtonHidden(true)
     }
-    // Calculate the underline width for each tab
+    
     private func underlineWidth(for selectedSegment: Int, in geometry: GeometryProxy) -> CGFloat {
         switch selectedSegment {
-        case 0:
-            return geometry.size.width / 7 // All Tab
-        case 1:
-            return geometry.size.width / 3.5 // Food on Sale Tab
-        case 2:
-            return geometry.size.width / 4.5 // Recipes Tab
-        default:
-            return geometry.size.width / 7
+        case 0: return geometry.size.width / 7
+        case 1: return geometry.size.width / 3.5
+        case 2: return geometry.size.width / 4.5
+        default: return geometry.size.width / 7
         }
     }
-    // Calculate the underline offset for each tab
+    
     private func underlineOffset(for selectedSegment: Int, in geometry: GeometryProxy) -> CGFloat {
         switch selectedSegment {
-        case 0:
-            return 0 //  "All"
-        case 1:
-            return geometry.size.width / 6 // "Food on Sale"
-        case 2:
-            return (geometry.size.width / 2) * 1 // "Recipes"
-        default:
-            return 0
+        case 0: return 0
+        case 1: return geometry.size.width / 6
+        case 2: return (geometry.size.width / 2) * 1
+        default: return 0
         }
     }
 }
+
 
 #Preview {
     ResultSearchView(isTabBarHidden: .constant(false))

@@ -126,8 +126,8 @@ struct HomeView: View {
                                 )) {
                                     FoodOnSaleViewCell(
                                         
-                                        imageName: "brohok",
-                                        dishName: "Somlor Kari",
+                                        imageName: "food8",
+                                        dishName: "Char Trorb",
                                         cookingDate: "30 Sep 2024",
                                         price: 2.00,
                                         rating: 5.0,
@@ -153,8 +153,8 @@ struct HomeView: View {
                                 )) {
                                     RecipeViewCell(
                                         
-                                        imageName           : "somlorKari",
-                                        dishName            : "Somlor Kari",
+                                        imageName           : "food9",
+                                        dishName            : "Stack",
                                         cookingDate         : "30 Sep 2024",
                                         statusType          : "Recipe",
                                         rating              : 5.0,
