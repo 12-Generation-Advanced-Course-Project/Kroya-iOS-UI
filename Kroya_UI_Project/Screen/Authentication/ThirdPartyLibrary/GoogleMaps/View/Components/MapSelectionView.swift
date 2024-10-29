@@ -59,11 +59,14 @@ struct MapSelectionView: View {
                             Image(systemName: "scope")
                                 .font(.system(size: 24))
                                 .foregroundColor(.yellow)
-                                .padding()
+                                .padding(10)
                                 .background(Color.white)
+                               
                                 .clipShape(Circle())
                         }
-                        .padding(.bottom, 55)
+                        .padding(.bottom, 25)
+                        .shadow(radius: 2)
+                        .padding(.trailing,20)
                     }
                 }
                 .onAppear {

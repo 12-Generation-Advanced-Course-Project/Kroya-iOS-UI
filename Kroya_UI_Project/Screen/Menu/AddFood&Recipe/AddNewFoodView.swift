@@ -213,7 +213,7 @@ struct AddFoodView: View {
                         HStack {
                             Text("<5")
                                 .font(.customfont(.bold, fontSize: 16))
-                                .foregroundStyle(DurationValure < 5 ? PrimaryColor.light : PrimaryColor.normal)
+                                .foregroundStyle(PrimaryColor.normal)
                             Spacer()
                             Text("\(Int(DurationValure))")  // Dynamically updating text
                                 .font(.customfont(.bold, fontSize: 16))
@@ -221,7 +221,7 @@ struct AddFoodView: View {
                             Spacer()
                             Text(">100")
                                 .font(.customfont(.bold, fontSize: 16))
-                                .foregroundStyle(DurationValure > 100 ? PrimaryColor.light : PrimaryColor.normal)
+                                .foregroundStyle(PrimaryColor.normal)
                         }.padding(.horizontal, 20)
                         
                         Slider(value: $DurationValure, in: 0...100, step: 1)
