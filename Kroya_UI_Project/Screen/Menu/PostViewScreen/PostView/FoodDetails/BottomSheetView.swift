@@ -21,7 +21,7 @@ struct BottomSheetView<Content: View>: View {
             RoundedRectangle(cornerRadius: 8)
                 .fill(Color(hex: "#D0DBEA"))
                 .frame(width: 40, height: 5)
-                .padding(.top,15)
+                .padding(.top,20)
             HStack{
                 Text("Somlor Mju")
                     .font(.customfont(.bold, fontSize: 20))
@@ -47,7 +47,7 @@ struct BottomSheetView<Content: View>: View {
                 }
                 
             }.padding(.horizontal, 15)
-                .padding(.top, 3)
+                .padding(.top, 8)
         }
     }
     
@@ -60,7 +60,7 @@ struct BottomSheetView<Content: View>: View {
     
     var body: some View {
         GeometryReader { geometry in
-            VStack(spacing: 0) {
+            VStack {
                 self.indicator
                 self.content
                  //   .padding(.top, 20)
@@ -121,7 +121,7 @@ struct FoodDetailView: View {
                     Image(currentImage)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: screenWidth, height: frameHeight)
+                        .frame(width: .screenWidth, height: .screenHeight * 0.4)
                         .clipped()
                         .edgesIgnoringSafeArea(.top)
                         .overlay {
@@ -131,7 +131,7 @@ struct FoodDetailView: View {
                                 }) {
                                     Circle()
                                         .fill(.white)
-                                        .frame(width: screenWidth * 0.07, height: screenHeight * 0.07)
+                                        .frame(width: .screenWidth * 0.07, height: .screenHeight * 0.07)
                                         .overlay(
                                             Image(systemName: "arrow.left")
                                                 .foregroundColor(.black)
@@ -144,7 +144,7 @@ struct FoodDetailView: View {
                                 }) {
                                     Circle()
                                         .fill(isFavorite ? Color(hex: "#FE724C") : Color.white.opacity(0.5))
-                                        .frame(width: screenWidth * 0.07, height: screenHeight * 0.07)
+                                        .frame(width: .screenWidth * 0.07, height: .screenHeight * 0.07)
                                         .overlay(
                                             Image(systemName: "heart.fill")
                                                 .foregroundColor(.white)
@@ -153,13 +153,13 @@ struct FoodDetailView: View {
                                 }
                                 .shadow(color: isFavorite ? Color.red.opacity(0.5) : Color.gray.opacity(0.5), radius: 4, x: 0, y: 4)
                             }
-                            .offset(y: -screenHeight * 0.18)
-                            .padding(.horizontal, screenWidth * 0.045)
+                            .offset(y: -.screenHeight * 0.18)
+                            .padding(.horizontal,. screenWidth * 0.045)
                         }
                         .overlay(
                             RoundedRectangle(cornerRadius: 11)
                                 .fill(Color.white.opacity(0.5))
-                                .frame(width: screenWidth * 0.55, height: screenHeight * 0.069)
+                                .frame(width: .screenWidth * 0.55, height: .screenHeight * 0.068)
                                 .overlay(
                                     HStack(spacing: 5) {
                                         Group {
@@ -184,33 +184,22 @@ struct FoodDetailView: View {
                                                     currentImage = subImage4
                                                 }
                                         }
-                                        .frame(width: screenWidth * 0.12, height: screenWidth * 0.11)
+                                        .frame(width: .screenWidth * 0.12, height: .screenWidth * 0.11)
                                         .cornerRadius(7)
                                     }
                                 )
-                                .offset(y: screenHeight * 0.04)
+                                .offset(y: -.screenHeight * 0.0007)
                         )
                     Spacer()
                 }
                 
-                // Blur background when the sheet is fully expanded
-                if isBottomSheetOpen {
-                    Color.black.opacity(0.3)
-                        .ignoresSafeArea()
-                        .transition(.opacity)
-                        .blur(radius: isBottomSheetOpen ? 10 : 0)
-                }
-
                 // Bottom Sheet Content
-                BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.73) {
-                    //List {
-                    ScrollView(showsIndicators: false){
+                BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.645) {
                         ContentView()
                         .padding(.horizontal, 15)
-                    }
-
-                }
+                }.edgesIgnoringSafeArea(.all)
             }
+            
             .navigationBarBackButtonHidden(true)
         }
     }

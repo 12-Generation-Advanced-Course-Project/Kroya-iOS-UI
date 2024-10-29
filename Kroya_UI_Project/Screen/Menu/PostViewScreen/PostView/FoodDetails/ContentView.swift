@@ -16,20 +16,20 @@ struct ContentView: View {
     @State private var selectedRating: Int = 0
     @State private var currentStep = 1
     @Environment(\.dismiss) var dismiss
+    @State var isShowPopup  = false
     @State private var isExpanded = false
     @State private var isReviewExpanded = false
-    @State private var isReviewPopupOpen = false
-   // @State private var selectedRating: Int = 0
+    @State private var isReviewPopupOpen : Bool = false
     @State private var description = ""
     // Step details
     let steps = [
         "Cut the fish into bite sized pieces and set aside.",
         "Clean and slice the vegetables.",
-        "In a large skillet, heat the curry seed oil, amok paste, shrimp paste, and coconut milk. Heat thoroughly, cooking until fragrant.In a large skillet, heat the curry seed oil, amok paste, shrimp paste, and coconut milk. Heat thoroughly, cooking until fragrant.In a large skillet, heat the curry seed oil, amok paste, shrimp paste, and coconut milk. Heat thoroughly, cooking until fragrant.In a large skillet, heat the curry seed oil, amok paste, shrimp paste, and coconut milk. Heat thoroughly, cooking until fragrant."
-    
+        "In a large skillet, heat the curry seed oil, amok paste, shrimp paste, and coconut milk."
+        
     ]
     // Dummy data for rating percentages
-    let ratingsPercentage: [CGFloat] = [0.9, 0.7, 0.5, 0.3, 0.1] // Example percentages for 5, 4, 3, 2, and 1 stars
+    let ratingsPercentage: [CGFloat] = [0.9, 0.7, 0.5, 0.3, 0.1]
     
     
     var body: some View {
@@ -37,35 +37,8 @@ struct ContentView: View {
             
             let screenHeight = geometry.size.height
             let screenWidth = geometry.size.width
-        
+            ScrollView(.vertical, showsIndicators: false){
                 VStack (alignment:.leading, spacing: 10){
-//                    HStack{
-//                        Text("Somlor Mju")
-//                            .font(.customfont(.bold, fontSize: 20))
-//                        Spacer()
-//                        
-//                        // Button Order
-//                        
-//                        Button(action : {
-//                            // navigateToCheckout = true // Set to true to trigger navigation
-//                        })
-//                        {
-//                            HStack {
-//                                Text("Order")
-//                                    .font(.customfont(.medium, fontSize: 16))
-//                                    .foregroundStyle(.white)
-//                                Image(systemName: "plus")
-//                                    .resizable()
-//                                    .frame(width: 14, height: 14)
-//                                    .foregroundStyle(Color.white)
-//                            }
-//                            .frame(width: .screenWidth * 0.25, height: .screenHeight * 0.04)
-//                            .background(PrimaryColor.normal)
-//                            .cornerRadius(.screenWidth * 0.022)
-//                        }
-//                        
-//                    }
-                    
                     HStack(spacing: 10){
                         // Group{
                         Text("$3.05")
@@ -106,17 +79,17 @@ struct ContentView: View {
                                 .foregroundColor(.black)
                         }
                     }
-                    Spacer().frame(height: screenHeight * 0.008)
+                    Spacer().frame(height: screenHeight * 0.003)
                     
                     
                     
                     //  Description
                     Text("Description")
                         .font(.customfont(.bold, fontSize: 18))
-                    Text("In the dynamic world of iOS development, harnessing the power of both SwiftUI and UIKit opens up a realm of possibilities. In this tutorial, we’ll delve into the seamless integration of UIKit’s UITableView in SwiftUI, exploring step-by-step how to create project.In the dynamic world of iOS development, harnessing the power of both SwiftUI and UIKit opens up a realm of possibilities. In this tutorial, we’ll delve into the seamless integration of UIKit’s UITableView in SwiftUI, exploring step-by-step how to create project.")
+                    Text("In the dynamic world of iOS development, harnessing the power of both SwiftUI and UIKit opens up a realm of possibilities. In this tutoria.")
                         .font(.customfont(.regular, fontSize: 14))
                         .multilineTextAlignment(.leading)
-                        .lineLimit(10, reservesSpace: true)
+                        .lineLimit(5, reservesSpace: true)
                         .opacity(0.6)
                     // Spacer().frame(height: .screenHeight * 0.008)
                     //Ingredients
@@ -188,13 +161,14 @@ struct ContentView: View {
                                 }) {
                                     Circle()
                                         .stroke(Color(hex: "FECC03"), lineWidth: 2)
-                                        .frame(width: screenWidth * 0.06, height: screenWidth * 0.06)
+                                        .frame(width: .screenWidth * 0.06, height: .screenHeight * 0.06)
                                         .overlay(
                                             Image(systemName: "arrow.backward")
                                                 .resizable()
                                                 .aspectRatio(contentMode: .fit)
-                                                .frame(width: screenWidth * 0.04, height: screenHeight * 0.04)
+                                                .frame(width: .screenWidth * 0.041, height: .screenHeight * 0.041)
                                                 .foregroundColor(Color(hex: "FECC03"))
+                                                .clipShape(Circle())
                                         )
                                 }
                                 
@@ -207,36 +181,47 @@ struct ContentView: View {
                                 }) {
                                     Circle()
                                         .stroke(Color(hex: "FECC03"), lineWidth: 2)
-                                        .frame(width: screenWidth * 0.06, height: screenWidth * 0.06)
+                                        .frame(width: .screenWidth * 0.06, height: .screenHeight * 0.06)
                                         .overlay(
                                             Image(systemName: "arrow.right")
                                                 .resizable()
                                                 .aspectRatio(contentMode: .fit)
-                                                .frame(width: screenWidth * 0.04, height: screenHeight * 0.04)
+                                                .frame(width: .screenWidth * 0.041, height: .screenHeight * 0.041)
                                                 .foregroundColor(Color(hex: "FECC03"))
+                                                .clipShape(Circle())
                                         )
-                                }
+                                }.padding(.trailing, 2)
+                                
                             }
                         }
                         
-                        // Step Content
-                        HStack(alignment: .top, spacing: 10) {
-                            Circle()
-                                .fill(Color(hex: "#2E3E5C"))
-                                .frame(width: screenWidth * 0.06, height: screenWidth * 0.06)
-                                .overlay(
-                                    Text("\(currentStep)")
-                                        .font(.customfont(.bold, fontSize: 14))
-                                        .foregroundColor(.white)
-                                )
-                            
-                            // Display current step detail
-                            Text(steps[currentStep - 1])
-                                .font(.system(size: 16))
-                                .multilineTextAlignment(.leading)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                       // .padding(.top, 10)
+                        // TabView for animated step change
+                      
+                            TabView(selection: $currentStep) {
+                                ForEach(1...steps.count, id: \.self) { step in
+                                    
+                                        HStack(alignment: .top, spacing: 10) {
+                                            Circle()
+                                                .fill(Color(hex: "#2E3E5C"))
+                                                .frame(width: geometry.size.width * 0.074)
+                                                .overlay(
+                                                    Text("\(step)")
+                                                        .font(.customfont(.bold, fontSize: 14))
+                                                        .foregroundColor(Color.white)
+                                                )
+                                            // Display step detail based on the current step
+                                            Text(steps[step - 1])
+                                                .font(.system(size: 16))
+                                                .multilineTextAlignment(.leading)
+                                                .lineLimit(3)
+                                            Spacer()
+                                    }
+                                    .tag(step) // Tag for each step to track the selected Tab
+                                }
+                            }
+                        .tabViewStyle(.page(indexDisplayMode: .never)) // Page style without dots
+                        .frame(minHeight: 50, maxHeight: .infinity)
+                        .disabled(true)
                         Divider()
                         
                         ///=====
@@ -260,7 +245,7 @@ struct ContentView: View {
                                         HStack(spacing: 2) {
                                             ForEach(0..<(5 - index)) { _ in
                                                 Image(systemName: "star.fill")
-                                                    .font(.customfont(.regular, fontSize: 8))
+                                                    .font(.customfont(.regular, fontSize: 9))
                                                     .foregroundColor(.yellow)
                                             }
                                         }
@@ -285,8 +270,8 @@ struct ContentView: View {
                                 .font(.customfont(.medium, fontSize: 12))
                                 .foregroundColor(.gray)
                         }}
-            Divider()
- ///=====
+                    Divider()
+                    ///=====
                     // User review
                     HStack {
                         Text("Tap to Rate")
@@ -313,14 +298,11 @@ struct ContentView: View {
                         HStack(spacing: 2) {
                             ForEach(0..<5) { _ in
                                 Image(systemName: "star.fill")
-                                    .font(.customfont(.regular, fontSize: 8))
+                                    .font(.customfont(.regular, fontSize: 9))
                                     .foregroundColor(.yellow)
                             }
                         }
                         
-                        //Spacer().frame(height: .screenHeight * 0.004)
-                        
-                        // Main review text with "more" or "less" toggle
                         VStack(alignment: .leading, spacing: 5) {
                             Text("Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded, you can see it on your profile. Your recipe has been uploaded, you can see it on your profile.Your recipe has been uploaded, you can see it on your profile.")
                                 .font(.customfont(.regular, fontSize: 14))
@@ -347,7 +329,7 @@ struct ContentView: View {
                     // Write a Review button
                     HStack {
                         Button(action: {
-                            // isReviewPopupOpen = true
+                            isShowPopup = true
                         }) {
                             Image("note")
                                 .resizable()
@@ -355,15 +337,20 @@ struct ContentView: View {
                             Text("Write a Review")
                                 .foregroundStyle(Color.yellow)
                                 .font(.customfont(.medium, fontSize: 15))
-                        }
+                                
+                        }.padding(.bottom, 40)
                     }
-                    //
-                    
-                    
-                    //===================
+
                 }
+
+                
+            }
+            .fullScreenCover(isPresented: $isShowPopup) {
+                            PopupReview(profile: "Songvak", userName: "Chhoy Sreynoch", description: "", isReviewPopupOpen: $isShowPopup)
+                                .presentationCompactAdaptation(.none)
+                        }
+
         }
- 
     }
 }
 

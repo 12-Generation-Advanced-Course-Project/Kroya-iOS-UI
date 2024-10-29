@@ -61,46 +61,46 @@ import SwiftUI
 //}
 
 
-struct ContentOnButtonSheet: View {
-    
-    @State private var isBottomSheetOpen    : Bool = false
-    @State private var isEggChecked         = true
-    @State private var isButterChecked      = true
-    @State private var isHalfButterChecked  = false
-    @State private var count                = 0
-    @State private var currentStep          = 1
-    @State private var isExpanded           = false
-    @State private var isReviewExpanded     = false
-    @State private var isReviewPopupOpen    = false
-    
-    @State private var selectedRating       : Int = 0
-    @Environment(\.dismiss) var dismiss
-    
-    // Step details
-    let steps = [
-        "Cut the fish into bite sized pieces and set aside.",
-        "Clean and slice the vegetables..",
-        "In a large skillet, heat the curry seed oil, amok paste, shrimp paste, and coconut milk. Heat thoroughly, cooking until fragrant."
-    ]
-    
+//struct ContentOnButtonSheet: View {
+//    
+//    @State private var isBottomSheetOpen    : Bool = false
+//    @State private var isEggChecked         = true
+//    @State private var isButterChecked      = true
+//    @State private var isHalfButterChecked  = false
+//    @State private var count                = 0
+//    @State private var currentStep          = 1
+//    @State private var isExpanded           = false
+//    @State private var isReviewExpanded     = false
+//    @State private var isReviewPopupOpen    = false
+//    
+//    @State private var selectedRating       : Int = 0
+//    @Environment(\.dismiss) var dismiss
+//    
+//    // Step details
+//    let steps = [
+//        "Cut the fish into bite sized pieces and set aside.",
+//        "Clean and slice the vegetables..",
+//        "In a large skillet, heat the curry seed oil, amok paste, shrimp paste, and coconut milk. Heat thoroughly, cooking until fragrant."
+//    ]
+//    
     //@Environment(\.dismiss) var dismiss
     
     // Data properties
-    var foodName    : String
-    var price       : Float
-    var date        : String
-    var itemFood    : String
-    var profile     : String
-    var userName    : String
-    var description : String
-    var ingredients : String
-    var percentageOfRating: Double
-    var numberOfRating: Int
-    var review: String
-    var reviewDetail: String
+//    var foodName    : String
+//    var price       : Float
+//    var date        : String
+//    var itemFood    : String
+//    var profile     : String
+//    var userName    : String
+//    var description : String
+//    var ingredients : String
+//    var percentageOfRating: Double
+//    var numberOfRating: Int
+//    var review: String
+//    var reviewDetail: String
     
-    var body: some View {
-        Text("abc")
+    //var body: some View {
+      //  Text("abc")
 //        ZStack {
 //            VStack {
 //                // Your FoodDetailView
@@ -498,8 +498,8 @@ struct ContentOnButtonSheet: View {
 //                    // .navigationBarBackButtonHidden(true)
 //              //  }
 //            }
-        }
-    }
+//        }
+//    }
 
 //
 //#Preview {
