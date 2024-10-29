@@ -9,41 +9,24 @@ import SwiftUI
 
 struct PasswordFieldd: View {
     @Binding var password: String
-    @State private var isSecure: Bool = true
     var backgroundColor: Color = .white
     var label: String
-    
+
     var body: some View {
         HStack {
-           
             Text(label)
                 .font(.customfont(.medium, fontSize: 18))
                 .opacity(0.6)
             
             Spacer().frame(width: 20)
 
-          
-            if isSecure {
-                SecureField("", text: $password)
-                    .font(.customfont(.medium, fontSize: 18))
-                    .lineLimit(1)
-                    .foregroundColor(Color.black.opacity(0.84))
-            } else {
-                TextField("", text: $password)
-                    .font(.customfont(.medium, fontSize: 18))
-                    .foregroundColor(Color.black.opacity(0.84))
-                    .lineLimit(1)
-            }
-            
+            // Display the password as asterisks
+            Text(String(repeating: "*", count: password.count))
+                .font(.customfont(.medium, fontSize: 18))
+                .foregroundColor(Color.black.opacity(0.84))
+                .lineLimit(1)
+
             Spacer()
-            
-           
-//            Button(action: {
-//                isSecure.toggle()
-//            }) {
-//                Image(systemName: isSecure ?  "eye.fill" : "eye.slash.fill")
-//                    .foregroundColor(Color.gray)
-//            }
         }
         .padding(16)
         .background(
@@ -53,8 +36,3 @@ struct PasswordFieldd: View {
         )
     }
 }
-
-#Preview {
-    PasswordFieldd(password: .constant("password123"), label: "Password")
-}
-

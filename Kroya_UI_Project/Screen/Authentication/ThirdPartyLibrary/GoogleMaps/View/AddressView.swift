@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct AddressView: View {
-    @StateObject var viewModel: AddressViewModel
-    @Binding var selectedAddress: Address?
+    @ObservedObject var viewModel: AddressViewModel
     @State private var showMapSheet = false
     @State private var addressToUpdate: Address? = nil
     @Environment(\.dismiss) private var dismiss
+
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -26,15 +26,15 @@ struct AddressView: View {
                 }
             }
             .padding(.bottom)
-            
+
             HStack {
                 Text("My Address")
                     .font(.system(size: 18, weight: .medium, design: .rounded))
                     .foregroundColor(.black)
                     .opacity(0.84)
-                
+
                 Spacer()
-                
+
                 Button(action: {
                     addressToUpdate = nil
                     showMapSheet = true
@@ -43,7 +43,7 @@ struct AddressView: View {
                         Image(systemName: "plus")
                             .foregroundColor(PrimaryColor.normal)
                             .font(.system(size: 17, weight: .medium, design: .rounded))
-                        
+
                         Text("Add")
                             .font(.system(size: 18, weight: .medium, design: .rounded))
                             .foregroundColor(.black)
@@ -52,7 +52,7 @@ struct AddressView: View {
                 }
             }
             .padding(.bottom)
-            
+
             ScrollView {
                 VStack {
                     Divider()
@@ -61,12 +61,13 @@ struct AddressView: View {
                         AddressRowView(
                             address: address,
                             onUpdate: {
-                                print("Update address \(address.id)")
+                                print("Attempting to update address with ID \(address.id)")
                                 addressToUpdate = address
                                 showMapSheet = true
+                                // Removed fetchAllAddresses to prevent interference
                             },
                             onDelete: {
-                                print("Delete address \(address.id)")
+                                print("Deleting address with ID \(address.id)")
                                 viewModel.deleteAddress(id: address.id)
                             }
                         )
@@ -75,21 +76,27 @@ struct AddressView: View {
                     Spacer()
                 }
             }
-            .background(Color.white)
+
         }
         .padding()
         .navigationBarHidden(true)
+        .onAppear {
+            viewModel.fetchAllAddresses()
+        }
         .onDisappear {
             if let lastAddress = viewModel.addresses.last {
-                selectedAddress = lastAddress
+                viewModel.selectedAddress = lastAddress
             }
         }
-        .fullScreenCover(isPresented: $showMapSheet) {
+        .fullScreenCover(isPresented: $showMapSheet, onDismiss: {
+            viewModel.fetchAllAddresses()
+        }) {
             MapSelectionView(
                 viewModel: viewModel,
                 showMapSheet: $showMapSheet,
                 addressToUpdate: addressToUpdate
             )
         }
+        
     }
 }

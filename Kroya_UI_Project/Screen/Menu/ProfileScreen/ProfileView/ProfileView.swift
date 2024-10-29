@@ -15,7 +15,7 @@ struct ProfileView: View {
     @EnvironmentObject var addressVM: AddressViewModel
     @EnvironmentObject var userStore: UserStore
     @State private var showMapSheet = false
-    @StateObject private  var Profile = ProfileViewModel()
+    @ObservedObject  var Profile : ProfileViewModel
     @State private var isgotoBill = false
     @State private var isEdit: Bool = false
     @State private var addressToUpdate: Address? = nil
@@ -25,7 +25,6 @@ struct ProfileView: View {
     var body: some View {
         ZStack {
             VStack {
-               
                 HStack {
                     HStack {
                         if let profileImageUrl = Profile.userProfile?.profileImage, !profileImageUrl.isEmpty {
@@ -70,11 +69,9 @@ struct ProfileView: View {
                             isEdit.toggle()
                         }
                     
-                    NavigationLink(destination: EditingProfileView(profile: Profile,selectedAddress: $selectedAddress, viewModel: addressVM).onAppear{
-                        if let  lastAddress = addressVM.addresses.last {
-                            selectedAddress = lastAddress
-                        }
-                    }
+                    NavigationLink(destination: EditingProfileView(profile: Profile,selectedAddress: $selectedAddress, viewModel: addressVM)
+                       
+                    
                                    ,isActive: $isEdit) {
                         EmptyView()
                     }.hidden()
@@ -94,7 +91,7 @@ struct ProfileView: View {
                             isTextCenter: false
                         )
                     }
-                    NavigationLink(destination: AddressView(viewModel: addressVM, selectedAddress: $selectedAddress)) {
+                    NavigationLink(destination: AddressView(viewModel: addressVM)) {
                         UserInfoCardView(
                             title: "Addresses",
                             subtitle: "List of your addresses",
@@ -103,6 +100,7 @@ struct ProfileView: View {
                             isTextCenter: false
                         )
                     }
+
                 }
                 HStack {
                     NavigationLink(destination: SaleReportView()) {
@@ -181,7 +179,7 @@ struct ProfileView: View {
                     isLoading = true
                     authVM.logout()
                     
-                }, backgroundColor: .red, frameWidth: .screenWidth * 0.9)
+                }, backgroundColor: .red, frameWidth: .screenWidth * 0.95)
                 
                 
                 // NavigationLink to go to LoginScreenView on logout
@@ -196,10 +194,10 @@ struct ProfileView: View {
                 ProgressIndicator()
             }
         }
-        .onAppear{
+        .refreshable {
             Profile.fetchUserProfile()
             addressVM.fetchAllAddresses()
-        }
+         }
         
     }
     

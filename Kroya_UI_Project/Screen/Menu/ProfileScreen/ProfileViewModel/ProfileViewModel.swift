@@ -15,7 +15,10 @@ class ProfileViewModel: ObservableObject {
     @Published var showError: Bool = false
     @Published var errorMessage: String = ""
     @Published var isUpdate: Bool = false
-
+    @ObservedObject var userStore: UserStore
+    init(userStore: UserStore) {
+        self.userStore = userStore
+    }
     // MARK: Fetch User Profile
     func fetchUserProfile() {
         self.isLoading = true

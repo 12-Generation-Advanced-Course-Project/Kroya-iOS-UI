@@ -97,7 +97,7 @@ struct UserBasicInfoView: View {
                     Text("Address")
                         .font(.customfont(.medium, fontSize: 14))
                         .foregroundColor(.gray)
-                    NavigationLink(destination: AddressView(viewModel: addressVM, selectedAddress: $selectedAddress)) {
+                    NavigationLink(destination: AddressView(viewModel: addressVM)) {
                         HStack {
                             Image("pinmap")
                                 .resizable()

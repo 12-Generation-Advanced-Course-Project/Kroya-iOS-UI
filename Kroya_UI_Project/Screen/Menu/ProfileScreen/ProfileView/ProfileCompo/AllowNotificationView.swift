@@ -34,7 +34,7 @@ struct AllowNotificationView: View {
                         LocalNotificationManager.shared.sendImmediateNotification()
                     }
                     
-                }, backgroundColor: .yellow)
+                }, backgroundColor: .yellow,frameWidth: .screenWidth * 0.85)
                 CustomButton(title: "Not Now", action: { dismiss() }, backgroundColor: .clear, textColor: .yellow)
             }
         }

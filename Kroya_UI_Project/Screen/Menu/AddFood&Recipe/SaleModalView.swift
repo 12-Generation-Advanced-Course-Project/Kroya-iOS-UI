@@ -26,7 +26,7 @@ struct CurrencyConverter {
 }
 
 struct SaleModalView: View {
-//    @Binding var shouldPopToRootView : Bool
+    let dismissToRoot: () -> Void
     @Environment(\.dismiss) var dismiss
     @Binding var ingret: Ingret
     @State private var isAvailableForSale: Bool? = nil
@@ -36,11 +36,9 @@ struct SaleModalView: View {
     @State var amount: String = ""
     @State var price: String = ""
     @State var location: String = ""
-
+    
     var totalRiel: String = "12000"
     let currencies = ["៛", "$"]
-    let dismissToRoot : DismissAction
-
     var body: some View {
         
         let converter = CurrencyConverter(totalRiel: totalRiel)
@@ -106,7 +104,7 @@ struct SaleModalView: View {
                                     TextField(selectedDate.formatted(.dateTime.day().month().year()), text: $ingret.cookDate)
                                         .multilineTextAlignment(.leading)
                                         .font(.customfont(.medium, fontSize: 15))
-                                        Button {
+                                    Button {
                                         isDatePickerVisible = true
                                     } label: {
                                         Image(systemName: "calendar")
@@ -212,20 +210,23 @@ struct SaleModalView: View {
         Spacer()
         
         HStack(spacing: 10) {
-            Button(action: {}) {
+            Button(action: {
+                dismiss()
+            }){
                 Text("Back")
                     .font(.customfont(.semibold, fontSize: 16))
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(Color(red: 0.956, green: 0.959, blue: 0.97))
+                            .fill(.gray.opacity(0.3))
                     )
                     .foregroundColor(.black)
             }
             
             Button(action: {
-                
+                print("Post Food Created")
+                  dismissToRoot()
             }) {
                 Text("Post")
                     .font(.customfont(.semibold, fontSize: 16))
@@ -233,10 +234,12 @@ struct SaleModalView: View {
                     .padding()
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.yellow)
+                            .fill(.yellow)
                     )
                     .foregroundColor(.white)
             }
+            .navigationTitle("Sale")
+           
         }
         .padding()
         .navigationBarBackButtonHidden(true)
@@ -244,25 +247,17 @@ struct SaleModalView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-               
-                NavigationLink(destination: RecipeModalView(dismissToRoot: dismiss)) {
+                Button(action: dismissToRoot) {
                     Image(systemName: "xmark")
                         .resizable()
+                        .scaledToFit()
                         .frame(width: 20, height: 20)
-                        .foregroundColor(.black)
+                        .foregroundStyle(.black)
                 }
             }
-            
         }
     }
 }
-
-
-//#Preview {
-//    let sampleIngret = Ingret(cookDate: "", amount: "", price: "", location: "", selectedCurrency: 0)
-//    SaleModalView(ingret: .constant(sampleIngret))
-//}
-
 
 
 

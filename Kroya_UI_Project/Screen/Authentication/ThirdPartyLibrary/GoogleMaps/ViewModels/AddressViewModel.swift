@@ -11,10 +11,10 @@ import SwiftUI
 import Combine
 
 class AddressViewModel: ObservableObject {
-    
     @Published var addresses: [Address] = []
+   
+    @Published var selectedAddress: Address?
     @ObservedObject var userStore: UserStore
-    
     init(userStore: UserStore) {
         self.userStore = userStore
     }
@@ -29,6 +29,7 @@ class AddressViewModel: ObservableObject {
                 if let savedAddress = response.payload {
                     DispatchQueue.main.async {
                         self?.addresses.append(savedAddress)
+                        self?.selectedAddress = savedAddress // Set newly saved address as selected
                         print("Address saved successfully: \(savedAddress)")
                     }
                 }
@@ -40,11 +41,12 @@ class AddressViewModel: ObservableObject {
 
     // Fetch all addresses through the service
     func fetchAllAddresses() {
-        GoogleMapsService.shared.fetchAllAddresses{ [weak self] result in
+        GoogleMapsService.shared.fetchAllAddresses { [weak self] result in
             switch result {
             case .success(let fetchedAddresses):
                 DispatchQueue.main.async {
                     self?.addresses = fetchedAddresses
+                    self?.selectedAddress = fetchedAddresses.last // Automatically select the last address
                     print("Fetched addresses: \(fetchedAddresses)")
                 }
             case .failure(let error):
@@ -52,8 +54,8 @@ class AddressViewModel: ObservableObject {
             }
         }
     }
-    
-    //MARK: Delete an address locally
+
+    // Delete an address locally
     func deleteAddress(id: Int) {
         GoogleMapsService.shared.deleteAddress(id: id) { [weak self] result in
             switch result {
@@ -61,6 +63,7 @@ class AddressViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     if let index = self?.addresses.firstIndex(where: { $0.id == id }) {
                         self?.addresses.remove(at: index)
+                        self?.selectedAddress = self?.addresses.last // Set selectedAddress to the latest address
                         print("Address deleted successfully: ID \(id)")
                     }
                 }
@@ -69,7 +72,9 @@ class AddressViewModel: ObservableObject {
             }
         }
     }
-    //MARK: Update Address by Id
+
+
+    // MARK: Update Address by Id
     func updateAddress(id: Int, address: Address) {
         let addressRequest = AddressRequest(
             addressDetail: address.addressDetail,
@@ -79,14 +84,14 @@ class AddressViewModel: ObservableObject {
             longitude: address.longitude
         )
         
-        //MARK: Call the updateGoogleMaps function to update the address in the backend
         GoogleMapsService.shared.updateGoogleMaps(id: id, addressRequest: addressRequest) { [weak self] result in
             switch result {
             case .success:
                 DispatchQueue.main.async {
-                    //MARK: Update the local address list with the new address details
+                    // Ensure the array is updated completely to refresh the view
                     if let index = self?.addresses.firstIndex(where: { $0.id == id }) {
                         self?.addresses[index] = address
+                        self?.addresses = Array(self?.addresses ?? []) // Reassign a new array to trigger update
                         print("Address updated successfully.")
                     } else {
                         print("Address not found in the list.")

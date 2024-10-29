@@ -1,4 +1,3 @@
-
 import SwiftUI
 import GoogleMaps
 
@@ -13,8 +12,9 @@ struct MapSelectionView: View {
     @ObservedObject private var locationManager = LocationManager()
     @Environment(\.dismiss) var dismiss
     @State private var isLoadingAddress = false
+    
     var body: some View {
-        ZStack{
+        ZStack {
             VStack(spacing: 0) {
                 ZStack(alignment: .topTrailing) {
                     GoogleMapViewRepresentable(
@@ -24,10 +24,9 @@ struct MapSelectionView: View {
                     )
                     .edgesIgnoringSafeArea(.all)
 
+                    // UI for navigation and controls
                     HStack {
-                        Button(action: {
-                            dismiss()
-                        }) {
+                        Button(action: { dismiss() }) {
                             Image(systemName: "arrow.left")
                                 .resizable()
                                 .scaledToFit()
@@ -35,10 +34,7 @@ struct MapSelectionView: View {
                                 .foregroundColor(.black)
                         }
                         Spacer()
-                        // Button to close map view
-                        Button(action: {
-                            showMapSheet = false
-                        }) {
+                        Button(action: { showMapSheet = false }) {
                             Image(systemName: "xmark.circle.fill")
                                 .foregroundColor(.gray)
                                 .font(.system(size: 30))
@@ -47,9 +43,8 @@ struct MapSelectionView: View {
                     }
                     .padding(.leading, 20)
                     .padding(.top, 10)
-                 
 
-                    // Button to get current location
+                    // Current location button
                     VStack {
                         Spacer()
                         Button(action: {
@@ -72,34 +67,25 @@ struct MapSelectionView: View {
                     }
                 }
                 .onAppear {
+                    // Load address to update if available
                     if let address = addressToUpdate {
-                        centerCoordinate = CLLocationCoordinate2D(
-                            latitude: address.latitude,
-                            longitude: address.longitude
-                        )
-                        markerCoordinate = CLLocationCoordinate2D(
-                            latitude: address.latitude,
-                            longitude: address.longitude
-                        )
-                        addressDetail = address.addressDetail
-                        selectedTag = address.tag
-                        
-                        // Start reverse geocoding
-                        isLoadingAddress = true
-                        locationManager.reverseGeocodePinLocation(
-                            CLLocation(latitude: address.latitude, longitude: address.longitude)
-                        ) {
-                          isLoadingAddress = false
-                        }
+                        updateCoordinatesAndTriggerReverseGeocoding(from: address)
+                    }
+                }
+                .onChange(of: addressToUpdate) { newAddress in
+                    // Trigger geocoding if address changes
+                    if let newAddress = newAddress {
+                        updateCoordinatesAndTriggerReverseGeocoding(from: newAddress)
                     }
                 }
 
-                // Address detail and tag selection
+                // Display and input fields
                 VStack(alignment: .leading) {
                     Text("Select your location")
                         .font(.system(size: 20, weight: .medium))
                         .padding(.top, 10)
 
+                    // Display the fetched or updated location
                     HStack {
                         Image(.arrowUpRight)
                             .resizable()
@@ -114,64 +100,27 @@ struct MapSelectionView: View {
                         }
                     }
 
+                    // Address detail and tag fields
                     Text("Address Detail")
                         .font(.system(size: 14, weight: .medium))
                         .padding(.top, 15)
-
                     TextField("Address Detail", text: $addressDetail)
                         .font(.system(size: 14))
                         .padding(.top, 5)
-
                     Divider()
-
                     Text("Tag this location for later")
                         .font(.system(size: 14, weight: .medium))
                         .padding(.top, 15)
 
                     HStack(spacing: 5) {
-                        TagButton(title: "Home", isSelected: selectedTag == "Home") {
-                            selectedTag = "Home"
-                        }
-                        TagButton(title: "Office", isSelected: selectedTag == "Office") {
-                            selectedTag = "Office"
-                        }
-                        TagButton(title: "School", isSelected: selectedTag == "School") {
-                            selectedTag = "School"
-                        }
-                        TagButton(title: "Other", isSelected: selectedTag == "Other") {
-                            selectedTag = "Other"
-                        }
+                        TagButton(title: "Home", isSelected: selectedTag == "Home") { selectedTag = "Home" }
+                        TagButton(title: "Office", isSelected: selectedTag == "Office") { selectedTag = "Office" }
+                        TagButton(title: "School", isSelected: selectedTag == "School") { selectedTag = "School" }
+                        TagButton(title: "Other", isSelected: selectedTag == "Other") { selectedTag = "Other" }
                     }
 
-                    // Save or Update Address Button
-                    Button(action: {
-                        if let markerCoordinate = markerCoordinate {
-                            if let addressToUpdate = addressToUpdate {
-                                // Create the updated address with the new inputs
-                                let updatedAddress = Address(
-                                    id: addressToUpdate.id,
-                                    addressDetail: addressDetail.isEmpty ? addressToUpdate.addressDetail : addressDetail,
-                                    specificLocation: locationManager.pinAddress ?? addressToUpdate.specificLocation,
-                                    tag: selectedTag ?? addressToUpdate.tag,
-                                    latitude: markerCoordinate.latitude,
-                                    longitude: markerCoordinate.longitude
-                                )
-                                viewModel.updateAddress(id: addressToUpdate.id, address: updatedAddress)
-                            } else {
-                                viewModel.saveAddress(
-                                    addressDetail: addressDetail,
-                                    specificLocation: locationManager.pinAddress ?? "No address found",
-                                    tag: selectedTag ?? "Other",
-                                    latitude: markerCoordinate.latitude,
-                                    longitude: markerCoordinate.longitude
-                                )
-                            }
-                        }
-                        showMapSheet = false
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            dismiss()
-                        }
-                    }) {
+                    // Save or Update button
+                    Button(action: saveOrUpdateAddress) {
                         Text("Save Address")
                             .font(.system(size: 16, weight: .medium))
                             .foregroundColor(.white)
@@ -186,15 +135,55 @@ struct MapSelectionView: View {
                 .background(Color.white)
                 .clipShape(RoundedCornerShape(corners: [.topLeft, .topRight], radius: 20))
             }
-            if isLoadingAddress {
-                ProgressIndicator()
-            }
         }
         .navigationBarBackButtonHidden(true)
-        
     }
     
-    // Open in Google Maps function
+    // Function to update coordinates and start reverse geocoding
+    private func updateCoordinatesAndTriggerReverseGeocoding(from address: Address) {
+        centerCoordinate = CLLocationCoordinate2D(latitude: address.latitude, longitude: address.longitude)
+        markerCoordinate = CLLocationCoordinate2D(latitude: address.latitude, longitude: address.longitude)
+        addressDetail = address.addressDetail
+        selectedTag = address.tag
+        
+        isLoadingAddress = true
+        locationManager.reverseGeocodePinLocation(
+            CLLocation(latitude: address.latitude, longitude: address.longitude)
+        ) {
+            isLoadingAddress = false
+        }
+    }
+
+    // Save or update address based on whether it's an edit or a new address
+    private func saveOrUpdateAddress() {
+        guard let markerCoordinate = markerCoordinate else { return }
+        
+        if let addressToUpdate = addressToUpdate {
+            let updatedAddress = Address(
+                id: addressToUpdate.id,
+                addressDetail: addressDetail.isEmpty ? addressToUpdate.addressDetail : addressDetail,
+                specificLocation: locationManager.pinAddress ?? addressToUpdate.specificLocation,
+                tag: selectedTag ?? addressToUpdate.tag,
+                latitude: markerCoordinate.latitude,
+                longitude: markerCoordinate.longitude
+            )
+            viewModel.updateAddress(id: addressToUpdate.id, address: updatedAddress)
+        } else {
+            viewModel.saveAddress(
+                addressDetail: addressDetail,
+                specificLocation: locationManager.pinAddress ?? "No address found",
+                tag: selectedTag ?? "Other",
+                latitude: markerCoordinate.latitude,
+                longitude: markerCoordinate.longitude
+            )
+        }
+        showMapSheet = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            dismiss()
+        }
+    }
+
+    // Function to open coordinates in Google Maps
     func openInGoogleMaps(coordinate: CLLocationCoordinate2D) {
         let url = "comgooglemaps://?q=\(coordinate.latitude),\(coordinate.longitude)"
         if let googleMapsURL = URL(string: url), UIApplication.shared.canOpenURL(googleMapsURL) {
@@ -207,3 +196,4 @@ struct MapSelectionView: View {
         }
     }
 }
+

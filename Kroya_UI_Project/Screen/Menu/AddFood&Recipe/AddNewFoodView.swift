@@ -7,7 +7,7 @@ struct AddFoodView: View {
     @Environment(\.dismiss) var dismiss
     @State var Foodname: String = ""
     @State var Description: String = ""
-    @State private var DurationValure: Double = 50 // Initial value
+    @State private var DurationValure: Double = 5
     @State private var selectedLevel: Int? = nil
     @State private var selectedCuisines: Int? = nil
     @State private var selectedCategories: Int? = nil
@@ -16,6 +16,7 @@ struct AddFoodView: View {
     @State private var selectedImages: [UIImage] = []
     @State private var showValidationMessage: Bool = false
     @State private var navigateToNextView: Bool = false
+    let dismissToRoot: () -> Void // Closure for dismissing to root
     var levels: [String] = ["Hard", "Medium", "Easy"]
     var cuisines: [String] = ["Soup", "Salad", "Dessert", "Grill"]
     var categories: [String] = ["Breakfast", "Lunch", "Dinner", "Snack"]
@@ -34,12 +35,29 @@ struct AddFoodView: View {
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack {
                                         ForEach(selectedImages, id: \.self) { image in
-                                            Image(uiImage: image)
-                                                .resizable()
-                                                .scaledToFill()
-                                                .frame(width: 100, height: 100)
-                                                .cornerRadius(10)
-                                                .padding(5)
+                                            ZStack(alignment: .topTrailing) {
+                                                Image(uiImage: image)
+                                                    .resizable()
+                                                    .scaledToFill()
+                                                    .frame(width: 100, height: 100)
+                                                    .cornerRadius(10)
+                                                    .padding(5)
+                                                
+                                                // "X" button to delete image
+                                                Button(action: {
+                                                    if let index = selectedImages.firstIndex(of: image) {
+                                                        selectedImages.remove(at: index)
+                                                    }
+                                                }) {
+                                                    Image(systemName: "xmark.circle.fill")
+                                                        .resizable()
+                                                        .frame(width: 20, height: 20)
+                                                        .background(Color.white)
+                                                        .clipShape(Circle())
+                                                        .foregroundColor(.red)
+                                                        .offset(x: -5, y: -5)
+                                                }
+                                            }
                                         }
                                         VStack{
                                             Image(systemName: "plus")
@@ -101,28 +119,23 @@ struct AddFoodView: View {
                                     )
                                 )
                         )
-                    }
-                    // If validation fails, show error message
-                    if isImagePickerPresented {
-                        HStack{
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundColor(.red)
-                            Text("Please add an image of the dish.")
-                                .font(.customfont(.medium, fontSize: 12))
-                                .foregroundColor(.red)
-                                .padding(.top, 5)
+                        // If validation fails, show error message
+                        if showValidationMessage && selectedImages.isEmpty {
+                            HStack{
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .foregroundColor(.red)
+                                Text("Please add an image of the dish.")
+                                    .font(.customfont(.medium, fontSize: 12))
+                                    .foregroundColor(.red)
+                                    .padding(.top, 5)
+                            }.frame(maxWidth: .infinity,alignment: .leading)
+                                .padding(.horizontal)
+                            
                         }
                     }
                     
-                    Spacer().frame(height: 15)
                     
-                    // Food Name Section
-                    //                    VStack(alignment: .leading) {
-                    //                        Text("Food Name")
-                    //                            .font(.customfont(.bold, fontSize: 16))
-                    //                        Spacer().frame(height: 15)
-                    //                        InputField(placeholder: "Enter your name", text: $Foodname, backgroundColor: .white, frameWidth: .screenWidth * 0.9, colorBorder: Color(hex: "#D0DBEA"), isMultiline: false)
-                    //                    }
+                    Spacer().frame(height: 15)
                     VStack(alignment: .leading) {
                         Text("Food Name")
                             .font(.customfont(.bold, fontSize: 16))
@@ -255,16 +268,18 @@ struct AddFoodView: View {
                         }
                     }.padding(.leading, .screenWidth * 0.02)
                     
+                    
                     Spacer().frame(height: 35)
                     
                     Button(action: {
-                        // Show validation message if fields are empty
-                        if Foodname.isEmpty || Description.isEmpty {
-                            showValidationMessage = true
-                        } else {
-                            showValidationMessage = false
-                            navigateToNextView = true
-                        }
+
+//                        if Foodname.isEmpty || Description.isEmpty {
+//                            showValidationMessage = true
+//                        } else {
+//                            showValidationMessage = false
+//                           
+//                        }
+                        navigateToNextView = true
                     }) {
                         Text("Next")
                             .font(.customfont(.semibold, fontSize: 16))
@@ -275,35 +290,34 @@ struct AddFoodView: View {
                             .cornerRadius(10)
                             .padding(.horizontal)
                     }
-                    
-                    // Navigate to next view if all fields are valid
-                    if navigateToNextView {
-                        NavigationLink(destination: RecipeModalView(dismissToRoot: dismiss), isActive: $navigateToNextView) {
-                            EmptyView()
-                        }
-                    }
                 }
                 .navigationTitle("Your dishes")
                 .navigationBarBackButtonHidden(true)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        Image(systemName: "xmark")
-                            .resizable()
-                            .frame(width: 20, height: 20)
-                            .onTapGesture {
-                                dismiss()
-                            }
-                            .padding(.horizontal, 8)
+                        Button(action: dismissToRoot) {
+                            Image(systemName: "xmark")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 20, height: 20)
+                                .foregroundStyle(.black)
+                        }
                     }
                 }
-                .fullScreenCover(isPresented: $isImagePickerPresented) {
-                    ImagePicker(selectedImages: $selectedImages) // Update the array after selection
-                }
+                .background(
+                    NavigationLink(destination: RecipeModalView(dismissToRoot: dismissToRoot), isActive: $navigateToNextView) {
+                        EmptyView()
+                    }
+                )
+            }
+            .fullScreenCover(isPresented: $isImagePickerPresented) {
+                ImagePicker(selectedImages: $selectedImages)
             }
         }
     }
 }
+
 
 
 
