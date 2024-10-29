@@ -65,7 +65,7 @@ struct FoodonRecipe: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
                 Spacer().frame(height: 20)
-                Text("All")
+                Text(LocalizedStringKey("All"))
                     .font(.customfont(.bold, fontSize: 16))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundStyle(.black.opacity(0.8))

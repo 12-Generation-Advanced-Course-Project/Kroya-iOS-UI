@@ -28,14 +28,14 @@ struct AllowNotificationView: View {
                 Spacer()
             }
             VStack {
-                CustomButton(title: "Allow Notification", action: {    LocalNotificationManager.shared.askForNotificationPermission()
+                CustomButton(title: LocalizedStringKey("Allow Notification"), action: {    LocalNotificationManager.shared.askForNotificationPermission()
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         LocalNotificationManager.shared.sendImmediateNotification()
                     }
                     
                 }, backgroundColor: .yellow,frameWidth: .screenWidth * 0.85)
-                CustomButton(title: "Not Now", action: { dismiss() }, backgroundColor: .clear, textColor: .yellow)
+                CustomButton(title: LocalizedStringKey("Not Now"), action: { dismiss() }, backgroundColor: .clear, textColor: .yellow)
             }
         }
         .navigationBarBackButtonHidden(true)

@@ -141,7 +141,7 @@ struct SaleReportView: View {
 
             
             HStack {
-                Text("Earning")
+                Text(LocalizedStringKey("Earning"))
                     .font(.customfont(.semibold, fontSize: 18))
                     .foregroundStyle(.white)
                 Spacer()
@@ -166,13 +166,13 @@ struct SaleReportView: View {
                     }
                 }
             } else {
-                Text("No items sold on this day")
+                Text(LocalizedStringKey("No items sold on this day"))
                     .foregroundColor(.gray)
                     .padding(.top)
             }
             Spacer()
         }
-        .navigationTitle("Sale Report")
+        .navigationTitle(LocalizedStringKey("Sale Report"))
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {

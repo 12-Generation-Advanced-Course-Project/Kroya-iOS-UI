@@ -19,7 +19,7 @@ struct FavoriteViewCart: View {
                 HStack {
                     Spacer()
                     
-                    Text("Food on Sale")
+                    Text(LocalizedStringKey("Food on Sale"))
                         .fontWeight(.semibold)
                         .font(.customfont(.semibold, fontSize: 16))
                         .foregroundColor(selectedSegment == 0 ? .black.opacity(0.8) : .black.opacity(0.5))
@@ -29,7 +29,7 @@ struct FavoriteViewCart: View {
                     
                     Spacer()
                     
-                    Text("Recipes")
+                    Text(LocalizedStringKey("Recipes"))
                         .fontWeight(.semibold)
                         .font(.customfont(.semibold, fontSize: 16))
                         .foregroundColor(selectedSegment == 1 ? .black.opacity(0.8) : .black.opacity(0.5))

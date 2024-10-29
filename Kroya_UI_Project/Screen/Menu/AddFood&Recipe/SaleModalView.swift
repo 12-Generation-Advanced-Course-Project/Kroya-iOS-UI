@@ -47,7 +47,7 @@ struct SaleModalView: View {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .trailing, spacing: 15) {
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("Is this food available for sell?")
+                        Text("Is this food available for sale?")
                             .font(.customfont(.bold, fontSize: 16))
                         VStack(spacing: 25) {
                             Button(action: {

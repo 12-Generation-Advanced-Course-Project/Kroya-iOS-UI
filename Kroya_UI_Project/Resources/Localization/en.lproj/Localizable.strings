@@ -17,7 +17,7 @@
 "Continue with password" = "Continue with password";
 "Password" = "Password";
 "Input your password" = "Input your password";
-"Forget password?" = "Forget password?";
+"Forget Password?" = "Forget Password?";
 "Login" = "Login";
 "Verification Code" = "Verification Code";
 "Enter 6 digits code sent to your mobile number" = "Enter 6 digits code sent to your mobile number";
@@ -50,6 +50,9 @@
 "School" = "School";
 "Other" = "Other";
 "Save Address" = "Save Address";
+"Please enter a valid email address." = "Please enter a valid email address.";
+"Please input a valid password" = "Please input a valid password";
+"Password is Incorrect" = "Password is Incorrect";
 
 //Home
 "What would you like to eat today?" = "What would you like to eat today?";
@@ -83,7 +86,10 @@
 "Sale" = "Sale";
 "Today" = "Today";
 "Yesterday" = "Yesterday";
-"Last 2 days" = "Last 2 days";
+"Last 2 days" = "Last 2 Days";
+"This Week" = "This Week";
+"Notification" = "Notification";
+"NotificationsCountToday" = "You have %@ notifications today";
 
 //About me
 
@@ -137,6 +143,9 @@
 "Dinner" = "Dinner";
 "Snack" = "Snack";
 "Next" = "Next";
+"Food name cannot be empty" = "Food name cannot be empty" ;
+"Description cannot be empty" = "Description cannot be empty";
+
 
 //Recipe
 
@@ -152,6 +161,7 @@
 "Enter incredients" = "Enter incredients";
 "Back" = "Back";
 "Next" = "Next";
+"No items sold on this day" = "No items sold on this day";
 
 //Sale
 "Yes" = "Yes";
@@ -164,6 +174,9 @@
 "Ingredient" = "Ingreadient";
 "Back"= "Back";
 "Post" = "Post";
+"Is this food available for sale?" = "Is this food available for sale?";
+"Sale Report" = "Sale Report";
+
 
 //Popup Sale
 "Save this as a draft?" = "Save this as a draft?";
@@ -206,3 +219,12 @@
 "All" = "All";
 "Food on Sale" = "Food on Sale";
 "Recipes" = "Recipes";
+
+//SearchView
+"Recent Searches" = "Recent Searches";
+
+//PopupMessage
+"Successfully" = "Successfully";
+"Your account have been created successfully" = "Your account have been created successfully";
+"Allow Notification" = "Allow Notification";
+"Not Now" = "Not Now";

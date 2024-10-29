@@ -8,7 +8,7 @@
 "Continue with password" = "បន្តជាមួយលេខសម្ងាត់";
 "Password" = "លេខសម្ងាត់";
 "Input your password" = "បញ្ជូលលេខសម្ងាត់របស់អ្នក";
-"Forget password?" = "ភ្លេចលេខសម្ងាត់?";
+"Forget Password?" = "ភ្លេចលេខសម្ងាត់?";
 "Login" = "ចូល";
 "Verification Code" = "លេខកូដផ្ទៀងផ្ទាត់";
 "Enter 6 digits code sent to your mobile number" = "សូមបញ្ជូលលេខកូដ៦ខ្ទង់ដែលបានផ្ញើទៅកាន់លេខទូរស័ព្ទរបស់អ្នក";
@@ -41,6 +41,9 @@
 "School" = "សាលារៀន";
 "Other" = "ផ្សេងៗ";
 "Save Address" = "រក្សាទុកឤស័យដ្ឋាន";
+"Please enter a valid email address." = "សូមបញ្ចូលអ៊ីមែលដែលត្រឹមត្រូវ";
+"Please input a valid password" = "សូមបញ្ចូលពាក្យសម្ងាត់ដែលត្រឹមត្រូវ";
+"Password is Incorrect" = "ពាក្យសម្ងាត់មិនត្រឹមត្រូវ";
 
 //Home
 "What would you like to eat today ?" = "តើអ្នកចង់ញុំាអ្វីថ្ងៃនេះ?";
@@ -57,24 +60,28 @@
 "View all -->" = "មើលទាំងអស់";
 "Home" = "ទំព័រដើម";
 "Favorite" = "ចំណូលចិត្ត";
-"Orders" = "កម្មង់";
+"Orders" = "ការកម្មង់";
 "Me" = "អំពីខ្ញុំ";
 
 //Post
 "All" = "ទាំងអស់";
 "Search foods" = "ស្វែងរកមុខម្ហូប";
-"Food on sale" = "អាហារកំពុងលក់";
-"Recipes" = "វិធីធ្វើម្ហូប";
+"Food on sale" = "ម្ហូបសម្រាប់លក់";
+"Recipes" = "រូបមន្តធ្វើម្ហូប";
 
 //Orders
-"Orders" = "កម្មង់";
+"Orders" = "ការកម្មង់";
 "Search item" = "ស្វែងរកការកម្មង់";
 "All" = "ទាំងអស់";
-"Order" = "កម្មង់";
 "Sale" = "លក់";
 "Today" = "ថ្ងៃនេះ";
 "Yesterday" = "ម្សិលមិញ";
-"Last 2 days" = "2ថ្ងៃ ចុងក្រោយ";
+"Last 2 days" = "2ថ្ងៃមុន";
+"This Week" = "សប្តាហ៍នេះ";
+"Notification" = "ការជួនដំណឹង";
+"You have" = "당신";
+
+
 
 //About me
 
@@ -107,7 +114,7 @@
 "Food Name" = "ឈ្មោះម្ហូប";
 "Enter food name" = "បញ្ចូលឈ្មោះម្ហូប";
 "Description" = "ការពិពណ៌នា";
-"Tell me a little about your food" = "ប្រាប់ខ្ញុំបន្តិចអំពីម្ហូបរបស់អ្នក";
+"Tell me a little about your food" = "ពិពណ៌នាអំពីម្ហូបរបស់អ្នក";
 "Duration" = "រយៈពេល";
 "Level" = "កម្រិត";
 "Hard" = "លំបាក";
@@ -124,6 +131,9 @@
 "Dinner" = "អាហារពេលល្ងាច";
 "Snack" = "អាហារសម្រន់";
 "Next" = "បន្ទាប់";
+"Food name cannot be empty" = "ឈ្មោះមុខម្ហូបមិនអាចទទេបានទេ" ;
+"Description cannot be empty" = "ការពិពណ៌នាមិនអាចទទេបានទេ";
+"Sale Report" = "របាយការណ៍ការលក់";
 
 //Recipe
 "Recipe" = "វិធីធ្វើម្ហូប";
@@ -138,6 +148,7 @@
 "Enter incredients" = "បញ្ជូលគ្រឿងផ្សំ";
 "Back" = "ត្រឡប់";
 "Next" = "បន្ទាប់";
+"No items sold on this day" = "ថ្ងៃនេះគ្មានមុខម្ហូបសម្រាប់លក់ទេ";
 
 //Sale
 "Yes" = "យល់ព្រម";
@@ -150,6 +161,8 @@
 "Ingredient" = "គ្រឿងផ្សំ";
 "Back"= "ត្រឡប់";
 "Post" = "ប្រកាស";
+"Is this food available for sale?" = "តើម្ហូបនេះដាក់សម្រាប់លក់ដែរឬទេ?";
+"Earning" = "ចំណូល";
 
 //Popup Sale
 "Save this as a draft?" = "រក្សាទុកជាការព្រាង?";
@@ -173,7 +186,7 @@
 "Post" = "ប្រកាស";
 
 //Edit Profile
-"Edit profile" = "កែប្រែគណនី";
+"Edit profile" = "កែប្រែប្រវត្តិរូប";
 "Personal info" = "ព័ត៏មានផ្ទាល់ខ្លួន";
 "Full name" = "ឈ្មោះពេញ";
 "Email" = "អ៊ីម៉ែល";
@@ -190,5 +203,14 @@
 "View all sales" = "មើលការលក់ទាំងអស់";
 "Edit" = "កែប្រែ";
 "All" = "ទាំងអស់";
-"Food on Sale" = "អាហារមានការលក់";
-"Recipes" = "រូបមន្ត";
+"Food on Sale" = "ម្ហូបដាក់លក់";
+"Recipes" = "រូបមន្តម្ហូប";
+
+//SearchView
+"Recent Searches" = "ការស្វែងរកថ្មីៗ";
+
+//PopupMessage
+"Successfully" = "ទទួលបានជោគជ័យ";
+"Your account have been created successfully" = "គណនីរបស់អ្នកត្រូវបានបង្កើតដោយជោគជ័យ";
+"Allow Notification" = "អនុញ្ញាតអោយមានការជូនដំណឹង";
+"Not Now" = "មិនត្រូវការទេឥឡូវនេះ";

@@ -11,7 +11,7 @@ import SwiftUI
 import SwiftUI
 
 struct CustomButton: View {
-    var title: String
+    var title: LocalizedStringKey
     var action: () -> Void
     var backgroundColor: Color
     var textColor: Color = .white

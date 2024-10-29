@@ -54,7 +54,7 @@ struct FillPasswordScreen: View {
                     
                     PasswordField(
                         iconName: "lock",
-                        placeholder: "Input your password",
+                        placeholder: LocalizedStringKey("Input your password"),
                         text: $password,
                         isSecure: !isPasswordVisible,
                         frameWidth: .infinity
@@ -71,7 +71,7 @@ struct FillPasswordScreen: View {
                                     .scaledToFit()
                                     .foregroundStyle(.red)
                                     .frame(width: 12, height: 12)
-                                Text(authVM.showError ? "Password is Incorrect" : "Please input a valid password")
+                                Text(authVM.showError ? LocalizedStringKey("Password is Incorrect") : LocalizedStringKey("Please input a valid password"))
                                     .font(.caption)
                                     .foregroundColor(.red)
                                     .font(.customfont(.regular, fontSize: 12))
@@ -82,7 +82,7 @@ struct FillPasswordScreen: View {
                         Button(action: {
                             
                         }) {
-                            Text("Forgot Password?")
+                            Text(LocalizedStringKey("Forget Password?"))
                                 .foregroundStyle(.black.opacity(0.8))
                                 .font(.customfont(.semibold, fontSize: 12))
                                 .underline()

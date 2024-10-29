@@ -8,7 +8,7 @@ import SwiftUI
 
 struct PasswordField: View {
     var iconName: String
-    var placeholder: String
+    var placeholder: LocalizedStringKey
     @Binding var text: String
     @State var isSecure: Bool = true
     var iconColor: Color = .gray
