@@ -85,11 +85,18 @@ struct DinnerScreenView: View {
                                 .font(.customfont(.semibold, fontSize: 16))
                                 .foregroundStyle(.black.opacity(0.8))
                             Group {
-                                Text("Please check your ")
-                                    .font(.customfont(.medium, fontSize: 12)) +
-                                Text("dinner")
-                                    .font(.customfont(.medium, fontSize: 12))
-                                    .foregroundStyle(.yellow)
+//                                Text("Please check your ")
+//                                    .font(.customfont(.medium, fontSize: 12)) +
+//                                Text("dinner")
+//                                    .font(.customfont(.medium, fontSize: 12))
+//                                    .foregroundStyle(.yellow)
+                                HStack{
+                                    Text(LocalizedStringKey("Please check your "))
+                                        .font(.customfont(.medium, fontSize: 12))
+                                    Text(LocalizedStringKey("Dinner"))
+                                        .font(.customfont(.medium, fontSize: 12))
+                                        .foregroundStyle(.yellow)
+                                }
                             }
                             .font(.customfont(.regular, fontSize: 12))
                             .foregroundStyle(.black.opacity(0.6))

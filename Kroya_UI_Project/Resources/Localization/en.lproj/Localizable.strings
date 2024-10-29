@@ -33,7 +33,7 @@
 "Your account have been successful create." = "Your account have been successful create.";
 "Basic Information" = "Basic Information" ;
 "Username" = "Username";
-"Full name" = "Full name";
+"Full Name" = "Full name";
 "Email" = "Email";
 "example@mail.com" = "example@mail.com";
 "Address" = "Address";
@@ -53,10 +53,13 @@
 "Please enter a valid email address." = "Please enter a valid email address.";
 "Please input a valid password" = "Please input a valid password";
 "Password is Incorrect" = "Password is Incorrect";
+"Finding current address..." = "Finding current address...";
+"Finding pin address..." = "Finding pin address...";
+"Finding pin address..." = "កំពុងស្វែងរកអាស័យដ្ឋានតំណ...";
 
 //Home
 "What would you like to eat today?" = "What would you like to eat today?";
-"Food Order" = "Food Order";
+"Food order" = "Food Order";
 "Order what you love" = "Order what you love";
 "Food Recipe" = "Food Recipe";
 "Learn how to cook" = "Learn how to cook";
@@ -89,7 +92,7 @@
 "Last 2 days" = "Last 2 Days";
 "This Week" = "This Week";
 "Notification" = "Notification";
-"NotificationsCountToday" = "You have %@ notifications today";
+"You have" = "You have";
 
 //About me
 
@@ -144,7 +147,7 @@
 "Snack" = "Snack";
 "Next" = "Next";
 "Food name cannot be empty" = "Food name cannot be empty" ;
-"Description cannot be empty" = "Description cannot be empty";
+"description cannot be empty" = "Description cannot be empty";
 
 
 //Recipe
@@ -176,6 +179,8 @@
 "Post" = "Post";
 "Is this food available for sale?" = "Is this food available for sale?";
 "Sale Report" = "Sale Report";
+"Ingredient cannot be empty" = "Ingredient cannot be empty";
+"Enter ingredients" = "Enter ingredients";
 
 
 //Popup Sale
@@ -209,6 +214,11 @@
 "Address" = "Address";
 "Save" = "Save";
 "Delete account?" = "Delete account?";
+"Enter your full name" = "Enter your full name";
+"Enter your mobile number" = "Enter your mobile number";
+"Enter your password" = "Enter your password";
+"Enter your address" = "Enter your address";
+
 
 //Delete account popup
 "Delete your account?" = "Delete your account?";
@@ -228,3 +238,16 @@
 "Your account have been created successfully" = "Your account have been created successfully";
 "Allow Notification" = "Allow Notification";
 "Not Now" = "Not Now";
+"Detail information cannot be empty" = "상세 정보는 비워둘 수 없습니다";
+"Do you want to turn on\nNotification?" = "Do you want to turn on\nNotification?";
+
+//WeBill
+"Connect to WeBill365 account for e-payment" = "Connect to WeBill365 account for e-payment";
+"Client ID" = "Client ID" ;
+"Secret ID" = "Secret ID";
+
+// Change language
+"Change Language" = "Change Language";
+"Which language do you prefer?" = "Which language do you prefer?";
+"Please check your " = "Please check your ";
+

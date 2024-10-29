@@ -183,7 +183,7 @@ struct AddFoodView: View {
                             HStack {
                                 Image(systemName: "exclamationmark.triangle.fill")
                                     .foregroundColor(.red)
-                                Text(LocalizedStringKey("Description cannot be empty"))
+                                Text(LocalizedStringKey("description cannot be empty"))
                                     .foregroundColor(.red)
                                     .font(.caption)
                             }

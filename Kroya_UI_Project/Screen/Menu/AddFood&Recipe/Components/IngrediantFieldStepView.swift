@@ -38,7 +38,7 @@ struct StepEntryView: View {
                     
                     ZStack(alignment: .trailing) {
                         // Multi-line TextField
-                        TextField("Enter ingredients", text: $step.description, axis: .vertical)
+                        TextField(LocalizedStringKey("Enter ingredients"), text: $step.description, axis: .vertical)
                             .textFieldStyle(PlainTextFieldStyle())
                             .multilineTextAlignment(.leading)
                             .padding(10)
@@ -60,7 +60,7 @@ struct StepEntryView: View {
                     HStack{
                         Image(systemName: "exclamationmark.triangle.fill")
                             .foregroundColor(.red)
-                        Text("description cannot be empty")
+                        Text(LocalizedStringKey("description cannot be empty"))
                             .foregroundColor(.red)
                             .font(.caption)
                     }

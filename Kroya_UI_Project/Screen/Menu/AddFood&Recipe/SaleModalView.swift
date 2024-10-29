@@ -183,7 +183,7 @@ struct SaleModalView: View {
                                 HStack {
                                     Image(systemName: "exclamationmark.triangle.fill")
                                         .foregroundColor(.red)
-                                    Text("Detail information cannot be empty")
+                                    Text(LocalizedStringKey("Detail information cannot be empty"))
                                         .foregroundColor(.red)
                                         .font(.caption)
                                 }

@@ -60,7 +60,7 @@ struct IngredientEntryView: View {
                         HStack{
                             Image(systemName: "exclamationmark.triangle.fill")
                                 .foregroundColor(.red)
-                            Text("Ingredient cannot be empty")
+                            Text(LocalizedStringKey("Ingredient cannot be empty"))
                                 .foregroundColor(.red)
                                 .font(.caption)
                         }
@@ -127,7 +127,7 @@ struct IngredientEntryView: View {
                 HStack{
                     Image(systemName: "exclamationmark.triangle.fill")
                         .foregroundColor(.red)
-                    Text("quantity and price cannot be empty")
+                    Text(LocalizedStringKey("quantity and price cannot be empty"))
                         .foregroundColor(.red)
                         .font(.caption)
                 }

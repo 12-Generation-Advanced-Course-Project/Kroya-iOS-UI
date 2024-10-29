@@ -38,7 +38,7 @@ struct WebillConnectView: View {
             
             
                 HStack{
-                    Text("Connect to WeBill365 account for e-payment")
+                    Text(LocalizedStringKey("Connect to WeBill365 account for e-payment"))
                         .font(.customfont(.medium, fontSize: 15)).padding([.bottom, .top], 5)
                         .foregroundStyle(Color(hex: "#737A86"))
                     Spacer()
@@ -46,7 +46,7 @@ struct WebillConnectView: View {
                 }
             
             HStack{
-                Text("Client ID")
+                Text(LocalizedStringKey("Client ID"))
                     .font(.customfont(.medium, fontSize: 14))
                     .foregroundStyle(Color(hex: "#0A0019")).padding(.top, 15)
                     .opacity(0.7)
@@ -59,7 +59,7 @@ struct WebillConnectView: View {
                 text: $clientId,
                 isSecure: false)
             HStack{
-                Text("Secret ID")
+                Text(LocalizedStringKey("Secret ID"))
                     .font(.customfont(.medium, fontSize: 14))
                     .foregroundStyle(Color(hex: "#0A0019")).padding(.top, 10)
                     .opacity(0.7)

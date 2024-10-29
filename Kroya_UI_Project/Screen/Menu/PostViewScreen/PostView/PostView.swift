@@ -18,6 +18,7 @@ struct PostViewScreen: View {
     let tabTitles = ["All", "Food on Sale", "Recipes"]
     
     var body: some View {
+        
         ZStack{
             VStack {
                 HStack {
