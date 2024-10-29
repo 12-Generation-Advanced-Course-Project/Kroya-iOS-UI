@@ -63,7 +63,7 @@ struct BottomSheetView<Content: View>: View {
             VStack {
                 self.indicator
                 self.content
-                 //   .padding(.top, 20)
+                //   .padding(.top, 20)
             }
             .frame(width: geometry.size.width, height: self.maxHeight, alignment: .top)
             .background(Color.white)
@@ -92,6 +92,7 @@ struct FoodDetailView: View {
     @State private var isFavorite: Bool = false
     @State private var currentImage: String
     @State private var isBottomSheetOpen: Bool = false
+    @State private var isShowPopup: Bool = false  // Popup control here
     var theMainImage: String
     var subImage1: String
     var subImage2: String
@@ -195,9 +196,16 @@ struct FoodDetailView: View {
                 
                 // Bottom Sheet Content
                 BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.645) {
-                        ContentView()
+                    ContentView(isShowPopup: $isShowPopup)
                         .padding(.horizontal, 15)
-                }.edgesIgnoringSafeArea(.all)
+                }
+                .edgesIgnoringSafeArea(.all)
+                // Show the popup in full screen
+                if isShowPopup {
+                    PopupReview(profile: "Songvak", userName: "Chhoy Sreynoch", description: "", isReviewPopupOpen: $isShowPopup)
+                        .background(Color.black.opacity(0.5))  // Background dim effect
+                        .edgesIgnoringSafeArea(.all)
+                }
             }
             
             .navigationBarBackButtonHidden(true)

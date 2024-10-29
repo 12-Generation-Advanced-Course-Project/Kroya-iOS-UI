@@ -60,7 +60,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA70E8692CCB28F20034DEFB /* GoogleMaps in Frameworks */,
 				8445843A2CB6793F00CA3C01 /* SwiftUIFlow in Frameworks */,
 				840C1FAB2CB3BD0C0066027A /* Alamofire in Frameworks */,
 				268612322CCA226400DE1F6F /* SwiftKeychainWrapper in Frameworks */,
@@ -643,14 +642,6 @@
 				minimumVersion = 8.1.0;
 			};
 		};
-		FA70E8672CCB28F20034DEFB /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 9.1.1;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -678,11 +669,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8494AC212CCB533E00FB8206 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
-		};
-		FA70E8682CCB28F20034DEFB /* GoogleMaps */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FA70E8672CCB28F20034DEFB /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
-			productName = GoogleMaps;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

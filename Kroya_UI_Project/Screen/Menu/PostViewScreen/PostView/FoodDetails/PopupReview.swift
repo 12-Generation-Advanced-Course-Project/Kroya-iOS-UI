@@ -11,31 +11,15 @@ struct PopupReview: View {
     
     var profile: String
     var userName: String
-    @State var description: String
+    @State var description: String = ""
+    @State var showWarning = false
     @Binding var isReviewPopupOpen: Bool
-
+    
     
     var body: some View {
         ZStack{
             Color.black.opacity(0.1)
                 .edgesIgnoringSafeArea(.all)
-//            VStack{
-//                // Close button
-//                Button(action: {
-//                    // Action to dismiss the popup
-//                    isReviewPopupOpen = false
-//                    
-//                })
-//                {
-//                    Image(systemName: "xmark.circle.fill")
-//                        .resizable()
-//                        .frame(width: 24, height: 24)
-//                        .foregroundColor(.black)
-//                        .padding(.bottom, 700) // Adjust to place it at the top
-//                        .padding(.leading, 300)
-//                }
-//            }
-//            
             VStack(alignment: .leading){
                 
                 HStack(spacing: 10){
@@ -81,15 +65,33 @@ struct PopupReview: View {
                                 RoundedRectangle(cornerRadius: 15)
                                     .strokeBorder(Color(hex: "#D0DBEA"), lineWidth: 1)
                             )
+                            .onChange(of: description){ userInput in
+                                if userInput.count > 300{
+                                    description = String(userInput.prefix(300))
+                                    showWarning = true
+                                } else {
+                                    showWarning = false
+                                }
+                                
+                                
+                            }
                     }
                     .overlay(
                         RoundedRectangle(cornerRadius: 15)
                             .strokeBorder(Color.gray.opacity(0.3), lineWidth: 1)
                     )
                     .padding(.vertical,10)
-                    Text("\(description.count)/300")
-                        .font(.customfont(.medium, fontSize: 12))
-                        .foregroundColor(.black.opacity(0.3))
+                    HStack{
+                        // Warning Message
+                        if showWarning {
+                            Text("Maximum character limit of 300 exceeded")
+                                .foregroundColor(.red)
+                        }
+                        Spacer()
+                        Text("\(description.count)/300")
+                          
+                            .foregroundColor(.black.opacity(0.3))
+                    }  .font(.customfont(.medium, fontSize: 12))
                     Spacer().frame(height: 70)
                     HStack{
                         Button (action: {
@@ -119,10 +121,9 @@ struct PopupReview: View {
             .padding(30)
             .background(Color.white)
             .cornerRadius(10)
-            .frame(maxWidth: .infinity,maxHeight: 500)
             .padding()
         }
-
+        
     }
 }
 

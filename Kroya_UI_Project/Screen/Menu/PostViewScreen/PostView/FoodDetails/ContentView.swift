@@ -16,7 +16,8 @@ struct ContentView: View {
     @State private var selectedRating: Int = 0
     @State private var currentStep = 1
     @Environment(\.dismiss) var dismiss
-    @State var isShowPopup  = false
+    @Binding var isShowPopup: Bool  // Use a binding to control popup
+   // @State var isShowPopup  = false
     @State private var isExpanded = false
     @State private var isReviewExpanded = false
     @State private var isReviewPopupOpen : Bool = false
@@ -62,7 +63,6 @@ struct ContentView: View {
                         .fontWeight(.medium)
                         .foregroundStyle(Color(hex:"#9FA5C0"))
                     
-                    // Profile
                     
                     // Profile Section
                     Spacer().frame(height: screenHeight * 0.012)
@@ -91,7 +91,7 @@ struct ContentView: View {
                         .multilineTextAlignment(.leading)
                         .lineLimit(5, reservesSpace: true)
                         .opacity(0.6)
-                    // Spacer().frame(height: .screenHeight * 0.008)
+                    
                     //Ingredients
                     Text("Ingredients")
                         .font(.customfont(.bold, fontSize: 18))
@@ -140,7 +140,7 @@ struct ContentView: View {
                             .foregroundColor(Color(hex: "#2E3E5C"))
                     }
                     Divider()
-                    ////=========step
+                    //=========step
                     VStack(alignment: .leading, spacing: 10) {
                         // Title and Navigation Buttons
                         HStack {
@@ -196,35 +196,34 @@ struct ContentView: View {
                         }
                         
                         // TabView for animated step change
-                      
-                            TabView(selection: $currentStep) {
-                                ForEach(1...steps.count, id: \.self) { step in
-                                    
-                                        HStack(alignment: .top, spacing: 10) {
-                                            Circle()
-                                                .fill(Color(hex: "#2E3E5C"))
-                                                .frame(width: geometry.size.width * 0.074)
-                                                .overlay(
-                                                    Text("\(step)")
-                                                        .font(.customfont(.bold, fontSize: 14))
-                                                        .foregroundColor(Color.white)
-                                                )
-                                            // Display step detail based on the current step
-                                            Text(steps[step - 1])
-                                                .font(.system(size: 16))
-                                                .multilineTextAlignment(.leading)
-                                                .lineLimit(3)
-                                            Spacer()
-                                    }
-                                    .tag(step) // Tag for each step to track the selected Tab
+                        
+                        TabView(selection: $currentStep) {
+                            ForEach(1...steps.count, id: \.self) { step in
+                                
+                                HStack(alignment: .top, spacing: 10) {
+                                    Circle()
+                                        .fill(Color(hex: "#2E3E5C"))
+                                        .frame(width: geometry.size.width * 0.074)
+                                        .overlay(
+                                            Text("\(step)")
+                                                .font(.customfont(.bold, fontSize: 14))
+                                                .foregroundColor(Color.white)
+                                        )
+                                    // Display step detail based on the current step
+                                    Text(steps[step - 1])
+                                        .font(.system(size: 16))
+                                        .multilineTextAlignment(.leading)
+                                        .lineLimit(3)
+                                    Spacer()
                                 }
+                                .tag(step) // Tag for each step to track the selected Tab
                             }
+                        }
                         .tabViewStyle(.page(indexDisplayMode: .never)) // Page style without dots
                         .frame(minHeight: 50, maxHeight: .infinity)
                         .disabled(true)
                         Divider()
-                        
-                        ///=====
+                        //Ratings & Review
                         
                         Text("Ratings & Review")
                             .font(.system(size: 17))
@@ -271,7 +270,6 @@ struct ContentView: View {
                                 .foregroundColor(.gray)
                         }}
                     Divider()
-                    ///=====
                     // User review
                     HStack {
                         Text("Tap to Rate")
@@ -337,23 +335,53 @@ struct ContentView: View {
                             Text("Write a Review")
                                 .foregroundStyle(Color.yellow)
                                 .font(.customfont(.medium, fontSize: 15))
-                                
-                        }.padding(.bottom, 40)
+                            
+                        }.padding(.bottom, 60)
                     }
-
+                    
                 }
-
+                
                 
             }
-            .fullScreenCover(isPresented: $isShowPopup) {
-                            PopupReview(profile: "Songvak", userName: "Chhoy Sreynoch", description: "", isReviewPopupOpen: $isShowPopup)
-                                .presentationCompactAdaptation(.none)
-                        }
-
+//                    .popup(isPresented: $isShowPopup, content: {
+//                                        PopupReview(profile: "Songvak", userName: "Chhoy Sreynoch", description: "", isReviewPopupOpen: $isShowPopup)
+//                          //  .presentationCompactAdaptation(.none)
+//                    })
+            
         }
     }
 }
+//
+//#Preview {
+//    ContentView(isShowPopup: $isShowPopup)
+//}
 
-#Preview {
-    ContentView()
-}
+
+
+
+//struct ContentView: View {
+//    @State private var showAlert = false
+//    
+//    var body: some View {
+//        VStack {
+//            Button(action: {
+//                showAlert = true
+//            }) {
+//                Text("Show Popup Alert")
+//                    .padding()
+//                    .background(Color.blue)
+//                    .foregroundColor(.white)
+//                    .cornerRadius(10)
+//            }
+//        }
+//        .popup(isPresented: $showAlert, content: {
+//            PopupView()
+//        })
+//    }
+//}
+//
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//    }
+//}
