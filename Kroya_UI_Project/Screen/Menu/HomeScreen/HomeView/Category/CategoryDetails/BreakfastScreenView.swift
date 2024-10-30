@@ -1,18 +1,18 @@
 //import SwiftUI
 //
 //struct BreakfastScreenView: View {
-//    
+//
 //    @State private var selectedSegment = 0
 //    @Environment(\.dismiss) var dismiss
-//    
+//
 //    var body: some View {
-//    
+//
 //            VStack {
 //                // Tab View
 //                VStack {
 //                    HStack {
 //                        Spacer()
-//                        
+//
 //                        Text("Food on Sale")
 //                            .fontWeight(.semibold)
 //                            .font(.customfont(.semibold, fontSize: 16))
@@ -20,9 +20,9 @@
 //                            .onTapGesture {
 //                                selectedSegment = 0
 //                            }
-//                        
+//
 //                        Spacer()
-//                        
+//
 //                        Text("Recipes")
 //                            .fontWeight(.semibold)
 //                            .font(.customfont(.semibold, fontSize: 16))
@@ -30,15 +30,15 @@
 //                            .onTapGesture {
 //                                selectedSegment = 1
 //                            }
-//                        
+//
 //                        Spacer()
 //                    }
 //                    .padding(.top)
-//                    
+//
 //                    // Simple Geometry Reader for Underline
 //                    GeometryReader { geometry in
 //                        Divider()
-//                        
+//
 //                        Rectangle()
 //                            .fill(PrimaryColor.normal)
 //                            .frame(width: selectedSegment == 0 ? geometry.size.width / 3 : geometry.size.width / 4, height: 2)  // Static width for the underline
@@ -50,7 +50,7 @@
 //                    .frame(height: 2)
 //                }
 //                .padding(.top, 5)
-//                
+//
 //                // Tab View Content
 //                TabView(selection: $selectedSegment) {
 //                    FoodSaleView(iselected: selectedSegment)
@@ -91,7 +91,7 @@
 //                    }
 //                }
 //            }
-//        
+//
 //    }
 //}
 //
@@ -162,41 +162,60 @@ struct BreakfastScreenView: View {
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                HStack {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Image(systemName: "arrow.left")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 20, height: 20)
-                            .foregroundColor(.black)  // Replace with `foregroundStyle` if desired
-                    }
-                    VStack(alignment: .leading, spacing: 4) {
-                        Spacer()
-                        Text("Breakfast")
-                            .font(.system(size: 16))  // Replace with your custom font method if you have one
-                            .foregroundColor(.black.opacity(0.8))
-                        Group {
-//                            Text("Please check your ")
-//                                .font(.system(size: 12)) +  // Replace with your custom font method if you have one
-//                            Text("breakfast")
-//                                .font(.system(size: 12))  // Replace with your custom font method if you have one
-//                                .foregroundColor(.yellow)
-                            HStack{
-                                Text(LocalizedStringKey("Please check your "))
-                                    .font(.system(size: 12))
-                                Text(LocalizedStringKey("Breakfast"))
-                                    .font(.system(size: 12))
-                                    .foregroundColor(.yellow)
-                            }
-                        }
-                        .font(.system(size: 12))  // Replace with your custom font method if you have one
-                        .foregroundColor(.black.opacity(0.6))
-                    }
+                Button(action: {
+                    dismiss()
+                }) {
+                    Image(systemName: "arrow.left")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 20, height: 20)
+                        .foregroundStyle(.black)
                 }
             }
+            ToolbarItem(placement: .principal) { // Center the title
+                Text(LocalizedStringKey("Food order"))
+                    .font(.customfont(.semibold, fontSize: 16))
+                    .foregroundStyle(.black.opacity(0.8))
+                    .frame(maxWidth: .infinity, alignment: .center) // Center alignment
+            }
         }
+        //        .toolbar {
+        //            ToolbarItem(placement: .navigationBarLeading) {
+        //                HStack {
+        //                    Button(action: {
+        //                        dismiss()
+        //                    }) {
+        //                        Image(systemName: "arrow.left")
+        //                            .resizable()
+        //                            .scaledToFit()
+        //                            .frame(width: 20, height: 20)
+        //                            .foregroundColor(.black)  // Replace with `foregroundStyle` if desired
+        //                    }
+        //                    VStack(alignment: .leading, spacing: 4) {
+        //                        Spacer()
+        //                        Text("Breakfast")
+        //                            .font(.system(size: 16))  // Replace with your custom font method if you have one
+        //                            .foregroundColor(.black.opacity(0.8))
+        //                        Group {
+        ////                            Text("Please check your ")
+        ////                                .font(.system(size: 12)) +  // Replace with your custom font method if you have one
+        ////                            Text("breakfast")
+        ////                                .font(.system(size: 12))  // Replace with your custom font method if you have one
+        ////                                .foregroundColor(.yellow)
+        //                            HStack{
+        //                                Text(LocalizedStringKey("Please check your "))
+        //                                    .font(.system(size: 12))
+        //                                Text(LocalizedStringKey("Breakfast"))
+        //                                    .font(.system(size: 12))
+        //                                    .foregroundColor(.yellow)
+        //                            }
+        //                        }
+        //                        .font(.system(size: 12))  // Replace with your custom font method if you have one
+        //                        .foregroundColor(.black.opacity(0.6))
+        //                    }
+        //                }
+        //            }
+        //        }
     }
 }
 

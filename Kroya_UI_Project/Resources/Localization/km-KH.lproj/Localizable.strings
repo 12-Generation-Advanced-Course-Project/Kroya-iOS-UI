@@ -79,7 +79,7 @@
 "Yesterday" = "ម្សិលមិញ";
 "Last 2 days" = "2ថ្ងៃមុន";
 "This Week" = "សប្តាហ៍នេះ";
-"Notification" = "ការជួនដំណឹង";
+"Notification" = "ការជូនដំណឹង";
 "You have" = "អ្នកមាន";
 
 
@@ -213,7 +213,7 @@
 "View all sales" = "មើលការលក់ទាំងអស់";
 "Edit" = "កែប្រែ";
 "All" = "ទាំងអស់";
-"Food on Sale" = "ម្ហូបដាក់លក់";
+"Food on Sale" = "ម្ហូបសម្រាប់លក់";
 "Recipes" = "រូបមន្តម្ហូប";
 
 //SearchView

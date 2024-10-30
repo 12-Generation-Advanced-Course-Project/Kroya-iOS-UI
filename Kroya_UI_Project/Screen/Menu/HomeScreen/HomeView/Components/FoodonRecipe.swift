@@ -158,25 +158,25 @@ struct FoodonRecipe: View {
                                     }
                                 }
                                 Spacer()
-                
-                RecipeView()
+//                RecipeView()
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    HStack {
-                        Button(action: {
-                            dismiss()
-                        }) {
-                            Image(systemName: "arrow.left")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 20, height: 20)
-                                .foregroundStyle(.black)
-                        }
-                        Text(LocalizedStringKey("Food Recipe"))
-                            .font(.customfont(.semibold, fontSize: 16))
-                            .foregroundStyle(.black.opacity(0.8))
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Image(systemName: "arrow.left")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 20, height: 20)
+                            .foregroundStyle(.black)
                     }
+                }
+                ToolbarItem(placement: .principal) { // Center the title
+                    Text(LocalizedStringKey("Food Recipe"))
+                        .font(.customfont(.semibold, fontSize: 16))
+                        .foregroundStyle(.black.opacity(0.8))
+                        .frame(maxWidth: .infinity, alignment: .center) // Center alignment
                 }
             }
             

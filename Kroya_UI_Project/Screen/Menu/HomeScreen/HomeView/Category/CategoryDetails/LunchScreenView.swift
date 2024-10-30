@@ -68,41 +68,60 @@ struct LunchScreenView: View {
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                HStack {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Image(systemName: "arrow.left")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 20, height: 20)
-                            .foregroundStyle(.black)
-                    }
-                    VStack(alignment: .leading, spacing: 4) {
-                        Spacer()
-                        Text("Lunch")
-                            .font(.customfont(.semibold, fontSize: 16))
-                            .foregroundStyle(.black.opacity(0.8))
-                        Group {
-                            //                                Text("Please check your ")
-                            //                                    .font(.customfont(.medium, fontSize: 12)) +
-                            //                                Text("lunch")
-                            //                                    .font(.customfont(.medium, fontSize: 12))
-                            //                                    .foregroundStyle(.yellow)
-                            HStack{
-                                Text(LocalizedStringKey("Please check your "))
-                                    .font(.customfont(.medium, fontSize: 12))
-                                Text(LocalizedStringKey("Lunch"))
-                                    .font(.customfont(.medium, fontSize: 12))
-                                    .foregroundStyle(.yellow)
-                            }
-                        }
-                        .font(.customfont(.regular, fontSize: 12))
-                        .foregroundStyle(.black.opacity(0.6))
-                    }
+                Button(action: {
+                    dismiss()
+                }) {
+                    Image(systemName: "arrow.left")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 20, height: 20)
+                        .foregroundStyle(.black)
                 }
             }
+            ToolbarItem(placement: .principal) { // Center the title
+                Text(LocalizedStringKey("Lunch"))
+                    .font(.customfont(.semibold, fontSize: 16))
+                    .foregroundStyle(.black.opacity(0.8))
+                    .frame(maxWidth: .infinity, alignment: .center) // Center alignment
+            }
         }
+//        .toolbar {
+//            ToolbarItem(placement: .navigationBarLeading) {
+//                HStack {
+//                    Button(action: {
+//                        dismiss()
+//                    }) {
+//                        Image(systemName: "arrow.left")
+//                            .resizable()
+//                            .scaledToFit()
+//                            .frame(width: 20, height: 20)
+//                            .foregroundStyle(.black)
+//                    }
+//                    VStack(alignment: .leading, spacing: 4) {
+//                        Spacer()
+//                        Text("Lunch")
+//                            .font(.customfont(.semibold, fontSize: 16))
+//                            .foregroundStyle(.black.opacity(0.8))
+//                        Group {
+//                            //                                Text("Please check your ")
+//                            //                                    .font(.customfont(.medium, fontSize: 12)) +
+//                            //                                Text("lunch")
+//                            //                                    .font(.customfont(.medium, fontSize: 12))
+//                            //                                    .foregroundStyle(.yellow)
+//                            HStack{
+//                                Text(LocalizedStringKey("Please check your "))
+//                                    .font(.customfont(.medium, fontSize: 12))
+//                                Text(LocalizedStringKey("Lunch"))
+//                                    .font(.customfont(.medium, fontSize: 12))
+//                                    .foregroundStyle(.yellow)
+//                            }
+//                        }
+//                        .font(.customfont(.regular, fontSize: 12))
+//                        .foregroundStyle(.black.opacity(0.6))
+//                    }
+//                }
+//            }
+//        }
         
     }
 }
