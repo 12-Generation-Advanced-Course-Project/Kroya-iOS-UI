@@ -241,7 +241,7 @@ struct EditingProfileView: View {
                     }
                     
                 }, backgroundColor: PrimaryColor.normal, frameHeight: 55,frameWidth: .screenWidth * 0.9)
-                Text("Delete Account?")
+                Text(LocalizedStringKey("Delete Account?"))
                     .font(.customfont(.medium, fontSize: 18))
                     .foregroundStyle(.red)
                     .padding()

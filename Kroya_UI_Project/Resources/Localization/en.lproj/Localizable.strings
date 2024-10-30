@@ -213,7 +213,7 @@
 "Password" = "Password";
 "Address" = "Address";
 "Save" = "Save";
-"Delete account?" = "Delete account?";
+"Delete Account?" = "Delete account?";
 "Enter your full name" = "Enter your full name";
 "Enter your mobile number" = "Enter your mobile number";
 "Enter your password" = "Enter your password";
@@ -250,4 +250,6 @@
 "Change Language" = "Change Language";
 "Which language do you prefer?" = "Which language do you prefer?";
 "Please check your " = "Please check your ";
-
+"Now" = "now";
+"New" = "New";
+"Old" = "Old";

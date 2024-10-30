@@ -201,7 +201,7 @@
 "Password" = "비밀번호";
 "Address" = "주소";
 "Save" = "저장";
-"Delete account?" = "계정을 삭제하시겠습니까?";
+"Delete Account?" = "계정을 삭제하시겠습니까?";
 "Enter your full name" = "이름을 입력하세요";
 "Enter your mobile number" =  "휴대폰 번호를 입력하세요";
 "Enter your password" = "비밀번호를 입력하세요";
@@ -237,3 +237,6 @@
 "Change Language" = "언어 변경";
 "Which language do you prefer?" = "어떤 언어를 선호하십니까?";
 "Please check your " = "당신의 것을 확인하십시오";
+"Now" = "지금";
+"New" = "새로운 알림";
+"Old" = "오래된 알림";

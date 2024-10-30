@@ -199,7 +199,7 @@
 "Password" = "លេខសម្ងាត់";
 "Address" = "អាស័យដ្ឋាន";
 "Save" = "រក្សាទុក";
-"Delete account?" = "លុបគណនី?";
+"Delete Account?" = "លុបគណនី?";
 "Enter your full name" = "សូមបញ្ចូលឈ្មោះពេញរបស់អ្នក";
 "Enter your mobile number" = "សូមបញ្ចូលលេខទូរស័ព្ទរបស់អ្នក";
 "Enter your password" = "សូមបញ្ចូលពាក្យសម្ងាត់របស់អ្នក";
@@ -235,3 +235,6 @@
 "Change Language" = "ផ្លាស់ប្តូរភាសា";
 "Which language do you prefer?" = "តើអ្នកពេញចិត្តភាសាមួយណា?";
 "Please check your " = "សូមពិនិត្យមើល";
+"Now" = "ឥឡូវនេះ";
+"New" = "ការជូនដំណឹងថ្មី";
+"Old" = "ការជូនដំណឹងចាស់";

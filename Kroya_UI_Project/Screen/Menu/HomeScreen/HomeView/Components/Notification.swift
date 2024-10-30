@@ -9,7 +9,7 @@ struct Notification: View {
     var body: some View {
         NavigationView {
             List {
-                Section(header: Text("Today")
+                Section(header: Text("New")
                     .font(.customfont(.semibold, fontSize: 16))
                     .foregroundStyle(.black)) {
                         ForEach(notification, id: \.self) { notification in
@@ -18,7 +18,7 @@ struct Notification: View {
                         }
                     }
                 
-                Section(header: Text("This Week")
+                Section(header: Text("Old")
                     .font(.customfont(.semibold, fontSize: 16))
                     .foregroundStyle(.black)) {
                         ForEach(notification, id: \.self) { notification in
@@ -55,7 +55,7 @@ struct Notification: View {
                                     Text(LocalizedStringKey("You have"))
                                     Text(LocalizedStringKey("\(notification.count) Notification"))
                                         .foregroundStyle(.yellow)
-                                    Text(LocalizedStringKey("Today"))
+                                    Text(LocalizedStringKey("Now"))
                                     
                                 }
                             }
