@@ -18,22 +18,9 @@ struct RecipeTab: View {
                                     subImage1: "ahmok",
                                     subImage2: "brohok",
                                     subImage3: "SomlorKari",
-                                    subImage4: "Songvak"
+                                    subImage4: "Songvak",
+                                    showOrderButton: false
                                 )
-//                                ContentOnButtonSheet(
-//                    foodName: "Songvak",
-//                    price: 2.00,
-//                    date: "30 Sep 2024",
-//                    itemFood: "Songvak",
-//                    profile: "profile_image", // Assuming a profile image
-//                    userName: "User Name",
-//                    description: "Songvak is a delicious dish...",
-//                    ingredients: "Pork, Fish Sauce, Spices",
-//                    percentageOfRating: 4.7,
-//                    numberOfRating: 150,
-//                    review: "Fantastic!",
-//                    reviewDetail: "The dish was flavorful and aromatic, a great meal..."
-//                )
                 ) {
                     RecipeViewCell(
                         
@@ -53,22 +40,9 @@ struct RecipeTab: View {
                                     subImage1: "ahmok",
                                     subImage2: "brohok",
                                     subImage3: "SomlorKari",
-                                    subImage4: "Songvak"
+                                    subImage4: "Songvak",
+                                    showOrderButton: false
                                 )
-//                                ContentOnButtonSheet(
-//                    foodName: "Songvak",
-//                    price: 2.00,
-//                    date: "30 Sep 2024",
-//                    itemFood: "Songvak",
-//                    profile: "profile_image", // Assuming a profile image
-//                    userName: "User Name",
-//                    description: "Songvak is a delicious dish...",
-//                    ingredients: "Pork, Fish Sauce, Spices",
-//                    percentageOfRating: 4.7,
-//                    numberOfRating: 150,
-//                    review: "Fantastic!",
-//                    reviewDetail: "The dish was flavorful and aromatic, a great meal..."
-//                )
                 ) {
                     RecipeViewCell(
                         

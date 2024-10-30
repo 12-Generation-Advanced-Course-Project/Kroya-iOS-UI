@@ -20,28 +20,6 @@ struct FoodonRecipe: View {
     var body: some View {
         NavigationView {
             VStack {
-                // Search Bar
-                //                NavigationLink(destination: SearchScreen()) {
-                //                    HStack {
-                //                        Image("ico_search1")
-                //                            .resizable()
-                //                            .scaledToFit()
-                //                            .frame(width: 24, height: 24)
-                //
-                //                        Text("Search item")
-                //                            .font(.customfont(.medium, fontSize: 16))
-                //                            .foregroundColor(.gray)
-                //                            .frame(width: .screenWidth * 0.26)
-                //                            .padding(.trailing, 12)
-                //
-                //                        Spacer()
-                //                    }
-                //                    .padding(.leading, 12)
-                //                    .frame(width: .screenWidth * 0.93, height: .screenHeight * 0.05)
-                //                    .background(Color(hex: "#F3F2F3"))
-                //                    .cornerRadius(12)
-                //                }
-                
                 // Loop through images and titles
                 HStack(spacing: 20) {
                     ForEach(0..<imageofOrder.count, id: \.self) { index in
@@ -70,95 +48,6 @@ struct FoodonRecipe: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundStyle(.black.opacity(0.8))
                     .padding(.horizontal)
-                
-                                ScrollView(.vertical,showsIndicators: false) {
-                                    VStack{
-                                        NavigationLink(destination:
-                                                        FoodDetailView(
-                                                            theMainImage: "Songvak",
-                                                            subImage1: "ahmok",
-                                                            subImage2: "brohok",
-                                                            subImage3: "SomlorKari",
-                                                            subImage4: "Songvak"
-                                                        )
-//                                                        ContentOnButtonSheet(
-//                                            foodName: "Somlor Kari",
-//                                            price: 2.00,
-//                                            date: "30 Sep 2024",
-//                                            itemFood: "Somlor Kari",
-//                                            profile: "profile_image",
-//                                            userName: "User Name",
-//                                            description: "Somlor Kari is a traditional Cambodian dish",
-//                                            ingredients: "Chicken, Coconut Milk, Curry Paste",
-//                                            percentageOfRating: 4.8,
-//                                            numberOfRating: 200,
-//                                            review: "Delicious dish!",
-//                                            reviewDetail: "The Somlor Kari was perfectly spiced and rich in flavor"
-//                                        )
-                                        ){
-                                            FoodandRecipeCardView(
-                                                imageName: "SomlorKari",
-                                                dishName: "Somlor Kari",
-                                                cookingDate: "30 Sep 2024",
-                                                price: 2.00,
-                                                rating: 5.0,
-                                                reviewCount: 200,
-                                                deliveryInfo: "Free",
-                                                deliveryIcon: "motorbike",
-                                                framewidth:340,
-                                                frameheight:200,
-                                                frameWImage:605,
-                                                frameHImage:180,
-                                                Spacing: .screenWidth * 0.55,
-                                                offset:.screenHeight * -(0.06),
-                                                isRecipeorFood: true
-                                            )
-                                        }
-                                        NavigationLink(destination:
-                                                        FoodDetailView(
-                                                            theMainImage: "Songvak",
-                                                            subImage1: "ahmok",
-                                                            subImage2: "brohok",
-                                                            subImage3: "SomlorKari",
-                                                            subImage4: "Songvak"
-                                                        )
-//                                                        ContentOnButtonSheet(
-//                                            foodName: "Somlor Kari",
-//                                            price: 2.00,
-//                                            date: "30 Sep 2024",
-//                                            itemFood: "Somlor Kari",
-//                                            profile: "profile_image",
-//                                            userName: "User Name",
-//                                            description: "Somlor Kari is a traditional Cambodian dish",
-//                                            ingredients: "Chicken, Coconut Milk, Curry Paste",
-//                                            percentageOfRating: 4.8,
-//                                            numberOfRating: 200,
-//                                            review: "Delicious dish!",
-//                                            reviewDetail: "The Somlor Kari was perfectly spiced and rich in flavor"
-//                                        )
-                                        ){
-                                            FoodandRecipeCardView(
-                                                imageName: "food_background",
-                                                dishName: "Khmer Food",
-                                                cookingDate: "30 Sep 2024",
-                                                price: 10.00,
-                                                rating: 5.0,
-                                                reviewCount: 200,
-                                                deliveryInfo: "Free",
-                                                deliveryIcon: "motorbike",
-                                                framewidth:340,
-                                                frameheight:200,
-                                                frameWImage:405,
-                                                frameHImage:180,
-                                                Spacing: .screenWidth * 0.55,
-                                                offset:.screenHeight * -(0.06),
-                                                isRecipeorFood: true
-                                            )
-                                        }
-                                    }
-                                }
-                                Spacer()
-                
                 RecipeView()
             }
             .toolbar {

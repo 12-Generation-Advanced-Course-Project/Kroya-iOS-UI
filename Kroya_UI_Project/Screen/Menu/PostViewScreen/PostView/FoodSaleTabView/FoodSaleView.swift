@@ -26,8 +26,12 @@ struct FoodSaleView: View {
                                     subImage1: "ahmok",
                                     subImage2: "brohok",
                                     subImage3: "SomlorKari",
-                                    subImage4: "Songvak"
-                                )) {
+                                    subImage4: "Songvak",
+                                    showPrice1: true
+                                )
+                               
+                            
+                ) {
                     FoodOnSaleViewCell(
                         
                         imageName: "food1",
@@ -41,26 +45,27 @@ struct FoodSaleView: View {
                     )
                 }
                 
-                NavigationLink(destination:    FoodDetailView(
-                    theMainImage: "Songvak",
-                    subImage1: "ahmok",
-                    subImage2: "brohok",
-                    subImage3: "SomlorKari",
-                    subImage4: "Songvak"
-                )) {
-                    RecipeViewCell(
-                        
-                        imageName           : "food9",
-                        dishName            : "Stack",
-                        cookingDate         : "30 Sep 2024",
-                        statusType          : "Recipe",
-                        rating              : 5.0,
-                        reviewCount         : 200,
-                        level               : "Easy"
-                        
-                    )
-                }
-                .padding(.top, 10)
+//                NavigationLink(destination:    FoodDetailView(
+//                    theMainImage: "Songvak",
+//                    subImage1: "ahmok",
+//                    subImage2: "brohok",
+//                    subImage3: "SomlorKari",
+//                    subImage4: "Songvak",
+//                    showPrice1: true
+//                )) {
+//                    RecipeViewCell(
+//                        
+//                        imageName           : "food9",
+//                        dishName            : "Stack",
+//                        cookingDate         : "30 Sep 2024",
+//                        statusType          : "Recipe",
+//                        rating              : 5.0,
+//                        reviewCount         : 200,
+//                        level               : "Easy"
+//                        
+//                    )
+//                }
+//                .padding(.top, 10)
                 
                 // Example PopularDishesCard for dishes
                 NavigationLink(destination:    FoodDetailView(
@@ -68,7 +73,8 @@ struct FoodSaleView: View {
                     subImage1: "ahmok",
                     subImage2: "brohok",
                     subImage3: "SomlorKari",
-                    subImage4: "Songvak"
+                    subImage4: "Songvak",
+                    showPrice1: true
                 )) {
                     FoodOnSaleViewCell(
                         
@@ -84,89 +90,93 @@ struct FoodSaleView: View {
                 }
                 .padding(.top, 10)
                 
-                NavigationLink(destination:   FoodDetailView(
-                    theMainImage: "Songvak",
-                    subImage1: "ahmok",
-                    subImage2: "brohok",
-                    subImage3: "SomlorKari",
-                    subImage4: "Songvak"
-                )) {
-                    RecipeViewCell(
-                        
-                        imageName           : "food3",
-                        dishName            : "Koung",
-                        cookingDate         : "30 Sep 2024",
-                        statusType          : "Recipe",
-                        rating              : 5.0,
-                        reviewCount         : 200,
-                        level               : "Easy"
-                        
-                    )
-                }
-                .padding(.top, 10)
+//                NavigationLink(destination:   FoodDetailView(
+//                    theMainImage: "Songvak",
+//                    subImage1: "ahmok",
+//                    subImage2: "brohok",
+//                    subImage3: "SomlorKari",
+//                    subImage4: "Songvak",
+//                    showPrice1: true
+//                )) {
+//                    RecipeViewCell(
+//                        
+//                        imageName           : "food3",
+//                        dishName            : "Koung",
+//                        cookingDate         : "30 Sep 2024",
+//                        statusType          : "Recipe",
+//                        rating              : 5.0,
+//                        reviewCount         : 200,
+//                        level               : "Easy"
+//                        
+//                    )
+//                }
+//                .padding(.top, 10)
                 
-                NavigationLink(destination:   FoodDetailView(
-                    theMainImage: "Songvak",
-                    subImage1: "ahmok",
-                    subImage2: "brohok",
-                    subImage3: "SomlorKari",
-                    subImage4: "Songvak"
-                )) {
-                    RecipeViewCell(
-                        
-                        imageName           : "food7",
-                        dishName            : "BayChar Loklak",
-                        cookingDate         : "30 Sep 2024",
-                        statusType          : "Recipe",
-                        rating              : 5.0,
-                        reviewCount         : 200,
-                        level               : "Easy"
-                        
-                    )
-                }
-                .padding(.top, 10)
+//                NavigationLink(destination:   FoodDetailView(
+//                    theMainImage: "Songvak",
+//                    subImage1: "ahmok",
+//                    subImage2: "brohok",
+//                    subImage3: "SomlorKari",
+//                    subImage4: "Songvak",
+//                    showPrice1: true
+//                )) {
+//                    RecipeViewCell(
+//                        
+//                        imageName           : "food7",
+//                        dishName            : "BayChar Loklak",
+//                        cookingDate         : "30 Sep 2024",
+//                        statusType          : "Recipe",
+//                        rating              : 5.0,
+//                        reviewCount         : 200,
+//                        level               : "Easy"
+//                        
+//                    )
+//                }
+//                .padding(.top, 10)
+//                
+//                NavigationLink(destination:   FoodDetailView(
+//                    theMainImage: "Songvak",
+//                    subImage1: "ahmok",
+//                    subImage2: "brohok",
+//                    subImage3: "SomlorKari",
+//                    subImage4: "Songvak",
+//                    showPrice1: true
+//                )) {
+//                    RecipeViewCell(
+//                        
+//                        imageName           : "food5",
+//                        dishName            : "Amork",
+//                        cookingDate         : "30 Sep 2024",
+//                        statusType          : "Recipe",
+//                        rating              : 5.0,
+//                        reviewCount         : 200,
+//                        level               : "Easy"
+//                        
+//                    )
+//                }
+//                .padding(.top, 10)
                 
-                NavigationLink(destination:   FoodDetailView(
-                    theMainImage: "Songvak",
-                    subImage1: "ahmok",
-                    subImage2: "brohok",
-                    subImage3: "SomlorKari",
-                    subImage4: "Songvak"
-                )) {
-                    RecipeViewCell(
-                        
-                        imageName           : "food5",
-                        dishName            : "Amork",
-                        cookingDate         : "30 Sep 2024",
-                        statusType          : "Recipe",
-                        rating              : 5.0,
-                        reviewCount         : 200,
-                        level               : "Easy"
-                        
-                    )
-                }
-                .padding(.top, 10)
-                
-                NavigationLink(destination:    FoodDetailView(
-                    theMainImage: "Songvak",
-                    subImage1: "ahmok",
-                    subImage2: "brohok",
-                    subImage3: "SomlorKari",
-                    subImage4: "Songvak"
-                )) {
-                    RecipeViewCell(
-                        
-                        imageName           : "food4",
-                        dishName            : "Char Kroeng",
-                        cookingDate         : "30 Sep 2024",
-                        statusType          : "Recipe",
-                        rating              : 5.0,
-                        reviewCount         : 200,
-                        level               : "Easy"
-                        
-                    )
-                }
-                .padding(.top, 10)
+//                NavigationLink(destination:    FoodDetailView(
+//                    theMainImage: "Songvak",
+//                    subImage1: "ahmok",
+//                    subImage2: "brohok",
+//                    subImage3: "SomlorKari",
+//                    subImage4: "Songvak",
+//                    showPrice1: true
+//                )) {
+//                    RecipeViewCell(
+//                        
+//                        imageName           : "food4",
+//                        dishName            : "Char Kroeng",
+//                        cookingDate         : "30 Sep 2024",
+//                        statusType          : "Recipe",
+//                        rating              : 5.0,
+//                        reviewCount         : 200,
+//                        level               : "Easy"
+//                        
+//                    )
+//                }
+//                .padding(.top, 10)
                        
             }
             .padding(.horizontal, 20)

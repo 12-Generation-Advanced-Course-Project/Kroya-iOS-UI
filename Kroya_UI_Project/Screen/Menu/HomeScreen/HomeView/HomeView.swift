@@ -115,7 +115,8 @@ struct HomeView: View {
                                                 subImage1: "ahmok",
                                                 subImage2: "brohok",
                                                 subImage3: "SomlorKari",
-                                                subImage4: "Songvak"
+                                                subImage4: "Songvak",
+                                                showPrice1: true
                                             )
                             
                             ) {
@@ -138,7 +139,8 @@ struct HomeView: View {
                                                     subImage1: "ahmok",
                                                     subImage2: "brohok",
                                                     subImage3: "SomlorKari",
-                                                    subImage4: "Songvak"
+                                                    subImage4: "Songvak",
+                                                    showPrice1: true
                                                 )
                                 ) {
                                     FoodOnSaleViewCell(
@@ -160,7 +162,8 @@ struct HomeView: View {
                                                     subImage1: "ahmok",
                                                     subImage2: "brohok",
                                                     subImage3: "SomlorKari",
-                                                    subImage4: "Songvak"
+                                                    subImage4: "Songvak",
+                                                    showOrderButton: false
                                                 )
                                 ) {
                                     RecipeViewCell(

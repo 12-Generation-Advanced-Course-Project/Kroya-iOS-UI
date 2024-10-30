@@ -33,7 +33,8 @@ struct FoodOnSaleView: View {
                                         subImage1: "ahmok",
                                         subImage2: "brohok",
                                         subImage3: "SomlorKari",
-                                        subImage4: "Songvak"
+                                        subImage4: "Songvak",
+                                        showPrice1: true
                                     )
 //                                    ContentOnButtonSheet(
 //                        foodName: "Somlor Kari \(index + 1)", // Customize with the index if needed

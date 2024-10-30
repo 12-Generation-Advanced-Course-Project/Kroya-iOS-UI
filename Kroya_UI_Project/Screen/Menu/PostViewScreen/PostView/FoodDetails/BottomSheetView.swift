@@ -1,11 +1,13 @@
 import SwiftUI
 
 struct BottomSheetView<Content: View>: View {
+    
     let content: Content
     @Binding var isOpen: Bool
-    
+    @State private var navigateToCheckout = false
     let maxHeight: CGFloat
     let minHeight: CGFloat
+    let showOrderButton: Bool // New parameter to control Order button visibility
     @GestureState private var translation: CGFloat = 0
     
     private var offset: CGFloat {
@@ -17,45 +19,51 @@ struct BottomSheetView<Content: View>: View {
     }
     
     private var indicator: some View {
-        VStack(spacing: 10){
+        VStack(spacing: 10) {
             RoundedRectangle(cornerRadius: 8)
                 .fill(Color(hex: "#D0DBEA"))
                 .frame(width: 40, height: 5)
-                .padding(.top,20)
-            HStack{
+                .padding(.top, 20)
+            HStack {
                 Text("Somlor Mju")
                     .font(.customfont(.bold, fontSize: 20))
                 Spacer()
                 
-                
-                Button(action : {
-                    // navigateToCheckout = true // Set to true to trigger navigation
-                })
-                {
-                    HStack {
-                        Text("Order")
-                            .font(.customfont(.medium, fontSize: 16))
-                            .foregroundStyle(.white)
-                        Image(systemName: "plus")
-                            .resizable()
-                            .frame(width: 14, height: 14)
-                            .foregroundStyle(Color.white)
+                if showOrderButton { // Conditionally show Order button
+                    Button(action: {
+                        navigateToCheckout = true
+                    }) {
+                        HStack {
+                            Text("Order")
+                                .font(.customfont(.medium, fontSize: 16))
+                                .foregroundStyle(.white)
+                            Image(systemName: "plus")
+                                .resizable()
+                                .frame(width: 14, height: 14)
+                                .foregroundStyle(.white)
+                        }
+                        .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.height * 0.04)
+                        .background(PrimaryColor.normal)
+                        .cornerRadius(UIScreen.main.bounds.width * 0.022)
                     }
-                    .frame(width: .screenWidth * 0.25, height: .screenHeight * 0.04)
-                    .background(PrimaryColor.normal)
-                    .cornerRadius(.screenWidth * 0.022)
+                    .background(
+                        NavigationLink(destination: FoodCheckOutView(), isActive: $navigateToCheckout) {
+                            EmptyView()
+                        }
+                    )
                 }
-                
-            }.padding(.horizontal, 15)
-                .padding(.top, 8)
+            }
         }
+        .padding(.horizontal, 15)
+        .padding(.top, 8)
     }
     
-    init(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat, @ViewBuilder content: () -> Content) {
+    init(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat, showOrderButton: Bool = true, @ViewBuilder content: () -> Content) {
         self.content = content()
         self._isOpen = isOpen
         self.maxHeight = maxHeight
         self.minHeight = minHeight
+        self.showOrderButton = showOrderButton
     }
     
     var body: some View {
@@ -63,7 +71,6 @@ struct BottomSheetView<Content: View>: View {
             VStack {
                 self.indicator
                 self.content
-                //   .padding(.top, 20)
             }
             .frame(width: geometry.size.width, height: self.maxHeight, alignment: .top)
             .background(Color.white)
@@ -88,11 +95,15 @@ struct BottomSheetView<Content: View>: View {
     }
 }
 
+
+
 struct FoodDetailView: View {
     @State private var isFavorite: Bool = false
     @State private var currentImage: String
     @State private var isBottomSheetOpen: Bool = false
     @State private var isShowPopup: Bool = false  // Popup control here
+    var showPrice : Bool
+    var showOrderButton: Bool // New parameter to control Order button visibility
     var theMainImage: String
     var subImage1: String
     var subImage2: String
@@ -100,12 +111,14 @@ struct FoodDetailView: View {
     var subImage4: String
     @Environment(\.dismiss) var dismiss
     
-    init(theMainImage: String, subImage1: String, subImage2: String, subImage3: String, subImage4: String) {
+    init(theMainImage: String, subImage1: String, subImage2: String, subImage3: String, subImage4: String,showOrderButton: Bool = true,showPrice1 : Bool = false) {
         self.theMainImage = theMainImage
         self.subImage1 = subImage1
         self.subImage2 = subImage2
         self.subImage3 = subImage3
         self.subImage4 = subImage4
+        self.showOrderButton = showOrderButton // Initialize showOrderButton
+        self.showPrice = showPrice1
         _currentImage = State(initialValue: theMainImage)
     }
     
@@ -195,8 +208,8 @@ struct FoodDetailView: View {
                 }
                 
                 // Bottom Sheet Content
-                BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.645) {
-                    ContentView(isShowPopup: $isShowPopup)
+                BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.645, showOrderButton: showOrderButton) {
+                    ContentView(showPrice: showPrice, isShowPopup: $isShowPopup)
                         .padding(.horizontal, 15)
                 }
                 .edgesIgnoringSafeArea(.all)
@@ -218,7 +231,7 @@ struct FoodDetailView: View {
         theMainImage: "Songvak",
         subImage1: "ahmok",
         subImage2: "brohok",
-        subImage3: "SomlorKari",
+        subImage3: "somlorKari",
         subImage4: "Songvak"
     )
 }
