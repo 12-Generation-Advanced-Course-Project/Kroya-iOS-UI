@@ -2,7 +2,9 @@
 //  RecipeView.swift
 //  Kroya_UI_Project
 //
-//  Created by Ounbonaliheng on 4/10/24.
+// 
+// 29/10/24
+// Hengly
 //
 
 import SwiftUI
@@ -19,8 +21,8 @@ struct RecipeView: View {
                 ZStack {
                     RecipeViewCell(
                         
-                        imageName: "somlorKari",
-                        dishName: "Somlor Kari \(index + 1)",
+                        imageName: "slide3",
+                        dishName: "Amork \(index + 1)",
                         cookingDate: "30 Sep 2024",
                         statusType: "Recipe",
                         rating: 5.0,

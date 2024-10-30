@@ -10,15 +10,15 @@
 				<key>location-parameters</key>
 				<dict>
 					<key>EndingColumnNumber</key>
-					<string>54</string>
+					<string>0</string>
 					<key>EndingLineNumber</key>
-					<string>42</string>
+					<string>0</string>
 					<key>StartingColumnNumber</key>
-					<string>13</string>
+					<string>0</string>
 					<key>StartingLineNumber</key>
-					<string>42</string>
+					<string>0</string>
 					<key>Timestamp</key>
-					<string>751275786.43241</string>
+					<string>751913708.772278</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -34,15 +34,13 @@
 			<key>text-context</key>
 			<dict>
 				<key>focused</key>
-				<string>   TabView(selection: $selectedSegment) {</string>
+				<string></string>
 				<key>leading</key>
-				<string>                .padding(.top, 5)
-                
-             </string>
+				<string></string>
 				<key>trailing</key>
 				<string>
-                    FoodSaleView(iselected: selectedSegment)
-                        .tag(0)
+
+// New Code
 </string>
 			</dict>
 			<key>type</key>
