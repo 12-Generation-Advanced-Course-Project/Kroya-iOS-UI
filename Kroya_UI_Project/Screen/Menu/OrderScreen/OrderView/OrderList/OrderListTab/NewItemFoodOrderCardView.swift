@@ -7,20 +7,26 @@
 
 import SwiftUI
 
-struct NewItemFoodOrderCardView: View {
-    var iselected:Int?
-    var body: some View {
-        
-        ScrollView(.vertical,showsIndicators: false){
-            VStack(spacing: 20){
-                ItemFoodOrderCard(item: FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: nil, timeAgo: "10m ago"))
-                ItemFoodOrderCard(item: FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: "Accept", timeAgo: "15m ago"))
-                ItemFoodOrderCard(item:FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: "Reject", timeAgo: "35m ago"))
-            }
-            .padding(.horizontal, 15)
-        }}
-}
 
-#Preview {
-    NewItemFoodOrderCardView()
+
+struct NewItemFoodOrderCardView: View {
+    var iselected: Int?
+    
+    @State  var foodItems : [FoodItem] = [
+        FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: nil, timeAgo: "10m ago"),
+        FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR",status: "Reject", timeAgo: "15m ago"),
+        FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR",status: "Reject", timeAgo: "15m ago"),
+        FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR",status: "Reject", timeAgo: "15m ago")
+    ]
+    
+    var body: some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            VStack(spacing: 20) {
+                ForEach($foodItems){ item in
+                    ItemFoodOrderCard(item: item)
+                }
+                  }
+            .padding(.horizontal, 15)
+        }
+    }
 }
