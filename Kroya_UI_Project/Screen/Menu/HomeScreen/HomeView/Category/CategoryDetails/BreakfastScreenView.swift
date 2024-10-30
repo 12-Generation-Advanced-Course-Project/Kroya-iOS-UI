@@ -178,11 +178,18 @@ struct BreakfastScreenView: View {
                             .font(.system(size: 16))  // Replace with your custom font method if you have one
                             .foregroundColor(.black.opacity(0.8))
                         Group {
-                            Text("Please check your ")
-                                .font(.system(size: 12)) +  // Replace with your custom font method if you have one
-                            Text("breakfast")
-                                .font(.system(size: 12))  // Replace with your custom font method if you have one
-                                .foregroundColor(.yellow)
+//                            Text("Please check your ")
+//                                .font(.system(size: 12)) +  // Replace with your custom font method if you have one
+//                            Text("breakfast")
+//                                .font(.system(size: 12))  // Replace with your custom font method if you have one
+//                                .foregroundColor(.yellow)
+                            HStack{
+                                Text(LocalizedStringKey("Please check your "))
+                                    .font(.system(size: 12))
+                                Text(LocalizedStringKey("Breakfast"))
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.yellow)
+                            }
                         }
                         .font(.system(size: 12))  // Replace with your custom font method if you have one
                         .foregroundColor(.black.opacity(0.6))

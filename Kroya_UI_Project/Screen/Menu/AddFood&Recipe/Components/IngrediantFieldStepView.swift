@@ -36,7 +36,7 @@ struct StepEntryView: View {
                     }
                     
                     ZStack(alignment: .trailing) {
-                        TextField("Enter description", text: Binding(
+                        TextField(LocalizedStringKey("Enter ingredients"), text: Binding(
                             get: { step.description },
                             set: { newValue in
                                 step.description = newValue
@@ -78,7 +78,7 @@ struct StepEntryView: View {
                     HStack {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .foregroundColor(.red)
-                        Text("Please write a description for this step.")
+                        Text(LocalizedStringKey("Please write a description for this step."))
                             .foregroundColor(.red)
                             .font(.caption)
                     }

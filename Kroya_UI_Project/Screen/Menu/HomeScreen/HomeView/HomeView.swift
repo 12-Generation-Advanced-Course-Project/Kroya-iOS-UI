@@ -35,7 +35,7 @@ struct HomeView: View {
                         HStack(spacing: 16) {
                             NavigationLink(destination: FoodonOrderView()) {
                                 Recipe_OrderCard(
-                                    title: LocalizedStringKey("Food Order"),
+                                    title: LocalizedStringKey("Food order"),
                                     subtitle: LocalizedStringKey("Order what you love"),
                                     imageName: "food_recipe",
                                     width: .screenWidth * 0.45,

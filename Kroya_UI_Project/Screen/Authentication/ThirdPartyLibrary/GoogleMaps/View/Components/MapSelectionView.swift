@@ -94,7 +94,7 @@ struct MapSelectionView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 15, height: 15)
-                        Text(markerCoordinate != nil ? locationManager.pinAddress ?? "Finding pin address..." : locationManager.address ?? "Finding current address...")
+                        Text(LocalizedStringKey( markerCoordinate != nil ? locationManager.pinAddress ?? "Finding pin address..." : locationManager.address ?? "Finding current address..."))
                             .font(.system(size: 15, weight: .regular))
                     }
                     .onTapGesture {

@@ -49,10 +49,12 @@
 "Please enter a valid email address." = "유효한 이메일 주소를 입력해 주세요.";
 "Please input a valid password" = "유효한 비밀번호를 입력해 주세요";
 "Password is Incorrect" = "비밀번호가 틀렸습니다";
+"Finding current address..." = "현재 주소를 찾는 중...";
+"Finding pin address..." = "핀 주소를 찾는 중...";
 
 //Home
 "What would you like to eat today ?" = "오늘 무엇을 드시고 싶으세요?";
-"Food Order" = "음식 주문";
+"Food order" = "음식 주문";
 "Order what you love" = "좋아하는 것을 주문하세요";
 "Food Recipe" = "음식 조리법";
 "Learn how to cook" = "요리하는 법을 배우세요";
@@ -75,7 +77,7 @@
 
 //Orders
 "Orders" = "명령";
-"Search item" = "검색항목";
+"Search Item" = "검색항목";
 "All" = "모두";
 "Order" = "주문하다";
 "Sale" = "판매";
@@ -84,7 +86,7 @@
 "Last 2 days" = "지난 2일";
 "This Week" = "이번 주";
 "Notification" = "알림";
-"You have" = "អ្នកមាន";
+"You have" = "당신";
 
 //About me
 "Meng Chantha" = "멩 찬타";
@@ -135,7 +137,7 @@
 "Snack" = "간식";
 "Next" = "다음";
 "Food name cannot be empty" = "음식 이름은 비워둘 수 없습니다" ;
-"Description cannot be empty" = "설명은 비워둘 수 없습니다";
+"description cannot be empty" = "설명은 비워둘 수 없습니다";
 "Sale Report" = "판매 보고서";
 
 //Recipe
@@ -165,6 +167,9 @@
 "Post" = "우편";
 "Is this food available for sale?" = "이 음식은 판매 가능한가요?";
 "Earning" = "수익";
+"Ingredient cannot be empty" = "재료를 비워둘 수 없습니다";
+"quantity and price cannot be empty" = "수량과 가격을 비워둘 수 없습니다";
+"Enter Ingredients" = "재료 입력";
 
 //Popup Sale
 "Save this as a draft?" = "초안으로 저장하시겠습니까?";
@@ -190,13 +195,17 @@
 //Edit Profile
 "Edit Profile" = "프로필 편집";
 "Personal info" = "개인 정보";
-"Full name" = "성명";
+"Full name" = "이름";
 "Email" = "이메일";
 "Mobile" = "모바일";
 "Password" = "비밀번호";
 "Address" = "주소";
 "Save" = "저장";
 "Delete account?" = "계정을 삭제하시겠습니까?";
+"Enter your full name" = "이름을 입력하세요";
+"Enter your mobile number" =  "휴대폰 번호를 입력하세요";
+"Enter your password" = "비밀번호를 입력하세요";
+"Enter your address" = "주소를 입력하세요";
 
 //Delete account popup
 "Delete your account?" = "계정을 삭제하시겠습니까?";
@@ -216,3 +225,15 @@
 "Your account have been created successfully." = "귀하의 계정이 성공적으로 생성되었습니다.";
 "Allow Notification" = "알림 허용";
 "Not Now" = " 지금 아님";
+"Detail information cannot be empty" = "Detail information cannot be empty";
+"Do you want to turn on\nNotification?" = "알림을 \n켜시겠습니까?";
+
+//WeBill
+"Connect to WeBill365 account for e-payment" = "전자 결제를 위한 WeBill365 계정에 연결하세요";
+"Client ID" = "클라이언트 ID";
+"Secret ID" = "비밀 ID";
+
+// Change language
+"Change Language" = "언어 변경";
+"Which language do you prefer?" = "어떤 언어를 선호하십니까?";
+"Please check your " = "당신의 것을 확인하십시오";

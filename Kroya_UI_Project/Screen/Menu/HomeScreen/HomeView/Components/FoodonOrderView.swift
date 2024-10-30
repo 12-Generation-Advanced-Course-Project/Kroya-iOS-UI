@@ -86,7 +86,7 @@ struct FoodonOrderView: View {
                                 .frame(width: 20, height: 20)
                                 .foregroundStyle(.black)
                         }
-                        Text("Food order")
+                        Text(LocalizedStringKey("Food order"))
                             .font(.customfont(.semibold, fontSize: 16))
                             .foregroundStyle(.black.opacity(0.8))
                     }
@@ -94,7 +94,7 @@ struct FoodonOrderView: View {
             }
             
         }
-        .searchable(text: $searchText, prompt:"Search Item")
+        .searchable(text: $searchText, prompt: LocalizedStringKey("Search Item"))
         .navigationBarBackButtonHidden(true)
     }
 }

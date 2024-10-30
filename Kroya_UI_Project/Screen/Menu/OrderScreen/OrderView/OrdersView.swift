@@ -30,7 +30,7 @@ struct OrdersView: View {
                             .scaledToFit()
                             .frame(width: 24, height: 24)
 
-                        Text("Search item")
+                        Text(LocalizedStringKey("Search Item"))
                             .font(.customfont(.medium, fontSize: 16))
                             .foregroundColor(.gray)
                             .frame(width: .screenWidth * 0.26)

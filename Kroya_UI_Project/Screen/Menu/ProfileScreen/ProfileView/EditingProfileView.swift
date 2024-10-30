@@ -2,6 +2,10 @@
 
 
 
+
+
+
+
 import SwiftUI
 import Kingfisher
 import Combine
@@ -21,6 +25,8 @@ struct EditingProfileView: View {
     @Binding var selectedAddress: Address?
     @State private var imagefile: String = ""
     @StateObject var viewModel: AddressViewModel
+    @State private var isPasswordVisible = false
+    
     var urlImagePrefix: String = "https://kroya-api.up.railway.app/api/v1/fileView/"
     
     var body: some View {
@@ -76,22 +82,103 @@ struct EditingProfileView: View {
                     }
                 }
                 // Personal Info Section
-                VStack(spacing: 13) {
-                    HStack {
-                        Text("Personal info")
-                            .foregroundStyle(Color(hex: "#0A0019"))
-                            .opacity(0.6)
-                            .font(.customfont(.regular, fontSize: 14))
-                        Spacer()
+                VStack(alignment: .leading) {
+                    Text("Personal info")
+                        .foregroundStyle(Color(hex: "#0A0019"))
+                        .opacity(0.6)
+                        .font(.customfont(.regular, fontSize: 14))
+                        .padding(.trailing,25)
+                        .padding(.vertical,10)
+                        .background(Color.white.opacity(0.2))
+                    
+                    // Full Name Label and TextField
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text(LocalizedStringKey("Full name"))
+                                .font(.customfont(.medium, fontSize: 16))
+                                .foregroundColor(.black.opacity(0.8))
+                            TextField("Enter your full name", text: $userInputName)
+                                .padding()
+                                .foregroundColor(.black)
+                                .cornerRadius(8)
+                                .font(.customfont(.medium, fontSize: 16))
+                        }
+                        .padding(.leading, 16)
+                        .background(Color.black.opacity(0.1))
+                        .cornerRadius(8)
                     }
-                    Text_field(text: $userInputName, label: "Full Name", backgroundColor: .white.opacity(0.8), fontcolor: .black)
-                    Text_field(text: $userInputEmail, label: "Email", backgroundColor: .white.opacity(0.8), fontcolor: .black.opacity(0.5))
-                        .disabled(true)
-                    Text_field(text: $userInputContact, label: "Mobile", backgroundColor: .white.opacity(0.8), fontcolor: .black)
-                        .onChange(of: userInputContact) { _ in formatPhoneNumber() }
-                    PasswordFieldd(password: $userInputPassword, backgroundColor: .white.opacity(0.8), label: "Password:")
-                    Text_field(text: $userInputAddress, label: "Address", backgroundColor: .white.opacity(0.8), fontcolor: .black.opacity(0.5))
-                        .disabled(true)
+                    
+                    // Email Label and TextField (disabled)
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text(LocalizedStringKey("Email"))
+                                .font(.customfont(.medium, fontSize: 16))
+                                .foregroundColor(.black.opacity(0.8))
+                            Spacer()
+                            TextField("Enter your email", text: $userInputEmail)
+                                .padding()
+                                .foregroundColor(.black.opacity(0.5))
+                                .cornerRadius(8)
+                                .font(.customfont(.medium, fontSize: 16))
+                                .disabled(true)
+                        }
+                        .padding(.leading, 16)
+                        .background(Color.black.opacity(0.1))
+                        .cornerRadius(8)
+                    }
+                    
+                    // Mobile Label and TextField
+                    VStack(alignment: .leading) {
+                        HStack(spacing: 10){
+                            Text(LocalizedStringKey("Mobile"))
+                                .font(.customfont(.medium, fontSize: 16))
+                                .foregroundColor(.black.opacity(0.8))
+                            TextField("Enter your mobile number", text: $userInputContact)
+                                .padding()
+                                .foregroundColor(.black)
+                                .cornerRadius(8)
+                                .font(.customfont(.medium, fontSize: 16))
+                        }
+                        .padding(.leading, 16)
+                        .background(Color.black.opacity(0.1))
+                        .cornerRadius(8)
+                    }
+                    
+                    // Password Label and SecureField
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text(LocalizedStringKey("Password"))
+                                .font(.customfont(.medium, fontSize: 16))
+                                .foregroundColor(.black.opacity(0.8))
+                            // Toggleable password field
+                            (isPasswordVisible ? AnyView(TextField("Enter your password", text: $userInputPassword)) : AnyView(SecureField("Enter your password", text: $userInputPassword)))
+                                .padding()
+                                .foregroundColor(.black)
+                                .cornerRadius(8)
+                                .font(.customfont(.medium, fontSize: 16))
+                                .disabled(true)
+                        }
+                        .padding(.leading, 16)
+                        .background(Color.black.opacity(0.1))
+                        .cornerRadius(8)
+                    }
+                    
+                    // Address Label and TextField (disabled)
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text("Address")
+                                .font(.customfont(.medium, fontSize: 16))
+                                .foregroundColor(.black.opacity(0.8))
+                            TextField("Enter your address", text: $userInputAddress)
+                                .padding()
+                                .foregroundColor(.black.opacity(0.5))
+                                .font(.customfont(.medium, fontSize: 16))
+                                .disabled(true)
+                        }
+                        .padding(.leading, 16)
+                        .background(Color.black.opacity(0.1))
+                        .cornerRadius(8)
+                    }
                 }
                 .padding(.horizontal, 20)
                 
@@ -209,16 +296,16 @@ struct EditingProfileView: View {
         userInputAddress = selectedAddress?.specificLocation ?? profile.userProfile?.location ?? ""
     }
     private func detectImageFormat(data: Data) -> String {
-            let headerBytes = [UInt8](data.prefix(1))
-            switch headerBytes {
-            case [0x89]:
-                return "png"
-            case [0xFF]:
-                return "jpg"
-            default:
-                return "jpeg"
-            }
+        let headerBytes = [UInt8](data.prefix(1))
+        switch headerBytes {
+        case [0x89]:
+            return "png"
+        case [0xFF]:
+            return "jpg"
+        default:
+            return "jpeg"
         }
+    }
     private func formatPhoneNumber() {
         let digits = userInputContact.filter { $0.isNumber }
         let formatted = digits.prefix(9)
@@ -227,7 +314,7 @@ struct EditingProfileView: View {
             return "\(char)"
         }.joined()
     }
-
+    
 }
 
 struct DeleteAccountDialog: View {

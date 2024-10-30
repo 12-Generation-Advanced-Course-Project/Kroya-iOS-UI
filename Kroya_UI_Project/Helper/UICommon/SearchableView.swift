@@ -247,7 +247,7 @@ struct SearchScreen: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(maxWidth: geometry.size.width * 0.05)
-                            TextField("Search items", text: $searchText)
+                            TextField(LocalizedStringKey("Search items"), text: $searchText)
                                 .font(.customfont(.medium, fontSize: geometry.size.width * 0.04)) // Responsive font
                                 .foregroundColor(.gray)
                                 .padding(.trailing, 12)

@@ -15,10 +15,14 @@ struct AllowNotificationView: View {
     var body: some View {
         VStack {
             VStack {
-                Group {
-                    Text("Do you want to turn")
-                    Text("on Notification?")
+                HStack(alignment: .center) {
+                    Text("Do you want to turn on\nNotification?")
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
+                        .frame(maxWidth: .infinity)
                 }
+                .frame(minHeight: 40)
+                .padding()
                 .font(.customfont(.semibold, fontSize: 24))
                 Spacer()
                 Image("PushNotification")

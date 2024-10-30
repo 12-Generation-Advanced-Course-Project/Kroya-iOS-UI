@@ -23,9 +23,9 @@ struct ChangeLanguageView: View {
     var body: some View {
         VStack(alignment: .leading) {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Change Language")
+                Text(LocalizedStringKey("Change Language"))
                     .font(.customfont(.bold, fontSize: 16))
-                Text("Which language do you prefer?")
+                Text(LocalizedStringKey("Which language do you prefer?"))
                     .font(.customfont(.medium, fontSize: 13))
                     .foregroundColor(.black.opacity(0.5))
             }
