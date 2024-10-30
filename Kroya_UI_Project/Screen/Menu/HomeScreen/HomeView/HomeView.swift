@@ -263,7 +263,7 @@ struct HomeView: View {
             Text("Unknown Category")
         }
     }
-}
+
 
 #Preview {
     HomeView()
