@@ -58,7 +58,7 @@ struct IngredientEntryView: View {
                         .strokeBorder(Color(hex: "#D0DBEA"), lineWidth: 1)
                 )
             }
-            .padding(.leading, .screenWidth * 0.015)
+            .padding(.leading, .screenWidth * 0.020)
             .padding(.top, 10)
             
             // Quantity and Price Input Fields
@@ -116,7 +116,9 @@ struct IngredientEntryView: View {
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 16)
+                .padding(.horizontal, 13)
+                .padding(.top,5)
+  
             }
             .padding(.vertical, 10)
             .overlay(
@@ -125,12 +127,13 @@ struct IngredientEntryView: View {
             )
             .padding(.leading, .screenWidth * 0.1)
             
+            
             // Error message shown only if showValidationError is true
             if showValidationError && (ingredient.name.isEmpty || ingredient.quantity.isEmpty || ingredient.price.isEmpty) {
                 HStack {
                     Image(systemName: "exclamationmark.triangle.fill")
                         .foregroundColor(.red)
-                    Text("Please fill all fields")
+                    Text(LocalizedStringKey("Please fill all fields"))
                         .foregroundColor(.red)
                         .font(.caption)
                 }
