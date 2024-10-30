@@ -178,16 +178,16 @@ struct EditingProfileView: View {
                                     .cornerRadius(8)
                                     .font(.customfont(.medium, fontSize: 16))
                                 
-                                // Eye icon to toggle password visibility
-                                Button(action: {
-                                    isPasswordVisible.toggle() // Toggle visibility
-                                }) {
-                                    Image(systemName: isPasswordVisible ? "eye.slash" : "eye")
-                                        .foregroundColor(.black)
-                                        .font(.customfont(.medium, fontSize: 16))
-                                }
-                                .padding(.trailing, 16)
-                                .padding(.leading, 5) // Space between the text field and the icon
+//                                // Eye icon to toggle password visibility
+//                                Button(action: {
+//                                    isPasswordVisible.toggle() // Toggle visibility
+//                                }) {
+//                                    Image(systemName: isPasswordVisible ? "eye.slash" : "eye")
+//                                        .foregroundColor(.black)
+//                                        .font(.customfont(.medium, fontSize: 16))
+//                                }
+//                                .padding(.trailing, 16)
+//                                .padding(.leading, 5) // Space between the text field and the icon
                             }
                             .padding(.leading, 16)
                             .background(Color.black.opacity(0.1))
