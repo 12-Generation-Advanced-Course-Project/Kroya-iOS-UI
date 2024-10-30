@@ -15,7 +15,7 @@ struct Recipe: View {
                 ZStack {
                     RecipeViewCell(
                         
-                        imageName: "somlorKari",
+                        imageName: "SomlorKari",
                         dishName: "Somlor Kari \(index + 1)", // Customize the dish name with index
                         cookingDate: "30 Sep 2024",
                         statusType: "Recipe",

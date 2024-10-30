@@ -18,7 +18,7 @@ struct PopupModifier<Popup: View>: ViewModifier {
             if isPresented {
                 self.content()
                     .transition(.scale)
-                    .animation(.easeInOut)
+                    .animation(.easeInOut(duration: 0.3))
             }
         }
     }

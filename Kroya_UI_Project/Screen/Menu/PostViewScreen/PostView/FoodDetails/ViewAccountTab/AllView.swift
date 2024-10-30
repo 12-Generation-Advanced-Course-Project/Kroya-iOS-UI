@@ -39,14 +39,13 @@ struct AllView: View {
                 ) {
                     RecipeViewCell(
                         
-                        imageName           : "somlorKari",
-                        dishName            : "Somlor Kari",
-                        cookingDate         : "30 Sep 2024",
-                        statusType          : "Recipe",
-                        rating              : 5.0,
-                        reviewCount         : 200,
-                        level               : "Easy"
-                        
+                        imageName: "SomlorKari",
+                        dishName: "Somlor Kari", // 
+                        cookingDate: "30 Sep 2024",
+                        statusType: "Recipe",
+                        rating: 5.0,
+                        reviewCount: 200,
+                        level: "Easy"
                     )
                 }
                 

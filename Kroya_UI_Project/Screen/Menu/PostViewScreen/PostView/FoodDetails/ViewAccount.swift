@@ -136,6 +136,6 @@ struct ViewAccount: View {
         return offset
     }
 }
-#Preview {
-    ViewAccount(profileImage: "Songvak", userName: "Kuromi", email: "Kuromi@gmail.com")
-}
+//#Preview {
+//    ViewAccount(profileImage: "Songvak", userName: "Kuromi", email: "Kuromi@gmail.com")
+//}

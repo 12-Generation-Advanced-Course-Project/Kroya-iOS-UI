@@ -65,15 +65,8 @@ struct PopupReview: View {
                                 RoundedRectangle(cornerRadius: 15)
                                     .strokeBorder(Color(hex: "#D0DBEA"), lineWidth: 1)
                             )
-                            .onChange(of: description){ userInput in
-                                if userInput.count > 300{
-                                    description = String(userInput.prefix(300))
-                                    showWarning = true
-                                } else {
-                                    showWarning = false
-                                }
-                                
-                                
+                            .onChange(of: description) { _ in
+                                checkCharacterLimit()
                             }
                     }
                     .overlay(
@@ -83,10 +76,8 @@ struct PopupReview: View {
                     .padding(.vertical,10)
                     HStack{
                         // Warning Message
-                        if showWarning {
-                            Text("Maximum character limit of 300 exceeded")
-                                .foregroundColor(.red)
-                        }
+                        Text(showWarning ? "Maximum character limit of 300 exceeded" : "")
+                            .foregroundColor(.red)
                         Spacer()
                         Text("\(description.count)/300")
                           
@@ -97,7 +88,7 @@ struct PopupReview: View {
                         Button (action: {
                             isReviewPopupOpen = false
                         }){
-                            Text("Cencel")
+                            Text("Cancel")
                                 .frame(width: 100,height: 45)
                                 .font(.customfont(.semibold, fontSize: 16))
                                 .background(Color(hex: "#F4F5F7"))
@@ -124,6 +115,16 @@ struct PopupReview: View {
             .padding()
         }
         
+    }
+    
+    private func checkCharacterLimit() {
+        if description.count > 300 {
+            description = String(description.prefix(300))
+            showWarning = true
+        }
+        else if description.count < 300 {
+            showWarning = false
+        }
     }
 }
 

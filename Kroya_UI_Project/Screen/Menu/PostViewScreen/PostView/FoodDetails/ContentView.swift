@@ -17,7 +17,7 @@ struct ContentView: View {
     @State private var currentStep = 1
     @Environment(\.dismiss) var dismiss
     @Binding var isShowPopup: Bool  // Use a binding to control popup
-   // @State var isShowPopup  = false
+    // @State var isShowPopup  = false
     @State private var isExpanded = false
     @State private var isReviewExpanded = false
     @State private var isReviewPopupOpen : Bool = false
@@ -66,19 +66,21 @@ struct ContentView: View {
                     
                     // Profile Section
                     Spacer().frame(height: screenHeight * 0.012)
-                    HStack(spacing: 10) {
-                        Image("mehh")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: screenWidth * 0.12, height: screenWidth * 0.12) // Circle image size
-                            .clipShape(Circle())
-                        
-                        VStack(alignment: .leading) {
-                            Text("PSN Team")
-                                .font(.customfont(.bold, fontSize: 17))
-                                .foregroundColor(.black)
-                        }
-                    }
+                    NavigationLink(destination: ViewAccount(profileImage: "mehh", userName: "Red Red", email: "redred168@gmail.com")){
+                   
+                            HStack(spacing: 10) {
+                                Image("mehh")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: screenWidth * 0.12, height: screenWidth * 0.12) // Circle image size
+                                    .clipShape(Circle())
+                                
+                                VStack(alignment: .leading) {
+                                    Text("Red Red")
+                                        .font(.customfont(.bold, fontSize: 17))
+                                        .foregroundColor(.black)
+                                }
+                            }}
                     Spacer().frame(height: screenHeight * 0.003)
                     
                     
@@ -341,47 +343,10 @@ struct ContentView: View {
                     
                 }
                 
-                
             }
-//                    .popup(isPresented: $isShowPopup, content: {
-//                                        PopupReview(profile: "Songvak", userName: "Chhoy Sreynoch", description: "", isReviewPopupOpen: $isShowPopup)
-//                          //  .presentationCompactAdaptation(.none)
-//                    })
             
         }
     }
 }
-//
-//#Preview {
-//    ContentView(isShowPopup: $isShowPopup)
-//}
 
 
-
-
-//struct ContentView: View {
-//    @State private var showAlert = false
-//    
-//    var body: some View {
-//        VStack {
-//            Button(action: {
-//                showAlert = true
-//            }) {
-//                Text("Show Popup Alert")
-//                    .padding()
-//                    .background(Color.blue)
-//                    .foregroundColor(.white)
-//                    .cornerRadius(10)
-//            }
-//        }
-//        .popup(isPresented: $showAlert, content: {
-//            PopupView()
-//        })
-//    }
-//}
-//
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ContentView()
-//    }
-//}
