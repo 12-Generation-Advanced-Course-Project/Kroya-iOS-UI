@@ -1,20 +1,19 @@
 //
-//  sale.swift
+//  AllView.swift
 //  Kroya_UI_Project
 //
-//  Created by Macbook on 10/14/24.
+//  Created by Macbook on 10/21/24.
 //
 
 import SwiftUI
 
-struct SaleTab: View {
-    
-    var isselected:Int?
-    
+struct AllView: View {
+    var iselected:Int?
     var body: some View {
-        ScrollView(.vertical,showsIndicators: false) {
+        ScrollView(.vertical,showsIndicators: false){
+            
             VStack{
-                // Example PopularDishesCard for dishes
+                
                 NavigationLink(destination:
                                 FoodDetailView(
                                     theMainImage: "Songvak",
@@ -24,33 +23,31 @@ struct SaleTab: View {
                                     subImage4: "Songvak"
                                 )
 //                                ContentOnButtonSheet(
-//                    foodName: "somlor Kari",
+//                    foodName: "Songvak",
 //                    price: 2.00,
 //                    date: "30 Sep 2024",
-//                    itemFood: "Somlor Kari",
-//                    profile: "profile_image",
+//                    itemFood: "Songvak",
+//                    profile: "profile_image", // Assuming a profile image
 //                    userName: "User Name",
-//                    description: "Somlor Kari is a traditional Cambodian dish...",
-//                    ingredients: "Chicken, Coconut Milk, Curry Paste",
-//                    percentageOfRating: 4.8,
-//                    numberOfRating: 200,
-//                    review: "Delicious dish!",
-//                    reviewDetail: "The Somlor Kari was perfectly spiced and rich in flavor"
+//                    description: "Songvak is a delicious dish...",
+//                    ingredients: "Pork, Fish Sauce, Spices",
+//                    percentageOfRating: 4.7,
+//                    numberOfRating: 150,
+//                    review: "Fantastic!",
+//                    reviewDetail: "The dish was flavorful and aromatic, a great meal..."
 //                )
                 ) {
-                    FoodOnSaleViewCell(
+                    RecipeViewCell(
                         
-                        imageName: "brohok", // Make sure this is the correct image in your assets
-                        dishName: "Somlor Kari",
+                        imageName: "SomlorKari",
+                        dishName: "Somlor Kari", // 
                         cookingDate: "30 Sep 2024",
-                        price: 2.00,
+                        statusType: "Recipe",
                         rating: 5.0,
                         reviewCount: 200,
-                        deliveryInfo: "Free",
-                        deliveryIcon: "motorbike"
+                        level: "Easy"
                     )
                 }
-                
                 
                 // Example PopularDishesCard for dishes
                 NavigationLink(destination:
@@ -89,11 +86,10 @@ struct SaleTab: View {
                     )
                 }
             }
-            .padding(.horizontal)
         }
     }
 }
 
-//#Preview {
-//   SaleTab()
-//}
+#Preview {
+    AllView()
+}
