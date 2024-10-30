@@ -125,8 +125,6 @@ struct LoginScreenView: View {
                     }
                     .font(.customfont(.regular, fontSize: 12))
                     .padding(.bottom, 20)
-                    
-                    Spacer()
                 }
                 .navigationBarHidden(true)
                 
