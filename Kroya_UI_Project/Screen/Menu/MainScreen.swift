@@ -102,7 +102,7 @@ struct MainScreen: View {
                     
                 }
                 .frame(width: .screenWidth, height: .screenHeight)
-                .padding(.bottom, .screenHeight * 0.089)
+                .padding(.bottom, .screenHeight * 0.072)
                 GeometryReader { geometry in
                     VStack {
                         Spacer()
