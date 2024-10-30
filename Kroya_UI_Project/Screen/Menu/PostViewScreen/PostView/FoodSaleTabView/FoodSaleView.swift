@@ -20,20 +20,14 @@ struct FoodSaleView: View {
             ScrollView(.vertical,showsIndicators: false){
                 
                 // Example PopularDishesCard for dishes
-                NavigationLink(destination: ContentOnButtonSheet(
-                    foodName: "somlor Kari",
-                    price: 2.00,
-                    date: "30 Sep 2024",
-                    itemFood: "Somlor Kari",
-                    profile: "profile_image",
-                    userName: "User Name",
-                    description: "Somlor Kari is a traditional Cambodian dish...",
-                    ingredients: "Chicken, Coconut Milk, Curry Paste",
-                    percentageOfRating: 4.8,
-                    numberOfRating: 200,
-                    review: "Delicious dish!",
-                    reviewDetail: "The Somlor Kari was perfectly spiced and rich in flavor"
-                )) {
+                NavigationLink(destination:
+                                FoodDetailView(
+                                    theMainImage: "Songvak",
+                                    subImage1: "ahmok",
+                                    subImage2: "brohok",
+                                    subImage3: "SomlorKari",
+                                    subImage4: "Songvak"
+                                )) {
                     FoodOnSaleViewCell(
                         
                         imageName: "food1",
@@ -47,19 +41,12 @@ struct FoodSaleView: View {
                     )
                 }
                 
-                NavigationLink(destination: ContentOnButtonSheet(
-                    foodName: "Songvak",
-                    price: 2.00,
-                    date: "30 Sep 2024",
-                    itemFood: "Songvak",
-                    profile: "profile_image", // Assuming a profile image
-                    userName: "User Name",
-                    description: "Songvak is a delicious dish...",
-                    ingredients: "Pork, Fish Sauce, Spices",
-                    percentageOfRating: 4.7,
-                    numberOfRating: 150,
-                    review: "Fantastic!",
-                    reviewDetail: "The dish was flavorful and aromatic, a great meal..."
+                NavigationLink(destination:    FoodDetailView(
+                    theMainImage: "Songvak",
+                    subImage1: "ahmok",
+                    subImage2: "brohok",
+                    subImage3: "SomlorKari",
+                    subImage4: "Songvak"
                 )) {
                     RecipeViewCell(
                         
@@ -76,19 +63,12 @@ struct FoodSaleView: View {
                 .padding(.top, 10)
                 
                 // Example PopularDishesCard for dishes
-                NavigationLink(destination: ContentOnButtonSheet(
-                    foodName: "somlor Kari",
-                    price: 2.00,
-                    date: "30 Sep 2024",
-                    itemFood: "Somlor Kari",
-                    profile: "profile_image",
-                    userName: "User Name",
-                    description: "Somlor Kari is a traditional Cambodian dish...",
-                    ingredients: "Chicken, Coconut Milk, Curry Paste",
-                    percentageOfRating: 4.8,
-                    numberOfRating: 200,
-                    review: "Delicious dish!",
-                    reviewDetail: "The Somlor Kari was perfectly spiced and rich in flavor"
+                NavigationLink(destination:    FoodDetailView(
+                    theMainImage: "Songvak",
+                    subImage1: "ahmok",
+                    subImage2: "brohok",
+                    subImage3: "SomlorKari",
+                    subImage4: "Songvak"
                 )) {
                     FoodOnSaleViewCell(
                         
@@ -104,19 +84,12 @@ struct FoodSaleView: View {
                 }
                 .padding(.top, 10)
                 
-                NavigationLink(destination: ContentOnButtonSheet(
-                    foodName: "Songvak",
-                    price: 2.00,
-                    date: "30 Sep 2024",
-                    itemFood: "Songvak",
-                    profile: "profile_image", // Assuming a profile image
-                    userName: "User Name",
-                    description: "Songvak is a delicious dish...",
-                    ingredients: "Pork, Fish Sauce, Spices",
-                    percentageOfRating: 4.7,
-                    numberOfRating: 150,
-                    review: "Fantastic!",
-                    reviewDetail: "The dish was flavorful and aromatic, a great meal..."
+                NavigationLink(destination:   FoodDetailView(
+                    theMainImage: "Songvak",
+                    subImage1: "ahmok",
+                    subImage2: "brohok",
+                    subImage3: "SomlorKari",
+                    subImage4: "Songvak"
                 )) {
                     RecipeViewCell(
                         
@@ -132,19 +105,12 @@ struct FoodSaleView: View {
                 }
                 .padding(.top, 10)
                 
-                NavigationLink(destination: ContentOnButtonSheet(
-                    foodName: "Songvak",
-                    price: 2.00,
-                    date: "30 Sep 2024",
-                    itemFood: "Songvak",
-                    profile: "profile_image", // Assuming a profile image
-                    userName: "User Name",
-                    description: "Songvak is a delicious dish...",
-                    ingredients: "Pork, Fish Sauce, Spices",
-                    percentageOfRating: 4.7,
-                    numberOfRating: 150,
-                    review: "Fantastic!",
-                    reviewDetail: "The dish was flavorful and aromatic, a great meal..."
+                NavigationLink(destination:   FoodDetailView(
+                    theMainImage: "Songvak",
+                    subImage1: "ahmok",
+                    subImage2: "brohok",
+                    subImage3: "SomlorKari",
+                    subImage4: "Songvak"
                 )) {
                     RecipeViewCell(
                         
@@ -160,19 +126,12 @@ struct FoodSaleView: View {
                 }
                 .padding(.top, 10)
                 
-                NavigationLink(destination: ContentOnButtonSheet(
-                    foodName: "Songvak",
-                    price: 2.00,
-                    date: "30 Sep 2024",
-                    itemFood: "Songvak",
-                    profile: "profile_image", // Assuming a profile image
-                    userName: "User Name",
-                    description: "Songvak is a delicious dish...",
-                    ingredients: "Pork, Fish Sauce, Spices",
-                    percentageOfRating: 4.7,
-                    numberOfRating: 150,
-                    review: "Fantastic!",
-                    reviewDetail: "The dish was flavorful and aromatic, a great meal..."
+                NavigationLink(destination:   FoodDetailView(
+                    theMainImage: "Songvak",
+                    subImage1: "ahmok",
+                    subImage2: "brohok",
+                    subImage3: "SomlorKari",
+                    subImage4: "Songvak"
                 )) {
                     RecipeViewCell(
                         
@@ -188,19 +147,12 @@ struct FoodSaleView: View {
                 }
                 .padding(.top, 10)
                 
-                NavigationLink(destination: ContentOnButtonSheet(
-                    foodName: "Songvak",
-                    price: 2.00,
-                    date: "30 Sep 2024",
-                    itemFood: "Songvak",
-                    profile: "profile_image", // Assuming a profile image
-                    userName: "User Name",
-                    description: "Songvak is a delicious dish...",
-                    ingredients: "Pork, Fish Sauce, Spices",
-                    percentageOfRating: 4.7,
-                    numberOfRating: 150,
-                    review: "Fantastic!",
-                    reviewDetail: "The dish was flavorful and aromatic, a great meal..."
+                NavigationLink(destination:    FoodDetailView(
+                    theMainImage: "Songvak",
+                    subImage1: "ahmok",
+                    subImage2: "brohok",
+                    subImage3: "SomlorKari",
+                    subImage4: "Songvak"
                 )) {
                     RecipeViewCell(
                         

@@ -40,8 +40,8 @@ struct SaleReportView: View {
     let soldItems: [Date: [FoodItem]] = [
         Calendar.current.date(from: DateComponents(year: 2024, month: 10, day: 3))!: [
 
-             FoodItem(name: "Brohok", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: nil, timeAgo: nil),
-             FoodItem(name: "Brohok", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: nil, timeAgo: nil)
+            FoodItem(name: "Brohok", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: nil, timeAgo: nil),
+            // FoodItem(name: "Brohok", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", timeAgo: nil)
             
         ]
     ]
@@ -157,19 +157,22 @@ struct SaleReportView: View {
             Spacer()
             
             // Sold food items for the selected day
-            if let items = soldItems[selectedDate] {
-                ScrollView(.vertical, showsIndicators: false) {
-                    ForEach(items) { item in
-                        ItemFoodOrderCard(item: item)
-                            .padding(.vertical, 5)
-                            .padding(.horizontal)
-                    }
-                }
-            } else {
-                Text(LocalizedStringKey("No items sold on this day"))
-                    .foregroundColor(.gray)
-                    .padding(.top)
-            }
+
+//            if let items = soldItems[selectedDate] {
+//                ScrollView(.vertical, showsIndicators: false) {
+//                    ForEach(items) { item in
+//                        ItemFoodOrderCard(item: item)
+//                            .padding(.vertical, 5)
+//                            .padding(.horizontal)
+//                    }
+//                }
+//            } else {
+//                Text(LocalizedStringKey("No items sold on this day"))
+//                    .foregroundColor(.gray)
+//                    .padding(.top)
+//            }
+
+
             Spacer()
         }
         .navigationTitle(LocalizedStringKey("Sale Report"))

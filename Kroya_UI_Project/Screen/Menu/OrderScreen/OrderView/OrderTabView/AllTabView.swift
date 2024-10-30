@@ -1,95 +1,79 @@
-//
-//  AllTabView.swift
-//  Kroya_UI_Project
-//
-//  Created by Ounbonaliheng on 5/10/24.
-//
-
 import SwiftUI
 
-struct AllTabView:View {
+struct AllTabView: View {
     
-    var iselected:Int?
+    var iselected: Int?
     
     @State private var isExpandedToday = false
     @State private var isExpandedYTD = false
     @State private var isExpandedLst2Day = false
     
     var body: some View {
-        ScrollView(.vertical,showsIndicators: false) {
-            VStack(alignment:.leading) {
+        NavigationStack {
+            VStack(alignment: .leading) {
+                // Disclosure Group for Today
                 DisclosureGroup("Today", isExpanded: $isExpandedToday) {
-                    ScrollView(.vertical, showsIndicators: false) {
-                        VStack{
-                            NavigationLink(destination: OrderListView()) {
-                                OrderCard(isAccepted: true, isOrder: false, showIcon: true)
-                            }
-                            OrderCard(isAccepted: false, isOrder: false, showIcon: false)
+                    VStack {
+                        List {
+                            OrderCard(isAccepted: true, isOrder: false, showIcon: true)
+                            OrderCard(isAccepted: false, isOrder: true, showIcon: false)
                             OrderCard(isAccepted: true, isOrder: true, showIcon: false)
-                            OrderCard(isAccepted: false, isOrder: false, showIcon: false)
-                            Spacer().frame(height: 5)
+                            OrderCard(isAccepted: false, isOrder: true, showIcon: false)
                         }
-                        .frame(maxWidth: .infinity,minHeight: .screenHeight * 0.48,alignment: .leading)
-                     .padding(.horizontal,5)
-                     
+                        .listStyle(PlainListStyle())
+                        .listRowSeparator(.hidden)
+                        .frame(maxWidth: .infinity, minHeight: .screenHeight * 0.3, alignment: .leading)
                     }
-                    
                 }
                 .font(.customfont(.semibold, fontSize: 16))
                 .frame(maxWidth: .infinity)
                 .foregroundStyle(.black)
                 .accentColor(.black)
-                .padding(.horizontal)
                 
+                // Disclosure Group for Yesterday
                 DisclosureGroup("Yesterday", isExpanded: $isExpandedYTD) {
-                    ScrollView(.vertical, showsIndicators: false) {
-                        VStack{
-                            
+                    VStack {
+                        List {
+                            OrderCard(isAccepted: true, isOrder: false, showIcon: true)
+                            OrderCard(isAccepted: false, isOrder: true, showIcon: false)
                             OrderCard(isAccepted: true, isOrder: true, showIcon: false)
-                            OrderCard(isAccepted: false, isOrder: false, showIcon: false)
-                            OrderCard(isAccepted: true, isOrder: true, showIcon: false)
-                            OrderCard(isAccepted: false, isOrder: false, showIcon: false)
-                            Spacer().frame(height: 5)
+                            OrderCard(isAccepted: false, isOrder: true, showIcon: false)
                         }
-                        .frame(maxWidth: .infinity,minHeight: .screenHeight * 0.5,alignment: .leading)
-                        .padding(.horizontal,5)
-                     
+                        .listStyle(PlainListStyle())
+                        .listRowSeparator(.hidden)
+                        .frame(maxWidth: .infinity, minHeight: .screenHeight * 0.35, alignment: .leading)
                     }
-                    
                 }
                 .font(.customfont(.semibold, fontSize: 16))
                 .frame(maxWidth: .infinity)
                 .foregroundStyle(.black)
                 .accentColor(.black)
-                .padding(.horizontal)
+                
+                // Disclosure Group for Last 2 Days
                 DisclosureGroup("Last 2 days", isExpanded: $isExpandedLst2Day) {
-                    ScrollView(.vertical, showsIndicators: false) {
-                        VStack{
-                            
+                    VStack {
+                        List {
                             OrderCard(isAccepted: true, isOrder: true, showIcon: false)
-                            OrderCard(isAccepted: false, isOrder: false, showIcon: false)
+                            OrderCard(isAccepted: false, isOrder: true, showIcon: false)
                             OrderCard(isAccepted: true, isOrder: true, showIcon: false)
-                            OrderCard(isAccepted: false, isOrder: false, showIcon: false)
-                            Spacer().frame(height: 5)
                         }
-                        .frame(maxWidth: .infinity,minHeight: .screenHeight * 0.5,alignment: .leading)
-                        .padding(.horizontal,5)
-                     
+                        .listStyle(PlainListStyle())
+                        .listRowSeparator(.hidden)
+                        .frame(maxWidth: .infinity, minHeight: .screenHeight * 0.3, alignment: .leading)
                     }
-                    
                 }
                 .font(.customfont(.semibold, fontSize: 16))
                 .frame(maxWidth: .infinity)
                 .foregroundStyle(.black)
                 .accentColor(.black)
-                .padding(.horizontal)
-                Spacer()
             }
+            .padding(.horizontal, 10)
+            Spacer()
         }
-       
     }
 }
-//
+
+
 #Preview {
     AllTabView()
 }

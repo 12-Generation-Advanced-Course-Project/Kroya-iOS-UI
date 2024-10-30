@@ -12,20 +12,29 @@ struct RecipeTab: View {
     var body: some View {
         ScrollView(.vertical,showsIndicators: false) {
             VStack{
-                NavigationLink(destination: ContentOnButtonSheet(
-                    foodName: "Songvak",
-                    price: 2.00,
-                    date: "30 Sep 2024",
-                    itemFood: "Songvak",
-                    profile: "profile_image", // Assuming a profile image
-                    userName: "User Name",
-                    description: "Songvak is a delicious dish...",
-                    ingredients: "Pork, Fish Sauce, Spices",
-                    percentageOfRating: 4.7,
-                    numberOfRating: 150,
-                    review: "Fantastic!",
-                    reviewDetail: "The dish was flavorful and aromatic, a great meal..."
-                )) {
+                NavigationLink(destination:
+                                FoodDetailView(
+                                    theMainImage: "Songvak",
+                                    subImage1: "ahmok",
+                                    subImage2: "brohok",
+                                    subImage3: "SomlorKari",
+                                    subImage4: "Songvak"
+                                )
+//                                ContentOnButtonSheet(
+//                    foodName: "Songvak",
+//                    price: 2.00,
+//                    date: "30 Sep 2024",
+//                    itemFood: "Songvak",
+//                    profile: "profile_image", // Assuming a profile image
+//                    userName: "User Name",
+//                    description: "Songvak is a delicious dish...",
+//                    ingredients: "Pork, Fish Sauce, Spices",
+//                    percentageOfRating: 4.7,
+//                    numberOfRating: 150,
+//                    review: "Fantastic!",
+//                    reviewDetail: "The dish was flavorful and aromatic, a great meal..."
+//                )
+                ) {
                     RecipeViewCell(
                         
                         imageName           : "Songvak",
@@ -38,20 +47,29 @@ struct RecipeTab: View {
                         
                     )
                 }
-                NavigationLink(destination: ContentOnButtonSheet(
-                    foodName: "Songvak",
-                    price: 2.00,
-                    date: "30 Sep 2024",
-                    itemFood: "Songvak",
-                    profile: "profile_image", // Assuming a profile image
-                    userName: "User Name",
-                    description: "Songvak is a delicious dish...",
-                    ingredients: "Pork, Fish Sauce, Spices",
-                    percentageOfRating: 4.7,
-                    numberOfRating: 150,
-                    review: "Fantastic!",
-                    reviewDetail: "The dish was flavorful and aromatic, a great meal..."
-                )) {
+                NavigationLink(destination:
+                                FoodDetailView(
+                                    theMainImage: "Songvak",
+                                    subImage1: "ahmok",
+                                    subImage2: "brohok",
+                                    subImage3: "SomlorKari",
+                                    subImage4: "Songvak"
+                                )
+//                                ContentOnButtonSheet(
+//                    foodName: "Songvak",
+//                    price: 2.00,
+//                    date: "30 Sep 2024",
+//                    itemFood: "Songvak",
+//                    profile: "profile_image", // Assuming a profile image
+//                    userName: "User Name",
+//                    description: "Songvak is a delicious dish...",
+//                    ingredients: "Pork, Fish Sauce, Spices",
+//                    percentageOfRating: 4.7,
+//                    numberOfRating: 150,
+//                    review: "Fantastic!",
+//                    reviewDetail: "The dish was flavorful and aromatic, a great meal..."
+//                )
+                ) {
                     RecipeViewCell(
                         
                         imageName           : "Songvak",
