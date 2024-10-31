@@ -25,14 +25,16 @@ struct FoodOnSaleView: View {
                         deliveryInfo: "Free",
                         deliveryIcon: "motorbike"
                     )
-                    NavigationLink(destination:
-                                    FoodDetailView(
-                                        theMainImage: "Songvak",
-                                        subImage1: "ahmok",
-                                        subImage2: "brohok",
-                                        subImage3: "SomlorKari",
-                                        subImage4: "Songvak"
-                                    )
+                    
+                    // Place the NavigationLink as a background item, without using the arrow.
+                    NavigationLink(destination: FoodDetailView(
+                        
+                        theMainImage: "Songvak",
+                        subImage1: "ahmok",
+                        subImage2: "brohok",
+                        subImage3: "somlorKari",
+                        subImage4: "Songvak"
+                    )
                     ) {
                         EmptyView()
                     }
