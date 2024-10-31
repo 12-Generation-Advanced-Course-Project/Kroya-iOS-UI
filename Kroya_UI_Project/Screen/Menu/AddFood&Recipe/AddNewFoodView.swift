@@ -16,25 +16,26 @@ struct AddFoodView: View {
     @State private var selectedImages: [UIImage] = []
     @State private var showValidationMessage: Bool = false
     @State private var navigateToNextView: Bool = false
-    let dismissToRoot: () -> Void // Closure for dismissing to root
+    let dismissToRoot: () -> Void
     var levels: [String] = ["Hard", "Medium", "Easy"]
     var cuisines: [String] = ["Soup", "Salad", "Dessert", "Grill"]
     var categories: [String] = ["Breakfast", "Lunch", "Dinner", "Snack"]
-    
+    @ObservedObject var addressVM: AddressViewModel
+    @ObservedObject var draftModel: DraftModel
+    @State private var showDraftAlert = false
     var body: some View {
         NavigationView {
             ScrollView(.vertical,showsIndicators: false) {
                 VStack {
                     Spacer().frame(height: 15)
-                    
                     // Image selection and display
                     VStack {
                         VStack {
                             // Show selected images if available
-                            if !selectedImages.isEmpty {
+                            if !draftModel.selectedImages.isEmpty {
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack {
-                                        ForEach(selectedImages, id: \.self) { image in
+                                        ForEach(draftModel.selectedImages, id: \.self) { image in
                                             ZStack(alignment: .topTrailing) {
                                                 Image(uiImage: image)
                                                     .resizable()
@@ -45,8 +46,8 @@ struct AddFoodView: View {
                                                 
                                                 // "X" button to delete image
                                                 Button(action: {
-                                                    if let index = selectedImages.firstIndex(of: image) {
-                                                        selectedImages.remove(at: index)
+                                                    if let index = draftModel.selectedImages.firstIndex(of: image) {
+                                                        draftModel.selectedImages.remove(at: index)
                                                     }
                                                 }) {
                                                     Image(systemName: "xmark.circle.fill")
@@ -55,7 +56,7 @@ struct AddFoodView: View {
                                                         .background(Color.white)
                                                         .clipShape(Circle())
                                                         .foregroundColor(.red)
-                                                        .offset(x: -5, y: -5)
+                                                        .offset(x: -2, y: -5)
                                                 }
                                             }
                                         }
@@ -120,17 +121,13 @@ struct AddFoodView: View {
                                 )
                         )
                         // If validation fails, show error message
-                        if showValidationMessage && selectedImages.isEmpty {
-                            HStack{
-                                Image(systemName: "exclamationmark.triangle.fill")
+                        if showValidationMessage && draftModel.selectedImages.isEmpty {
+                            HStack {
+                                validationMessage("Image can not be empty")
                                     .foregroundColor(.red)
-                                Text("Please add an image of the dish.")
-                                    .font(.customfont(.medium, fontSize: 12))
-                                    .foregroundColor(.red)
-                                    .padding(.top, 5)
+                                    .font(.caption)
                             }.frame(maxWidth: .infinity,alignment: .leading)
-                                .padding(.horizontal)
-                            
+                            .padding(.horizontal)
                         }
                     }
                     
@@ -139,29 +136,12 @@ struct AddFoodView: View {
                     VStack(alignment: .leading) {
                         Text("Food Name")
                             .font(.customfont(.bold, fontSize: 16))
-                        
                         Spacer().frame(height: 15)
-                        
-                        
-                        // InputField for food name
-//                        InputField(placeholder: placeholder, text: $Foodname, backgroundColor: .white, frameWidth: .screenWidth * 0.9, colorBorder: Color(hex: "#D0DBEA"), isMultiline: false)
-                        
-                        TextField("Enter food name", text: $Foodname, axis: .vertical)
-                            .frame(maxWidth: .screenWidth * 0.9,minHeight: 50 , alignment: .leading)
-                            .padding(.leading, 15)
-                            .font(.customfont(.medium, fontSize: 15))
-                            .foregroundStyle(.black.opacity(0.6))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 15)
-                                    .strokeBorder(Color(hex: "#D0DBEA"), lineWidth: 1)
-                            )
-                            
+                        InputField(placeholder: "Enter food name", text: $draftModel.foodName,backgroundColor: .white, frameHeight: 60, frameWidth: 0.9 * CGFloat.screenWidth, colorBorder: Color(hex: "#D0DBEA"), isMultiline: false)
                         // Validation message under TextField
-                        if showValidationMessage && Foodname.isEmpty {
+                        if showValidationMessage && draftModel.foodName.isEmpty {
                             HStack {
-                                Image(systemName: "exclamationmark.triangle.fill")
-                                    .foregroundColor(.red)
-                                Text("Food name cannot be empty")
+                                validationMessage("Please enter your food name")
                                     .foregroundColor(.red)
                                     .font(.caption)
                             }
@@ -169,17 +149,14 @@ struct AddFoodView: View {
                         
                         Spacer().frame(height: 15)
                     }
-                    
-                    
                     Spacer().frame(height: 15)
-                    
                     // Description Section
                     VStack(alignment: .leading) {
                         Text("Description")
                             .font(.customfont(.bold, fontSize: 16))
                         Spacer().frame(height: 15)
                         
-                        TextField("Tell me a little about your food", text: $Description, axis: .vertical)
+                        TextField("Tell me a little about your food", text: $draftModel.description, axis: .vertical)
                             .textFieldStyle(PlainTextFieldStyle())
                             .multilineTextAlignment(.leading)
                             .padding(10)
@@ -191,15 +168,16 @@ struct AddFoodView: View {
                                     .strokeBorder(Color(hex: "#D0DBEA"), lineWidth: 1)
                             )
                         // Validation message under TextField
-                        if showValidationMessage && Description.isEmpty {
+                        if showValidationMessage && draftModel.description.isEmpty {
                             HStack {
                                 Image(systemName: "exclamationmark.triangle.fill")
                                     .foregroundColor(.red)
-                                Text(LocalizedStringKey("description cannot be empty"))
+                                Text("Please describe about your food")
                                     .foregroundColor(.red)
                                     .font(.caption)
                             }
                         }
+
                     }
                     
                     Spacer().frame(height: 15)
@@ -215,7 +193,7 @@ struct AddFoodView: View {
                                 .font(.customfont(.bold, fontSize: 16))
                                 .foregroundStyle(PrimaryColor.normal)
                             Spacer()
-                            Text("\(Int(DurationValure))")  // Dynamically updating text
+                            Text("\(Int(DurationValure))")
                                 .font(.customfont(.bold, fontSize: 16))
                                 .foregroundStyle(PrimaryColor.normal)
                             Spacer()
@@ -240,9 +218,9 @@ struct AddFoodView: View {
                         Spacer().frame(height: 10)
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
-                                ForEach(0..<levels.count, id: \.self) { index in
-                                    ChipCheckView(text: levels[index], isSelected: selectedLevel == index) {
-                                        selectedLevel = selectedLevel == index ? nil : index
+                                ForEach(levels, id: \.self) { level in
+                                    ChipCheckView(text: level, isSelected: draftModel.selectedLevel == level) {
+                                        draftModel.selectedLevel = draftModel.selectedLevel == level ? nil : level
                                     }
                                 }
                             }.padding(.leading, .screenWidth * 0.02)
@@ -255,9 +233,9 @@ struct AddFoodView: View {
                         Spacer().frame(height: 10)
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
-                                ForEach(0..<cuisines.count, id: \.self) { index in
-                                    ChipCheckView(text: cuisines[index], isSelected: selectedCuisines == index) {
-                                        selectedCuisines = selectedCuisines == index ? nil : index
+                                ForEach(cuisines, id: \.self) { cuisine in
+                                    ChipCheckView(text: cuisine, isSelected: draftModel.selectedCuisine == cuisine) {
+                                        draftModel.selectedCuisine = draftModel.selectedCuisine == cuisine ? nil : cuisine
                                     }
                                 }
                             }.padding(.leading, .screenWidth * 0.02)
@@ -270,27 +248,22 @@ struct AddFoodView: View {
                         Spacer().frame(height: 10)
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
-                                ForEach(0..<categories.count, id: \.self) { index in
-                                    ChipCheckView(text: categories[index], isSelected: selectedCategories == index) {
-                                        selectedCategories = selectedCategories == index ? nil : index
+                                ForEach(categories, id: \.self) { category in
+                                    ChipCheckView(text: category, isSelected: draftModel.selectedCategory == category) {
+                                        draftModel.selectedCategory = draftModel.selectedCategory == category ? nil : category
                                     }
                                 }
                             }.padding(.leading, .screenWidth * 0.02)
                         }
                     }.padding(.leading, .screenWidth * 0.02)
-                    
-                    
                     Spacer().frame(height: 35)
-                    
                     Button(action: {
-
-//                        if Foodname.isEmpty || Description.isEmpty {
-//                            showValidationMessage = true
-//                        } else {
-//                            showValidationMessage = false
-//                           
-//                        }
-                        navigateToNextView = true
+                        if draftModel.foodName.isEmpty || draftModel.description.isEmpty || draftModel.selectedImages == nil {
+                            showValidationMessage = true
+                        } else {
+                            showValidationMessage = false
+                            navigateToNextView = true
+                        }
                     }) {
                         Text("Next")
                             .font(.customfont(.semibold, fontSize: 16))
@@ -307,7 +280,9 @@ struct AddFoodView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        Button(action: dismissToRoot) {
+                        Button(action: {
+                            handleCancel()
+                        }) {
                             Image(systemName: "xmark")
                                 .resizable()
                                 .scaledToFit()
@@ -316,17 +291,49 @@ struct AddFoodView: View {
                         }
                     }
                 }
+                .alert(isPresented: $showDraftAlert) {
+                    Alert(
+                        title: Text("Save this as a draft?"),
+                        message: Text("If you choose discard post, you'll lose this post that can't edit again."),
+                        primaryButton: .default(Text("Save Draft")) {
+                            saveDraft()
+                            dismissToRoot()
+                        },
+                        secondaryButton: .destructive(Text("Discard Post")) {
+                            draftModel.clearDraft()
+                            dismissToRoot()
+                        }
+                    )
+                }
                 .background(
-                    NavigationLink(destination: RecipeModalView(dismissToRoot: dismissToRoot), isActive: $navigateToNextView) {
+                    NavigationLink(destination: RecipeModalView(dismissToRoot: dismissToRoot, addressVM: addressVM, draftModel: draftModel), isActive: $navigateToNextView) {
                         EmptyView()
                     }
                 )
             }
             .fullScreenCover(isPresented: $isImagePickerPresented) {
-                ImagePicker(selectedImages: $selectedImages)
+                ImagePicker(selectedImages: $draftModel.selectedImages)
             }
         }
         
+    }
+    private func handleCancel() {
+        if draftModel.hasDraftData {
+            showDraftAlert = true
+        } else if !draftModel.hasDraftData {
+            dismiss()
+        }
+    }
+    
+    private func saveDraft() {
+        // Save draft data logic if required
+    }
+    
+    private func validationMessage(_ text: String) -> some View {
+        HStack {
+            Image(systemName: "exclamationmark.triangle.fill").foregroundColor(.red)
+            Text(text).foregroundColor(.red).font(.caption)
+        }
     }
 }
 
