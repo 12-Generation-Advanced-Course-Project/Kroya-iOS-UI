@@ -210,7 +210,6 @@
 import SwiftUI
 
 struct SaleReportView: View {
-    
     @State private var selectedDate: Date = Date()
     @Environment(\.dismiss) var dismiss
 
@@ -239,7 +238,8 @@ struct SaleReportView: View {
     
     let soldItems: [Date: [FoodItem]] = [
         Calendar.current.date(from: DateComponents(year: 2024, month: 10, day: 3))!: [
-            FoodItem(name: "Brohok", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: nil, timeAgo: nil)
+            FoodItem(name: "Brohok", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: nil, timeAgo: nil),
+            FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 6, paymentMethod: "KHQR", timeAgo: "15m ago")
         ]
     ]
     
@@ -342,9 +342,9 @@ struct SaleReportView: View {
             
             Spacer()
             
-            // Display sold items using NewItemFoodOrderCardView
             if let items = soldItems[selectedDate] {
-                NewItemFoodOrderCardView(foodItems: items)
+                NewItemFoodOrderCardView(foodItems: items, showEllipsis: false)
+                    .padding(.top, 18)
             } else {
                 Text(LocalizedStringKey("No items sold on this day"))
                     .foregroundColor(.gray)

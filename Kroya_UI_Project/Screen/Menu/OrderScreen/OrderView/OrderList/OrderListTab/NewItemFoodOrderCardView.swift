@@ -20,11 +20,13 @@ struct NewItemFoodOrderCardView: View {
         FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR",status: "Reject", timeAgo: "15m ago")
     ]
     
+    var showEllipsis: Bool
+    
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(spacing: 20) {
                 ForEach($foodItems){ item in
-                    ItemFoodOrderCard(item: item)
+                    ItemFoodOrderCard(item: item, showEllipsis: showEllipsis)
                 }
                   }
             .padding(.horizontal, 15)

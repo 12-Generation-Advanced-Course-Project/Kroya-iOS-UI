@@ -60,8 +60,9 @@ struct OrderListView: View {
                 }
                 
             }.padding(.horizontal,15)
-            NewItemFoodOrderCardView()
-        } .navigationBarBackButtonHidden(true)
+            NewItemFoodOrderCardView(showEllipsis: true)
+        }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
