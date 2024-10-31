@@ -10,9 +10,8 @@ import SwiftUI
 struct AllView: View {
     var iselected:Int?
     var body: some View {
-        ScrollView(.vertical,showsIndicators: false){
-            
-            VStack{
+        VStack{
+            ScrollView(.vertical,showsIndicators: false){
                 
                 NavigationLink(destination:
                                 FoodDetailView(
@@ -20,63 +19,16 @@ struct AllView: View {
                                     subImage1: "ahmok",
                                     subImage2: "brohok",
                                     subImage3: "SomlorKari",
-                                    subImage4: "Songvak"
+                                    subImage4: "Songvak",
+                                    showPrice1: true
                                 )
-//                                ContentOnButtonSheet(
-//                    foodName: "Songvak",
-//                    price: 2.00,
-//                    date: "30 Sep 2024",
-//                    itemFood: "Songvak",
-//                    profile: "profile_image", // Assuming a profile image
-//                    userName: "User Name",
-//                    description: "Songvak is a delicious dish...",
-//                    ingredients: "Pork, Fish Sauce, Spices",
-//                    percentageOfRating: 4.7,
-//                    numberOfRating: 150,
-//                    review: "Fantastic!",
-//                    reviewDetail: "The dish was flavorful and aromatic, a great meal..."
-//                )
-                ) {
-                    RecipeViewCell(
-                        
-                        imageName: "SomlorKari",
-                        dishName: "Somlor Kari", // 
-                        cookingDate: "30 Sep 2024",
-                        statusType: "Recipe",
-                        rating: 5.0,
-                        reviewCount: 200,
-                        level: "Easy"
-                    )
-                }
-                
-                // Example PopularDishesCard for dishes
-                NavigationLink(destination:
-                                FoodDetailView(
-                                    theMainImage: "Songvak",
-                                    subImage1: "ahmok",
-                                    subImage2: "brohok",
-                                    subImage3: "SomlorKari",
-                                    subImage4: "Songvak"
-                                )
-//                                ContentOnButtonSheet(
-//                    foodName: "somlor Kari",
-//                    price: 2.00,
-//                    date: "30 Sep 2024",
-//                    itemFood: "Somlor Kari",
-//                    profile: "profile_image",
-//                    userName: "User Name",
-//                    description: "Somlor Kari is a traditional Cambodian dish...",
-//                    ingredients: "Chicken, Coconut Milk, Curry Paste",
-//                    percentageOfRating: 4.8,
-//                    numberOfRating: 200,
-//                    review: "Delicious dish!",
-//                    reviewDetail: "The Somlor Kari was perfectly spiced and rich in flavor"
-//                )
+                               
+                               
                 ) {
                     FoodOnSaleViewCell(
                         
-                        imageName: "brohok", // Make sure this is the correct image in your assets
-                        dishName: "Somlor Kari",
+                        imageName: "food1",
+                        dishName: "Noodles",
                         cookingDate: "30 Sep 2024",
                         price: 2.00,
                         rating: 5.0,
@@ -85,8 +37,56 @@ struct AllView: View {
                         deliveryIcon: "motorbike"
                     )
                 }
-            }
+                
+                NavigationLink(destination:
+                                FoodDetailView(
+                                    theMainImage: "Songvak",
+                                    subImage1: "ahmok",
+                                    subImage2: "brohok",
+                                    subImage3: "SomlorKari",
+                                    subImage4: "Songvak",
+                                    showPrice1: true
+                                )
+                               
+                               
+                ) {
+                    FoodOnSaleViewCell(
+                        
+                        imageName: "ahmok3",
+                        dishName: "Amok Fish",
+                        cookingDate: "30 Sep 2024",
+                        price: 3.00,
+                        rating: 4.0,
+                        reviewCount: 100,
+                        deliveryInfo: "Free",
+                        deliveryIcon: "motorbike"
+                    )
+                }
+                
+                NavigationLink(destination:   FoodDetailView(
+                    theMainImage: "Songvak",
+                    subImage1: "ahmok",
+                    subImage2: "brohok",
+                    subImage3: "SomlorKari",
+                    subImage4: "Songvak",
+                    showOrderButton: false
+                )) {
+                    RecipeViewCell(
+                        
+                        imageName           : "food5",
+                        dishName            : "Amork",
+                        cookingDate         : "30 Sep 2024",
+                        statusType          : "Recipe",
+                        rating              : 5.0,
+                        reviewCount         : 200,
+                        level               : "Easy"
+                        
+                    )
+                }
+                
+            }   .padding(.horizontal, 20)
         }
+       
     }
 }
 

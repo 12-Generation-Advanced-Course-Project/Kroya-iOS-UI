@@ -18,29 +18,6 @@ struct FoodonOrderView: View {
     var body: some View {
         NavigationView{
             VStack {
-                //Not work well
-                // Search Bar
-                //                NavigationLink(destination: SearchScreen()) {
-                //                    HStack {
-                //                        Image("ico_search1")
-                //                            .resizable()
-                //                            .scaledToFit()
-                //                            .frame(width: 24, height: 24)
-                //
-                //                        Text("Search item")
-                //                            .font(.customfont(.medium, fontSize: 16))
-                //                            .foregroundColor(.gray)
-                //                            .frame(width: .screenWidth * 0.26)
-                //                            .padding(.trailing, 12)
-                //
-                //                        Spacer()
-                //                    }
-                //                    .padding(.leading, 12)
-                //                    .frame(width: .screenWidth * 0.93, height: .screenHeight * 0.05)
-                //                    .background(Color(hex: "#F3F2F3"))
-                //                    .cornerRadius(12)
-                //                }
-                
                 // Loop through images and titles
                 HStack(spacing: 20) {
                     ForEach(0..<imageofOrder.count, id: \.self) { index in
