@@ -34,7 +34,7 @@ struct FoodOnSaleView: View {
                                         subImage2: "brohok",
                                         subImage3: "SomlorKari",
                                         subImage4: "Songvak",
-                                        showPrice1: true
+                                        showPrice: true
                                     )
                     ) {
                         EmptyView() // Empty view to prevent showing the default arrow

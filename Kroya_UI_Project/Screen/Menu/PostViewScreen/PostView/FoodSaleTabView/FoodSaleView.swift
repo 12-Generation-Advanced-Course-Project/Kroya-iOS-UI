@@ -27,7 +27,7 @@ struct FoodSaleView: View {
                                     subImage2: "brohok",
                                     subImage3: "SomlorKari",
                                     subImage4: "Songvak",
-                                    showPrice1: true
+                                    showPrice: true
                                 )
                                
                             
@@ -74,7 +74,7 @@ struct FoodSaleView: View {
                     subImage2: "brohok",
                     subImage3: "SomlorKari",
                     subImage4: "Songvak",
-                    showPrice1: true
+                    showPrice: true
                 )) {
                     FoodOnSaleViewCell(
                         

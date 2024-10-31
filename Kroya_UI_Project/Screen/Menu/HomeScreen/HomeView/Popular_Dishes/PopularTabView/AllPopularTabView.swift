@@ -14,7 +14,7 @@ struct AllPopularTabView: View {
     var body: some View {
         ScrollView(.vertical,showsIndicators: false) {
             
-            VStack(spacing: 10){
+            VStack{
                 // Example PopularDishesCard for dishes
                 NavigationLink(destination:
                                 FoodDetailView(
@@ -23,7 +23,7 @@ struct AllPopularTabView: View {
                                     subImage2: "brohok",
                                     subImage3: "SomlorKari",
                                     subImage4: "Songvak",
-                                    showPrice1: true
+                                    showPrice: true
                                 )
                 ) {
                     FoodOnSaleViewCell(

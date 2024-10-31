@@ -1,3 +1,4 @@
+
 import SwiftUI
 
 struct BottomSheetView<Content: View>: View {
@@ -7,7 +8,8 @@ struct BottomSheetView<Content: View>: View {
     @State private var navigateToCheckout = false
     let maxHeight: CGFloat
     let minHeight: CGFloat
-    let showOrderButton: Bool // New parameter to control Order button visibility
+    let showOrderButton: Bool // Control for Food vs Recipe view
+    let notificationType: Int? // Control for status from Notification
     @GestureState private var translation: CGFloat = 0
     
     private var offset: CGFloat {
@@ -24,12 +26,19 @@ struct BottomSheetView<Content: View>: View {
                 .fill(Color(hex: "#D0DBEA"))
                 .frame(width: 40, height: 5)
                 .padding(.top, 20)
+            
             HStack {
                 Text("Somlor Mju")
                     .font(.customfont(.bold, fontSize: 20))
                 Spacer()
                 
-                if showOrderButton { // Conditionally show Order button
+                if let notificationType = notificationType {
+                    // Display status based on notificationType
+                    Text(notificationType == 1 ? "Rejected" : "Accepted ")
+                        .font(.customfont(.medium, fontSize: 16))
+                        .foregroundStyle(notificationType == 1 ? .red : .green)
+                } else if showOrderButton {
+                    // Show Order button if showOrderButton is true and not accessed from Notification
                     Button(action: {
                         navigateToCheckout = true
                     }) {
@@ -58,12 +67,13 @@ struct BottomSheetView<Content: View>: View {
         .padding(.top, 8)
     }
     
-    init(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat, showOrderButton: Bool = true, @ViewBuilder content: () -> Content) {
+    init(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat, showOrderButton: Bool = true, notificationType: Int? = nil, @ViewBuilder content: () -> Content) {
         self.content = content()
         self._isOpen = isOpen
         self.maxHeight = maxHeight
         self.minHeight = minHeight
         self.showOrderButton = showOrderButton
+        self.notificationType = notificationType
     }
     
     var body: some View {
@@ -102,8 +112,9 @@ struct FoodDetailView: View {
     @State private var currentImage: String
     @State private var isBottomSheetOpen: Bool = false
     @State private var isShowPopup: Bool = false  // Popup control here
-    var showPrice : Bool
-    var showOrderButton: Bool // New parameter to control Order button visibility
+    var showPrice: Bool
+    var showOrderButton: Bool
+    var notificationType: Int? // Notification type for status display
     var theMainImage: String
     var subImage1: String
     var subImage2: String
@@ -111,14 +122,15 @@ struct FoodDetailView: View {
     var subImage4: String
     @Environment(\.dismiss) var dismiss
     
-    init(theMainImage: String, subImage1: String, subImage2: String, subImage3: String, subImage4: String,showOrderButton: Bool = true,showPrice1 : Bool = false) {
+    init(theMainImage: String, subImage1: String, subImage2: String, subImage3: String, subImage4: String, showOrderButton: Bool = true, showPrice: Bool = false, notificationType: Int? = nil) {
         self.theMainImage = theMainImage
         self.subImage1 = subImage1
         self.subImage2 = subImage2
         self.subImage3 = subImage3
         self.subImage4 = subImage4
-        self.showOrderButton = showOrderButton // Initialize showOrderButton
-        self.showPrice = showPrice1
+        self.showOrderButton = showOrderButton
+        self.showPrice = showPrice
+        self.notificationType = notificationType
         _currentImage = State(initialValue: theMainImage)
     }
     
@@ -208,10 +220,10 @@ struct FoodDetailView: View {
                 }
                 
                 // Bottom Sheet Content
-                BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.645, showOrderButton: showOrderButton) {
-                    ContentView(showPrice: showPrice, isShowPopup: $isShowPopup)
-                        .padding(.horizontal, 15)
-                }
+                BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.645, showOrderButton: showOrderButton, notificationType: notificationType) {
+                                  ContentView(showPrice: showPrice, isShowPopup: $isShowPopup)
+                                      .padding(.horizontal, 15)
+                              }
                 .edgesIgnoringSafeArea(.all)
                 // Show the popup in full screen
                 if isShowPopup {

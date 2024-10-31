@@ -53,6 +53,21 @@ struct OrderCard: View {
                             .font(.customfont(.medium, fontSize: 15)) // Responsive font size
                             .fontWeight(.medium)
                             .foregroundColor(isAccepted ? .green : .red)
+                            .buttonStyle(PlainButtonStyle())
+                            .background(
+                                NavigationLink(destination:     FoodDetailView(
+                                    theMainImage: "Songvak",
+                                    subImage1: "ahmok",
+                                    subImage2: "brohok",
+                                    subImage3: "somlorKari",
+                                    subImage4: "Songvak",
+                                    showOrderButton: false,
+                                    showPrice: true
+                                )) {
+                                    EmptyView()
+                                }
+                                .opacity(0) // NavigationLink invisible but functional
+                            )
                     }
                 }
 
@@ -61,7 +76,7 @@ struct OrderCard: View {
                     .opacity(0.6)
 
                 // Price and Order/Sale Button
-                HStack(spacing: 15) {
+                HStack(spacing: 17) {
                     Text("$3.05")
                         .font(.customfont(.medium, fontSize: 15)) // Responsive font size
                         .fontWeight(.medium)
