@@ -115,7 +115,9 @@ struct ItemFoodOrderCard: View {
             .foregroundColor(Color(hex: "#7B7D92"))
             
             // Divider
-            Divider().frame(maxWidth: .infinity).foregroundColor(Color(red: 0.836, green: 0.875, blue: 0.924))
+            Divider()
+                .frame(maxWidth: .infinity)
+                .foregroundColor(Color(red: 0.836, green: 0.875, blue: 0.924))
             
             // Price and payment method
             HStack {
@@ -150,3 +152,4 @@ struct ItemFoodOrderCard: View {
         )
     }
 }
+

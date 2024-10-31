@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct OrderListView: View {
+    
     @State private var searchText = ""
     @State private var selectedSegment = 0
     @Environment(\.dismiss) var dismiss
-
+    
     var body: some View {
         
         VStack {
@@ -32,7 +33,10 @@ struct OrderListView: View {
                 Text("Orders request")
                     .font(.customfont(.bold, fontSize: 18))
                 Spacer()
-                Button(action : {})
+                
+                Button(action : {
+                    
+                })
                 {
                     Image("ico_note")
                         .resizable()
@@ -57,12 +61,6 @@ struct OrderListView: View {
                 
             }.padding(.horizontal,15)
             NewItemFoodOrderCardView()
-            
-            
-            
-            
-            
-            
         } .navigationBarBackButtonHidden(true)
     }
 }

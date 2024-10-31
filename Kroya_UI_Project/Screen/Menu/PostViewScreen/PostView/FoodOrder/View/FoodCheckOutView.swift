@@ -11,8 +11,8 @@ struct FoodCheckOutView: View {
     
     // properties
     @Environment(\.dismiss) var dismiss
-    @State private var isReceipViewActive = false
-
+    @State private var isOrdersViewActive = false
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -56,38 +56,25 @@ struct FoodCheckOutView: View {
                     .listRowSeparator(.hidden)
                     
                     
-                
+                    
                 }
                 .listStyle(PlainListStyle())
                 .scrollContentBackground(.hidden)
                 
-               
+                
                 Button("Place an order") {
-                    self.isReceipViewActive = true
+                    self.isOrdersViewActive = true
                 }
                 .font(.customfont(.semibold, fontSize: 16))
-                .frame(maxWidth: .infinity , maxHeight: 44) 
-//                .padding(.bottom, 10)
+                .frame(maxWidth: .infinity , maxHeight: 44)
+                //                .padding(.bottom, 10)
                 .background(Color.yellow)
                 .foregroundColor(.white)
                 .cornerRadius(12)
-           
-                // Navigation to ReceiptView with isPresented binding
-                .navigationDestination(isPresented: $isReceipViewActive) {
-                    ReceiptView(isPresented: $isReceipViewActive)
-                }
                 
-                // Next Button to navigate to ReceiptView
-//                NavigationLink(destination: ReceiptView()) {
-//                    Text("Place an order")
-//                        .font(.customfont(.semibold, fontSize: 16))
-//                        .frame(maxWidth: .infinity)
-//                        .padding()
-//                        .background(Color.yellow)
-//                        .foregroundColor(.white)
-//                        .cornerRadius(12)
-//                }
-
+                NavigationLink(destination: OrdersView(), isActive: $isOrdersViewActive) {
+                    EmptyView()
+                }
                 
             }
             .padding(.horizontal)
@@ -96,27 +83,26 @@ struct FoodCheckOutView: View {
             .navigationBarBackButtonHidden(true)
             
         }
-                        
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    HStack {
-                        Button(action: {
-                            dismiss()
-                        }) {
-                            Circle()
-                                .fill(.white)
-                                .frame(width: 25, height: 25)
-                                .padding(10)
-                                .overlay(
-                                    Image(systemName: "arrow.left")
-                                        .foregroundColor(.black)
-                                        .font(.system(size: 16))
-                                )
-                        }
+        
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                HStack {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Circle()
+                            .fill(.white)
+                            .frame(width: 25, height: 25)
+                            .padding(10)
+                            .overlay(
+                                Image(systemName: "arrow.left")
+                                    .foregroundColor(.black)
+                                    .font(.system(size: 16))
+                            )
                     }
                 }
             }
-        
+        }
     }
 }
 
