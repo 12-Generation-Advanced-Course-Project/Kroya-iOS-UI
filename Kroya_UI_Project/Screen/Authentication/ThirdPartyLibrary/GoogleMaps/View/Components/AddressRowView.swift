@@ -11,17 +11,31 @@ struct AddressRowView: View {
     var address: Address
     var onUpdate: () -> Void
     var onDelete: () -> Void
-    @State var isShowPopup  : Bool = false
+    var isSelected: Bool
+    @State private var isShowPopup: Bool = false
+
     var body: some View {
         VStack {
             HStack {
                 VStack(alignment: .leading, spacing: 5) {
-                    Text(address.addressDetail)
-                        .font(.system(size: 15, weight: .medium, design: .rounded))
-                        .foregroundColor(.black)
-                        .opacity(0.6)
+                    HStack{
+                        Text(address.addressDetail)
+                            .font(.system(size: 15, weight: .medium, design: .rounded))
+                            .foregroundColor(.black)
+                            .opacity(0.6)
+                        if isSelected {
+                            Text("Default")
+                                .font(.customfont(.light, fontSize: 10))
+                                .fontWeight(.medium)
+                                .foregroundColor(PrimaryColor.normal)
+                                .frame(width: 46,height: 19)
+                                .background(Color(hex: "#FFFAE6"))
+                                .cornerRadius(6)
+                        }
+                        Spacer()
+                    }
                     Text(address.specificLocation)
-                        .font(.system(size: 13, weight: .regular, design: .rounded))
+                        .font(.customfont(.regular, fontSize: 12))
                         .foregroundColor(Color(red: 0.4, green: 0.4, blue: 0.4))
                         .opacity(0.4)
                         .lineLimit(1)
@@ -31,7 +45,6 @@ struct AddressRowView: View {
                     .foregroundColor(PrimaryColor.normal)
                     .font(.system(size: 15, weight: .semibold, design: .rounded))
                 Button(action: {
-                    print("Button tapped")
                     isShowPopup.toggle()
                 }) {
                     Image("dot")
@@ -39,22 +52,18 @@ struct AddressRowView: View {
                         .scaledToFit()
                         .frame(width: 18, height: 18)
                 }
-                .popover(isPresented: $isShowPopup ,attachmentAnchor: .point(.topTrailing), arrowEdge: .top) {
+                .popover(isPresented: $isShowPopup, attachmentAnchor: .point(.topTrailing), arrowEdge: .top) {
                     CustomMenuView(showPopup: $isShowPopup, onUpdate: onUpdate, onDelete: onDelete)
                         .presentationCompactAdaptation(.none)
                 }
-
             }
             .padding(.vertical, 5)
+            .padding(.leading,5)
             Divider()
+        }
+   
+        .onTapGesture {
+            // Handle tap if needed
         }
     }
 }
-
-//#Preview {
-//    AddressRowView(
-//        address: Address(id: 1, addressDetail: "HRD Center, St232", specificLocation: "Russian federation blvd. (#110)", tag: "Office"),
-//        onUpdate: { print("Update Address") },
-//        onDelete: { print("Delete Address") }
-//    )
-//}

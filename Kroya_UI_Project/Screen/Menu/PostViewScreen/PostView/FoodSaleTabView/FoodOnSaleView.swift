@@ -25,8 +25,6 @@ struct FoodOnSaleView: View {
                         deliveryInfo: "Free",
                         deliveryIcon: "motorbike"
                     )
-                
-                    // Place the NavigationLink as a background item, without using the arrow.
                     NavigationLink(destination:
                                     FoodDetailView(
                                         theMainImage: "Songvak",
@@ -35,27 +33,13 @@ struct FoodOnSaleView: View {
                                         subImage3: "SomlorKari",
                                         subImage4: "Songvak"
                                     )
-//                                    ContentOnButtonSheet(
-//                        foodName: "Somlor Kari \(index + 1)", // Customize with the index if needed
-//                        price: 2.00,
-//                        date: "30 Sep 2024",
-//                        itemFood: "Somlor Kari",
-//                        profile: "profile_image",
-//                        userName: "User Name",
-//                        description: "Somlor Kari is a traditional Cambodian dish...",
-//                        ingredients: "Chicken, Coconut Milk, Curry Paste",
-//                        percentageOfRating: 4.8,
-//                        numberOfRating: 200,
-//                        review: "Delicious dish!",
-//                        reviewDetail: "The Somlor Kari was perfectly spiced and rich in flavor..."
-//                    )
                     ) {
-                        EmptyView() // Empty view to prevent showing the default arrow
+                        EmptyView()
                     }
-                    .opacity(0) // Make the navigation link invisible (but still tappable)
+                    .opacity(0)
                 }
                 .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden) // Hide separator line for this cell
+                .listRowSeparator(.hidden)
                 .padding(.vertical, -6)
             }
         }

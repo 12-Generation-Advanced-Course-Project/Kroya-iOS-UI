@@ -155,10 +155,12 @@ struct SearchScreen: View {
                         }
                         .frame(maxWidth: .infinity)
                     }
+                   
                     .padding(.horizontal, geometry.size.width * 0.05)
                 }
             }
         }
+        .ignoresSafeArea(.keyboard)
         .navigationBarBackButtonHidden(true)
     }
 }
