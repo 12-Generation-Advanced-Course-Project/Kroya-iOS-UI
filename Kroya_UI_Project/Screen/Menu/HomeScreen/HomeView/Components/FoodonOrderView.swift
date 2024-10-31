@@ -74,6 +74,8 @@ struct FoodonOrderView: View {
                 
                 Spacer()
             }
+            .navigationTitle(LocalizedStringKey("Food order"))
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
@@ -85,12 +87,6 @@ struct FoodonOrderView: View {
                             .frame(width: 20, height: 20)
                             .foregroundStyle(.black)
                     }
-                }
-                ToolbarItem(placement: .principal) { // Center the title
-                    Text(LocalizedStringKey("Food order"))
-                        .font(.customfont(.semibold, fontSize: 16))
-                        .foregroundStyle(.black.opacity(0.8))
-                        .frame(maxWidth: .infinity, alignment: .center) // Center alignment
                 }
             }
 

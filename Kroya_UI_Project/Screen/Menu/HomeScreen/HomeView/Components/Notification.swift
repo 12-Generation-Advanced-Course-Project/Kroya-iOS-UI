@@ -77,9 +77,10 @@
 import SwiftUI
 
 struct Notification: View {
-
+    @State var isNavigate:Bool = false
     @Environment(\.dismiss) var dismiss
     @State private var notifications: [NotificationModel] = [
+        NotificationModel(id: UUID(), title: "New Notification 1", isClicked: false),
         NotificationModel(id: UUID(), title: "New Notification 1", isClicked: false),
         NotificationModel(id: UUID(), title: "New Notification 1", isClicked: true)
     ]

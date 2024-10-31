@@ -58,7 +58,7 @@
 "Dinner" = "អាហារពេលល្ងាច";
 "Dessert" = "បង្អែម";
 "Popular Dishes" = "មុខម្ហូបពេញនិយម";
-"View all -->" = "មើលទាំងអស់";
+"View all -->" = "មើលទាំងអស់ -->";
 "Home" = "ទំព័រដើម";
 "Favorite" = "ចំណូលចិត្ត";
 "Orders" = "ការកម្មង់";
@@ -161,7 +161,7 @@
 "Location" = "ទីតាំង";
 "Ingredient" = "គ្រឿងផ្សំ";
 "Back"= "ត្រឡប់";
-"Post" = "ការប្រកាស";
+"Post" = "បង្ហោះ";
 "Is this food available for sale?" = "តើម្ហូបនេះដាក់សម្រាប់លក់ដែរឬទេ?";
 "Earning" = "ចំណូល";
 "Ingredient cannot be empty" = "គ្រឿងផ្សំមិនអាចទទេបានទេ";
@@ -188,7 +188,7 @@
 //PopUp Food Details
 "Describe your experience" = "ពិពណ៌នាបទពិសោធន៍របស់អ្នក";
 "Cancle" = "បោះបង់";
-"Post" = "ការប្រកាស";
+"Post" = "បង្ហោះ";
 
 //Edit Profile
 "Edit Profile" = "កែប្រែប្រវត្តិរូប";

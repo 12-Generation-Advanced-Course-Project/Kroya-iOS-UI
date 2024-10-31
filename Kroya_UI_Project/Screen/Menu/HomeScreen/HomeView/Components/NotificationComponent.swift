@@ -136,11 +136,14 @@ struct NotificationComponent: View {
                 }
             }
             .padding(.vertical, 5)
+            
             Divider()
         }
         .padding(.horizontal)
         .onTapGesture {
-            isClicked.toggle() // Toggle clicked state on tap
-        }
+            if !isClicked {
+                isClicked = true // Set clicked state to true on first tap
+                // Additional action can be triggered here if needed
+            }        }
     }
 }

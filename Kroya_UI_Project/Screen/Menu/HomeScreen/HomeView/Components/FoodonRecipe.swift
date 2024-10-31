@@ -160,6 +160,8 @@ struct FoodonRecipe: View {
                                 Spacer()
 //                RecipeView()
             }
+            .navigationTitle(LocalizedStringKey("Food Recipe"))
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
@@ -171,12 +173,6 @@ struct FoodonRecipe: View {
                             .frame(width: 20, height: 20)
                             .foregroundStyle(.black)
                     }
-                }
-                ToolbarItem(placement: .principal) { // Center the title
-                    Text(LocalizedStringKey("Food Recipe"))
-                        .font(.customfont(.semibold, fontSize: 16))
-                        .foregroundStyle(.black.opacity(0.8))
-                        .frame(maxWidth: .infinity, alignment: .center) // Center alignment
                 }
             }
             
