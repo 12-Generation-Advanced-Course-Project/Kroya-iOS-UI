@@ -9,6 +9,10 @@ struct Category {
 }
 
 struct HomeView: View {
+    
+    @StateObject private var foodOnSaleViewModel = FoodOnSaleViewCellViewModel()
+    @StateObject private var recipeViewModel = RecipeViewModel()
+    
     let notification = [1, 2, 3, 4, 5]
     
     let categories: [Category] = [
@@ -105,79 +109,42 @@ struct HomeView: View {
                     }
 
                     Spacer().frame(height: 20)
-
-                    // Scrollable Dishes
+                    
+                    // Scrollable Dishes (Show only a few cards)
                     ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 10) {
-                            NavigationLink(destination:
-                                            FoodDetailView(
-                                                theMainImage: "Songvak",
-                                                subImage1: "ahmok",
-                                                subImage2: "brohok",
-                                                subImage3: "SomlorKari",
-                                                subImage4: "Songvak"
-                                            )
-                            
-                            ) {
-                                FoodOnSaleViewCell(
-                                    
-                                    imageName: "brohok",
-                                    dishName: "Somlor Kari",
-                                    cookingDate: "30 Sep 2024",
-                                    price: 2.00,
-                                    rating: 5.0,
-                                    reviewCount: 200,
-                                    deliveryInfo: "Free",
-                                    deliveryIcon: "motorbike"
-                                )
+                        HStack{
+                            // Food on Sale Cards (Limited to 2)
+                            ForEach(foodOnSaleViewModel.foodOnSaleItems.prefix(2)) { foodSale in
+                                NavigationLink(destination:
+                                                FoodDetailView(
+                                                    theMainImage: foodSale.imageName,
+                                                    subImage1: "ahmok",
+                                                    subImage2: "brohok",
+                                                    subImage3: "SomlorKari",
+                                                    subImage4: foodSale.imageName
+                                                )
+                                ) {
+                                    FoodOnSaleViewCell(foodSale: foodSale)
+                                        .frame(width: 360)
+                                       
+                                }
                             }
-
-                                // Example PopularDishesCard for dishes
+                            
+                            // Recipe Cards (Limited to 2)
+                            ForEach(recipeViewModel.recipes.prefix(2)) { recipe in
                                 NavigationLink(destination:
                                                 FoodDetailView(
-                                                    theMainImage: "Songvak",
+                                                    theMainImage: recipe.imageName,
                                                     subImage1: "ahmok",
                                                     subImage2: "brohok",
                                                     subImage3: "SomlorKari",
-                                                    subImage4: "Songvak"
+                                                    subImage4: recipe.imageName
                                                 )
                                 ) {
-                                    FoodOnSaleViewCell(
-                                        
-                                        imageName: "food8",
-                                        dishName: "Char Trorb",
-                                        cookingDate: "30 Sep 2024",
-                                        price: 2.00,
-                                        rating: 5.0,
-                                        reviewCount: 200,
-                                        deliveryInfo: "Free",
-                                        deliveryIcon: "motorbike"
-                                    )
+                                    RecipeViewCell(recipe: recipe)
+                                        .frame(width: 360)
+                                    
                                 }
-                                
-                                NavigationLink(destination:
-                                                FoodDetailView(
-                                                    theMainImage: "Songvak",
-                                                    subImage1: "ahmok",
-                                                    subImage2: "brohok",
-                                                    subImage3: "SomlorKari",
-                                                    subImage4: "Songvak"
-                                                )
-                                ) {
-                                    RecipeViewCell(
-                                        
-                                        imageName           : "food9",
-                                        dishName            : "Stack",
-                                        cookingDate         : "30 Sep 2024",
-                                        statusType          : "Recipe",
-                                        rating              : 5.0,
-                                        reviewCount         : 200,
-                                        level               : "Easy"
-                                        
-                                    )
-                                }
-                                
-                                
                             }
                         }
                     }
@@ -233,6 +200,8 @@ struct HomeView: View {
                 }
             }
         }
+        .environmentObject(foodOnSaleViewModel)
+        .environmentObject(recipeViewModel)
     }
     
     @ViewBuilder
@@ -250,7 +219,7 @@ struct HomeView: View {
             Text("Unknown Category")
         }
     }
-
+}
 
 #Preview {
     HomeView()

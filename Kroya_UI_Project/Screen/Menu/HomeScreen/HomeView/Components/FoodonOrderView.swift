@@ -9,6 +9,7 @@ import SwiftUI
 struct FoodonOrderView: View {
     
     @Environment(\.dismiss) var dismiss
+    
     let imageofOrder: [String] = ["SoupPic", "SaladPic", "GrillPic", "DessertPic 1"]
     let titleofOrder: [String] = ["Soup", "Salad", "Grill", "Dessert"]
     
@@ -18,31 +19,8 @@ struct FoodonOrderView: View {
     var body: some View {
         NavigationView{
             VStack {
-                //Not work well
-                // Search Bar
-                //                NavigationLink(destination: SearchScreen()) {
-                //                    HStack {
-                //                        Image("ico_search1")
-                //                            .resizable()
-                //                            .scaledToFit()
-                //                            .frame(width: 24, height: 24)
-                //
-                //                        Text("Search item")
-                //                            .font(.customfont(.medium, fontSize: 16))
-                //                            .foregroundColor(.gray)
-                //                            .frame(width: .screenWidth * 0.26)
-                //                            .padding(.trailing, 12)
-                //
-                //                        Spacer()
-                //                    }
-                //                    .padding(.leading, 12)
-                //                    .frame(width: .screenWidth * 0.93, height: .screenHeight * 0.05)
-                //                    .background(Color(hex: "#F3F2F3"))
-                //                    .cornerRadius(12)
-                //                }
-                
                 // Loop through images and titles
-                HStack(spacing: 20) {
+                HStack(spacing: 40) {
                     ForEach(0..<imageofOrder.count, id: \.self) { index in
                         Button(action: {
                             selectedOrderIndex = index // Update the selected index
@@ -61,10 +39,11 @@ struct FoodonOrderView: View {
                         .buttonStyle(PlainButtonStyle())
                     }
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(maxWidth: .infinity, alignment: .center)
                 .padding()
-                Spacer().frame(height: 20)
-                Text("All")
+                Spacer()
+                    .frame(height: 20)
+                Text(LocalizedStringKey("All"))
                     .font(.customfont(.bold, fontSize: 16))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundStyle(.black.opacity(0.8))

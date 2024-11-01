@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct RecipeModalView: View {
+    
     @State private var draggedIngredient: Ingredient?
     @State private var draggedStep: Step?
     @Environment(\.dismiss) var dismiss
@@ -12,6 +13,7 @@ struct RecipeModalView: View {
     @ObservedObject var addressVM: AddressViewModel
     @ObservedObject var draftModel: DraftModel
     @State var showDraftAlert: Bool = false
+    
     var body: some View {
         VStack {
             ScrollView(.vertical, showsIndicators: false) {
