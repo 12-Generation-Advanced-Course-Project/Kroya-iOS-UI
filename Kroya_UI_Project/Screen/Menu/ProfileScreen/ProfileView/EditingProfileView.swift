@@ -258,9 +258,13 @@ struct EditingProfileView: View {
             }
             .onAppear {
                 loadProfileData()
+                viewModel.fetchAllAddresses()
+                let lastaddress = viewModel.addresses.last
+                selectedAddress = lastaddress
             }
             .onDisappear{
                 profile.fetchUserProfile()
+                loadProfileData()
             }
             .sheet(isPresented: $showImagePicker) {
                 ImagePicker(selectedImages: $selectedImages)
@@ -293,7 +297,7 @@ struct EditingProfileView: View {
         userInputEmail = profile.userProfile?.email ?? ""
         userInputContact = profile.userProfile?.phoneNumber ?? ""
         userInputPassword = profile.userProfile?.password ?? ""
-        userInputAddress = selectedAddress?.specificLocation ?? profile.userProfile?.location ?? ""
+        userInputAddress =  selectedAddress?.specificLocation ?? ""
     }
     private func detectImageFormat(data: Data) -> String {
         let headerBytes = [UInt8](data.prefix(1))

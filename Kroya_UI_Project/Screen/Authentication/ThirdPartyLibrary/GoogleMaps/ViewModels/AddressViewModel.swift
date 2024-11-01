@@ -29,7 +29,7 @@ class AddressViewModel: ObservableObject {
                 if let savedAddress = response.payload {
                     DispatchQueue.main.async {
                         self?.addresses.append(savedAddress)
-                        self?.selectedAddress = savedAddress // Set newly saved address as selected
+                        self?.selectedAddress = savedAddress
                         print("Address saved successfully: \(savedAddress)")
                     }
                 }

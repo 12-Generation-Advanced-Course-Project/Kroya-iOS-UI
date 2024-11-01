@@ -10,14 +10,15 @@ struct OrdersView: View {
 
     var body: some View {
             VStack(spacing: 0) {
+                
                 Spacer().frame(height: 10)
                 // Orders Text Header
                 HStack {
                     Text("Orders")
                         .font(.customfont(.bold, fontSize: 18))
-                        .padding(.leading, 16)
+                        .padding(.leading, 20)
                 }
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
                 Spacer().frame(height: 10)
 
@@ -78,7 +79,7 @@ struct OrdersView: View {
                 TabView(selection: $selectedSegment) {
                     AllTabView(iselected: selectedSegment)
                         .tag(0)
-                    OrderTabview(iselected: selectedSegment)
+                    OrderTabView(iselected: selectedSegment)
                         .tag(1)
                     SaleTabView(iselected: selectedSegment)
                         .tag(2)
@@ -145,4 +146,8 @@ struct OrdersView: View {
 #Preview {
     OrdersView()
 }
+
+
+
+
 

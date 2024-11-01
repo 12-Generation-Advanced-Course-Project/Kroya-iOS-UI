@@ -1,8 +1,10 @@
 import SwiftUI
 
 struct BottomSheetView<Content: View>: View {
+    
     let content: Content
     @Binding var isOpen: Bool
+    @State private var navigateToCheckout = false
     
     let maxHeight: CGFloat
     let minHeight: CGFloat
@@ -27,11 +29,9 @@ struct BottomSheetView<Content: View>: View {
                     .font(.customfont(.bold, fontSize: 20))
                 Spacer()
                 
-                
-                Button(action : {
-                    // navigateToCheckout = true // Set to true to trigger navigation
-                })
-                {
+                Button(action: {
+                    navigateToCheckout = true // Set to true to trigger navigation
+                }) {
                     HStack {
                         Text("Order")
                             .font(.customfont(.medium, fontSize: 16))
@@ -39,16 +39,21 @@ struct BottomSheetView<Content: View>: View {
                         Image(systemName: "plus")
                             .resizable()
                             .frame(width: 14, height: 14)
-                            .foregroundStyle(Color.white)
+                            .foregroundStyle(.white)
                     }
-                    .frame(width: .screenWidth * 0.25, height: .screenHeight * 0.04)
+                    .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.height * 0.04)
                     .background(PrimaryColor.normal)
-                    .cornerRadius(.screenWidth * 0.022)
+                    .cornerRadius(UIScreen.main.bounds.width * 0.022)
                 }
-                
-            }.padding(.horizontal, 15)
-                .padding(.top, 8)
-        }
+                .background(
+                    NavigationLink(destination: FoodCheckOutView(), isActive: $navigateToCheckout) {
+                        EmptyView()
+                    }
+                )
+            }
+            
+        }.padding(.horizontal, 15)
+            .padding(.top, 8)
     }
     
     init(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat, @ViewBuilder content: () -> Content) {
@@ -87,6 +92,8 @@ struct BottomSheetView<Content: View>: View {
         }
     }
 }
+
+
 
 struct FoodDetailView: View {
     @State private var isFavorite: Bool = false
@@ -218,7 +225,7 @@ struct FoodDetailView: View {
         theMainImage: "Songvak",
         subImage1: "ahmok",
         subImage2: "brohok",
-        subImage3: "SomlorKari",
+        subImage3: "somlorKari",
         subImage4: "Songvak"
     )
 }

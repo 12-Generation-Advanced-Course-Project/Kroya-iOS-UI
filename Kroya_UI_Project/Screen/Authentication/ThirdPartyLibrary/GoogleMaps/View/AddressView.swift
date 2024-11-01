@@ -10,8 +10,9 @@ import SwiftUI
 struct AddressView: View {
     @ObservedObject var viewModel: AddressViewModel
     @State private var showMapSheet = false
-    @State private var addressToUpdate: Address? = nil
+    @State private var addressToUpdate: Address?
     @Environment(\.dismiss) private var dismiss
+    @State private var selectedAddressID: Int?
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -24,17 +25,12 @@ struct AddressView: View {
                         .font(.system(size: 18, weight: .medium, design: .rounded))
                         .opacity(0.84)
                 }
-            }
-            .padding(.bottom)
-
-            HStack {
+                Spacer()
                 Text("My Address")
                     .font(.system(size: 18, weight: .medium, design: .rounded))
                     .foregroundColor(.black)
                     .opacity(0.84)
-
                 Spacer()
-
                 Button(action: {
                     addressToUpdate = nil
                     showMapSheet = true
@@ -43,7 +39,6 @@ struct AddressView: View {
                         Image(systemName: "plus")
                             .foregroundColor(PrimaryColor.normal)
                             .font(.system(size: 17, weight: .medium, design: .rounded))
-
                         Text("Add")
                             .font(.system(size: 18, weight: .medium, design: .rounded))
                             .foregroundColor(.black)
@@ -56,37 +51,35 @@ struct AddressView: View {
             ScrollView {
                 VStack {
                     Divider()
-                    
                     ForEach(viewModel.addresses) { address in
-                        AddressRowView(
-                            address: address,
-                            onUpdate: {
-                                print("Attempting to update address with ID \(address.id)")
-                                addressToUpdate = address
-                                showMapSheet = true
-                                // Removed fetchAllAddresses to prevent interference
-                            },
-                            onDelete: {
-                                print("Deleting address with ID \(address.id)")
-                                viewModel.deleteAddress(id: address.id)
-                            }
-                        )
+                        Button(action: {
+                            viewModel.selectedAddress = address
+                            selectedAddressID = address.id // Update selected address ID
+                            dismiss()
+                        }) {
+                            AddressRowView(
+                                address: address,
+                                onUpdate: {
+                                    addressToUpdate = address
+                                    showMapSheet = true
+                                },
+                                onDelete: {
+                                    viewModel.deleteAddress(id: address.id)
+                                },
+                                isSelected: address.id == selectedAddressID // Highlight if selected
+                            )
+                        }
                     }
-                    
                     Spacer()
                 }
             }
-
         }
         .padding()
         .navigationBarHidden(true)
         .onAppear {
             viewModel.fetchAllAddresses()
-        }
-        .onDisappear {
-            if let lastAddress = viewModel.addresses.last {
-                viewModel.selectedAddress = lastAddress
-            }
+            // Initialize selected address highlight if a selection exists
+            selectedAddressID = viewModel.selectedAddress?.id
         }
         .fullScreenCover(isPresented: $showMapSheet, onDismiss: {
             viewModel.fetchAllAddresses()
@@ -97,6 +90,5 @@ struct AddressView: View {
                 addressToUpdate: addressToUpdate
             )
         }
-        
     }
 }

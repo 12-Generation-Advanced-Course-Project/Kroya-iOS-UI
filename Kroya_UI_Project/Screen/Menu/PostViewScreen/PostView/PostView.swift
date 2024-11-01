@@ -100,10 +100,8 @@ struct PostViewScreen: View {
                     .frame(height: 2)
                 }
                 .padding(.top, 5)
-                
                 // TabView for content
                 TabView(selection: $selectedSegment) {
-//                   AllPostFoodandRecipe(iselected: selectedSegment)
                     FoodSaleView(iselected: selectedSegment)
                         .tag(0)
                     FoodOnSaleView(iselected: selectedSegment)
@@ -114,11 +112,6 @@ struct PostViewScreen: View {
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
         }
-//        .onAppear{
-//            Profile.fetchUserProfile()
-//        }
-       
-        
     }
     
     // Calculate the underline width dynamically based on the text width

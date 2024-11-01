@@ -2,7 +2,7 @@
 //  FoodSaleView.swift
 //  Kroya_UI_Project
 //
-//  
+//
 // 29/10/24
 // Hengly
 //
@@ -20,14 +20,15 @@ struct FoodSaleView: View {
             ScrollView(.vertical,showsIndicators: false){
                 
                 // Example PopularDishesCard for dishes
-                NavigationLink(destination:
-                                FoodDetailView(
-                                    theMainImage: "Songvak",
-                                    subImage1: "ahmok",
-                                    subImage2: "brohok",
-                                    subImage3: "SomlorKari",
-                                    subImage4: "Songvak"
-                                )) {
+                NavigationLink(destination: FoodDetailView(
+                    
+                    theMainImage: "Songvak",
+                    subImage1: "ahmok",
+                    subImage2: "brohok",
+                    subImage3: "somlorKari",
+                    subImage4: "Songvak"
+                    
+                )) {
                     FoodOnSaleViewCell(
                         
                         imageName: "food1",
@@ -42,11 +43,13 @@ struct FoodSaleView: View {
                 }
                 
                 NavigationLink(destination:    FoodDetailView(
+                    
                     theMainImage: "Songvak",
                     subImage1: "ahmok",
                     subImage2: "brohok",
-                    subImage3: "SomlorKari",
+                    subImage3: "somlorKari",
                     subImage4: "Songvak"
+                    
                 )) {
                     RecipeViewCell(
                         
@@ -64,11 +67,13 @@ struct FoodSaleView: View {
                 
                 // Example PopularDishesCard for dishes
                 NavigationLink(destination:    FoodDetailView(
+                    
                     theMainImage: "Songvak",
                     subImage1: "ahmok",
                     subImage2: "brohok",
-                    subImage3: "SomlorKari",
+                    subImage3: "somlorKari",
                     subImage4: "Songvak"
+                    
                 )) {
                     FoodOnSaleViewCell(
                         
@@ -85,11 +90,13 @@ struct FoodSaleView: View {
                 .padding(.top, 10)
                 
                 NavigationLink(destination:   FoodDetailView(
+                    
                     theMainImage: "Songvak",
                     subImage1: "ahmok",
                     subImage2: "brohok",
-                    subImage3: "SomlorKari",
+                    subImage3: "somlorKari",
                     subImage4: "Songvak"
+                    
                 )) {
                     RecipeViewCell(
                         
@@ -106,11 +113,13 @@ struct FoodSaleView: View {
                 .padding(.top, 10)
                 
                 NavigationLink(destination:   FoodDetailView(
+                    
                     theMainImage: "Songvak",
                     subImage1: "ahmok",
                     subImage2: "brohok",
-                    subImage3: "SomlorKari",
+                    subImage3: "somlorKari",
                     subImage4: "Songvak"
+                    
                 )) {
                     RecipeViewCell(
                         
@@ -127,11 +136,13 @@ struct FoodSaleView: View {
                 .padding(.top, 10)
                 
                 NavigationLink(destination:   FoodDetailView(
+                    
                     theMainImage: "Songvak",
                     subImage1: "ahmok",
                     subImage2: "brohok",
-                    subImage3: "SomlorKari",
+                    subImage3: "somlorKari",
                     subImage4: "Songvak"
+                    
                 )) {
                     RecipeViewCell(
                         
@@ -147,12 +158,14 @@ struct FoodSaleView: View {
                 }
                 .padding(.top, 10)
                 
-                NavigationLink(destination:    FoodDetailView(
+                NavigationLink(destination: FoodDetailView(
+                    
                     theMainImage: "Songvak",
                     subImage1: "ahmok",
                     subImage2: "brohok",
-                    subImage3: "SomlorKari",
+                    subImage3: "somlorKari",
                     subImage4: "Songvak"
+                    
                 )) {
                     RecipeViewCell(
                         
@@ -167,7 +180,7 @@ struct FoodSaleView: View {
                     )
                 }
                 .padding(.top, 10)
-                       
+                
             }
             .padding(.horizontal, 20)
         }

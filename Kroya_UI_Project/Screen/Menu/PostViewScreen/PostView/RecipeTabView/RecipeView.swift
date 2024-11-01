@@ -2,7 +2,7 @@
 //  RecipeView.swift
 //  Kroya_UI_Project
 //
-// 
+//
 // 29/10/24
 // Hengly
 //
@@ -30,29 +30,14 @@ struct RecipeView: View {
                         level: "Easy"
                     )
                     
-                  
-                    NavigationLink(destination:
-                                    FoodDetailView(
-                                        theMainImage: "Songvak",
-                                        subImage1: "ahmok",
-                                        subImage2: "brohok",
-                                        subImage3: "SomlorKari",
-                                        subImage4: "Songvak"
-                                    )
-//                                    ContentOnButtonSheet(
-//                        foodName: "Somlor Kari \(index + 1)",
-//                        price: 2.00,
-//                        date: "30 Sep 2024",
-//                        itemFood: "Somlor Kari",
-//                        profile: "profile_image",
-//                        userName: "User Name",
-//                        description: "Somlor Kari is a traditional Cambodian dish...",
-//                        ingredients: "Chicken, Coconut Milk, Curry Paste",
-//                        percentageOfRating: 4.8,
-//                        numberOfRating: 200,
-//                        review: "Delicious dish!",
-//                        reviewDetail: "The Somlor Kari was perfectly spiced and rich in flavor..."
-//                    )
+                    NavigationLink(destination: FoodDetailView(
+                        
+                        theMainImage: "Songvak",
+                        subImage1: "ahmok",
+                        subImage2: "brohok",
+                        subImage3: "SomlorKari",
+                        subImage4: "Songvak"
+                    )
                     ) {
                         EmptyView()
                     }
