@@ -6,6 +6,7 @@ struct BottomSheetView<Content: View>: View {
     let content: Content
     @Binding var isOpen: Bool
     @State private var navigateToCheckout = false
+    
     let maxHeight: CGFloat
     let minHeight: CGFloat
     let showOrderButton: Bool // Control for Food vs Recipe view
@@ -61,6 +62,11 @@ struct BottomSheetView<Content: View>: View {
                         }
                     )
                 }
+                .background(
+                    NavigationLink(destination: FoodCheckOutView(), isActive: $navigateToCheckout) {
+                        EmptyView()
+                    }
+                )
             }
         }
         .padding(.horizontal, 15)

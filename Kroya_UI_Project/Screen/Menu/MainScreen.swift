@@ -9,11 +9,13 @@ struct MainScreen: View {
     @StateObject var authVM: AuthViewModel
     @StateObject var addressViewModel: AddressViewModel
     @StateObject var Profile: ProfileViewModel
+    @StateObject var draft: DraftModel
     @Binding var lang: String
     init(userStore: UserStore, lang: Binding<String>) {
         _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
         _addressViewModel = StateObject(wrappedValue: AddressViewModel(userStore: userStore))
         _Profile = StateObject(wrappedValue: ProfileViewModel(userStore: userStore))
+        _draft = StateObject(wrappedValue: DraftModel(userStore: userStore))
         self._lang = lang
     }
     
@@ -102,7 +104,7 @@ struct MainScreen: View {
                     
                 }
                 .frame(width: .screenWidth, height: .screenHeight)
-                .padding(.bottom, .screenHeight * 0.089)
+                .padding(.bottom, .screenHeight * 0.072)
                 GeometryReader { geometry in
                     VStack {
                         Spacer()
@@ -136,7 +138,7 @@ struct MainScreen: View {
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .fullScreenCover(isPresented: $isModalPresented, content: {
-            AddFoodView(rootIsActive1: self.$isActive, dismissToRoot: { isModalPresented = false })
+            AddFoodView(rootIsActive1: self.$isActive, dismissToRoot: { isModalPresented = false }, addressVM: addressViewModel, draftModel: draft)
         })
     }
     

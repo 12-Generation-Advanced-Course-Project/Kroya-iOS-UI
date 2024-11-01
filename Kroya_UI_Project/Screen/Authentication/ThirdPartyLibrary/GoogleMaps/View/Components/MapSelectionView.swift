@@ -12,7 +12,8 @@ struct MapSelectionView: View {
     @ObservedObject private var locationManager = LocationManager()
     @Environment(\.dismiss) var dismiss
     @State private var isLoadingAddress = false
-    
+//    @Binding var longtitude: Double?
+//    @Binding var latitude: Double?
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
@@ -42,7 +43,7 @@ struct MapSelectionView: View {
                         }
                     }
                     .padding(.leading, 20)
-                    .padding(.top, 10)
+                    .padding(.bottom, 40)
 
                     // Current location button
                     VStack {
@@ -88,7 +89,7 @@ struct MapSelectionView: View {
                         .font(.system(size: 20, weight: .medium))
                         .padding(.top, 10)
 
-                    // Display the fetched or updated location
+                    // Display the fetched or updated locatio
                     HStack {
                         Image(.arrowUpRight)
                             .resizable()

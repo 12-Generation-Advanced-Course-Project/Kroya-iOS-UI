@@ -36,7 +36,7 @@ struct StepEntryView: View {
                     }
                     
                     ZStack(alignment: .trailing) {
-                        TextField(LocalizedStringKey("Enter ingredients"), text: Binding(
+                        TextField("Enter ingredients", text: Binding(
                             get: { step.description },
                             set: { newValue in
                                 step.description = newValue
@@ -71,6 +71,7 @@ struct StepEntryView: View {
                         }
                     }
                     .frame(maxWidth: .infinity)
+                    .padding(.trailing,1)
                 }
                 
                 // Validation error message
@@ -78,7 +79,7 @@ struct StepEntryView: View {
                     HStack {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .foregroundColor(.red)
-                        Text(LocalizedStringKey("Please write a description for this step."))
+                        Text("Please write a description for this step.")
                             .foregroundColor(.red)
                             .font(.caption)
                     }

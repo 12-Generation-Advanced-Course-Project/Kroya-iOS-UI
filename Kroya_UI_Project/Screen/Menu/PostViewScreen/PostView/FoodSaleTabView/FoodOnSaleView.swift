@@ -25,7 +25,7 @@ struct FoodOnSaleView: View {
                         deliveryInfo: "Free",
                         deliveryIcon: "motorbike"
                     )
-                
+                    
                     // Place the NavigationLink as a background item, without using the arrow.
                     NavigationLink(destination:
                                     FoodDetailView(
@@ -37,12 +37,12 @@ struct FoodOnSaleView: View {
                                         showPrice: true
                                     )
                     ) {
-                        EmptyView() // Empty view to prevent showing the default arrow
+                        EmptyView()
                     }
-                    .opacity(0) // Make the navigation link invisible (but still tappable)
+                    .opacity(0)
                 }
                 .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden) // Hide separator line for this cell
+                .listRowSeparator(.hidden)
                 .padding(.vertical, -6)
             }
         }

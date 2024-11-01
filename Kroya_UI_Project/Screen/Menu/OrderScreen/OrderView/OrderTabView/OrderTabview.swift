@@ -7,79 +7,46 @@
 
 import SwiftUI
 
-struct OrderTabview:View {
+struct OrderTabView: View {
     
-    var iselected:Int?
+    var iselected: Int
 
-    @State private var isExpandedToday = false
+    @State private var isExpandedToday = true
     @State private var isExpandedYTD = false
     @State private var isExpandedLst2Day = false
+
     var body: some View {
-        NavigationStack {
-            VStack(alignment: .leading) {
-                // Disclosure Group for Today
+        ScrollView {
+            VStack(alignment: .leading, spacing: 8) {
                 DisclosureGroup("Today", isExpanded: $isExpandedToday) {
-                    VStack {
-                        List {
-                            OrderCard(isAccepted: true, isOrder: true, showIcon: false)
-                            OrderCard(isAccepted: false, isOrder: true, showIcon: false)
-                            OrderCard(isAccepted: false, isOrder: true, showIcon: false)
-                            OrderCard(isAccepted: true, isOrder: true, showIcon: false)
-                        }
-                        .listStyle(PlainListStyle())
-                        .listRowSeparator(.hidden)
-                        .frame(maxWidth: .infinity, minHeight: .screenHeight * 0.3, alignment: .leading)
+                    VStack(spacing: 15) {
+                        OrderCard(isAccepted: true, isOrder: true, showIcon: false)
+                        OrderCard(isAccepted: false, isOrder: true, showIcon: false)
                     }
                 }
-                .font(.customfont(.semibold, fontSize: 16))
-                .frame(maxWidth: .infinity)
-                .foregroundStyle(.black)
-                .accentColor(.black)
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(.black)
                 
                 // Disclosure Group for Yesterday
                 DisclosureGroup("Yesterday", isExpanded: $isExpandedYTD) {
-                    VStack {
-                        List {
-                            OrderCard(isAccepted: false, isOrder: true, showIcon: false)
-                            OrderCard(isAccepted: false, isOrder: true, showIcon: false)
-                            OrderCard(isAccepted: true, isOrder: true, showIcon: false)
-                            OrderCard(isAccepted: false, isOrder: true, showIcon: false)
-                        }
-                        .listStyle(PlainListStyle())
-                        .listRowSeparator(.hidden)
-                        .frame(maxWidth: .infinity, minHeight: .screenHeight * 0.35, alignment: .leading)
+                    VStack(spacing: 15) {
+                        OrderCard(isAccepted: true, isOrder: true, showIcon: false)
                     }
                 }
-                .font(.customfont(.semibold, fontSize: 16))
-                .frame(maxWidth: .infinity)
-                .foregroundStyle(.black)
-                .accentColor(.black)
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(.black)
                 
-                // Disclosure Group for Last 2 Days
-                DisclosureGroup("Last 2 days", isExpanded: $isExpandedLst2Day) {
-                    VStack {
-                        List {
-                            OrderCard(isAccepted: true, isOrder: true, showIcon: false)
-                            OrderCard(isAccepted: true, isOrder: true, showIcon: false)
-                            OrderCard(isAccepted: false, isOrder: true, showIcon: false)
-                            OrderCard(isAccepted: false, isOrder: true, showIcon: false)
-                        }
-                        .listStyle(PlainListStyle())
-                        .listRowSeparator(.hidden)
-                        .frame(maxWidth: .infinity, minHeight: .screenHeight * 0.3, alignment: .leading)
+                DisclosureGroup("Last 2 Days", isExpanded: $isExpandedLst2Day) {
+                    VStack(spacing: 15) {
+                        OrderCard(isAccepted: false, isOrder: true, showIcon: false)
                     }
                 }
-                .font(.customfont(.semibold, fontSize: 16))
-                .frame(maxWidth: .infinity)
-                .foregroundStyle(.black)
-                .accentColor(.black)
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(.black)
             }
-            .padding(.horizontal, 10)
-            Spacer()
+            .padding(.horizontal)
         }
+        .background(Color.clear)
+        .scrollIndicators(.hidden)
     }
-}
-
-#Preview {
-    OrderTabview()
 }
