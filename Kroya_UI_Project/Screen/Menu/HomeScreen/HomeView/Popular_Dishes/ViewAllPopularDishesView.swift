@@ -183,21 +183,39 @@ struct ImageSliderView: View {
     let timer: Publishers.Autoconnect<Timer.TimerPublisher>
     
     var body: some View {
-        TabView(selection: $currentPage) {
-            ForEach(0..<images.count, id: \.self) { index in
-                Image(images[index])
-                    .resizable()
-                    .scaledToFill()
-                    .tag(index)
+        ZStack {
+            TabView(selection: $currentPage) {
+                ForEach(0..<images.count, id: \.self) { index in
+                    Image(images[index])
+                        .resizable()
+                        .scaledToFill()
+                        .tag(index)
+                }
             }
-        }
-        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
-        .frame(maxWidth: .infinity, maxHeight: 120)
-        .cornerRadius(12)
-        .onReceive(timer) { _ in
-            withAnimation {
-                currentPage = (currentPage + 1) % images.count
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+            .frame(maxWidth: .infinity, maxHeight: 120)
+            .cornerRadius(12)
+            .onReceive(timer) { _ in
+                withAnimation {
+                    currentPage = (currentPage + 1) % images.count
+                }
             }
+            HStack(spacing: 5) {
+                ForEach(0..<images.count, id: \.self) { index in
+                    if index == currentPage {
+                        // Active dot (oval and yellow)
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(Color.yellow)
+                            .frame(width: 20, height: 10) // Oval shape
+                    } else {
+                        // Inactive dot (circular)
+                        Circle()
+                            .fill(Color.gray)
+                            .frame(width: 10, height: 10)
+                    }
+                }
+            }
+            .padding(.top,80)
         }
     }
 }
@@ -208,33 +226,85 @@ struct SegmentedControlView: View {
     let tabTitles: [String]
     
     var body: some View {
-        VStack(alignment: .leading) {
-            // HStack for the Tab Titles
+        
+        VStack {
             HStack {
-                ForEach(tabTitles, id: \.self) { title in
-                    Text(title)
-                        .onTapGesture {
-                            selectedSegment = tabTitles.firstIndex(of: title) ?? 0
-                        }
-                        .fontWeight(.semibold)
-                        .font(.customfont(.semibold, fontSize: 16))
-                        .foregroundColor(selectedSegment == (tabTitles.firstIndex(of: title) ?? 0) ? .black.opacity(0.8) : .black.opacity(0.5))
-                        .padding(.trailing, 10) // Spacing between titles
-                }
+                Spacer()
+                
+                Text(LocalizedStringKey("All"))
+                    .fontWeight(.semibold)
+                    .font(.system(size: 16))
+                    .foregroundColor(selectedSegment == 0 ? .black.opacity(0.8) : .black.opacity(0.5))
+                    .onTapGesture {
+                        selectedSegment = 0
+                    }
+                
+                Spacer()
+                
+                Text(LocalizedStringKey("Sale"))
+                    .fontWeight(.semibold)
+                    .font(.system(size: 16))
+                    .foregroundColor(selectedSegment == 1 ? .black.opacity(0.8) : .black.opacity(0.5))
+                    .onTapGesture {
+                        selectedSegment = 1
+                    }
+                
+                Spacer()
+                
+                Text(LocalizedStringKey("Recipes"))
+                    .fontWeight(.semibold)
+                    .font(.system(size: 16))
+                    .foregroundColor(selectedSegment == 2 ? .black.opacity(0.8) : .black.opacity(0.5))
+                    .onTapGesture {
+                        selectedSegment = 2
+                    }
+                
+                Spacer()
             }
-            .padding(.horizontal, 15)
+            .padding(.top)
             
-            // Geometry Reader for Underline
             GeometryReader { geometry in
                 Divider()
+                
                 Rectangle()
-                    .fill(PrimaryColor.normal)
-                    .frame(width: underlineWidth(for: selectedSegment, in: geometry), height: 2)
-                    .offset(x: underlineOffset(for: selectedSegment, in: geometry))
+                    .fill(Color.yellow) // Use your defined color here
+                    .frame(width: geometry.size.width / 3, height: 2) // Three segments
+                    .offset(x: CGFloat(selectedSegment) * (geometry.size.width / 3))
                     .animation(.easeInOut(duration: 0.3), value: selectedSegment)
             }
             .frame(height: 2)
         }
+        
+        
+        
+        
+//        VStack(alignment: .leading) {
+//            // HStack for the Tab Titles
+//            HStack {
+//                ForEach(tabTitles, id: \.self) { title in
+//                    Text(title)
+//                        .onTapGesture {
+//                            selectedSegment = tabTitles.firstIndex(of: title) ?? 0
+//                        }
+//                        .fontWeight(.semibold)
+//                        .font(.customfont(.semibold, fontSize: 16))
+//                        .foregroundColor(selectedSegment == (tabTitles.firstIndex(of: title) ?? 0) ? .black.opacity(0.8) : .black.opacity(0.5))
+//                        .padding(.trailing, 10) // Spacing between titles
+//                }
+//            }
+//            .padding(.horizontal, 15)
+//            
+//            // Geometry Reader for Underline
+//            GeometryReader { geometry in
+//                Divider()
+//                Rectangle()
+//                    .fill(PrimaryColor.normal)
+//                    .frame(width: underlineWidth(for: selectedSegment, in: geometry), height: 2)
+//                    .offset(x: underlineOffset(for: selectedSegment, in: geometry))
+//                    .animation(.easeInOut(duration: 0.3), value: selectedSegment)
+//            }
+//            .frame(height: 2)
+//        }
         .padding(.top, 5)
         
     }
