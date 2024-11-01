@@ -30,7 +30,7 @@ struct OrderListView: View {
                         .foregroundColor(.black)
                 }
                 Spacer()
-                Text("Orders request")
+                Text(LocalizedStringKey("Orders request"))
                     .font(.customfont(.bold, fontSize: 18))
                 Spacer()
                 

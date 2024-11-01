@@ -61,34 +61,81 @@ struct ViewAllPopularDishesView: View {
                 }
                 
                 // Tab View
-                VStack(alignment: .leading) {
+//                VStack(alignment: .leading) {
+//                    HStack {
+//                        ForEach(["All", "Sale", "Recipe"], id: \.self) { title in
+//                            Text(title)
+//                                .onTapGesture {
+//                                    selectedSegment = ["All", "Sale", "Recipe"].firstIndex(of: title) ?? 0
+//                                }
+//                                .fontWeight(.semibold)
+//                                .font(.customfont(.semibold, fontSize: 16))
+//                                .foregroundColor(selectedSegment == (["All", "Sale", "Recipe"].firstIndex(of: title) ?? 0) ? .black.opacity(0.8) : .black.opacity(0.5))
+//                                .padding(.horizontal, 19)
+//                        }
+//                        Spacer()
+//                    }
+//                    .padding(.top)
+//                    // Geometry Reader for Dynamic Line Under the Selected Tab
+//                    GeometryReader { geometry in
+//                        Divider()
+//                        Rectangle()
+//                            .fill(PrimaryColor.normal)
+//                            .frame(width: geometry.size.width / 7, height: 2)
+//                            .offset(x: selectedSegment == 2
+//                                    ? CGFloat(selectedSegment) * geometry.size.width / 4.5
+//                                    : CGFloat(selectedSegment) * geometry.size.width / 5)
+//                            .animation(.easeInOut(duration: 0.3), value: selectedSegment)
+//                    }
+//                    .frame(height: 15)
+//                    
+//                }
+                VStack {
                     HStack {
-                        ForEach(["All", "Sale", "Recipe"], id: \.self) { title in
-                            Text(title)
-                                .onTapGesture {
-                                    selectedSegment = ["All", "Sale", "Recipe"].firstIndex(of: title) ?? 0
-                                }
-                                .fontWeight(.semibold)
-                                .font(.customfont(.semibold, fontSize: 16))
-                                .foregroundColor(selectedSegment == (["All", "Sale", "Recipe"].firstIndex(of: title) ?? 0) ? .black.opacity(0.8) : .black.opacity(0.5))
-                                .padding(.horizontal, 19)
-                        }
+                        Spacer()
+                        
+                        Text(LocalizedStringKey("All"))
+                            .fontWeight(.semibold)
+                            .font(.system(size: 16))
+                            .foregroundColor(selectedSegment == 0 ? .black.opacity(0.8) : .black.opacity(0.5))
+                            .onTapGesture {
+                                selectedSegment = 0
+                            }
+                        
+                        Spacer()
+                        
+                        Text(LocalizedStringKey("Sale"))
+                            .fontWeight(.semibold)
+                            .font(.system(size: 16))
+                            .foregroundColor(selectedSegment == 1 ? .black.opacity(0.8) : .black.opacity(0.5))
+                            .onTapGesture {
+                                selectedSegment = 1
+                            }
+                        
+                        Spacer()
+                        
+                        Text(LocalizedStringKey("Recipes"))
+                            .fontWeight(.semibold)
+                            .font(.system(size: 16))
+                            .foregroundColor(selectedSegment == 2 ? .black.opacity(0.8) : .black.opacity(0.5))
+                            .onTapGesture {
+                                selectedSegment = 2
+                            }
+                        
                         Spacer()
                     }
                     .padding(.top)
-                    // Geometry Reader for Dynamic Line Under the Selected Tab
+                    
                     GeometryReader { geometry in
                         Divider()
+                        
                         Rectangle()
-                            .fill(PrimaryColor.normal)
-                            .frame(width: geometry.size.width / 7, height: 2)
-                            .offset(x: selectedSegment == 2
-                                    ? CGFloat(selectedSegment) * geometry.size.width / 4.5
-                                    : CGFloat(selectedSegment) * geometry.size.width / 5)
+                            .fill(Color.yellow) // Use your defined color here
+                            .frame(width: geometry.size.width / 3, height: 2) // Three segments
+                            .offset(x: CGFloat(selectedSegment) * (geometry.size.width / 3))
                             .animation(.easeInOut(duration: 0.3), value: selectedSegment)
                     }
-                    .frame(height: 15)
-                    
+                    .frame(height: 2)
                 }
                 .padding(.top, 5)
                 
