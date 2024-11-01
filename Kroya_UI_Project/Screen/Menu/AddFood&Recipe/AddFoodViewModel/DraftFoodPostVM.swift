@@ -15,8 +15,8 @@ class DraftModel: ObservableObject {
     @Published var selectedCategory: String? = nil
     
     // MARK: Fields from RecipeModal
-    @Published var ingredients: [Ingredient] = []
-    @Published var steps: [Step] = []
+    @Published var ingredients: [RecipeIngredient] = []
+    @Published var cookingSteps: [CookingStep] = []
     
     // MARK: Fields from SaleModalView
     @Published var amount: Double = 0
@@ -31,7 +31,7 @@ class DraftModel: ObservableObject {
     // MARK: Check if any fields have values for determining if a draft exists
     var hasDraftData: Bool {
         return !foodName.isEmpty || !description.isEmpty || selectedCategory != nil ||
-               !ingredients.isEmpty || !steps.isEmpty ||
+               !ingredients.isEmpty || !cookingSteps.isEmpty ||
                amount != 0 || price != 0 || !location.isEmpty ||
                !selectedImages.isEmpty || selectedLevel != nil || selectedCuisine != nil || CookDate != Date()
     }
@@ -42,7 +42,7 @@ class DraftModel: ObservableObject {
         description = ""
         category = ""
         ingredients = []
-        steps = []
+        cookingSteps = []
         amount = 0.00
         price = 0.00
         location = ""

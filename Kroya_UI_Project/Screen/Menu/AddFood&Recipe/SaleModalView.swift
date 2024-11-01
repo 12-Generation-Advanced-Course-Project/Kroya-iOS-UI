@@ -1,20 +1,9 @@
 import SwiftUI
 
-struct Ingret: Identifiable, Codable {
-    var id = UUID()
-    var cookDate: String
-    var amount: String
-    var price: String
-    var location: String
-    var selectedCurrency: Int
-}
-
-
-
 struct SaleModalView: View {
     let dismissToRoot: () -> Void
     @Environment(\.dismiss) var dismiss
-    @Binding var ingret: Ingret
+    @Binding var ingret: SaleIngredient
     @State private var isAvailableForSale: Bool? = nil
     @State private var selectedDate = Date()
     @State private var isDatePickerVisible: Bool = false
@@ -153,34 +142,31 @@ struct SaleModalView: View {
                                         .font(.customfont(.regular, fontSize: 15))
                                         .foregroundStyle(.black.opacity(0.6))
                                         .frame(maxWidth: 120, alignment: .leading)
+                                    TextField(getCurrencyPlaceholder(), text: Binding(
+                                        get: { formatPrice() },
+                                        set: { newValue in
+                                            draftModel.price = filterPriceInput(newValue)
+                                        }
+                                    ))
+                                    .multilineTextAlignment(.leading)
+                                    .keyboardType(.decimalPad)
+                                    .foregroundStyle(.gray.opacity(0.8))
+                                    .font(.customfont(.medium, fontSize: 15))
+                                    .onChange(of: draftModel.price) { _ in
+                                        validateFields()
+                                    }
                                     
-                                    HStack {
-                                        TextField(getCurrencyPlaceholder(), text: Binding(
-                                            get: { formatPrice() },
-                                            set: { newValue in
-                                                draftModel.price = filterPriceInput(newValue)
-                                            }
-                                        ))
-                                        .multilineTextAlignment(.leading)
-                                        .keyboardType(.decimalPad)
-                                        .foregroundStyle(.gray.opacity(0.8))
-                                        .font(.customfont(.medium, fontSize: 15))
-                                        .onChange(of: draftModel.price) { _ in
-                                            validateFields()
+                                    Picker("", selection: $ingret.selectedCurrency) {
+                                        ForEach(0..<currencies.count) { index in
+                                            Text(currencies[index])
+                                                .tag(index)
+                                                .font(.customfont(.medium, fontSize: 20))
                                         }
-                                        
-                                        Picker("", selection: $ingret.selectedCurrency) {
-                                            ForEach(0..<currencies.count) { index in
-                                                Text(currencies[index])
-                                                    .tag(index)
-                                                    .font(.customfont(.medium, fontSize: 20))
-                                            }
-                                        }
-                                        .pickerStyle(SegmentedPickerStyle())
-                                        .frame(width: 60)
-                                        .onChange(of: ingret.selectedCurrency) { _ in
-                                            draftModel.price = convertCurrency(draftModel.price)
-                                        }
+                                    }
+                                    .pickerStyle(SegmentedPickerStyle())
+                                    .frame(width: 60)
+                                    .onChange(of: ingret.selectedCurrency) { _ in
+                                        draftModel.price = convertCurrency(draftModel.price)
                                     }
                                 }
                                 .padding(.horizontal)
@@ -216,7 +202,6 @@ struct SaleModalView: View {
                             )
                             
                             HStack {
-                                // Error message if any required fields are empty
                                 if showError {
                                     HStack {
                                         Image(systemName: "exclamationmark.triangle.fill")
@@ -323,12 +308,10 @@ struct SaleModalView: View {
             }
         }
     }
-    
-//    // MARK: Validation function
+    // MARK: Validation function
     private func validateFields() {
         showError = draftModel.amount == 0 || draftModel.price == 0 || addressStore.selectedAddress == nil
     }
-//    
     // MARK: Saving Draft
     private func handleCancel() {
         if draftModel.hasDraftData {
@@ -342,56 +325,43 @@ struct SaleModalView: View {
     private func saveDraft() {
         // Implement your logic for saving the draft
     }
-    //MARK: Function to get the placeholder based on selected currency
+    // MARK: Function to get the placeholder based on selected currency
     private func getCurrencyPlaceholder() -> String {
-        ingret.selectedCurrency == 0 ? "0.0000" : "0.00"
+        "0"
     }
     
-    //MARK: Function to format the price based on selected currency
+    // MARK: Function to format the price based on currency selection
     private func formatPrice() -> String {
-        if draftModel.price != 0 {
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .decimal
-            formatter.maximumFractionDigits = ingret.selectedCurrency == 0 ? 4 : 2
-            formatter.groupingSeparator = ingret.selectedCurrency == 0 ? "," : ""
-            return formatter.string(from: NSNumber(value: draftModel.price)) ?? ""
-        }
-        return ""
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = ingret.selectedCurrency == 0 ? 4 : 2
+        formatter.groupingSeparator = ingret.selectedCurrency == 1 ? "," : ""
+        return formatter.string(from: NSNumber(value: draftModel.price)) ?? "0"
     }
     
-    //MARK: Function to filter price input based on currency selection
+    // MARK: Function to filter and format the price input based on the selected currency
     private func filterPriceInput(_ input: String) -> Double {
         let maxDecimalPlaces = ingret.selectedCurrency == 0 ? 4 : 2
         var filtered = input.filter { "0123456789.".contains($0) }
         
-        // Ensure only one decimal point
-        if filtered.components(separatedBy: ".").count > 2 {
-            filtered.removeLast()
-        }
+        let components = filtered.components(separatedBy: ".")
+        guard components.count <= 2 else { return draftModel.price }
         
-        // Limit decimal places
-        if let decimalIndex = filtered.firstIndex(of: ".") {
-            let integerPart = filtered[..<decimalIndex]
-            let decimalPart = filtered[decimalIndex...].prefix(maxDecimalPlaces + 1)
-            filtered = String(integerPart + decimalPart)
+        if components.count == 2 {
+            let decimalPart = String(components[1].prefix(maxDecimalPlaces))
+            filtered = "\(components[0]).\(decimalPart)"
         }
         
         return Double(filtered) ?? 0.0
     }
     
-    //MARK: Function to convert currency based on the selected currency type
+    // MARK: Function to convert the currency value when switching between Riel and USD
     private func convertCurrency(_ price: Double) -> Double {
         if ingret.selectedCurrency == 0 {
-            // Convert USD to Riels
             return price * conversionRate
         } else {
-            // Convert Riels to USD
             return price / conversionRate
         }
     }
-    
-    // MARK: Validation Function
-//    private func validateFields() {
-//        showError = draftModel.price == 0 || draftModel.amount == 0 || draftModel.location.isEmpty
-//    }
 }

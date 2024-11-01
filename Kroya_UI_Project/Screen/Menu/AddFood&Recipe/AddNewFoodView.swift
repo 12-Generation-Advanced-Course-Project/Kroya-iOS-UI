@@ -23,6 +23,7 @@ struct AddFoodView: View {
     @ObservedObject var addressVM: AddressViewModel
     @ObservedObject var draftModel: DraftModel
     @State private var showDraftAlert = false
+    @ObservedObject var addnewFoodVM: AddNewFoodVM
     var body: some View {
         NavigationView {
             ScrollView(.vertical,showsIndicators: false) {
@@ -55,7 +56,7 @@ struct AddFoodView: View {
                                                         .frame(width: 20, height: 20)
                                                         .background(Color.white)
                                                         .clipShape(Circle())
-                                                        .foregroundColor(.red)
+                                                        .foregroundColor(.gray)
                                                         .offset(x: -2, y: -5)
                                                 }
                                             }

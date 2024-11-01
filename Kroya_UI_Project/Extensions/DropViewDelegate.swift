@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct DropViewDelegate: DropDelegate {
-    let destinationItem: Ingredient
-    @Binding var ingredients: [Ingredient]
-    @Binding var draggedItem: Ingredient?
+    let destinationItem: RecipeIngredient
+    @Binding var ingredients: [RecipeIngredient]
+    @Binding var draggedItem: RecipeIngredient?
 
     func dropUpdated(info: DropInfo) -> DropProposal? {
         return DropProposal(operation: .move)

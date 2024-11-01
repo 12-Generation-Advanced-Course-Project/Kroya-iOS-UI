@@ -50,7 +50,7 @@ struct PostViewScreen: View {
                                 .font(.customfont(.bold, fontSize: 16))
                                 .foregroundStyle(.black)
                             Spacer().frame(height: 5)
-                            Text("\(Profile.formatDate(from: Profile.userProfile?.createdAt ?? ""))")
+                            Text("\(Profile.userProfile?.email ?? "")")
                                 .font(.customfont(.light, fontSize: 12))
                                 .foregroundStyle(.black)
                         }
