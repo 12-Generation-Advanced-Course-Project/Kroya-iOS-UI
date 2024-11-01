@@ -16,7 +16,7 @@ extension String {
     }
 }
 
-// MARK: Custom Fonts Inter
+// MARK: Custom Fonts Inter for English
 enum Inter: String {
     case regular = "Inter-Regular"
     case medium = "Inter-Medium"
@@ -31,6 +31,57 @@ extension Font {
         custom(font.rawValue, size: fontSize)
     }
 }
+
+//// MARK: Custom Fonts KantumruyPro for Khmer
+//enum KantumryPro: String {
+//    case regular = "KantumruyPro-Regular"
+//    case medium = "KantumruyPro-Medium"
+//    case semibold = "KantumruyPro-SemiBold"
+//    case bold = "KantumruyPro-Bold"
+//    case light = "KantumruyPro-Light"
+//}
+//
+//extension Font {
+//    static func fontKm(_ font: KantumryPro, fontSize: CGFloat) -> Font {
+//        custom(font.rawValue, size: fontSize)
+//    }
+//}
+//
+//// MARK: Custom Fonts NotoSansKR for Korean
+//enum NotoSansKR: String {
+//    case black = "NotoSansKR-Black"
+//    case regular = "NotoSansKR-Regular"
+//    case medium = "NotoSansKR-Medium"
+//    case semibold = "NotoSansKR-SemiBold"
+//    case bold = "NotoSansKR-Bold"
+//    case light = "NotoSansKR-Light"
+//}
+//
+//extension Font {
+//    static func fontkR(_ font: NotoSansKR, fontSize: CGFloat) -> Font {
+//        custom(font.rawValue, size: fontSize)
+//    }
+//}
+
+//extension Font {
+//    static func customfont(_ font: KantumryPro, fontSize: CGFloat) -> Font {
+//        custom(font.rawValue, size: fontSize)
+//    }
+//}
+
+
+//func fontForCurrentLocale() -> Font {
+//    let locale = Locale.current.identifier
+//    
+//    if locale.starts(with: "km") { // Khmer
+//        return Font.custom("KantumruyPro-VariableFont_wght", size: 16)
+//    } else if locale.starts(with: "ko") { // Korean
+//        return Font.custom("NotoSansKR-VariableFont_wght", size: 16)
+//    } else { // Default to English
+//        return Font.custom("Inter-Italic-VariableFont_opsz,wght", size: 16)
+//    }
+//}
+
 
 //MARK: Using CGFloat For Responsive Screen
 extension CGFloat {

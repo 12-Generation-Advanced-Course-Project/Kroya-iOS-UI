@@ -14,8 +14,7 @@ struct PostViewScreen: View {
     var urlImagePost: String = "https://kroya-api.up.railway.app/api/v1/fileView/"
     @Environment(\.dismiss) var dismiss
     @ObservedObject  var Profile : ProfileViewModel
-    // Text titles for each tab
-    let tabTitles = ["All", "Food on Sale", "Recipes"]
+    //    var tabTitles = ["All", "Food on Sale", "Recipes"]
     
     var body: some View {
         
@@ -24,7 +23,7 @@ struct PostViewScreen: View {
                 HStack {
                     HStack {
                         if let profileImageUrl = Profile.userProfile?.profileImage, !profileImageUrl.isEmpty {
-                          
+                            
                             KFImage(URL(string: "\(urlImagePost)\(profileImageUrl)"))
                                 .resizable()
                                 .scaledToFill()
@@ -73,71 +72,121 @@ struct PostViewScreen: View {
                 // Tab View
                 VStack(alignment: .leading) {
                     // HStack for the Tab Titles
-                    HStack {
-                        ForEach(tabTitles, id: \.self) { title in
-                            Text(title)
-                                .onTapGesture {
-                                    selectedSegment = tabTitles.firstIndex(of: title) ?? 0
-                                }
+                    //                    HStack {
+                    //                        ForEach(tabTitles, id: \.self) { title in
+                    //                            Text(title)
+                    //                                .onTapGesture {
+                    //                                    selectedSegment = tabTitles.firstIndex(of: title) ?? 0
+                    //                                }
+                    //                                .fontWeight(.semibold)
+                    //                                .font(.customfont(.semibold, fontSize: 16))
+                    //                                .foregroundColor(selectedSegment == (tabTitles.firstIndex(of: title) ?? 0) ? .black.opacity(0.8) : .black.opacity(0.5))
+                    //                                .padding(.trailing, 10) // Spacing between titles
+                    //                        }
+                    //                    }
+                    //                    .padding(.horizontal, 15)
+                    //                    .padding(.top)
+                    //
+                    //                    // Geometry Reader for Underline
+                    //                    GeometryReader { geometry in
+                    //                        Divider()
+                    //                        Rectangle()
+                    //                            .fill(PrimaryColor.normal)
+                    //                            .frame(width: underlineWidth(for: selectedSegment, in: geometry), height: 2)
+                    //                            .offset(x: underlineOffset(for: selectedSegment, in: geometry))
+                    //                            .animation(.easeInOut(duration: 0.3), value: selectedSegment)
+                    //                    }
+                    //                    .frame(height: 2)
+                    //                }
+                    VStack {
+                        HStack {
+                            Spacer()
+                            
+                            Text(LocalizedStringKey("All"))
                                 .fontWeight(.semibold)
-                                .font(.customfont(.semibold, fontSize: 16))
-                                .foregroundColor(selectedSegment == (tabTitles.firstIndex(of: title) ?? 0) ? .black.opacity(0.8) : .black.opacity(0.5))
-                                .padding(.trailing, 10) // Spacing between titles
+                                .font(.system(size: 16)) 
+                                .foregroundColor(selectedSegment == 0 ? .black.opacity(0.8) : .black.opacity(0.5))
+                                .onTapGesture {
+                                    selectedSegment = 0
+                                }
+                            
+                            Spacer()
+                            
+                            Text(LocalizedStringKey("Food on Sale"))
+                                .fontWeight(.semibold)
+                                .font(.system(size: 16))
+                                .foregroundColor(selectedSegment == 1 ? .black.opacity(0.8) : .black.opacity(0.5))
+                                .onTapGesture {
+                                    selectedSegment = 1
+                                }
+                            
+                            Spacer()
+                            
+                            Text(LocalizedStringKey("Recipes"))
+                                .fontWeight(.semibold)
+                                .font(.system(size: 16))
+                                .foregroundColor(selectedSegment == 2 ? .black.opacity(0.8) : .black.opacity(0.5))
+                                .onTapGesture {
+                                    selectedSegment = 2
+                                }
+                            
+                            Spacer()
                         }
+                        .padding(.top)
+                        
+                        GeometryReader { geometry in
+                            Divider()
+                            
+                            Rectangle()
+                                .fill(Color.yellow) // Use your defined color here
+                                .frame(width: geometry.size.width / 3, height: 2) // Three segments
+                                .offset(x: CGFloat(selectedSegment) * (geometry.size.width / 3))
+                                .animation(.easeInOut(duration: 0.3), value: selectedSegment)
+                        }
+                        .frame(height: 2)
                     }
-                    .padding(.horizontal, 15) 
-                    .padding(.top)
-                    
-                    // Geometry Reader for Underline
-                    GeometryReader { geometry in
-                        Divider()
-                        Rectangle()
-                            .fill(PrimaryColor.normal)
-                            .frame(width: underlineWidth(for: selectedSegment, in: geometry), height: 2)
-                            .offset(x: underlineOffset(for: selectedSegment, in: geometry))
-                            .animation(.easeInOut(duration: 0.3), value: selectedSegment)
-                    }
-                    .frame(height: 2)
                 }
-                .padding(.top, 5)
-                // TabView for content
-                TabView(selection: $selectedSegment) {
-                    FoodSaleView(iselected: selectedSegment)
-                        .tag(0)
-                    FoodOnSaleView(iselected: selectedSegment)
-                        .tag(1)
-                    RecipeView(iselected: selectedSegment)
-                        .tag(2)
-                }
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+            
+            
+            .padding(.top, 5)
+            // TabView for content
+            TabView(selection: $selectedSegment) {
+                FoodSaleView(iselected: selectedSegment)
+                    .tag(0)
+                FoodOnSaleView(iselected: selectedSegment)
+                    .tag(1)
+                RecipeView(iselected: selectedSegment)
+                    .tag(2)
             }
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         }
     }
-    
-    // Calculate the underline width dynamically based on the text width
-    private func underlineWidth(for selectedSegment: Int, in geometry: GeometryProxy) -> CGFloat {
-        let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        let title = tabTitles[selectedSegment]
-        let titleWidth = title.size(withAttributes: [NSAttributedString.Key.font: font]).width
-        
-        // Add or subtract a fixed value from the calculated width
-        let widthAdjustment: CGFloat = 10 // Adjust this value to add/subtract pixels from the underline width
-        return titleWidth + widthAdjustment
-    }
-    
-    
-    
-    // Calculate the underline offset based on the cumulative width of the previous text items
-    private func underlineOffset(for selectedSegment: Int, in geometry: GeometryProxy) -> CGFloat {
-        // Calculate the width of the preceding tabs
-        let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        var offset: CGFloat = 10 // Starting padding from the leading edge
-        
-        for index in 0..<selectedSegment {
-            let titleWidth = tabTitles[index].size(withAttributes: [NSAttributedString.Key.font: font]).width
-            offset += titleWidth + 20 // Add the width of the text and the trailing padding between titles
-        }
-        
-        return offset
-    }
+}
+
+//// Calculate the underline width dynamically based on the text width
+//private func underlineWidth(for selectedSegment: Int, in geometry: GeometryProxy) -> CGFloat {
+//    let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+//    let title = tabTitles[selectedSegment]
+//    let titleWidth = title.size(withAttributes: [NSAttributedString.Key.font: font]).width
+//    
+//    // Add or subtract a fixed value from the calculated width
+//    let widthAdjustment: CGFloat = 10 // Adjust this value to add/subtract pixels from the underline width
+//    return titleWidth + widthAdjustment
+//}
+//
+//
+//
+//// Calculate the underline offset based on the cumulative width of the previous text items
+//private func underlineOffset(for selectedSegment: Int, in geometry: GeometryProxy) -> CGFloat {
+//    // Calculate the width of the preceding tabs
+//    let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+//    var offset: CGFloat = 10 // Starting padding from the leading edge
+//    
+//    for index in 0..<selectedSegment {
+//        let titleWidth = tabTitles[index].size(withAttributes: [NSAttributedString.Key.font: font]).width
+//        offset += titleWidth + 20 // Add the width of the text and the trailing padding between titles
+//    }
+//    
+//    return offset
+//}
 }
