@@ -1,42 +1,26 @@
-//
-//  FoodOnSaleView.swift
-//  Kroya_UI_Project
-//
-//  Created by KAK-LY on 22/10/24.
-//
-
-
 import SwiftUI
 
 struct FoodOnSaleViewCell: View {
     
-    @State private var isFavorite: Bool = false
-    
-    var imageName           : String
-    var dishName            : String
-    var cookingDate         : String
-    var price               : Double
-    var rating              : Double
-    var reviewCount         : Int
-    var deliveryInfo        : String
-    var deliveryIcon        : String
-    
-    
+    @State private var isFavorite: Bool
+    var foodSale: FoodOnSaleModel
+
+    init(foodSale: FoodOnSaleModel, isFavorite: Bool = false) {
+        self.foodSale = foodSale
+        _isFavorite = State(initialValue: isFavorite) // Initialize `isFavorite` with the passed value
+    }
+
     var body: some View {
-        
         VStack {
-            ZStack(alignment: .topLeading) {  // Aligns everything to the top leading (left)
-                
-                // Image Section
-                Image(imageName)
+            ZStack(alignment: .topLeading) {
+                Image(foodSale.imageName)
                     .resizable()
                     .scaledToFill()
-                    .frame(height: 160) // Fixed height for the image as shown in the sample UI
+                    .frame(height: 160)
                     .cornerRadius(15, corners: [.topLeft, .topRight])
                     .clipped()
                 
                 HStack {
-                    // Rating and Reviews Section
                     HStack(spacing: 3) {
                         Image(systemName: "star.fill")
                             .resizable()
@@ -44,22 +28,21 @@ struct FoodOnSaleViewCell: View {
                             .frame(width: 12, height: 12)
                             .foregroundColor(.yellow)
                         
-                        Text(String(format: "%.1f", rating))
+                        Text(String(format: "%.1f", foodSale.rating))
                             .font(.customfont(.medium, fontSize: 11))
                             .foregroundColor(.black)
                         
-                        Text("(\(reviewCount)+)")
+                        Text("(\(foodSale.reviewCount)+)")
                             .font(.system(size: 14))
                             .foregroundColor(.gray)
                     }
                     .padding(3)
                     .background(Color.white.opacity(0.8))
                     .cornerRadius(10)
-                    .shadow(color: PrimaryColor.normal.opacity(0.25),radius: 5,y:4)
+                    .shadow(color: PrimaryColor.normal.opacity(0.25), radius: 5, y: 4)
                     
-                    Spacer()  // Push the Favorite button to the right
+                    Spacer()
                     
-                    // Favorite Button
                     Button(action: {
                         isFavorite.toggle()
                     }) {
@@ -75,24 +58,21 @@ struct FoodOnSaleViewCell: View {
                 }
                 .padding(.top, 20)
                 .padding(.leading, 10)
-                .padding(.trailing, 10)  // Padding added for right spacing
+                .padding(.trailing, 10)
             }
             .frame(height: 140)
             
-            // Content Section
             VStack(alignment: .leading, spacing: 5) {
-                // Dish Name
-                Text(dishName)
-                    .font(.customfont(.medium, fontSize: 14))  // Dynamic font size
+                Text(foodSale.dishName)
+                    .font(.customfont(.medium, fontSize: 14))
                     .foregroundColor(.black)
                 
-                // Cooking Date Information
                 HStack {
                     Text("It will be cooked on ")
-                        .font(.customfont(.light, fontSize:9))
+                        .font(.customfont(.light, fontSize: 9))
                         .foregroundColor(.gray) +
                     
-                    Text(cookingDate)
+                    Text(foodSale.cookingDate)
                         .font(.customfont(.light, fontSize: 9))
                         .foregroundColor(.yellow) +
                     
@@ -101,36 +81,27 @@ struct FoodOnSaleViewCell: View {
                         .foregroundColor(.gray)
                 }
                 
-               
-                // Price and Delivery Info
-                HStack(spacing: 10){
-                    Text("$ \(String(format: "%.2f", price))")
+                HStack(spacing: 10) {
+                    Text("$ \(String(format: "%.2f", foodSale.price))")
                         .font(.customfont(.medium, fontSize: 14))
                         .foregroundColor(.yellow)
                     
                     HStack(spacing: 4) {
-                        Image(deliveryIcon)
+                        Image(foodSale.deliveryIcon)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 16, height: 16)
                             .opacity(0.60)
-                        Text(deliveryInfo)
+                        Text(foodSale.deliveryInfo)
                             .font(.customfont(.light, fontSize: 12))
                             .foregroundColor(.gray)
-                        
                     }
                     Spacer()
-                    
-//                    .frame(maxWidth: .infinity, alignment: .leading)
-                    
                 }
-               
             }
             .padding(10)
-//            .frame(maxWidth: .infinity)
             .frame(width: 350)
         }
-       
         .background(Color.white)
         .cornerRadius(15)
         .shadow(color: Color.gray.opacity(0.2), radius: 5, x: 0, y: 4)
@@ -139,19 +110,4 @@ struct FoodOnSaleViewCell: View {
                 .stroke(Color(hex: "#E6E6E6"), lineWidth: 0.8)
         }
     }
-}
-
-#Preview {
-    
-    FoodOnSaleViewCell(
-        
-        imageName: "food7", // Make sure this is the correct image in your assets
-        dishName: "Baycha Loklak",
-        cookingDate: "30 Sep 2024",
-        price: 2.00,
-        rating: 5.0,
-        reviewCount: 200,
-        deliveryInfo: "Free",
-        deliveryIcon: "motorbike"
-    )
 }

@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct AddressRowView: View {
+    
     var address: Address
     var onUpdate: () -> Void
     var onDelete: () -> Void
     var isSelected: Bool
-    @State private var isShowPopup: Bool = false
-
+    @State var isShowPopup  : Bool = false
+    
     var body: some View {
         VStack {
             HStack {

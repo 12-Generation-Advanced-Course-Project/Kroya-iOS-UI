@@ -9,36 +9,24 @@ struct FoodOnSaleView: View {
     
     // Properties
     var iselected: Int?
+    @StateObject private var viewModel = FoodOnSaleViewCellViewModel()
     
     var body: some View {
-        
         List {
-            ForEach(0..<3) { index in // Loop 3 times
+            ForEach(viewModel.foodOnSaleItems) { item in
                 ZStack {
-                    FoodOnSaleViewCell(
-                        imageName: "food7",
-                        dishName: "BayChar Loklak",
-                        cookingDate: "30 Sep 2024",
-                        price: 2.00,
-                        rating: 5.0,
-                        reviewCount: 200,
-                        deliveryInfo: "Free",
-                        deliveryIcon: "motorbike"
-                    )
+                    FoodOnSaleViewCell(foodSale: item)  // Pass each item to FoodOnSaleViewCell
                     
-                    // Place the NavigationLink as a background item, without using the arrow.
                     NavigationLink(destination: FoodDetailView(
-                        
-                        theMainImage: "Songvak",
+                        theMainImage: item.imageName,
                         subImage1: "ahmok",
                         subImage2: "brohok",
                         subImage3: "somlorKari",
                         subImage4: "Songvak"
-                    )
-                    ) {
+                    )) {
                         EmptyView()
                     }
-                    .opacity(0)
+                    .opacity(0) // Hide the link arrow
                 }
                 .listRowBackground(Color.clear)
                 .listRowSeparator(.hidden)
@@ -52,5 +40,5 @@ struct FoodOnSaleView: View {
 }
 
 #Preview {
-    FoodOnSaleView(iselected: 1)
+    FoodOnSaleView()
 }

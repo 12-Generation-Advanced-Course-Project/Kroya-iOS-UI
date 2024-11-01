@@ -37,16 +37,16 @@ struct AllView: View {
 //                    reviewDetail: "The dish was flavorful and aromatic, a great meal..."
 //                )
                 ) {
-                    RecipeViewCell(
-                        
-                        imageName: "SomlorKari",
-                        dishName: "Somlor Kari", // 
-                        cookingDate: "30 Sep 2024",
-                        statusType: "Recipe",
-                        rating: 5.0,
-                        reviewCount: 200,
-                        level: "Easy"
-                    )
+//                    RecipeViewCell(
+//                        
+//                        imageName: "SomlorKari",
+//                        dishName: "Somlor Kari", // 
+//                        cookingDate: "30 Sep 2024",
+//                        statusType: "Recipe",
+//                        rating: 5.0,
+//                        reviewCount: 200,
+//                        level: "Easy"
+//                    )
                 }
                 
                 // Example PopularDishesCard for dishes
@@ -73,17 +73,17 @@ struct AllView: View {
 //                    reviewDetail: "The Somlor Kari was perfectly spiced and rich in flavor"
 //                )
                 ) {
-                    FoodOnSaleViewCell(
-                        
-                        imageName: "brohok", // Make sure this is the correct image in your assets
-                        dishName: "Somlor Kari",
-                        cookingDate: "30 Sep 2024",
-                        price: 2.00,
-                        rating: 5.0,
-                        reviewCount: 200,
-                        deliveryInfo: "Free",
-                        deliveryIcon: "motorbike"
-                    )
+//                    FoodOnSaleViewCell(
+//                        
+//                        imageName: "brohok", // Make sure this is the correct image in your assets
+//                        dishName: "Somlor Kari",
+//                        cookingDate: "30 Sep 2024",
+//                        price: 2.00,
+//                        rating: 5.0,
+//                        reviewCount: 200,
+//                        deliveryInfo: "Free",
+//                        deliveryIcon: "motorbike"
+//                    )
                 }
             }
         }
