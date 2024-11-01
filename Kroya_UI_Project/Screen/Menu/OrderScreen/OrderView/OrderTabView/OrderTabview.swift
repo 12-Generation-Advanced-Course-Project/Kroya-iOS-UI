@@ -35,7 +35,7 @@ struct OrderTabView: View {
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundColor(.black)
                 
-                DisclosureGroup("Last 2 Days", isExpanded: $isExpandedLst2Day) {
+                DisclosureGroup("Last 2 days", isExpanded: $isExpandedLst2Day) {
                     VStack(spacing: 15) {
                         OrderCard(isAccepted: false, isOrder: true, showIcon: false)
                     }

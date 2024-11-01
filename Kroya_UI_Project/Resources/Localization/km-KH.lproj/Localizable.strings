@@ -58,7 +58,7 @@
 "Dinner" = "អាហារពេលល្ងាច";
 "Dessert" = "បង្អែម";
 "Popular Dishes" = "មុខម្ហូបពេញនិយម";
-"View all -->" = "មើលទាំងអស់";
+"View all -->" = "មើលទាំងអស់ -->";
 "Home" = "ទំព័រដើម";
 "Favorite" = "ចំណូលចិត្ត";
 "Orders" = "ការកម្មង់";
@@ -79,7 +79,7 @@
 "Yesterday" = "ម្សិលមិញ";
 "Last 2 days" = "2ថ្ងៃមុន";
 "This Week" = "សប្តាហ៍នេះ";
-"Notification" = "ការជួនដំណឹង";
+"Notification" = "ការជូនដំណឹង";
 "You have" = "អ្នកមាន";
 
 
@@ -161,7 +161,7 @@
 "Location" = "ទីតាំង";
 "Ingredient" = "គ្រឿងផ្សំ";
 "Back"= "ត្រឡប់";
-"Post" = "ការប្រកាស";
+"Post" = "បង្ហោះ";
 "Is this food available for sale?" = "តើម្ហូបនេះដាក់សម្រាប់លក់ដែរឬទេ?";
 "Earning" = "ចំណូល";
 "Ingredient cannot be empty" = "គ្រឿងផ្សំមិនអាចទទេបានទេ";
@@ -188,7 +188,7 @@
 //PopUp Food Details
 "Describe your experience" = "ពិពណ៌នាបទពិសោធន៍របស់អ្នក";
 "Cancle" = "បោះបង់";
-"Post" = "ការប្រកាស";
+"Post" = "បង្ហោះ";
 
 //Edit Profile
 "Edit Profile" = "កែប្រែប្រវត្តិរូប";
@@ -199,7 +199,7 @@
 "Password" = "លេខសម្ងាត់";
 "Address" = "អាស័យដ្ឋាន";
 "Save" = "រក្សាទុក";
-"Delete account?" = "លុបគណនី?";
+"Delete Account?" = "លុបគណនី?";
 "Enter your full name" = "សូមបញ្ចូលឈ្មោះពេញរបស់អ្នក";
 "Enter your mobile number" = "សូមបញ្ចូលលេខទូរស័ព្ទរបស់អ្នក";
 "Enter your password" = "សូមបញ្ចូលពាក្យសម្ងាត់របស់អ្នក";
@@ -213,7 +213,7 @@
 "View all sales" = "មើលការលក់ទាំងអស់";
 "Edit" = "កែប្រែ";
 "All" = "ទាំងអស់";
-"Food on Sale" = "ម្ហូបដាក់លក់";
+"Food on Sale" = "ម្ហូបសម្រាប់លក់";
 "Recipes" = "រូបមន្តម្ហូប";
 
 //SearchView
@@ -235,3 +235,9 @@
 "Change Language" = "ផ្លាស់ប្តូរភាសា";
 "Which language do you prefer?" = "តើអ្នកពេញចិត្តភាសាមួយណា?";
 "Please check your " = "សូមពិនិត្យមើល";
+"Now" = "ឥឡូវនេះ";
+"New" = "ការជូនដំណឹងថ្មី";
+"Old" = "ការជូនដំណឹងចាស់";
+"Your account have connected with Webill365 successfully" = "គណនីរបស់អ្នកបានភ្ជាប់ជាមួយ Webill365 បានជោគជ័យ";
+"This food is not found" = "មុខម្ហូបនេះមិនមានទេ";
+"Orders request" = "ស្នើការកម្មង់";

@@ -1,14 +1,13 @@
 import SwiftUI
 
 struct RecipeModalView: View {
-    
-    @State private var draggedIngredient: Ingredient?
-    @State private var draggedStep: Step?
+    @State private var draggedIngredient: RecipeIngredient?
+    @State private var draggedStep: CookingStep?
     @Environment(\.dismiss) var dismiss
     let dismissToRoot: () -> Void
     @State private var navigateToNextView: Bool = false
     @State private var showValidationError: Bool = false
-    @State private var ingret = Ingret(cookDate: "", amount: "", price: "", location: "", selectedCurrency: 0)
+    @State private var ingret = SaleIngredient(cookDate: "", amount: 0, price: "", location: "", selectedCurrency: 1)
     @StateObject private var keyboardObserver = KeyboardObserver()
     @ObservedObject var addressVM: AddressViewModel
     @ObservedObject var draftModel: DraftModel
@@ -73,20 +72,17 @@ struct RecipeModalView: View {
                         .foregroundColor(.black.opacity(0.5))
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    if draftModel.steps.isEmpty {
+                    if draftModel.cookingSteps.isEmpty {
                         Text("Please add some steps to your recipe.")
                             .font(.customfont(.regular, fontSize: 12))
                             .frame(maxWidth: .infinity, alignment: .center)
                             .foregroundStyle(PrimaryColor.normal)
                             .padding(.top, 20)
                     } else {
-                        ForEach($draftModel.steps) { $step in
+                        ForEach($draftModel.cookingSteps) { $step in
                             StepEntryView(
-                                step: $step,
-                                index: draftModel.steps.firstIndex(where: { $0.id == step.id }) ?? 0,
-                                onEdit: {
-                                    print("Editing \(step.description)")
-                                },
+                                cookingStep: $step,
+                                index: draftModel.cookingSteps.firstIndex(where: { $0.id == step.id }) ?? 0,
                                 onDelete: {
                                     deleteStep(step)
                                 }
@@ -97,7 +93,7 @@ struct RecipeModalView: View {
                             } preview: {
                                 Color.clear.frame(width: 1, height: 1)
                             }
-                            .onDrop(of: [.text], delegate: StepDropDelegate(destinationItem: step, steps: $draftModel.steps, draggedItem: $draggedStep))
+                            .onDrop(of: [.text], delegate: StepDropDelegate(destinationItem: step, steps: $draftModel.cookingSteps, draggedItem: $draggedStep))
                         }
                     }
                     
@@ -120,6 +116,7 @@ struct RecipeModalView: View {
                 }
             }
             .padding(.horizontal, 20)
+            
             // Global validation error message
             if showValidationError {
                 Text("Please fill in all required fields before proceeding.")
@@ -165,9 +162,7 @@ struct RecipeModalView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button(action:
-                        {handleCancel()}
-                ) {
+                Button(action: handleCancel) {
                     Image(systemName: "xmark")
                         .resizable()
                         .scaledToFit()
@@ -182,7 +177,8 @@ struct RecipeModalView: View {
                         ingret: $ingret,
                         totalRiels: calculateTotal(ingredients: draftModel.ingredients).totalRiels,
                         totalUSD: calculateTotal(ingredients: draftModel.ingredients).totalUSD,
-                        addressStore: addressVM, draftModel: draftModel
+                        addressStore: addressVM,
+                        draftModel: draftModel
                     )
                 ) {
                     Text("Skip")
@@ -211,7 +207,8 @@ struct RecipeModalView: View {
                     ingret: $ingret,
                     totalRiels: calculateTotal(ingredients: draftModel.ingredients).totalRiels,
                     totalUSD: calculateTotal(ingredients: draftModel.ingredients).totalUSD,
-                    addressStore: addressVM, draftModel: draftModel
+                    addressStore: addressVM,
+                    draftModel: draftModel
                 ),
                 isActive: $navigateToNextView
             ) {
@@ -219,7 +216,8 @@ struct RecipeModalView: View {
             }
         )
     }
-    //MARK: Saving Draft
+    
+    // MARK: Saving Draft
     private func handleCancel() {
         if draftModel.hasDraftData {
             showDraftAlert = true
@@ -227,38 +225,45 @@ struct RecipeModalView: View {
             dismiss()
         }
     }
-    //MARK: Save Draft
+    
+    // MARK: Save Draft
     private func saveDraft() {
         // Save draft data logic if required
     }
-    //MARK: Helper function to add a new ingredient
+    
+    // MARK: Helper function to add a new ingredient
     private func addNewIngredient() {
-        draftModel.ingredients.append(Ingredient(name: "", quantity: "", price: 0, selectedCurrency: 0))
+        let newIngredient = RecipeIngredient(id: UUID().hashValue, name: "", quantity: 0, price: 0, selectedCurrency: 0)
+        draftModel.ingredients.append(newIngredient)
     }
-    
-    //MARK: Helper function to add a new step
+
+    // MARK: Helper function to add a new step
     private func addNewStep() {
-        draftModel.steps.append(Step(description: ""))
+        let newStep = CookingStep(id: UUID().hashValue, description: "")
+        draftModel.cookingSteps.append(newStep)
     }
-    
-    //MARK: Helper function to delete an ingredient safely
-    private func deleteIngredient(_ ingredient: Ingredient) {
+
+    // MARK: Helper function to delete an ingredient safely
+    private func deleteIngredient(_ ingredient: RecipeIngredient) {
         if let index = draftModel.ingredients.firstIndex(where: { $0.id == ingredient.id }) {
+            guard index < draftModel.ingredients.count else { return }
             draftModel.ingredients.remove(at: index)
         }
     }
-    
-    //MARK: Helper function to delete a step safely
-    private func deleteStep(_ step: Step) {
-        if let index = draftModel.steps.firstIndex(where: { $0.id == step.id }) {
-            draftModel.steps.remove(at: index)
+
+    // MARK: Helper function to delete a step safely
+    private func deleteStep(_ step: CookingStep) {
+        if let index = draftModel.cookingSteps.firstIndex(where: { $0.id == step.id }) {
+            guard index < draftModel.cookingSteps.count else { return }
+            draftModel.cookingSteps.remove(at: index)
         }
     }
+
     
-    //MARK: Computed property to check if all fields are filled
+    // MARK: Computed property to check if all fields are filled
     private var allFieldsFilled: Bool {
-        draftModel.ingredients.allSatisfy { !$0.name.isEmpty && !$0.quantity.isEmpty && !$0.price.isNaN } &&
-        draftModel.steps.allSatisfy { !$0.description.isEmpty }
+        draftModel.ingredients.allSatisfy { !$0.name.isEmpty && $0.quantity != 0 && $0.price != 0 } &&
+        draftModel.cookingSteps.allSatisfy { !$0.description.isEmpty }
     }
     
     //MARK: Validation function to check if all fields are filled before allowing navigation
@@ -272,25 +277,22 @@ struct RecipeModalView: View {
     }
     
     //MARK: Function to calculate the total in Riels and USD across all ingredients
-    private func calculateTotal(ingredients: [Ingredient]) -> (totalRiels: Double, totalUSD: Double) {
+    private func calculateTotal(ingredients: [RecipeIngredient]) -> (totalRiels: Double, totalUSD: Double) {
         let conversionRate = 4100.0
         var totalRiels: Double = 0.0
         var totalUSD: Double = 0.0
         
         for ingredient in ingredients {
-            if let quantity = Double(ingredient.quantity) {
-                let totalForIngredient = ingredient.price * quantity
-                if ingredient.selectedCurrency == 0 {
-                    totalRiels += totalForIngredient
-                    totalUSD += totalForIngredient / conversionRate
-                } else {
-                    totalUSD += totalForIngredient
-                    totalRiels += totalForIngredient * conversionRate
-                }
+            let totalForIngredient = ingredient.price * (ingredient.quantity)
+            if ingredient.selectedCurrency == 0 {
+                totalRiels += totalForIngredient
+                totalUSD += totalForIngredient / conversionRate
+            } else {
+                totalUSD += totalForIngredient
+                totalRiels += totalForIngredient * conversionRate
             }
         }
         return (totalRiels, totalUSD)
     }
-
 }
 

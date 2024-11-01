@@ -6,7 +6,7 @@ struct OrdersView: View {
     @Environment(\.dismiss) var dismiss
 
     // Tab Titles
-    let tabTitles = ["All", "Order", "Sale"]
+//    let tabTitles = ["All", "Order", "Sale"]
 
     var body: some View {
             VStack(spacing: 0) {
@@ -47,31 +47,78 @@ struct OrdersView: View {
                 // Tab View
                 VStack(alignment: .leading) {
                     // HStack for Tab Titles
-                    HStack {
-                        ForEach(tabTitles, id: \.self) { title in
-                            Text(title)
-                                .onTapGesture {
-                                    selectedSegment = tabTitles.firstIndex(of: title) ?? 0
-                                }
+//                    HStack {
+//                        ForEach(tabTitles, id: \.self) { title in
+//                            Text(title)
+//                                .onTapGesture {
+//                                    selectedSegment = tabTitles.firstIndex(of: title) ?? 0
+//                                }
+//                                .fontWeight(.semibold)
+//                                .font(.customfont(.semibold, fontSize: 16))
+//                                .foregroundColor(selectedSegment == (tabTitles.firstIndex(of: title) ?? 0) ? .black.opacity(0.8) : .black.opacity(0.5))
+//                                .padding(.trailing, 10) // Adjust spacing between titles
+//                        }
+//                    }
+//                    .padding(.horizontal, 15) // Aligns the text with the screen edge
+//                    .padding(.top)
+//
+//                    // GeometryReader for underline
+//                    GeometryReader { geometry in
+//                        Divider()
+//                        Rectangle()
+//                            .fill(PrimaryColor.normal)
+//                            .frame(width: underlineWidth(for: selectedSegment, in: geometry), height: 2)
+//                            .offset(x: underlineOffset(for: selectedSegment, in: geometry))
+//                            .animation(.easeInOut(duration: 0.3), value: selectedSegment)
+//                    }
+//                    .frame(height: 2) // Divider height
+                    VStack {
+                        HStack {
+                            Spacer()
+                            
+                            Text(LocalizedStringKey("All"))
                                 .fontWeight(.semibold)
-                                .font(.customfont(.semibold, fontSize: 16))
-                                .foregroundColor(selectedSegment == (tabTitles.firstIndex(of: title) ?? 0) ? .black.opacity(0.8) : .black.opacity(0.5))
-                                .padding(.trailing, 10) // Adjust spacing between titles
+                                .font(.system(size: 16))
+                                .foregroundColor(selectedSegment == 0 ? .black.opacity(0.8) : .black.opacity(0.5))
+                                .onTapGesture {
+                                    selectedSegment = 0
+                                }
+                            
+                            Spacer()
+                            
+                            Text(LocalizedStringKey("Order"))
+                                .fontWeight(.semibold)
+                                .font(.system(size: 16))
+                                .foregroundColor(selectedSegment == 1 ? .black.opacity(0.8) : .black.opacity(0.5))
+                                .onTapGesture {
+                                    selectedSegment = 1
+                                }
+                            
+                            Spacer()
+                            
+                            Text(LocalizedStringKey("Sale"))
+                                .fontWeight(.semibold)
+                                .font(.system(size: 16))
+                                .foregroundColor(selectedSegment == 2 ? .black.opacity(0.8) : .black.opacity(0.5))
+                                .onTapGesture {
+                                    selectedSegment = 2
+                                }
+                            
+                            Spacer()
                         }
+                        .padding(.top)
+                        
+                        GeometryReader { geometry in
+                            Divider()
+                            
+                            Rectangle()
+                                .fill(Color.yellow) // Use your defined color here
+                                .frame(width: geometry.size.width / 3, height: 2) // Three segments
+                                .offset(x: CGFloat(selectedSegment) * (geometry.size.width / 3))
+                                .animation(.easeInOut(duration: 0.3), value: selectedSegment)
+                        }
+                        .frame(height: 2)
                     }
-                    .padding(.horizontal, 15) // Aligns the text with the screen edge
-                    .padding(.top)
-
-                    // GeometryReader for underline
-                    GeometryReader { geometry in
-                        Divider()
-                        Rectangle()
-                            .fill(PrimaryColor.normal)
-                            .frame(width: underlineWidth(for: selectedSegment, in: geometry), height: 2)
-                            .offset(x: underlineOffset(for: selectedSegment, in: geometry))
-                            .animation(.easeInOut(duration: 0.3), value: selectedSegment)
-                    }
-                    .frame(height: 2) // Divider height
                 }
                 .padding(.top, 15)
 
@@ -118,29 +165,29 @@ struct OrdersView: View {
             }
         
     }
-
-    // Calculate the underline width dynamically based on the text width
-    private func underlineWidth(for selectedSegment: Int, in geometry: GeometryProxy) -> CGFloat {
-        let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        let title = tabTitles[selectedSegment]
-        let titleWidth = title.size(withAttributes: [NSAttributedString.Key.font: font]).width
-        
-        // Adjust width if needed
-        return titleWidth + 10 // Add padding to the width
-    }
-
-    // Calculate the underline offset based on the width of preceding tabs
-    private func underlineOffset(for selectedSegment: Int, in geometry: GeometryProxy) -> CGFloat {
-        let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        var offset: CGFloat = 10 // Starting padding
-
-        for index in 0..<selectedSegment {
-            let titleWidth = tabTitles[index].size(withAttributes: [NSAttributedString.Key.font: font]).width
-            offset += titleWidth + 20 // Add text width + spacing between titles
-        }
-
-        return offset
-    }
+//
+//    // Calculate the underline width dynamically based on the text width
+//    private func underlineWidth(for selectedSegment: Int, in geometry: GeometryProxy) -> CGFloat {
+//        let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+//        let title = tabTitles[selectedSegment]
+//        let titleWidth = title.size(withAttributes: [NSAttributedString.Key.font: font]).width
+//        
+//        // Adjust width if needed
+//        return titleWidth + 10 // Add padding to the width
+//    }
+//
+//    // Calculate the underline offset based on the width of preceding tabs
+//    private func underlineOffset(for selectedSegment: Int, in geometry: GeometryProxy) -> CGFloat {
+//        let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+//        var offset: CGFloat = 10 // Starting padding
+//
+//        for index in 0..<selectedSegment {
+//            let titleWidth = tabTitles[index].size(withAttributes: [NSAttributedString.Key.font: font]).width
+//            offset += titleWidth + 20 // Add text width + spacing between titles
+//        }
+//
+//        return offset
+//    }
 }
 
 #Preview {

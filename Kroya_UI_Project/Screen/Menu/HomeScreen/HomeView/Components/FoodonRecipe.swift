@@ -51,21 +51,18 @@ struct FoodonRecipe: View {
                 
                 RecipeView()
             }
+            .navigationTitle(LocalizedStringKey("Food Recipe"))
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    HStack {
-                        Button(action: {
-                            dismiss()
-                        }) {
-                            Image(systemName: "arrow.left")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 20, height: 20)
-                                .foregroundStyle(.black)
-                        }
-                        Text(LocalizedStringKey("Food Recipe"))
-                            .font(.customfont(.semibold, fontSize: 16))
-                            .foregroundStyle(.black.opacity(0.8))
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Image(systemName: "arrow.left")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 20, height: 20)
+                            .foregroundStyle(.black)
                     }
                 }
             }

@@ -45,11 +45,9 @@ struct LunchScreenView: View {
                     Divider()
                     
                     Rectangle()
-                        .fill(PrimaryColor.normal)
-                        .frame(width: selectedSegment == 0 ? geometry.size.width / 3 : geometry.size.width / 4, height: 2)  // Static width for the underline
-                        .offset(x: selectedSegment == 1
-                                ? geometry.size.width / 1.65
-                                : geometry.size.width / 6.5)
+                        .fill(Color.yellow) // Use your defined color here
+                        .frame(width: geometry.size.width / 2, height: 2) // Two segments
+                        .offset(x: selectedSegment == 1 ? geometry.size.width / 2 : 0)
                         .animation(.easeInOut(duration: 0.3), value: selectedSegment)
                 }
                 .frame(height: 2)
@@ -66,44 +64,21 @@ struct LunchScreenView: View {
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         }
         .navigationBarBackButtonHidden(true)
+        .navigationTitle("Dessert")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                HStack {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Image(systemName: "arrow.left")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 20, height: 20)
-                            .foregroundStyle(.black)
-                    }
-                    VStack(alignment: .leading, spacing: 4) {
-                        Spacer()
-                        Text("Lunch")
-                            .font(.customfont(.semibold, fontSize: 16))
-                            .foregroundStyle(.black.opacity(0.8))
-                        Group {
-                            //                                Text("Please check your ")
-                            //                                    .font(.customfont(.medium, fontSize: 12)) +
-                            //                                Text("lunch")
-                            //                                    .font(.customfont(.medium, fontSize: 12))
-                            //                                    .foregroundStyle(.yellow)
-                            HStack{
-                                Text(LocalizedStringKey("Please check your "))
-                                    .font(.customfont(.medium, fontSize: 12))
-                                Text(LocalizedStringKey("Lunch"))
-                                    .font(.customfont(.medium, fontSize: 12))
-                                    .foregroundStyle(.yellow)
-                            }
-                        }
-                        .font(.customfont(.regular, fontSize: 12))
-                        .foregroundStyle(.black.opacity(0.6))
-                    }
+                Button(action: {
+                    dismiss()
+                }) {
+                    Image(systemName: "arrow.left")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 20, height: 20)
+                        .foregroundStyle(.black)
                 }
             }
         }
-        
     }
 }
 

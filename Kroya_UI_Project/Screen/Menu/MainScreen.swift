@@ -11,11 +11,13 @@ struct MainScreen: View {
     @StateObject var Profile: ProfileViewModel
     @StateObject var draft: DraftModel
     @Binding var lang: String
+    @StateObject var addNewFood: AddNewFoodVM
     init(userStore: UserStore, lang: Binding<String>) {
         _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
         _addressViewModel = StateObject(wrappedValue: AddressViewModel(userStore: userStore))
         _Profile = StateObject(wrappedValue: ProfileViewModel(userStore: userStore))
         _draft = StateObject(wrappedValue: DraftModel(userStore: userStore))
+        _addNewFood = StateObject(wrappedValue: AddNewFoodVM(userStore: userStore))
         self._lang = lang
     }
     
@@ -138,7 +140,7 @@ struct MainScreen: View {
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .fullScreenCover(isPresented: $isModalPresented, content: {
-            AddFoodView(rootIsActive1: self.$isActive, dismissToRoot: { isModalPresented = false }, addressVM: addressViewModel, draftModel: draft)
+            AddFoodView(rootIsActive1: self.$isActive, dismissToRoot: { isModalPresented = false }, addressVM: addressViewModel, draftModel: draft, addnewFoodVM: addNewFood)
         })
     }
     
