@@ -14,8 +14,7 @@ struct PostViewScreen: View {
     var urlImagePost: String = "https://kroya-api.up.railway.app/api/v1/fileView/"
     @Environment(\.dismiss) var dismiss
     @ObservedObject  var Profile : ProfileViewModel
-    // Text titles for each tab
-    let tabTitles = ["All", "Food on Sale", "Recipes"]
+    var tabTitles = ["All", "Food on Sale", "Recipes"]
     
     var body: some View {
         
@@ -24,7 +23,7 @@ struct PostViewScreen: View {
                 HStack {
                     HStack {
                         if let profileImageUrl = Profile.userProfile?.profileImage, !profileImageUrl.isEmpty {
-                          
+                            
                             KFImage(URL(string: "\(urlImagePost)\(profileImageUrl)"))
                                 .resizable()
                                 .scaledToFill()
@@ -85,7 +84,7 @@ struct PostViewScreen: View {
                                 .padding(.trailing, 10) // Spacing between titles
                         }
                     }
-                    .padding(.horizontal, 15) 
+                    .padding(.horizontal, 15)
                     .padding(.top)
                     
                     // Geometry Reader for Underline

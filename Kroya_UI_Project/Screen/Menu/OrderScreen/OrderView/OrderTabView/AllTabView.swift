@@ -122,7 +122,7 @@ struct AllTabView: View {
                     .animation(.easeInOut(duration: 0.3), value: isExpandedYTD)
                     
                     // Disclosure Group for Last 2 Days
-                    DisclosureGroup("Last 2 Days", isExpanded: $isExpandedLst2Day) {
+                    DisclosureGroup("Last 2 days", isExpanded: $isExpandedLst2Day) {
                         VStack(spacing: 15) {
                             OrderCard(isAccepted: true, isOrder: true, showIcon: false)
                             OrderCard(isAccepted: false, isOrder: true, showIcon: false)
