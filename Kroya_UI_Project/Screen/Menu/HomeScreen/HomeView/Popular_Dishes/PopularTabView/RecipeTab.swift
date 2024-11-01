@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct RecipeTab: View {
+    
     var isselected : Int?
+    
     var body: some View {
         ScrollView(.vertical,showsIndicators: false) {
             VStack{

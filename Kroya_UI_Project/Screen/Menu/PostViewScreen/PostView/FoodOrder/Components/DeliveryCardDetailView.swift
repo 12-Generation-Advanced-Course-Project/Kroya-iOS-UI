@@ -1,9 +1,4 @@
-//
-//  DeliveryCardDetailView.swift
-//  Kroya
-//
-//  Created by KAK-LY on 11/10/24.
-//
+
 
 import SwiftUI
 
@@ -28,6 +23,9 @@ struct DeliveryCardDetailView: View {
                         .frame(width: 24, height: 24)
                 }
                 .buttonStyle(PlainButtonStyle()) // Remove default button style
+                
+              
+                
             }
             .padding(.horizontal)
             .padding(.top, 15)

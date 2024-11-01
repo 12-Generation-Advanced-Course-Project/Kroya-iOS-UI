@@ -1,11 +1,3 @@
-//
-//  RecipeView.swift
-//  Kroya_UI_Project
-//
-//
-// 29/10/24
-// Hengly
-//
 
 import SwiftUI
 

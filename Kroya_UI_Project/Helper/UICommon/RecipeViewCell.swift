@@ -1,9 +1,4 @@
-//
-//  RecipeViewCell.swift
-//  Kroya_UI_Project
-//
-//  Created by KAK-LY on 22/10/24.
-//
+
 
 import SwiftUI
 

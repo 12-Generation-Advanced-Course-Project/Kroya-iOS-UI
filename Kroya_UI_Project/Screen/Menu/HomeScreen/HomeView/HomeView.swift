@@ -120,6 +120,7 @@ struct HomeView: View {
                             
                             ) {
                                 FoodOnSaleViewCell(
+                                    
                                     imageName: "brohok",
                                     dishName: "Somlor Kari",
                                     cookingDate: "30 Sep 2024",

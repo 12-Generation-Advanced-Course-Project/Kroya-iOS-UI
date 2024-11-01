@@ -69,7 +69,7 @@ struct ProfileView: View {
                             isEdit.toggle()
                         }
                     
-                    NavigationLink(destination: EditingProfileView(profile: Profile,selectedAddress: $selectedAddress, viewModel: addressVM)
+                    NavigationLink(destination: EditingProfileView(profile: Profile, selectedAddress: $selectedAddress, viewModel: addressVM)
                        
                     
                                    ,isActive: $isEdit) {
