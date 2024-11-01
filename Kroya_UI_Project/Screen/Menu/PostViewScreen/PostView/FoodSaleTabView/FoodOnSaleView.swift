@@ -36,12 +36,12 @@ struct FoodOnSaleView: View {
                         subImage4: "Songvak"
                     )
                     ) {
-                        EmptyView() // Empty view to prevent showing the default arrow
+                        EmptyView()
                     }
-                    .opacity(0) // Make the navigation link invisible (but still tappable)
+                    .opacity(0)
                 }
                 .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden) // Hide separator line for this cell
+                .listRowSeparator(.hidden)
                 .padding(.vertical, -6)
             }
         }

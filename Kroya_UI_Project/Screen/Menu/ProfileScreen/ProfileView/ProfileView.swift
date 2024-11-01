@@ -69,10 +69,8 @@ struct ProfileView: View {
                             isEdit.toggle()
                         }
                     
-                    NavigationLink(destination: EditingProfileView(profile: Profile, selectedAddress: $selectedAddress, viewModel: addressVM)
-                       
-                    
-                                   ,isActive: $isEdit) {
+                    NavigationLink(destination: EditingProfileView(profile: Profile,selectedAddress: $selectedAddress, viewModel: addressVM)
+               ,isActive: $isEdit) {
                         EmptyView()
                     }.hidden()
                        
@@ -193,6 +191,9 @@ struct ProfileView: View {
             if isLoading {
                 ProgressIndicator()
             }
+        }
+        .onAppear{
+            Profile.fetchUserProfile()
         }
         .refreshable {
             Profile.fetchUserProfile()

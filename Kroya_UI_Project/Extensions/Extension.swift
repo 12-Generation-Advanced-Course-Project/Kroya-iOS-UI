@@ -165,3 +165,35 @@ struct NavigationControllerWrapper<Content: View>: UIViewControllerRepresentable
         }
     }
 }
+//MARK: Alert Saving Food Draft
+struct AlertControllerWrapper: UIViewControllerRepresentable {
+    let draftModel: DraftModel
+    let dismiss: () -> Void
+    
+    func makeUIViewController(context: Context) -> UIViewController {
+        return UIViewController() // Placeholder view controller for presenting the alert
+    }
+
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        guard uiViewController.presentedViewController == nil else { return }
+        
+        let alert = UIAlertController(title: "Save this as a draft?",
+                                      message: "If you choose to discard, your data will be lost.",
+                                      preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Save Draft", style: .default) { _ in
+            // Save data and dismiss
+            dismiss()
+        })
+        
+        alert.addAction(UIAlertAction(title: "Discard Post", style: .destructive) { _ in
+            draftModel.clearDraft() // Clear the draft
+            dismiss()
+        })
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        uiViewController.present(alert, animated: true, completion: nil)
+    }
+}
+

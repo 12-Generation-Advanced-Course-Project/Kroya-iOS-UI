@@ -2,16 +2,16 @@ import SwiftUI
 
 struct RecipeModalView: View {
     @State private var draggedIngredient: Ingredient?
-    @State private var ingredients: [Ingredient] = []
-    @State private var newIngredient = Ingredient(name: "", quantity: "", price: "", selectedCurrency: 0)
-    @State private var steps: [Step] = []
     @State private var draggedStep: Step?
     @Environment(\.dismiss) var dismiss
     let dismissToRoot: () -> Void
     @State private var navigateToNextView: Bool = false
     @State private var showValidationError: Bool = false
     @State private var ingret = Ingret(cookDate: "", amount: "", price: "", location: "", selectedCurrency: 0)
-    
+    @StateObject private var keyboardObserver = KeyboardObserver()
+    @ObservedObject var addressVM: AddressViewModel
+    @ObservedObject var draftModel: DraftModel
+    @State var showDraftAlert: Bool = false
     var body: some View {
         VStack {
             ScrollView(.vertical, showsIndicators: false) {
@@ -22,37 +22,40 @@ struct RecipeModalView: View {
                         .foregroundColor(.black.opacity(0.5))
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    if ingredients.isEmpty {
+                    if draftModel.ingredients.isEmpty {
                         Text("No ingredients added yet. Please add some ingredients.")
                             .font(.customfont(.regular, fontSize: 12))
                             .frame(maxWidth: .infinity, alignment: .center)
                             .foregroundStyle(PrimaryColor.normal)
                             .padding(.top, 20)
                     } else {
-                        ForEach($ingredients) { $ingredient in
+                        ForEach($draftModel.ingredients, id: \.id) { $ingredient in
                             IngredientEntryView(
                                 ingredient: $ingredient,
                                 onEdit: {
                                     print("Editing \(ingredient.name)")
                                 },
                                 onDelete: {
-                                    if let index = ingredients.firstIndex(where: { $0.id == ingredient.id }) {
-                                        ingredients.remove(at: index)
-                                    }
+                                    deleteIngredient(ingredient)
                                 }
                             )
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .contentShape(RoundedRectangle(cornerRadius: 12))
                             .onDrag {
                                 self.draggedIngredient = ingredient
-                                return NSItemProvider(object: ingredient.name as NSString)
+                                let provider = NSItemProvider(object: ingredient.name as NSString)
+                                provider.suggestedName = ""
+                                return provider
+                            } preview: {
+                                Color.clear.frame(width: 1, height: 1)
                             }
-                            .onDrop(of: [.text], delegate: DropViewDelegate(destinationItem: ingredient, ingredients: $ingredients, draggedItem: $draggedIngredient))
+                            .onDrop(of: [.text], delegate: DropViewDelegate(destinationItem: ingredient, ingredients: $draftModel.ingredients, draggedItem: $draggedIngredient))
                         }
                     }
-
+                    
                     // Button to add new ingredient
                     Button(action: {
-                        ingredients.append(newIngredient)
-                        newIngredient = Ingredient(name: "", quantity: "", price: "", selectedCurrency: 0)
+                        addNewIngredient()
                     }) {
                         Image(systemName: "plus.circle.fill")
                             .resizable()
@@ -68,37 +71,37 @@ struct RecipeModalView: View {
                         .foregroundColor(.black.opacity(0.5))
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    if steps.isEmpty {
+                    if draftModel.steps.isEmpty {
                         Text("Please add some steps to your recipe.")
                             .font(.customfont(.regular, fontSize: 12))
                             .frame(maxWidth: .infinity, alignment: .center)
                             .foregroundStyle(PrimaryColor.normal)
                             .padding(.top, 20)
                     } else {
-                        ForEach(steps.indices, id: \.self) { index in
+                        ForEach($draftModel.steps) { $step in
                             StepEntryView(
-                                step: $steps[index],
-                                index: index,
+                                step: $step,
+                                index: draftModel.steps.firstIndex(where: { $0.id == step.id }) ?? 0,
                                 onEdit: {
-                                    print("Editing \(steps[index].description)")
+                                    print("Editing \(step.description)")
                                 },
                                 onDelete: {
-                                    if index < steps.count { // Safe deletion check
-                                        steps.remove(at: index)
-                                    }
+                                    deleteStep(step)
                                 }
                             )
                             .onDrag {
-                                self.draggedStep = steps[index]
+                                self.draggedStep = step
                                 return NSItemProvider()
+                            } preview: {
+                                Color.clear.frame(width: 1, height: 1)
                             }
-                            .onDrop(of: [.text], delegate: StepDropDelegate(destinationItem: steps[index], steps: $steps, draggedItem: $draggedStep))
+                            .onDrop(of: [.text], delegate: StepDropDelegate(destinationItem: step, steps: $draftModel.steps, draggedItem: $draggedStep))
                         }
                     }
                     
                     // Button to add new step
                     Button(action: {
-                        steps.append(Step(description: ""))
+                        addNewStep()
                     }) {
                         Image(systemName: "plus")
                             .resizable()
@@ -115,7 +118,6 @@ struct RecipeModalView: View {
                 }
             }
             .padding(.horizontal, 20)
-            
             // Global validation error message
             if showValidationError {
                 Text("Please fill in all required fields before proceeding.")
@@ -146,22 +148,24 @@ struct RecipeModalView: View {
                         .padding()
                         .background(
                             RoundedRectangle(cornerRadius: 12)
-                                .fill(allFieldsFilled ? .yellow : .gray.opacity(0.3)) // Yellow if all fields are filled, gray otherwise
+                                .fill(allFieldsFilled ? .yellow : .gray.opacity(0.3))
                         )
                         .foregroundColor(.white)
                 }
-                .disabled(!allFieldsFilled) // Disable the button if not all fields are filled
-
+                .disabled(!allFieldsFilled)
             }
             .padding(.horizontal, 20)
             .edgesIgnoringSafeArea(.bottom)
         }
+        .ignoresSafeArea(.keyboard)
         .navigationBarBackButtonHidden(true)
         .navigationTitle("Recipe")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: dismissToRoot) {
+                Button(action:
+                        {handleCancel()}
+                ) {
                     Image(systemName: "xmark")
                         .resizable()
                         .scaledToFit()
@@ -170,26 +174,92 @@ struct RecipeModalView: View {
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination: SaleModalView(dismissToRoot: dismissToRoot, ingret: $ingret)) {
+                NavigationLink(
+                    destination: SaleModalView(
+                        dismissToRoot: dismissToRoot,
+                        ingret: $ingret,
+                        totalRiels: calculateTotal(ingredients: draftModel.ingredients).totalRiels,
+                        totalUSD: calculateTotal(ingredients: draftModel.ingredients).totalUSD,
+                        addressStore: addressVM, draftModel: draftModel
+                    )
+                ) {
                     Text("Skip")
                         .foregroundColor(.black.opacity(0.6))
                 }
             }
         }
+        .alert(isPresented: $showDraftAlert) {
+            Alert(
+                title: Text("Save this as a draft?"),
+                message: Text("If you choose discard post, you'll lose this post that can't edit again."),
+                primaryButton: .default(Text("Save Draft")) {
+                    saveDraft()
+                    dismissToRoot()
+                },
+                secondaryButton: .destructive(Text("Discard Post")) {
+                    draftModel.clearDraft()
+                    dismissToRoot()
+                }
+            )
+        }
         .background(
-            NavigationLink(destination: SaleModalView(dismissToRoot: dismissToRoot, ingret: $ingret), isActive: $navigateToNextView) {
+            NavigationLink(
+                destination: SaleModalView(
+                    dismissToRoot: dismissToRoot,
+                    ingret: $ingret,
+                    totalRiels: calculateTotal(ingredients: draftModel.ingredients).totalRiels,
+                    totalUSD: calculateTotal(ingredients: draftModel.ingredients).totalUSD,
+                    addressStore: addressVM, draftModel: draftModel
+                ),
+                isActive: $navigateToNextView
+            ) {
                 EmptyView()
             }
         )
     }
-
-    // Computed property to check if all fields are filled
-    private var allFieldsFilled: Bool {
-        ingredients.allSatisfy { !$0.name.isEmpty && !$0.quantity.isEmpty && !$0.price.isEmpty } &&
-        steps.allSatisfy { !$0.description.isEmpty }
+    //MARK: Saving Draft
+    private func handleCancel() {
+        if draftModel.hasDraftData {
+            showDraftAlert = true
+        } else {
+            dismiss()
+        }
     }
-
-    // Validation function to check if all fields are filled before allowing navigation
+    //MARK: Save Draft
+    private func saveDraft() {
+        // Save draft data logic if required
+    }
+    //MARK: Helper function to add a new ingredient
+    private func addNewIngredient() {
+        draftModel.ingredients.append(Ingredient(name: "", quantity: "", price: 0, selectedCurrency: 0))
+    }
+    
+    //MARK: Helper function to add a new step
+    private func addNewStep() {
+        draftModel.steps.append(Step(description: ""))
+    }
+    
+    //MARK: Helper function to delete an ingredient safely
+    private func deleteIngredient(_ ingredient: Ingredient) {
+        if let index = draftModel.ingredients.firstIndex(where: { $0.id == ingredient.id }) {
+            draftModel.ingredients.remove(at: index)
+        }
+    }
+    
+    //MARK: Helper function to delete a step safely
+    private func deleteStep(_ step: Step) {
+        if let index = draftModel.steps.firstIndex(where: { $0.id == step.id }) {
+            draftModel.steps.remove(at: index)
+        }
+    }
+    
+    //MARK: Computed property to check if all fields are filled
+    private var allFieldsFilled: Bool {
+        draftModel.ingredients.allSatisfy { !$0.name.isEmpty && !$0.quantity.isEmpty && !$0.price.isNaN } &&
+        draftModel.steps.allSatisfy { !$0.description.isEmpty }
+    }
+    
+    //MARK: Validation function to check if all fields are filled before allowing navigation
     private func validateAndProceed() {
         if allFieldsFilled {
             navigateToNextView = true
@@ -198,5 +268,27 @@ struct RecipeModalView: View {
             showValidationError = true
         }
     }
+    
+    //MARK: Function to calculate the total in Riels and USD across all ingredients
+    private func calculateTotal(ingredients: [Ingredient]) -> (totalRiels: Double, totalUSD: Double) {
+        let conversionRate = 4100.0
+        var totalRiels: Double = 0.0
+        var totalUSD: Double = 0.0
+        
+        for ingredient in ingredients {
+            if let quantity = Double(ingredient.quantity) {
+                let totalForIngredient = ingredient.price * quantity
+                if ingredient.selectedCurrency == 0 {
+                    totalRiels += totalForIngredient
+                    totalUSD += totalForIngredient / conversionRate
+                } else {
+                    totalUSD += totalForIngredient
+                    totalRiels += totalForIngredient * conversionRate
+                }
+            }
+        }
+        return (totalRiels, totalUSD)
+    }
+
 }
 

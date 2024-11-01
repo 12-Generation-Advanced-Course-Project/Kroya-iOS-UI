@@ -19,8 +19,10 @@ struct CustomMenuView: View {
             }) {
                 HStack {
                     Text("Edit")
+                        .foregroundStyle(.yellow)
                     Spacer()
                     Image(systemName: "square.and.pencil")
+                        .foregroundStyle(.yellow)
                 }
                 .padding(.horizontal, 10)
                 .padding(.vertical, 8)
@@ -33,8 +35,10 @@ struct CustomMenuView: View {
             }) {
                 HStack {
                     Text("Delete")
+                        .foregroundStyle(.red)
                     Spacer()
                     Image(systemName: "trash")
+                        .foregroundStyle(.red)
                 }
                 .padding(.horizontal, 10)
                 .padding(.vertical, 8)
