@@ -33,7 +33,7 @@ struct HomeView: View {
                     VStack(alignment: .leading) {
                         Text(LocalizedStringKey("What would you like to eat today ?"))
                             .frame(width: locale.identifier == "ko" ? 170 : locale.identifier == "km-KH" ? 120 : 250)
-                            .font(.customfont(.semibold, fontSize: 24))
+                            .customFontSemiBoldLocalize(size: 23)
 
                         // Recipe Order Cards
                         HStack(spacing: 16) {
@@ -72,7 +72,7 @@ struct HomeView: View {
                     // Category Section
                     VStack(alignment: .leading) {
                         Text(LocalizedStringKey("Category"))
-                            .font(.customfont(.semibold, fontSize: 16))
+                            .customFontSemiBoldLocalize(size: 16)
 
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
@@ -96,14 +96,14 @@ struct HomeView: View {
                     // Popular Dishes Section
                     HStack {
                         Text(LocalizedStringKey("Popular Dishes"))
-                            .font(.customfont(.semibold, fontSize: 16))
+                            .customFontSemiBoldLocalize(size: 16)
                         Spacer()
                         NavigationLink {
                             ViewAllPopularDishesView()
                         } label: {
                             Text(LocalizedStringKey("View all -->"))
                                 .foregroundStyle(PrimaryColor.normal)
-                                .font(.customfont(.semibold, fontSize: 16))
+                                .customFontSemiBoldLocalize(size: 16)
                                 .offset(x: -10)
                         }
                     }

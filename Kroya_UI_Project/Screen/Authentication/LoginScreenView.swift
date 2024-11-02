@@ -7,16 +7,17 @@ import SwiftUI
 struct LoginScreenView: View {
     @State private var email: String = ""
     @State private var isEmailInvalid: Bool = false
-   
+    @State private var showingCredits = false
+    
     @StateObject private var countdownTimer = CountdownTimer()
     @Binding var lang:String
     @StateObject private var authVM: AuthViewModel
     @EnvironmentObject var userStore: UserStore
     init(userStore: UserStore, lang: Binding<String>) {
-           _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
-           self._lang = lang
+        _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
+        self._lang = lang
     }
-       
+    
     
     var body: some View {
         NavigationStack{
@@ -27,8 +28,21 @@ struct LoginScreenView: View {
                             .resizable()
                             .scaledToFill()
                             .frame(height: 260)
+                        
+                            .overlay(alignment: .topTrailing){
+                                Button(action:{
+                                    showingCredits = true
+                                }){
+                                    Image("English")
+                                        .padding()
+                                }
+                                .sheet(isPresented: $showingCredits) {
+                                    ChangeLanguageView(lang: $lang)
+                                }
+                                
+                            }
+                        
                     }
-                    
                     Image("KroyaYellowLogo")
                         .resizable()
                         .scaledToFit()
@@ -39,7 +53,6 @@ struct LoginScreenView: View {
                         Text("Email")
                             .foregroundStyle(.black.opacity(0.5))
                             .font(.customfont(.regular, fontSize: 14))
-                        
                         InputField(
                             iconName: "mail.fill",
                             placeholder: "example@gmail.com",
