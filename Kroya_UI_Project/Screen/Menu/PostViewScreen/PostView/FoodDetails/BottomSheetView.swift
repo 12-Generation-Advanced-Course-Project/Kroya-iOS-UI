@@ -62,11 +62,7 @@ struct BottomSheetView<Content: View>: View {
                         }
                     )
                 }
-                .background(
-                    NavigationLink(destination: FoodCheckOutView(), isActive: $navigateToCheckout) {
-                        EmptyView()
-                    }
-                )
+               
             }
         }
         .padding(.horizontal, 15)

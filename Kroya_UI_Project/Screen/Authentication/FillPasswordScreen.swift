@@ -16,7 +16,7 @@ struct FillPasswordScreen: View {
     @ObservedObject var authVM: AuthViewModel
     @State var email: String
     @Binding var lang: String
-    
+    @State private var isForgetPassword = false
     var body: some View {
         ZStack {
             VStack {
@@ -79,17 +79,23 @@ struct FillPasswordScreen: View {
                         }
                         
                         // Forgot Password
-                        Button(action: {
-                            
-                        }) {
-                            Text(LocalizedStringKey("Forget Password?"))
-                                .foregroundStyle(.black.opacity(0.8))
-                                .font(.customfont(.semibold, fontSize: 12))
-                                .underline()
-                                .frame(maxWidth: .infinity, alignment: .trailing)
-                                .padding(.top, 5)
+//                        NavigationLink(destination: VerificationCodeStatic(lang: $lang)){
+                            Button(action: {
+                                isForgetPassword = true
+                            }) {
+                                Text(LocalizedStringKey("Forget Password?"))
+                                    .foregroundStyle(.black.opacity(0.8))
+                                    .font(.customfont(.semibold, fontSize: 12))
+                                    .underline()
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
+                                    .padding(.top, 5)
+                           // }
+                        }.frame(minHeight: 50,alignment: .top)
+                        NavigationLink(destination: VerificationCodeStatic(lang: $lang), isActive: $isForgetPassword) {
+                            EmptyView()
                         }
-                    }.frame(minHeight: 50,alignment: .top)
+                        .hidden()
+                    }
                     
                 }
                 .frame(maxWidth: .infinity,minHeight: 200, alignment: .center)

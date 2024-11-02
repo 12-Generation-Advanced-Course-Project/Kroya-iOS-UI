@@ -56,6 +56,7 @@ struct ItemFoodOrderCard: View {
                                 .foregroundColor(.gray)
                         }
                         
+                        // new code popupstus
                         // Ellipsis menu for options, only shown if showEllipsis is true
                         if showEllipsis {
                             Menu {
@@ -78,6 +79,8 @@ struct ItemFoodOrderCard: View {
                                     .foregroundColor(.gray)
                             }
                         }
+                        
+                        // old code popup status
                         
                         // Ellipsis button for popover
 //                        Button(action: {
