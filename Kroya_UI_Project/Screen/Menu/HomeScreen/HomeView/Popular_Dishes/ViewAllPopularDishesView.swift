@@ -1,6 +1,3 @@
-
-
-
 import SwiftUI
 import Combine
 
@@ -16,12 +13,12 @@ struct ViewAllPopularDishesView: View {
         VStack(spacing: 10) {
             // Image Slider
             ImageSliderView(currentPage: $currentPage, images: images, timer: timer)
+                .padding(.horizontal)
+                .padding(.top, 10)
             
             // Segmented Control
-            GeometryReader { geometry in
-                SegmentedControlView(selectedSegment: $selectedSegment, geometry: geometry, tabTitles: tabTitles)
-            }
-            .frame(height: 30) // Set a height for the geometry reader
+            SegmentedControlView(selectedSegment: $selectedSegment, tabTitles: tabTitles)
+                .frame(height: 30)
             
             // Content for Each Tab
             TabView(selection: $selectedSegment) {
@@ -54,7 +51,7 @@ struct ViewAllPopularDishesView: View {
                 }
             }
         }
-        .padding()
+//        .padding()
     }
 }
 
@@ -96,98 +93,44 @@ struct ImageSliderView: View {
                     }
                 }
             }
-            .padding(.top,80)
+//            .padding(.top, 80)
         }
     }
 }
 
 struct SegmentedControlView: View {
     @Binding var selectedSegment: Int
-    let geometry: GeometryProxy
     let tabTitles: [String]
     
     var body: some View {
-        
-        VStack {
+        VStack(alignment: .leading) {
+            // HStack for the Tab Titles
             HStack {
-                Spacer()
-                
-                Text(LocalizedStringKey("All"))
-                    .fontWeight(.semibold)
-                    .font(.system(size: 16))
-                    .foregroundColor(selectedSegment == 0 ? .black.opacity(0.8) : .black.opacity(0.5))
-                    .onTapGesture {
-                        selectedSegment = 0
-                    }
-                
-                Spacer()
-                
-                Text(LocalizedStringKey("Sale"))
-                    .fontWeight(.semibold)
-                    .font(.system(size: 16))
-                    .foregroundColor(selectedSegment == 1 ? .black.opacity(0.8) : .black.opacity(0.5))
-                    .onTapGesture {
-                        selectedSegment = 1
-                    }
-                
-                Spacer()
-                
-                Text(LocalizedStringKey("Recipes"))
-                    .fontWeight(.semibold)
-                    .font(.system(size: 16))
-                    .foregroundColor(selectedSegment == 2 ? .black.opacity(0.8) : .black.opacity(0.5))
-                    .onTapGesture {
-                        selectedSegment = 2
-                    }
-                
-                Spacer()
+                ForEach(tabTitles.indices, id: \.self) { index in
+                    Text(tabTitles[index])
+                        .onTapGesture {
+                            selectedSegment = index
+                        }
+                        .fontWeight(.semibold)
+                        .font(.customfont(.semibold, fontSize: 16))
+                        .foregroundColor(selectedSegment == index ? .black.opacity(0.8) : .black.opacity(0.5))
+                        .padding(.trailing, 10)
+                }
             }
-            .padding(.top)
-            
+            .padding(.horizontal, 20)
+
+            // Geometry Reader for Underline
             GeometryReader { geometry in
                 Divider()
-                
                 Rectangle()
-                    .fill(Color.yellow) // Use your defined color here
-                    .frame(width: geometry.size.width / 3, height: 2) // Three segments
-                    .offset(x: CGFloat(selectedSegment) * (geometry.size.width / 3))
+                    .fill(Color.yellow)
+                    .frame(width: underlineWidth(for: selectedSegment, in: geometry), height: 2)
+                    .offset(x: underlineOffset(for: selectedSegment, in: geometry))
                     .animation(.easeInOut(duration: 0.3), value: selectedSegment)
             }
             .frame(height: 2)
         }
-        
-        
-        
-        
-//        VStack(alignment: .leading) {
-//            // HStack for the Tab Titles
-//            HStack {
-//                ForEach(tabTitles, id: \.self) { title in
-//                    Text(title)
-//                        .onTapGesture {
-//                            selectedSegment = tabTitles.firstIndex(of: title) ?? 0
-//                        }
-//                        .fontWeight(.semibold)
-//                        .font(.customfont(.semibold, fontSize: 16))
-//                        .foregroundColor(selectedSegment == (tabTitles.firstIndex(of: title) ?? 0) ? .black.opacity(0.8) : .black.opacity(0.5))
-//                        .padding(.trailing, 10) // Spacing between titles
-//                }
-//            }
-//            .padding(.horizontal, 15)
-//            
-//            // Geometry Reader for Underline
-//            GeometryReader { geometry in
-//                Divider()
-//                Rectangle()
-//                    .fill(PrimaryColor.normal)
-//                    .frame(width: underlineWidth(for: selectedSegment, in: geometry), height: 2)
-//                    .offset(x: underlineOffset(for: selectedSegment, in: geometry))
-//                    .animation(.easeInOut(duration: 0.3), value: selectedSegment)
-//            }
-//            .frame(height: 2)
-//        }
-        .padding(.top, 5)
-        
+        .padding(.top, 10)
     }
     
     // Calculate the underline width based on the text width

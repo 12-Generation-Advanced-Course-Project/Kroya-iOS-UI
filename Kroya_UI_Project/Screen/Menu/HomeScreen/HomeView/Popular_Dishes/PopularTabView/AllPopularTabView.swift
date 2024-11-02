@@ -21,7 +21,7 @@ struct AllPopularTabView: View {
                                     )
                     ) {
                         FoodOnSaleViewCell(foodSale: foodSale)
-                            .frame(width: 350)
+                            .frame(width: 362)
                             .padding(.top, 8)
                     }
                 }
@@ -38,7 +38,7 @@ struct AllPopularTabView: View {
                                     )
                     ) {
                         RecipeViewCell(recipe: recipe)
-                            .frame(width: 350)
+                            .frame(width: 362)
                             .padding(.top, 8)
                     }
                 }
