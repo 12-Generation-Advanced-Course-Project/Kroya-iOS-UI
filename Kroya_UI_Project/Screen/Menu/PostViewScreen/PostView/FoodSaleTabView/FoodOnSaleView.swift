@@ -15,7 +15,7 @@ struct FoodOnSaleView: View {
         List {
             ForEach(viewModel.foodOnSaleItems) { item in
                 ZStack {
-                    FoodOnSaleViewCell(foodSale: item)  // Pass each item to FoodOnSaleViewCell
+                    FoodOnSaleViewCell(foodSale: item)
                     
                     NavigationLink(destination: FoodDetailView(
                         theMainImage: item.imageName,
@@ -26,7 +26,7 @@ struct FoodOnSaleView: View {
                     )) {
                         EmptyView()
                     }
-                    .opacity(0) // Hide the link arrow
+                    .opacity(0)
                 }
                 .listRowBackground(Color.clear)
                 .listRowSeparator(.hidden)

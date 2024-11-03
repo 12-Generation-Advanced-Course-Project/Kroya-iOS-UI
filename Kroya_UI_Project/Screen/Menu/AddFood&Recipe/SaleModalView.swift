@@ -13,11 +13,12 @@ struct SaleModalView: View {
     let currencies = ["៛", "$"]
     @State private var addressSelect: String = ""
     @ObservedObject var addressStore: AddressViewModel
-    @ObservedObject var draftModel: DraftModel
+    @ObservedObject var draftModelData: DraftModelData
+    @Environment(\.modelContext) var modelContext
     @State var showDraftAlert: Bool = false
     @State private var formattedDate: String = ""
     private let conversionRate: Double = 4100.0
-    
+    @State private var priceText: String = ""
     var body: some View {
         VStack {
             ScrollView(.vertical, showsIndicators: false) {
@@ -27,36 +28,36 @@ struct SaleModalView: View {
                             .font(.customfont(.bold, fontSize: 16))
                         VStack(spacing: 15) {
                             Button(action: {
-                                draftModel.isForSale = true
+                                draftModelData.isForSale = true
                                 isAvailableForSale = true
                             }) {
                                 Text("Yes")
                                     .font(.customfont(.semibold, fontSize: 16))
                                     .frame(maxWidth: .infinity)
                                     .padding()
-                                    .background(draftModel.isForSale == true ? Color.yellow.opacity(0.3) : Color.gray.opacity(0.3))
+                                    .background(draftModelData.isForSale ? Color.yellow.opacity(0.3) : Color.gray.opacity(0.3))
                                     .foregroundColor(.black)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .stroke(draftModel.isForSale == true ? Color.yellow.opacity(0.3) : Color.gray.opacity(0.3), lineWidth: 4)
+                                            .stroke(draftModelData.isForSale ? Color.yellow.opacity(0.3) : Color.gray.opacity(0.3), lineWidth: 4)
                                     )
                                     .cornerRadius(12)
                             }
                             .padding(.horizontal, 5)
                             
                             Button(action: {
-                                draftModel.isForSale = false
+                                draftModelData.isForSale = false
                                 isAvailableForSale = false
                             }) {
                                 Text("No")
                                     .font(.customfont(.semibold, fontSize: 16))
                                     .frame(maxWidth: .infinity)
                                     .padding()
-                                    .background(draftModel.isForSale == false ? Color.yellow.opacity(0.3) : Color.gray.opacity(0.3))
+                                    .background(draftModelData.isForSale == false ? Color.yellow.opacity(0.3) : Color.gray.opacity(0.3))
                                     .foregroundColor(.black)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .stroke(draftModel.isForSale == false ? Color.yellow.opacity(0.3) : Color.gray.opacity(0.3), lineWidth: 4)
+                                            .stroke(draftModelData.isForSale == false ? Color.yellow.opacity(0.3) : Color.gray.opacity(0.3), lineWidth: 4)
                                     )
                                     .cornerRadius(12)
                             }
@@ -66,7 +67,7 @@ struct SaleModalView: View {
                     }
                     
                     // Show details only if available for sale is Yes
-                    if draftModel.isForSale == true {
+                    if draftModelData.isForSale {
                         VStack(alignment: .leading) {
                             Text("Details")
                                 .font(.customfont(.bold, fontSize: 16))
@@ -96,7 +97,7 @@ struct SaleModalView: View {
                                         Group {
                                             if isDatePickerVisible {
                                                 DatePicker(
-                                                    selection: $draftModel.CookDate,
+                                                    selection: $draftModelData.cookDate,
                                                     in: Date()...,
                                                     displayedComponents: .date
                                                 ) {
@@ -105,7 +106,7 @@ struct SaleModalView: View {
                                                 .fixedSize()
                                                 .labelsHidden()
                                                 .colorMultiply(.clear)
-                                                .onChange(of: draftModel.CookDate) { newDate in
+                                                .onChange(of: draftModelData.cookDate) { newDate in
                                                     formattedDate = newDate.formatted(.dateTime.day().month().year())
                                                 }
                                                 
@@ -123,13 +124,13 @@ struct SaleModalView: View {
                                         .font(.customfont(.regular, fontSize: 15))
                                         .foregroundStyle(.black.opacity(0.6))
                                         .frame(maxWidth: 120, alignment: .leading)
-                                    TextField("", value: $draftModel.amount, format: .number)
+                                    TextField("", value: $draftModelData.amount, format: .number)
                                         .multilineTextAlignment(.leading)
                                         .keyboardType(.numberPad)
                                         .font(.customfont(.medium, fontSize: 15))
                                         .foregroundStyle(.gray.opacity(0.8))
                                         .frame(maxWidth: .infinity, alignment: .leading)
-                                        .onChange(of: draftModel.amount) { _ in
+                                        .onChange(of: draftModelData.amount) { _ in
                                             validateFields()
                                         }
                                 }
@@ -142,17 +143,19 @@ struct SaleModalView: View {
                                         .font(.customfont(.regular, fontSize: 15))
                                         .foregroundStyle(.black.opacity(0.6))
                                         .frame(maxWidth: 120, alignment: .leading)
+                                    
                                     TextField(getCurrencyPlaceholder(), text: Binding(
                                         get: { formatPrice() },
                                         set: { newValue in
-                                            draftModel.price = filterPriceInput(newValue)
+                                            priceText = filterPriceInput(newValue)
+                                            ingret.price = Double(priceText) ?? 0.0
                                         }
                                     ))
                                     .multilineTextAlignment(.leading)
                                     .keyboardType(.decimalPad)
                                     .foregroundStyle(.gray.opacity(0.8))
                                     .font(.customfont(.medium, fontSize: 15))
-                                    .onChange(of: draftModel.price) { _ in
+                                    .onChange(of: ingret.price) { _ in
                                         validateFields()
                                     }
                                     
@@ -165,9 +168,16 @@ struct SaleModalView: View {
                                     }
                                     .pickerStyle(SegmentedPickerStyle())
                                     .frame(width: 60)
-                                    .onChange(of: ingret.selectedCurrency) { _ in
-                                        draftModel.price = convertCurrency(draftModel.price)
+                                    .onChange(of: ingret.selectedCurrency) { newCurrency in
+                                        if newCurrency == 1 {
+                                            // Convert Riel to USD if switching to USD
+                                            ingret.price = convertCurrency(ingret.price)
+                                        } else {
+                                            // Convert USD to Riel if switching to Riel
+                                            ingret.price = ingret.price * conversionRate
+                                        }
                                     }
+
                                 }
                                 .padding(.horizontal)
                                 
@@ -177,7 +187,7 @@ struct SaleModalView: View {
                                     HStack {
                                         Text("Location")
                                             .font(.customfont(.regular, fontSize: 15))
-                                            .foregroundStyle(.black.opacity(0.6))
+                                            .foregroundStyle(.black.opacity(0.8))
                                             .frame(maxWidth: 120, alignment: .leading)
                                         
                                         TextField("Choose Location", text: Binding(
@@ -187,7 +197,7 @@ struct SaleModalView: View {
                                         .multilineTextAlignment(.leading)
                                         .font(.customfont(.medium, fontSize: 15))
                                         .frame(maxWidth: .infinity, alignment: .leading)
-                                        .foregroundStyle(.gray.opacity(0.4))
+                                        .foregroundStyle(.gray.opacity(0.8))
                                         .disabled(true)
                                     }
                                     .padding(.vertical, 5)
@@ -252,7 +262,8 @@ struct SaleModalView: View {
             Button(action: {
                 validateFields()
                 if !showError {
-                    print("Post Food Created")
+                    draftModelData.saveDraft(in: modelContext) // Save data
+                    draftModelData.clearDraft(from: modelContext) // Clear data after save
                     dismissToRoot()
                 }
             }) {
@@ -260,11 +271,11 @@ struct SaleModalView: View {
                     .font(.customfont(.semibold, fontSize: 16))
                     .frame(maxWidth: .infinity)
                     .padding()
+                    .foregroundColor(.white)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(showError ? .gray.opacity(0.3) : PrimaryColor.normal)
+                            .fill(showError ? Color.gray.opacity(0.3) : PrimaryColor.normal)
                     )
-                    .foregroundColor(.white)
             }
             .disabled(showError)
             .navigationTitle("Sale")
@@ -275,7 +286,7 @@ struct SaleModalView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             addressStore.fetchAllAddresses()
-            formattedDate = draftModel.CookDate.formatted(.dateTime.day().month().year())
+            formattedDate = draftModelData.cookDate.formatted(.dateTime.day().month().year())
             _ = formatPrice()
         }
         .onChange(of: addressStore.selectedAddress) { _ in
@@ -287,11 +298,11 @@ struct SaleModalView: View {
                 title: Text("Save this as a draft?"),
                 message: Text("If you choose to discard, you will lose this post and it can't be edited again."),
                 primaryButton: .default(Text("Save Draft")) {
-                    saveDraft()
+                    draftModelData.saveDraft(in: modelContext)
                     dismissToRoot()
                 },
                 secondaryButton: .destructive(Text("Discard Post")) {
-                    draftModel.clearDraft()
+                    draftModelData.clearDraft(from: modelContext)
                     dismissToRoot()
                 }
             )
@@ -308,28 +319,38 @@ struct SaleModalView: View {
             }
         }
     }
-    // MARK: Validation function
-    private func validateFields() {
-        showError = draftModel.amount == 0 || draftModel.price == 0 || addressStore.selectedAddress == nil
-    }
-    // MARK: Saving Draft
+    
+
     private func handleCancel() {
-        if draftModel.hasDraftData {
+        if hasDraftData {
             showDraftAlert = true
         } else {
             dismiss()
         }
     }
     
-    // MARK: Save Draft
-    private func saveDraft() {
-        // Implement your logic for saving the draft
-    }
-    // MARK: Function to get the placeholder based on selected currency
-    private func getCurrencyPlaceholder() -> String {
-        "0"
+    private var hasDraftData: Bool {
+        return !draftModelData.foodName.isEmpty ||
+        !draftModelData.descriptionText.isEmpty ||
+        !draftModelData.selectedImages.isEmpty ||
+        draftModelData.selectedLevel != nil ||
+        draftModelData.selectedCuisine != nil ||
+        draftModelData.selectedCategory != nil ||
+        draftModelData.duration > 0 ||
+        draftModelData.amount > 0 ||
+        draftModelData.price > 0 ||
+        !draftModelData.location.isEmpty ||
+        draftModelData.isForSale
     }
     
+    private func validateFields() {
+        showError = draftModelData.amount == 0 || ingret.price == 0 || addressStore.selectedAddress == nil
+    }
+
+    private func getCurrencyPlaceholder() -> String {
+        return ingret.selectedCurrency == 0 ? "0" : "0.00"
+    }
+
     // MARK: Function to format the price based on currency selection
     private func formatPrice() -> String {
         let formatter = NumberFormatter()
@@ -337,31 +358,63 @@ struct SaleModalView: View {
         formatter.minimumFractionDigits = 0
         formatter.maximumFractionDigits = ingret.selectedCurrency == 0 ? 4 : 2
         formatter.groupingSeparator = ingret.selectedCurrency == 1 ? "," : ""
-        return formatter.string(from: NSNumber(value: draftModel.price)) ?? "0"
+        return formatter.string(from: NSNumber(value: ingret.price)) ?? ""
     }
-    
+
     // MARK: Function to filter and format the price input based on the selected currency
-    private func filterPriceInput(_ input: String) -> Double {
+    private func filterPriceInput(_ input: String) -> String {
         let maxDecimalPlaces = ingret.selectedCurrency == 0 ? 4 : 2
         var filtered = input.filter { "0123456789.".contains($0) }
         
         let components = filtered.components(separatedBy: ".")
-        guard components.count <= 2 else { return draftModel.price }
-        
-        if components.count == 2 {
-            let decimalPart = String(components[1].prefix(maxDecimalPlaces))
-            filtered = "\(components[0]).\(decimalPart)"
+        if components.count > 2 {
+            filtered = components[0] + "." + components[1]
+        } else if components.count == 2 {
+            let decimalIndex = filtered.firstIndex(of: ".") ?? filtered.endIndex
+            let integerPart = filtered[..<decimalIndex]
+            let decimalPart = filtered[decimalIndex...].prefix(maxDecimalPlaces + 1)
+            filtered = String(integerPart + decimalPart)
         }
         
-        return Double(filtered) ?? 0.0
+        return filtered
     }
-    
-    // MARK: Function to convert the currency value when switching between Riel and USD
+
+    // MARK: Function to convert the price based on selected currency
     private func convertCurrency(_ price: Double) -> Double {
         if ingret.selectedCurrency == 0 {
-            return price * conversionRate
+            // If currency is Riel, return the price as is
+            return price
         } else {
+            // If currency is USD, convert the Riel price to USD
             return price / conversionRate
         }
     }
 }
+
+
+
+
+
+//    private func formatPrice() -> String {
+//        let formatter = NumberFormatter()
+//        formatter.numberStyle = .decimal
+//        formatter.minimumFractionDigits = 0
+//        formatter.maximumFractionDigits = ingret.selectedCurrency == 0 ? 4 : 2
+//        formatter.groupingSeparator = ingret.selectedCurrency == 1 ? "," : ""
+//        return formatter.string(from: NSNumber(value: draftModelData.price)) ?? "0"
+//    }
+//
+//    private func filterPriceInput(_ input: String) -> Double {
+//        let maxDecimalPlaces = ingret.selectedCurrency == 0 ? 4 : 2
+//        var filtered = input.filter { "0123456789.".contains($0) }
+//
+//        let components = filtered.components(separatedBy: ".")
+//        guard components.count <= 2 else { return draftModelData.price }
+//
+//        if components.count == 2 {
+//            let decimalPart = String(components[1].prefix(maxDecimalPlaces))
+//            filtered = "\(components[0]).\(decimalPart)"
+//        }
+//
+//        return Double(filtered) ?? 0.0
+//    }

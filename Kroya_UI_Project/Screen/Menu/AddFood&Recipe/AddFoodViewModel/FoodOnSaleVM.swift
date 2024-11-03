@@ -23,9 +23,7 @@ struct FoodOnSaleModel: Identifiable {
 }
 
 class FoodOnSaleViewCellViewModel: ObservableObject {
-    
     @Published var foodOnSaleItems: [FoodOnSaleModel] = [
-        
         FoodOnSaleModel(
             imageName: "food1",
             dishName: "Grilled Chicken",

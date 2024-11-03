@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct RecipeModalView: View {
     @State private var draggedIngredient: RecipeIngredient?
@@ -7,10 +8,10 @@ struct RecipeModalView: View {
     let dismissToRoot: () -> Void
     @State private var navigateToNextView: Bool = false
     @State private var showValidationError: Bool = false
-    @State private var ingret = SaleIngredient(cookDate: "", amount: 0, price: "", location: "", selectedCurrency: 1)
-    @StateObject private var keyboardObserver = KeyboardObserver()
+    @State private var ingret = SaleIngredient(cookDate: "", amount: 0, price: 0, location: "", selectedCurrency: 0)
     @ObservedObject var addressVM: AddressViewModel
-    @ObservedObject var draftModel: DraftModel
+    @ObservedObject var draftModelData: DraftModelData
+    @Environment(\.modelContext) var modelContext
     @State var showDraftAlert: Bool = false
     
     var body: some View {
@@ -23,14 +24,14 @@ struct RecipeModalView: View {
                         .foregroundColor(.black.opacity(0.5))
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    if draftModel.ingredients.isEmpty {
+                    if $draftModelData.ingredients.isEmpty {
                         Text("No ingredients added yet. Please add some ingredients.")
                             .font(.customfont(.regular, fontSize: 12))
                             .frame(maxWidth: .infinity, alignment: .center)
                             .foregroundStyle(PrimaryColor.normal)
                             .padding(.top, 20)
                     } else {
-                        ForEach($draftModel.ingredients, id: \.id) { $ingredient in
+                        ForEach($draftModelData.ingredients, id: \.id) { $ingredient in
                             IngredientEntryView(
                                 ingredient: $ingredient,
                                 onEdit: {
@@ -50,7 +51,7 @@ struct RecipeModalView: View {
                             } preview: {
                                 Color.clear.frame(width: 1, height: 1)
                             }
-                            .onDrop(of: [.text], delegate: DropViewDelegate(destinationItem: ingredient, ingredients: $draftModel.ingredients, draggedItem: $draggedIngredient))
+                            .onDrop(of: [.text], delegate: DropViewDelegate(destinationItem: ingredient, ingredients: $draftModelData.ingredients, draggedItem: $draggedIngredient))
                         }
                     }
                     
@@ -72,17 +73,17 @@ struct RecipeModalView: View {
                         .foregroundColor(.black.opacity(0.5))
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    if draftModel.cookingSteps.isEmpty {
+                    if draftModelData.cookingSteps.isEmpty {
                         Text("Please add some steps to your recipe.")
                             .font(.customfont(.regular, fontSize: 12))
                             .frame(maxWidth: .infinity, alignment: .center)
                             .foregroundStyle(PrimaryColor.normal)
                             .padding(.top, 20)
                     } else {
-                        ForEach($draftModel.cookingSteps) { $step in
+                        ForEach($draftModelData.cookingSteps) { $step in
                             StepEntryView(
                                 cookingStep: $step,
-                                index: draftModel.cookingSteps.firstIndex(where: { $0.id == step.id }) ?? 0,
+                                index: draftModelData.cookingSteps.firstIndex(where: { $0.id == step.id }) ?? 0,
                                 onDelete: {
                                     deleteStep(step)
                                 }
@@ -93,7 +94,7 @@ struct RecipeModalView: View {
                             } preview: {
                                 Color.clear.frame(width: 1, height: 1)
                             }
-                            .onDrop(of: [.text], delegate: StepDropDelegate(destinationItem: step, steps: $draftModel.cookingSteps, draggedItem: $draggedStep))
+                            .onDrop(of: [.text], delegate: StepDropDelegate(destinationItem: step, steps: $draftModelData.cookingSteps, draggedItem: $draggedStep))
                         }
                     }
                     
@@ -138,6 +139,7 @@ struct RecipeModalView: View {
                         )
                         .foregroundColor(.black)
                 }
+                
                 Button(action: {
                     validateAndProceed()
                 }) {
@@ -154,7 +156,22 @@ struct RecipeModalView: View {
                 .disabled(!allFieldsFilled)
             }
             .padding(.horizontal, 20)
-            .edgesIgnoringSafeArea(.bottom)
+            .background(
+                NavigationLink(
+                    destination: SaleModalView(
+                        dismissToRoot: dismissToRoot,
+                        ingret: $ingret,
+                        totalRiels: calculateTotal(ingredients: draftModelData.ingredients).totalRiels,
+                        totalUSD: calculateTotal(ingredients: draftModelData.ingredients).totalUSD,
+                        addressStore: addressVM,
+                        draftModelData: draftModelData
+                    )
+                    .environment(\.modelContext, modelContext),
+                    isActive: $navigateToNextView
+                ) {
+                    EmptyView()
+                }
+            )
         }
         .ignoresSafeArea(.keyboard)
         .navigationBarBackButtonHidden(true)
@@ -175,15 +192,16 @@ struct RecipeModalView: View {
                     destination: SaleModalView(
                         dismissToRoot: dismissToRoot,
                         ingret: $ingret,
-                        totalRiels: calculateTotal(ingredients: draftModel.ingredients).totalRiels,
-                        totalUSD: calculateTotal(ingredients: draftModel.ingredients).totalUSD,
+                        totalRiels: calculateTotal(ingredients: draftModelData.ingredients).totalRiels,
+                        totalUSD: calculateTotal(ingredients: draftModelData.ingredients).totalUSD,
                         addressStore: addressVM,
-                        draftModel: draftModel
+                        draftModelData: draftModelData
                     )
                 ) {
                     Text("Skip")
                         .foregroundColor(.black.opacity(0.6))
                 }
+                .foregroundColor(.black.opacity(0.6))
             }
         }
         .alert(isPresented: $showDraftAlert) {
@@ -191,108 +209,87 @@ struct RecipeModalView: View {
                 title: Text("Save this as a draft?"),
                 message: Text("If you choose discard post, you'll lose this post that can't edit again."),
                 primaryButton: .default(Text("Save Draft")) {
-                    saveDraft()
+                    draftModelData.saveDraft(in: modelContext) // Save to SwiftData
                     dismissToRoot()
                 },
                 secondaryButton: .destructive(Text("Discard Post")) {
-                    draftModel.clearDraft()
+                    draftModelData.clearDraft(from: modelContext)
                     dismissToRoot()
                 }
             )
         }
-        .background(
-            NavigationLink(
-                destination: SaleModalView(
-                    dismissToRoot: dismissToRoot,
-                    ingret: $ingret,
-                    totalRiels: calculateTotal(ingredients: draftModel.ingredients).totalRiels,
-                    totalUSD: calculateTotal(ingredients: draftModel.ingredients).totalUSD,
-                    addressStore: addressVM,
-                    draftModel: draftModel
-                ),
-                isActive: $navigateToNextView
-            ) {
-                EmptyView()
-            }
-        )
+}
+
+// MARK: - Helper Methods
+private func handleCancel() {
+    if hasDraftData {
+        showDraftAlert = true
+    } else {
+        dismiss()
     }
+}
+private var hasDraftData: Bool {
+    return !draftModelData.foodName.isEmpty ||
+    !draftModelData.descriptionText.isEmpty ||
+    draftModelData.selectedImages.isEmpty == false ||
+    draftModelData.selectedLevel != nil ||
+    draftModelData.selectedCuisine != nil ||
+    draftModelData.selectedCategory != nil ||
+    draftModelData.duration > 0 ||
+    draftModelData.amount > 0 ||
+    draftModelData.price > 0 ||
+    !draftModelData.location.isEmpty ||
+    draftModelData.isForSale
+}
+
+private func addNewIngredient() {
+    let newIngredient = RecipeIngredient(id: UUID().hashValue, name: "", quantity: 0, price: 0, selectedCurrency: 0)
+    draftModelData.ingredients.append(newIngredient)
+}
+
+private func addNewStep() {
+    let newStep = CookingStep(id: UUID().hashValue, description: "")
+    draftModelData.cookingSteps.append(newStep)
+}
+
+private func deleteIngredient(_ ingredient: RecipeIngredient) {
+    draftModelData.ingredients.removeAll { $0.id == ingredient.id }
+}
+
+private func deleteStep(_ step: CookingStep) {
+    draftModelData.cookingSteps.removeAll { $0.id == step.id }
+}
+
+private var allFieldsFilled: Bool {
+    draftModelData.ingredients.allSatisfy { !$0.name.isEmpty && $0.quantity != 0 && $0.price != 0 } &&
+    draftModelData.cookingSteps.allSatisfy { !$0.description.isEmpty }
+}
+
+private func validateAndProceed() {
+    if draftModelData.ingredients.isEmpty || draftModelData.cookingSteps.isEmpty ||
+        showValidationError == true {
+    } else {
+        showValidationError = false
+        navigateToNextView = true
+    }
+}
+//MARK: Function to calculate the total in Riels and USD across all ingredients
+private func calculateTotal(ingredients: [RecipeIngredient]) -> (totalRiels: Double, totalUSD: Double) {
+    let conversionRate = 4100.0
+    var totalRiels: Double = 0.0
+    var totalUSD: Double = 0.0
     
-    // MARK: Saving Draft
-    private func handleCancel() {
-        if draftModel.hasDraftData {
-            showDraftAlert = true
+    for ingredient in ingredients {
+        let totalForIngredient = ingredient.price * (ingredient.quantity)
+        if ingredient.selectedCurrency == 0 {
+            totalRiels += totalForIngredient
+            totalUSD += totalForIngredient / conversionRate
         } else {
-            dismiss()
+            totalUSD += totalForIngredient
+            totalRiels += totalForIngredient * conversionRate
         }
     }
-    
-    // MARK: Save Draft
-    private func saveDraft() {
-        // Save draft data logic if required
-    }
-    
-    // MARK: Helper function to add a new ingredient
-    private func addNewIngredient() {
-        let newIngredient = RecipeIngredient(id: UUID().hashValue, name: "", quantity: 0, price: 0, selectedCurrency: 0)
-        draftModel.ingredients.append(newIngredient)
-    }
-
-    // MARK: Helper function to add a new step
-    private func addNewStep() {
-        let newStep = CookingStep(id: UUID().hashValue, description: "")
-        draftModel.cookingSteps.append(newStep)
-    }
-
-    // MARK: Helper function to delete an ingredient safely
-    private func deleteIngredient(_ ingredient: RecipeIngredient) {
-        if let index = draftModel.ingredients.firstIndex(where: { $0.id == ingredient.id }) {
-            guard index < draftModel.ingredients.count else { return }
-            draftModel.ingredients.remove(at: index)
-        }
-    }
-
-    // MARK: Helper function to delete a step safely
-    private func deleteStep(_ step: CookingStep) {
-        if let index = draftModel.cookingSteps.firstIndex(where: { $0.id == step.id }) {
-            guard index < draftModel.cookingSteps.count else { return }
-            draftModel.cookingSteps.remove(at: index)
-        }
-    }
-
-    
-    // MARK: Computed property to check if all fields are filled
-    private var allFieldsFilled: Bool {
-        draftModel.ingredients.allSatisfy { !$0.name.isEmpty && $0.quantity != 0 && $0.price != 0 } &&
-        draftModel.cookingSteps.allSatisfy { !$0.description.isEmpty }
-    }
-    
-    //MARK: Validation function to check if all fields are filled before allowing navigation
-    private func validateAndProceed() {
-        if allFieldsFilled {
-            navigateToNextView = true
-            showValidationError = false
-        } else {
-            showValidationError = true
-        }
-    }
-    
-    //MARK: Function to calculate the total in Riels and USD across all ingredients
-    private func calculateTotal(ingredients: [RecipeIngredient]) -> (totalRiels: Double, totalUSD: Double) {
-        let conversionRate = 4100.0
-        var totalRiels: Double = 0.0
-        var totalUSD: Double = 0.0
-        
-        for ingredient in ingredients {
-            let totalForIngredient = ingredient.price * (ingredient.quantity)
-            if ingredient.selectedCurrency == 0 {
-                totalRiels += totalForIngredient
-                totalUSD += totalForIngredient / conversionRate
-            } else {
-                totalUSD += totalForIngredient
-                totalRiels += totalForIngredient * conversionRate
-            }
-        }
-        return (totalRiels, totalUSD)
-    }
+    return (totalRiels, totalUSD)
+}
 }
 

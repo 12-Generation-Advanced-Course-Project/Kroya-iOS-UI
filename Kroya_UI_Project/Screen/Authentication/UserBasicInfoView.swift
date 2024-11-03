@@ -71,7 +71,7 @@ struct UserBasicInfoView: View {
                             let filtered = newValue.filter { "0123456789".contains($0) }
                             if filtered != newValue {
                                 isPhoneNumberInvalid = true
-                                phoneNumber = filtered // Only allow numeric input
+                                phoneNumber = filtered
                             } else {
                                 isPhoneNumberInvalid = false
                             }

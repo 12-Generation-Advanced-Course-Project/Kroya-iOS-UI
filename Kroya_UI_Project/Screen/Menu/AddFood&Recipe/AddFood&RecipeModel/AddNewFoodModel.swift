@@ -45,10 +45,9 @@ struct SaleIngredient: Identifiable, Codable {
     var id = UUID()
     var cookDate: String
     var amount: Double
-    var price: String
+    var price: Double
     var location: String
     var selectedCurrency: Int
 }
 
-// Example usage for each view
-// You can initialize and use these structures in `AddNewFood`, `RecipeModal`, and `SaleModalView`.
+

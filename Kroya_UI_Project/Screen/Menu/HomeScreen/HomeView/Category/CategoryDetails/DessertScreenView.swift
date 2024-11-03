@@ -27,6 +27,7 @@ struct DessertScreenView: View {
                         }
                     
                     Spacer()
+                    Spacer()
                     
                     Text(LocalizedStringKey("Recipes"))
                         .fontWeight(.semibold)

@@ -7,7 +7,7 @@
 
 import SwiftUI
 import GoogleMaps
-
+import SwiftData
 
 @main
 struct Kroya_UI_ProjectApp: App {
@@ -16,9 +16,11 @@ struct Kroya_UI_ProjectApp: App {
     @StateObject var addressViewModel = AddressViewModel(userStore: UserStore())
     @State private var isSplashScreenActive = true // State to control SplashScreen display
     @State var lang: String = UserDefaults.standard.string(forKey: "AppLanguage") ?? "en"
-    
+    let modelContainer: ModelContainer
     init() {
         GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
+        // Initialize the modelContainer with the Draft model for persistence
+        modelContainer = try! ModelContainer(for: Draft.self) // Draft model should be in SwiftData
     }
     
     var body: some Scene {
@@ -36,6 +38,7 @@ struct Kroya_UI_ProjectApp: App {
                                 .environmentObject(Auth.shared)
                                 .environmentObject(addressViewModel)
                                 .environment(\.locale, .init(identifier: lang))
+                                .environment(\.modelContext, modelContainer.mainContext)
                                 .onAppear {
                                     UNUserNotificationCenter.current().delegate = appdelegate
                                 }
@@ -47,6 +50,7 @@ struct Kroya_UI_ProjectApp: App {
                                 .environmentObject(Auth.shared)
                                 .environmentObject(addressViewModel)
                                 .environment(\.locale, .init(identifier: lang))
+                                .environment(\.modelContext, modelContainer.mainContext)
                         }
                     }
                 }

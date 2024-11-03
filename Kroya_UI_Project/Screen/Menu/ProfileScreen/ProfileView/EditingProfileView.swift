@@ -283,6 +283,7 @@ struct EditingProfileView: View {
             .onDisappear{
                 profile.fetchUserProfile()
                 loadProfileData()
+                viewModel.fetchAllAddresses()
             }
             .sheet(isPresented: $showImagePicker) {
                 ImagePicker(selectedImages: $selectedImages)

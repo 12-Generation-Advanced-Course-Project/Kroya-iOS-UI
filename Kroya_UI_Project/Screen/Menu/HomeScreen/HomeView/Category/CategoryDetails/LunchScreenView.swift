@@ -27,6 +27,7 @@ struct LunchScreenView: View {
                         }
                     
                     Spacer()
+                    Spacer()
                     
                     Text("Recipes")
                         .fontWeight(.semibold)

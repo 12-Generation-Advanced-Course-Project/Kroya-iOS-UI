@@ -148,12 +148,10 @@ struct ProfileView: View {
                     Text("App Settings")
                         .font(.customfont(.medium, fontSize: 14))
                     Spacer().frame(height: .screenHeight * 0.02)
-                    NavigationLink {
-                        MapSelectionView(viewModel: addressVM, showMapSheet: $showMapSheet,addressToUpdate: addressToUpdate)
-                    } label: {
-                        AppSettingView(imageName: "VectorLocation", title: LocalizedStringKey("Change location"), iconName: "Rightarrow")
-                    }.accentColor(.black)
-                    
+                    AppSettingView(imageName: "VectorLocation", title: LocalizedStringKey("Change location"), iconName: "Rightarrow")
+                        .onTapGesture {
+                            showMapSheet.toggle()
+                        }
                     NavigationLink {
                         AllowNotificationView()
                     } label: {
@@ -187,6 +185,9 @@ struct ProfileView: View {
                 
                 Spacer()
             }
+            .fullScreenCover(isPresented: $showMapSheet, content: {
+                MapSelectionView(viewModel: addressVM, showMapSheet: $showMapSheet,addressToUpdate: addressToUpdate)
+            })
             .padding(.horizontal, 10)
             if isLoading {
                 ProgressIndicator()
@@ -207,3 +208,4 @@ struct ProfileView: View {
 //#Preview {
 //    ProfileView()
 //}
+

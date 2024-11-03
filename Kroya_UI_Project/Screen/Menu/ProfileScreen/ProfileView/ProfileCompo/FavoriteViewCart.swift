@@ -196,6 +196,7 @@ struct FavoriteViewCart: View {
                         }
                     
                     Spacer()
+                    Spacer()
                     
                     Text(LocalizedStringKey("Recipes"))
                         .fontWeight(.semibold)
@@ -212,13 +213,11 @@ struct FavoriteViewCart: View {
                 // Underline animation for selected segment
                 GeometryReader { geometry in
                     Divider()
-                    
+             
                     Rectangle()
-                        .fill(PrimaryColor.normal)
-                        .frame(width: selectedSegment == 0 ? geometry.size.width / 3 : geometry.size.width / 4, height: 2)
-                        .offset(x: selectedSegment == 1
-                                ? geometry.size.width / 1.65
-                                : geometry.size.width / 6.5)
+                        .fill(Color.yellow)
+                        .frame(width: geometry.size.width / 2, height: 2)
+                        .offset(x: selectedSegment == 1 ? geometry.size.width / 2 : 0)
                         .animation(.easeInOut(duration: 0.3), value: selectedSegment)
                 }
                 .frame(height: 2)

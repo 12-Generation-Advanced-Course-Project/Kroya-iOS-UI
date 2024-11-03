@@ -2,29 +2,28 @@ import SwiftUI
 
 struct MainScreen: View {
     @State private var selectedTab = 1
-    @State var isActive : Bool = false
+    @State var isActive: Bool = false
     @Environment(\.presentationMode) var presentationMode
     @State private var isModalPresented: Bool = false
     @EnvironmentObject var userStore: UserStore
-    @StateObject var authVM: AuthViewModel
-    @StateObject var addressViewModel: AddressViewModel
-    @StateObject var Profile: ProfileViewModel
-    @StateObject var draft: DraftModel
+    @StateObject private var authVM: AuthViewModel
+    @StateObject private var addressViewModel: AddressViewModel
+    @StateObject private var profileVM: ProfileViewModel
+    @StateObject private var draftModelData: DraftModelData
+    @Environment(\.modelContext) var modelContext
     @Binding var lang: String
-    @StateObject var addNewFood: AddNewFoodVM
     init(userStore: UserStore, lang: Binding<String>) {
         _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
         _addressViewModel = StateObject(wrappedValue: AddressViewModel(userStore: userStore))
-        _Profile = StateObject(wrappedValue: ProfileViewModel(userStore: userStore))
-        _draft = StateObject(wrappedValue: DraftModel(userStore: userStore))
-        _addNewFood = StateObject(wrappedValue: AddNewFoodVM(userStore: userStore))
+        _profileVM = StateObject(wrappedValue: ProfileViewModel(userStore: userStore))
+        _draftModelData = StateObject(wrappedValue: DraftModelData(userStore: userStore))
         self._lang = lang
     }
     
     var body: some View {
-        NavigationStack{
+        NavigationStack {
             ZStack {
-                VStack (spacing: 10) {
+                VStack(spacing: 10) {
                     TabView(selection: $selectedTab) {
                         HomeView()
                             .tabItem {
@@ -39,7 +38,7 @@ struct MainScreen: View {
                                 }
                             }
                             .tag(1)
-                        PostViewScreen(Profile: Profile)
+                        PostViewScreen(Profile: profileVM)
                             .tabItem {
                                 VStack {
                                     Image(selectedTab == 2 ? "PostVectorYellow" : "PostVector")
@@ -49,13 +48,9 @@ struct MainScreen: View {
                                     Text("Post")
                                         .font(.customfont(selectedTab == 2 ? .bold : .semibold, fontSize: selectedTab == 2 ? 18 : 16))
                                         .foregroundColor(selectedTab == 2 ? PrimaryColor.normal : .black)
-                                    
                                 }
-                                
-                                
                             }
                             .tag(2)
-                        
                         Spacer()
                         OrdersView()
                             .tabItem {
@@ -70,7 +65,8 @@ struct MainScreen: View {
                                 }
                             }
                             .tag(3)
-                        ProfileView(authVM: authVM,Profile: Profile, lang: $lang)
+
+                        ProfileView(authVM: authVM, Profile: profileVM, lang: $lang)
                             .environmentObject(addressViewModel)
                             .environmentObject(userStore)
                             .tabItem {
@@ -83,12 +79,12 @@ struct MainScreen: View {
                                         .font(.customfont(selectedTab == 4 ? .bold : .semibold, fontSize: selectedTab == 4 ? 18 : 16))
                                         .foregroundColor(selectedTab == 4 ? PrimaryColor.normal : .black)
                                 }
-                                
-                            }.tag(4)
+                            }
+                            .tag(4)
                     }
                     .padding(.top, 30)
                     .accentColor(PrimaryColor.normal)
-                    .background(.red)
+
                     GeometryReader { geometry in
                         Divider().frame(height: 0.1).background(.black.opacity(0.1))
                         HStack {
@@ -102,17 +98,17 @@ struct MainScreen: View {
                         .animation(.easeInOut(duration: 0.3), value: selectedTab)
                     }
                     .frame(height: 2)
-                    .offset(y:-(.screenHeight * 0.0715))
-                    
+                    .offset(y: -(.screenHeight * 0.0715))
                 }
                 .frame(width: .screenWidth, height: .screenHeight)
                 .padding(.bottom, .screenHeight * 0.072)
+
                 GeometryReader { geometry in
                     VStack {
                         Spacer()
                         Button(action: {
                             isModalPresented.toggle()
-                        }, label: {
+                        }) {
                             ZStack {
                                 Rectangle()
                                     .fill(PrimaryColor.normal)
@@ -122,7 +118,7 @@ struct MainScreen: View {
                                     .foregroundColor(.white)
                                     .font(.system(size: 24))
                             }
-                        })
+                        }
                         .frame(width: 100, height: 100)
                         .padding(20)
                         .cornerRadius(10)
@@ -131,28 +127,35 @@ struct MainScreen: View {
                 }
             }
             .frame(width: .screenWidth, height: .screenHeight)
-  
         }
         .onAppear {
-            Profile.fetchUserProfile()
+            profileVM.fetchUserProfile()
             addressViewModel.fetchAllAddresses()
+            draftModelData.loadDraft(from: modelContext)
+           
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
-        .fullScreenCover(isPresented: $isModalPresented, content: {
-            AddFoodView(rootIsActive1: self.$isActive, dismissToRoot: { isModalPresented = false }, addressVM: addressViewModel, draftModel: draft, addnewFoodVM: addNewFood)
-        })
+        .fullScreenCover(isPresented: $isModalPresented) {
+            AddFoodView(
+                rootIsActive1: $isActive,
+                dismissToRoot: { isModalPresented = false },
+                addressVM: addressViewModel,
+                draftModelData: draftModelData
+            )
+            .environment(\.modelContext, modelContext)
+        }
     }
-    
+
     private func getSpacerWidth(for selectedTab: Int, geometry: GeometryProxy) -> CGFloat {
         switch selectedTab {
-        case 2: // Favorite Tab
+        case 2:
             return (geometry.size.width / 5.20) * CGFloat(selectedTab - 1)
-        case 3: // Orders Tab
+        case 3:
             return (geometry.size.width / 3.30) * CGFloat(selectedTab - 1)
-        case 4: // Profile Tab
+        case 4:
             return (geometry.size.width / 3.75) * CGFloat(selectedTab - 1)
-        default: // Other Tabs
+        default:
             return (geometry.size.width / 3.30) * CGFloat(selectedTab - 1)
         }
     }

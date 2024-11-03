@@ -7,7 +7,7 @@ struct FoodOnSaleViewCell: View {
 
     init(foodSale: FoodOnSaleModel, isFavorite: Bool = false) {
         self.foodSale = foodSale
-        _isFavorite = State(initialValue: isFavorite) // Initialize `isFavorite` with the passed value
+        _isFavorite = State(initialValue: isFavorite)
     }
 
     var body: some View {
