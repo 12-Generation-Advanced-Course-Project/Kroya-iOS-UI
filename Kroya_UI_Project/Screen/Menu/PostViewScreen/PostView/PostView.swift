@@ -14,7 +14,7 @@ struct PostViewScreen: View {
     var urlImagePost: String = "https://kroya-api.up.railway.app/api/v1/fileView/"
     @Environment(\.dismiss) var dismiss
     @ObservedObject  var Profile : ProfileViewModel
-    //    var tabTitles = ["All", "Food on Sale", "Recipes"]
+    var tabTitles = ["All", "Food on Sale", "Recipes"]
     
     var body: some View {
         
@@ -133,21 +133,6 @@ struct PostViewScreen: View {
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
-        }
-            }
-            
-            
-            .padding(.top, 5)
-            // TabView for content
-            TabView(selection: $selectedSegment) {
-                FoodSaleView(iselected: selectedSegment)
-                    .tag(0)
-                FoodOnSaleView(iselected: selectedSegment)
-                    .tag(1)
-                RecipeView(iselected: selectedSegment)
-                    .tag(2)
-            }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         }
     }
     
