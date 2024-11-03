@@ -102,7 +102,7 @@ struct ViewAccount: View {
                         .tag(0)
                     FoodOnSale(iselected: selectedSegment)
                         .tag(1)
-                    Recipe(iselected: selectedSegment)
+//                    Recipe(iselected: selectedSegment)
                         .tag(2)
                   
 

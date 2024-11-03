@@ -1,7 +1,7 @@
 //import SwiftUI
 //
 //struct OrderCard: View {
-//    
+//
 //    var isAccepted: Bool
 //    var isOrder: Bool
 //    var showIcon: Bool = false
@@ -33,7 +33,7 @@
 //                            ZStack {
 //                                Image(systemName: "list.clipboard") // Clipboard icon
 //                                    .foregroundColor(.gray)
-//                                
+//
 //                                // Notification bubble
 //                                Text("4")
 //                                    .font(.customfont(.semibold, fontSize: 9))
@@ -95,7 +95,7 @@ struct OrderCard: View {
     var isOrder: Bool
     var showIcon: Bool = false
     @State private var navigateToOrderListView = false
-
+    
     var body: some View {
         
         HStack {
@@ -104,14 +104,14 @@ struct OrderCard: View {
                 .resizable()
                 .frame(width: 61, height: 62)
                 .cornerRadius(8)
-
+            
             VStack(alignment: .leading, spacing: 5) {
                 HStack {
                     // Title and subtitle
                     Text("Somlor Kari")
                         .font(.customfont(.medium, fontSize: 15))
                         .fontWeight(.medium)
-
+                    
                     // Conditional display for Accept/Reject or Icon
                     if showIcon {
                         Spacer()
@@ -121,7 +121,7 @@ struct OrderCard: View {
                             ZStack {
                                 Image(systemName: "list.clipboard")
                                     .foregroundColor(.gray)
-
+                                
                                 // Notification bubble
                                 Text("3")
                                     .font(.customfont(.semibold, fontSize: 9))
@@ -131,7 +131,7 @@ struct OrderCard: View {
                                     .offset(x: 8, y: -6)
                             }
                         }
-                      
+                        
                         .background(
                             NavigationLink(destination: OrderListView(), isActive: $navigateToOrderListView) {
                                 EmptyView()
@@ -156,21 +156,21 @@ struct OrderCard: View {
                                 )) {
                                     EmptyView()
                                 }
-                                .opacity(0) // NavigationLink invisible but functional
+                                    .opacity(0) // NavigationLink invisible but functional
                             )
                     }
                 }
-
+                
                 Text("you are selling now")
                     .font(.customfont(.regular, fontSize: 12))
                     .opacity(0.6)
-
+                
                 // Price and Order/Sale Button
                 HStack(spacing: 17) {
                     Text("$3.05")
                         .font(.customfont(.medium, fontSize: 15))
                         .fontWeight(.medium)
-
+                    
                     // Order/Sale Button based on isOrder boolean
                     Text(isOrder ? "Order" : "Sale")
                         .font(.customfont(.medium, fontSize: 15))

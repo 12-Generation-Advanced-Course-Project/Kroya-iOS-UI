@@ -176,17 +176,23 @@ struct ItemFoodOrderCard: View {
             // Location and contact details
             HStack {
                 Group {
+                    
                     Image(systemName: "scope")
                         .foregroundColor(.yellow)
                     Text("St 323 - Toeul kork")
-                    Spacer().frame(width: 22)
+                    
+                    Spacer()
+                    
+                        .frame(width: 22)
                     Image(systemName: "phone.fill")
                         .foregroundColor(.yellow)
+                    Text("cheata, ")
+                    +
                     Text("016 860 375")
                 }
-                .font(.customfont(.semibold, fontSize: 16))
+                .font(.customfont(.semibold, fontSize: 14))
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 10)
             .foregroundColor(Color(hex: "#7B7D92"))
             
             // Divider

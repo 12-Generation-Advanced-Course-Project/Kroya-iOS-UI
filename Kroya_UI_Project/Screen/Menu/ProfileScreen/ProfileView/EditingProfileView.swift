@@ -97,11 +97,15 @@ struct EditingProfileView: View {
                             Text(LocalizedStringKey("Full name"))
                                 .font(.customfont(.medium, fontSize: 16))
                                 .foregroundColor(.black.opacity(0.8))
+                               
+                                .padding(.trailing,10)
+                            
                             TextField("Enter your full name", text: $userInputName)
                                 .padding()
                                 .foregroundColor(.black)
                                 .cornerRadius(8)
                                 .font(.customfont(.medium, fontSize: 16))
+                                
                         }
                         .padding(.leading, 16)
                         .background(Color.black.opacity(0.1))
@@ -114,6 +118,9 @@ struct EditingProfileView: View {
                             Text(LocalizedStringKey("Email"))
                                 .font(.customfont(.medium, fontSize: 16))
                                 .foregroundColor(.black.opacity(0.8))
+                                
+                                .padding(.trailing,40)
+                                
                             Spacer()
                             TextField("Enter your email", text: $userInputEmail)
                                 .padding()
@@ -121,6 +128,7 @@ struct EditingProfileView: View {
                                 .cornerRadius(8)
                                 .font(.customfont(.medium, fontSize: 16))
                                 .disabled(true)
+                                
                         }
                         .padding(.leading, 16)
                         .background(Color.black.opacity(0.1))
@@ -133,11 +141,15 @@ struct EditingProfileView: View {
                             Text(LocalizedStringKey("Mobile"))
                                 .font(.customfont(.medium, fontSize: 16))
                                 .foregroundColor(.black.opacity(0.8))
+                                
+                                .padding(.trailing,30)
+                              
                             TextField("Enter your mobile number", text: $userInputContact)
                                 .padding()
                                 .foregroundColor(.black)
                                 .cornerRadius(8)
                                 .font(.customfont(.medium, fontSize: 16))
+                               
                         }
                         .padding(.leading, 16)
                         .background(Color.black.opacity(0.1))
@@ -150,6 +162,8 @@ struct EditingProfileView: View {
                             Text(LocalizedStringKey("Password"))
                                 .font(.customfont(.medium, fontSize: 16))
                                 .foregroundColor(.black.opacity(0.8))
+                              
+                                .padding(.trailing,10)
                             // Toggleable password field
                             (isPasswordVisible ? AnyView(TextField("Enter your password", text: $userInputPassword)) : AnyView(SecureField("Enter your password", text: $userInputPassword)))
                                 .padding()
@@ -157,6 +171,7 @@ struct EditingProfileView: View {
                                 .cornerRadius(8)
                                 .font(.customfont(.medium, fontSize: 16))
                                 .disabled(true)
+                               
                         }
                         .padding(.leading, 16)
                         .background(Color.black.opacity(0.1))
@@ -169,11 +184,14 @@ struct EditingProfileView: View {
                             Text("Address")
                                 .font(.customfont(.medium, fontSize: 16))
                                 .foregroundColor(.black.opacity(0.8))
+                                
+                                .padding(.trailing,20)
                             TextField("Enter your address", text: $userInputAddress)
                                 .padding()
-                                .foregroundColor(.black.opacity(0.5))
+                                .foregroundColor(.black.opacity(0.3))
                                 .font(.customfont(.medium, fontSize: 16))
                                 .disabled(true)
+                               
                         }
                         .padding(.leading, 16)
                         .background(Color.black.opacity(0.1))
@@ -241,7 +259,7 @@ struct EditingProfileView: View {
                     }
                     
                 }, backgroundColor: PrimaryColor.normal, frameHeight: 55,frameWidth: .screenWidth * 0.9)
-                Text("Delete Account?")
+                Text(LocalizedStringKey("Delete Account?"))
                     .font(.customfont(.medium, fontSize: 18))
                     .foregroundStyle(.red)
                     .padding()

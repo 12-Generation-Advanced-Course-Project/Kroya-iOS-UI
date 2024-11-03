@@ -1,72 +1,56 @@
-//
-//  AllTabView.swift
-//  Kroya_UI_Project
-//
-//  Created by Macbook on 10/15/24.
-//
-
 import SwiftUI
 
 struct AllPopularTabView: View {
     
-    var isselected : Int?
+    @StateObject private var foodOnSaleViewModel = FoodOnSaleViewCellViewModel()
+    @StateObject private var recipeViewModel = RecipeViewModel()
+    var isselected: Int?
     
     var body: some View {
-        ScrollView(.vertical,showsIndicators: false) {
-            
-            VStack{
-                // Example PopularDishesCard for dishes
-                NavigationLink(destination:
-                                FoodDetailView(
-                                    theMainImage: "Songvak",
-                                    subImage1: "ahmok",
-                                    subImage2: "brohok",
-                                    subImage3: "SomlorKari",
-                                    subImage4: "Songvak",
-                                    showPrice: true
-                                )
-                ) {
-                    FoodOnSaleViewCell(
-                        
-                        imageName: "brohok", // Make sure this is the correct image in your assets
-                        dishName: "Somlor Kari",
-                        cookingDate: "30 Sep 2024",
-                        price: 2.00,
-                        rating: 5.0,
-                        reviewCount: 200,
-                        deliveryInfo: "Free",
-                        deliveryIcon: "motorbike"
-                    )
+        VStack{
+            ScrollView(showsIndicators: false){
+                // Food on Sale Cards (Limited to 2)
+                ForEach(foodOnSaleViewModel.foodOnSaleItems.prefix(3)) { foodSale in
+                    NavigationLink(destination:
+                                    FoodDetailView(
+                                        theMainImage: foodSale.imageName,
+                                        subImage1: "ahmok",
+                                        subImage2: "brohok",
+                                        subImage3: "SomlorKari",
+                                        subImage4: foodSale.imageName
+                                    )
+                    ) {
+                        FoodOnSaleViewCell(foodSale: foodSale)
+                            .frame(width: 350)
+                            .padding(.top, 8)
+                    }
                 }
                 
-                NavigationLink(destination:
-                                FoodDetailView(
-                                    theMainImage: "Songvak",
-                                    subImage1: "ahmok",
-                                    subImage2: "brohok",
-                                    subImage3: "SomlorKari",
-                                    subImage4: "Songvak",
-                                    showOrderButton: false
-                                )
-                ) {
-                    RecipeViewCell(
-                        imageName           : "Songvak",
-                        dishName            : "Somlor Kari",
-                        cookingDate         : "30 Sep 2024",
-                        statusType          : "Recipe",
-                        rating              : 5.0,
-                        reviewCount         : 200,
-                        level               : "Easy"
-                        
-                    )
+                // Recipe Cards (Limited to 2)
+                ForEach(recipeViewModel.recipes.prefix(3)) { recipe in
+                    NavigationLink(destination:
+                                    FoodDetailView(
+                                        theMainImage: recipe.imageName,
+                                        subImage1: "ahmok",
+                                        subImage2: "brohok",
+                                        subImage3: "SomlorKari",
+                                        subImage4: recipe.imageName
+                                    )
+                    ) {
+                        RecipeViewCell(recipe: recipe)
+                            .frame(width: 350)
+                            .padding(.top, 8)
+                    }
                 }
             }
-            .padding(.horizontal)
-     
+            .environmentObject(foodOnSaleViewModel)
+            .environmentObject(recipeViewModel)
         }
     }
 }
 
 #Preview {
     AllPopularTabView()
+        .environmentObject(FoodOnSaleViewCellViewModel()) // Injecting sample environment objects for preview
+        .environmentObject(RecipeViewModel())
 }

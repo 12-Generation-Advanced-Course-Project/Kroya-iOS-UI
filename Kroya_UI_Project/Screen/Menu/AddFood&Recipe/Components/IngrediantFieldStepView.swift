@@ -4,15 +4,10 @@
 
 import SwiftUI
 
-struct Step: Identifiable, Codable {
-    var id = UUID()
-    var description: String
-}
 
 struct StepEntryView: View {
-    @Binding var step: Step
+    @Binding var cookingStep: CookingStep
     let index: Int
-    let onEdit: () -> Void
     let onDelete: () -> Void
     
     @State private var showError: Bool = false
@@ -37,9 +32,9 @@ struct StepEntryView: View {
                     
                     ZStack(alignment: .trailing) {
                         TextField("Enter ingredients", text: Binding(
-                            get: { step.description },
+                            get: { cookingStep.description },
                             set: { newValue in
-                                step.description = newValue
+                                cookingStep.description = newValue
                                 // Hide error message if the user enters text
                                 if !newValue.isEmpty {
                                     showError = false
@@ -75,7 +70,7 @@ struct StepEntryView: View {
                 }
                 
                 // Validation error message
-                if showError && step.description.isEmpty {
+                if showError && cookingStep.description.isEmpty {
                     HStack {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .foregroundColor(.red)
@@ -88,7 +83,7 @@ struct StepEntryView: View {
             }
             .frame(maxWidth: .infinity)
         }
-        .onChange(of: step.description) { newValue in
+        .onChange(of: cookingStep.description) { newValue in
             // Hide the error if a valid input is provided
             if !newValue.isEmpty {
                 showError = false
@@ -98,6 +93,6 @@ struct StepEntryView: View {
     
     // Function to show the error when "Next" is pressed without input
     func validateStep() {
-        showError = step.description.isEmpty
+        showError = cookingStep.description.isEmpty
     }
 }

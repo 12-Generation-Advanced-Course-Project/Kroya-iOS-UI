@@ -70,11 +70,11 @@ struct FillPasswordScreen: View {
                                     .resizable()
                                     .scaledToFit()
                                     .foregroundStyle(.red)
-                                    .frame(width: 12, height: 12)
+                                    .frame(width: 12, height: 10)
                                 Text(authVM.showError ? LocalizedStringKey("Password is Incorrect") : LocalizedStringKey("Please input a valid password"))
                                     .font(.caption)
                                     .foregroundColor(.red)
-                                    .font(.customfont(.regular, fontSize: 12))
+                                    .font(.customfont(.regular, fontSize: 10))
                             }
                         }
                         

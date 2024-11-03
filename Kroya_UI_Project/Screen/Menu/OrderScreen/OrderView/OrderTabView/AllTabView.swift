@@ -99,9 +99,33 @@ struct AllTabView: View {
                     DisclosureGroup("Today", isExpanded: $isExpandedToday) {
                         VStack(spacing: 15){
                             OrderCard(isAccepted: true, isOrder: false, showIcon: true)
-                            OrderCard(isAccepted: false, isOrder: true, showIcon: false)
-                            OrderCard(isAccepted: true, isOrder: true, showIcon: false)
-                        }
+                            
+                            NavigationLink(destination:  FoodDetailView(
+                                theMainImage: "Songvak",
+                                subImage1: "ahmok",
+                                subImage2: "brohok",
+                                subImage3: "SomlorKari",
+                                subImage4: "Songvak",
+                                showOrderButton: false,
+                                showButtonInvoic: true,
+                                invoiceAccept: false
+                            )){
+                                OrderCard(isAccepted: false, isOrder: true, showIcon: false)
+                            }
+                            
+                            NavigationLink(destination: FoodDetailView(
+                                theMainImage: "Songvak",
+                                subImage1: "ahmok",
+                                subImage2: "brohok",
+                                subImage3: "SomlorKari",
+                                subImage4: "Songvak",
+                                showOrderButton: false,
+                                showButtonInvoic: true,
+                                invoiceAccept: true
+                                
+                            )){
+                                OrderCard(isAccepted: true, isOrder: true, showIcon: false)
+                            }}
                     }
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(.black)
@@ -112,8 +136,32 @@ struct AllTabView: View {
                     DisclosureGroup("Yesterday", isExpanded: $isExpandedYTD) {
                         VStack(spacing: 15) {
                             OrderCard(isAccepted: true, isOrder: false, showIcon: true)
-                            OrderCard(isAccepted: false, isOrder: true, showIcon: false)
-                            OrderCard(isAccepted: true, isOrder: true, showIcon: false)
+                            
+                            NavigationLink(destination:  FoodDetailView(
+                                theMainImage: "Songvak",
+                                subImage1: "ahmok",
+                                subImage2: "brohok",
+                                subImage3: "SomlorKari",
+                                subImage4: "Songvak",
+                                showOrderButton: false,
+                                showButtonInvoic: true,
+                                invoiceAccept: false
+                            )){
+                                OrderCard(isAccepted: false, isOrder: true, showIcon: false)
+                            }
+                            
+                            NavigationLink(destination:  FoodDetailView(
+                                theMainImage: "Songvak",
+                                subImage1: "ahmok",
+                                subImage2: "brohok",
+                                subImage3: "SomlorKari",
+                                subImage4: "Songvak",
+                                showOrderButton: false,
+                                showButtonInvoic: true,
+                                invoiceAccept: true
+                            )){
+                                OrderCard(isAccepted: true, isOrder: true, showIcon: false)
+                            }
                         }
                     }
                     .font(.system(size: 16, weight: .semibold))
@@ -122,12 +170,47 @@ struct AllTabView: View {
                     .animation(.easeInOut(duration: 0.3), value: isExpandedYTD)
                     
                     // Disclosure Group for Last 2 Days
-                    DisclosureGroup("Last 2 Days", isExpanded: $isExpandedLst2Day) {
+                    DisclosureGroup("Last 2 days", isExpanded: $isExpandedLst2Day) {
                         VStack(spacing: 15) {
-                            OrderCard(isAccepted: true, isOrder: true, showIcon: false)
-                            OrderCard(isAccepted: false, isOrder: true, showIcon: false)
-                            OrderCard(isAccepted: true, isOrder: true, showIcon: false)
-                        }
+                            
+                            NavigationLink(destination:  FoodDetailView(
+                                theMainImage: "Songvak",
+                                subImage1: "ahmok",
+                                subImage2: "brohok",
+                                subImage3: "SomlorKari",
+                                subImage4: "Songvak",
+                                showOrderButton: false,
+                                showButtonInvoic: true,
+                                invoiceAccept: true
+                            )){
+                                OrderCard(isAccepted: true, isOrder: true, showIcon: false)
+                            }
+                            
+                            NavigationLink(destination:  FoodDetailView(
+                                theMainImage: "Songvak",
+                                subImage1: "ahmok",
+                                subImage2: "brohok",
+                                subImage3: "SomlorKari",
+                                subImage4: "Songvak",
+                                showOrderButton: false,
+                                showButtonInvoic: true,
+                                invoiceAccept: false
+                            )){
+                                OrderCard(isAccepted: false, isOrder: true, showIcon: false)
+                            }
+                            
+                            NavigationLink(destination:  FoodDetailView(
+                                theMainImage: "Songvak",
+                                subImage1: "ahmok",
+                                subImage2: "brohok",
+                                subImage3: "SomlorKari",
+                                subImage4: "Songvak",
+                                showOrderButton: false,
+                                showButtonInvoic: true,
+                                invoiceAccept: true
+                            )){
+                                OrderCard(isAccepted: true, isOrder: true, showIcon: false)
+                            }}
                     }
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(.black)

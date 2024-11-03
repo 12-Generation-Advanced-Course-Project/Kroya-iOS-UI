@@ -6,11 +6,15 @@ struct BottomSheetView<Content: View>: View {
     let content: Content
     @Binding var isOpen: Bool
     @State private var navigateToCheckout = false
+    @State private var navigateToReceipt = false
+    @State private var isPresented = false
     
     let maxHeight: CGFloat
     let minHeight: CGFloat
     let showOrderButton: Bool // Control for Food vs Recipe view
     let notificationType: Int? // Control for status from Notification
+    let showButtonInvoic : Bool // Control ler Button Invoice from Orders
+    var invoiceAccept : Bool
     @GestureState private var translation: CGFloat = 0
     
     private var offset: CGFloat {
@@ -33,13 +37,15 @@ struct BottomSheetView<Content: View>: View {
                     .font(.customfont(.bold, fontSize: 20))
                 Spacer()
                 
+                // Show Accept or Reject from Notification
                 if let notificationType = notificationType {
                     // Display status based on notificationType
                     Text(notificationType == 1 ? "Rejected" : "Accepted ")
                         .font(.customfont(.medium, fontSize: 16))
                         .foregroundStyle(notificationType == 1 ? .red : .green)
-                } else if showOrderButton {
-                    // Show Order button if showOrderButton is true and not accessed from Notification
+                }
+                // Show Order button if showOrderButton is true and not accessed from Notification
+                else if showOrderButton {
                     Button(action: {
                         navigateToCheckout = true
                     }) {
@@ -62,22 +68,44 @@ struct BottomSheetView<Content: View>: View {
                         }
                     )
                 }
-               
+      //  Show Button Invoice from Order
+                else if showButtonInvoic {
+                    Button(action: {
+                        navigateToReceipt = true
+                    }) {
+                        HStack {
+                            Text("Invoice")
+                                .font(.customfont(.medium, fontSize: 16))
+                                .foregroundStyle(.white)
+                        }
+                        .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.height * 0.04)
+                        .background(invoiceAccept ? Color(hex: "#00BD4E") : Color.red)
+                        .cornerRadius(UIScreen.main.bounds.width * 0.022)
+                    }
+                    .background(
+                        NavigationLink(destination: ReceiptView(isPresented: $isPresented), isActive: $navigateToReceipt) {
+                            EmptyView()
+                        }
+                    )
+                }
+                
             }
         }
         .padding(.horizontal, 15)
         .padding(.top, 8)
     }
     
-    init(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat, showOrderButton: Bool = true, notificationType: Int? = nil, @ViewBuilder content: () -> Content) {
-        self.content = content()
-        self._isOpen = isOpen
-        self.maxHeight = maxHeight
-        self.minHeight = minHeight
-        self.showOrderButton = showOrderButton
-        self.notificationType = notificationType
-    }
-    
+    init(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat, showOrderButton: Bool = true, notificationType: Int? = nil, showButtonInvoic: Bool = false, invoiceAccept: Bool = false, @ViewBuilder content: () -> Content) {
+         self.content = content()
+         self._isOpen = isOpen
+         self.maxHeight = maxHeight
+         self.minHeight = minHeight
+         self.showOrderButton = showOrderButton
+         self.notificationType = notificationType
+         self.showButtonInvoic = showButtonInvoic
+         self.invoiceAccept = invoiceAccept
+     }
+     
     var body: some View {
         GeometryReader { geometry in
             VStack {
@@ -116,6 +144,8 @@ struct FoodDetailView: View {
     @State private var isShowPopup: Bool = false  // Popup control here
     var showPrice: Bool
     var showOrderButton: Bool
+    var showButtonInvoic: Bool
+    var invoiceAccept: Bool
     var notificationType: Int? // Notification type for status display
     var theMainImage: String
     var subImage1: String
@@ -124,17 +154,19 @@ struct FoodDetailView: View {
     var subImage4: String
     @Environment(\.dismiss) var dismiss
     
-    init(theMainImage: String, subImage1: String, subImage2: String, subImage3: String, subImage4: String, showOrderButton: Bool = true, showPrice: Bool = false, notificationType: Int? = nil) {
-        self.theMainImage = theMainImage
-        self.subImage1 = subImage1
-        self.subImage2 = subImage2
-        self.subImage3 = subImage3
-        self.subImage4 = subImage4
-        self.showOrderButton = showOrderButton
-        self.showPrice = showPrice
-        self.notificationType = notificationType
-        _currentImage = State(initialValue: theMainImage)
-    }
+    init(theMainImage: String, subImage1: String, subImage2: String, subImage3: String, subImage4: String, showOrderButton: Bool = true, showPrice: Bool = false, showButtonInvoic: Bool = false, invoiceAccept: Bool = false, notificationType: Int? = nil) {
+          self.theMainImage = theMainImage
+          self.subImage1 = subImage1
+          self.subImage2 = subImage2
+          self.subImage3 = subImage3
+          self.subImage4 = subImage4
+          self.showOrderButton = showOrderButton
+          self.showPrice = showPrice
+          self.showButtonInvoic = showButtonInvoic
+          self.invoiceAccept = invoiceAccept
+          self.notificationType = notificationType
+          _currentImage = State(initialValue: theMainImage)
+      }
     
     var body: some View {
         
@@ -222,7 +254,7 @@ struct FoodDetailView: View {
                 }
                 
                 // Bottom Sheet Content
-                BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.645, showOrderButton: showOrderButton, notificationType: notificationType) {
+                BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.645, showOrderButton: showOrderButton, notificationType: notificationType, showButtonInvoic: showButtonInvoic, invoiceAccept: invoiceAccept) {
                                   ContentView(showPrice: showPrice, isShowPopup: $isShowPopup)
                                       .padding(.horizontal, 15)
                               }

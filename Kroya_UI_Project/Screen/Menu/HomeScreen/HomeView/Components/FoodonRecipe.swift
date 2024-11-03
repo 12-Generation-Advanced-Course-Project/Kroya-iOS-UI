@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct FoodonRecipe: View {
     
     @Environment(\.dismiss) var dismiss
@@ -21,7 +20,7 @@ struct FoodonRecipe: View {
         NavigationView {
             VStack {
                 // Loop through images and titles
-                HStack(spacing: 20) {
+                HStack(spacing: 40) {
                     ForEach(0..<imageofOrder.count, id: \.self) { index in
                         Button(action: {
                             selectedOrderIndex = index // Update the selected index
@@ -40,31 +39,30 @@ struct FoodonRecipe: View {
                         .buttonStyle(PlainButtonStyle())
                     }
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(maxWidth: .infinity, alignment: .center)
                 .padding()
-                Spacer().frame(height: 20)
+                Spacer()
+                    .frame(height: 20)
                 Text(LocalizedStringKey("All"))
                     .font(.customfont(.bold, fontSize: 16))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundStyle(.black.opacity(0.8))
                     .padding(.horizontal)
+                
                 RecipeView()
             }
+            .navigationTitle(LocalizedStringKey("Food Recipe"))
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    HStack {
-                        Button(action: {
-                            dismiss()
-                        }) {
-                            Image(systemName: "arrow.left")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 20, height: 20)
-                                .foregroundStyle(.black)
-                        }
-                        Text(LocalizedStringKey("Food Recipe"))
-                            .font(.customfont(.semibold, fontSize: 16))
-                            .foregroundStyle(.black.opacity(0.8))
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Image(systemName: "arrow.left")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 20, height: 20)
+                            .foregroundStyle(.black)
                     }
                 }
             }
