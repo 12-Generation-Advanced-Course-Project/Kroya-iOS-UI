@@ -15,6 +15,7 @@ struct ContentView: View {
     @State private var navigateToCheckout = false // State variable to control navigation
     @State private var selectedRating: Int = 0
     @State private var currentStep = 1
+    var showPrice: Bool
     @Environment(\.dismiss) var dismiss
     @Binding var isShowPopup: Bool  // Use a binding to control popup
     // @State var isShowPopup  = false
@@ -42,9 +43,11 @@ struct ContentView: View {
                 VStack (alignment:.leading, spacing: 10){
                     HStack(spacing: 10){
                         // Group{
-                        Text("$3.05")
-                            .foregroundStyle(Color.yellow)
-                            .font(.customfont(.regular, fontSize: 13))
+                        if showPrice {
+                            Text("$3.05")
+                                .foregroundStyle(Color.yellow)
+                                .font(.customfont(.regular, fontSize: 13))
+                        }
                         Text("5 May 2023 (Morning)")
                             .opacity(0.5)
                         
@@ -67,20 +70,20 @@ struct ContentView: View {
                     // Profile Section
                     Spacer().frame(height: screenHeight * 0.012)
                     NavigationLink(destination: ViewAccount(profileImage: "mehh", userName: "Red Red", email: "redred168@gmail.com")){
-                   
-                            HStack(spacing: 10) {
-                                Image("mehh")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: screenWidth * 0.12, height: screenWidth * 0.12) // Circle image size
-                                    .clipShape(Circle())
-                                
-                                VStack(alignment: .leading) {
-                                    Text("Red Red")
-                                        .font(.customfont(.bold, fontSize: 17))
-                                        .foregroundColor(.black)
-                                }
-                            }}
+                        
+                        HStack(spacing: 10) {
+                            Image("mehh")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: screenWidth * 0.12, height: screenWidth * 0.12) // Circle image size
+                                .clipShape(Circle())
+                            
+                            VStack(alignment: .leading) {
+                                Text("Red Red")
+                                    .font(.customfont(.bold, fontSize: 17))
+                                    .foregroundColor(.black)
+                            }
+                        }}
                     Spacer().frame(height: screenHeight * 0.003)
                     
                     

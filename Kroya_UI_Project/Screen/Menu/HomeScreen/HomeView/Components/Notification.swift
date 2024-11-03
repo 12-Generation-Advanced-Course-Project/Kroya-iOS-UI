@@ -1,148 +1,136 @@
-//import SwiftUI
-//
-//struct Notification: View {
-//
-//    @Environment(\.dismiss) var dismiss
-//    let notification = [1, 2, 3, 4, 5]
-//
-//
-//    var body: some View {
-//        NavigationView {
-//            List {
-//                Section(header: Text("New")
-//                    .font(.customfont(.semibold, fontSize: 16))
-//                    .foregroundStyle(.black)) {
-//                        ForEach(notification, id: \.self) { notification in
-//                            NotificationComponent(notificationType: 1)
-//                                .listRowSeparator(.hidden)
-//                        }
-//                    }
-//
-//                Section(header: Text("Old")
-//                    .font(.customfont(.semibold, fontSize: 16))
-//                    .foregroundStyle(.black)) {
-//                        ForEach(notification, id: \.self) { notification in
-//                            NotificationComponent(notificationType: 2)
-//                                .listRowSeparator(.hidden)
-//                        }
-//                    }
-//            }
-//            .listStyle(PlainListStyle())
-//            .scrollIndicators(.hidden)
-//            .navigationBarTitleDisplayMode(.inline)
-//            .toolbar {
-//                ToolbarItem(placement: .navigationBarLeading) {
-//                    HStack {
-//                        Button(action: {
-//                            dismiss()
-//                        }) {
-//                            Image(systemName: "arrow.left")
-//                                .resizable()
-//                                .scaledToFit()
-//                                .frame(width: 20, height: 20)
-//                                .foregroundStyle(.black)
-//                        }
-//                        VStack(alignment: .leading, spacing: 4) {
-//                            Text(LocalizedStringKey("Notification"))
-//                                .font(.customfont(.semibold, fontSize: 20))
-//                                .foregroundStyle(.black)
-//                            Group{
-//                                //                                Text(LocalizedStringKey("You have "))
-//                                //                                + Text(LocalizedStringKey("\(notification.count) Notifications "))
-//                                //                                    .foregroundStyle(.yellow)
-//                                //                                + Text(LocalizedStringKey("today"))
-//                                HStack{
-//                                    Text(LocalizedStringKey("You have"))
-//                                    Text(LocalizedStringKey("\(notification.count) Notification"))
-//                                        .foregroundStyle(.yellow)
-//                                    Text(LocalizedStringKey("Now"))
-//
-//                                }
-//                            }
-//                            .font(.customfont(.regular, fontSize: 12))
-//                            .foregroundStyle(.black.opacity(0.6))
-//                        }
-//                    }
-//                }
-//            }
-//        }.navigationBarBackButtonHidden(true)
-//    }
-//}
-//
-//#Preview {
-//    Notification()
-//}
 
 
 import SwiftUI
 
-struct Notification: View {
-    @State var isNavigate:Bool = false
-    @Environment(\.dismiss) var dismiss
-    @State private var notifications: [NotificationModel] = [
-        NotificationModel(id: UUID(), title: "New Notification 1", isClicked: false),
-        NotificationModel(id: UUID(), title: "New Notification 1", isClicked: false),
-        NotificationModel(id: UUID(), title: "New Notification 1", isClicked: true)
-    ]
-
-    var body: some View {
-        NavigationView {
-            List {
-                Section(header: Text("New")
-                    .font(.customfont(.medium, fontSize: 16))
-                    .foregroundColor(.black)) {
-                        ForEach($notifications) { $notification in
-                            NotificationComponent(notificationType: 1, isClicked: $notification.isClicked)
+struct NotificationItem: Identifiable {
+    let id = UUID()
+    var image: String
+    var name: String
+    var notificationType: Int
+    var time: String
+    var seen: Bool
+}
+    struct Notification: View {
+        @Environment(\.dismiss) var dismiss
+        @State private var selectedNotification: NotificationItem? = nil
+        @State private var notificationsNew  = [
+            NotificationItem(image: "Songvak", name: "Songvak", notificationType: 1, time: "14 m ago", seen: false),
+            NotificationItem(image: "SomlorKari", name: "SomlorKari", notificationType: 2, time: "30 m ago", seen: false),
+            NotificationItem(image: "ahmok", name: "Amok Fish", notificationType: 3, time: "1 h ago", seen: false),
+            NotificationItem(image: "food5", name: "Amok Fish", notificationType: 4, time: "2 h ago", seen: true)
+        ]
+        
+        @State private var notificationsNewOlder = [
+            NotificationItem(image: "food1", name: "SomlorKari", notificationType: 1, time: "11/10/2024", seen: true),
+            NotificationItem(image: "food2", name: "SomlorMju", notificationType: 2, time: "11/10/2024", seen: true),
+            NotificationItem(image: "food3", name: "Amok Fish", notificationType: 3, time: "10/10/2024", seen: true),
+            NotificationItem(image: "food4", name: "SomlorMju", notificationType: 4, time: "10/10/2024", seen: true)
+        ]
+        
+        var body: some View {
+            NavigationView {
+                List {
+                    Section(header: Text("New")
+                        .font(.customfont(.semibold, fontSize: 16))
+                        .foregroundStyle(.black)) {
+                            ForEach($notificationsNew) { $notification in
+                                //Button for navigate to the Food detail
+                                Button(action: {
+                                    selectedNotification = notification
+                                    notification.seen = true // Mark as seen /
+                                })
+                                {
+                                    NotificationComponent(
+                                        image: notification.image,
+                                        name: notification.name,
+                                        notificationType: notification.notificationType,
+                                        time: notification.time,
+                                        seen: notification.seen
+                                    )
+                                }
+                                .frame(maxWidth: .infinity, alignment: .center) // Center content in the row
                                 .listRowSeparator(.hidden)
-                        }
-                    }
-
-                Section(header: Text("Old")
-                    .font(.customfont(.medium, fontSize: 16))
-                    .foregroundColor(.black)) {
-                        ForEach($notifications) { notification in
-                            NotificationComponent(notificationType: 2, isClicked: .constant(true))
-                                .listRowSeparator(.hidden)
-                        }
-                    }
-            }
-            .listStyle(PlainListStyle())
-            .scrollIndicators(.hidden)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    HStack {
-                        Button(action: {
-                            dismiss()
-                        }) {
-                            Image(systemName: "arrow.left")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 20, height: 20)
-                                .foregroundStyle(.black)
-                        }
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Notification")
-                                .font(.custom("HelveticaNeue-Semibold", size: 20))
-                                .foregroundStyle(.black)
-                            HStack {
-                                Text("You have ")
-                                Text("\(notifications.count) Notification")
-                                    .foregroundStyle(.yellow)
-                                Text(" Now")
+                                .listRowInsets(EdgeInsets()) // Remove default padding
                             }
-                            .font(.custom("HelveticaNeue-Regular", size: 12))
-                            .foregroundStyle(.black.opacity(0.6))
+                        }
+                    Section(header: Text("Older")
+                        .font(.customfont(.semibold, fontSize: 16))
+                        .foregroundStyle(.black)) {
+                            ForEach($notificationsNewOlder) { $notification in
+                                //Button for navigate to the Food detail
+                                Button(action: {
+                                    selectedNotification = notification
+                                    notification.seen = true
+                                }){
+                                    NotificationComponent(
+                                        image: notification.image,
+                                        name: notification.name,
+                                        notificationType: notification.notificationType,
+                                        time: notification.time,
+                                        seen: notification.seen
+                                    )
+                                }
+                                .frame(maxWidth: .infinity, alignment: .center) // Center content in the row
+                                .listRowSeparator(.hidden)
+                                .listRowInsets(EdgeInsets()) // Remove default padding
+                            }
+                        }
+                }
+                .listStyle(PlainListStyle())
+                .scrollIndicators(.hidden)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        HStack {
+                            Button(action: {
+                                dismiss()
+                            }) {
+                                Image(systemName: "arrow.left")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 20, height: 20)
+                                    .foregroundStyle(.black)
+                            }
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Notification")
+                                    .font(.custom("HelveticaNeue-Semibold", size: 20))
+                                    .foregroundStyle(.black)
+                                HStack {
+                                    Text(LocalizedStringKey("You have"))
+                                    Text("\(notificationsNew.count) Notifications")
+                                        .foregroundStyle(.yellow)
+                                    Text(LocalizedStringKey("Today"))
+                                }
+                                .font(.custom("HelveticaNeue-Regular", size: 12))
+                                .foregroundStyle(.black.opacity(0.6))
+                            }
                         }
                     }
                 }
+                // Programmatic navigation to FoodDetailView
+                // Programmatic navigation to FoodDetailView
+                .background(
+                    NavigationLink(
+                        destination: FoodDetailView(
+                            theMainImage: selectedNotification?.image ?? "Songvak",
+                            subImage1: "ahmok",
+                            subImage2: "brohok",
+                            subImage3: "SomlorKari",
+                            subImage4: "Songvak",
+                            showOrderButton: false, // Hide Order button when accessed from Notification
+                            notificationType: selectedNotification?.notificationType // Pass notificationType here
+                        ),
+                        isActive: Binding(
+                            get: { selectedNotification != nil },
+                            set: { if !$0 { selectedNotification = nil } }
+                        )
+                    ) {
+                        EmptyView()
+                    }
+                )
             }
+            .navigationBarBackButtonHidden(true)
         }
-        .navigationBarBackButtonHidden(true)
     }
-}
 
-#Preview {
-    Notification()
-}
 
