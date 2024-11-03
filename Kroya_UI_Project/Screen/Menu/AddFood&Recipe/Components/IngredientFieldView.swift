@@ -67,6 +67,7 @@ struct IngredientEntryView: View {
                     .multilineTextAlignment(.leading)
                     .font(.customfont(.medium, fontSize: 15))
                     .keyboardType(.numberPad)
+                    .foregroundStyle(.black.opacity(0.6))
                     .padding(.leading, 10)
                     .frame(width: .screenWidth * 0.2, height: 30)
                     .onChange(of: ingredient.quantity) { _ in
@@ -84,7 +85,7 @@ struct IngredientEntryView: View {
                         .foregroundStyle(.black.opacity(0.6))
                     Spacer().frame(width: 30)
                     
-                    TextField("", text: Binding(
+                    TextField("0", text: Binding(
                         get: { priceText },
                         set: { newValue in
                             priceText = filterPriceInput(newValue)
@@ -93,6 +94,7 @@ struct IngredientEntryView: View {
                     ))
                     .multilineTextAlignment(.leading)
                     .font(.customfont(.medium, fontSize: 15))
+                    .foregroundStyle(.black.opacity(0.6))
                     .keyboardType(.decimalPad)
                     .padding(.leading, 10)
                     .frame(width: .screenWidth * 0.2, height: 30)
