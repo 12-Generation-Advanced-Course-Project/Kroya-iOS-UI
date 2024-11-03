@@ -57,14 +57,14 @@ struct SaleIngredient: Identifiable, Codable {
 enum cuisine: String {
     case Soup = "Soup"
     case Salad = "Salad"
-    case Desert = "Desert"
+    case Dessert = "Dessert"
     case Grill = "Grill"
     
     var id: Int {
         switch self {
         case .Soup: return 1
         case .Salad: return 2
-        case .Desert: return 3
+        case .Dessert: return 3
         case .Grill: return 4
         }
     }

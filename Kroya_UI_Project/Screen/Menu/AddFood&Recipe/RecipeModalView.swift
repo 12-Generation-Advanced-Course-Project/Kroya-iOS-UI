@@ -25,35 +25,27 @@ struct RecipeModalView: View {
                         .foregroundColor(.black.opacity(0.5))
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    if $draftModelData.ingredients.isEmpty {
-                        Text("No ingredients added yet. Please add some ingredients.")
-                            .font(.customfont(.regular, fontSize: 12))
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .foregroundStyle(PrimaryColor.normal)
-                            .padding(.top, 20)
-                    } else {
-                        ForEach($draftModelData.ingredients, id: \.id) { $ingredient in
-                            IngredientEntryView(
-                                ingredient: $ingredient,
-                                onEdit: {
-                                    print("Editing \(ingredient.name)")
-                                },
-                                onDelete: {
-                                    deleteIngredient(ingredient)
-                                }
-                            )
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                            .contentShape(RoundedRectangle(cornerRadius: 12))
-                            .onDrag {
-                                self.draggedIngredient = ingredient
-                                let provider = NSItemProvider(object: ingredient.name as NSString)
-                                provider.suggestedName = ""
-                                return provider
-                            } preview: {
-                                Color.clear.frame(width: 1, height: 1)
+                    ForEach($draftModelData.ingredients, id: \.id) { $ingredient in
+                        IngredientEntryView(
+                            ingredient: $ingredient,
+                            onEdit: {
+                                print("Editing \(ingredient.name)")
+                            },
+                            onDelete: {
+                                deleteIngredient(ingredient)
                             }
-                            .onDrop(of: [.text], delegate: DropViewDelegate(destinationItem: ingredient, ingredients: $draftModelData.ingredients, draggedItem: $draggedIngredient))
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .contentShape(RoundedRectangle(cornerRadius: 12))
+                        .onDrag {
+                            self.draggedIngredient = ingredient
+                            let provider = NSItemProvider(object: ingredient.name as NSString)
+                            provider.suggestedName = ""
+                            return provider
+                        } preview: {
+                            Color.clear.frame(width: 1, height: 1)
                         }
+                        .onDrop(of: [.text], delegate: DropViewDelegate(destinationItem: ingredient, ingredients: $draftModelData.ingredients, draggedItem: $draggedIngredient))
                     }
                     
                     // Button to add new ingredient
@@ -74,29 +66,21 @@ struct RecipeModalView: View {
                         .foregroundColor(.black.opacity(0.5))
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    if draftModelData.cookingSteps.isEmpty {
-                        Text("Please add some steps to your recipe.")
-                            .font(.customfont(.regular, fontSize: 12))
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .foregroundStyle(PrimaryColor.normal)
-                            .padding(.top, 20)
-                    } else {
-                        ForEach($draftModelData.cookingSteps) { $step in
-                            StepEntryView(
-                                cookingStep: $step,
-                                index: draftModelData.cookingSteps.firstIndex(where: { $0.id == step.id }) ?? 0,
-                                onDelete: {
-                                    deleteStep(step)
-                                }
-                            )
-                            .onDrag {
-                                self.draggedStep = step
-                                return NSItemProvider()
-                            } preview: {
-                                Color.clear.frame(width: 1, height: 1)
+                    ForEach($draftModelData.cookingSteps) { $step in
+                        StepEntryView(
+                            cookingStep: $step,
+                            index: draftModelData.cookingSteps.firstIndex(where: { $0.id == step.id }) ?? 0,
+                            onDelete: {
+                                deleteStep(step)
                             }
-                            .onDrop(of: [.text], delegate: StepDropDelegate(destinationItem: step, steps: $draftModelData.cookingSteps, draggedItem: $draggedStep))
+                        )
+                        .onDrag {
+                            self.draggedStep = step
+                            return NSItemProvider()
+                        } preview: {
+                            Color.clear.frame(width: 1, height: 1)
                         }
+                        .onDrop(of: [.text], delegate: StepDropDelegate(destinationItem: step, steps: $draftModelData.cookingSteps, draggedItem: $draggedStep))
                     }
                     
                     // Button to add new step
