@@ -18,8 +18,8 @@ struct ItemFoodOrderCard: View {
     @Binding var item: FoodItem
     var showEllipsis: Bool = true // Default to true for other uses
     @State private var showPopover = false
-
-
+    
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 12) {
@@ -57,103 +57,56 @@ struct ItemFoodOrderCard: View {
                         }
                         
                         // Ellipsis menu for options, only shown if showEllipsis is true
-                        if showEllipsis {
-                            Menu {
-                                Button(role: .none ,action: {
-                                    item.status = "Accept"
-                                }) {
-                                    Text("Accept")
-                                }
-                                
-                                Button(role: .destructive, action: {
-                                    item.status = "Reject"
-                                }) {
-                                    Text("Reject")
-
-                                }
-                            } label: {
-                                Image(systemName: "ellipsis")
-                                    .rotationEffect(.degrees(90)) // Rotate to make it vertical
-                                    .font(.system(size: 18))
-                                    .foregroundColor(.gray)
-                            }
-                        }
+                        //                        if showEllipsis {
+                        //                            Menu {
+                        //                                Button(role: .none ,action: {
+                        //                                    item.status = "Accept"
+                        //                                }) {
+                        //                                    Text("Accept")
+                        //                                }
+                        //
+                        //                                Button(role: .destructive, action: {
+                        //                                    item.status = "Reject"
+                        //                                }) {
+                        //                                    Text("Reject")
+                        //
+                        //                                }
+                        //                            } label: {
+                        //                                Image(systemName: "ellipsis")
+                        //                                    .rotationEffect(.degrees(90)) // Rotate to make it vertical
+                        //                                    .font(.system(size: 18))
+                        //                                    .foregroundColor(.gray)
+                        //                            }
+                        //                        }
                         
                         // Ellipsis button for popover
-//                        Button(action: {
-//                            showPopover = true
-//                        }, label: {
-//                            Image(systemName: "ellipsis")
-//                                .rotationEffect(.degrees(90)) // Rotate to make it vertical
-//                                .font(.system(size: 18))
-//                                .foregroundColor(.gray)
-//                                .popover(isPresented: $showPopover,
-//                                         attachmentAnchor: .point(.topLeading),
-//                                         content: {
-//                                    VStack(spacing: 8) {
-//                                        Button("Accept", action: {
-//                                            item.status = "Accept"
-//                                            showPopover = false
-//                                        })
-//                                        .foregroundStyle(Color(hex: "#00941D"))
-//                                        
-//                                        Button("Reject", action: {
-//                                            item.status = "Reject"
-//                                            showPopover = false
-//                                        })
-//                                        .foregroundStyle(Color(hex: "#FF3B30"))
-//                                    }
-//                                    .frame(width: 130, height: 80)
-//                                    .presentationCompactAdaptation(.popover)
-//                                })
-//                        })
-                        
-                        
-                        
-                        
-//                       
-//                        if showEllipsis {
-//                            Button(action: { item.status = "Accept" }) {
-//                                Text("Accept")
-//                                    .font(.customfont(.semibold, fontSize: 12))
-//                                    .foregroundColor(.green)
-//                            }
-//                            Button(action: { item.status = "Reject" }) {
-//                                Text("Reject")
-//                                    .font(.customfont(.semibold, fontSize: 12))
-//                                    .foregroundColor(.red)
-//                            }
-//                        }
-//                        
-
-//                         // Ellipsis button for popover
-//                        Button(action: {
-//                            showPopover = true
-//                        }, label: {
-//                            Image(systemName: "ellipsis")
-//                                .rotationEffect(.degrees(90)) // Rotate to make it vertical
-//                                .font(.system(size: 18))
-//                                .foregroundColor(.gray)
-//                                .popover(isPresented: $showPopover,
-//                                         attachmentAnchor: .point(.topLeading),
-//                                         content: {
-//                                    VStack(spacing: 8) {
-//                                        Button("Accept", action: {
-//                                            item.status = "Accept"
-//                                            showPopover = false
-//                                        })
-//                                        .foregroundStyle(Color(hex: "#00941D"))
-//                                        
-//                                        Button("Reject", action: {
-//                                            item.status = "Reject"
-//                                            showPopover = false
-//                                        })
-//                                        .foregroundStyle(Color(hex: "#FF3B30"))
-//                                    }
-//                                    .frame(width: 130, height: 80)
-//                                    .presentationCompactAdaptation(.popover)
-//                                })
-//                        })
+                        Button(action: {
+                            showPopover = true
+                        }, label: {
+                            Image(systemName: "ellipsis")
+                                .rotationEffect(.degrees(90)) // Rotate to make it vertical
+                                .font(.system(size: 18))
+                                .foregroundColor(.gray)
+                                .popover(isPresented: $showPopover,
+                                         attachmentAnchor: .point(.topLeading),
+                                         content: {
+                                    VStack(spacing: 8) {
+                                        Button("Accept", action: {
+                                            item.status = "Accept"
+                                            showPopover = false
+                                        })
+                                        .foregroundStyle(Color(hex: "#00941D"))
+                                        
+                                        Button("Reject", action: {
+                                            item.status = "Reject"
+                                            showPopover = false
+                                        })
+                                        .foregroundStyle(Color(hex: "#FF3B30"))
+                                    }
+                                    .frame(width: 130, height: 80)
+                                    .presentationCompactAdaptation(.popover)
+                                })
+                        })
                     }
                     
                     // Item count and remarks
