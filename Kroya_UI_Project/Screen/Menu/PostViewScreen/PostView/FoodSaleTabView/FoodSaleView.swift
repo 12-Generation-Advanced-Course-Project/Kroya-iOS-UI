@@ -31,8 +31,8 @@ struct FoodSaleView: View {
                                     )
                     ) {
                         FoodOnSaleViewCell(foodSale: foodSale)
-                            .frame(width: 362)
-                            .padding(.top, 8)
+                            .padding(.horizontal, 20)
+                            .padding(.bottom,8)
                     }
                 }
                 
@@ -48,14 +48,15 @@ struct FoodSaleView: View {
                                     )
                     ) {
                         RecipeViewCell(recipe: recipe)
-                            .frame(width: 362)
-                            .padding(.top, 8)
+                            .padding(.horizontal, 20)
+                            .padding(.bottom,8)
                     }
                 }
             }
             .environmentObject(foodOnSaleViewModel)
             .environmentObject(recipeViewModel)
         }
+        .padding(.top,8)
     }
 }
 
