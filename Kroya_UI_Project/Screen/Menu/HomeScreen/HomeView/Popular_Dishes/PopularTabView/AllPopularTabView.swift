@@ -17,7 +17,8 @@ struct AllPopularTabView: View {
                                         subImage1: "ahmok",
                                         subImage2: "brohok",
                                         subImage3: "SomlorKari",
-                                        subImage4: foodSale.imageName
+                                        subImage4: foodSale.imageName,
+                                        showPrice: true
                                     )
                     ) {
                         FoodOnSaleViewCell(foodSale: foodSale)
@@ -34,7 +35,8 @@ struct AllPopularTabView: View {
                                         subImage1: "ahmok",
                                         subImage2: "brohok",
                                         subImage3: "SomlorKari",
-                                        subImage4: recipe.imageName
+                                        subImage4: recipe.imageName,
+                                        showOrderButton: false
                                     )
                     ) {
                         RecipeViewCell(recipe: recipe)

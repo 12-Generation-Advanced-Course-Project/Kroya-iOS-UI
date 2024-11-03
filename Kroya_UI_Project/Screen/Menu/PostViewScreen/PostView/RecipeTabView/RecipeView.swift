@@ -18,7 +18,8 @@ struct RecipeView: View {
                         subImage1: "ahmok",
                         subImage2: "brohok",
                         subImage3: "SomlorKari",
-                        subImage4: "Songvak"
+                        subImage4: "Songvak",
+                        showOrderButton: false
                         //showBotton
                     )) {
                         EmptyView()

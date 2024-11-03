@@ -21,8 +21,9 @@ struct FoodOnSaleView: View {
                         theMainImage: item.imageName,
                         subImage1: "ahmok",
                         subImage2: "brohok",
-                        subImage3: "somlorKari",
-                        subImage4: "Songvak"
+                        subImage3: "SomlorKari",
+                        subImage4: "Songvak",
+                        showPrice: true
                     )) {
                         EmptyView()
                     }
