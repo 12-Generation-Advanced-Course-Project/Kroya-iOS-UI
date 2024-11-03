@@ -18,6 +18,10 @@ struct AddNewFoodModel: Codable {
     var categoryId: Int
     var ingredients: [RecipeIngredient]
     var cookingSteps: [CookingStep]
+    var saleIngredients: SaleIngredient?
+    var isForSale: Bool {
+           return saleIngredients != nil
+       }
 }
 
 // MARK: - Photo
