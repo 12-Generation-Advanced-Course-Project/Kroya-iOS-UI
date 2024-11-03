@@ -145,53 +145,6 @@ struct PostViewScreen: View {
                         .frame(height: 2)
                     }
                 }
-                //                    VStack {
-                //                        HStack {
-                //                            Spacer()
-                //
-                //                            Text(LocalizedStringKey("All"))
-                //                                .fontWeight(.semibold)
-                //                                .font(.system(size: 16))
-                //                                .foregroundColor(selectedSegment == 0 ? .black.opacity(0.8) : .black.opacity(0.5))
-                //                                .onTapGesture {
-                //                                    selectedSegment = 0
-                //                                }
-                //
-                //                            Spacer()
-                //
-                //                            Text(LocalizedStringKey("Food on Sale"))
-                //                                .fontWeight(.semibold)
-                //                                .font(.system(size: 16))
-                //                                .foregroundColor(selectedSegment == 1 ? .black.opacity(0.8) : .black.opacity(0.5))
-                //                                .onTapGesture {
-                //                                    selectedSegment = 1
-                //                                }
-                //
-                //                            Spacer()
-                //
-                //                            Text(LocalizedStringKey("Recipes"))
-                //                                .fontWeight(.semibold)
-                //                                .font(.system(size: 16))
-                //                                .foregroundColor(selectedSegment == 2 ? .black.opacity(0.8) : .black.opacity(0.5))
-                //                                .onTapGesture {
-                //                                    selectedSegment = 2
-                //                                }
-                //
-                //                            Spacer()
-                //                        }
-                //                        .padding(.top)
-                //
-                //                        GeometryReader { geometry in
-                //                            Divider()
-                //
-                //                            Rectangle()
-                //                                .fill(Color.yellow) // Use your defined color here
-                //                                .frame(width: geometry.size.width / 3, height: 2) // Three segments
-                //                                .offset(x: CGFloat(selectedSegment) * (geometry.size.width / 3))
-                //                                .animation(.easeInOut(duration: 0.3), value: selectedSegment)
-                //                        }
-                //                        .frame(height: 2)
-                //                    }
             }
             
             

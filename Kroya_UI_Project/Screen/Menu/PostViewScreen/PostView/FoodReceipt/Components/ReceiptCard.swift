@@ -258,7 +258,7 @@ struct ReceiptCard1: View {
                         HStack {
                             Text("Download Success")
                                 .font(.system(size: 16, weight: .bold))
-                                .foregroundColor(Color(hex: "#3FBD4E"))
+                                .foregroundColor(Color.yellow)
                         }
                         
                         // Disable button after download is successful
