@@ -12,8 +12,8 @@ import SwiftUI
 struct NewItemFoodOrderCardView: View {
     
     var iselected: Int?
-    
-    @State  var foodItems : [FoodItem] = [
+    @Binding  var show3dot:Bool
+    @State var foodItems : [FoodItem] = [
         FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: nil, timeAgo: "10m ago"),
         FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR",status: "Reject", timeAgo: "15m ago"),
         FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR",status: "Reject", timeAgo: "15m ago"),
@@ -26,7 +26,7 @@ struct NewItemFoodOrderCardView: View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(spacing: 20) {
                 ForEach($foodItems){ item in
-                    ItemFoodOrderCard(item: item, showEllipsis: showEllipsis)
+                    ItemFoodOrderCard(item: item, showEllipsis: showEllipsis, show3dot: $show3dot)
                 }
                   }
             .padding(.horizontal, 15)

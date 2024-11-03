@@ -5,8 +5,10 @@ class DraftModelData: ObservableObject {
     @ObservedObject var userStore: UserStore
     
     init(userStore: UserStore) {
-        self.userStore = userStore
-    }
+           self.userStore = userStore
+           self.ingredients = [RecipeIngredient(id: UUID().hashValue, name: "", quantity: 0, price: 0, selectedCurrency: 0)]
+           self.cookingSteps = [CookingStep(id: UUID().hashValue, description: "")]
+       }
     
     //MARK: Fields for AddNewFood
     @Published var foodName: String = ""
@@ -17,8 +19,8 @@ class DraftModelData: ObservableObject {
     @Published var duration: Double = 0
     
     //MARK: Fields for RecipeModal
-    @Published var ingredients: [RecipeIngredient] = []
-    @Published var cookingSteps: [CookingStep] = []
+    @Published var ingredients: [RecipeIngredient]
+    @Published var cookingSteps: [CookingStep]
     
     //MARK: Fields for SaleModalView
     @Published var amount: Double = 0

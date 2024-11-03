@@ -212,7 +212,7 @@ import SwiftUI
 struct SaleReportView: View {
     @State private var selectedDate: Date = Date()
     @Environment(\.dismiss) var dismiss
-
+    @State private var ishow3dot:Bool = false
     let dateFormatter = DateFormatter()
     let years = Array(2020...2100)
     let months = Calendar.current.monthSymbols
@@ -343,7 +343,7 @@ struct SaleReportView: View {
             Spacer()
             
             if let items = soldItems[selectedDate] {
-                NewItemFoodOrderCardView(foodItems: items, showEllipsis: false)
+                NewItemFoodOrderCardView(show3dot: $ishow3dot, foodItems: items, showEllipsis: false)
                     .padding(.top, 18)
             } else {
                 Text(LocalizedStringKey("No items sold on this day"))

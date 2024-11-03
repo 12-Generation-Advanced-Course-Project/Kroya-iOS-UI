@@ -22,7 +22,7 @@ struct AddFoodView: View {
     
     @ObservedObject var addressVM: AddressViewModel
     @ObservedObject var draftModelData: DraftModelData
-    
+    @ObservedObject var addNewFoodVM: AddNewFoodVM
     var body: some View {
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
@@ -107,9 +107,12 @@ struct AddFoodView: View {
                             RoundedRectangle(cornerRadius: 16)
                                 .strokeBorder(Color(hex: "#D0DBEA"), style: StrokeStyle(lineWidth: 2, dash: [10, 5]))
                         )
-                        if showValidationMessage && draftModelData.selectedImages.isEmpty {
-                            validationMessage("Image cannot be empty")
-                        }
+                        HStack{
+                            if showValidationMessage && draftModelData.selectedImages.isEmpty {
+                                validationMessage("Image cannot be empty")
+                            }
+                        }.frame(maxWidth: .infinity,alignment: .leading)
+                            .padding(.horizontal,20)
                     }
                     
                     Spacer().frame(height: 15)
@@ -175,7 +178,7 @@ struct AddFoodView: View {
                             .accentColor(PrimaryColor.normal)
                             .padding(.horizontal, 20)
                             .onChange(of: draftModelData.duration) { newValue in
-                                        print("Duration: \(Int(newValue))")
+                                
                            }
                     }
                     
@@ -277,7 +280,7 @@ struct AddFoodView: View {
                     )
                 }
                 .background(
-                    NavigationLink(destination: RecipeModalView(dismissToRoot: dismissToRoot, addressVM: addressVM, draftModelData: draftModelData), isActive: $navigateToNextView) {
+                    NavigationLink(destination: RecipeModalView(dismissToRoot: dismissToRoot, addressVM: addressVM, draftModelData: draftModelData, addNewFoodVM: addNewFoodVM), isActive: $navigateToNextView) {
                         EmptyView()
                     }
                 )

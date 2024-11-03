@@ -84,7 +84,7 @@ struct IngredientEntryView: View {
                         .foregroundStyle(.black.opacity(0.6))
                     Spacer().frame(width: 30)
                     
-                    TextField("0", text: Binding(
+                    TextField("", text: Binding(
                         get: { priceText },
                         set: { newValue in
                             priceText = filterPriceInput(newValue)
