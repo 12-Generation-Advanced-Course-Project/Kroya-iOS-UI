@@ -8,7 +8,7 @@ struct LoginScreenView: View {
     @State private var email: String = ""
     @State private var isEmailInvalid: Bool = false
     @State private var showingCredits = false
-    
+    @Environment(\.locale) var local
     @StateObject private var countdownTimer = CountdownTimer()
     @Binding var lang:String
     @StateObject private var authVM: AuthViewModel
@@ -33,9 +33,16 @@ struct LoginScreenView: View {
                                 Button(action:{
                                     showingCredits = true
                                 }){
-                                    Image("English")
-                                        .padding()
+                                    if local.identifier == "km-KH" {
+                                        Image("Khmer")
+                                    }else if local.identifier == "en"{
+                                        Image("English")
+                                    }
+                                    else{
+                                        Image("Korean")
+                                    }
                                 }
+                                .padding()
                                 .sheet(isPresented: $showingCredits) {
                                     ChangeLanguageView(lang: $lang)
                                 }
