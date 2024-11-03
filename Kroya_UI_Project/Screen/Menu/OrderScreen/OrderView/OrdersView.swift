@@ -101,6 +101,7 @@ struct OrdersView: View {
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         }
+        .searchable(text: $searchText)
         .navigationBarHidden(true)
         .onChange(of: locale) { _ in
             // Trigger view update when language changes
