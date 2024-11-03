@@ -82,7 +82,6 @@ extension Font {
 //    }
 //}
 
-
 //MARK: Using CGFloat For Responsive Screen
 extension CGFloat {
     static var screenWidth: Double {
@@ -216,35 +215,122 @@ struct NavigationControllerWrapper<Content: View>: UIViewControllerRepresentable
         }
     }
 }
-////MARK: Alert Saving Food Draft
-//struct AlertControllerWrapper: UIViewControllerRepresentable {
-//    let draftModel: DraftModel
-//    let dismiss: () -> Void
-//    
-//    func makeUIViewController(context: Context) -> UIViewController {
-//        return UIViewController() // Placeholder view controller for presenting the alert
-//    }
-//
-//    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-//        guard uiViewController.presentedViewController == nil else { return }
-//        
-//        let alert = UIAlertController(title: "Save this as a draft?",
-//                                      message: "If you choose to discard, your data will be lost.",
-//                                      preferredStyle: .alert)
-//        
-//        alert.addAction(UIAlertAction(title: "Save Draft", style: .default) { _ in
-//            // Save data and dismiss
-//            dismiss()
-//        })
-//        
-//        alert.addAction(UIAlertAction(title: "Discard Post", style: .destructive) { _ in
-//            draftModel.clearDraft() // Clear the draft
-//            dismiss()
-//        })
-//        
-//        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-//        
-//        uiViewController.present(alert, animated: true, completion: nil)
-//    }
-//}
-//
+//MARK: Alert Saving Food Draft
+struct AlertControllerWrapper: UIViewControllerRepresentable {
+    let draftModel: DraftModel
+    let dismiss: () -> Void
+    
+    func makeUIViewController(context: Context) -> UIViewController {
+        return UIViewController() // Placeholder view controller for presenting the alert
+    }
+
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        guard uiViewController.presentedViewController == nil else { return }
+        
+        let alert = UIAlertController(title: "Save this as a draft?",
+                                      message: "If you choose to discard, your data will be lost.",
+                                      preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Save Draft", style: .default) { _ in
+            // Save data and dismiss
+            dismiss()
+        })
+        
+        alert.addAction(UIAlertAction(title: "Discard Post", style: .destructive) { _ in
+            draftModel.clearDraft() // Clear the draft
+            dismiss()
+        })
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        uiViewController.present(alert, animated: true, completion: nil)
+    }
+}
+
+//Change fonts base on Language
+
+struct CustomFontLocalization: ViewModifier {
+    var size: CGFloat
+    @Environment(\.locale) var local
+    
+    func body(content: Content) -> some View {
+        content
+            .font(.custom(local.identifier == "km" ? "KantumruyPro-Regular" : local.identifier == "en" ? "Inter-Regular" : "NotoSansKR-Regular", size: size))
+    }
+}
+
+struct CustomFontMediumLocalization: ViewModifier {
+    var size: CGFloat
+    @Environment(\.locale) var local
+    func body(content: Content) -> some View {
+        content
+            .font(.custom(local.identifier == "km" ? "KantumruyPro-Medium" : local.identifier == "en" ? "Inter-Medium" : "NotoSansKR-Medium", size: size))
+    }
+}
+
+struct CustomFontSemiblodLocalization: ViewModifier {
+    var size: CGFloat
+    @Environment(\.locale) var local
+    func body(content: Content) -> some View {
+        content
+            .font(.custom(local.identifier == "km" ? "KantumruyPro-SemiBold" : local.identifier == "en" ? "Inter-Medium" : "NotoSansKR-SemiBold", size: size))
+    }
+}
+
+struct CustomFontBoldLocalization: ViewModifier {
+    var size: CGFloat
+    @Environment(\.locale) var local
+    func body(content: Content) -> some View {
+        content
+            .font(.custom(local.identifier == "km-KH" ? "KantumruyPro-Bold" : local.identifier == "en" ? "Inter-Bold" : "NotoSansKR-Bold", size: size))
+    }
+}
+
+struct CustomFontModifier: ViewModifier {
+    var size: CGFloat
+    func body(content: Content) -> some View {
+        content
+            .font(.custom("Inter-Regular", size: size))
+    }
+}
+
+struct CustomFontMediumModifier: ViewModifier {
+    var size: CGFloat
+    func body(content: Content) -> some View {
+        content
+            .font(.custom("Inter-Medium", size: size))
+    }
+}
+
+struct CustomFontBoldModifier: ViewModifier {
+    var size: CGFloat
+    func body(content: Content) -> some View {
+        content
+            .font(.custom("Inter-Black", size: size))
+    }
+}
+
+extension View {
+    func customFont(size: CGFloat) -> some View {
+        self.modifier(CustomFontModifier(size: size))
+    }
+    func customFontMedium(size: CGFloat) -> some View {
+        self.modifier(CustomFontMediumModifier(size: size))
+    }
+    func customFontBold(size: CGFloat) -> some View {
+        self.modifier(CustomFontBoldModifier(size: size))
+    }
+    func customFontLocalize(size: CGFloat) -> some View {
+        self.modifier(CustomFontLocalization(size: size))
+    }
+    func customFontMediumLocalize(size: CGFloat) -> some View {
+        self.modifier(CustomFontMediumLocalization(size: size))
+    }
+    func customFontSemiBoldLocalize(size: CGFloat) -> some View {
+        self.modifier(CustomFontSemiblodLocalization(size: size))
+    }
+    func customFontBoldLocalize(size: CGFloat) -> some View {
+        self.modifier(CustomFontBoldLocalization(size: size))
+    }
+    
+}

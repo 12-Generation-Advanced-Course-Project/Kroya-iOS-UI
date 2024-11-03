@@ -14,5 +14,5 @@ struct DeliveryInfo: Identifiable {
     let address: String
     let recipient: String
     let phoneNumber: String
-    let remarks: String?
+    var remarks: String?
 }

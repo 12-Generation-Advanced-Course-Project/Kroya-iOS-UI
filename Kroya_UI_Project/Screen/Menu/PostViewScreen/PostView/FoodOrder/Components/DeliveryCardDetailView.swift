@@ -13,8 +13,8 @@ struct DeliveryCardDetailView: View {
                 Text("Delivery to")
                     .font(.customfont(.semibold, fontSize: 16))
                 Spacer()
-//                AddressView()
-  
+                //                AddressView()
+                
                 Button(action: {
                     // Action for cash payment
                 }) {
@@ -24,7 +24,7 @@ struct DeliveryCardDetailView: View {
                 }
                 .buttonStyle(PlainButtonStyle()) // Remove default button style
                 
-              
+                
                 
             }
             .padding(.horizontal)
@@ -64,14 +64,17 @@ struct DeliveryCardDetailView: View {
             
             // Remarks and notes
             HStack {
-                HStack {
+                HStack(spacing: 50){
                     Text("Remarks")
                         .font(.customfont(.medium, fontSize: 16))
-                    Spacer()
-                    Text(viewModel.deliveryInfo.remarks ?? "Notes (optional)")
-                        .font(.customfont(.medium, fontSize: 16))
-                        .foregroundColor(viewModel.deliveryInfo.remarks == nil ? .gray : .primary)
-                    Spacer()
+                    // Replace Text with TextField
+                    TextField("Notes (optional)",
+                              text: Binding(
+                                get: { viewModel.deliveryInfo.remarks ?? "" },
+                                set: { viewModel.deliveryInfo.remarks = $0.isEmpty ? nil : $0 }
+                              ))
+                    .font(.customfont(.medium, fontSize: 16))
+                    .foregroundColor(viewModel.deliveryInfo.remarks == nil ? .gray : .primary)
                 }
                 .padding(.horizontal)
             }
