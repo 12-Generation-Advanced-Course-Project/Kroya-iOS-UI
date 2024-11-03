@@ -134,5 +134,48 @@ struct PostViewScreen: View {
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
         }
+            }
+            
+            
+            .padding(.top, 5)
+            // TabView for content
+            TabView(selection: $selectedSegment) {
+                FoodSaleView(iselected: selectedSegment)
+                    .tag(0)
+                FoodOnSaleView(iselected: selectedSegment)
+                    .tag(1)
+                RecipeView(iselected: selectedSegment)
+                    .tag(2)
+            }
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+        }
+    }
+    
+    
+    //// Calculate the underline width dynamically based on the text width
+    private func underlineWidth(for selectedSegment: Int, in geometry: GeometryProxy) -> CGFloat {
+        let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        let title = tabTitles[selectedSegment]
+        let titleWidth = title.size(withAttributes: [NSAttributedString.Key.font: font]).width
+        
+        // Add or subtract a fixed value from the calculated width
+        let widthAdjustment: CGFloat = 10 // Adjust this value to add/subtract pixels from the underline width
+        return titleWidth + widthAdjustment
+    }
+    
+    
+    
+    // Calculate the underline offset based on the cumulative width of the previous text items
+    private func underlineOffset(for selectedSegment: Int, in geometry: GeometryProxy) -> CGFloat {
+        // Calculate the width of the preceding tabs
+        let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        var offset: CGFloat = 10 // Starting padding from the leading edge
+        
+        for index in 0..<selectedSegment {
+            let titleWidth = tabTitles[index].size(withAttributes: [NSAttributedString.Key.font: font]).width
+            offset += titleWidth + 20 // Add the width of the text and the trailing padding between titles
+        }
+        
+        return offset
     }
 }

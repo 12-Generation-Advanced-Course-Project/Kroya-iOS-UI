@@ -17,108 +17,109 @@ struct CreatePasswordStatic: View {
     @Environment(\.dismiss) var dismiss
     @State private var isNavigating = false
     @Binding var lang: String
-
+    @StateObject var userStore = UserStore()
     var body: some View {
-        ZStack {
-            VStack(alignment: .leading, spacing: 20) {
-                // Custom Back Button
-                HStack {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Image(systemName: "arrow.left")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 25, height: 25)
-                            .foregroundColor(.black)
-                    }
-                    Spacer()
-                }
-                
-                // Title
-                Text("Create new password")
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                
-                // New Password and Confirm Password Fields
-                VStack(spacing: 15) {
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text("New password ") + Text("*").foregroundStyle(.red)
-                        PasswordField(
-                            iconName: "lock",
-                            placeholder: "Input your password",
-                            text: $password,
-                            isSecure: !isPasswordVisible1,
-                            frameWidth: .infinity
-                        )
+        NavigationStack{
+            ZStack {
+                VStack(alignment: .leading, spacing: 20) {
+                    // Custom Back Button
+                    HStack {
+                        Button(action: {
+                            dismiss()
+                        }) {
+                            Image(systemName: "arrow.left")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 25, height: 25)
+                                .foregroundColor(.black)
+                        }
+                        Spacer()
                     }
                     
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text("Confirm new password ") + Text("*").foregroundStyle(.red)
-                        PasswordField(
-                            iconName: "lock",
-                            placeholder: "Confirm your password",
-                            text: $confirmPassword,
-                            isSecure: !isPasswordVisible2,
-                            frameWidth: .infinity
-                        )
-                    }
+                    // Title
+                    Text("Create new password")
+                        .font(.title3)
+                        .fontWeight(.semibold)
                     
-                    // Error message display
-                    if !errorMessage.isEmpty {
-                        Text(errorMessage)
-                            .foregroundColor(.red)
-                            .font(.caption)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    } else {
-                        Text("")
-                            .foregroundColor(.red)
-                            .font(.caption)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                }
-                .padding(.horizontal, 6)
-                
-                // CREATE PASSWORD Button
-                Button(action: {
-                    if validatePassword() {
-                        // Simulate a successful password creation
-                        showPopupMessage = true
+                    // New Password and Confirm Password Fields
+                    VStack(spacing: 15) {
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("New password ") + Text("*").foregroundStyle(.red)
+                            PasswordField(
+                                iconName: "lock",
+                                placeholder: "Input your password",
+                                text: $password,
+                                isSecure: !isPasswordVisible1,
+                                frameWidth: .infinity
+                            )
+                        }
                         
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            showPopupMessage = false
-                            isNavigating = true
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Confirm new password ") + Text("*").foregroundStyle(.red)
+                            PasswordField(
+                                iconName: "lock",
+                                placeholder: "Confirm your password",
+                                text: $confirmPassword,
+                                isSecure: !isPasswordVisible2,
+                                frameWidth: .infinity
+                            )
+                        }
+                        
+                        // Error message display
+                        if !errorMessage.isEmpty {
+                            Text(errorMessage)
+                                .foregroundColor(.red)
+                                .font(.caption)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        } else {
+                            Text("")
+                                .foregroundColor(.red)
+                                .font(.caption)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
-                }) {
-                    Text("CREATE PASSWORD")
-                        .font(.customfont(.semibold, fontSize: 16))
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.yellow)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
+                    .padding(.horizontal, 6)
+                    
+                    // CREATE PASSWORD Button
+                    Button(action: {
+                        if validatePassword() {
+                            // Simulate a successful password creation
+                            showPopupMessage = true
+                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                showPopupMessage = false
+                                isNavigating = true
+                            }
+                        }
+                    }) {
+                        Text("CREATE PASSWORD")
+                            .font(.customfont(.semibold, fontSize: 16))
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.yellow)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    
+                    Spacer()
+                }
+                .padding(.horizontal, 20)
+                
+                if showPopupMessage {
+                    PopupMessage()
+                        .transition(.scale)
                 }
                 
-                Spacer()
+                NavigationLink(destination:  MainScreen(userStore: userStore, lang: $lang).navigationBarBackButtonHidden(true), isActive: $isNavigating) {
+                    EmptyView()
+                }
+                // .hidden()
+                
             }
-            .padding(.horizontal, 20)
-          
-            if showPopupMessage {
-                PopupMessage()
-                    .transition(.scale)
-            }
+            .navigationBarHidden(true)
+            // .navigationBarBackButtonHidden(true)
             
-            NavigationLink(destination: HomeView().navigationBarBackButtonHidden(true), isActive: $isNavigating) {
-                EmptyView()
-            }
-            .hidden()
-
-        }
-        .navigationBarHidden(true)
-       // .navigationBarBackButtonHidden(true)
-      
-    }
+        }}
     
     // Password validation logic
     func validatePassword() -> Bool {
