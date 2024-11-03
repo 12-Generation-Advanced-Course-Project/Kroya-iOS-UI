@@ -22,7 +22,7 @@ struct AddFoodView: View {
     
     @ObservedObject var addressVM: AddressViewModel
     @ObservedObject var draftModelData: DraftModelData
-    
+    @ObservedObject var addNewFoodVM: AddNewFoodVM
     var body: some View {
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
@@ -277,7 +277,7 @@ struct AddFoodView: View {
                     )
                 }
                 .background(
-                    NavigationLink(destination: RecipeModalView(dismissToRoot: dismissToRoot, addressVM: addressVM, draftModelData: draftModelData), isActive: $navigateToNextView) {
+                    NavigationLink(destination: RecipeModalView(dismissToRoot: dismissToRoot, addressVM: addressVM, draftModelData: draftModelData, addNewFoodVM: addNewFoodVM), isActive: $navigateToNextView) {
                         EmptyView()
                     }
                 )

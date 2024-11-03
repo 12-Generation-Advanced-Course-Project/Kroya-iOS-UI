@@ -20,8 +20,8 @@ struct AddNewFoodModel: Codable {
     var cookingSteps: [CookingStep]
     var saleIngredients: SaleIngredient?
     var isForSale: Bool {
-           return saleIngredients != nil
-       }
+        return saleIngredients != nil
+    }
 }
 
 // MARK: - Photo
@@ -54,4 +54,35 @@ struct SaleIngredient: Identifiable, Codable {
     var selectedCurrency: Int
 }
 
+enum cuisine: String {
+    case Soup = "Soup"
+    case Salad = "Salad"
+    case Desert = "Desert"
+    case Grill = "Grill"
+    
+    var id: Int {
+        switch self {
+        case .Soup: return 1
+        case .Salad: return 2
+        case .Desert: return 3
+        case .Grill: return 4
+        }
+    }
+}
+
+enum category: String {
+    case Breakfast = "Breakfast"
+    case Lunch = "Lunch"
+    case Dinner = "Dinner"
+    case snack = "Snack"
+    
+    var id: Int {
+        switch self {
+        case .Breakfast: return 1
+        case .Lunch: return 2
+        case .Dinner: return 3
+        case .snack: return 4
+        }
+    }
+}
 

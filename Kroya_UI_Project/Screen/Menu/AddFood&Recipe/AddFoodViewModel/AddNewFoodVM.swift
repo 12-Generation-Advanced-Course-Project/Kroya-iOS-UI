@@ -10,44 +10,72 @@ import SwiftUI
 class AddNewFoodVM: ObservableObject {
     @Published var allNewFoodAndRecipes: [AddNewFoodModel] = []
     @Published var selectedFoodOrRecipe: AddNewFoodModel?
-
-    // MARK: - Add New Recipe/Food
-    func addNewRecipeFood(_ newFood: AddNewFoodModel) {
+    
+    // MARK: - Add New Recipe/Food from Draft
+    func addNewRecipeFood(from draftData: DraftModelData) {
+        let cuisineId = cuisine(rawValue: draftData.selectedCuisine ?? "")?.id ?? 0
+        let categoryId = category(rawValue: draftData.selectedCategory ?? "")?.id ?? 0
+        let newFood = AddNewFoodModel(
+            photos: draftData.selectedImages.map { image in
+                Photo(photo: "\(UUID().uuidString).jpg")
+            },
+            name: draftData.foodName,
+            description: draftData.descriptionText,
+            durationInMinutes: Int(draftData.duration),
+            level: draftData.selectedLevel ?? "",
+            cuisineId:cuisineId,
+            categoryId: categoryId,
+            ingredients: draftData.ingredients,
+            cookingSteps: draftData.cookingSteps,
+            saleIngredients: draftData.isForSale ? SaleIngredient(
+                cookDate: draftData.cookDate.description,
+                amount: draftData.amount,
+                price: draftData.price,
+                location: draftData.location,
+                selectedCurrency: 0
+            ) : nil
+        )
+        
+        // Add new food or recipe to the list
         allNewFoodAndRecipes.append(newFood)
+        
+        // Print the data to verify it's being saved correctly
+        print("New Recipe/Food added from draft:")
+        print("Name: \(newFood.name)")
+        print("Description: \(newFood.description)")
+        print("Duration: \(newFood.durationInMinutes) minutes")
+        print("Level: \(newFood.level)")
+        print("Cuisine ID: \(newFood.cuisineId)")
+        print("Category ID: \(newFood.categoryId)")
+        print("Ingredients:")
+        for ingredient in newFood.ingredients {
+            print("  - Name: \(ingredient.name), Quantity: \(ingredient.quantity), Price: \(ingredient.price), Currency: \(ingredient.selectedCurrency)")
+        }
+        print("Cooking Steps:")
+        for step in newFood.cookingSteps {
+            print("  - Step: \(step.description)")
+        }
+        
+        if let saleInfo = newFood.saleIngredients {
+            print("Sale Information:")
+            print("  - Cook Date: \(saleInfo.cookDate)")
+            print("  - Amount: \(saleInfo.amount)")
+            print("  - Price: \(saleInfo.price)")
+            print("  - Location: \(saleInfo.location)")
+            print("  - Selected Currency: \(saleInfo.selectedCurrency)")
+        } else {
+            print("This item is not for sale.")
+        }
+        print("Images:")
+        for (index, image) in draftData.selectedImages.enumerated() {
+            let imageName = "\(UUID().uuidString).jpg"  // Generate a unique name for each image
+            if let imageData = image.jpegData(compressionQuality: 0.8) {
+                print("  - Image \(index + 1): name = \(imageName), size = \(imageData.count) bytes")
+            }
+        }
     }
 
-//    // MARK: - Get All Recipes and Foods
-//    func getAllRecipeFoods() {
-//        // Example static data, can be replaced with API data later
-//        let recipe = AddNewFoodModel(
-//            photos: ["examplePhoto.jpg"],
-//            name: "Classic Pizza",
-//            description: "A delicious classic pizza with mozzarella and tomato sauce",
-//            durationInMinutes: 30,
-//            level: "Easy",
-//            cuisineId: 1,
-//            categoryId: 2,
-//            ingredients: [Ingredient(name: "Mozzarella", quantity: 100, price: 2)],
-//            cookingSteps: [CookingStep(description: "Preheat oven to 220°C.")]
-//        )
-//        allNewFoodAndRecipes.append(recipe)
-//        
-//        // For Sale Item
-//        let foodForSale = AddNewFoodModel(
-//            photos: ["examplePhotoForSale.jpg"],
-//            name: "Spicy Burger",
-//            description: "Juicy burger with spicy sauce",
-//            durationInMinutes: 20,
-//            level: "Medium",
-//            cuisineId: 1,
-//            categoryId: 3,
-//            ingredients: [Ingredient(name: "Beef Patty", quantity: 1, price: 5)],
-//            cookingSteps: [CookingStep(description: "Grill the patty for 5 minutes on each side.")],
-//            saleInfo: SaleInfo(dateCooking: "2024-11-03T05:52:32.330Z", amount: 10, price: 8, location: "New York")
-//        )
-//        allNewFoodAndRecipes.append(foodForSale)
-//    }
-
+    
     // MARK: - Fetch Specific Recipe/Food based on For Sale status
     func fetchRecipeOrFood(forSaleOnly: Bool) -> [AddNewFoodModel] {
         return allNewFoodAndRecipes.filter { $0.isForSale == forSaleOnly }

@@ -19,6 +19,7 @@ struct SaleModalView: View {
     @State private var formattedDate: String = ""
     private let conversionRate: Double = 4100.0
     @State private var priceText: String = ""
+    @ObservedObject var addNewFoodVM: AddNewFoodVM
     var body: some View {
         VStack {
             ScrollView(.vertical, showsIndicators: false) {
@@ -263,6 +264,7 @@ struct SaleModalView: View {
                 validateFields()
                 if !showError {
                     draftModelData.saveDraft(in: modelContext) // Save data
+                    addNewFoodVM.addNewRecipeFood(from: draftModelData)  // Add the new recipe or food to AddNewFoodVM
                     draftModelData.clearDraft(from: modelContext) // Clear data after save
                     dismissToRoot()
                 }

@@ -10,6 +10,7 @@ struct MainScreen: View {
     @StateObject private var addressViewModel: AddressViewModel
     @StateObject private var profileVM: ProfileViewModel
     @StateObject private var draftModelData: DraftModelData
+    @StateObject private var addNewFoodVM: AddNewFoodVM
     @Environment(\.modelContext) var modelContext
     @Binding var lang: String
     init(userStore: UserStore, lang: Binding<String>) {
@@ -17,6 +18,7 @@ struct MainScreen: View {
         _addressViewModel = StateObject(wrappedValue: AddressViewModel(userStore: userStore))
         _profileVM = StateObject(wrappedValue: ProfileViewModel(userStore: userStore))
         _draftModelData = StateObject(wrappedValue: DraftModelData(userStore: userStore))
+        _addNewFoodVM = StateObject(wrappedValue: AddNewFoodVM())
         self._lang = lang
     }
     
@@ -141,7 +143,7 @@ struct MainScreen: View {
                 rootIsActive1: $isActive,
                 dismissToRoot: { isModalPresented = false },
                 addressVM: addressViewModel,
-                draftModelData: draftModelData
+                draftModelData: draftModelData, addNewFoodVM: addNewFoodVM
             )
             .environment(\.modelContext, modelContext)
         }

@@ -13,7 +13,8 @@ struct RecipeModalView: View {
     @ObservedObject var draftModelData: DraftModelData
     @Environment(\.modelContext) var modelContext
     @State var showDraftAlert: Bool = false
-    
+    @ObservedObject var addNewFoodVM: AddNewFoodVM // Injected ViewModel
+
     var body: some View {
         VStack {
             ScrollView(.vertical, showsIndicators: false) {
@@ -164,7 +165,7 @@ struct RecipeModalView: View {
                         totalRiels: calculateTotal(ingredients: draftModelData.ingredients).totalRiels,
                         totalUSD: calculateTotal(ingredients: draftModelData.ingredients).totalUSD,
                         addressStore: addressVM,
-                        draftModelData: draftModelData
+                        draftModelData: draftModelData, addNewFoodVM: addNewFoodVM
                     )
                     .environment(\.modelContext, modelContext),
                     isActive: $navigateToNextView
@@ -195,7 +196,7 @@ struct RecipeModalView: View {
                         totalRiels: calculateTotal(ingredients: draftModelData.ingredients).totalRiels,
                         totalUSD: calculateTotal(ingredients: draftModelData.ingredients).totalUSD,
                         addressStore: addressVM,
-                        draftModelData: draftModelData
+                        draftModelData: draftModelData, addNewFoodVM: addNewFoodVM
                     )
                 ) {
                     Text("Skip")
