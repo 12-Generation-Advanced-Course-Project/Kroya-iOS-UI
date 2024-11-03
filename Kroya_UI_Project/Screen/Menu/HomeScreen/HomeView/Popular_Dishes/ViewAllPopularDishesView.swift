@@ -7,7 +7,6 @@ struct ViewAllPopularDishesView: View {
     @State private var currentPage = 0
     let images = ["slide1", "slide2", "slide3"]
     let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
-    let tabTitles = ["All", "Sale", "Recipes"]
 
     var body: some View {
         VStack(spacing: 10) {
@@ -17,7 +16,7 @@ struct ViewAllPopularDishesView: View {
                 .padding(.top, 10)
             
             // Segmented Control
-            SegmentedControlView(selectedSegment: $selectedSegment, tabTitles: tabTitles)
+            SegmentedControlView(selectedSegment: $selectedSegment)
                 .frame(height: 30)
             
             // Content for Each Tab
@@ -93,63 +92,63 @@ struct ImageSliderView: View {
                     }
                 }
             }
-//            .padding(.top, 80)
+            .padding(.top,80)
         }
     }
 }
 
+
 struct SegmentedControlView: View {
-    @Binding var selectedSegment: Int
-    let tabTitles: [String]
     
+    @Binding var selectedSegment: Int
+    let tabTitles: [String] = ["All", "Sale", "Recipes"]
+
     var body: some View {
         VStack(alignment: .leading) {
-            // HStack for the Tab Titles
-            HStack {
+            HStack(spacing: 20) {
                 ForEach(tabTitles.indices, id: \.self) { index in
-                    Text(tabTitles[index])
+                    Text(LocalizedStringKey(tabTitles[index]))
+                        .fontWeight(.semibold)
+                        .font(.system(size: 16))
+                        .foregroundColor(selectedSegment == index ? .black.opacity(0.8) : .black.opacity(0.5))
                         .onTapGesture {
                             selectedSegment = index
                         }
-                        .fontWeight(.semibold)
-                        .font(.customfont(.semibold, fontSize: 16))
-                        .foregroundColor(selectedSegment == index ? .black.opacity(0.8) : .black.opacity(0.5))
-                        .padding(.trailing, 10)
                 }
             }
-            .padding(.horizontal, 20)
+            .padding(.leading, 15)
 
-            // Geometry Reader for Underline
             GeometryReader { geometry in
-                Divider()
-                Rectangle()
-                    .fill(Color.yellow)
-                    .frame(width: underlineWidth(for: selectedSegment, in: geometry), height: 2)
-                    .offset(x: underlineOffset(for: selectedSegment, in: geometry))
-                    .animation(.easeInOut(duration: 0.3), value: selectedSegment)
+                ZStack(alignment: .leading) {
+                    Divider()
+                        .background(Color.gray.opacity(0.2)) // Full-width gray line
+
+                    Rectangle()
+                        .fill(Color.yellow)
+                        .frame(width: underlineWidth(for: selectedSegment), height: 2)
+                        .offset(x: underlineOffset(for: selectedSegment, in: geometry))
+                        .animation(.easeInOut(duration: 0.3), value: selectedSegment)
+                }
             }
             .frame(height: 2)
         }
-        .padding(.top, 10)
     }
     
-    // Calculate the underline width based on the text width
-    private func underlineWidth(for selectedSegment: Int, in geometry: GeometryProxy) -> CGFloat {
+    private func underlineWidth(for selectedSegment: Int) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         let title = tabTitles[selectedSegment]
         let titleWidth = title.size(withAttributes: [NSAttributedString.Key.font: font]).width
-        let widthAdjustment: CGFloat = 10 // Adjust this value as needed for padding
-        return titleWidth + widthAdjustment
+        let padding: CGFloat = 15 // Add a bit of padding to the underline
+        return titleWidth + padding
     }
     
-    // Calculate the underline offset based on the cumulative width of previous text items
     private func underlineOffset(for selectedSegment: Int, in geometry: GeometryProxy) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         var offset: CGFloat = 10 // Starting padding from the leading edge
-        
+
         for index in 0..<selectedSegment {
             let titleWidth = tabTitles[index].size(withAttributes: [NSAttributedString.Key.font: font]).width
-            offset += titleWidth + 20 // Adjust for spacing between titles
+            offset += titleWidth + 20 // Add spacing between titles
         }
         
         return offset

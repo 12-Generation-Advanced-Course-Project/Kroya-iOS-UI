@@ -6,13 +6,13 @@
 //
 
 import SwiftUI
-
-
-
 struct NewItemFoodOrderCardView: View {
     
-    var iselected: Int?
+//    var iselected: Int?
     @Binding  var show3dot:Bool
+    let showEllipsis: Bool
+  
+    
     @State var foodItems : [FoodItem] = [
         FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: nil, timeAgo: "10m ago"),
         FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR",status: "Reject", timeAgo: "15m ago"),
@@ -20,7 +20,7 @@ struct NewItemFoodOrderCardView: View {
         FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR",status: "Reject", timeAgo: "15m ago")
     ]
     
-    var showEllipsis: Bool
+  
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
