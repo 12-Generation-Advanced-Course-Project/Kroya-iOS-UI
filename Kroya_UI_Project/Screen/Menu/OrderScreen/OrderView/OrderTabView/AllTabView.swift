@@ -24,6 +24,7 @@ struct AllTabView: View {
                                 subImage3: "SomlorKari",
                                 subImage4: "Songvak",
                                 showOrderButton: false,
+                                showPrice: true,
                                 showButtonInvoic: true,
                                 invoiceAccept: false
                             )){
@@ -37,6 +38,7 @@ struct AllTabView: View {
                                 subImage3: "SomlorKari",
                                 subImage4: "Songvak",
                                 showOrderButton: false,
+                                showPrice: true,
                                 showButtonInvoic: true,
                                 invoiceAccept: true
                                 
@@ -61,6 +63,7 @@ struct AllTabView: View {
                                 subImage3: "SomlorKari",
                                 subImage4: "Songvak",
                                 showOrderButton: false,
+                                showPrice: true,
                                 showButtonInvoic: true,
                                 invoiceAccept: false
                             )){
@@ -74,6 +77,7 @@ struct AllTabView: View {
                                 subImage3: "SomlorKari",
                                 subImage4: "Songvak",
                                 showOrderButton: false,
+                                showPrice: true,
                                 showButtonInvoic: true,
                                 invoiceAccept: true
                             )){
@@ -97,6 +101,7 @@ struct AllTabView: View {
                                 subImage3: "SomlorKari",
                                 subImage4: "Songvak",
                                 showOrderButton: false,
+                                showPrice: true,
                                 showButtonInvoic: true,
                                 invoiceAccept: true
                             )){
@@ -110,6 +115,7 @@ struct AllTabView: View {
                                 subImage3: "SomlorKari",
                                 subImage4: "Songvak",
                                 showOrderButton: false,
+                                showPrice: true,
                                 showButtonInvoic: true,
                                 invoiceAccept: false
                             )){
@@ -123,6 +129,7 @@ struct AllTabView: View {
                                 subImage3: "SomlorKari",
                                 subImage4: "Songvak",
                                 showOrderButton: false,
+                                showPrice: true,
                                 showButtonInvoic: true,
                                 invoiceAccept: true
                             )){

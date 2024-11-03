@@ -4,8 +4,6 @@
 //
 //  Created by Ounbonaliheng on 5/10/24.
 //
-
-
 import SwiftUI
 
 struct OrderTabView: View {
@@ -27,7 +25,7 @@ struct OrderTabView: View {
                                             theMainImage: "Songvak",
                                             subImage1: "ahmok",
                                             subImage2: "brohok",
-                                            subImage3: "somlorKari",
+                                            subImage3: "SomlorKari",
                                             subImage4: "Songvak",
                                             showOrderButton: false,
                                             showButtonInvoic: true,
@@ -43,9 +41,10 @@ struct OrderTabView: View {
                                                  theMainImage: "Songvak",
                                                  subImage1: "ahmok",
                                                  subImage2: "brohok",
-                                                 subImage3: "somlorKari",
+                                                 subImage3: "SomlorKari",
                                                  subImage4: "Songvak",
                                                  showOrderButton: false,
+                                                 showPrice: true,
                                                  showButtonInvoic: true,
                                                  invoiceAccept: false
                                              )){
@@ -68,6 +67,7 @@ struct OrderTabView: View {
                                     subImage3: "SomlorKari",
                                     subImage4: "Songvak",
                                     showOrderButton: false,
+                                    showPrice: true,
                                     showButtonInvoic: true,
                                     invoiceAccept: true
                                )){
@@ -86,9 +86,10 @@ struct OrderTabView: View {
                                     theMainImage: "Songvak",
                                     subImage1: "ahmok",
                                     subImage2: "brohok",
-                                    subImage3: "somlorKari",
+                                    subImage3: "SomlorKari",
                                     subImage4: "Songvak",
                                     showOrderButton: false,
+                                    showPrice: true,
                                     showButtonInvoic: true,
                                     invoiceAccept: false
                                )){
