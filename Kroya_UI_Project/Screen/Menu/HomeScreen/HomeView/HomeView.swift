@@ -11,8 +11,7 @@ struct Category {
 struct HomeView: View {
     
     @StateObject private var foodOnSaleViewModel = FoodOnSaleViewCellViewModel()
-    @StateObject private var recipeViewModel = RecipeViewModel()
-    
+    @EnvironmentObject var addNewFoodVM: AddNewFoodVM // Use @EnvironmentObject instead of @StateObject
     let notification = [1, 2, 3, 4, 5]
     
     let categories: [Category] = [
@@ -126,24 +125,23 @@ struct HomeView: View {
                                 ) {
                                     FoodOnSaleViewCell(foodSale: foodSale)
                                         .frame(width: 360)
-                                       
                                 }
                             }
                             
-                            // Recipe Cards (Limited to 2)
-                            ForEach(recipeViewModel.recipes.prefix(2)) { recipe in
+                            // Recipe/Food Cards from AddNewFoodVM (Limited to 2)
+                            ForEach(addNewFoodVM.allNewFoodAndRecipes.prefix(2)) { recipe in
                                 NavigationLink(destination:
                                                 FoodDetailView(
-                                                    theMainImage: recipe.imageName,
-                                                    subImage1: "ahmok",
-                                                    subImage2: "brohok",
-                                                    subImage3: "SomlorKari",
-                                                    subImage4: recipe.imageName
+                                                    theMainImage: recipe.photos.first?.photo ?? "defaultImage",
+                                                    subImage1: recipe.photos.dropFirst().first?.photo ?? "defaultImage",
+                                                    subImage2: recipe.photos.dropFirst(2).first?.photo ?? "defaultImage",
+                                                    subImage3: recipe.photos.dropFirst(3).first?.photo ?? "defaultImage",
+                                                    subImage4: recipe.photos.dropFirst(4).first?.photo ?? "defaultImage",
+                                                    showOrderButton: recipe.isForSale
                                                 )
                                 ) {
                                     RecipeViewCell(recipe: recipe)
                                         .frame(width: 360)
-                                    
                                 }
                             }
                         }
@@ -190,9 +188,9 @@ struct HomeView: View {
                                         .clipShape(Circle())
                                         .overlay(
                                             Circle()
-                                                .stroke(Color.white, lineWidth: 1) // Optional white border around the badge
+                                                .stroke(Color.white, lineWidth: 1)
                                         )
-                                        .offset(x: 10, y: -10) // Position badge on top of the notification icon
+                                        .offset(x: 10, y: -10)
                                 }
                             }
                         }
@@ -201,7 +199,7 @@ struct HomeView: View {
             }
         }
         .environmentObject(foodOnSaleViewModel)
-        .environmentObject(recipeViewModel)
+        .environmentObject(addNewFoodVM)
     }
     
     @ViewBuilder
@@ -223,4 +221,5 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+        .environmentObject(AddNewFoodVM()) // Preview requires providing the environment object explicitly
 }

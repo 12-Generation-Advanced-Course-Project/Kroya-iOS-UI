@@ -6,19 +6,19 @@ struct MainScreen: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var isModalPresented: Bool = false
     @EnvironmentObject var userStore: UserStore
+    @EnvironmentObject var addNewFoodVM: AddNewFoodVM
     @StateObject private var authVM: AuthViewModel
     @StateObject private var addressViewModel: AddressViewModel
     @StateObject private var profileVM: ProfileViewModel
     @StateObject private var draftModelData: DraftModelData
-    @StateObject private var addNewFoodVM: AddNewFoodVM
     @Environment(\.modelContext) var modelContext
     @Binding var lang: String
+    
     init(userStore: UserStore, lang: Binding<String>) {
         _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
         _addressViewModel = StateObject(wrappedValue: AddressViewModel(userStore: userStore))
         _profileVM = StateObject(wrappedValue: ProfileViewModel(userStore: userStore))
         _draftModelData = StateObject(wrappedValue: DraftModelData(userStore: userStore))
-        _addNewFoodVM = StateObject(wrappedValue: AddNewFoodVM())
         self._lang = lang
     }
     

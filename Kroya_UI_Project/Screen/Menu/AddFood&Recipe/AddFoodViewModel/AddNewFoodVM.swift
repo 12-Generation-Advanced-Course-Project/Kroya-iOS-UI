@@ -38,7 +38,9 @@ class AddNewFoodVM: ObservableObject {
         
         // Add new food or recipe to the list
         allNewFoodAndRecipes.append(newFood)
-        
+        print("Added new recipe:", newFood)
+        print("Current recipes after adding:", allNewFoodAndRecipes)
+        objectWillChange.send()
         // Print the data to verify it's being saved correctly
         print("New Recipe/Food added from draft:")
         print("Name: \(newFood.name)")
@@ -68,16 +70,19 @@ class AddNewFoodVM: ObservableObject {
         }
         print("Images:")
         for (index, image) in draftData.selectedImages.enumerated() {
-            let imageName = "\(UUID().uuidString).jpg"  // Generate a unique name for each image
+            let imageName = "\(UUID().uuidString).jpg"
             if let imageData = image.jpegData(compressionQuality: 0.8) {
                 print("  - Image \(index + 1): name = \(imageName), size = \(imageData.count) bytes")
             }
         }
+        print("All recipes after posting:", allNewFoodAndRecipes)
     }
 
     
     // MARK: - Fetch Specific Recipe/Food based on For Sale status
-    func fetchRecipeOrFood(forSaleOnly: Bool) -> [AddNewFoodModel] {
-        return allNewFoodAndRecipes.filter { $0.isForSale == forSaleOnly }
+    func fetchRecipeOrFood(forSaleOnly: Bool) {
+        allNewFoodAndRecipes = allNewFoodAndRecipes.filter { $0.isForSale == forSaleOnly }
+        print("Fetched recipes for sale only (\(forSaleOnly)): \(allNewFoodAndRecipes)")
     }
+
 }

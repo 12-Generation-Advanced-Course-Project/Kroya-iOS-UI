@@ -22,7 +22,7 @@ struct ViewAllPopularDishesView: View {
             
             // Content for Each Tab
             TabView(selection: $selectedSegment) {
-                AllPopularTabView(isselected: selectedSegment)
+                AllPopularTabView(isSelected: selectedSegment)
                     .tag(0)
                 SaleTab(isselected: selectedSegment)
                     .tag(1)

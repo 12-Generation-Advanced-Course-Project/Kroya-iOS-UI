@@ -13,6 +13,7 @@ struct FoodSaleView: View {
     
     @StateObject private var foodOnSaleViewModel = FoodOnSaleViewCellViewModel()
     @StateObject private var recipeViewModel = RecipeViewModel()
+    @StateObject private var viewModel = AddNewFoodVM()
     var iselected: Int?
     
     var body: some View {
@@ -38,22 +39,22 @@ struct FoodSaleView: View {
                 }
                 
                 // Recipe Cards (Limited to 2)
-                ForEach(recipeViewModel.recipes.prefix(3)) { recipe in
-                    NavigationLink(destination:
-                                    FoodDetailView(
-                                        theMainImage: recipe.imageName,
-                                        subImage1: "ahmok",
-                                        subImage2: "brohok",
-                                        subImage3: "SomlorKari",
-                                        subImage4: recipe.imageName,
-                                        showPrice: true
-                                    )
-                    ) {
-                        RecipeViewCell(recipe: recipe)
-                            .padding(.horizontal, 20)
-                            .padding(.bottom,8)
-                    }
-                }
+//                ForEach(viewModel.recipes.prefix(3)) { recipe in
+//                    NavigationLink(destination:
+//                                    FoodDetailView(
+//                                        theMainImage: recipe.imageName,
+//                                        subImage1: "ahmok",
+//                                        subImage2: "brohok",
+//                                        subImage3: "SomlorKari",
+//                                        subImage4: recipe.imageName,
+//                                        showPrice: true
+//                                    )
+//                    ) {
+//                        RecipeViewCell(recipe: recipe)
+//                            .padding(.horizontal, 20)
+//                            .padding(.bottom,8)
+//                    }
+//                }
             }
             .environmentObject(foodOnSaleViewModel)
             .environmentObject(recipeViewModel)
