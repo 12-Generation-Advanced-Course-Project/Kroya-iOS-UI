@@ -100,10 +100,14 @@ struct HomeView: View {
                         NavigationLink {
                             ViewAllPopularDishesView()
                         } label: {
-                            Text(LocalizedStringKey("View all -->"))
-                                .foregroundStyle(PrimaryColor.normal)
-                                .customFontSemiBoldLocalize(size: 16)
-                                .offset(x: -10)
+                            HStack(spacing: 10){
+                                Text(LocalizedStringKey("View all"))
+                                    .foregroundStyle(PrimaryColor.normal)
+                                    .customFontSemiBoldLocalize(size: 16)
+                                Image(systemName: "arrow.right")
+                                    .foregroundStyle(PrimaryColor.normal)
+                                    .offset(y:2)
+                            }
                         }
                     }
 
