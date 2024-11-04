@@ -241,3 +241,6 @@
 "Your account have connected with Webill365 successfully" = "គណនីរបស់អ្នកបានភ្ជាប់ជាមួយ Webill365 បានជោគជ័យ";
 "This food is not found" = "មុខម្ហូបនេះមិនមានទេ";
 "Orders request" = "ស្នើការកម្មង់";
+"Image cannot be empty" = "រូបភាពមិនអាចទទេបានទេ";
+"Please enter your food name" = "សូមបញ្ជូលឈ្មោះមុខម្ហូប";
+"Please describe your food" = "សូមពិពណ៏នាអំពីមុខម្ហូបរបស់អ្នក";

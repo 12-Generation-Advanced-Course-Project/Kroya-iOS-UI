@@ -73,9 +73,16 @@ struct LoginScreenView: View {
                         })
                         
                         if isEmailInvalid {
-                            Text(LocalizedStringKey("Please enter a valid email address."))
-                                .font(.caption)
-                                .foregroundColor(.red)
+                            HStack{
+                                Image(systemName: "exclamationmark.circle")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .foregroundStyle(.red)
+                                    .frame(width: 12, height: 10)
+                                Text(LocalizedStringKey("Please enter a valid email address."))
+                                    .font(.caption)
+                                    .foregroundColor(.red)
+                            }
                         }
                     }
                     .padding()

@@ -256,3 +256,6 @@
 "Your account have connected with Webill365 successfully" = "Your account have connected with Webill365 successfully";
 "This food is not found" = "This food is not found";
 "Orders request" = "Orders request";
+"Image cannot be empty" = "Image cannot be empty";
+"Please enter your food name" = "Please enter your food name";
+"Please describe your food" = "Please describe your food";
