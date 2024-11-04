@@ -13,23 +13,24 @@ import SwiftData
 struct Kroya_UI_ProjectApp: App {
     @UIApplicationDelegateAdaptor var appdelegate: AppDelegateForLocalNotification
     @StateObject var userStore = UserStore()
-    @StateObject var addNewFood = AddNewFoodVM()
+    @StateObject var addNewFoodVM = AddNewFoodVM()
     @StateObject var addressViewModel = AddressViewModel(userStore: UserStore())
-    @State private var isSplashScreenActive = true // State to control SplashScreen display
+    @State private var isSplashScreenActive = true
     @State var lang: String = UserDefaults.standard.string(forKey: "AppLanguage") ?? "en"
     let modelContainer: ModelContainer
+
     init() {
         GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
-        // Initialize the modelContainer with the Draft model for persistence
-        modelContainer = try! ModelContainer(for: Draft.self) // Draft model should be in SwiftData
+        modelContainer = try! ModelContainer(for: Draft.self) // Initialize model container for persistence
     }
     
     var body: some Scene {
         WindowGroup {
-            
-      
             if isSplashScreenActive {
                 SplashScreen(isSplashScreenActive: $isSplashScreenActive, lang: $lang)
+                    .environmentObject(userStore)
+                    .environmentObject(addNewFoodVM)
+                    .environmentObject(addressViewModel)
             } else {
                 Group {
                     if Auth.shared.loggedIn {
@@ -40,7 +41,7 @@ struct Kroya_UI_ProjectApp: App {
                                 .environmentObject(addressViewModel)
                                 .environment(\.locale, .init(identifier: lang))
                                 .environment(\.modelContext, modelContainer.mainContext)
-                                .environmentObject(addNewFood)
+                                .environmentObject(addNewFoodVM)
                                 .onAppear {
                                     UNUserNotificationCenter.current().delegate = appdelegate
                                 }
@@ -53,6 +54,7 @@ struct Kroya_UI_ProjectApp: App {
                                 .environmentObject(addressViewModel)
                                 .environment(\.locale, .init(identifier: lang))
                                 .environment(\.modelContext, modelContainer.mainContext)
+                                .environmentObject(addNewFoodVM)
                         }
                     }
                 }

@@ -2,10 +2,12 @@
 
 import SwiftUI
 import Kingfisher
+
 struct RecipeViewCell: View {
     var recipe: AddNewFoodModel
     @State private var isFavorite: Bool
     var urlImagePrefix: String = "https://kroya-api.up.railway.app/api/v1/fileView/"
+    
     init(recipe: AddNewFoodModel, isFavorite: Bool = false) {
         self.recipe = recipe
         _isFavorite = State(initialValue: isFavorite)
@@ -14,48 +16,40 @@ struct RecipeViewCell: View {
     var body: some View {
         VStack {
             ZStack(alignment: .topLeading) {
-                // Display the first photo or a placeholder
-//                if let firstImageName = recipe.photos.first?.photo {
-//                    let imageUrl = URL(string: "https://kroya-api.up.railway.app/api/v1/fileView/\(firstImageName)")
-//                    KFImage(imageUrl)
-//                        .resizable()
-//                        .scaledToFill()
-//                        .frame(height: 160)
-//                        .cornerRadius(15, corners: [.topLeft, .topRight])
-//                        .clipped()
-//                } else {
-//
-//                }
-                Image(.mixue)
+                // Display recipe image
+                Image(.chineseHotpot)
                     .resizable()
                     .scaledToFill()
                     .frame(height: 160)
                     .cornerRadius(15, corners: [.topLeft, .topRight])
                     .clipped()
-                // Display rating and favorite button
+                
+                // Rating and Favorite Button
                 HStack {
+                    // Rating Section
                     HStack(spacing: 3) {
                         Image(systemName: "star.fill")
                             .resizable()
                             .scaledToFill()
-                            .frame(width: 12, height: 12)
+                            .frame(width: 14, height: 14)
                             .foregroundColor(.yellow)
                         
-                        Text(String(format: "%.1f", recipe.rating ?? 4.5))
-                            .font(.customfont(.medium, fontSize: 11))
+                        Text(String(format: "%.1f", recipe.rating ?? 0))
+                            .font(.customfont(.medium, fontSize: 12))
                             .foregroundColor(.black)
                         
-                        Text("(\(recipe.reviewCount ?? 100)+)")
-                            .font(.system(size: 14))
+                        Text("(\(recipe.reviewCount ?? 0)+)")
+                            .font(.system(size: 12))
                             .foregroundColor(.gray)
                     }
-                    .padding(3)
+                    .padding(5)
                     .background(Color.white.opacity(0.8))
                     .cornerRadius(10)
-                    .shadow(color: PrimaryColor.normal.opacity(0.25), radius: 5, y: 4)
+                    .shadow(color: Color.black.opacity(0.15), radius: 5, y: 4)
                     
                     Spacer()
                     
+                    // Favorite Button
                     Button(action: {
                         isFavorite.toggle()
                     }) {
@@ -70,32 +64,35 @@ struct RecipeViewCell: View {
                     }
                 }
                 .padding(.top, 20)
-                .padding(.leading, 10)
-                .padding(.trailing, 10)
+                .padding(.horizontal, 10)
             }
             .frame(height: 140)
             
-            // Display details (e.g., name, level, duration, and optional sale information)
             VStack(alignment: .leading, spacing: 5) {
+                // Dish Name
                 Text(recipe.name)
                     .font(.customfont(.medium, fontSize: 14))
                     .foregroundColor(.black)
+                
+                // Description for Recipe
+                Text(recipe.description)
+                    .font(.customfont(.light, fontSize: 10))
+                    .foregroundColor(.gray)
+                    .lineLimit(2)
+                
                 HStack {
-                    // Display description if item is a recipe
-                    Text(recipe.description)
-                        .font(.customfont(.light, fontSize: 9))
-                        .foregroundColor(.gray)
-                        .lineLimit(2) // Limit lines for a cleaner look
-                }
-                // Show level and duration
-                HStack(spacing: 10) {
-                    Text(recipe.level)
-                        .font(.customfont(.medium, fontSize: 14))
-                        .foregroundColor(.yellow)
+                    // Status Type: "Recipe" label if not for sale
+                    if !recipe.isForSale {
+                        Text("Recipe")
+                            .font(.customfont(.medium, fontSize: 12))
+                            .foregroundColor(.yellow)
+                    }
                     
-                    Text(recipe.durationInMinutes > 0 ? "\(recipe.durationInMinutes) min" : "N/A")
+                    // Difficulty Level
+                    Text(recipe.level)
                         .font(.customfont(.light, fontSize: 12))
                         .foregroundColor(.gray)
+                    
                     Spacer()
                 }
             }
@@ -107,24 +104,7 @@ struct RecipeViewCell: View {
         .shadow(color: Color.gray.opacity(0.2), radius: 5, x: 0, y: 4)
         .overlay {
             RoundedRectangle(cornerRadius: 15)
-                .stroke(Color(hex: "#E6E6E6"), lineWidth: 0.5)
+                .stroke(Color(hex: "#E6E6E6"), lineWidth: 0.8)
         }
     }
-    // Helper to get the path to the app's Documents directory
-    private func getDocumentsDirectory() -> URL {
-        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-    }
-    
-    func saveImageToDocumentsDirectory(image: UIImage, fileName: String) {
-        if let data = image.jpegData(compressionQuality: 1.0) {
-            let url = getDocumentsDirectory().appendingPathComponent(fileName)
-            do {
-                try data.write(to: url)
-                print("Image saved to \(url.path)")
-            } catch {
-                print("Failed to save image: \(error)")
-            }
-        }
-    }
-
 }

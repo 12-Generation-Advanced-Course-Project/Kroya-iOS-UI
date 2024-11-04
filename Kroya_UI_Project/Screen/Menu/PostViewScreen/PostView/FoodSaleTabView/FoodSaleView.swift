@@ -17,55 +17,35 @@ struct FoodSaleView: View {
     var iselected: Int?
     
     var body: some View {
-        
-        VStack{
-            ScrollView(showsIndicators: false){
-                // Food on Sale Cards (Limited to 2)
-                ForEach(foodOnSaleViewModel.foodOnSaleItems.prefix(3)) { foodSale in
+        VStack {
+            ScrollView(showsIndicators: false) {
+                // Food on Sale Cards
+                ForEach(viewModel.allNewFoodAndRecipes.filter { $0.isForSale }.prefix(3)) { foodSale in
                     NavigationLink(destination:
                                     FoodDetailView(
-                                        theMainImage: foodSale.imageName,
-                                        subImage1: "ahmok",
-                                        subImage2: "brohok",
-                                        subImage3: "SomlorKari",
-                                        subImage4: foodSale.imageName,
-                                        showPrice: true
-                                    )
-                    ) {
+                                        theMainImage:"Hotpot",
+                                        subImage1:  "Chinese Hotpot",
+                                        subImage2:  "Chinese",
+                                        subImage3:  "Fly-By-Jing",
+                                        subImage4:  "Mixue",
+                                        showOrderButton: true
+                                    )) {
                         FoodOnSaleViewCell(foodSale: foodSale)
                             .padding(.horizontal, 20)
-                            .padding(.bottom,8)
+                            .padding(.bottom, 8)
                     }
                 }
-                
-                // Recipe Cards (Limited to 2)
-//                ForEach(viewModel.recipes.prefix(3)) { recipe in
-//                    NavigationLink(destination:
-//                                    FoodDetailView(
-//                                        theMainImage: recipe.imageName,
-//                                        subImage1: "ahmok",
-//                                        subImage2: "brohok",
-//                                        subImage3: "SomlorKari",
-//                                        subImage4: recipe.imageName,
-//                                        showPrice: true
-//                                    )
-//                    ) {
-//                        RecipeViewCell(recipe: recipe)
-//                            .padding(.horizontal, 20)
-//                            .padding(.bottom,8)
-//                    }
-//                }
             }
             .environmentObject(foodOnSaleViewModel)
             .environmentObject(recipeViewModel)
         }
-        .padding(.top,8)
+        .padding(.top, 8)
     }
 }
 
 #Preview {
     FoodSaleView()
-        .environmentObject(FoodOnSaleViewCellViewModel()) // Injecting sample environment objects for preview
+        .environmentObject(FoodOnSaleViewCellViewModel())
         .environmentObject(RecipeViewModel())
 }
 

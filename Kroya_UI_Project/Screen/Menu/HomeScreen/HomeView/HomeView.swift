@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct Category {
-    let title: String
+    let title: FoodCategory
     let image: String
     let color: Color
     let x: CGFloat
@@ -11,19 +11,19 @@ struct Category {
 struct HomeView: View {
     
     @StateObject private var foodOnSaleViewModel = FoodOnSaleViewCellViewModel()
+    @StateObject private var addNewFoodVM1 = AddNewFoodVM()
     @EnvironmentObject var addNewFoodVM: AddNewFoodVM // Use @EnvironmentObject instead of @StateObject
     let notification = [1, 2, 3, 4, 5]
     
     let categories: [Category] = [
-        Category(title: "Breakfast", image: "khmernoodle", color: Color(hex: "#F2F2F2"), x: 60, y: 18),
-        Category(title: "Lunch", image: "Somlorkoko", color: Color(hex: "#E6F4E8"), x: 60, y: 18),
-        Category(title: "Dinner", image: "DinnerPic", color: .yellow.opacity(0.2), x: 50, y: 14),
-        Category(title: "Dessert", image: "DessertPic", color: .blue.opacity(0.2), x: 50, y: 14)
+        Category(title: .breakfast, image: "khmernoodle", color: Color(hex: "#F2F2F2"), x: 60, y: 18),
+        Category(title: .lunch, image: "Somlorkoko", color: Color(hex: "#E6F4E8"), x: 60, y: 18),
+        Category(title: .dinner, image: "DinnerPic", color: .yellow.opacity(0.2), x: 50, y: 14),
+        Category(title: .dessert, image: "DessertPic", color: .blue.opacity(0.2), x: 50, y: 14)
     ]
-
     @State var isSearching: Bool = false
     @Environment(\.locale) var locale
-
+    
     var body: some View {
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
@@ -33,7 +33,7 @@ struct HomeView: View {
                         Text(LocalizedStringKey("What would you like to eat today ?"))
                             .frame(width: locale.identifier == "ko" ? 170 : locale.identifier == "km-KH" ? 120 : 250)
                             .customFontSemiBoldLocalize(size: 23)
-
+                        
                         // Recipe Order Cards
                         HStack(spacing: 16) {
                             NavigationLink(destination: FoodonOrderView()) {
@@ -49,7 +49,7 @@ struct HomeView: View {
                                     yImage: 35
                                 )
                             }
-
+                            
                             NavigationLink(destination: FoodonRecipe()) {
                                 Recipe_OrderCard(
                                     title: LocalizedStringKey("Food Recipe"),
@@ -65,20 +65,20 @@ struct HomeView: View {
                             }
                         }
                     }
-
+                    
                     Spacer().frame(height: 25)
-
+                    
                     // Category Section
                     VStack(alignment: .leading) {
                         Text(LocalizedStringKey("Category"))
                             .customFontSemiBoldLocalize(size: 16)
-
+                        
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
                                 ForEach(categories, id: \.title) { category in
                                     NavigationLink(destination: destinationView(for: category.title)) {
                                         CategoryCardView(
-                                            title: LocalizedStringKey(category.title),
+                                            title: LocalizedStringKey(category.title.rawValue),
                                             image: category.image,
                                             color: category.color,
                                             x: category.x,
@@ -89,9 +89,9 @@ struct HomeView: View {
                             }
                         }
                     }
-
+                    
                     Spacer().frame(height: 30)
-
+                    
                     // Popular Dishes Section
                     HStack {
                         Text(LocalizedStringKey("Popular Dishes"))
@@ -110,23 +110,23 @@ struct HomeView: View {
                             }
                         }
                     }
-
+                    
                     Spacer().frame(height: 20)
                     
                     // Scrollable Dishes (Show only a few cards)
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack{
                             // Food on Sale Cards (Limited to 2)
-                            ForEach(foodOnSaleViewModel.foodOnSaleItems.prefix(2)) { foodSale in
+                            ForEach(addNewFoodVM.allNewFoodAndRecipes) { foodSale in
                                 NavigationLink(destination:
                                                 FoodDetailView(
-                                                    theMainImage: foodSale.imageName,
-                                                    subImage1: "ahmok",
-                                                    subImage2: "brohok",
-                                                    subImage3: "SomlorKari",
-                                                    subImage4: foodSale.imageName,
-                                                    showPrice: true
-                                                )
+                                                   theMainImage:"Hotpot",
+                                                   subImage1:  "Chinese Hotpot",
+                                                   subImage2:  "Chinese",
+                                                   subImage3:  "Fly-By-Jing",
+                                                   subImage4:  "Mixue",
+                                                   showOrderButton: true
+                                               )
                                 ) {
                                     FoodOnSaleViewCell(foodSale: foodSale)
                                         .frame(width: 360)
@@ -134,16 +134,16 @@ struct HomeView: View {
                             }
                             
                             // Recipe/Food Cards from AddNewFoodVM (Limited to 2)
-                            ForEach(addNewFoodVM.allNewFoodAndRecipes.prefix(2)) { recipe in
+                            ForEach(addNewFoodVM.allNewFoodAndRecipes) { recipe in
                                 NavigationLink(destination:
                                                 FoodDetailView(
-                                                    theMainImage: recipe.photos.first?.photo ?? "defaultImage",
-                                                    subImage1: recipe.photos.dropFirst().first?.photo ?? "defaultImage",
-                                                    subImage2: recipe.photos.dropFirst(2).first?.photo ?? "defaultImage",
-                                                    subImage3: recipe.photos.dropFirst(3).first?.photo ?? "defaultImage",
-                                                    subImage4: recipe.photos.dropFirst(4).first?.photo ?? "defaultImage",
-                                                    showOrderButton: recipe.isForSale
-                                                )
+                                                   theMainImage:"Hotpot",
+                                                   subImage1:  "Chinese Hotpot",
+                                                   subImage2:  "Chinese",
+                                                   subImage3:  "Fly-By-Jing",
+                                                   subImage4:  "Mixue",
+                                                   showOrderButton: recipe.isForSale
+                                               )
                                 ) {
                                     RecipeViewCell(recipe: recipe)
                                         .frame(width: 360)
@@ -163,7 +163,7 @@ struct HomeView: View {
                             .frame(width: 73, height: 73)
                             .offset(x: -10)
                     }
-
+                    
                     ToolbarItem(placement: .navigationBarTrailing) {
                         NavigationLink(destination: SearchScreen()) {
                             Image("ico_search")
@@ -173,7 +173,7 @@ struct HomeView: View {
                                 .foregroundColor(.black)
                         }
                     }
-
+                    
                     ToolbarItem(placement: .navigationBarTrailing) {
                         NavigationLink(destination: Notification()) {
                             ZStack {
@@ -182,7 +182,7 @@ struct HomeView: View {
                                     .scaledToFit()
                                     .frame(width: 24, height: 24)
                                     .foregroundColor(.black)
-
+                                
                                 // Notification Badge
                                 if notification.count > 0 {
                                     Text("\(notification.count)")
@@ -208,23 +208,27 @@ struct HomeView: View {
     }
     
     @ViewBuilder
-    func destinationView(for title: String) -> some View {
+    func destinationView(for title: FoodCategory) -> some View {
         switch title {
-        case "Breakfast":
+        case .breakfast:
             BreakfastScreenView()
-        case "Lunch":
+        case .lunch:
             LunchScreenView()
-        case "Dinner":
+        case .dinner:
             DinnerScreenView()
-        case "Dessert":
+        case .dessert:
             DessertScreenView()
-        default:
-            Text("Unknown Category")
         }
     }
 }
 
 #Preview {
     HomeView()
-        .environmentObject(AddNewFoodVM()) // Preview requires providing the environment object explicitly
+        .environmentObject(AddNewFoodVM())
+}
+enum FoodCategory: String {
+    case breakfast = "Breakfast"
+    case lunch = "Lunch"
+    case dinner = "Dinner"
+    case dessert = "Dessert"
 }

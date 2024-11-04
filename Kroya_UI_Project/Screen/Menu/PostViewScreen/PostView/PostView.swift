@@ -119,9 +119,6 @@ struct PostViewScreen: View {
                         .frame(height: 2)
                     }
                 }
-                
-                
-                .padding(.top, 5)
                 // TabView for content
                 TabView(selection: $selectedSegment) {
                     FoodSaleView(iselected: selectedSegment)

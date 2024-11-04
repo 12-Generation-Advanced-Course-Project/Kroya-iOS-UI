@@ -9,21 +9,20 @@ struct FoodOnSaleView: View {
     
     // Properties
     var iselected: Int?
-    @StateObject private var viewModel = FoodOnSaleViewCellViewModel()
+    @StateObject private var addFoodVM = AddNewFoodVM()
     
     var body: some View {
         List {
-            ForEach(viewModel.foodOnSaleItems) { item in
+            ForEach(addFoodVM.allNewFoodAndRecipes.filter { $0.saleIngredients != nil }) { foodSale in
                 ZStack {
-                    FoodOnSaleViewCell(foodSale: item)
-                    
+                    FoodOnSaleViewCell(foodSale: foodSale)
                     NavigationLink(destination: FoodDetailView(
-                        theMainImage: item.imageName,
-                        subImage1: "ahmok",
-                        subImage2: "brohok",
-                        subImage3: "SomlorKari",
-                        subImage4: "Songvak",
-                        showPrice: true
+                        theMainImage: foodSale.photos.first?.photo ?? "Hotpot",
+                        subImage1: foodSale.photos.dropFirst().first?.photo ?? "Chinese Hotpot",
+                        subImage2: foodSale.photos.dropFirst(2).first?.photo ?? "Chinese",
+                        subImage3: foodSale.photos.dropFirst(3).first?.photo ?? "Fly-By-Jing",
+                        subImage4: foodSale.photos.dropFirst(4).first?.photo ?? "Mixue",
+                        showOrderButton: foodSale.isForSale
                     )) {
                         EmptyView()
                     }
@@ -38,8 +37,4 @@ struct FoodOnSaleView: View {
         .buttonStyle(PlainButtonStyle())
         .listStyle(.plain)
     }
-}
-
-#Preview {
-    FoodOnSaleView()
 }

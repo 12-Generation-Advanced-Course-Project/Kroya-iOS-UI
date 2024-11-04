@@ -11,16 +11,16 @@ struct AllPopularTabView: View {
         VStack {
             ScrollView(showsIndicators: false) {
                 // Food on Sale Cards (Limited to 3)
-                ForEach(foodOnSaleViewModel.foodOnSaleItems.prefix(3)) { foodSale in
+                ForEach(addNewFoodVM.allNewFoodAndRecipes.prefix(3)) { foodSale in
                     NavigationLink(destination:
                                     FoodDetailView(
-                                        theMainImage: foodSale.imageName,
-                                        subImage1: "ahmok",
-                                        subImage2: "brohok",
-                                        subImage3: "SomlorKari",
-                                        subImage4: foodSale.imageName,
-                                        showPrice: true
-                                    )
+                                       theMainImage:"Hotpot",
+                                       subImage1:  "Chinese Hotpot",
+                                       subImage2:  "Chinese",
+                                       subImage3:  "Fly-By-Jing",
+                                       subImage4:  "Mixue",
+                                       showOrderButton: foodSale.isForSale
+                                   )
                     ) {
                         FoodOnSaleViewCell(foodSale: foodSale)
                             .frame(width: 362)
@@ -32,13 +32,13 @@ struct AllPopularTabView: View {
                 ForEach(addNewFoodVM.allNewFoodAndRecipes) { recipe in
                     NavigationLink(destination:
                                     FoodDetailView(
-                                        theMainImage: recipe.photos.first?.photo ?? "defaultImage",
-                                        subImage1: recipe.photos.dropFirst().first?.photo ?? "defaultImage",
-                                        subImage2: recipe.photos.dropFirst(2).first?.photo ?? "defaultImage",
-                                        subImage3: recipe.photos.dropFirst(3).first?.photo ?? "defaultImage",
-                                        subImage4: recipe.photos.dropFirst(4).first?.photo ?? "defaultImage",
-                                        showOrderButton: recipe.isForSale
-                                    )
+                                       theMainImage:"Hotpot",
+                                       subImage1:  "Chinese Hotpot",
+                                       subImage2:  "Chinese",
+                                       subImage3:  "Fly-By-Jing",
+                                       subImage4:  "Mixue",
+                                       showOrderButton: recipe.isForSale
+                                   )
                     ) {
                         RecipeViewCell(recipe: recipe)
                             .frame(width: 362)
