@@ -101,6 +101,7 @@ struct OrderTabView: View {
                 .foregroundColor(.black)
             }
             .padding(.horizontal)
+            .padding(.top, 5)
             
             
         }

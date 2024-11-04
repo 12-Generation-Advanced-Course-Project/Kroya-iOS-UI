@@ -142,7 +142,7 @@ struct AllTabView: View {
                     .animation(.easeInOut(duration: 0.3), value: isExpandedLst2Day)
                 }
                 .padding(.horizontal)
-                .padding(.top, 15)
+                .padding(.top, 5)
             }
             .background(Color.clear)
             .scrollIndicators(.hidden)
