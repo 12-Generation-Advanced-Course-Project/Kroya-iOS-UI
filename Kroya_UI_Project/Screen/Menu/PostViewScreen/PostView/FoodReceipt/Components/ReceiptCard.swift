@@ -345,10 +345,11 @@ struct ReceiptCard1: View {
                         } else {
                             ReceiptRow(label: "Payer", value: viewModel.receipt.payer)
                         }
-                        
-                        Rectangle()
-                            .fill(Color(red: 0.82, green: 0.816, blue: 0.82))
-                            .frame(height: 1)
+                        if isOrderReceived{
+                            Rectangle()
+                                .fill(Color(red: 0.82, green: 0.816, blue: 0.82))
+                                .frame(height: 1)
+                        }
                         if isOrderReceived {
                             ReceiptRow(label: "Address", value: viewModel.receipt.address)
                         } else{
@@ -371,9 +372,9 @@ struct ReceiptCard1: View {
                                     .foregroundColor(.yellow)
                             }
                             .padding(.horizontal)
-//                            Rectangle()
-//                                .fill(Color(red: 0.82, green: 0.816, blue: 0.82))
-//                                .frame(height: 1)
+                            Rectangle()
+                                .fill(Color(red: 0.82, green: 0.816, blue: 0.82))
+                                .frame(height: 1)
                         }
                     }
                     .padding(.horizontal)
