@@ -35,7 +35,7 @@ struct ItemFoodOrderCard: View {
                         // Food name
                         Text(item.name)
                             .font(.customfont(.semibold, fontSize: 17))
-                        
+                            .foregroundColor(.black)
                         ZStack {
                             RoundedRectangle(cornerRadius: 8)
                                 .fill(item.status == "Accept" ? Color(hex: "#DDF6C3") : (item.status == "Reject" ? Color(hex: "#FFD8E4") : Color.clear))

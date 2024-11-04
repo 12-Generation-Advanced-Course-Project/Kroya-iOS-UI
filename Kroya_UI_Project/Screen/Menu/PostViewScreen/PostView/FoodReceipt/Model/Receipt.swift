@@ -19,4 +19,5 @@ struct Receipt: Identifiable {
     var sellerPhone: String
     var amount: String
     var paidTo: String
+    var address: String
 }

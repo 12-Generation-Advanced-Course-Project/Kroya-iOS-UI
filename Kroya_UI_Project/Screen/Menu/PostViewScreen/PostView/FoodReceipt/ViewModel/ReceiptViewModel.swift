@@ -22,7 +22,8 @@ class ReceiptViewModel: ObservableObject {
             sellerName: "Monika Souch",
             sellerPhone: "(+85512383030)",
             amount: "2.20 USD",
-            paidTo: "Paid to Monika Souch"
+            paidTo: "Paid to Monika Souch",
+            address: "HRD Center"
         )
     }
     

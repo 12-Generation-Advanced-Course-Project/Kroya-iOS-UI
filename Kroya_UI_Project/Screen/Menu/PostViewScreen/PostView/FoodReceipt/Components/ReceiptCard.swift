@@ -13,7 +13,7 @@ struct ReceiptCard: View {
     @ObservedObject var viewModel: ReceiptViewModel
     @Binding var presentPopup: Bool
     @State private var downloadSuccess: Bool = false  // State variable for download status
-   // let isOrderReceived: Bool
+    var isOrderReceived: Bool
     
     var body: some View {
         VStack {
@@ -38,27 +38,25 @@ struct ReceiptCard: View {
                                 .foregroundColor(.black)
                             
                             HStack {
-//                                if isOrderReceived{
-//                                    Image(systemName: "arrow.down.left")
-//                                        .resizable()
-//                                        .frame(width: 14, height: 14)
-//                                        .foregroundColor(.green)
-//                                    
-//                                    Text("From\(viewModel.receipt.payer)")
-//                                        .font(.system(size: 14, weight: .medium))
-//                                        .foregroundColor(.gray)
-
-                             //   } else{
-                                    Image(systemName: "arrow.up.left")
+                                if isOrderReceived {
+                                    Image(systemName: "arrow.down.left")
+                                        .resizable()
+                                        .frame(width: 14, height: 14)
+                                        .foregroundColor(.green)
+                                    
+                                    Text("From \(viewModel.receipt.payer)")
+                                        .font(.system(size: 14, weight: .medium))
+                                        .foregroundColor(.gray)
+                                } else {
+                                    Image(systemName: "arrow.up.right")
                                         .resizable()
                                         .frame(width: 14, height: 14)
                                         .foregroundColor(.red)
-                                 //   Image(systemName: "arrow.down.left")
-
+                                    
                                     Text(viewModel.receipt.paidTo)
                                         .font(.system(size: 14, weight: .medium))
                                         .foregroundColor(.gray)
-                               // }
+                                }
                             }
                         }
                         Spacer()
@@ -66,10 +64,11 @@ struct ReceiptCard: View {
                     .padding(.horizontal)
                     .padding(.leading, 20)
                     .offset(y: -7)
-                    
+        //Item
                     VStack(alignment: .leading, spacing: 18) {
                         HStack {
                             Text("Item")
+                                .opacity(0.7)
                                 .font(.system(size: 16, weight: .medium))
                             Spacer()
                             Text(viewModel.receipt.item)
@@ -81,31 +80,72 @@ struct ReceiptCard: View {
                             .font(.system(size: 16, weight: .medium))
                             .foregroundStyle(Color.black)
                         }.padding(.horizontal)
-                        ReceiptRow(label: "Reference#", value: viewModel.receipt.referenceNumber)
-                        ReceiptRow(label: "Order date", value: viewModel.receipt.orderDate)
-                        ReceiptRow(label: "Paid by", value: viewModel.receipt.paidBy)
-                        ReceiptRow(label: "Payer", value: viewModel.receipt.payer)
-                        
-                        HStack {
-                            Text("Seller")
-                                .font(.system(size: 16, weight: .medium))
-                            Spacer()
-                            VStack(alignment: .leading) {
-                                Text(viewModel.receipt.sellerName)
-                                    .font(.system(size: 16, weight: .medium))
-                                Text(viewModel.receipt.sellerPhone)
-                                    .font(.system(size: 16, weight: .medium))
-                            }
-                            Spacer()
-                            Image(systemName: "phone.fill")
-                                .resizable()
-                                .frame(width: 16, height: 16)
-                                .foregroundColor(.yellow)
-                        }
-                        .padding(.horizontal)
                         Rectangle()
                             .fill(Color(red: 0.82, green: 0.816, blue: 0.82))
                             .frame(height: 1)
+                        
+                        ReceiptRow(label: "Reference#", value: viewModel.receipt.referenceNumber)
+                        ReceiptRow(label: "Order date", value: viewModel.receipt.orderDate)
+                        ReceiptRow(label: "Paid by", value: viewModel.receipt.paidBy)
+                        
+            //Payer
+                        if isOrderReceived {
+                            HStack{
+                                Text("Payer")
+                                    .opacity(0.7)
+                                    .font(.system(size: 16, weight: .medium))
+                                Spacer()
+                                VStack(alignment: .leading) {
+                                    Text(viewModel.receipt.payer)
+                                        .font(.system(size: 16, weight: .medium))
+                                    // ReceiptRow(label: "Payer", value: viewModel.receipt.payer)
+                                    Text(viewModel.receipt.sellerPhone)
+                                        .font(.system(size: 16, weight: .medium))
+                                        .foregroundColor(.yellow)
+                                }
+                                Spacer()
+                                Image(systemName: "phone.fill")
+                                    .resizable()
+                                    .frame(width: 16, height: 16)
+                                    .foregroundColor(.yellow)
+                            } .padding(.horizontal)
+                        } else {
+                            ReceiptRow(label: "Payer", value: viewModel.receipt.payer)
+                        }
+                        
+                        if isOrderReceived{
+                            Rectangle()
+                                .fill(Color(red: 0.82, green: 0.816, blue: 0.82))
+                                .frame(height: 1)
+                        }
+                        
+                        if isOrderReceived {
+                            ReceiptRow(label: "Address", value: viewModel.receipt.address)
+                        } else{
+                            HStack {
+                                Text("Seller")
+                                    .opacity(0.7)
+                                    .font(.system(size: 16, weight: .medium))
+                                    
+                                Spacer()
+                                VStack(alignment: .leading) {
+                                    Text(viewModel.receipt.sellerName)
+                                        .font(.system(size: 16, weight: .medium))
+                                    Text(viewModel.receipt.sellerPhone)
+                                        .font(.system(size: 16, weight: .medium))
+                                }
+                                Spacer()
+                                Image(systemName: "phone.fill")
+                                    .resizable()
+                                    .frame(width: 16, height: 16)
+                                    .foregroundColor(.yellow)
+                            }
+                            .padding(.horizontal)
+                            Rectangle()
+                                .fill(Color(red: 0.82, green: 0.816, blue: 0.82))
+                                .frame(height: 1)
+                        }
+                     
                     }
                     .padding(.horizontal)
                     
@@ -134,16 +174,14 @@ struct ReceiptCard: View {
                             }
                         }
                         .buttonStyle(PlainButtonStyle())
-                        
-                        // Disable button after download is successful
+               
                         .disabled(downloadSuccess)
                     }
                     
                 }
             }
-            .frame(maxWidth: .infinity, minHeight: 550, alignment: .center)
-            
-            // Set background to clear, no color
+            .frame(maxWidth: .infinity, minHeight: 530, alignment: .center)
+          
             .background(Color.clear)
         }
     }
@@ -192,6 +230,7 @@ struct ReceiptRow: View {
     var body: some View {
         HStack(spacing: 20) {
             Text(label)
+                .opacity(0.7)
                 .frame(minWidth: 100, alignment: .leading)
             HStack {
                 Text(value)
@@ -210,11 +249,11 @@ struct ReceiptCard1: View {
     @ObservedObject var viewModel: ReceiptViewModel
     @Binding var presentPopup: Bool
     @State private var downloadSuccess: Bool = false  // State variable for download status
+    var isOrderReceived: Bool
     
     var body: some View {
         VStack {
             ZStack {
-                // Only capture this section
                 Image("receipt")
                     .resizable()
                     .frame(maxWidth: .infinity)
@@ -234,14 +273,25 @@ struct ReceiptCard1: View {
                                 .foregroundColor(.black)
                             
                             HStack {
-                                Image(systemName: "arrow.up.right")
-                                    .resizable()
-                                    .frame(width: 14, height: 14)
-                                    .foregroundColor(.red)
-                                
-                                Text(viewModel.receipt.paidTo)
-                                    .font(.system(size: 14, weight: .medium))
-                                    .foregroundColor(.gray)
+                                if isOrderReceived {
+                                    Image(systemName: "arrow.down.left")
+                                        .resizable()
+                                        .frame(width: 14, height: 14)
+                                        .foregroundColor(.green)
+                                    
+                                    Text("From \(viewModel.receipt.payer)")
+                                        .font(.system(size: 14, weight: .medium))
+                                        .foregroundColor(.gray)
+                                } else {
+                                    Image(systemName: "arrow.up.right")
+                                        .resizable()
+                                        .frame(width: 14, height: 14)
+                                        .foregroundColor(.red)
+                                    
+                                    Text(viewModel.receipt.paidTo)
+                                        .font(.system(size: 14, weight: .medium))
+                                        .foregroundColor(.gray)
+                                }
                             }
                         }
                         Spacer()
@@ -253,6 +303,7 @@ struct ReceiptCard1: View {
                     VStack(alignment: .leading, spacing: 18) {
                         HStack {
                             Text("Item")
+                                .opacity(0.7)
                                 .font(.system(size: 16, weight: .medium))
                             Spacer()
                             Text(viewModel.receipt.item)
@@ -264,31 +315,67 @@ struct ReceiptCard1: View {
                             .font(.system(size: 16, weight: .medium))
                             .foregroundStyle(Color.black)
                         }.padding(.horizontal)
-                        ReceiptRow(label: "Reference#", value: viewModel.receipt.referenceNumber)
-                        ReceiptRow(label: "Order date", value: viewModel.receipt.orderDate)
-                        ReceiptRow(label: "Paid by", value: viewModel.receipt.paidBy)
-                        ReceiptRow(label: "Payer", value: viewModel.receipt.payer)
-                        
-                        HStack {
-                            Text("Seller")
-                                .font(.system(size: 16, weight: .medium))
-                            Spacer()
-                            VStack(alignment: .leading) {
-                                Text(viewModel.receipt.sellerName)
-                                    .font(.system(size: 16, weight: .medium))
-                                Text(viewModel.receipt.sellerPhone)
-                                    .font(.system(size: 16, weight: .medium))
-                            }
-                            Spacer()
-                            Image(systemName: "phone.fill")
-                                .resizable()
-                                .frame(width: 16, height: 16)
-                                .foregroundColor(.yellow)
-                        }
-                        .padding(.horizontal)
                         Rectangle()
                             .fill(Color(red: 0.82, green: 0.816, blue: 0.82))
                             .frame(height: 1)
+                        ReceiptRow(label: "Reference#", value: viewModel.receipt.referenceNumber)
+                        ReceiptRow(label: "Order date", value: viewModel.receipt.orderDate)
+                        ReceiptRow(label: "Paid by", value: viewModel.receipt.paidBy)
+                        //Payer
+                        if isOrderReceived {
+                            HStack{
+                                Text("Payer")
+                                    .opacity(0.7)
+                                    .font(.system(size: 16, weight: .medium))
+                                Spacer()
+                                VStack(alignment: .leading) {
+                                    Text(viewModel.receipt.payer)
+                                        .font(.system(size: 16, weight: .medium))
+                                    // ReceiptRow(label: "Payer", value: viewModel.receipt.payer)
+                                    Text(viewModel.receipt.sellerPhone)
+                                        .font(.system(size: 16, weight: .medium))
+                                        .foregroundColor(.yellow)
+                                }
+                                Spacer()
+                                Image(systemName: "phone.fill")
+                                    .resizable()
+                                    .frame(width: 16, height: 16)
+                                    .foregroundColor(.yellow)
+                            } .padding(.horizontal)
+                        } else {
+                            ReceiptRow(label: "Payer", value: viewModel.receipt.payer)
+                        }
+                        if isOrderReceived{
+                            Rectangle()
+                                .fill(Color(red: 0.82, green: 0.816, blue: 0.82))
+                                .frame(height: 1)
+                        }
+                        if isOrderReceived {
+                            ReceiptRow(label: "Address", value: viewModel.receipt.address)
+                        } else{
+                            HStack {
+                                Text("Seller")
+                                    .opacity(0.7)
+                                    .font(.system(size: 16, weight: .medium))
+                                    
+                                Spacer()
+                                VStack(alignment: .leading) {
+                                    Text(viewModel.receipt.sellerName)
+                                        .font(.system(size: 16, weight: .medium))
+                                    Text(viewModel.receipt.sellerPhone)
+                                        .font(.system(size: 16, weight: .medium))
+                                }
+                                Spacer()
+                                Image(systemName: "phone.fill")
+                                    .resizable()
+                                    .frame(width: 16, height: 16)
+                                    .foregroundColor(.yellow)
+                            }
+                            .padding(.horizontal)
+                            Rectangle()
+                                .fill(Color(red: 0.82, green: 0.816, blue: 0.82))
+                                .frame(height: 1)
+                        }
                     }
                     .padding(.horizontal)
                     
@@ -298,16 +385,11 @@ struct ReceiptCard1: View {
                                 .font(.system(size: 16, weight: .bold))
                                 .foregroundColor(Color.yellow)
                         }
-                        
-                        // Disable button after download is successful
                         .disabled(downloadSuccess)
                     }
-                    
                 }
             }
             .frame(maxWidth: .infinity, minHeight: 550, alignment: .center)
-            
-            // Set background to clear, no color
             .background(Color.clear)
         }
     }

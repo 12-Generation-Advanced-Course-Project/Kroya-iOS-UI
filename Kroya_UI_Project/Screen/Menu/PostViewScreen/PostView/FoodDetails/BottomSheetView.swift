@@ -85,11 +85,11 @@ struct BottomSheetView<Content: View>: View {
                         .background(invoiceAccept ? Color(hex: "#00BD4E") : Color.red)
                         .cornerRadius(UIScreen.main.bounds.width * 0.022)
                     }
-//                    .background(
-//                        NavigationLink(destination: ReceiptView(isPresented: $isPresented), isActive: $navigateToReceipt) {
-//                            EmptyView()
-//                        }
-//                    )
+                    .background(
+                        NavigationLink(destination: ReceiptView(isPresented: $isPresented, isOrderReceived: false), isActive: $navigateToReceipt) {
+                            EmptyView()
+                        }
+                    )
                 }
                 
             }
