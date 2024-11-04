@@ -22,7 +22,9 @@ struct FoodOnSaleView: View {
                         subImage2: foodSale.photos.dropFirst(2).first?.photo ?? "Chinese",
                         subImage3: foodSale.photos.dropFirst(3).first?.photo ?? "Fly-By-Jing",
                         subImage4: foodSale.photos.dropFirst(4).first?.photo ?? "Mixue",
-                        showOrderButton: foodSale.isForSale
+                        showOrderButton: foodSale.isForSale,
+                        showPrice: foodSale.isForSale
+                        
                     )) {
                         EmptyView()
                     }
