@@ -11,8 +11,8 @@ struct FoodCheckOutView: View {
     
     // properties
     @Environment(\.dismiss) var dismiss
-    @State private var isOrdersViewActive = false
-    
+    @State private var isReceiptActive = false
+    @State private var isPresented = false
     var body: some View {
         NavigationStack {
             VStack {
@@ -63,7 +63,7 @@ struct FoodCheckOutView: View {
                 
                 
                 Button("Place an order") {
-                    self.isOrdersViewActive = true
+                    self.isReceiptActive = true
                 }
                 .font(.customfont(.semibold, fontSize: 16))
                 .frame(maxWidth: .infinity , maxHeight: 44)
@@ -72,7 +72,7 @@ struct FoodCheckOutView: View {
                 .foregroundColor(.white)
                 .cornerRadius(12)
                 
-                NavigationLink(destination: OrdersView(), isActive: $isOrdersViewActive) {
+                NavigationLink(destination: ReceiptView(isPresented: $isPresented, isOrderReceived: false), isActive: $isReceiptActive) {
                     EmptyView()
                 }
                 
