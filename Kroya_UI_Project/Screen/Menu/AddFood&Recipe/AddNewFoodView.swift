@@ -121,7 +121,7 @@ struct AddFoodView: View {
                         Text("Food Name")
                             .font(.customfont(.bold, fontSize: 16))
                         Spacer().frame(height: 15)
-                        TextField(LocalizedStringKey("Enter food name"), text: $foodName)
+                        TextField(LocalizedStringKey("Enter food name"), text: $draftModelData.foodName)
                               .padding()
                               .background(Color.white)
                               .frame(width: 0.9 * UIScreen.main.bounds.width, height: 60)
@@ -133,7 +133,7 @@ struct AddFoodView: View {
                                       .strokeBorder(Color(hex: "#D0DBEA"), lineWidth: 1)
                               )
                         // Validation message under TextField
-                        if showValidationMessage && foodName.isEmpty {
+                        if showValidationMessage && draftModelData.foodName.isEmpty {
                             validationMessage("Please enter your food name")
                         }
                     }
