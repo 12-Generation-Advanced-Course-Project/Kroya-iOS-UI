@@ -10,8 +10,7 @@ struct AllPopularTabView: View {
     var body: some View {
         VStack {
             ScrollView(showsIndicators: false) {
-                // Food on Sale Cards (Limited to 3)
-                ForEach(addNewFoodVM.allNewFoodAndRecipes.prefix(3)) { foodSale in
+                ForEach(addNewFoodVM.allNewFoodAndRecipes.filter { $0.isForSale }.prefix(3)) { foodSale in
                     NavigationLink(destination:
                                     FoodDetailView(
                                        theMainImage:"Hotpot",
@@ -19,7 +18,7 @@ struct AllPopularTabView: View {
                                        subImage2:  "Chinese",
                                        subImage3:  "Fly-By-Jing",
                                        subImage4:  "Mixue",
-                                       showOrderButton: foodSale.isForSale
+                                       showOrderButton: true
                                    )
                     ) {
                         FoodOnSaleViewCell(foodSale: foodSale)
@@ -28,8 +27,12 @@ struct AllPopularTabView: View {
                     }
                 }
                 
-                // Recipe/Food Cards (from AddNewFoodVM)
-                ForEach(addNewFoodVM.allNewFoodAndRecipes) { recipe in
+                // Recipe Cards (Filter items with isForSale = false)
+                Text("Recipes")
+                    .font(.headline)
+                    .padding(.top, 20)
+                
+                ForEach(addNewFoodVM.allNewFoodAndRecipes.filter { !$0.isForSale }) { recipe in
                     NavigationLink(destination:
                                     FoodDetailView(
                                        theMainImage:"Hotpot",
@@ -37,7 +40,7 @@ struct AllPopularTabView: View {
                                        subImage2:  "Chinese",
                                        subImage3:  "Fly-By-Jing",
                                        subImage4:  "Mixue",
-                                       showOrderButton: recipe.isForSale
+                                       showOrderButton: false
                                    )
                     ) {
                         RecipeViewCell(recipe: recipe)
