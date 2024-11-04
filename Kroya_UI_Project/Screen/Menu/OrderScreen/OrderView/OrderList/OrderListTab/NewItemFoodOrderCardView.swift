@@ -26,20 +26,21 @@ struct NewItemFoodOrderCardView: View {
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(spacing: 20) {
-                ForEach(foodItems.indices, id: \.self) { index in
-                    if foodItems[index].status != nil { // Check if status is not nil
-                        NavigationLink(destination: ReceiptView(isPresented: $isPresented)) {
-                            ItemFoodOrderCard(item: $foodItems[index], showEllipsis: showEllipsis, show3dot: $show3dot)
-                        }
-                    } else {
-                        // Display the item without navigation if status is nil
-                        ItemFoodOrderCard(item: $foodItems[index], showEllipsis: showEllipsis, show3dot: $show3dot)
-                    }
-                }
+//                ForEach(foodItems.indices, id: \.self) { index in
+//                    if foodItems[index].status != nil { // Check if status is not nil
+//                        NavigationLink(destination: ReceiptView(isPresented: $isPresented, isOrderReceived: foodItems[index].status != nil)) {
+//                            ItemFoodOrderCard(item: $foodItems[index], showEllipsis: showEllipsis, show3dot: $show3dot)
+//                        }
+//                    } else {
+//                        ItemFoodOrderCard(item: $foodItems[index], showEllipsis: showEllipsis, show3dot: $show3dot)
+//                    }
+//                }
             }
             .padding(.horizontal, 15)
         }
     }
 }
+
+
 
 

@@ -13,6 +13,7 @@ struct ReceiptCard: View {
     @ObservedObject var viewModel: ReceiptViewModel
     @Binding var presentPopup: Bool
     @State private var downloadSuccess: Bool = false  // State variable for download status
+   // let isOrderReceived: Bool
     
     var body: some View {
         VStack {
@@ -37,14 +38,27 @@ struct ReceiptCard: View {
                                 .foregroundColor(.black)
                             
                             HStack {
-                                Image(systemName: "arrow.up.right")
-                                    .resizable()
-                                    .frame(width: 14, height: 14)
-                                    .foregroundColor(.red)
-                                
-                                Text(viewModel.receipt.paidTo)
-                                    .font(.system(size: 14, weight: .medium))
-                                    .foregroundColor(.gray)
+//                                if isOrderReceived{
+//                                    Image(systemName: "arrow.down.left")
+//                                        .resizable()
+//                                        .frame(width: 14, height: 14)
+//                                        .foregroundColor(.green)
+//                                    
+//                                    Text("From\(viewModel.receipt.payer)")
+//                                        .font(.system(size: 14, weight: .medium))
+//                                        .foregroundColor(.gray)
+
+                             //   } else{
+                                    Image(systemName: "arrow.up.left")
+                                        .resizable()
+                                        .frame(width: 14, height: 14)
+                                        .foregroundColor(.red)
+                                 //   Image(systemName: "arrow.down.left")
+
+                                    Text(viewModel.receipt.paidTo)
+                                        .font(.system(size: 14, weight: .medium))
+                                        .foregroundColor(.gray)
+                               // }
                             }
                         }
                         Spacer()
