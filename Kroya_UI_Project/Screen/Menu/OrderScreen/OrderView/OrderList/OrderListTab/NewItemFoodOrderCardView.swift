@@ -11,10 +11,10 @@ import SwiftUI
 
 struct NewItemFoodOrderCardView: View {
     
-    var iselected: Int?
-    @Binding var show3dot: Bool
-    @State private var isPresented = false
-    @State var foodItems: [FoodItem] = [
+//    var iselected: Int?
+//    @Binding var show3dot: Bool
+//    @State private var isPresented = false
+//    @State var foodItems: [FoodItem] = []
 //    var iselected: Int?
     @Binding  var show3dot:Bool
     let showEllipsis: Bool
@@ -49,7 +49,7 @@ struct NewItemFoodOrderCardView: View {
             .padding(.horizontal, 15)
         }
     }
-}
+    
 
 
 
