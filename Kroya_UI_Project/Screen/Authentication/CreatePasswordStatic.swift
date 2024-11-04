@@ -113,11 +113,11 @@ struct CreatePasswordStatic: View {
                 NavigationLink(destination:  MainScreen(userStore: userStore, lang: $lang).navigationBarBackButtonHidden(true), isActive: $isNavigating) {
                     EmptyView()
                 }
-                // .hidden()
+
                 
             }
             .navigationBarHidden(true)
-            // .navigationBarBackButtonHidden(true)
+    
             
         }}
     
