@@ -48,7 +48,6 @@ struct SaleModalView: View {
                             
                             Button(action: {
                                 draftModelData.isForSale = false
-                                isAvailableForSale = false
                             }) {
                                 Text("No")
                                     .font(.customfont(.semibold, fontSize: 16))
@@ -178,7 +177,7 @@ struct SaleModalView: View {
                                             ingret.price = ingret.price * conversionRate
                                         }
                                     }
-
+                                    
                                 }
                                 .padding(.horizontal)
                                 
@@ -261,11 +260,23 @@ struct SaleModalView: View {
             }
             
             Button(action: {
-                validateFields()
-                if !showError {
-                    draftModelData.saveDraft(in: modelContext) // Save data
-                    addNewFoodVM.addNewRecipeFood(from: draftModelData)  // Add the new recipe or food to AddNewFoodVM
-                    draftModelData.clearDraft(from: modelContext) // Clear data after save
+                // If the item is marked as for sale, validate sale-specific fields
+                if draftModelData.isForSale {
+                    validateFields()
+                    if !showError {
+                        // All required sale fields are valid, proceed with saving and clearing
+                        draftModelData.saveDraft(in: modelContext)
+                        addNewFoodVM.addNewRecipeFood(from: draftModelData)
+                        print("Current recipes after adding new one:", addNewFoodVM.allNewFoodAndRecipes)
+                        draftModelData.clearDraft(from: modelContext)
+                        
+                        dismissToRoot()
+                    }
+                } else {
+                    // If not for sale, skip sale-specific validation and proceed
+                    draftModelData.saveDraft(in: modelContext)
+                    addNewFoodVM.addNewRecipeFood(from: draftModelData)
+                    draftModelData.clearDraft(from: modelContext)
                     dismissToRoot()
                 }
             }) {
@@ -279,8 +290,9 @@ struct SaleModalView: View {
                             .fill(showError ? Color.gray.opacity(0.3) : PrimaryColor.normal)
                     )
             }
-            .disabled(showError)
+            .disabled(draftModelData.isForSale && showError)
             .navigationTitle("Sale")
+            
         }
         .padding()
         .navigationBarBackButtonHidden(true)
@@ -322,7 +334,6 @@ struct SaleModalView: View {
         }
     }
     
-
     private func handleCancel() {
         if hasDraftData {
             showDraftAlert = true
@@ -346,13 +357,22 @@ struct SaleModalView: View {
     }
     
     private func validateFields() {
-        showError = draftModelData.amount == 0 || ingret.price == 0 || addressStore.selectedAddress == nil
+        if draftModelData.isForSale {
+            // Validate sale-specific fields if the item is marked for sale
+            showError = draftModelData.amount <= 0 ||
+            ingret.price <= 0 ||
+            addressStore.selectedAddress == nil ||
+            draftModelData.cookDate < Date()  // Ensures date is not in the past
+        } else {
+            // No error if not for sale, allowing post without these details
+            showError = false
+        }
     }
-
+    
     private func getCurrencyPlaceholder() -> String {
         return ingret.selectedCurrency == 0 ? "0" : "0.00"
     }
-
+    
     // MARK: Function to format the price based on currency selection
     private func formatPrice() -> String {
         let formatter = NumberFormatter()
@@ -362,7 +382,7 @@ struct SaleModalView: View {
         formatter.groupingSeparator = ingret.selectedCurrency == 1 ? "," : ""
         return formatter.string(from: NSNumber(value: ingret.price)) ?? ""
     }
-
+    
     // MARK: Function to filter and format the price input based on the selected currency
     private func filterPriceInput(_ input: String) -> String {
         let maxDecimalPlaces = ingret.selectedCurrency == 0 ? 4 : 2
@@ -380,7 +400,7 @@ struct SaleModalView: View {
         
         return filtered
     }
-
+    
     // MARK: Function to convert the price based on selected currency
     private func convertCurrency(_ price: Double) -> Double {
         if ingret.selectedCurrency == 0 {
@@ -393,30 +413,3 @@ struct SaleModalView: View {
     }
 }
 
-
-
-
-
-//    private func formatPrice() -> String {
-//        let formatter = NumberFormatter()
-//        formatter.numberStyle = .decimal
-//        formatter.minimumFractionDigits = 0
-//        formatter.maximumFractionDigits = ingret.selectedCurrency == 0 ? 4 : 2
-//        formatter.groupingSeparator = ingret.selectedCurrency == 1 ? "," : ""
-//        return formatter.string(from: NSNumber(value: draftModelData.price)) ?? "0"
-//    }
-//
-//    private func filterPriceInput(_ input: String) -> Double {
-//        let maxDecimalPlaces = ingret.selectedCurrency == 0 ? 4 : 2
-//        var filtered = input.filter { "0123456789.".contains($0) }
-//
-//        let components = filtered.components(separatedBy: ".")
-//        guard components.count <= 2 else { return draftModelData.price }
-//
-//        if components.count == 2 {
-//            let decimalPart = String(components[1].prefix(maxDecimalPlaces))
-//            filtered = "\(components[0]).\(decimalPart)"
-//        }
-//
-//        return Double(filtered) ?? 0.0
-//    }

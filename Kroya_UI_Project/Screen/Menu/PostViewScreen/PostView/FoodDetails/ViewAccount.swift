@@ -98,15 +98,14 @@ struct ViewAccount: View {
 
                 // TabView for Content
                 TabView(selection: $selectedSegment) {
-                    AllView(iselected: selectedSegment)
+                    FoodSaleView(iselected: selectedSegment)
                         .tag(0)
-                    FoodOnSale(iselected: selectedSegment)
+                    FoodOnSaleView(iselected: selectedSegment)
                         .tag(1)
-//                    Recipe(iselected: selectedSegment)
+                    RecipeView(iselected: selectedSegment)
                         .tag(2)
-                  
-
-                }.padding(.top, 20)
+                }
+                .padding(.top, 8)
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }.navigationBarBackButtonHidden(true)
         

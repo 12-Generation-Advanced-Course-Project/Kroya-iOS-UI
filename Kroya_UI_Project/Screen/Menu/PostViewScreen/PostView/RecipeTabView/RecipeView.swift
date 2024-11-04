@@ -1,42 +1,43 @@
-
 import SwiftUI
 
 struct RecipeView: View {
-    
-    // Properties
     var iselected: Int?
-    @StateObject private var viewModel = RecipeViewModel()
+    @EnvironmentObject var viewModel: AddNewFoodVM
     
     var body: some View {
-        List {
-            ForEach(viewModel.recipes) { recipe in
-                ZStack {
-                    RecipeViewCell(recipe: recipe)
-                    
-                    NavigationLink(destination: FoodDetailView(
-                        theMainImage: "Songvak",
-                        subImage1: "ahmok",
-                        subImage2: "brohok",
-                        subImage3: "SomlorKari",
-                        subImage4: "Songvak",
-                        showOrderButton: false
-                        //showBotton
-                    )) {
-                        EmptyView()
+        NavigationView {
+            List {
+                ForEach(viewModel.allNewFoodAndRecipes) { recipe in
+                    ZStack {
+                        RecipeViewCell(recipe: recipe)
+                        NavigationLink(destination: FoodDetailView(
+                            theMainImage: recipe.photos.first?.photo ?? "defaultImage",
+                            subImage1: recipe.photos.dropFirst().first?.photo ?? "defaultImage",
+                            subImage2: recipe.photos.dropFirst(2).first?.photo ?? "defaultImage",
+                            subImage3: recipe.photos.dropFirst(3).first?.photo ?? "defaultImage",
+                            subImage4: recipe.photos.dropFirst(4).first?.photo ?? "defaultImage",
+                            showOrderButton: recipe.isForSale
+                        )) {
+                            EmptyView()
+                        }
+                        .opacity(0)
                     }
-                    .opacity(0)
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+                    .padding(.vertical, -6)
                 }
-                .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
-                .padding(.vertical, -6)
+            }
+            .onReceive(viewModel.$allNewFoodAndRecipes) { updatedRecipes in
+                print("Updated recipes in view:", updatedRecipes)
+            }
+            .scrollIndicators(.hidden)
+            .buttonStyle(PlainButtonStyle())
+            .listStyle(.plain)
+            .onAppear {
+                viewModel.fetchRecipeOrFood(forSaleOnly: false)
+                print("Recipes on appear:", viewModel.allNewFoodAndRecipes)
             }
         }
-        .scrollIndicators(.hidden)
-        .buttonStyle(PlainButtonStyle())
-        .listStyle(.plain)
     }
 }
 
-#Preview {
-    RecipeView(iselected: 1)
-}

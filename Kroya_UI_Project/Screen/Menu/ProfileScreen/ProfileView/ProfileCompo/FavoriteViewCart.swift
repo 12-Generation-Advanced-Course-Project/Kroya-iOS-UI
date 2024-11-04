@@ -178,7 +178,7 @@ struct FavoriteViewCart: View {
     @Environment(\.dismiss) var dismiss
     
     @StateObject private var foodOnSaleViewModel = FoodOnSaleViewCellViewModel()
-    @StateObject private var recipeViewModel = RecipeViewModel()
+    @StateObject private var addNewFoodVM = AddNewFoodVM()
     
     var body: some View {
         VStack {
@@ -237,7 +237,7 @@ struct FavoriteViewCart: View {
                 .tag(0)
                 
                 ScrollView(showsIndicators: false) {
-                    ForEach(recipeViewModel.recipes) { recipe in
+                    ForEach(addNewFoodVM.allNewFoodAndRecipes) { recipe in
                         RecipeViewCell(recipe: recipe, isFavorite: true)
                             .padding(.bottom, 8) // Adjust padding as needed
                             .padding(.top, 10)
@@ -269,12 +269,12 @@ struct FavoriteViewCart: View {
             }
         }
         .environmentObject(foodOnSaleViewModel)
-        .environmentObject(recipeViewModel)
+        .environmentObject(addNewFoodVM)
     }
 }
 
 #Preview {
     FavoriteViewCart()
         .environmentObject(FoodOnSaleViewCellViewModel())
-        .environmentObject(RecipeViewModel())
+        .environmentObject(AddNewFoodVM())
 }
