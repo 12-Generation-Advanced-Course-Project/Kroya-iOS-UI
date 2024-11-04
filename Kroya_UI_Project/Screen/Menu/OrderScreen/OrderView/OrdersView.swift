@@ -10,7 +10,7 @@ struct OrdersView: View {
     var body: some View {
         VStack(spacing: 0) {
             Spacer().frame(height: 10)
-            
+
             // Orders Text Header
             HStack {
                 Text("Orders")
@@ -18,9 +18,9 @@ struct OrdersView: View {
                     .padding(.leading, 20)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            
+
             Spacer().frame(height: 10)
-            
+
             // Search Bar
             NavigationLink(destination: SearchScreen()) {
                 HStack {
@@ -28,13 +28,13 @@ struct OrdersView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 24, height: 24)
-                    
+
                     Text("Search Item")
                         .font(.customfont(.medium, fontSize: 16))
                         .foregroundColor(.gray)
                         .frame(width: .screenWidth * 0.26)
                         .padding(.trailing, 12)
-                    
+
                     Spacer()
                 }
                 .padding(.leading, 12)
@@ -42,7 +42,7 @@ struct OrdersView: View {
                 .background(Color(hex: "#F3F2F3"))
                 .cornerRadius(12)
             }
-            
+
             // Tab View
             VStack(alignment: .leading) {
                 // HStack for Tab Titles with localized strings
@@ -55,7 +55,7 @@ struct OrdersView: View {
                         .font(.customfont(.semibold, fontSize: 16))
                         .foregroundColor(selectedSegment == 0 ? .black.opacity(0.8) : .black.opacity(0.5))
                         .padding(.trailing, 10)
-                    
+
                     Text(LocalizedStringKey("Order"))
                         .onTapGesture {
                             selectedSegment = 1
@@ -64,7 +64,7 @@ struct OrdersView: View {
                         .font(.customfont(.semibold, fontSize: 16))
                         .foregroundColor(selectedSegment == 1 ? .black.opacity(0.8) : .black.opacity(0.5))
                         .padding(.trailing, 10)
-                    
+
                     Text(LocalizedStringKey("Sale"))
                         .onTapGesture {
                             selectedSegment = 2
@@ -76,7 +76,7 @@ struct OrdersView: View {
                 }
                 .padding(.horizontal, 15)
                 .padding(.top)
-                
+
                 // GeometryReader for underline
                 GeometryReader { geometry in
                     Divider()
@@ -89,7 +89,7 @@ struct OrdersView: View {
                 .frame(height: 2)
             }
             .padding(.top, 15)
-            
+
             // TabView for Content
             TabView(selection: $selectedSegment) {
                 AllTabView(iselected: selectedSegment)
@@ -108,18 +108,18 @@ struct OrdersView: View {
             languageChangeTrigger.toggle()
         }
     }
-    
+
     // Calculate the underline width dynamically based on the localized text width
     private func underlineWidth(for selectedSegment: Int) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        
+
         // Localized titles for calculation
         let localizedTitles = [
             NSLocalizedString("All", comment: ""),
             NSLocalizedString("Order", comment: ""),
             NSLocalizedString("Sale", comment: "")
         ]
-        
+
         // Calculate the width based on the localized title
         let title = localizedTitles[selectedSegment]
         let titleWidth = title.size(withAttributes: [NSAttributedString.Key.font: font]).width
@@ -134,13 +134,13 @@ struct OrdersView: View {
             NSLocalizedString("Order", comment: ""),
             NSLocalizedString("Sale", comment: "")
         ]
-        
+
         var offset: CGFloat = 10
         for index in 0..<selectedSegment {
             let titleWidth = localizedTitles[index].size(withAttributes: [NSAttributedString.Key.font: font]).width
             offset += titleWidth + 20 // Adjust spacing as needed
         }
-        
+
         return offset
     }
 }
