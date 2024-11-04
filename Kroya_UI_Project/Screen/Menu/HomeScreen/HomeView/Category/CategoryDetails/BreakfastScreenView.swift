@@ -3,42 +3,49 @@ import SwiftUI
 struct BreakfastScreenView: View {
     @State private var selectedSegment = 0
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var addNewFoodVM: AddNewFoodVM
     
     var body: some View {
         VStack {
-            // Tab View
+            // Segment Control
             VStack {
                 HStack {
                     Spacer()
                     
-                    Text(LocalizedStringKey("Food on Sale"))
+                    Text("Food on Sale")
                         .fontWeight(.semibold)
-                        .font(.system(size: 16))  // Replace with your custom font method if you have one
+                        .font(.system(size: 16))
                         .foregroundColor(selectedSegment == 0 ? .black.opacity(0.8) : .black.opacity(0.5))
                         .onTapGesture {
-                            selectedSegment = 0
+                            withAnimation {
+                                selectedSegment = 0
+                                fetchSegmentData() // Fetch food on sale data
+                            }
                         }
                     
                     Spacer()
-                    Spacer()
                     
-                    Text(LocalizedStringKey("Recipes"))
+                    Text("Recipes")
                         .fontWeight(.semibold)
-                        .font(.system(size: 16))  // Replace with your custom font method if you have one
+                        .font(.system(size: 16))
                         .foregroundColor(selectedSegment == 1 ? .black.opacity(0.8) : .black.opacity(0.5))
                         .onTapGesture {
-                            selectedSegment = 1
+                            withAnimation {
+                                selectedSegment = 1
+                                fetchSegmentData() // Fetch recipes data
+                            }
                         }
                     
                     Spacer()
                 }
                 .padding(.top)
+                
                 GeometryReader { geometry in
                     Divider()
                     
                     Rectangle()
-                        .fill(Color.yellow) // Use your defined color here
-                        .frame(width: geometry.size.width / 2, height: 2) // Two segments
+                        .fill(Color.yellow)
+                        .frame(width: geometry.size.width / 2, height: 2)
                         .offset(x: selectedSegment == 1 ? geometry.size.width / 2 : 0)
                         .animation(.easeInOut(duration: 0.3), value: selectedSegment)
                 }
@@ -48,16 +55,22 @@ struct BreakfastScreenView: View {
             
             // Tab View Content
             TabView(selection: $selectedSegment) {
-                FoodSaleView(iselected: selectedSegment)  // Make sure FoodSaleView accepts `iselected`
+                FoodSaleView(iselected: selectedSegment)
                     .tag(0)
-                RecipeView(iselected: selectedSegment)  // Make sure RecipeView accepts `iselected`
+                    .environmentObject(addNewFoodVM)
+                
+                RecipeView(iselected: selectedSegment) // RecipeView now relies on BreakfastScreenView to fetch data
                     .tag(1)
+                    .environmentObject(addNewFoodVM)
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         }
         .navigationBarBackButtonHidden(true)
         .navigationTitle("Breakfast")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            fetchSegmentData() // Initial data fetch based on selected segment
+        }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
@@ -67,13 +80,24 @@ struct BreakfastScreenView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 20, height: 20)
-                        .foregroundStyle(.black)
+                        .foregroundColor(.black)
                 }
             }
         }
     }
-}
-
-#Preview {
-    BreakfastScreenView()
+    
+    // Function to fetch data based on selected segment
+    private func fetchSegmentData() {
+        if selectedSegment == 0 {
+            // Fetch Food on Sale only if data is empty
+            if addNewFoodVM.allNewFoodAndRecipes.isEmpty || !addNewFoodVM.allNewFoodAndRecipes.contains(where: { $0.isForSale }) {
+                addNewFoodVM.fetchRecipeOrFood(forSaleOnly: true)
+            }
+        } else {
+            // Fetch Recipes only if data is empty or no recipes loaded
+            if addNewFoodVM.allNewFoodAndRecipes.isEmpty || !addNewFoodVM.allNewFoodAndRecipes.contains(where: { !$0.isForSale }) {
+                addNewFoodVM.fetchRecipeOrFood(forSaleOnly: false)
+            }
+        }
+    }
 }

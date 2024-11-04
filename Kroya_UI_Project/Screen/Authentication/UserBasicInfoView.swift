@@ -17,8 +17,10 @@ struct UserBasicInfoView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var userStore: UserStore
     @EnvironmentObject var addressVM: AddressViewModel
+    @EnvironmentObject var addNewFoodVM: AddNewFoodVM
     @ObservedObject var authVM = AuthViewModel(userStore: UserStore())
-    @Binding var lang:String
+    @Binding var lang: String
+
     var body: some View {
         VStack(spacing: 20) {
             HStack {
@@ -41,6 +43,7 @@ struct UserBasicInfoView: View {
             
             //MARK: User Input
             VStack(spacing: 5) {
+                // Username input
                 VStack(alignment: .leading, spacing: 5) {
                     Text("Username")
                         .font(.callout)
@@ -54,14 +57,10 @@ struct UserBasicInfoView: View {
                         Text("Please enter your name")
                             .foregroundColor(.red)
                             .font(.customfont(.medium, fontSize: 14))
-                    } else {
-                        Text("")
-                            .foregroundColor(.red)
-                            .font(.customfont(.medium, fontSize: 14))
                     }
-                   
                 }
-                //MARK: Phone Number
+                
+                // Phone Number input
                 VStack(alignment: .leading, spacing: 5) {
                     Text("Phone Number")
                         .font(.customfont(.medium, fontSize: 14))
@@ -85,14 +84,10 @@ struct UserBasicInfoView: View {
                         Text("Phone number can only contain digits")
                             .foregroundColor(.red)
                             .font(.customfont(.medium, fontSize: 14))
-                    } else {
-                        Text("")
-                            .foregroundColor(.red)
-                            .font(.customfont(.medium, fontSize: 14))
                     }
-                    
                 }
-                //MARK: Address
+
+                // Address input
                 VStack(alignment: .leading, spacing: 5) {
                     Text("Address")
                         .font(.customfont(.medium, fontSize: 14))
@@ -108,7 +103,6 @@ struct UserBasicInfoView: View {
                                 .font(.customfont(.regular, fontSize: 18))
                                 .padding(.vertical, 20)
                                 .foregroundColor(.gray)
-                                .keyboardType(.default)
                                 .frame(width: .screenWidth * 0.6, alignment: .leading)
                             
                             Spacer()
@@ -130,15 +124,13 @@ struct UserBasicInfoView: View {
                         Text("Please select an address")
                             .foregroundColor(.red)
                             .font(.customfont(.medium, fontSize: 14))
-                    } else {
-                        Text("")
-                            .foregroundColor(.red)
-                            .font(.customfont(.medium, fontSize: 14))
                     }
                 }
+                
                 Spacer()
             }
-            .frame(maxWidth: .infinity,maxHeight: .screenHeight * 0.4)
+            .frame(maxWidth: .infinity, maxHeight: .screenHeight * 0.4)
+
             // Save Button
             Button(action: {
                 validateAndSaveUserInfo()
@@ -153,10 +145,11 @@ struct UserBasicInfoView: View {
                     .cornerRadius(10)
                     .padding(.horizontal)
             }
+            
+            // Skip Button
             Button(action: {
                 isSkip.toggle()
                 Auth.shared.loggedIn = true
-               
             }) {
                 Text("Skip")
                     .font(.customfont(.semibold, fontSize: 16))
@@ -164,17 +157,26 @@ struct UserBasicInfoView: View {
             }
 
             Spacer()
-            NavigationLink(destination:  MainScreen(userStore: userStore,lang:$lang).environmentObject(userStore),isActive: $authVM.isUserSave, label: {
+
+            // NavigationLink to MainScreen for save action
+            NavigationLink(destination: MainScreen(userStore: userStore, lang: $lang)
+                            .environmentObject(userStore)
+                            .environmentObject(addNewFoodVM)
+                            .environmentObject(addressVM)
+                           , isActive: $authVM.isUserSave, label: {
                 EmptyView()
             })
             .hidden()
+
         }
         .padding(.horizontal, 20)
-        .navigationDestination(isPresented: $isSkip, destination: {
-            MainScreen(userStore: userStore,lang:$lang).environmentObject(userStore).navigationBarHidden(true)
-        })
         .navigationBarHidden(true)
-        
+        .navigationDestination(isPresented: $isSkip) {
+            MainScreen(userStore: userStore, lang: $lang)
+                .environmentObject(addNewFoodVM)
+                .environmentObject(userStore)
+                .navigationBarHidden(true)
+        }
     }
     
     func validateAndSaveUserInfo() {
@@ -194,9 +196,9 @@ struct UserBasicInfoView: View {
             email: userStore.user?.email ?? "No Email",
             userName: textName,
             phoneNumber: phoneNumber,
-            address: selectedAddress?.specificLocation ?? "No Address"
-            ,accessToken: userStore.user?.accesstoken ?? ""
-            ,refreshToken: userStore.user?.refreshtoken ?? ""
+            address: selectedAddress?.specificLocation ?? "No Address",
+            accessToken: userStore.user?.accesstoken ?? "",
+            refreshToken: userStore.user?.refreshtoken ?? ""
         )
         
         isLoading = false

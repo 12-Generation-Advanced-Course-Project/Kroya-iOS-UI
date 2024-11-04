@@ -10,6 +10,7 @@ import SwiftUI
 struct LunchScreenView: View {
     @State private var selectedSegment = 0
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var addNewFoodVM: AddNewFoodVM
     var body: some View {
         
         VStack {
@@ -27,7 +28,7 @@ struct LunchScreenView: View {
                         }
                     
                     Spacer()
-                    Spacer()
+            
                     
                     Text("Recipes")
                         .fontWeight(.semibold)
