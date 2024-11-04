@@ -31,12 +31,11 @@ struct ItemFoodOrderCard: View {
                     .cornerRadius(8)
                 
                 VStack(alignment: .leading, spacing: 5) {
-                    HStack(spacing: 7) {
+                    HStack(spacing: 8) {
                         // Food name
                         Text(item.name)
                             .font(.customfont(.semibold, fontSize: 17))
                         
-                        // Status with conditional background and text color
                         ZStack {
                             RoundedRectangle(cornerRadius: 8)
                                 .fill(item.status == "Accept" ? Color(hex: "#DDF6C3") : (item.status == "Reject" ? Color(hex: "#FFD8E4") : Color.clear))
@@ -49,7 +48,6 @@ struct ItemFoodOrderCard: View {
                         }
                         
                         Spacer()
-                        
                         // Time
                         if let timeAgo = item.timeAgo {
                             Text(timeAgo)

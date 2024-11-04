@@ -10,6 +10,7 @@ import SwiftUI
 struct Receipt: Identifiable {
     var id = UUID()
     var item: String
+    var qty: Int
     var referenceNumber: String
     var orderDate: String
     var paidBy: String

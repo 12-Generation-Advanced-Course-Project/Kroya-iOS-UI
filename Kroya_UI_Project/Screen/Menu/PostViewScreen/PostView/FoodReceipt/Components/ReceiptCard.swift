@@ -13,6 +13,7 @@ struct ReceiptCard: View {
     @ObservedObject var viewModel: ReceiptViewModel
     @Binding var presentPopup: Bool
     @State private var downloadSuccess: Bool = false  // State variable for download status
+   // let isOrderReceived: Bool
     
     var body: some View {
         VStack {
@@ -37,14 +38,27 @@ struct ReceiptCard: View {
                                 .foregroundColor(.black)
                             
                             HStack {
-                                Image(systemName: "arrow.up.right")
-                                    .resizable()
-                                    .frame(width: 14, height: 14)
-                                    .foregroundColor(.red)
-                                
-                                Text(viewModel.receipt.paidTo)
-                                    .font(.system(size: 14, weight: .medium))
-                                    .foregroundColor(.gray)
+//                                if isOrderReceived{
+//                                    Image(systemName: "arrow.down.left")
+//                                        .resizable()
+//                                        .frame(width: 14, height: 14)
+//                                        .foregroundColor(.green)
+//                                    
+//                                    Text("From\(viewModel.receipt.payer)")
+//                                        .font(.system(size: 14, weight: .medium))
+//                                        .foregroundColor(.gray)
+
+                             //   } else{
+                                    Image(systemName: "arrow.up.left")
+                                        .resizable()
+                                        .frame(width: 14, height: 14)
+                                        .foregroundColor(.red)
+                                 //   Image(systemName: "arrow.down.left")
+
+                                    Text(viewModel.receipt.paidTo)
+                                        .font(.system(size: 14, weight: .medium))
+                                        .foregroundColor(.gray)
+                               // }
                             }
                         }
                         Spacer()
@@ -54,7 +68,19 @@ struct ReceiptCard: View {
                     .offset(y: -7)
                     
                     VStack(alignment: .leading, spacing: 18) {
-                        ReceiptRow(label: "Item", value: viewModel.receipt.item, valueColor: .yellow)
+                        HStack {
+                            Text("Item")
+                                .font(.system(size: 16, weight: .medium))
+                            Spacer()
+                            Text(viewModel.receipt.item)
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundStyle(Color.yellow)
+                     
+                        Spacer()
+                        Text("x\(viewModel.receipt.qty)")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundStyle(Color.black)
+                        }.padding(.horizontal)
                         ReceiptRow(label: "Reference#", value: viewModel.receipt.referenceNumber)
                         ReceiptRow(label: "Order date", value: viewModel.receipt.orderDate)
                         ReceiptRow(label: "Paid by", value: viewModel.receipt.paidBy)
@@ -104,7 +130,7 @@ struct ReceiptCard: View {
                                 
                                 Text(downloadSuccess ? "Download Success" : "Download Receipt")
                                     .font(.system(size: 16, weight: .bold))
-                                    .foregroundColor(downloadSuccess ? Color(hex: "#3FBD4E") : .yellow)
+                                    .foregroundColor(.yellow)
                             }
                         }
                         .buttonStyle(PlainButtonStyle())
@@ -225,7 +251,19 @@ struct ReceiptCard1: View {
                     .offset(y: -7)
                     
                     VStack(alignment: .leading, spacing: 18) {
-                        ReceiptRow(label: "Item", value: viewModel.receipt.item, valueColor: .yellow)
+                        HStack {
+                            Text("Item")
+                                .font(.system(size: 16, weight: .medium))
+                            Spacer()
+                            Text(viewModel.receipt.item)
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundStyle(Color.yellow)
+                     
+                        Spacer()
+                        Text("x\(viewModel.receipt.qty)")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundStyle(Color.black)
+                        }.padding(.horizontal)
                         ReceiptRow(label: "Reference#", value: viewModel.receipt.referenceNumber)
                         ReceiptRow(label: "Order date", value: viewModel.receipt.orderDate)
                         ReceiptRow(label: "Paid by", value: viewModel.receipt.paidBy)
