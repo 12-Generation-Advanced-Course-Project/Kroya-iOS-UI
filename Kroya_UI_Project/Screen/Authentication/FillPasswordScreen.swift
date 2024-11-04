@@ -17,6 +17,7 @@ struct FillPasswordScreen: View {
     @State var email: String
     @Binding var lang: String
     @State private var isForgetPassword = false
+    @Environment(\.locale) var locale
     var body: some View {
         ZStack {
             VStack {
@@ -65,17 +66,20 @@ struct FillPasswordScreen: View {
                     
                     HStack{
                         if !isPasswordValid || authVM.showError {
-                            HStack {
+                            HStack{
                                 Image(systemName: "exclamationmark.circle")
                                     .resizable()
                                     .scaledToFit()
                                     .foregroundStyle(.red)
                                     .frame(width: 12, height: 10)
                                 Text(authVM.showError ? LocalizedStringKey("Password is Incorrect") : LocalizedStringKey("Please input a valid password"))
+                                    .frame(width: locale.identifier == "ko" ? 170 : locale.identifier == "km-KH" ? 200 : 170)
                                     .font(.caption)
                                     .foregroundColor(.red)
                                     .font(.customfont(.regular, fontSize: 10))
+
                             }
+                            .offset(y:-10)
                         }
                         
                         // Forgot Password

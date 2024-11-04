@@ -14,6 +14,7 @@ struct AddFoodView: View {
     @State private var showValidationMessage: Bool = false
     @State private var navigateToNextView: Bool = false
     @State private var showDraftAlert = false
+    @State private var foodName: String = ""
     
     let dismissToRoot: () -> Void
     var levels: [String] = ["Hard", "Medium", "Easy"]
@@ -120,11 +121,19 @@ struct AddFoodView: View {
                         Text("Food Name")
                             .font(.customfont(.bold, fontSize: 16))
                         Spacer().frame(height: 15)
-                        InputField(placeholder: "Enter food name", text: $draftModelData.foodName,
-                                   backgroundColor: .white, frameHeight: 60,
-                                   frameWidth: 0.9 * CGFloat.screenWidth, colorBorder: Color(hex: "#D0DBEA"),
-                                   isMultiline: false)
-                        if showValidationMessage && draftModelData.foodName.isEmpty {
+                        TextField(LocalizedStringKey("Enter food name"), text: $foodName)
+                              .padding()
+                              .background(Color.white)
+                              .frame(width: 0.9 * UIScreen.main.bounds.width, height: 60)
+                              .cornerRadius(8)
+                              .font(.body)
+                              .padding(.leading,-5)
+                              .overlay(
+                                  RoundedRectangle(cornerRadius: 15)
+                                      .strokeBorder(Color(hex: "#D0DBEA"), lineWidth: 1)
+                              )
+                        // Validation message under TextField
+                        if showValidationMessage && foodName.isEmpty {
                             validationMessage("Please enter your food name")
                         }
                     }
@@ -316,7 +325,7 @@ struct AddFoodView: View {
     private func validationMessage(_ text: String) -> some View {
         HStack {
             Image(systemName: "exclamationmark.triangle.fill").foregroundColor(.red)
-            Text(text).foregroundColor(.red).font(.caption)
+            Text(LocalizedStringKey(text)).foregroundColor(.red).font(.caption)
         }
     }
 }
