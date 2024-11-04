@@ -6,9 +6,8 @@
 //
 
 import SwiftUI
-
 // MARK: - AddNewFoodModel
-struct AddNewFoodModel:Identifiable, Codable {
+struct AddNewFoodModel: Identifiable, Codable {
     var id = UUID()
     var photos: [Photo]
     var name: String
@@ -22,8 +21,16 @@ struct AddNewFoodModel:Identifiable, Codable {
     var saleIngredients: SaleIngredient?
     var rating: Double?
     var reviewCount: Int?
+
     var isForSale: Bool {
         return saleIngredients != nil
+    }
+    var statusType: String {
+        if isForSale, let price = saleIngredients?.price {
+            return "Food on Sale - $\(String(format: "%.2f", price))"
+        } else {
+            return "Recipe"
+        }
     }
 }
 
@@ -77,15 +84,14 @@ enum category: String {
     case Breakfast = "Breakfast"
     case Lunch = "Lunch"
     case Dinner = "Dinner"
-    case snack = "Snack"
+    case Snack = "Snack"
     
     var id: Int {
         switch self {
         case .Breakfast: return 1
         case .Lunch: return 2
         case .Dinner: return 3
-        case .snack: return 4
+        case .Snack: return 4
         }
     }
 }
-

@@ -4,28 +4,24 @@
 //
 //  Created by Ounbonaliheng on 14/10/24.
 //
-
 import SwiftUI
 
 struct FoodonRecipe: View {
-    
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var addNewFoodVM: AddNewFoodVM // Use the shared instance
+    @EnvironmentObject var addNewFoodVM: AddNewFoodVM
     
     let imageofOrder: [String] = ["SoupPic", "SaladPic", "GrillPic", "DessertPic 1"]
     let titleofOrder: [String] = ["Soup", "Salad", "Grill", "Dessert"]
     
     @State private var selectedOrderIndex: Int? = nil
-    @State private var searchText = ""
     
     var body: some View {
         NavigationView {
             VStack {
-                // Loop through images and titles
                 HStack(spacing: 40) {
                     ForEach(0..<imageofOrder.count, id: \.self) { index in
                         Button(action: {
-                            selectedOrderIndex = index 
+                            selectedOrderIndex = index
                         }) {
                             VStack {
                                 Image(imageofOrder[index])
@@ -46,15 +42,15 @@ struct FoodonRecipe: View {
                 
                 Spacer().frame(height: 20)
                 
-                Text(LocalizedStringKey("All"))
+                Text("All")
                     .font(.customfont(.bold, fontSize: 16))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundStyle(.black.opacity(0.8))
                     .padding(.horizontal)
                 
-                RecipeView() // RecipeView will use the shared AddNewFoodVM
+                RecipeView()
             }
-            .navigationTitle(LocalizedStringKey("Food Recipe"))
+            .navigationTitle("Food Recipe")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -70,12 +66,6 @@ struct FoodonRecipe: View {
                 }
             }
         }
-        .searchable(text: $searchText, prompt: LocalizedStringKey("Search Item"))
         .navigationBarBackButtonHidden(true)
     }
-}
-
-#Preview {
-    FoodonRecipe()
-        .environmentObject(AddNewFoodVM()) // Provide the environment object for preview
 }

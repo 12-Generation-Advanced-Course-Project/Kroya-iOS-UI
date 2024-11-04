@@ -5,39 +5,44 @@ struct RecipeView: View {
     @EnvironmentObject var viewModel: AddNewFoodVM
     
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(viewModel.allNewFoodAndRecipes) { recipe in
-                    ZStack {
-                        RecipeViewCell(recipe: recipe)
-                        NavigationLink(destination: FoodDetailView(
-                            theMainImage: recipe.photos.first?.photo ?? "defaultImage",
-                            subImage1: recipe.photos.dropFirst().first?.photo ?? "defaultImage",
-                            subImage2: recipe.photos.dropFirst(2).first?.photo ?? "defaultImage",
-                            subImage3: recipe.photos.dropFirst(3).first?.photo ?? "defaultImage",
-                            subImage4: recipe.photos.dropFirst(4).first?.photo ?? "defaultImage",
-                            showOrderButton: recipe.isForSale
-                        )) {
-                            EmptyView()
+        VStack {
+            if viewModel.allNewFoodAndRecipes.isEmpty {
+                Text("No Recipes Found")
+                    .font(.title3)
+                    .foregroundColor(.gray)
+                    .padding()
+            } else {
+                List {
+                    ForEach(viewModel.allNewFoodAndRecipes.filter { !$0.isForSale }) { recipe in
+                        ZStack {
+                            RecipeViewCell(recipe: recipe)
+                                .padding(.vertical, 6)
+                            
+                            NavigationLink(destination:  FoodDetailView(
+                                theMainImage:"Hotpot",
+                                subImage1:  "Chinese Hotpot",
+                                subImage2:  "Chinese",
+                                subImage3:  "Fly-By-Jing",
+                                subImage4:  "Mixue",
+                                showOrderButton: false
+                            )) {
+                                EmptyView()
+                            }
+                            .opacity(0)
                         }
-                        .opacity(0)
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
                     }
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
-                    .padding(.vertical, -6)
                 }
+                .listStyle(.plain)
+                .scrollIndicators(.hidden)
             }
-            .onReceive(viewModel.$allNewFoodAndRecipes) { updatedRecipes in
-                print("Updated recipes in view:", updatedRecipes)
-            }
-            .scrollIndicators(.hidden)
-            .buttonStyle(PlainButtonStyle())
-            .listStyle(.plain)
-            .onAppear {
-                viewModel.fetchRecipeOrFood(forSaleOnly: false)
-                print("Recipes on appear:", viewModel.allNewFoodAndRecipes)
+        }
+        .navigationBarBackButtonHidden(true)
+        .onAppear {
+            if viewModel.allNewFoodAndRecipes.isEmpty {
+                print("Using static recipes:", viewModel.allNewFoodAndRecipes)
             }
         }
     }
 }
-
