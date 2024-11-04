@@ -16,14 +16,13 @@ struct RecipeViewCell: View {
     var body: some View {
         VStack {
             ZStack(alignment: .topLeading) {
-                // Display recipe image
+                // Display recipe image with NavigationLink only on the image and background
                 Image(.chineseHotpot)
                     .resizable()
                     .scaledToFill()
                     .frame(height: 160)
                     .cornerRadius(15, corners: [.topLeft, .topRight])
                     .clipped()
-                
                 // Rating and Favorite Button
                 HStack {
                     // Rating Section
@@ -49,7 +48,7 @@ struct RecipeViewCell: View {
                     
                     Spacer()
                     
-                    // Favorite Button
+                    // Favorite Button (outside of NavigationLink area)
                     Button(action: {
                         isFavorite.toggle()
                     }) {
