@@ -8,7 +8,8 @@
 import SwiftUI
 
 // MARK: - AddNewFoodModel
-struct AddNewFoodModel: Codable {
+struct AddNewFoodModel:Identifiable, Codable {
+    var id = UUID()
     var photos: [Photo]
     var name: String
     var description: String
@@ -19,6 +20,8 @@ struct AddNewFoodModel: Codable {
     var ingredients: [RecipeIngredient]
     var cookingSteps: [CookingStep]
     var saleIngredients: SaleIngredient?
+    var rating: Double?
+    var reviewCount: Int?
     var isForSale: Bool {
         return saleIngredients != nil
     }

@@ -43,6 +43,7 @@ struct SaleTabView: View {
                 .foregroundColor(.black)
             }
             .padding(.horizontal)
+            .padding(.top, 5)
         }
         .background(Color.clear)
         .scrollIndicators(.hidden)

@@ -13,6 +13,7 @@ import SwiftData
 struct Kroya_UI_ProjectApp: App {
     @UIApplicationDelegateAdaptor var appdelegate: AppDelegateForLocalNotification
     @StateObject var userStore = UserStore()
+    @StateObject var addNewFood = AddNewFoodVM()
     @StateObject var addressViewModel = AddressViewModel(userStore: UserStore())
     @State private var isSplashScreenActive = true // State to control SplashScreen display
     @State var lang: String = UserDefaults.standard.string(forKey: "AppLanguage") ?? "en"
@@ -39,6 +40,7 @@ struct Kroya_UI_ProjectApp: App {
                                 .environmentObject(addressViewModel)
                                 .environment(\.locale, .init(identifier: lang))
                                 .environment(\.modelContext, modelContainer.mainContext)
+                                .environmentObject(addNewFood)
                                 .onAppear {
                                     UNUserNotificationCenter.current().delegate = appdelegate
                                 }

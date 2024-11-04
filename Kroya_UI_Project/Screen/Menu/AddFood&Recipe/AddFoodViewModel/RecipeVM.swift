@@ -35,7 +35,7 @@ class RecipeViewModel: ObservableObject {
         ),
         
         RecipeModal(
-            imageName: "food2",
+            imageName: "food2", 
             dishName: "Somlor Kor Ko",
             cookingDate: "01 Oct 2024",
             statusType: "Recipe",
