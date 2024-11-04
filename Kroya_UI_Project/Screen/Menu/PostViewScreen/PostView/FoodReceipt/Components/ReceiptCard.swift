@@ -54,7 +54,19 @@ struct ReceiptCard: View {
                     .offset(y: -7)
                     
                     VStack(alignment: .leading, spacing: 18) {
-                        ReceiptRow(label: "Item", value: viewModel.receipt.item, valueColor: .yellow)
+                        HStack {
+                            Text("Item")
+                                .font(.system(size: 16, weight: .medium))
+                            Spacer()
+                            Text(viewModel.receipt.item)
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundStyle(Color.yellow)
+                     
+                        Spacer()
+                        Text("x\(viewModel.receipt.qty)")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundStyle(Color.black)
+                        }.padding(.horizontal)
                         ReceiptRow(label: "Reference#", value: viewModel.receipt.referenceNumber)
                         ReceiptRow(label: "Order date", value: viewModel.receipt.orderDate)
                         ReceiptRow(label: "Paid by", value: viewModel.receipt.paidBy)
@@ -104,7 +116,7 @@ struct ReceiptCard: View {
                                 
                                 Text(downloadSuccess ? "Download Success" : "Download Receipt")
                                     .font(.system(size: 16, weight: .bold))
-                                    .foregroundColor(downloadSuccess ? Color(hex: "#3FBD4E") : .yellow)
+                                    .foregroundColor(.yellow)
                             }
                         }
                         .buttonStyle(PlainButtonStyle())
@@ -225,7 +237,19 @@ struct ReceiptCard1: View {
                     .offset(y: -7)
                     
                     VStack(alignment: .leading, spacing: 18) {
-                        ReceiptRow(label: "Item", value: viewModel.receipt.item, valueColor: .yellow)
+                        HStack {
+                            Text("Item")
+                                .font(.system(size: 16, weight: .medium))
+                            Spacer()
+                            Text(viewModel.receipt.item)
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundStyle(Color.yellow)
+                     
+                        Spacer()
+                        Text("x\(viewModel.receipt.qty)")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundStyle(Color.black)
+                        }.padding(.horizontal)
                         ReceiptRow(label: "Reference#", value: viewModel.receipt.referenceNumber)
                         ReceiptRow(label: "Order date", value: viewModel.receipt.orderDate)
                         ReceiptRow(label: "Paid by", value: viewModel.receipt.paidBy)

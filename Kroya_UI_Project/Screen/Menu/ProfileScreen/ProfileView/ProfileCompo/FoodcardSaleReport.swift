@@ -30,12 +30,11 @@ struct ItemFoodOrderCard: View {
                     .cornerRadius(8)
                 
                 VStack(alignment: .leading, spacing: 5) {
-                    HStack(spacing: 7) {
+                    HStack(spacing: 8) {
                         // Food name
                         Text(item.name)
                             .font(.customfont(.semibold, fontSize: 17))
                         
-                        // Status with conditional background and text color
                         ZStack {
                             RoundedRectangle(cornerRadius: 8)
                                 .fill(item.status == "Accept" ? Color(hex: "#DDF6C3") : (item.status == "Reject" ? Color(hex: "#FFD8E4") : Color.clear))
@@ -48,36 +47,12 @@ struct ItemFoodOrderCard: View {
                         }
                         
                         Spacer()
-                        
                         // Time
                         if let timeAgo = item.timeAgo {
                             Text(timeAgo)
                                 .font(.customfont(.medium, fontSize: 12))
                                 .foregroundColor(.gray)
                         }
-                        
-                        // Ellipsis menu for options, only shown if showEllipsis is true
-                        //                        if showEllipsis {
-                        //                            Menu {
-                        //                                Button(role: .none ,action: {
-                        //                                    item.status = "Accept"
-                        //                                }) {
-                        //                                    Text("Accept")
-                        //                                }
-                        //
-                        //                                Button(role: .destructive, action: {
-                        //                                    item.status = "Reject"
-                        //                                }) {
-                        //                                    Text("Reject")
-                        //
-                        //                                }
-                        //                            } label: {
-                        //                                Image(systemName: "ellipsis")
-                        //                                    .rotationEffect(.degrees(90)) // Rotate to make it vertical
-                        //                                    .font(.system(size: 18))
-                        //                                    .foregroundColor(.gray)
-                        //                            }
-                        //                        }
                         
                         // Ellipsis button for popover
                         Button(action: {

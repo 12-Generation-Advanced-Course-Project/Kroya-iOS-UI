@@ -39,10 +39,13 @@ struct BottomSheetView<Content: View>: View {
                 
                 // Show Accept or Reject from Notification
                 if let notificationType = notificationType {
-                    // Display status based on notificationType
+
                     Text(notificationType == 1 ? "Rejected" : "Accepted ")
                         .font(.customfont(.medium, fontSize: 16))
-                        .foregroundStyle(notificationType == 1 ? .red : .green)
+                        .foregroundStyle(.white)
+                        .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.height * 0.04)
+                        .background(notificationType == 1 ?  Color.red : Color(hex: "#00BD4E") )
+                        .cornerRadius(UIScreen.main.bounds.width * 0.022)
                 }
                 // Show Order button if showOrderButton is true and not accessed from Notification
                 else if showOrderButton {
