@@ -107,8 +107,6 @@ struct NotificationItem: Identifiable {
                         }
                     }
                 }
-                // Programmatic navigation to FoodDetailView
-                // Programmatic navigation to FoodDetailView
                 .background(
                     NavigationLink(
                         destination: FoodDetailView(
@@ -117,7 +115,8 @@ struct NotificationItem: Identifiable {
                             subImage2: "brohok",
                             subImage3: "SomlorKari",
                             subImage4: "Songvak",
-                            showOrderButton: false, // Hide Order button when accessed from Notification
+                            showOrderButton: false,
+                            showPrice: true,
                             notificationType: selectedNotification?.notificationType // Pass notificationType here
                         ),
                         isActive: Binding(

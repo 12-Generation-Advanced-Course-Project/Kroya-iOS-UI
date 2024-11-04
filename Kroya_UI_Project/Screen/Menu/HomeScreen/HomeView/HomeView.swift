@@ -120,7 +120,8 @@ struct HomeView: View {
                                                     subImage1: "ahmok",
                                                     subImage2: "brohok",
                                                     subImage3: "SomlorKari",
-                                                    subImage4: foodSale.imageName
+                                                    subImage4: foodSale.imageName,
+                                                    showPrice: true
                                                 )
                                 ) {
                                     FoodOnSaleViewCell(foodSale: foodSale)

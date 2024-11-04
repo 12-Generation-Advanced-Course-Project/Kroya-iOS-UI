@@ -14,6 +14,7 @@ class ReceiptViewModel: ObservableObject {
     init() {
         self.receipt = Receipt(
             item: "Somlor Kari",
+            qty: 2,
             referenceNumber: "828200000",
             orderDate: "04/05/2023 @01:39 PM",
             paidBy: "KHQR",
