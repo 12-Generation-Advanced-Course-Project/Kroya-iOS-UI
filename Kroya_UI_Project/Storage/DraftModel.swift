@@ -34,7 +34,6 @@ class DraftModelData: ObservableObject {
     
     // MARK: - Save Draft
     func saveDraft(in context: ModelContext) {
-        //MARK: Check if draft is for that email
         guard let email = Auth.shared.getCredentials().email else {
                    print("No user email found. Cannot save draft.")
                    return
@@ -59,7 +58,6 @@ class DraftModelData: ObservableObject {
         let fetchRequest = FetchDescriptor<Draft>()
         do {
             let drafts = try context.fetch(fetchRequest)
-            
             if let existingDraft = drafts.first(where: { $0.email == email }) {
                 // Update the existing draft
                 existingDraft.foodName = foodName
@@ -97,13 +95,12 @@ class DraftModelData: ObservableObject {
                     ingredients: ingredients,
                     cookingSteps: cookingSteps
                 )
-                
+
                 context.insert(draft)
                 print("New draft saved to SwiftData!")
             }
-            
+
             try context.save()
-            
             // Log details to verify data
             print("Draft saved to SwiftData with details:")
             print("foodName: \(foodName)")
@@ -118,22 +115,11 @@ class DraftModelData: ObservableObject {
             print("isForSale: \(isForSale)")
             print("cookDate: \(cookDate)")
 
-            // Decode selectedImagesData to get the count of images and print their sizes
-            if let imagesData = imagesData,
-               let decodedImages = try? JSONDecoder().decode([Data].self, from: imagesData) {
-                print("selectedImages count: \(decodedImages.count)")
-                for (index, image) in imageDetails.enumerated() {
-                    print("Image \(index + 1): name = \(image.name), size = \(image.data.count) bytes")
-                }
-            } else {
-                print("selectedImages count: 0")
-            }
-            
         } catch {
             print("Failed to save draft: \(error.localizedDescription)")
         }
     }
-    
+
     // MARK: - Load Draft
     func loadDraft(from context: ModelContext) {
         guard let email = Auth.shared.getCredentials().email else {
