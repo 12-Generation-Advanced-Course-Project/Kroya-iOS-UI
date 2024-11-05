@@ -26,7 +26,7 @@ struct ContentView: View {
     // Step details
     let steps = [
         "Cut the fish into bite sized pieces and set aside.",
-        "Samlor machu is a Khmer term for a category of sour soups. Samlor machu The sour flavour of the soup comes from the use of ....",
+        "Samlor machu is a Khmer term for a category of sour soups. Samlor machu The sour flavour of the soup comes from the use.",
         "In a large skillet,  skillet, heat  skillet, heat the currthe curry seed oil, amok pasheat the curry seed oil, amok paste, shrimp paste, and coconut and coconut milk."
         
     ]
@@ -202,39 +202,52 @@ struct ContentView: View {
                             HStack(alignment: .top, spacing: 8) {
                                 // Displaying current step number
                                 ZStack {
-                                    Circle()
-                                        .fill(Color(hex: "2D3E50")) // Dark color for circle
-                                        .frame(width: 24, height: 24)
-                                    Text("\(currentStep)")
-                                        .font(.system(size: 14))
-                                        .foregroundColor(.white)
-                                }
-                                
-                                // Displaying current step text with "See More" functionality
-                                VStack(alignment: .leading, spacing: 5) {
-                                    Text(steps[currentStep - 1])
-                                        .font(.system(size: 14))
-                                        .foregroundColor(Color(hex: "#2E3E5C"))
-                                        .lineLimit(isExpanded ? nil : 2)
-                                        .truncationMode(.tail)
-                                    
-                                    // "See More" or "See Less"
-                                    if steps[currentStep - 1].count > 100 {
-                                        HStack {
-                                            Spacer()
-                                            Text(isExpanded ? "less" : "more")
-                                                .font(.customfont(.semibold, fontSize: 13))
-                                                .foregroundColor(.yellow)
-                                                .onTapGesture {
-                                                    withAnimation {
-                                                        isExpanded.toggle()
+                                    ForEach(0..<steps.count, id: \.self) { index in
+                                        if index + 1 == currentStep {
+                                            HStack(alignment: .top, spacing: 8) {
+                                                // Displaying current step number
+                                                ZStack {
+                                                    Circle()
+                                                        .fill(Color(hex: "2D3E50")) // Dark color for circle
+                                                        .frame(width: 24, height: 24)
+                                                    Text("\(currentStep)")
+                                                        .font(.system(size: 14))
+                                                        .foregroundColor(.white)
+                                                }
+                                                
+                                                // Displaying current step text with "See More" functionality
+                                                VStack(alignment: .leading, spacing: 5) {
+                                                    Text(steps[currentStep - 1])
+                                                        .font(.system(size: 14))
+                                                        .foregroundColor(Color(hex: "#2E3E5C"))
+                                                        .lineLimit(isExpanded ? nil : 2)
+                                                        .truncationMode(.tail)
+                                                        .transition(.slide) // Slide transition for text change
+                                                        .animation(.easeInOut(duration: 0.3), value: currentStep)
+                                                    
+                                                    // "See More" or "See Less" button
+                                                    if steps[currentStep - 1].count > 100 {
+                                                        HStack {
+                                                            Spacer()
+                                                            Text(isExpanded ? "less" : "more")
+                                                                .font(.customfont(.semibold, fontSize: 13))
+                                                                .foregroundColor(.yellow)
+                                                                .onTapGesture {
+                                                                    withAnimation {
+                                                                        isExpanded.toggle()
+                                                                    }
+                                                                }
+                                                        }
                                                     }
                                                 }
+                                            }
+                                       
+                                            .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)).combined(with: .opacity))
                                         }
                                     }
                                 }
+                                
                             }
-                            .padding(.vertical, 8)
                             Divider()
                         }
                         

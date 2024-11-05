@@ -17,11 +17,11 @@ struct FoodOnSaleView: View {
                 ZStack {
                     FoodOnSaleViewCell(foodSale: foodSale)
                     NavigationLink(destination: FoodDetailView(
-                        theMainImage:"Hotpot",
-                        subImage1: "Chinese Hotpot",
-                        subImage2: "Chinese",
-                        subImage3: "Fly-By-Jing",
-                        subImage4: "Mixue",
+                        theMainImage:"ahmok",
+                        subImage1: "ahmok1",
+                        subImage2: "ahmok2",
+                        subImage3: "ahmok3",
+                        subImage4: "ahmok4",
                         showOrderButton: foodSale.isForSale,
                         showPrice: foodSale.isForSale
                         
