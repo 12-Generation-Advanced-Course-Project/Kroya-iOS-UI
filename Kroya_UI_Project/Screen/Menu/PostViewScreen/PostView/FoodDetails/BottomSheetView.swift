@@ -249,15 +249,17 @@ struct FoodDetailView: View {
                                         }
                                         .frame(width: .screenWidth * 0.12, height: .screenWidth * 0.11)
                                         .cornerRadius(7)
+                                       
                                     }
-                                )
+                                       
+                                ) .offset(y: .screenHeight * 0.045)
 
                         )
                    Spacer()
                 }
                 
                 // Bottom Sheet Content
-                BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.645, showOrderButton: showOrderButton, notificationType: notificationType, showButtonInvoic: showButtonInvoic, invoiceAccept: invoiceAccept) {
+                BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.625, showOrderButton: showOrderButton, notificationType: notificationType, showButtonInvoic: showButtonInvoic, invoiceAccept: invoiceAccept) {
                                   ContentView(showPrice: showPrice, isShowPopup: $isShowPopup)
                                       .padding(.horizontal, 15)
                 }

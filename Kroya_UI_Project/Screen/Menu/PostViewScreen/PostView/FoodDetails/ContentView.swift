@@ -26,8 +26,8 @@ struct ContentView: View {
     // Step details
     let steps = [
         "Cut the fish into bite sized pieces and set aside.",
-        "Clean and slice the vegetables.",
-        "In a large skillet, heat the curry seed oil, amok paste, shrimp paste, and coconut milk."
+        "Samlor machu is a Khmer term for a category of sour soups. Samlor machu The sour flavour of the soup comes from the use of ....",
+        "In a large skillet,  skillet, heat  skillet, heat the currthe curry seed oil, amok pasheat the curry seed oil, amok paste, shrimp paste, and coconut and coconut milk."
         
     ]
     // Dummy data for rating percentages
@@ -155,25 +155,24 @@ struct ContentView: View {
                             
                             Spacer()
                             
-                            // Navigation buttons
                             HStack(spacing: 10) {
                                 Button(action: {
                                     if currentStep > 1 {
                                         withAnimation(.easeInOut) {
                                             currentStep -= 1
+                                            isExpanded = false // Collapse when changing steps
                                         }
                                     }
                                 }) {
                                     Circle()
-                                        .stroke(Color(hex: "FECC03"), lineWidth: 2)
-                                        .frame(width: .screenWidth * 0.06, height: .screenHeight * 0.06)
+                                        .stroke(Color.yellow, lineWidth: 2)
+                                        .frame(width: 30, height: 30)
                                         .overlay(
                                             Image(systemName: "arrow.backward")
                                                 .resizable()
                                                 .aspectRatio(contentMode: .fit)
-                                                .frame(width: .screenWidth * 0.041, height: .screenHeight * 0.041)
-                                                .foregroundColor(Color(hex: "FECC03"))
-                                                .clipShape(Circle())
+                                                .frame(width: 15, height: 15)
+                                                .foregroundColor(Color.yellow)
                                         )
                                 }
                                 
@@ -181,53 +180,64 @@ struct ContentView: View {
                                     if currentStep < steps.count {
                                         withAnimation(.easeInOut) {
                                             currentStep += 1
+                                            isExpanded = false // Collapse when changing steps
                                         }
                                     }
                                 }) {
                                     Circle()
-                                        .stroke(Color(hex: "FECC03"), lineWidth: 2)
-                                        .frame(width: .screenWidth * 0.06, height: .screenHeight * 0.06)
+                                        .stroke(Color.yellow, lineWidth: 2)
+                                        .frame(width: 30, height: 30)
                                         .overlay(
                                             Image(systemName: "arrow.right")
                                                 .resizable()
                                                 .aspectRatio(contentMode: .fit)
-                                                .frame(width: .screenWidth * 0.041, height: .screenHeight * 0.041)
-                                                .foregroundColor(Color(hex: "FECC03"))
-                                                .clipShape(Circle())
+                                                .frame(width: 15, height: 15)
+                                                .foregroundColor(Color.yellow)
                                         )
-                                }.padding(.trailing, 2)
-                                
+                                }.padding(.trailing,2)
                             }
                         }
                         
-                        // TabView for animated step change
-                        
-                        TabView(selection: $currentStep) {
-                            ForEach(1...steps.count, id: \.self) { step in
-                                
-                                HStack(alignment: .top, spacing: 10) {
+                        VStack(alignment: .leading) {
+                            HStack(alignment: .top, spacing: 8) {
+                                // Displaying current step number
+                                ZStack {
                                     Circle()
-                                        .fill(Color(hex: "#2E3E5C"))
-                                        .frame(width: geometry.size.width * 0.074)
-                                        .overlay(
-                                            Text("\(step)")
-                                                .font(.customfont(.bold, fontSize: 14))
-                                                .foregroundColor(Color.white)
-                                        )
-                                    // Display step detail based on the current step
-                                    Text(steps[step - 1])
-                                        .font(.system(size: 16))
-                                        .multilineTextAlignment(.leading)
-                                        .lineLimit(3)
-                                    Spacer()
+                                        .fill(Color(hex: "2D3E50")) // Dark color for circle
+                                        .frame(width: 24, height: 24)
+                                    Text("\(currentStep)")
+                                        .font(.system(size: 14))
+                                        .foregroundColor(.white)
                                 }
-                                .tag(step) // Tag for each step to track the selected Tab
+                                
+                                // Displaying current step text with "See More" functionality
+                                VStack(alignment: .leading, spacing: 5) {
+                                    Text(steps[currentStep - 1])
+                                        .font(.system(size: 14))
+                                        .foregroundColor(Color(hex: "#2E3E5C"))
+                                        .lineLimit(isExpanded ? nil : 2)
+                                        .truncationMode(.tail)
+                                    
+                                    // "See More" or "See Less"
+                                    if steps[currentStep - 1].count > 100 {
+                                        HStack {
+                                            Spacer()
+                                            Text(isExpanded ? "less" : "more")
+                                                .font(.customfont(.semibold, fontSize: 13))
+                                                .foregroundColor(.yellow)
+                                                .onTapGesture {
+                                                    withAnimation {
+                                                        isExpanded.toggle()
+                                                    }
+                                                }
+                                        }
+                                    }
+                                }
                             }
+                            .padding(.vertical, 8)
+                            Divider()
                         }
-                        .tabViewStyle(.page(indexDisplayMode: .never)) // Page style without dots
-                        .frame(minHeight: 50, maxHeight: .infinity)
-                        .disabled(true)
-                        Divider()
+                        
                         //Ratings & Review
                         
                         Text("Ratings & Review")
