@@ -14,7 +14,7 @@ struct FoodonRecipe: View {
     let titleofOrder: [String] = ["Soup", "Salad", "Grill", "Dessert"]
     
     @State private var selectedOrderIndex: Int? = nil
-    
+    @State private var searchText = ""
     var body: some View {
         NavigationView {
             VStack {
@@ -66,6 +66,7 @@ struct FoodonRecipe: View {
                 }
             }
         }
+        .searchable(text: $searchText, prompt: LocalizedStringKey("Search Item"))
         .navigationBarBackButtonHidden(true)
     }
 }
