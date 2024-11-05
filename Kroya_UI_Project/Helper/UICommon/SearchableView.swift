@@ -1,18 +1,12 @@
-
-// New Code
-// 29/10/24
-// Hengly
-
-
 import SwiftUI
 import SwiftUIFlow
 
 struct SearchScreen: View {
     @State private var searchText = ""
     @State private var isSearching = false
-    
     @Environment(\.dismiss) var dismiss
-    let recentSearches = ["Somlor Kari", "Stack", "BayChar Loklak", "Amork", "Noodles", "Koung", "Fried fish", "Char Kroeng"]
+    
+    @State private var recentSearches = ["Somlor Kari", "Stack", "BayChar Loklak", "Amork", "Noodles", "Koung", "Fried fish", "Char Kroeng"]
     let suggestedForYou = ["Somlor Mju Krerng", "Cha Ju Eam", "Tongyum", "Somlor Kari", "Khor", "Somlor Jab Chay", "asdasd", "as33333jk3k", "fkkfkkfkkf", "ooososos", "asdddsdasd", "ssddooooooo", "ddd,dmddnndn", "dddosddsd"]
     
     var body: some View {
@@ -83,44 +77,56 @@ struct SearchScreen: View {
                                         .foregroundColor(.black)
                                     
                                     ForEach(Array(recentSearches.enumerated()), id: \.offset) { index, search in
-                                        HStack {
-                                            Image(systemName: "clock.arrow.trianglehead.counterclockwise.rotate.90")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(maxWidth: geometry.size.width * 0.05)
-                                                .foregroundStyle(.gray)
-                                            Spacer().frame(width: geometry.size.width * 0.02)
-                                            Text(search)
-                                                .font(.customfont(.medium, fontSize: geometry.size.width * 0.04))
-                                                .foregroundColor(.black.opacity(0.60))
-                                            Spacer()
-                                            Image(systemName: "multiply")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(maxWidth: geometry.size.width * 0.05)
-                                                .foregroundStyle(.gray)
-                                                .onTapGesture {
-                                                    print("Remove \(search) from recent searches")
+                                        NavigationLink(destination: ResultSearchView(isTabBarHidden: .constant(true), menuName: search)) {
+                                            HStack {
+                                                HStack {
+                                                    Image(systemName: "clock.arrow.trianglehead.counterclockwise.rotate.90")
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(maxWidth: geometry.size.width * 0.05)
+                                                        .foregroundStyle(.gray)
+                                                    Spacer().frame(width: geometry.size.width * 0.02)
+                                                    Text(search)
+                                                        .font(.customfont(.medium, fontSize: geometry.size.width * 0.04))
+                                                        .foregroundColor(.black.opacity(0.60))
+                                                    Spacer()
                                                 }
+                                                
+                                                // Cancel Button for deleting the item
+                                                Image(systemName: "multiply")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(maxWidth: geometry.size.width * 0.05)
+                                                    .foregroundStyle(.gray)
+                                                    .onTapGesture {
+                                                        // Remove the item from recent searches
+                                                        recentSearches.remove(at: index)
+                                                        print("Removed \(search) from recent searches")
+                                                    }
+                                            }
+                                            .padding(.vertical, geometry.size.height * 0.01)
+                                            .contentShape(Rectangle())
                                         }
-                                        .padding(.vertical, geometry.size.height * 0.01)
+                                        .buttonStyle(PlainButtonStyle())
                                     }
                                     
                                     ScrollView(.vertical) {
                                         Flow(.vertical, alignment: .topLeading) {
                                             ForEach(suggestedForYou, id: \.self) { suggestion in
-                                                Text(suggestion)
-                                                    .font(.customfont(.medium, fontSize: geometry.size.width * 0.035))
-                                                    .foregroundColor(PrimaryColor.normalHover)
-                                                    .padding(geometry.size.width * 0.02)
-                                                    .background(PrimaryColor.lightHover)
-                                                    .cornerRadius(geometry.size.width * 0.02)
-                                                    .onTapGesture {
-                                                        print("Selected suggestion: \(suggestion)")
-                                                    }
+                                                NavigationLink(destination: ResultSearchView(isTabBarHidden: .constant(true), menuName: suggestion)) {
+                                                    Text(suggestion)
+                                                        .font(.customfont(.medium, fontSize: geometry.size.width * 0.035))
+                                                        .foregroundColor(PrimaryColor.normalHover)
+                                                        .padding(geometry.size.width * 0.02)
+                                                        .background(PrimaryColor.lightHover)
+                                                        .cornerRadius(geometry.size.width * 0.02)
+                                                        .contentShape(Rectangle()) // Ensures the whole area is tappable
+                                                }
+                                                .buttonStyle(PlainButtonStyle()) // Removes default link styling
                                             }
                                         }
                                     }
+
                                 }
                             } else {
                                 // Filtered results combining recent searches and suggestions
@@ -155,7 +161,6 @@ struct SearchScreen: View {
                         }
                         .frame(maxWidth: .infinity)
                     }
-                   
                     .padding(.horizontal, geometry.size.width * 0.05)
                 }
             }

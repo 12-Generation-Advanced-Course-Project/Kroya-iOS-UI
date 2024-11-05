@@ -16,7 +16,7 @@ class DraftModelData: ObservableObject {
     @Published var selectedLevel: String? = nil
     @Published var selectedCuisine: String? = nil
     @Published var selectedCategory: String? = nil
-    @Published var duration: Double = 0
+    @Published var duration: Double = 5
     
     //MARK: Fields for RecipeModal
     @Published var ingredients: [RecipeIngredient]
@@ -183,7 +183,7 @@ class DraftModelData: ObservableObject {
         selectedLevel = nil
         selectedCuisine = nil
         selectedCategory = nil
-        duration = 0
+        duration = 5
         ingredients = [RecipeIngredient(id: UUID().hashValue, name: "", quantity: 0, price: 0, selectedCurrency: 0)]
         cookingSteps = [CookingStep(id: UUID().hashValue, description: "")]
         amount = 0
