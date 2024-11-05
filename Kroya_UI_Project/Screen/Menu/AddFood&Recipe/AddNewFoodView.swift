@@ -183,7 +183,7 @@ struct AddFoodView: View {
                         }
                         .padding(.horizontal, 20)
                         
-                        Slider(value: $draftModelData.duration, in: 0...100, step: 1)
+                        Slider(value: $draftModelData.duration, in: 5...100, step: 1)
                             .accentColor(PrimaryColor.normal)
                             .padding(.horizontal, 20)
                             .onChange(of: draftModelData.duration) { newValue in

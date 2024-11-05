@@ -7,7 +7,7 @@ struct IngredientEntryView: View {
     @State private var showValidationError = false
     @State private var priceText: String = ""
     let currencies = ["៛", "$"]
-    private let conversionRate: Double = 4100.0
+    private let conversionRate: Double = 4000.0
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -55,7 +55,7 @@ struct IngredientEntryView: View {
                         .foregroundStyle(.black.opacity(0.6))
                         
                     Spacer().frame(width: 25)
-                    TextField("0", text: Binding(
+                    TextField("Input", text: Binding(
                         get: { ingredient.quantity == 0 ? "" : String(Int(ingredient.quantity)) },
                         set: { newValue in
                             if let value = Int(newValue) {
@@ -88,7 +88,7 @@ struct IngredientEntryView: View {
                        
                     Spacer().frame(width: 30)
                     
-                    TextField("0", text: Binding(
+                    TextField("Input", text: Binding(
                         get: { priceText },
                         set: { newValue in
                             priceText = filterPriceInput(newValue)
@@ -120,6 +120,7 @@ struct IngredientEntryView: View {
                         priceText = formatPrice()
                     }
                 }
+
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 13)
                 .padding(.top, 5)
@@ -172,6 +173,11 @@ struct IngredientEntryView: View {
             filtered = filtered.replacingOccurrences(of: ",", with: "")
         }
         
+        // Prevent the price from starting with zero unless followed by a decimal
+        if filtered.hasPrefix("0") && !filtered.hasPrefix("0.") && filtered.count > 1 {
+            filtered.removeFirst()
+        }
+        
         // Handle multiple decimal points
         let components = filtered.components(separatedBy: ".")
         if components.count > 2 {
@@ -186,6 +192,7 @@ struct IngredientEntryView: View {
         
         return filtered
     }
+
     
     // MARK: Function to convert the currency value when switching between Riel and USD
     private func convertCurrency(_ price: Double) -> Double {
