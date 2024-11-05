@@ -1,7 +1,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <img src="http://8.219.139.67:6654/api/v1/files/view/44391c70-1793-4b87-9be5-7fa8aa4b2589.png" alt="Logo" width="180" height="180">
+  <img src="http://kroya-api-production.up.railway.app/api/v1/fileView/5cf3b19b-97bd-460f-a55c-eb28dabbc087.jpg" alt="Logo" width="180" height="180">
 
   <h3 align="center">Kroya</h3>
 
