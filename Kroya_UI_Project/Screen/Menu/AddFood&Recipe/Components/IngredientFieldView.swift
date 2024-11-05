@@ -19,7 +19,6 @@ struct IngredientEntryView: View {
                     .scaledToFit()
                     .frame(width: 24, height: 24)
                     .foregroundColor(Color(hex: "#D0DBEA"))
-                
                 HStack {
                     TextField("Enter ingredients", text: $ingredient.name)
                         .padding(.vertical, 17)
