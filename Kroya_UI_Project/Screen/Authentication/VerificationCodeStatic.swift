@@ -1,10 +1,3 @@
-//
-//  VerificationCodeStatic.swift
-//  Kroya_UI_Project
-//
-//  Created by Ounbonaliheng on 3/11/24.
-//
-
 import SwiftUI
 
 struct VerificationCodeStatic: View {

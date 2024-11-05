@@ -15,8 +15,9 @@ struct AllTabView: View {
                     // Disclosure Group for Today
                     DisclosureGroup("Today", isExpanded: $isExpandedToday) {
                         VStack(spacing: 15){
-                            OrderCard(isAccepted: true, isOrder: false, showIcon: true)
-                            
+                            NavigationLink(destination: OrderListView()){
+                                OrderCard(isAccepted: true, isOrder: false, showIcon: true)
+                            }
                             NavigationLink(destination:  FoodDetailView(
                                 theMainImage: "Songvak",
                                 subImage1: "ahmok",
@@ -54,7 +55,9 @@ struct AllTabView: View {
                     // Disclosure Group for Yesterday
                     DisclosureGroup("Yesterday", isExpanded: $isExpandedYTD) {
                         VStack(spacing: 15) {
-                            OrderCard(isAccepted: true, isOrder: false, showIcon: true)
+                            NavigationLink(destination: OrderListView()){
+                                OrderCard(isAccepted: true, isOrder: false, showIcon: true)
+                            }
                             
                             NavigationLink(destination:  FoodDetailView(
                                 theMainImage: "Songvak",

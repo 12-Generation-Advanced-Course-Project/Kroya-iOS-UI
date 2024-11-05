@@ -13,7 +13,7 @@ struct HomeView: View {
     @StateObject private var foodOnSaleViewModel = FoodOnSaleViewCellViewModel()
     @StateObject private var addNewFoodVM1 = AddNewFoodVM()
     @EnvironmentObject var addNewFoodVM: AddNewFoodVM // Use @EnvironmentObject instead of @StateObject
-    let notification = [1, 2, 3, 4, 5]
+    let notification = [1, 2, 3]
     
     let categories: [Category] = [
         Category(title: .breakfast, image: "khmernoodle", color: Color(hex: "#F2F2F2"), x: 60, y: 18),

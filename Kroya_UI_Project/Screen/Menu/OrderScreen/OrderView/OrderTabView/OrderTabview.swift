@@ -54,8 +54,6 @@ struct OrderTabView: View {
                 }
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundColor(.black)
-                .accentColor(.black)
-
                 
                 // Disclosure Group for Yesterday
                 DisclosureGroup("Yesterday", isExpanded: $isExpandedYTD) {
@@ -79,8 +77,6 @@ struct OrderTabView: View {
                 }
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundColor(.black)
-                .accentColor(.black)
-
                 
                 DisclosureGroup("Last 2 days", isExpanded: $isExpandedLst2Day) {
                     VStack(spacing: 15) {
@@ -103,8 +99,6 @@ struct OrderTabView: View {
                 }
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundColor(.black)
-                .accentColor(.black)
-
             }
             .padding(.horizontal)
             .padding(.top, 5)
