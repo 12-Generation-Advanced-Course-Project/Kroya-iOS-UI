@@ -216,7 +216,7 @@ struct FoodDetailView: View {
                                 }
                                 .shadow(color: isFavorite ? Color.red.opacity(0.5) : Color.gray.opacity(0.5), radius: 4, x: 0, y: 4)
                             }
-                            .offset(y: -.screenHeight * 0.18)
+                            .offset(y: -.screenHeight * 0.185)
                             .padding(.horizontal,. screenWidth * 0.045)
                         }
                         .overlay(
@@ -251,16 +251,16 @@ struct FoodDetailView: View {
                                         .cornerRadius(7)
                                     }
                                 )
-                                .offset(y: -.screenHeight * 0.0007)
+
                         )
-                    Spacer()
+                   Spacer()
                 }
                 
                 // Bottom Sheet Content
                 BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.645, showOrderButton: showOrderButton, notificationType: notificationType, showButtonInvoic: showButtonInvoic, invoiceAccept: invoiceAccept) {
                                   ContentView(showPrice: showPrice, isShowPopup: $isShowPopup)
                                       .padding(.horizontal, 15)
-                              }
+                }
                 .edgesIgnoringSafeArea(.all)
                 // Show the popup in full screen
                 if isShowPopup {
