@@ -26,14 +26,15 @@ struct SaleModalView: View {
                 VStack(alignment: .trailing, spacing: 15) {
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Is this food available for sale?")
-                            .font(.customfont(.bold, fontSize: 16))
+                            .customFontBoldLocalize(size: 16)
+                             
                         VStack(spacing: 15) {
                             Button(action: {
                                 draftModelData.isForSale = true
                                 isAvailableForSale = true
                             }) {
                                 Text("Yes")
-                                    .font(.customfont(.semibold, fontSize: 16))
+                                    .customFontSemiBoldLocalize(size: 16)
                                     .frame(maxWidth: .infinity)
                                     .padding()
                                     .background(draftModelData.isForSale ? Color.yellow.opacity(0.3) : Color.gray.opacity(0.3))
@@ -50,7 +51,7 @@ struct SaleModalView: View {
                                 draftModelData.isForSale = false
                             }) {
                                 Text("No")
-                                    .font(.customfont(.semibold, fontSize: 16))
+                                    .customFontSemiBoldLocalize(size: 16)
                                     .frame(maxWidth: .infinity)
                                     .padding()
                                     .background(draftModelData.isForSale == false ? Color.yellow.opacity(0.3) : Color.gray.opacity(0.3))
@@ -70,19 +71,19 @@ struct SaleModalView: View {
                     if draftModelData.isForSale {
                         VStack(alignment: .leading) {
                             Text("Details")
-                                .font(.customfont(.bold, fontSize: 16))
+                                .customFontBoldLocalize(size: 16)
                                 .padding(.vertical, 10)
                             VStack(spacing: 10) {
                                 // Cook Date Section
                                 HStack(spacing: 10) {
                                     Text("Cook date")
-                                        .font(.customfont(.regular, fontSize: 15))
+                                        .customFontLightLocalize(size: 15)
                                         .foregroundStyle(.black.opacity(0.6))
                                         .frame(minWidth: 100, alignment: .leading)
                                     Spacer()
                                     TextField("", text: $formattedDate)
+                                        .customFontMediumLocalize(size: 15)
                                         .multilineTextAlignment(.leading)
-                                        .font(.customfont(.medium, fontSize: 15))
                                         .foregroundStyle(.gray.opacity(0.8))
                                         .disabled(true)
                                     
@@ -90,7 +91,7 @@ struct SaleModalView: View {
                                         isDatePickerVisible.toggle()
                                     } label: {
                                         Image(systemName: "calendar")
-                                            .font(.customfont(.light, fontSize: 25))
+                                            .customFontLightLocalize(size: 25)
                                             .foregroundColor(.gray)
                                     }
                                     .overlay(
@@ -121,13 +122,13 @@ struct SaleModalView: View {
                                 
                                 HStack {
                                     Text("Amount")
-                                        .font(.customfont(.regular, fontSize: 15))
+                                        .customFontLightLocalize(size: 15)
                                         .foregroundStyle(.black.opacity(0.6))
                                         .frame(maxWidth: 120, alignment: .leading)
                                     TextField("", value: $draftModelData.amount, format: .number)
+                                        .customFontMediumLocalize(size: 15)
                                         .multilineTextAlignment(.leading)
                                         .keyboardType(.numberPad)
-                                        .font(.customfont(.medium, fontSize: 15))
                                         .foregroundStyle(.gray.opacity(0.8))
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                         .onChange(of: draftModelData.amount) { _ in
@@ -140,7 +141,7 @@ struct SaleModalView: View {
                                 // Price Input Section
                                 HStack {
                                     Text("Price")
-                                        .font(.customfont(.regular, fontSize: 15))
+                                        .customFontLightLocalize(size: 16)
                                         .foregroundStyle(.black.opacity(0.6))
                                         .frame(maxWidth: 120, alignment: .leading)
                                     
@@ -151,10 +152,10 @@ struct SaleModalView: View {
                                             ingret.price = Double(priceText) ?? 0.0
                                         }
                                     ))
+                                    .customFontMediumLocalize(size: 15)
                                     .multilineTextAlignment(.leading)
                                     .keyboardType(.decimalPad)
                                     .foregroundStyle(.gray.opacity(0.8))
-                                    .font(.customfont(.medium, fontSize: 15))
                                     .onChange(of: ingret.price) { _ in
                                         validateFields()
                                     }
@@ -163,7 +164,7 @@ struct SaleModalView: View {
                                         ForEach(0..<currencies.count) { index in
                                             Text(currencies[index])
                                                 .tag(index)
-                                                .font(.customfont(.medium, fontSize: 20))
+                                                .customFontMediumLocalize(size: 20)
                                         }
                                     }
                                     .pickerStyle(SegmentedPickerStyle())
@@ -186,7 +187,7 @@ struct SaleModalView: View {
                                 NavigationLink(destination: AddressView(viewModel: addressStore)) {
                                     HStack {
                                         Text("Location")
-                                            .font(.customfont(.regular, fontSize: 15))
+                                            .customFontLightLocalize(size: 15)
                                             .foregroundStyle(.black.opacity(0.8))
                                             .frame(maxWidth: 120, alignment: .leading)
                                         
@@ -194,8 +195,8 @@ struct SaleModalView: View {
                                             get: { addressStore.selectedAddress?.specificLocation ?? "" },
                                             set: { _ in }
                                         ))
+                                        .customFontMediumLocalize(size: 15)
                                         .multilineTextAlignment(.leading)
-                                        .font(.customfont(.medium, fontSize: 15))
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                         .foregroundStyle(.gray.opacity(0.8))
                                         .disabled(true)
@@ -217,21 +218,23 @@ struct SaleModalView: View {
                                         Image(systemName: "exclamationmark.triangle.fill")
                                             .foregroundColor(.red)
                                         Text("Detail information cannot be empty")
+                                            .customFontLightLocalize(size: 10)
                                             .foregroundColor(.red)
-                                            .font(.customfont(.regular, fontSize: 10))
                                     }
                                 }
                                 Spacer()
                                 VStack {
-                                    Text("Ingredient ")
-                                        .font(.customfont(.medium, fontSize: 13))
-                                        .foregroundColor(.black.opacity(0.4)) +
-                                    Text("\(totalRiels, specifier: "%.2f") ៛")
-                                        .foregroundStyle(.yellow)
-                                        .font(.customfont(.medium, fontSize: 13)) +
-                                    Text("(\(totalUSD, specifier: "%.2f")$)")
-                                        .font(.customfont(.medium, fontSize: 13))
-                                        .foregroundColor(.black.opacity(0.4))
+                                    HStack{
+                                        Text("Ingredient ")
+                                            .customFontMediumLocalize(size: 13)
+                                            .foregroundColor(.black.opacity(0.4))
+                                        Text("\(totalRiels, specifier: "%.2f") ៛")
+                                            .foregroundStyle(.yellow)
+                                            .customFontMediumLocalize(size: 13)
+                                        Text("(\(totalUSD, specifier: "%.2f")$)")
+                                            .customFontMediumLocalize(size: 13)
+                                            .foregroundColor(.black.opacity(0.4))
+                                    }
                                 }
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -249,7 +252,7 @@ struct SaleModalView: View {
                 dismiss()
             }) {
                 Text("Back")
-                    .font(.customfont(.semibold, fontSize: 16))
+                    .customFontSemiBoldLocalize(size: 16)
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(
@@ -281,7 +284,7 @@ struct SaleModalView: View {
                 }
             }) {
                 Text("Post")
-                    .font(.customfont(.semibold, fontSize: 16))
+                    .customFontSemiBoldLocalize(size: 16)
                     .frame(maxWidth: .infinity)
                     .padding()
                     .foregroundColor(.white)

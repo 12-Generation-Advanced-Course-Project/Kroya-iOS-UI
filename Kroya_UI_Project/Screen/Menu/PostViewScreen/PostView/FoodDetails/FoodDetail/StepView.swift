@@ -18,8 +18,7 @@ struct StepView: View {
                 Spacer().frame(height: geometry.size.height * 0.0015)
                 HStack {
                     Text("Steps")
-                        .font(.system(size: 17))
-                        .bold()
+                        .customFontBoldLocalize(size: 16)
                     
                     Spacer()
                     
@@ -76,7 +75,7 @@ struct StepView: View {
                                 .frame(width: geometry.size.width * 0.074)
                                 .overlay(
                                     Text("\(step)")
-                                        .font(.customfont(.bold, fontSize: 14))
+                                        .customFontBoldLocalize(size: 14)
                                         .foregroundColor(Color.white)
                                 )
                             

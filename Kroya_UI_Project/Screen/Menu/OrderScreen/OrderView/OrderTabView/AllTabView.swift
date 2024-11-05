@@ -88,7 +88,7 @@ struct AllTabView: View {
                             }
                         }
                     }
-                    .font(.system(size: 16, weight: .semibold))
+                    .customFontSemiBoldLocalize(size: 16)
                     .foregroundColor(.black)
                     .accentColor(.black)
                     .animation(.easeInOut(duration: 0.3), value: isExpandedYTD)
@@ -139,7 +139,7 @@ struct AllTabView: View {
                                 OrderCard(isAccepted: true, isOrder: true, showIcon: false)
                             }}
                     }
-                    .font(.system(size: 16, weight: .semibold))
+                    .customFontSemiBoldLocalize(size: 16)
                     .foregroundColor(.black)
                     .accentColor(.black)
                     .animation(.easeInOut(duration: 0.3), value: isExpandedLst2Day)

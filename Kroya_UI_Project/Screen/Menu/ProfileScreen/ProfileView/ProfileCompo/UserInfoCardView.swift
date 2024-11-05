@@ -29,12 +29,12 @@ struct UserInfoCardView: View {
             
             VStack(alignment: .leading, spacing: 5) {
                 Text((title))
-                    .font(.customfont(.medium, fontSize: 16))
+                    .customFontMediumLocalize(size: 16)
                     .foregroundColor(titleColor)
                     .frame(maxWidth:.infinity,alignment: isTextCenter ? .center : .leading)
                 
                 Text(subtitle)
-                    .font(.customfont(.light, fontSize: 11))
+                    .customFontLightLocalize(size: 11)
                     .foregroundColor(subtitleColor)
                     .frame(maxWidth:.infinity,alignment: isTextCenter ? .center : .leading)
                 

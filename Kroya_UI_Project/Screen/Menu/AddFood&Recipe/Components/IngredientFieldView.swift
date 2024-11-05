@@ -66,7 +66,7 @@ struct IngredientEntryView: View {
                         }
                     ))
                     .multilineTextAlignment(.leading)
-                    .font(.customfont(.medium, fontSize: 15))
+                    .customFontMediumLocalize(size: 15)
                     .keyboardType(.numberPad)
                     .foregroundStyle(.black.opacity(0.6))
                     .padding(.leading, 10)
@@ -83,7 +83,7 @@ struct IngredientEntryView: View {
                 
                 HStack {
                     Text("Price")
-                        .font(.customfont(.regular, fontSize: 15))
+                        .customFontLightLocalize(size: 15)
                         .foregroundStyle(.black.opacity(0.6))
                        
                     Spacer().frame(width: 30)
@@ -96,7 +96,7 @@ struct IngredientEntryView: View {
                         }
                     ))
                     .multilineTextAlignment(.leading)
-                    .font(.customfont(.medium, fontSize: 15))
+                    .customFontMediumLocalize(size: 15)
                     .foregroundStyle(.black.opacity(0.6))
                     .keyboardType(.decimalPad)
                     .padding(.leading, 10)

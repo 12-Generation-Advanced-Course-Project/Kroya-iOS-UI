@@ -25,7 +25,7 @@ struct CustomButton: View {
             action()
         }) {
             Text(title)
-                .font(.customfont(.semibold, fontSize: fontSize))
+                .customFontSemiBoldLocalize(size: fontSize)
                 .frame(maxWidth: frameWidth ?? .infinity) // Use the available width
                 .frame(height: frameHeight)
                 .background(backgroundColor)

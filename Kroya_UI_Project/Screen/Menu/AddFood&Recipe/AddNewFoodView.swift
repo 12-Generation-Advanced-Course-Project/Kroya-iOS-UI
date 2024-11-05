@@ -95,10 +95,10 @@ struct AddFoodView: View {
                                     }
                                 Spacer().frame(height: 10)
                                 Text("Add dishes Photo")
-                                    .font(.customfont(.bold, fontSize: 15))
+                                    .customFontBoldLocalize(size: 15)
                                     .foregroundStyle(.black.opacity(0.5))
                                 Text("(up to 12 Mb)")
-                                    .font(.customfont(.medium, fontSize: 12))
+                                    .customFontMediumLocalize(size: 12)
                                     .foregroundStyle(.black.opacity(0.5))
                             }
                         }
@@ -119,7 +119,7 @@ struct AddFoodView: View {
                     Spacer().frame(height: 15)
                     VStack(alignment: .leading) {
                         Text("Food Name")
-                            .font(.customfont(.bold, fontSize: 16))
+                            .customFontBoldLocalize(size: 16)
                         Spacer().frame(height: 15)
                         TextField(LocalizedStringKey("Enter food name"), text: $draftModelData.foodName)
                               .padding()
@@ -141,7 +141,7 @@ struct AddFoodView: View {
                     Spacer().frame(height: 15)
                     VStack(alignment: .leading) {
                         Text("Description")
-                            .font(.customfont(.bold, fontSize: 16))
+                            .customFontBoldLocalize(size: 16)
                         Spacer().frame(height: 15)
                         
                         TextField("Tell me a little about your food", text: $draftModelData.descriptionText, axis: .vertical)
@@ -149,7 +149,7 @@ struct AddFoodView: View {
                             .multilineTextAlignment(.leading)
                             .padding(10)
                             .frame(maxWidth: .screenWidth * 0.9, minHeight: 150, alignment: .topLeading)
-                            .font(.customfont(.medium, fontSize: 15))
+                            .customFontMediumLocalize(size: 15)
                             .foregroundStyle(.black.opacity(0.6))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 15)
@@ -157,6 +157,7 @@ struct AddFoodView: View {
                             )
                         if showValidationMessage && draftModelData.descriptionText.isEmpty {
                             validationMessage("Please describe your food")
+                                .customFontMediumLocalize(size: 15)
                         }
                     }
                     
@@ -164,21 +165,21 @@ struct AddFoodView: View {
                     
                     // Duration Section
                     VStack(alignment: .leading) {
-                        Text("Duration")
-                            .font(.customfont(.bold, fontSize: 16))
+                        Text("Duration(Min)")
+                            .customFontBoldLocalize(size: 16)
                             .padding(.leading, .screenWidth * 0.05)
                         Spacer().frame(height: 15)
                         HStack {
                             Text("<5")
-                                .font(.customfont(.bold, fontSize: 16))
+                                .customFontBoldLocalize(size: 16)
                                 .foregroundStyle(PrimaryColor.normal)
                             Spacer()
                             Text("\(Int(draftModelData.duration))")
-                                  .font(.customfont(.bold, fontSize: 16))
+                                  .customFontBoldLocalize(size: 16)
                                   .foregroundStyle(PrimaryColor.normal)
                             Spacer()
                             Text(">100")
-                                .font(.customfont(.bold, fontSize: 16))
+                                .customFontBoldLocalize(size: 16)
                                 .foregroundStyle(PrimaryColor.normal)
                         }
                         .padding(.horizontal, 20)
@@ -194,7 +195,7 @@ struct AddFoodView: View {
                     // Level, Cuisines, and Category Sections
                     VStack(alignment: .leading) {
                         Text("Level")
-                            .font(.customfont(.bold, fontSize: 15))
+                            .customFontBoldLocalize(size: 15)
                             .padding(.leading, .screenWidth * 0.02)
                         Spacer().frame(height: 10)
                         ScrollView(.horizontal, showsIndicators: false) {
@@ -209,7 +210,7 @@ struct AddFoodView: View {
                         
                         Spacer().frame(height: 20)
                         Text("Cuisines")
-                            .font(.customfont(.bold, fontSize: 15))
+                            .customFontBoldLocalize(size: 15)
                             .padding(.leading, .screenWidth * 0.02)
                         Spacer().frame(height: 10)
                         ScrollView(.horizontal, showsIndicators: false) {
@@ -225,7 +226,7 @@ struct AddFoodView: View {
                         
                         Spacer().frame(height: 20)
                         Text("Category")
-                            .font(.customfont(.bold, fontSize: 15))
+                            .customFontBoldLocalize(size: 15)
                             .padding(.leading, .screenWidth * 0.02)
                         Spacer().frame(height: 10)
                         ScrollView(.horizontal, showsIndicators: false) {
@@ -251,7 +252,7 @@ struct AddFoodView: View {
                         }
                     }) {
                         Text("Next")
-                            .font(.customfont(.semibold, fontSize: 16))
+                            .customFontSemiBoldLocalize(size: 16)
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(PrimaryColor.normal)
@@ -261,6 +262,7 @@ struct AddFoodView: View {
                     }
                 }
                 .navigationTitle("Your dishes")
+                .customFontSemiBoldLocalize(size: 16)
                 .navigationBarBackButtonHidden(true)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {

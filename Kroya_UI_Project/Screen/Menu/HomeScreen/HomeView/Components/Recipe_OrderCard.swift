@@ -35,11 +35,11 @@ struct Recipe_OrderCard: View {
             
             VStack(alignment: .leading, spacing: 5) {
                 Text(title)
-                    .font(.customfont(.semibold, fontSize: 18))
+                    .customFontSemiBoldLocalize(size: 18)
                     .foregroundColor(titleColor)
                 
                 Text(subtitle)
-                    .font(.customfont(.regular, fontSize: 12))
+                    .customFontLightLocalize(size: 12)
                     .foregroundColor(subtitleColor)
                 
                 Spacer()
