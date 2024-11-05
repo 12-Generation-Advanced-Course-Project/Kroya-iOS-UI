@@ -24,9 +24,9 @@ struct EditingProfileView: View {
     @Environment(\.dismiss) var dismiss
     @Binding var selectedAddress: Address?
     @State private var imagefile: String = ""
-    @StateObject var viewModel: AddressViewModel
+    @EnvironmentObject var addressVM: AddressViewModel
     @State private var isPasswordVisible = false
-    
+    @Environment(\.locale) var locale
     var urlImagePrefix: String = "https://kroya-api.up.railway.app/api/v1/fileView/"
     
     var body: some View {
@@ -96,17 +96,16 @@ struct EditingProfileView: View {
                     VStack(alignment: .leading) {
                         HStack {
                             Text(LocalizedStringKey("Full name"))
+                                .frame(width: locale.identifier == "ko" ? 80 : locale.identifier == "km-KH" ? 90 : 80, alignment: .leading)
                                 .font(.customfont(.medium, fontSize: 16))
                                 .foregroundColor(.black.opacity(0.8))
-                               
-                                .padding(.trailing,10)
-                            
+                                
                             TextField("Enter your full name", text: $userInputName)
                                 .padding()
                                 .foregroundColor(.black)
                                 .cornerRadius(8)
                                 .font(.customfont(.medium, fontSize: 16))
-                                
+                               
                         }
                         .padding(.leading, 16)
                         .background(Color(hex: "F4F5F7"))
@@ -117,12 +116,10 @@ struct EditingProfileView: View {
                     VStack(alignment: .leading) {
                         HStack {
                             Text(LocalizedStringKey("Email"))
+                                .frame(width: locale.identifier == "ko" ? 80 : locale.identifier == "km-KH" ? 90 : 80, alignment: .leading)
                                 .font(.customfont(.medium, fontSize: 16))
                                 .foregroundColor(.black.opacity(0.8))
-                                
-                                .padding(.trailing,40)
-                                
-                            Spacer()
+                               
                             TextField("Enter your email", text: $userInputEmail)
                                 .padding()
                                 .foregroundColor(.black.opacity(0.5))
@@ -130,27 +127,28 @@ struct EditingProfileView: View {
                                 .font(.customfont(.medium, fontSize: 16))
                                 .disabled(true)
                                 
+                               
                         }
                         .padding(.leading, 16)
                         .background(Color(hex: "F4F5F7"))
                         .cornerRadius(8)
                     }
                     
+                    
                     // Mobile Label and TextField
                     VStack(alignment: .leading) {
-                        HStack(spacing: 10){
+                        HStack {
                             Text(LocalizedStringKey("Mobile"))
+                                .frame(width: locale.identifier == "ko" ? 80 : locale.identifier == "km-KH" ? 90 : 80, alignment: .leading)
                                 .font(.customfont(.medium, fontSize: 16))
                                 .foregroundColor(.black.opacity(0.8))
                                 
-                                .padding(.trailing,30)
-                              
                             TextField("Enter your mobile number", text: $userInputContact)
                                 .padding()
                                 .foregroundColor(.black)
                                 .cornerRadius(8)
-                                .font(.customfont(.medium, fontSize: 16))
                                
+                                .font(.customfont(.medium, fontSize: 16))
                         }
                         .padding(.leading, 16)
                         .background(Color(hex: "F4F5F7"))
@@ -161,10 +159,10 @@ struct EditingProfileView: View {
                     VStack(alignment: .leading) {
                         HStack {
                             Text(LocalizedStringKey("Password"))
+                                .frame(width: locale.identifier == "ko" ? 80 : locale.identifier == "km-KH" ? 90 : 80, alignment: .leading)
                                 .font(.customfont(.medium, fontSize: 16))
                                 .foregroundColor(.black.opacity(0.8))
-                              
-                                .padding(.trailing,10)
+                               
                             // Toggleable password field
                             (isPasswordVisible ? AnyView(TextField("Enter your password", text: $userInputPassword)) : AnyView(SecureField("Enter your password", text: $userInputPassword)))
                                 .padding()
@@ -179,20 +177,21 @@ struct EditingProfileView: View {
                         .cornerRadius(8)
                     }
                     
+                    
                     // Address Label and TextField (disabled)
                     VStack(alignment: .leading) {
                         HStack {
                             Text("Address")
+                                .frame(width: locale.identifier == "ko" ? 80 : locale.identifier == "km-KH" ? 90 : 80, alignment: .leading)
                                 .font(.customfont(.medium, fontSize: 16))
                                 .foregroundColor(.black.opacity(0.8))
-                                
-                                .padding(.trailing,20)
+                               
                             TextField("Enter your address", text: $userInputAddress)
                                 .padding()
                                 .foregroundColor(.black.opacity(0.3))
                                 .font(.customfont(.medium, fontSize: 16))
                                 .disabled(true)
-                               
+                              
                         }
                         .padding(.leading, 16)
                         .background(Color(hex: "F4F5F7"))
@@ -200,6 +199,7 @@ struct EditingProfileView: View {
                     }
                 }
                 .padding(.horizontal, 20)
+                
                 
                 Spacer()
                 // Save Button
@@ -277,14 +277,14 @@ struct EditingProfileView: View {
             }
             .onAppear {
                 loadProfileData()
-                viewModel.fetchAllAddresses()
-                let lastaddress = viewModel.addresses.last
+                addressVM.fetchAllAddresses()
+                let lastaddress = addressVM.addresses.last
                 selectedAddress = lastaddress
             }
             .onDisappear{
                 profile.fetchUserProfile()
                 loadProfileData()
-                viewModel.fetchAllAddresses()
+                addressVM.fetchAllAddresses()
             }
             .sheet(isPresented: $showImagePicker) {
                 ImagePicker(selectedImages: $selectedImages)
@@ -317,7 +317,7 @@ struct EditingProfileView: View {
         userInputEmail = profile.userProfile?.email ?? ""
         userInputContact = profile.userProfile?.phoneNumber ?? ""
         userInputPassword = profile.userProfile?.password ?? ""
-        userInputAddress =  selectedAddress?.specificLocation ?? ""
+        userInputAddress = selectedAddress?.specificLocation ?? ""
     }
     private func detectImageFormat(data: Data) -> String {
         let headerBytes = [UInt8](data.prefix(1))

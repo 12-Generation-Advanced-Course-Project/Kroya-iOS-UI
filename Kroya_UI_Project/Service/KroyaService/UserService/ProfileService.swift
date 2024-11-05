@@ -47,7 +47,7 @@ class ProfileService {
                return
            }
 
-           let url = "https://kroya-api.up.railway.app/api/v1/user/edit-profile"
+           let url = Constants.KroyaUrlUser + "edit-profile"
            let headers: HTTPHeaders = [
                "Authorization": "Bearer \(accessToken)",
                "Content-Type": "application/json"

@@ -55,7 +55,7 @@ struct BreakfastScreenView: View {
             
             // Tab View Content
             TabView(selection: $selectedSegment) {
-                FoodSaleandRecipeView(iselected: selectedSegment)
+                FoodOnSaleView(iselected: selectedSegment)
                     .tag(0)
                     .environmentObject(addNewFoodVM)
                 

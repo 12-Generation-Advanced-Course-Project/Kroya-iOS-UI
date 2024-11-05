@@ -39,3 +39,15 @@ struct Payload: Codable {
     let phoneNumber: String
     let address: String
 }
+
+//MARK: Response OTP
+struct OtpResponse: Codable {
+    let email: String
+    let otp: String
+}
+
+struct ValidationOTPCode: Codable {
+    let email: String
+    let isEmailVerified: Bool
+    let verifiedAt: String
+}

@@ -14,7 +14,7 @@ class ImageUploadViewModel: ObservableObject {
 
     // Upload image function
     func uploadFile(image: Data, completion: @escaping (String) -> Void) {
-        let baseUrl = "https://kroya-api.up.railway.app/api/v1/fileView/file"
+        let baseUrl = Constants.fileupload + "file"
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(Auth.shared.getAccessToken() ?? "")",
             "Content-Type": "multipart/form-data"

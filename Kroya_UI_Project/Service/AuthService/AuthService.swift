@@ -82,7 +82,6 @@ class AuthService {
         AF.request(url, method: .post, parameters: parameters)
             .validate()
             .responseDecodable(of: SendOTPResponse.self) { response in
-                
                 switch response.result {
                 case .success(let apiResponse):
                     // Pretty print success response
@@ -130,7 +129,7 @@ class AuthService {
         AF.request(url, method: .post, parameters: parameters)
             .validate()
             .responseDecodable(of: VerificationCodeRequestResponse.self) { response in
-                
+                debugPrint(response)
                 switch response.result {
                 case .success(let apiResponse):
                     print("Response: \(apiResponse)")
@@ -141,6 +140,13 @@ class AuthService {
                         case 200:
                             print("OTP validated successfully!")
                             completion(.success(apiResponse))
+                            print("""
+                            API Response Success:
+                            - Code: \(apiResponse.statusCode)
+                            - Message: \(apiResponse.message)
+                            - Payload: \(String(describing: apiResponse.payload))
+                            """)
+                            
                         case 400:
                             print("OTP is invalid. Please input the correct OTP code!")
                             let error = NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "OTP is invalid. Please try again."])

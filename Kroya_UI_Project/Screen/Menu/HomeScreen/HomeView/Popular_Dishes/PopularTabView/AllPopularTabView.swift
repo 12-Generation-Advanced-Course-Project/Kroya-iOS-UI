@@ -27,12 +27,6 @@ struct AllPopularTabView: View {
                             .padding(.top, 8)
                     }
                 }
-                
-                // Recipe Cards (Filter items with isForSale = false)
-                Text("Recipes")
-                    .font(.headline)
-                    .padding(.top, 20)
-                
                 ForEach(addNewFoodVM.allNewFoodAndRecipes.filter { !$0.isForSale }) { recipe in
                     NavigationLink(destination:
                                     FoodDetailView(

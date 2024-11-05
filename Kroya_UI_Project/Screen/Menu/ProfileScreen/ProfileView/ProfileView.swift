@@ -19,7 +19,7 @@ struct ProfileView: View {
     @State private var isgotoBill = false
     @State private var isEdit: Bool = false
     @State private var addressToUpdate: Address? = nil
-    var urlImagePrefix: String = "https://kroya-api.up.railway.app/api/v1/fileView/"
+    var urlImagePrefix: String = Constants.fileupload
     @Binding var lang: String
     
     var body: some View {
@@ -69,7 +69,7 @@ struct ProfileView: View {
                             isEdit.toggle()
                         }
                     
-                    NavigationLink(destination: EditingProfileView(profile: Profile,selectedAddress: $selectedAddress, viewModel: addressVM)
+                    NavigationLink(destination: EditingProfileView(profile: Profile,selectedAddress: $selectedAddress)
                ,isActive: $isEdit) {
                         EmptyView()
                     }.hidden()
@@ -193,8 +193,10 @@ struct ProfileView: View {
                 ProgressIndicator()
             }
         }
-        .onAppear{
+        .onAppear {
             Profile.fetchUserProfile()
+            addressVM.fetchAllAddresses()
+            selectedAddress = addressVM.selectedAddress
         }
         .refreshable {
             Profile.fetchUserProfile()
@@ -204,8 +206,3 @@ struct ProfileView: View {
     }
     
 }
-
-//#Preview {
-//    ProfileView()
-//}
-
