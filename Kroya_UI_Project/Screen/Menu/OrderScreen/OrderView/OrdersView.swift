@@ -18,8 +18,7 @@ struct OrdersView: View {
                             .onTapGesture {
                                 selectedSegment = 0
                             }
-                            .fontWeight(.semibold)
-                            .font(.customfont(.semibold, fontSize: 16))
+                            .customFontSemiBoldLocalize(size: 16)
                             .foregroundColor(selectedSegment == 0 ? .black.opacity(0.8) : .black.opacity(0.5))
                             .padding(.trailing, 10)
 
@@ -27,8 +26,7 @@ struct OrdersView: View {
                             .onTapGesture {
                                 selectedSegment = 1
                             }
-                            .fontWeight(.semibold)
-                            .font(.customfont(.semibold, fontSize: 16))
+                            .customFontSemiBoldLocalize(size: 16)
                             .foregroundColor(selectedSegment == 1 ? .black.opacity(0.8) : .black.opacity(0.5))
                             .padding(.trailing, 10)
 
@@ -36,8 +34,7 @@ struct OrdersView: View {
                             .onTapGesture {
                                 selectedSegment = 2
                             }
-                            .fontWeight(.semibold)
-                            .font(.customfont(.semibold, fontSize: 16))
+                            .customFontSemiBoldLocalize(size: 16)
                             .foregroundColor(selectedSegment == 2 ? .black.opacity(0.8) : .black.opacity(0.5))
                             .padding(.trailing, 10)
                     }
@@ -71,10 +68,12 @@ struct OrdersView: View {
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(leading: Text("Orders")
-                .font(.customfont(.bold, fontSize: 18))
+                .customFontBoldLocalize(size: 16)
             )
         }
         .searchable(text: $searchText, prompt: "Search Item")
+        .customFontSemiBoldLocalize(size: 16)
+
         
     }
     

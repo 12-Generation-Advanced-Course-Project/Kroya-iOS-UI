@@ -23,7 +23,7 @@ struct AppSettingView: View {
                     .frame(width: 24, height: 24)
                 
                 Text(title)
-                    .font(.customfont(.medium, fontSize: 16))
+                    .customFontMediumLocalize(size: 16)
             }.padding(.horizontal,10)
             
             Spacer()

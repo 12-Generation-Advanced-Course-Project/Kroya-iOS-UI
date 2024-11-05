@@ -32,7 +32,7 @@ struct OrderListView: View {
                 }
                 Spacer()
                 Text(LocalizedStringKey("Orders request"))
-                    .font(.customfont(.bold, fontSize: 18))
+                    .customFontBoldLocalize(size: 18)
                 Spacer()
                 
                 Button(action : {
@@ -51,7 +51,7 @@ struct OrderListView: View {
                                 .padding([.bottom, .leading], 12)
                                 .overlay(
                                     Text("8")
-                                        .font(.customfont(.semibold, fontSize: 10))
+                                        .customFontSemiBoldLocalize(size: 10)
                                         .foregroundColor(.white)
                                         .padding([.bottom, .leading], 12)
                                 )

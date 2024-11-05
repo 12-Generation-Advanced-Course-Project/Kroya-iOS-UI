@@ -25,7 +25,7 @@ struct SaleTabView: View {
                         }
                     }
                 }
-                .font(.system(size: 16, weight: .semibold))
+                .customFontSemiBoldLocalize(size: 16)
                 .foregroundColor(.black)
                 .accentColor(.black)
 
@@ -37,7 +37,7 @@ struct SaleTabView: View {
                         }
                     }
                 }
-                .font(.system(size: 16, weight: .semibold))
+                .customFontSemiBoldLocalize(size: 16)
                 .foregroundColor(.black)
                 .accentColor(.black)
 
@@ -49,7 +49,7 @@ struct SaleTabView: View {
                         }
                     }
                 }
-                .font(.system(size: 16, weight: .semibold))
+                .customFontSemiBoldLocalize(size: 16)
                 .foregroundColor(.black)
                 .accentColor(.black)
 

@@ -52,7 +52,7 @@ struct OrderTabView: View {
                                }
                     }
                 }
-                .font(.system(size: 16, weight: .semibold))
+                .customFontSemiBoldLocalize(size: 16)
                 .foregroundColor(.black)
                 
                 // Disclosure Group for Yesterday
@@ -75,7 +75,7 @@ struct OrderTabView: View {
                                }
                     }
                 }
-                .font(.system(size: 16, weight: .semibold))
+                .customFontSemiBoldLocalize(size: 16)
                 .foregroundColor(.black)
                 
                 DisclosureGroup("Last 2 days", isExpanded: $isExpandedLst2Day) {
@@ -97,7 +97,7 @@ struct OrderTabView: View {
                                }
                     }
                 }
-                .font(.system(size: 16, weight: .semibold))
+                .customFontSemiBoldLocalize(size: 16)
                 .foregroundColor(.black)
             }
             .padding(.horizontal)

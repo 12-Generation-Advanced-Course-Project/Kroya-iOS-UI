@@ -242,7 +242,7 @@ struct CustomFontSemiblodLocalization: ViewModifier {
     @Environment(\.locale) var local
     func body(content: Content) -> some View {
         content
-            .font(.custom(local.identifier == "km" ? "KantumruyPro-SemiBold" : local.identifier == "en" ? "Inter-Medium" : "NotoSansKR-SemiBold", size: size))
+            .font(.custom(local.identifier == "km" ? "KantumruyPro-SemiBold" : local.identifier == "en" ? "Inter-SemiBold" : "NotoSansKR-SemiBold", size: size))
     }
 }
 
@@ -252,6 +252,15 @@ struct CustomFontBoldLocalization: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(.custom(local.identifier == "km-KH" ? "KantumruyPro-Bold" : local.identifier == "en" ? "Inter-Bold" : "NotoSansKR-Bold", size: size))
+    }
+}
+
+struct CustomFontLightLocalization: ViewModifier {
+    var size: CGFloat
+    @Environment(\.locale) var local
+    func body(content: Content) -> some View {
+        content
+            .font(.custom(local.identifier == "km-KH" ? "KantumruyPro-Light" : local.identifier == "en" ? "Inter-Light" : "NotoSansKR-Light", size: size))
     }
 }
 
@@ -301,5 +310,7 @@ extension View {
     func customFontBoldLocalize(size: CGFloat) -> some View {
         self.modifier(CustomFontBoldLocalization(size: size))
     }
-    
+    func customFontLightLocalize(size: CGFloat) -> some View {
+        self.modifier(CustomFontLightLocalization(size: size))
+    }
 }

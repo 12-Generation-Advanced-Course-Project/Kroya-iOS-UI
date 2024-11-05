@@ -17,7 +17,7 @@ struct IngredientsView: View {
             VStack (alignment:.leading, spacing: 10){
                 
                 Text("Ingredients")
-                    .font(.customfont(.bold, fontSize: 18))
+                    .customFontBoldLocalize(size: 18)
                 VStack(alignment: .leading, spacing: 20) {
                     
                     HStack {
@@ -36,7 +36,7 @@ struct IngredientsView: View {
                             
                         }
                         Text("Egg")
-                            .font(.customfont(.regular, fontSize: 17))
+                            .customFontLightLocalize(size: 17)
                             .foregroundStyle(Color(hex: "#2E3E5C"))
                         
                     }

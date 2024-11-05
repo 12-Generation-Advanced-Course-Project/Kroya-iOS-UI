@@ -23,7 +23,7 @@ struct AllowNotificationView: View {
                 }
                 .frame(minHeight: 40)
                 .padding()
-                .font(.customfont(.semibold, fontSize: 24))
+                .customFontSemiBoldLocalize(size: 24)
                 Spacer()
                 Image("PushNotification")
                     .resizable()
