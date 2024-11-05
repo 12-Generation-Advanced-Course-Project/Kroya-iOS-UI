@@ -47,12 +47,12 @@ struct EditingProfileView: View {
                             KFImage(URL(string: "\(urlImagePrefix)\(profileImageUrl)"))
                                 .resizable()
                                 .scaledToFill()
-                                .frame(width: 100, height: 100)
+                                .frame(width: 94, height: 94)
                                 .clipShape(Circle())
                         } else {
                             Circle()
-                                .fill(Color.gray)
-                                .frame(width: 100, height: 100)
+                                .fill(Color(hex:  "F4F5F7"))
+                                .frame(width: 94, height: 94)
                                 .overlay(
                                     Image(systemName: "person.fill")
                                         .resizable()
@@ -74,10 +74,11 @@ struct EditingProfileView: View {
                     }) {
                         Circle()
                             .fill(Color.yellow)
-                            .frame(width: 35, height: 35)
+                            .frame(width: 33, height: 33)
                             .overlay(
                                 Image("ico_pen")
                                     .foregroundColor(.white)
+                                    .font(.customfont(.medium, fontSize: 20))
                             )
                     }
                 }
@@ -108,7 +109,7 @@ struct EditingProfileView: View {
                                 
                         }
                         .padding(.leading, 16)
-                        .background(Color.black.opacity(0.1))
+                        .background(Color(hex: "F4F5F7"))
                         .cornerRadius(8)
                     }
                     
@@ -131,7 +132,7 @@ struct EditingProfileView: View {
                                 
                         }
                         .padding(.leading, 16)
-                        .background(Color.black.opacity(0.1))
+                        .background(Color(hex: "F4F5F7"))
                         .cornerRadius(8)
                     }
                     
@@ -152,7 +153,7 @@ struct EditingProfileView: View {
                                
                         }
                         .padding(.leading, 16)
-                        .background(Color.black.opacity(0.1))
+                        .background(Color(hex: "F4F5F7"))
                         .cornerRadius(8)
                     }
                     
@@ -174,7 +175,7 @@ struct EditingProfileView: View {
                                
                         }
                         .padding(.leading, 16)
-                        .background(Color.black.opacity(0.1))
+                        .background(Color(hex: "F4F5F7"))
                         .cornerRadius(8)
                     }
                     
@@ -194,7 +195,7 @@ struct EditingProfileView: View {
                                
                         }
                         .padding(.leading, 16)
-                        .background(Color.black.opacity(0.1))
+                        .background(Color(hex: "F4F5F7"))
                         .cornerRadius(8)
                     }
                 }

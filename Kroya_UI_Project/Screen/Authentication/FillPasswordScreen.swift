@@ -84,17 +84,19 @@ struct FillPasswordScreen: View {
                         
                         // Forgot Password
 //                        NavigationLink(destination: VerificationCodeStatic(lang: $lang)){
-                            Button(action: {
-                                isForgetPassword = true
-                            }) {
-                                Text(LocalizedStringKey("Forget Password?"))
-                                    .foregroundStyle(.black.opacity(0.8))
-                                    .font(.customfont(.semibold, fontSize: 12))
-                                    .underline()
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
-                                    .padding(.top, 5)
-                           // }
-                        }.frame(minHeight: 50,alignment: .top)
+                        Button(action: {
+                            isForgetPassword = true
+                            print("Forget Password clicked") // Debugging statement
+                        }) {
+                            Text(LocalizedStringKey("Forget Password?"))
+                                .foregroundStyle(.black.opacity(0.8))
+                                .font(.customfont(.semibold, fontSize: 12))
+                                .underline()
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                .padding(.top, 5)
+                        }
+                        .frame(minHeight: 50, alignment: .top)
+
                         NavigationLink(destination: VerificationCodeStatic(lang: $lang), isActive: $isForgetPassword) {
                             EmptyView()
                         }

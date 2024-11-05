@@ -9,11 +9,10 @@ struct OrdersView: View {
     
     var body: some View {
         NavigationView{
-            VStack(spacing: 0) {
-                
+            VStack{
                 // Tab View
                 VStack(alignment: .leading) {
-                    // HStack for Tab Titles with localized strings
+
                     HStack {
                         Text(LocalizedStringKey("All"))
                             .onTapGesture {
@@ -23,7 +22,7 @@ struct OrdersView: View {
                             .font(.customfont(.semibold, fontSize: 16))
                             .foregroundColor(selectedSegment == 0 ? .black.opacity(0.8) : .black.opacity(0.5))
                             .padding(.trailing, 10)
-                        
+
                         Text(LocalizedStringKey("Order"))
                             .onTapGesture {
                                 selectedSegment = 1
@@ -32,7 +31,7 @@ struct OrdersView: View {
                             .font(.customfont(.semibold, fontSize: 16))
                             .foregroundColor(selectedSegment == 1 ? .black.opacity(0.8) : .black.opacity(0.5))
                             .padding(.trailing, 10)
-                        
+
                         Text(LocalizedStringKey("Sale"))
                             .onTapGesture {
                                 selectedSegment = 2
@@ -44,7 +43,7 @@ struct OrdersView: View {
                     }
                     .padding(.horizontal, 15)
                     .padding(.top)
-                    
+
                     // GeometryReader for underline
                     GeometryReader { geometry in
                         Divider()
@@ -56,7 +55,8 @@ struct OrdersView: View {
                     }
                     .frame(height: 2)
                 }
-                
+          
+
                 // TabView for Content
                 TabView(selection: $selectedSegment) {
                     AllTabView(iselected: selectedSegment)
@@ -71,7 +71,7 @@ struct OrdersView: View {
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(leading: Text("Orders")
-                .customFontBold(size: 16)
+                .font(.customfont(.bold, fontSize: 18))
             )
         }
         .searchable(text: $searchText, prompt: "Search Item")
@@ -80,7 +80,7 @@ struct OrdersView: View {
     
     // Calculate the underline width dynamically based on the localized text width
     private func underlineWidth(for selectedSegment: Int) -> CGFloat {
-        let font = UIFont.systemFont(ofSize: 30, weight: .semibold)
+        let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         
         // Localized titles for calculation
         let localizedTitles = [
@@ -97,19 +97,19 @@ struct OrdersView: View {
     
     // Calculate the underline offset based on the localized width of preceding tabs
     private func underlineOffset(for selectedSegment: Int) -> CGFloat {
-        let font = UIFont.systemFont(ofSize: 30, weight: .semibold)
+        let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         let localizedTitles = [
             NSLocalizedString("All", comment: ""),
             NSLocalizedString("Order", comment: ""),
             NSLocalizedString("Sale", comment: "")
         ]
-        
-        var offset: CGFloat = 0
+
+        var offset: CGFloat = 10
         for index in 0..<selectedSegment {
             let titleWidth = localizedTitles[index].size(withAttributes: [NSAttributedString.Key.font: font]).width
-            offset += titleWidth + 15 // Adjust spacing as needed
+            offset += titleWidth + 20 // Adjust spacing as needed
         }
-        
+
         return offset
     }
 }

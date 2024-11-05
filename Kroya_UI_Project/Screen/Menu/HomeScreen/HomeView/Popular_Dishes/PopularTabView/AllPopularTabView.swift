@@ -41,7 +41,7 @@ struct AllPopularTabView: View {
                                        subImage2:  "Chinese",
                                        subImage3:  "Fly-By-Jing",
                                        subImage4:  "Mixue",
-                                       showOrderButton: false
+                                       showOrderButton: recipe.isForSale
                                
                                    )
                     ) {
