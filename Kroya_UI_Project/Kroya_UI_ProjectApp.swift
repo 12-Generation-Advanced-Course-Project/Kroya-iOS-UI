@@ -95,15 +95,10 @@ struct Kroya_UI_ProjectApp: App {
     }
 
     private func checkNetworkAgain() {
-        // Dismiss the offline message temporarily
         isConnected = monitor.currentPath.status == .satisfied
-
-        // Delay for 1 second to allow for network recheck
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             // Check the network status again after the delay
             isConnected = monitor.currentPath.status == .satisfied
-            
-            // If still not connected, the overlay (OfflineMessageView) will reappear
         }
     }
 
