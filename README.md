@@ -60,11 +60,7 @@ To get a local copy up and running follow these simple steps.
 ```sh
    git clone https://github.com/12-Generation-Advanced-Course-Project/Kroya-iOS-UI.git
 ```
-2. install pod
 
-```sh
-  pod install
-```
 ### Start
 
 1. Start the project
@@ -72,7 +68,7 @@ To get a local copy up and running follow these simple steps.
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Kroya  is Kroya is an e-commerce system that makes it easy for customers to buy and sell foods.
+Kroya is an Mobile Application that makes it easy for customers to buy and sell foods.
 
 
 
