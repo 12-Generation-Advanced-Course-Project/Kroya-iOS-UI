@@ -87,8 +87,8 @@ Auth
 * [Login Page with Gmail ]
   
 <!-- User -->
-For you page
-* [For you]
+Home page
+* [Home page]
 * In for you you can switch the cell layout between grid and row
 * In in the for you page you can view food order, food recipe, category, and popular dishes.
 * As a Buyer you can click on the food card it will show food details, and in this food detail, the user can see the recipe and  order buttom if food for sale.
