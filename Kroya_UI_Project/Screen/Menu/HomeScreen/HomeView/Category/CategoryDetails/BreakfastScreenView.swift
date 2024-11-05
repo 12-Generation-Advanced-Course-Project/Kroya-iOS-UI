@@ -68,9 +68,6 @@ struct BreakfastScreenView: View {
         .navigationBarBackButtonHidden(true)
         .navigationTitle("Breakfast")
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear {
-//            fetchSegmentData() // Initial data fetch based on selected segment
-        }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {

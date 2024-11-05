@@ -22,7 +22,7 @@ struct OrderCard: View {
                 HStack {
                     // Title and subtitle
                     Text("Somlor Kari")
-                        .font(.customfont(.medium, fontSize: 15))
+                        .customFontMediumLocalize(size: 15)
                         .fontWeight(.medium)
 
                     // Conditional display for Accept/Reject or Icon
@@ -37,7 +37,7 @@ struct OrderCard: View {
 
                                 // Notification bubble
                                 Text("3")
-                                    .font(.customfont(.semibold, fontSize: 9))
+                                    .customFontSemiBoldLocalize(size: 9)
                                     .foregroundColor(.white)
                                     .padding(4)
                                     .background(Circle().fill(Color.red))
@@ -53,25 +53,24 @@ struct OrderCard: View {
                     } else {
                         Spacer()
                         Text(isAccepted ? "Accept" : "Reject")
-                            .font(.customfont(.medium, fontSize: 15))
-                            .fontWeight(.medium)
+                            .customFontMediumLocalize(size: 15)
                             .foregroundColor(isAccepted ? .green : .red)
                     }
                 }
 
                 Text("you are selling now")
-                    .font(.customfont(.regular, fontSize: 12))
+                    .customFontLightLocalize(size: 12)
                     .opacity(0.6)
 
                 // Price and Order/Sale Button
                 HStack(spacing: 15) {
                     Text("$3.05")
-                        .font(.customfont(.medium, fontSize: 15))
+                        .customFontMediumLocalize(size: 15)
                         .fontWeight(.medium)
 
                     // Order/Sale Button based on isOrder boolean
                     Text(isOrder ? "Order" : "Sale")
-                        .font(.customfont(.medium, fontSize: 15))
+                        .customFontMediumLocalize(size: 15)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
                         .background(

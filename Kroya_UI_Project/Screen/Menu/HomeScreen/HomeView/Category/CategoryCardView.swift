@@ -19,7 +19,7 @@ struct CategoryCardView: View {
             HStack {
           
                 Text(title)
-                    .font(.customfont(.medium, fontSize: 14))
+                    .customFontMediumLocalize(size: 14)
                     .foregroundColor(.black)
                     .padding(.leading, 25)
                     .padding(.top, 10)

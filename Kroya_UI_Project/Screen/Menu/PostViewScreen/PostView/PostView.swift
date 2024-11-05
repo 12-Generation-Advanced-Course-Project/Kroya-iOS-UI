@@ -46,11 +46,11 @@ struct PostViewScreen: View {
                         
                         VStack(alignment: .leading) {
                             Text(Profile.userProfile?.fullName ?? "")
-                                .font(.customfont(.bold, fontSize: 16))
+                                .customFontBoldLocalize(size: 16)
                                 .foregroundStyle(.black)
                             Spacer().frame(height: 5)
                             Text("\(Profile.userProfile?.email ?? "")")
-                                .font(.customfont(.light, fontSize: 12))
+                                .customFontLightLocalize(size: 12)
                                 .foregroundStyle(.black)
                         }
                     }
@@ -58,10 +58,10 @@ struct PostViewScreen: View {
                     Button(action: { }) {
                         VStack {
                             Text("6")
-                                .font(.customfont(.semibold, fontSize: 14))
+                                .customFontMediumLocalize(size: 14)
                                 .foregroundStyle(PrimaryColor.normal)
                             Text("Post")
-                                .font(.customfont(.medium, fontSize: 14))
+                                .customFontMediumLocalize(size: 14)
                                 .foregroundStyle(.black)
                         }
                     }
@@ -76,8 +76,7 @@ struct PostViewScreen: View {
                             Spacer()
                             
                             Text(LocalizedStringKey("All"))
-                                .fontWeight(.semibold)
-                                .font(.system(size: 16))
+                                .customFontSemiBoldLocalize(size: 16)
                                 .foregroundColor(selectedSegment == 0 ? .black.opacity(0.8) : .black.opacity(0.5))
                                 .onTapGesture {
                                     selectedSegment = 0
@@ -86,8 +85,7 @@ struct PostViewScreen: View {
                             Spacer()
                             
                             Text(LocalizedStringKey("Food on Sale"))
-                                .fontWeight(.semibold)
-                                .font(.system(size: 16))
+                                .customFontSemiBoldLocalize(size: 16)
                                 .foregroundColor(selectedSegment == 1 ? .black.opacity(0.8) : .black.opacity(0.5))
                                 .onTapGesture {
                                     selectedSegment = 1
@@ -96,8 +94,7 @@ struct PostViewScreen: View {
                             Spacer()
                             
                             Text(LocalizedStringKey("Recipes"))
-                                .fontWeight(.semibold)
-                                .font(.system(size: 16))
+                                .customFontSemiBoldLocalize(size: 16)
                                 .foregroundColor(selectedSegment == 2 ? .black.opacity(0.8) : .black.opacity(0.5))
                                 .onTapGesture {
                                     selectedSegment = 2

@@ -8,42 +8,38 @@ struct OrdersView: View {
     @State private var languageChangeTrigger = false
     
     var body: some View {
-        NavigationView{
-            VStack{
+        NavigationView {
+            VStack {
                 // Tab View
                 VStack(alignment: .leading) {
-
                     HStack {
                         Text(LocalizedStringKey("All"))
                             .onTapGesture {
                                 selectedSegment = 0
                             }
-                            .fontWeight(.semibold)
-                            .font(.customfont(.semibold, fontSize: 16))
+                            .customFontSemiBoldLocalize(size: 16)
                             .foregroundColor(selectedSegment == 0 ? .black.opacity(0.8) : .black.opacity(0.5))
                             .padding(.trailing, 10)
-
+                        
                         Text(LocalizedStringKey("Order"))
                             .onTapGesture {
                                 selectedSegment = 1
                             }
-                            .fontWeight(.semibold)
-                            .font(.customfont(.semibold, fontSize: 16))
+                            .customFontSemiBoldLocalize(size: 16)
                             .foregroundColor(selectedSegment == 1 ? .black.opacity(0.8) : .black.opacity(0.5))
                             .padding(.trailing, 10)
-
+                        
                         Text(LocalizedStringKey("Sale"))
                             .onTapGesture {
                                 selectedSegment = 2
                             }
-                            .fontWeight(.semibold)
-                            .font(.customfont(.semibold, fontSize: 16))
+                            .customFontSemiBoldLocalize(size: 16)
                             .foregroundColor(selectedSegment == 2 ? .black.opacity(0.8) : .black.opacity(0.5))
                             .padding(.trailing, 10)
                     }
                     .padding(.horizontal, 15)
                     .padding(.top)
-
+                    
                     // GeometryReader for underline
                     GeometryReader { geometry in
                         Divider()
@@ -55,8 +51,7 @@ struct OrdersView: View {
                     }
                     .frame(height: 2)
                 }
-          
-
+                
                 // TabView for Content
                 TabView(selection: $selectedSegment) {
                     AllTabView(iselected: selectedSegment)
@@ -71,46 +66,60 @@ struct OrdersView: View {
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(leading: Text("Orders")
-                .font(.customfont(.bold, fontSize: 18))
+                .customFontBoldLocalize(size: 16)
             )
         }
         .searchable(text: $searchText, prompt: "Search Item")
+        .customFontSemiBoldLocalize(size: 16)
+
         
     }
     
-    // Calculate the underline width dynamically based on the localized text width
     private func underlineWidth(for selectedSegment: Int) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         
-        // Localized titles for calculation
+        // Localized titles for each segment
         let localizedTitles = [
             NSLocalizedString("All", comment: ""),
             NSLocalizedString("Order", comment: ""),
             NSLocalizedString("Sale", comment: "")
         ]
         
-        // Calculate the width based on the localized title
+        // Calculate title width for the selected segment
         let title = localizedTitles[selectedSegment]
         let titleWidth = title.size(withAttributes: [NSAttributedString.Key.font: font]).width
-        return locale.identifier == "ko" ? titleWidth + 30 : locale.identifier == "km-KH" ? titleWidth + 30 : titleWidth + 10
+        
+        // Adjust width based on locale
+        switch locale.identifier {
+        case "ko":
+            return titleWidth + 16.5
+        case "km-KH":
+            return  46
+        default:
+            return titleWidth + 10
+        }
     }
     
-    // Calculate the underline offset based on the localized width of preceding tabs
     private func underlineOffset(for selectedSegment: Int) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        
+        // Localized titles for each segment
         let localizedTitles = [
             NSLocalizedString("All", comment: ""),
             NSLocalizedString("Order", comment: ""),
             NSLocalizedString("Sale", comment: "")
         ]
-
-        var offset: CGFloat = 10
+        
+        var offset: CGFloat = 15 // Initial padding
+        
+        // Calculate the offset for the selected segment based on the cumulative width of previous segments
         for index in 0..<selectedSegment {
             let titleWidth = localizedTitles[index].size(withAttributes: [NSAttributedString.Key.font: font]).width
-            offset += (locale.identifier == "ko") ? (titleWidth + 20) :
-                      (locale.identifier == "km-KH") ? (titleWidth + 35) : (titleWidth + 20)
+            offset += (locale.identifier == "ko") ? (titleWidth + 23.5) :
+            (locale.identifier == "km-KH") ? (64) : (titleWidth + 15.5)
         }
-
+        
         return offset
     }
 }
+

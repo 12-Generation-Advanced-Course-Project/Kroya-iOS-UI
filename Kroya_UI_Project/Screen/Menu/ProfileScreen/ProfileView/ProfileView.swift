@@ -51,11 +51,11 @@ struct ProfileView: View {
                         
                         VStack(alignment: .leading) {
                             Text(Profile.userProfile?.fullName ?? "")
-                                .font(.customfont(.bold, fontSize: 16))
+                                .customFontBoldLocalize(size: 16)
                                 .foregroundStyle(.black)
                             Spacer().frame(height: 5)
                             Text("\(Profile.formatDate(from: Profile.userProfile?.createdAt ?? ""))")
-                                .font(.customfont(.light, fontSize: 12))
+                                .customFontLightLocalize(size: 12)
                                 .foregroundStyle(.black)
                         }
                     }
@@ -63,7 +63,7 @@ struct ProfileView: View {
                     
                     // Edit button
                     Text("Edit")
-                        .font(.customfont(.semibold, fontSize: 16))
+                        .customFontSemiBoldLocalize(size: 16)
                         .foregroundStyle(PrimaryColor.normal)
                         .onTapGesture {
                             isEdit.toggle()
@@ -115,7 +115,7 @@ struct ProfileView: View {
                 NavigationLink(destination: WebillConnectView()) {
                     VStack(alignment: .leading) {
                         Text("Payment Method")
-                            .font(.customfont(.medium, fontSize: 14))
+                            .customFontMediumLocalize(size: 14)
                             .foregroundStyle(.black)
                         Spacer().frame(height: .screenHeight * 0.02)
                         HStack(spacing: 10) {
@@ -124,12 +124,12 @@ struct ProfileView: View {
                                 .scaledToFit()
                                 .frame(width: 25, height: 25)
                             Text("Connected")
-                                .font(.customfont(.medium, fontSize: 16))
+                                .customFontMediumLocalize(size: 16)
                                 .foregroundStyle(.black)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             Spacer()
                             Text("weBill365")
-                                .font(.customfont(.medium, fontSize: 16))
+                                .customFontMediumLocalize(size: 14)
                                 .foregroundStyle(.black.opacity(0.75))
                             Image("Rightarrow")
                                 .resizable()
@@ -146,7 +146,7 @@ struct ProfileView: View {
                 Spacer().frame(height: .screenHeight * 0.03)
                 VStack(alignment: .leading) {
                     Text("App Settings")
-                        .font(.customfont(.medium, fontSize: 14))
+                        .customFontMediumLocalize(size: 14)
                     Spacer().frame(height: .screenHeight * 0.02)
                     AppSettingView(imageName: "VectorLocation", title: LocalizedStringKey("Change location"), iconName: "Rightarrow")
                         .onTapGesture {
