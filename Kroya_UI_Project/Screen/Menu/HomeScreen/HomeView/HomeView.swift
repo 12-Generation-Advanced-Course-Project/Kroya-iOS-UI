@@ -10,9 +10,7 @@ struct Category {
 
 struct HomeView: View {
     
-    @StateObject private var foodOnSaleViewModel = FoodOnSaleViewCellViewModel()
-    @StateObject private var addNewFoodVM1 = AddNewFoodVM()
-    @EnvironmentObject var addNewFoodVM: AddNewFoodVM // Use @EnvironmentObject instead of @StateObject
+    @EnvironmentObject var addNewFoodVM: AddNewFoodVM
     let notification = [1, 2, 3, 4, 5]
     
     let categories: [Category] = [
@@ -204,7 +202,6 @@ struct HomeView: View {
                 }
             }
         }
-        .environmentObject(foodOnSaleViewModel)
         .environmentObject(addNewFoodVM)
     }
     

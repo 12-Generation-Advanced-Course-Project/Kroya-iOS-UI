@@ -9,19 +9,19 @@ struct FoodOnSaleView: View {
     
     // Properties
     var iselected: Int?
-    @StateObject private var addFoodVM = AddNewFoodVM()
+    @EnvironmentObject var addNewFoodVM: AddNewFoodVM
     
     var body: some View {
         List {
-            ForEach(addFoodVM.allNewFoodAndRecipes.filter { $0.saleIngredients != nil }) { foodSale in
+            ForEach(addNewFoodVM.allNewFoodAndRecipes.filter { $0.saleIngredients != nil }) { foodSale in
                 ZStack {
                     FoodOnSaleViewCell(foodSale: foodSale)
                     NavigationLink(destination: FoodDetailView(
-                        theMainImage: foodSale.photos.first?.photo ?? "Hotpot",
-                        subImage1: foodSale.photos.dropFirst().first?.photo ?? "Chinese Hotpot",
-                        subImage2: foodSale.photos.dropFirst(2).first?.photo ?? "Chinese",
-                        subImage3: foodSale.photos.dropFirst(3).first?.photo ?? "Fly-By-Jing",
-                        subImage4: foodSale.photos.dropFirst(4).first?.photo ?? "Mixue",
+                        theMainImage:"Hotpot",
+                        subImage1: "Chinese Hotpot",
+                        subImage2: "Chinese",
+                        subImage3: "Fly-By-Jing",
+                        subImage4: "Mixue",
                         showOrderButton: foodSale.isForSale,
                         showPrice: foodSale.isForSale
                         

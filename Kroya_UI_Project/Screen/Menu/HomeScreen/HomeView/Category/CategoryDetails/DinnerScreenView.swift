@@ -59,7 +59,7 @@ struct DinnerScreenView: View {
             
             // Tab View Content
             TabView(selection: $selectedSegment) {
-                FoodSaleView(iselected: selectedSegment)
+                FoodSaleandRecipeView(iselected: selectedSegment)
                     .tag(0)
                 RecipeView(iselected: selectedSegment)
                     .tag(1)

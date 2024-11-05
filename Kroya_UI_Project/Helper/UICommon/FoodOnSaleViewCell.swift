@@ -1,3 +1,7 @@
+
+
+
+
 import SwiftUI
 
 struct FoodOnSaleViewCell: View {
@@ -71,18 +75,18 @@ struct FoodOnSaleViewCell: View {
                     .font(.customfont(.medium, fontSize: 16))
                     .foregroundColor(.black)
                 
-                // Cooking Date and Location
+                // Cooking Date and Time of Day
                 if let saleIngredient = foodSale.saleIngredients {
                     HStack {
                         Text("It will be cooked on ")
                             .font(.customfont(.light, fontSize: 10))
-                            .foregroundColor(.gray) +
+                            .foregroundColor(.gray)
                         
-                        Text(saleIngredient.cookDate)
+                        Text(formatDate(saleIngredient.cookDate))
                             .font(.customfont(.medium, fontSize: 10))
                             .foregroundColor(.yellow)
                         
-                        Text(" in the morning.")
+                        Text(determineTimeOfDay())
                             .font(.customfont(.light, fontSize: 10))
                             .foregroundColor(.gray)
                     }
@@ -110,12 +114,58 @@ struct FoodOnSaleViewCell: View {
             .padding(10)
             .frame(width: 350)
         }
+        .onAppear{
+            if let saleIngredient = foodSale.saleIngredients {
+                print(formatDate(saleIngredient.cookDate))
+            }
+        
+        }
         .background(Color.white)
         .cornerRadius(15)
         .shadow(color: Color.gray.opacity(0.2), radius: 5, x: 0, y: 4)
         .overlay {
             RoundedRectangle(cornerRadius: 15)
                 .stroke(Color(hex: "#E6E6E6"), lineWidth: 0.8)
+        }
+    }
+    
+    // Helper function to format date
+      private func formatDate(_ dateString: String) -> String {
+          let formatter = DateFormatter()
+          formatter.locale = Locale(identifier: "en_US_POSIX")
+          
+          // Try parsing with different date formats
+          let dateFormats = ["yyyy-MM-dd HH:mm:ss Z", "yyyy-MM-dd"]
+          var date: Date?
+          
+          for format in dateFormats {
+              formatter.dateFormat = format
+              if let parsedDate = formatter.date(from: dateString) {
+                  date = parsedDate
+                  break
+              }
+          }
+          
+          guard let validDate = date else { return dateString }
+          
+          formatter.dateFormat = "dd MMM yyyy" // Output format
+          return formatter.string(from: validDate)
+      }
+      
+    
+    // Helper function to determine time of day based on the cook date time (if available)
+    private func determineTimeOfDay() -> String {
+        let hour = Calendar.current.component(.hour, from: Date())
+        
+        switch hour {
+        case 5..<12:
+            return "in the morning."
+        case 12..<17:
+            return "in the afternoon."
+        case 17..<21:
+            return "in the evening."
+        default:
+            return "at night."
         }
     }
 }

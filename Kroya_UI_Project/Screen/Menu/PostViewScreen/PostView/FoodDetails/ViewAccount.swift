@@ -98,7 +98,7 @@ struct ViewAccount: View {
 
                 // TabView for Content
                 TabView(selection: $selectedSegment) {
-                    FoodSaleView(iselected: selectedSegment)
+                    FoodSaleandRecipeView(iselected: selectedSegment)
                         .tag(0)
                     FoodOnSaleView(iselected: selectedSegment)
                         .tag(1)

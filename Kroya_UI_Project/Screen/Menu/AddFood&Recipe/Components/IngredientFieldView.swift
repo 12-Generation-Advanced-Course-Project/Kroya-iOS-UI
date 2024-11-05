@@ -53,7 +53,8 @@ struct IngredientEntryView: View {
                     Text("Quantity")
                         .font(.customfont(.regular, fontSize: 15))
                         .foregroundStyle(.black.opacity(0.6))
-                    
+                        
+                    Spacer().frame(width: 25)
                     TextField("0", text: Binding(
                         get: { ingredient.quantity == 0 ? "" : String(Int(ingredient.quantity)) },
                         set: { newValue in
@@ -73,6 +74,7 @@ struct IngredientEntryView: View {
                     .onChange(of: ingredient.quantity) { _ in
                         showValidationError = false
                     }
+                  
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 16)
@@ -83,6 +85,7 @@ struct IngredientEntryView: View {
                     Text("Price")
                         .font(.customfont(.regular, fontSize: 15))
                         .foregroundStyle(.black.opacity(0.6))
+                       
                     Spacer().frame(width: 30)
                     
                     TextField("0", text: Binding(
@@ -101,6 +104,7 @@ struct IngredientEntryView: View {
                     .onChange(of: ingredient.price) { _ in
                         showValidationError = false
                     }
+                   
                     Spacer()
                     
                     Picker("", selection: $ingredient.selectedCurrency) {

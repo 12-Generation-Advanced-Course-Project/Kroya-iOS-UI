@@ -1,9 +1,9 @@
 import SwiftUI
 
+// MARK: - RecipeView
 struct RecipeView: View {
-    var iselected: Int?
     @EnvironmentObject var viewModel: AddNewFoodVM
-    
+    var iselected: Int?
     var body: some View {
         VStack {
             if viewModel.allNewFoodAndRecipes.isEmpty {
@@ -12,37 +12,38 @@ struct RecipeView: View {
                     .foregroundColor(.gray)
                     .padding()
             } else {
-                List {
-                    ForEach(viewModel.allNewFoodAndRecipes.filter { !$0.isForSale }) { recipe in
-                        ZStack {
-                            RecipeViewCell(recipe: recipe)
-                                .padding(.vertical, 6)
-                            
-                            NavigationLink(destination:  FoodDetailView(
-                                theMainImage:"Hotpot",
-                                subImage1:  "Chinese Hotpot",
-                                subImage2:  "Chinese",
-                                subImage3:  "Fly-By-Jing",
-                                subImage4:  "Mixue",
-                                showOrderButton: false
-                            )) {
-                                EmptyView()
+                ScrollView(showsIndicators: false) {
+                    LazyVStack(spacing: 8) {
+                        ForEach(viewModel.allNewFoodAndRecipes.filter { !$0.isForSale }) { recipe in
+                            NavigationLink(destination: recipeDetailDestination(for: recipe)) {
+                                RecipeViewCell(recipe: recipe)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.horizontal, 20)
                             }
-                            .opacity(0)
                         }
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
                     }
                 }
-                .listStyle(.plain)
-                .scrollIndicators(.hidden)
             }
         }
+        .padding(.top, 8)
         .navigationBarBackButtonHidden(true)
-        .onAppear {
-            if viewModel.allNewFoodAndRecipes.isEmpty {
-                print("Using static recipes:", viewModel.allNewFoodAndRecipes)
-            }
-        }
+//        .onAppear {
+//            if viewModel.allNewFoodAndRecipes.isEmpty {
+//                print("Using static recipes:", viewModel.allNewFoodAndRecipes)
+//            }
+//        }
+    }
+    
+    // Destination setup for FoodDetailView with appropriate images
+    @ViewBuilder
+    private func recipeDetailDestination(for item: AddNewFoodModel) -> some View {
+        FoodDetailView(
+            theMainImage: "Hotpot",
+            subImage1: "Chinese Hotpot",
+            subImage2: "Chinese",
+            subImage3: "Fly-By-Jing",
+            subImage4: "Mixue",
+            showOrderButton: false
+        )
     }
 }

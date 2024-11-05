@@ -81,6 +81,9 @@ struct AddressView: View {
             // Initialize selected address highlight if a selection exists
             selectedAddressID = viewModel.selectedAddress?.id
         }
+        .onDisappear{
+            viewModel.fetchAllAddresses()
+        }
         .fullScreenCover(isPresented: $showMapSheet, onDismiss: {
             viewModel.fetchAllAddresses()
         }) {

@@ -8,7 +8,7 @@ struct UserBasicInfoView: View {
     @State private var showSuccessAlert = false
     @State private var selectedAddress: Address?
     @State private var isSkip = false
-   
+    
     @State private var isNameEmpty = false
     @State private var isPhoneNumberEmpty = false
     @State private var isPhoneNumberInvalid = false
@@ -20,7 +20,7 @@ struct UserBasicInfoView: View {
     @EnvironmentObject var addNewFoodVM: AddNewFoodVM
     @ObservedObject var authVM = AuthViewModel(userStore: UserStore())
     @Binding var lang: String
-
+    
     var body: some View {
         VStack(spacing: 20) {
             HStack {
@@ -35,7 +35,7 @@ struct UserBasicInfoView: View {
                 }
                 Spacer()
             }
-           
+            
             Text("Basic Information")
                 .font(.title3)
                 .fontWeight(.semibold)
@@ -86,7 +86,7 @@ struct UserBasicInfoView: View {
                             .font(.customfont(.medium, fontSize: 14))
                     }
                 }
-
+                
                 // Address input
                 VStack(alignment: .leading, spacing: 5) {
                     Text("Address")
@@ -99,7 +99,7 @@ struct UserBasicInfoView: View {
                                 .scaledToFit()
                                 .frame(width: 24, height: 24)
                                 .foregroundColor(.gray)
-                            Text(selectedAddress?.specificLocation ?? "Select Address")
+                            Text(addressVM.selectedAddress?.specificLocation ?? "Select Address")
                                 .font(.customfont(.regular, fontSize: 18))
                                 .padding(.vertical, 20)
                                 .foregroundColor(.gray)
@@ -116,7 +116,7 @@ struct UserBasicInfoView: View {
                         )
                         .frame(height: 60)
                     }
-                    .onChange(of: selectedAddress) { newValue in
+                    .onChange(of: addressVM.selectedAddress) { newValue in
                         isAddressEmpty = newValue == nil
                     }
                     
@@ -130,7 +130,7 @@ struct UserBasicInfoView: View {
                 Spacer()
             }
             .frame(maxWidth: .infinity, maxHeight: .screenHeight * 0.4)
-
+            
             // Save Button
             Button(action: {
                 validateAndSaveUserInfo()
@@ -155,19 +155,25 @@ struct UserBasicInfoView: View {
                     .font(.customfont(.semibold, fontSize: 16))
                     .foregroundColor(PrimaryColor.normal)
             }
-
+            
             Spacer()
-
+            
             // NavigationLink to MainScreen for save action
             NavigationLink(destination: MainScreen(userStore: userStore, lang: $lang)
-                            .environmentObject(userStore)
-                            .environmentObject(addNewFoodVM)
-                            .environmentObject(addressVM)
+                .environmentObject(userStore)
+                .environmentObject(addNewFoodVM)
+                .environmentObject(addressVM)
                            , isActive: $authVM.isUserSave, label: {
                 EmptyView()
             })
             .hidden()
-
+            
+        }
+        .onAppear {
+            // Update selected address from AddressViewModel on reappear
+            if let selectedAddress = addressVM.selectedAddress {
+                self.selectedAddress = selectedAddress
+            }
         }
         .padding(.horizontal, 20)
         .navigationBarHidden(true)
@@ -183,7 +189,7 @@ struct UserBasicInfoView: View {
         // Reset validation flags
         isNameEmpty = textName.isEmpty
         isPhoneNumberEmpty = phoneNumber.isEmpty
-        isAddressEmpty = selectedAddress == nil
+        isAddressEmpty = addressVM.selectedAddress == nil
         
         // If any field is empty, return without saving
         if isNameEmpty || isPhoneNumberEmpty || isAddressEmpty || isPhoneNumberInvalid {
@@ -196,7 +202,7 @@ struct UserBasicInfoView: View {
             email: userStore.user?.email ?? "No Email",
             userName: textName,
             phoneNumber: phoneNumber,
-            address: selectedAddress?.specificLocation ?? "No Address",
+            address: addressVM.selectedAddress?.specificLocation ?? "No Address",
             accessToken: userStore.user?.accesstoken ?? "",
             refreshToken: userStore.user?.refreshtoken ?? ""
         )

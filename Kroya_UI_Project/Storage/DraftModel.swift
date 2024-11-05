@@ -184,8 +184,8 @@ class DraftModelData: ObservableObject {
         selectedCuisine = nil
         selectedCategory = nil
         duration = 0
-        ingredients = []  // Clear ingredients
-        cookingSteps = [] // Clear cooking steps
+        ingredients = [RecipeIngredient(id: UUID().hashValue, name: "", quantity: 0, price: 0, selectedCurrency: 0)]
+        cookingSteps = [CookingStep(id: UUID().hashValue, description: "")]
         amount = 0
         price = 0
         location = ""

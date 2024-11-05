@@ -7,17 +7,16 @@ struct FavoriteViewCart: View {
     @State private var selectedSegment = 0
     @Environment(\.dismiss) var dismiss
     
-    @StateObject private var foodOnSaleViewModel = FoodOnSaleViewCellViewModel()
     @StateObject private var addNewFoodVM = AddNewFoodVM()
     
     var body: some View {
         VStack {
-            // Single Tab Header
+            // Segment Header
             VStack {
                 HStack {
                     Spacer()
                     
-                    Text(LocalizedStringKey("Food on Sale"))
+                    Text("Food on Sale")
                         .fontWeight(.semibold)
                         .font(.customfont(.semibold, fontSize: 16))
                         .foregroundColor(selectedSegment == 0 ? .black.opacity(0.8) : .black.opacity(0.5))
@@ -26,9 +25,8 @@ struct FavoriteViewCart: View {
                         }
                     
                     Spacer()
-                    Spacer()
                     
-                    Text(LocalizedStringKey("Recipes"))
+                    Text("Recipes")
                         .fontWeight(.semibold)
                         .font(.customfont(.semibold, fontSize: 16))
                         .foregroundColor(selectedSegment == 1 ? .black.opacity(0.8) : .black.opacity(0.5))
@@ -40,10 +38,8 @@ struct FavoriteViewCart: View {
                 }
                 .padding(.top)
                 
-                // Underline animation for selected segment
+                // Underline for selected segment
                 GeometryReader { geometry in
-                    Divider()
-             
                     Rectangle()
                         .fill(Color.yellow)
                         .frame(width: geometry.size.width / 2, height: 2)
@@ -54,24 +50,44 @@ struct FavoriteViewCart: View {
             }
             .padding(.top, 5)
             
-            // TabView Content without duplicated headers
+            // TabView Content
             TabView(selection: $selectedSegment) {
+                
+                // Food on Sale Tab
                 ScrollView(showsIndicators: false) {
-                    ForEach(addNewFoodVM.allNewFoodAndRecipes) { foodSale in
-                        FoodOnSaleViewCell(foodSale: foodSale, isFavorite: true)
-                            .padding(.bottom, 8) // Adjust padding as needed
-                            .padding(.top, 10)
-                            .padding(.horizontal)
+                    ForEach(addNewFoodVM.allNewFoodAndRecipes.filter { $0.isForSale }) { foodSale in
+                        NavigationLink(destination:  FoodDetailView(
+                            theMainImage:"Mixue",
+                            subImage1: "Chinese Hotpot",
+                            subImage2: "Chinese",
+                            subImage3: "Fly-By-Jing",
+                            subImage4: "Mixue",
+                            showOrderButton: foodSale.isForSale,
+                            showPrice:  foodSale.isForSale
+                        )) {
+                            FoodOnSaleViewCell(foodSale: foodSale, isFavorite: true)
+                                .padding(.horizontal)
+                                .padding(.vertical, 8)
+                        }
                     }
                 }
                 .tag(0)
                 
+                // Recipes Tab
                 ScrollView(showsIndicators: false) {
-                    ForEach(addNewFoodVM.allNewFoodAndRecipes) { recipe in
-                        RecipeViewCell(recipe: recipe, isFavorite: true)
-                            .padding(.bottom, 8) // Adjust padding as needed
-                            .padding(.top, 10)
-                            .padding(.horizontal)
+                    ForEach(addNewFoodVM.allNewFoodAndRecipes.filter { !$0.isForSale }) { recipe in
+                        NavigationLink(destination: FoodDetailView(
+                            theMainImage:"Mixue",
+                            subImage1: "Chinese Hotpot",
+                            subImage2: "Chinese",
+                            subImage3: "Fly-By-Jing",
+                            subImage4: "Mixue",
+                            showOrderButton: recipe.isForSale
+                        )) {
+                            RecipeViewCell(recipe: recipe, isFavorite: true)
+                                .padding(.horizontal)
+                                .padding(.vertical, 8)
+                        }
                     }
                 }
                 .tag(1)
@@ -82,9 +98,7 @@ struct FavoriteViewCart: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 HStack {
-                    Button(action: {
-                        dismiss()
-                    }) {
+                    Button(action: { dismiss() }) {
                         Image(systemName: "arrow.left")
                             .resizable()
                             .scaledToFit()
@@ -98,13 +112,11 @@ struct FavoriteViewCart: View {
                 }
             }
         }
-        .environmentObject(foodOnSaleViewModel)
         .environmentObject(addNewFoodVM)
     }
 }
 
 #Preview {
     FavoriteViewCart()
-        .environmentObject(FoodOnSaleViewCellViewModel())
         .environmentObject(AddNewFoodVM())
 }

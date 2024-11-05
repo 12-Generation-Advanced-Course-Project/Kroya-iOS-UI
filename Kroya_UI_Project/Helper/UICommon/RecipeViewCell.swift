@@ -77,6 +77,7 @@ struct RecipeViewCell: View {
                 Text(recipe.description)
                     .font(.customfont(.light, fontSize: 10))
                     .foregroundColor(.gray)
+                    .multilineTextAlignment(.leading)
                     .lineLimit(2)
                 
                 HStack {

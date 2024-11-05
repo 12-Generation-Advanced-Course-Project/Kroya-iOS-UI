@@ -9,46 +9,59 @@
 
 import SwiftUI
 
-struct FoodSaleView: View {
-    
-    @StateObject private var foodOnSaleViewModel = FoodOnSaleViewCellViewModel()
-    @StateObject private var recipeViewModel = RecipeViewModel()
-    @StateObject private var viewModel = AddNewFoodVM()
+// MARK: - FoodSaleandRecipeView
+struct FoodSaleandRecipeView: View {
+    @EnvironmentObject var addNewFoodVM: AddNewFoodVM
     var iselected: Int?
-    
+
     var body: some View {
         VStack {
-            ScrollView(showsIndicators: false) {
-                // Food on Sale Cards
-                ForEach(viewModel.allNewFoodAndRecipes.filter { $0.isForSale }.prefix(3)) { foodSale in
-                    NavigationLink(destination:
-                                    FoodDetailView(
-                                        theMainImage:"Hotpot",
-                                        subImage1:  "Chinese Hotpot",
-                                        subImage2:  "Chinese",
-                                        subImage3:  "Fly-By-Jing",
-                                        subImage4:  "Mixue",
-                                        showOrderButton: true
-                                    )) {
-                        FoodOnSaleViewCell(foodSale: foodSale)
-                            .padding(.horizontal, 20)
-                            .padding(.bottom, 8)
+            if addNewFoodVM.allNewFoodAndRecipes.isEmpty {
+                Text("No Food Items Available")
+                    .font(.title3)
+                    .foregroundColor(.gray)
+                    .padding()
+            } else {
+                ScrollView(showsIndicators: false) {
+                    LazyVStack(spacing: 8) {
+                        // Display Food on Sale items
+                        ForEach(addNewFoodVM.allNewFoodAndRecipes.filter { $0.isForSale }.prefix(10)) { foodSale in
+                            NavigationLink(destination: foodDetailDestination(for: foodSale)) {
+                                FoodOnSaleViewCell(foodSale: foodSale)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.horizontal, 20)
+                            }
+                        }
+                        
+                        // Display Recipe items
+                        ForEach(addNewFoodVM.allNewFoodAndRecipes.filter { !$0.isForSale }.prefix(10)) { recipe in
+                            NavigationLink(destination: foodDetailDestination(for: recipe)) {
+                                RecipeViewCell(recipe: recipe)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.horizontal, 20)
+                            }
+                        }
                     }
                 }
             }
-            .environmentObject(foodOnSaleViewModel)
-            .environmentObject(recipeViewModel)
         }
         .padding(.top, 8)
+        .navigationBarBackButtonHidden(true)
+    }
+    
+    // Destination setup for FoodDetailView with appropriate images and options
+    @ViewBuilder
+    private func foodDetailDestination(for item: AddNewFoodModel) -> some View {
+        FoodDetailView(
+            theMainImage:"Mixue",
+            subImage1: "Chinese Hotpot",
+            subImage2: "Chinese",
+            subImage3: "Fly-By-Jing",
+            subImage4: "Mixue",
+            showOrderButton: item.isForSale,
+            showPrice: item.isForSale
+        )
     }
 }
-
-#Preview {
-    FoodSaleView()
-        .environmentObject(FoodOnSaleViewCellViewModel())
-        .environmentObject(RecipeViewModel())
-}
-
-
 
 
