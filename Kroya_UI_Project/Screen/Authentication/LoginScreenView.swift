@@ -13,6 +13,8 @@ struct LoginScreenView: View {
     @Binding var lang:String
     @StateObject private var authVM: AuthViewModel
     @EnvironmentObject var userStore: UserStore
+    @EnvironmentObject var addNewFoodVM: AddNewFoodVM
+    @EnvironmentObject var addressViewModel:AddressViewModel
     init(userStore: UserStore, lang: Binding<String>) {
         _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
         self._lang = lang
@@ -116,6 +118,19 @@ struct LoginScreenView: View {
                     
                     Button(action: {
                         // Guest login action
+                        Auth.shared.loggedIn = true
+                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                           let rootWindow = windowScene.windows.first {
+                            rootWindow.rootViewController = UIHostingController(
+                                rootView: MainScreen(userStore: userStore, lang: $lang)
+                                    .environmentObject(userStore)
+                                    .environmentObject(Auth.shared)
+                                    .environmentObject(addNewFoodVM)
+                                    .environmentObject(addressViewModel)
+                            )
+                            rootWindow.makeKeyAndVisible()
+                        }
+
                     }) {
                         Text("Login as guest")
                             .font(.customfont(.bold, fontSize: 12))
