@@ -92,7 +92,7 @@ struct OrdersView: View {
         // Calculate the width based on the localized title
         let title = localizedTitles[selectedSegment]
         let titleWidth = title.size(withAttributes: [NSAttributedString.Key.font: font]).width
-        return titleWidth + 10
+        return locale.identifier == "ko" ? titleWidth + 30 : locale.identifier == "km-KH" ? titleWidth + 30 : titleWidth + 10
     }
     
     // Calculate the underline offset based on the localized width of preceding tabs
@@ -107,7 +107,8 @@ struct OrdersView: View {
         var offset: CGFloat = 10
         for index in 0..<selectedSegment {
             let titleWidth = localizedTitles[index].size(withAttributes: [NSAttributedString.Key.font: font]).width
-            offset += titleWidth + 20 // Adjust spacing as needed
+            offset += (locale.identifier == "ko") ? (titleWidth + 20) :
+                      (locale.identifier == "km-KH") ? (titleWidth + 35) : (titleWidth + 20)
         }
 
         return offset

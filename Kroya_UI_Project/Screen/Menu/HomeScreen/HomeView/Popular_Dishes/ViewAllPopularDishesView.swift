@@ -96,6 +96,8 @@ struct ViewAllPopularDishesView: View {
         
         @Binding var selectedSegment: Int
         let tabTitles: [String] = ["All", "Sale", "Recipes"]
+        @Environment(\.locale) var locale
+
         
         var body: some View {
             VStack(alignment: .leading) {
@@ -133,7 +135,7 @@ struct ViewAllPopularDishesView: View {
             let title = tabTitles[selectedSegment]
             let titleWidth = title.size(withAttributes: [NSAttributedString.Key.font: font]).width
             let padding: CGFloat = 15 // Add a bit of padding to the underline
-            return titleWidth + padding
+            return locale.identifier == "ko" ? titleWidth + padding : locale.identifier == "km-KH" ? titleWidth + padding + 20 : titleWidth + padding
         }
         
         private func underlineOffset(for selectedSegment: Int, in geometry: GeometryProxy) -> CGFloat {
@@ -142,7 +144,8 @@ struct ViewAllPopularDishesView: View {
             
             for index in 0..<selectedSegment {
                 let titleWidth = tabTitles[index].size(withAttributes: [NSAttributedString.Key.font: font]).width
-                offset += titleWidth + 20 // Add spacing between titles
+                // Add spacing between titles
+                offset += titleWidth + (locale.identifier == "ko" ? 18 : locale.identifier == "km-KH" ? 30 : 20)
             }
             
             return offset
