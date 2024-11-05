@@ -9,8 +9,7 @@ struct IngredientEntryView: View {
     @State private var priceText: String = ""
     let currencies = ["៛", "$"]
     private let conversionRate: Double = 4000.0
-    @Environment(\.locale)
-    var locale
+    @Environment(\.locale) var locale
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -54,7 +53,7 @@ struct IngredientEntryView: View {
             VStack(alignment: .leading, spacing: 10) {
                           HStack {
                               Text("Quantity")
-                                  .font(.customfont(.regular, fontSize: 15))
+                                  .customFontMediumLocalize(size: 15)
                                   .foregroundStyle(.black.opacity(0.6))
                                   
                               Spacer().frame(width: 25)
@@ -67,7 +66,7 @@ struct IngredientEntryView: View {
                                   }
                               ))
                               .multilineTextAlignment(.leading)
-                              .font(.customfont(.medium, fontSize: 15))
+                              .customFontMediumLocalize(size: 15)
                               .keyboardType(.decimalPad)
                               .foregroundStyle(.black.opacity(0.6))
                               .padding(.leading, 10)
@@ -82,10 +81,11 @@ struct IngredientEntryView: View {
                 Divider()
                 HStack {
                     Text("Price")
-                        .customFontLightLocalize(size: 15)
+                        .customFontMediumLocalize(size: 15)
                         .foregroundStyle(.black.opacity(0.6))
+                        
                     Spacer()
-                        .frame(width: 30)
+                        .frame(width: locale.identifier == "ko" ? 40 : locale.identifier == "km-KH" ? 40 : 60)
                     
                     TextField("0", text: Binding(
                         get: { priceText },
@@ -98,11 +98,11 @@ struct IngredientEntryView: View {
                     .customFontMediumLocalize(size: 15)
                     .foregroundStyle(.black.opacity(0.6))
                     .keyboardType(.decimalPad)
-                    .padding(.leading, 10)
-                    .frame(width: .screenWidth * 0.2, height: 30)
+                    .frame(width: .screenWidth * 0.25, height: 30)
                     .onChange(of: ingredient.price) { _ in
                         showValidationError = false
                     }
+                   
                    
                     Spacer()
                     
