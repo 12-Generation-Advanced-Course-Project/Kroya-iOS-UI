@@ -76,16 +76,16 @@
 			<key>text-context</key>
 			<dict>
 				<key>focused</key>
-				<string>            TabView(selection: $selectedSegment) {
+				<string>                            theMainImage: "Mixue",
 </string>
 				<key>leading</key>
-				<string>////            
-////            // Tab View Content
-////</string>
+				<string>                        ForEach(addNewFoodVM.allNewFoodAndRecipes.filter { $0.isForSale }) { foodSale in
+                            NavigationLink(destination: FoodDetailView(
+    </string>
 				<key>trailing</key>
-				<string>////                FoodSaleView(iselected: selectedSegment)
-////                    .tag(0)
-////                RecipeView(iselected: selectedSegment)
+				<string>                                subImage1: "Chinese Hotpot",
+                                subImage2: "Chinese",
+                                subImage3: "Fly-By-Jing",
 </string>
 			</dict>
 			<key>type</key>
