@@ -7,14 +7,3 @@
 
 import SwiftUI
 
-struct Model:View {
-    var body: some View {
-        VStack{
-            
-        }
-    }
-}
-
-#Preview {
-    Model()
-}
