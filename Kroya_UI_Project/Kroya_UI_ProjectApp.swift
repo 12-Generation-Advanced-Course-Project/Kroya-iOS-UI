@@ -13,7 +13,7 @@ import Network
 @main
 struct Kroya_UI_ProjectApp: App {
     @UIApplicationDelegateAdaptor var appdelegate: AppDelegateForLocalNotification
-    @UIApplicationDelegateAdaptor(AppDelegateForMessage.self) var delegateForMessage
+//    @UIApplicationDelegateAdaptor(AppDelegateForMessage.self) var delegateForMessage
     @StateObject var userStore = UserStore()
     @StateObject var addNewFoodVM = AddNewFoodVM()
     @StateObject var addressViewModel = AddressViewModel(userStore: UserStore())
