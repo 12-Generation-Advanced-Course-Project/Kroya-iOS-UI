@@ -1,105 +1,125 @@
-//
-//  OrdersView.swift
-//  Kroya_UI_Project
-//
-//  Created by Ounbonaliheng on 30/9/24.
-//
-
 import SwiftUI
 
 struct OrdersView: View {
     @State private var searchText = ""
     @State private var selectedSegment = 0
     @Environment(\.dismiss) var dismiss
-    @State private var isExpanded = false
+    @Environment(\.locale) var locale
+    @State private var languageChangeTrigger = false
     
     var body: some View {
-        VStack(spacing: 10) {
-            // Orders Text Header
-            HStack {
-                Text("Orders")
-                    .font(.customfont(.bold, fontSize: 18))
-                Spacer()
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.leading, 16)
-            
-            Spacer().frame(height: 10)
-            
-            // Search Bar
-            NavigationLink(destination: SearchScreen()) {
-                HStack {
-                    Image("ico_search1")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24, height: 24)
-                    
-                    Text("Search item")
-                        .font(.customfont(.medium, fontSize: 16))
-                        .foregroundColor(.gray)
-                        .disabled(true)
-                        .frame(width: .screenWidth * 0.26)
-                        .padding(.trailing, 12)
-                    
-                    Spacer()
-                }
-                .padding(.leading, 12)
-                .frame(width: .screenWidth * 0.93, height: .screenHeight * 0.05)
-                .background(Color(hex: "#F3F2F3"))
-                .cornerRadius(12)
-            }
-            
-            // Tab View
-            VStack(alignment: .leading) {
-                HStack {
-                    ForEach(["All", "Order", "Sale"], id: \.self) { title in
-                        Text(title)
+        NavigationView {
+            VStack {
+                // Tab View
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text(LocalizedStringKey("All"))
                             .onTapGesture {
-                                selectedSegment = ["All", "Order", "Sale"].firstIndex(of: title) ?? 0
+                                selectedSegment = 0
                             }
-                            .fontWeight(.semibold)
-                            .font(.customfont(.semibold, fontSize: 16))
-                            .foregroundColor(selectedSegment == (["All", "Order", "Sale"].firstIndex(of: title) ?? 0) ? .black.opacity(0.8) : .black.opacity(0.5))
-                            .padding(.horizontal, 20)
+                            .customFontSemiBoldLocalize(size: 16)
+                            .foregroundColor(selectedSegment == 0 ? .black.opacity(0.8) : .black.opacity(0.5))
+                            .padding(.trailing, 10)
+                        
+                        Text(LocalizedStringKey("Order"))
+                            .onTapGesture {
+                                selectedSegment = 1
+                            }
+                            .customFontSemiBoldLocalize(size: 16)
+                            .foregroundColor(selectedSegment == 1 ? .black.opacity(0.8) : .black.opacity(0.5))
+                            .padding(.trailing, 10)
+                        
+                        Text(LocalizedStringKey("Sale"))
+                            .onTapGesture {
+                                selectedSegment = 2
+                            }
+                            .customFontSemiBoldLocalize(size: 16)
+                            .foregroundColor(selectedSegment == 2 ? .black.opacity(0.8) : .black.opacity(0.5))
+                            .padding(.trailing, 10)
                     }
-                    Spacer()
+                    .padding(.horizontal, 15)
+                    .padding(.top)
+                    
+                    // GeometryReader for underline
+                    GeometryReader { geometry in
+                        Divider()
+                        Rectangle()
+                            .fill(PrimaryColor.normal)
+                            .frame(width: underlineWidth(for: selectedSegment), height: 2)
+                            .offset(x: underlineOffset(for: selectedSegment))
+                            .animation(.easeInOut(duration: 0.3), value: selectedSegment)
+                    }
+                    .frame(height: 2)
                 }
-                .padding(.top)
-                // Geometry Reader for Dynamic Line Under the Selected Tab
-                GeometryReader { geometry in
-                    Divider()
-                    Rectangle()
-                        .fill(PrimaryColor.normal)
-                        .frame(width: geometry.size.width / 7, height: 2)
-                        .offset(x: selectedSegment == 2
-                                ? CGFloat(selectedSegment) * geometry.size.width / 4.7
-                                : CGFloat(selectedSegment) * geometry.size.width / 5)
-                        .animation(.easeInOut(duration: 0.3), value: selectedSegment)
+                
+                // TabView for Content
+                TabView(selection: $selectedSegment) {
+                    AllTabView(iselected: selectedSegment)
+                        .tag(0)
+                    OrderTabView(iselected: selectedSegment)
+                        .tag(1)
+                    SaleTabView(iselected: selectedSegment)
+                        .tag(2)
                 }
-                .frame(height: 2)
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+            }
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(leading: Text("Orders")
+                .customFontBoldLocalize(size: 16)
+            )
+        }
+        .searchable(text: $searchText, prompt: "Search Item")
+        .customFontSemiBoldLocalize(size: 16)
 
-            }
-            .padding(.top, 5)
-            
-            // Content for Each Tab
-            TabView(selection: $selectedSegment) {
-                AllTabView(iselected: selectedSegment)
-                    .tag(0)
-                OrderTabview(iselected: selectedSegment)
-                    .tag(1)
-                SaleTabView(iselected: selectedSegment)
-                    .tag(2)
-           
-            }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-            
-           
+        
+    }
+    
+    private func underlineWidth(for selectedSegment: Int) -> CGFloat {
+        let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        
+        // Localized titles for each segment
+        let localizedTitles = [
+            NSLocalizedString("All", comment: ""),
+            NSLocalizedString("Order", comment: ""),
+            NSLocalizedString("Sale", comment: "")
+        ]
+        
+        // Calculate title width for the selected segment
+        let title = localizedTitles[selectedSegment]
+        let titleWidth = title.size(withAttributes: [NSAttributedString.Key.font: font]).width
+        
+        // Adjust width based on locale
+        switch locale.identifier {
+        case "ko":
+            return titleWidth + 16.5
+        case "km-KH":
+            return  46
+        default:
+            return titleWidth + 10
         }
     }
+    
+    private func underlineOffset(for selectedSegment: Int) -> CGFloat {
+        let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        
+        // Localized titles for each segment
+        let localizedTitles = [
+            NSLocalizedString("All", comment: ""),
+            NSLocalizedString("Order", comment: ""),
+            NSLocalizedString("Sale", comment: "")
+        ]
+        
+        var offset: CGFloat = 15 // Initial padding
+        
+        // Calculate the offset for the selected segment based on the cumulative width of previous segments
+        for index in 0..<selectedSegment {
+            let titleWidth = localizedTitles[index].size(withAttributes: [NSAttributedString.Key.font: font]).width
+            offset += (locale.identifier == "ko") ? (titleWidth + 23.5) :
+            (locale.identifier == "km-KH") ? (64) : (titleWidth + 15.5)
+        }
+        
+        return offset
+    }
 }
-
-#Preview {
-    OrdersView()
-}
-
 

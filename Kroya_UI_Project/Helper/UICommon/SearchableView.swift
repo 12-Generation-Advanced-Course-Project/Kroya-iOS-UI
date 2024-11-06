@@ -1,162 +1,175 @@
-
-
-
-
 import SwiftUI
+import SwiftUIFlow
+
 struct SearchScreen: View {
     @State private var searchText = ""
     @State private var isSearching = false
     @Environment(\.dismiss) var dismiss
-    let recentSearches = ["Noodles", "Pizza", "Burger", "Somlor Mju Krerng", "Cha Ju Eam", "Tongyum", "Somlor Kari", "Khor"]
-    let suggestedForYou = ["Somlor Mju Krerng", "Cha Ju Eam", "Tongyum", "Somlor Kari", "Khor", "Somlor Jab Chay"]
     
-    // Define grid layout
-    let columns = [
-        GridItem(.flexible(minimum: 60), spacing: 10),
-        GridItem(.flexible(minimum: 60), spacing: 10)
-    ]
+    @State private var recentSearches = ["Somlor Kari", "Stack", "BayChar Loklak", "Amork", "Noodles", "Koung", "Fried fish", "Char Kroeng"]
+    let suggestedForYou = ["Somlor Mju Krerng", "Cha Ju Eam", "Tongyum", "Somlor Kari", "Khor", "Somlor Jab Chay", "asdasd", "as33333jk3k", "fkkfkkfkkf", "ooososos", "asdddsdasd", "ssddooooooo", "ddd,dmddnndn", "dddosddsd"]
     
     var body: some View {
-        NavigationView{
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack {
-                    // Header with back button
-                    HStack {
-                        Button(action: {
-                            dismiss()
-                        }) {
-                            Image(systemName: "arrow.left")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 22, height: 22)
-                                .foregroundColor(.black)
-                        }
-                        Spacer().frame(width: 35)
-                        Text("Search")
-                            .font(.customfont(.bold, fontSize: 18))
-                            .foregroundColor(.black.opacity(0.84))
-                        Spacer()
-                    }
-                    .padding(.leading, 20)
-                    .padding(.top, 10)
-                    
-                    Spacer().frame(height: 20)
-                    
-                    // Search field
-                    HStack {
-                        Image("ico_search1")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 24, height: 24)
-                        TextField("Search items", text: $searchText)
-                            .font(.customfont(.medium, fontSize: 16))
-                            .foregroundColor(.gray)
-                            .padding(.trailing, 12)
-                        Spacer()
-                        if !searchText.isEmpty { // Show clear button if searchText is not empty
+        NavigationStack {
+            GeometryReader { geometry in
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack {
+                        HStack {
                             Button(action: {
-                                searchText = ""
+                                dismiss()
                             }) {
-                                Image("CancelButton")
+                                Image(systemName: "arrow.left")
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 24, height: 24)
-                                    .padding(.trailing)
-                            }
-                        }
-                    }
-                    .padding(.leading, 12)
-                    .frame(width: .screenWidth * 0.9, height: .screenHeight * 0.05)
-                    .background(Color(hex: "#F3F2F3"))
-                    .cornerRadius(12)
-                    
-                    Spacer().frame(height: 20)
-                    
-                    VStack {
-                        if searchText.isEmpty {
-                            // Recent Searches
-                            VStack(alignment: .leading, spacing: 10) {
-                                Text("Recent Searches")
-                                    .font(.customfont(.semibold, fontSize: 16))
+                                    .frame(maxWidth: geometry.size.width * 0.05)
                                     .foregroundColor(.black)
-                                
-                                ForEach(recentSearches, id: \.self) { search in
-                                    HStack {
-                                        Image(systemName: "clock.arrow.trianglehead.counterclockwise.rotate.90")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 28, height: 28)
-                                            .foregroundStyle(.gray)
-                                        Spacer().frame(width: 10)
-                                        Text(search)
-                                            .font(.customfont(.medium, fontSize: 16))
-                                            .foregroundColor(.black.opacity(0.60))
-                                        Spacer()
-                                        Image(systemName: "multiply")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 20, height: 20)
-                                            .foregroundStyle(.gray)
-                                            .onTapGesture {
-                                                // Remove from recent searches logic
-                                                print("Remove \(search) from recent searches")
-                                            }
-                                    }
-                                    .frame(width: .screenWidth * 0.86, height: .screenHeight * 0.04, alignment: .leading)
-                                }
-                                
-                                // Suggested for You
-                                GeometryReader { geometry in
-                                    VStack(alignment: .leading) {
-                                        Text("Suggested for You")
-                                            .font(.customfont(.semibold, fontSize: 16))
-                                            .foregroundColor(.black)
-                                        FlowLayout(items: suggestedForYou, itemSpacing: 4, lineSpacing: 10) { suggestion in
-                                            Text(suggestion)
-                                                .font(.customfont(.medium, fontSize: 12))
-                                                .foregroundColor(PrimaryColor.normalHover)
-                                                .padding(10)
-                                                .background(PrimaryColor.lightHover)
-                                                .cornerRadius(10)
-                                                .onTapGesture {
-                                                    print("Selected suggestion: \(suggestion)")
-                                                }
-                                        }
-                                        .position(x: geometry.size.width * 0.49, y: geometry.size.height * -0.18)
-                                    }
-                                }
-                                .frame(width: .screenWidth * 0.9, height: .screenHeight * 0.25)
                             }
-                        } else {
-                            // Search Results
-                            ForEach((recentSearches + suggestedForYou).filter { $0.localizedCaseInsensitiveContains(searchText) }, id: \.self) { result in
-                                VStack(alignment: .leading, spacing: 15) {
-                                    Spacer().frame(height: 5)
-                                    HStack {
-                                        Image("ico_search1")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 24, height: 24)
-                                        Text(result)
-                                            .font(.customfont(.medium, fontSize: 16))
-                                            .foregroundStyle(.black.opacity(0.60))
-                                    }
-                                    Divider()
-                                }
-                                .onTapGesture {
-                                    print("Selected result: \(result)")
+                            
+                            Spacer()
+                            
+                            Text("Search")
+                                .font(.customfont(.bold, fontSize: geometry.size.width * 0.05))
+                                .foregroundColor(.black.opacity(0.84))
+                                .padding(.trailing, 20)
+                            
+                            Spacer()
+                        }
+                        .padding(.top, geometry.size.height * 0.02)
+                        
+                        Spacer().frame(height: geometry.size.height * 0.03)
+                        
+                        HStack {
+                            Image("ico_search1")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(maxWidth: geometry.size.width * 0.05)
+                            TextField(LocalizedStringKey("Search items"), text: $searchText)
+                                .font(.customfont(.medium, fontSize: geometry.size.width * 0.04)) // Responsive font
+                                .foregroundColor(.gray)
+                                .padding(.trailing, 12)
+                            
+                            Spacer()
+                            
+                            if !searchText.isEmpty {
+                                Button(action: {
+                                    searchText = ""
+                                }) {
+                                    Image("CancelButton")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(maxWidth: geometry.size.width * 0.05)
+                                        .padding(.trailing)
                                 }
                             }
                         }
+                        .padding(.leading, 12)
+                        .frame(maxWidth: .infinity, minHeight: geometry.size.height * 0.05)
+                        .background(Color(hex: "#F3F2F3"))
+                        .cornerRadius(12)
+                        
+                        Spacer().frame(height: geometry.size.height * 0.02)
+                        
+                        VStack {
+                            if searchText.isEmpty {
+                                VStack(alignment: .leading, spacing: geometry.size.height * 0.01) {
+                                    Text(LocalizedStringKey("Recent Searches"))
+                                        .font(.customfont(.semibold, fontSize: geometry.size.width * 0.045))
+                                        .foregroundColor(.black)
+                                    
+                                    ForEach(Array(recentSearches.enumerated()), id: \.offset) { index, search in
+                                        NavigationLink(destination: ResultSearchView(isTabBarHidden: .constant(true), menuName: search)) {
+                                            HStack {
+                                                HStack {
+                                                    Image(systemName: "clock.arrow.trianglehead.counterclockwise.rotate.90")
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(maxWidth: geometry.size.width * 0.05)
+                                                        .foregroundStyle(.gray)
+                                                    Spacer().frame(width: geometry.size.width * 0.02)
+                                                    Text(search)
+                                                        .font(.customfont(.medium, fontSize: geometry.size.width * 0.04))
+                                                        .foregroundColor(.black.opacity(0.60))
+                                                    Spacer()
+                                                }
+                                                
+                                                // Cancel Button for deleting the item
+                                                Image(systemName: "multiply")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(maxWidth: geometry.size.width * 0.05)
+                                                    .foregroundStyle(.gray)
+                                                    .onTapGesture {
+                                                        // Remove the item from recent searches
+                                                        recentSearches.remove(at: index)
+                                                        print("Removed \(search) from recent searches")
+                                                    }
+                                            }
+                                            .padding(.vertical, geometry.size.height * 0.01)
+                                            .contentShape(Rectangle())
+                                        }
+                                        .buttonStyle(PlainButtonStyle())
+                                    }
+                                    
+                                    ScrollView(.vertical) {
+                                        Flow(.vertical, alignment: .topLeading) {
+                                            ForEach(suggestedForYou, id: \.self) { suggestion in
+                                                NavigationLink(destination: ResultSearchView(isTabBarHidden: .constant(true), menuName: suggestion)) {
+                                                    Text(suggestion)
+                                                        .font(.customfont(.medium, fontSize: geometry.size.width * 0.035))
+                                                        .foregroundColor(PrimaryColor.normalHover)
+                                                        .padding(geometry.size.width * 0.02)
+                                                        .background(PrimaryColor.lightHover)
+                                                        .cornerRadius(geometry.size.width * 0.02)
+                                                        .contentShape(Rectangle()) // Ensures the whole area is tappable
+                                                }
+                                                .buttonStyle(PlainButtonStyle()) // Removes default link styling
+                                            }
+                                        }
+                                    }
+
+                                }
+                            } else {
+                                // Filtered results combining recent searches and suggestions
+                                let combinedResults = Array(Set((recentSearches + suggestedForYou).filter { $0.localizedCaseInsensitiveContains(searchText) }))
+                                
+                                // Check if combinedResults is empty and show the "not found" message
+                                if combinedResults.isEmpty {
+                                    Text("This food is not found")
+                                        .font(.customfont(.medium, fontSize: geometry.size.width * 0.04))
+                                        .foregroundColor(.black)
+                                        .padding()
+                                } else {
+                                    ForEach(combinedResults, id: \.self) { result in
+                                        NavigationLink(destination: ResultSearchView(isTabBarHidden: .constant(true), menuName: result)) {
+                                            VStack(alignment: .leading, spacing: geometry.size.height * 0.015) {
+                                                Spacer().frame(height: geometry.size.height * 0.01)
+                                                HStack {
+                                                    Image("ico_search1")
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(maxWidth: geometry.size.width * 0.05)
+                                                    Text(result)
+                                                        .font(.customfont(.medium, fontSize: geometry.size.width * 0.04))
+                                                        .foregroundColor(.black.opacity(0.60))
+                                                }
+                                                Divider()
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
                     }
-                    .frame(width: .screenWidth * 0.9)
-                    Spacer()
+                    .padding(.horizontal, geometry.size.width * 0.05)
                 }
             }
         }
-        .edgesIgnoringSafeArea(.all)
+        .ignoresSafeArea(.keyboard)
         .navigationBarBackButtonHidden(true)
-        
     }
 }
 
+#Preview {
+    SearchScreen()
+}

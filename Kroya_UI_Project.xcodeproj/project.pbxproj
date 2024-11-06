@@ -7,8 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		21E424A7EE788A519F13A1B9 /* Pods_Kroya_UI_Project.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D81D12750DC776E3E73A4288 /* Pods_Kroya_UI_Project.framework */; };
+		2686122F2CCA222300DE1F6F /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 2686122E2CCA222300DE1F6F /* GoogleMaps */; };
+		268612322CCA226400DE1F6F /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 268612312CCA226400DE1F6F /* SwiftKeychainWrapper */; };
 		840C1FAB2CB3BD0C0066027A /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 840C1FAA2CB3BD0C0066027A /* Alamofire */; };
-		840C1FAE2CB3BD610066027A /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 840C1FAD2CB3BD610066027A /* GoogleMaps */; };
+		8445843A2CB6793F00CA3C01 /* SwiftUIFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 844584392CB6793F00CA3C01 /* SwiftUIFlow */; };
+		8494AC232CCB533E00FB8206 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 8494AC222CCB533E00FB8206 /* Kingfisher */; };
+		A1F0F280C2FB2A0237375308 /* Pods_Kroya_UI_ProjectTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7867E32E96FB8AD4F4B4B5 /* Pods_Kroya_UI_ProjectTests.framework */; };
+		C0E4631E8E19C01080480355 /* Pods_Kroya_UI_Project_Kroya_UI_ProjectUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA8E4287C90F7037CC7E2F37 /* Pods_Kroya_UI_Project_Kroya_UI_ProjectUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,27 +35,23 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		13AF4374E16431753B38C6AE /* Pods-Kroya_UI_ProjectTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kroya_UI_ProjectTests.debug.xcconfig"; path = "Target Support Files/Pods-Kroya_UI_ProjectTests/Pods-Kroya_UI_ProjectTests.debug.xcconfig"; sourceTree = "<group>"; };
+		60E2EA42E0A2A676400F6787 /* Pods-Kroya_UI_Project-Kroya_UI_ProjectUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kroya_UI_Project-Kroya_UI_ProjectUITests.release.xcconfig"; path = "Target Support Files/Pods-Kroya_UI_Project-Kroya_UI_ProjectUITests/Pods-Kroya_UI_Project-Kroya_UI_ProjectUITests.release.xcconfig"; sourceTree = "<group>"; };
+		77AC2739FEBC9D34A702D269 /* Pods-Kroya_UI_Project.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kroya_UI_Project.release.xcconfig"; path = "Target Support Files/Pods-Kroya_UI_Project/Pods-Kroya_UI_Project.release.xcconfig"; sourceTree = "<group>"; };
 		8406DAAF2CA5510C0003EA40 /* Kroya_UI_Project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kroya_UI_Project.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8406DABF2CA5510F0003EA40 /* Kroya_UI_ProjectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Kroya_UI_ProjectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8406DAC92CA5510F0003EA40 /* Kroya_UI_ProjectUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Kroya_UI_ProjectUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A1F96A864688FE59AEACF37 /* Pods-Kroya_UI_ProjectTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kroya_UI_ProjectTests.release.xcconfig"; path = "Target Support Files/Pods-Kroya_UI_ProjectTests/Pods-Kroya_UI_ProjectTests.release.xcconfig"; sourceTree = "<group>"; };
+		C8998F9E06593DCC842A4717 /* Pods-Kroya_UI_Project.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kroya_UI_Project.debug.xcconfig"; path = "Target Support Files/Pods-Kroya_UI_Project/Pods-Kroya_UI_Project.debug.xcconfig"; sourceTree = "<group>"; };
+		CA8E4287C90F7037CC7E2F37 /* Pods_Kroya_UI_Project_Kroya_UI_ProjectUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Kroya_UI_Project_Kroya_UI_ProjectUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC7867E32E96FB8AD4F4B4B5 /* Pods_Kroya_UI_ProjectTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Kroya_UI_ProjectTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D81D12750DC776E3E73A4288 /* Pods_Kroya_UI_Project.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Kroya_UI_Project.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA75323C5310338CF65880D3 /* Pods-Kroya_UI_Project-Kroya_UI_ProjectUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kroya_UI_Project-Kroya_UI_ProjectUITests.debug.xcconfig"; path = "Target Support Files/Pods-Kroya_UI_Project-Kroya_UI_ProjectUITests/Pods-Kroya_UI_Project-Kroya_UI_ProjectUITests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		842E785D2CB5348400D7ED5D /* Exceptions for "Kroya_UI_Project" folder in "Kroya_UI_Project" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Screen/Menu/FavoriteScreen/FavoriteModel/FavoriteModel.swift,
-			);
-			target = 8406DAAE2CA5510C0003EA40 /* Kroya_UI_Project */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		8406DAB12CA5510C0003EA40 /* Kroya_UI_Project */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				842E785D2CB5348400D7ED5D /* Exceptions for "Kroya_UI_Project" folder in "Kroya_UI_Project" target */,
-			);
 			path = Kroya_UI_Project;
 			sourceTree = "<group>";
 		};
@@ -70,8 +72,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				840C1FAE2CB3BD610066027A /* GoogleMaps in Frameworks */,
+				8445843A2CB6793F00CA3C01 /* SwiftUIFlow in Frameworks */,
 				840C1FAB2CB3BD0C0066027A /* Alamofire in Frameworks */,
+				268612322CCA226400DE1F6F /* SwiftKeychainWrapper in Frameworks */,
+				2686122F2CCA222300DE1F6F /* GoogleMaps in Frameworks */,
+				8494AC232CCB533E00FB8206 /* Kingfisher in Frameworks */,
+				21E424A7EE788A519F13A1B9 /* Pods_Kroya_UI_Project.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1F0F280C2FB2A0237375308 /* Pods_Kroya_UI_ProjectTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C0E4631E8E19C01080480355 /* Pods_Kroya_UI_Project_Kroya_UI_ProjectUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,6 +107,8 @@
 				8406DAC22CA5510F0003EA40 /* Kroya_UI_ProjectTests */,
 				8406DACC2CA5510F0003EA40 /* Kroya_UI_ProjectUITests */,
 				8406DAB02CA5510C0003EA40 /* Products */,
+				9169E034255BCD3A142A9907 /* Pods */,
+				B1F5AE776A7D02D9C1590140 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -112,6 +122,29 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		9169E034255BCD3A142A9907 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C8998F9E06593DCC842A4717 /* Pods-Kroya_UI_Project.debug.xcconfig */,
+				77AC2739FEBC9D34A702D269 /* Pods-Kroya_UI_Project.release.xcconfig */,
+				DA75323C5310338CF65880D3 /* Pods-Kroya_UI_Project-Kroya_UI_ProjectUITests.debug.xcconfig */,
+				60E2EA42E0A2A676400F6787 /* Pods-Kroya_UI_Project-Kroya_UI_ProjectUITests.release.xcconfig */,
+				13AF4374E16431753B38C6AE /* Pods-Kroya_UI_ProjectTests.debug.xcconfig */,
+				9A1F96A864688FE59AEACF37 /* Pods-Kroya_UI_ProjectTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		B1F5AE776A7D02D9C1590140 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D81D12750DC776E3E73A4288 /* Pods_Kroya_UI_Project.framework */,
+				CA8E4287C90F7037CC7E2F37 /* Pods_Kroya_UI_Project_Kroya_UI_ProjectUITests.framework */,
+				CC7867E32E96FB8AD4F4B4B5 /* Pods_Kroya_UI_ProjectTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -119,9 +152,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8406DAD32CA5510F0003EA40 /* Build configuration list for PBXNativeTarget "Kroya_UI_Project" */;
 			buildPhases = (
+				DF23426D1DD1FDD5DA24406D /* [CP] Check Pods Manifest.lock */,
 				8406DAAB2CA5510C0003EA40 /* Sources */,
 				8406DAAC2CA5510C0003EA40 /* Frameworks */,
 				8406DAAD2CA5510C0003EA40 /* Resources */,
+				3EC2A1778F29EACC031C5B37 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -133,7 +168,10 @@
 			name = Kroya_UI_Project;
 			packageProductDependencies = (
 				840C1FAA2CB3BD0C0066027A /* Alamofire */,
-				840C1FAD2CB3BD610066027A /* GoogleMaps */,
+				844584392CB6793F00CA3C01 /* SwiftUIFlow */,
+				2686122E2CCA222300DE1F6F /* GoogleMaps */,
+				268612312CCA226400DE1F6F /* SwiftKeychainWrapper */,
+				8494AC222CCB533E00FB8206 /* Kingfisher */,
 			);
 			productName = Kroya_UI_Project;
 			productReference = 8406DAAF2CA5510C0003EA40 /* Kroya_UI_Project.app */;
@@ -143,6 +181,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8406DAD62CA5510F0003EA40 /* Build configuration list for PBXNativeTarget "Kroya_UI_ProjectTests" */;
 			buildPhases = (
+				7E81C6740FCAE4F887BD3800 /* [CP] Check Pods Manifest.lock */,
 				8406DABB2CA5510F0003EA40 /* Sources */,
 				8406DABC2CA5510F0003EA40 /* Frameworks */,
 				8406DABD2CA5510F0003EA40 /* Resources */,
@@ -156,8 +195,6 @@
 				8406DAC22CA5510F0003EA40 /* Kroya_UI_ProjectTests */,
 			);
 			name = Kroya_UI_ProjectTests;
-			packageProductDependencies = (
-			);
 			productName = Kroya_UI_ProjectTests;
 			productReference = 8406DABF2CA5510F0003EA40 /* Kroya_UI_ProjectTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -166,9 +203,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8406DAD92CA5510F0003EA40 /* Build configuration list for PBXNativeTarget "Kroya_UI_ProjectUITests" */;
 			buildPhases = (
+				880028045E23D31A2205CDBB /* [CP] Check Pods Manifest.lock */,
 				8406DAC52CA5510F0003EA40 /* Sources */,
 				8406DAC62CA5510F0003EA40 /* Frameworks */,
 				8406DAC72CA5510F0003EA40 /* Resources */,
+				4DD5A94D536EF053F6461784 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -179,8 +218,6 @@
 				8406DACC2CA5510F0003EA40 /* Kroya_UI_ProjectUITests */,
 			);
 			name = Kroya_UI_ProjectUITests;
-			packageProductDependencies = (
-			);
 			productName = Kroya_UI_ProjectUITests;
 			productReference = 8406DAC92CA5510F0003EA40 /* Kroya_UI_ProjectUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -216,12 +253,16 @@
 				Base,
 				"km-KH",
 				km,
+				ko,
 			);
 			mainGroup = 8406DAA62CA5510C0003EA40;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				840C1FA92CB3BD0C0066027A /* XCRemoteSwiftPackageReference "Alamofire" */,
-				840C1FAC2CB3BD610066027A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
+				844584382CB6793F00CA3C01 /* XCRemoteSwiftPackageReference "SwiftUIFlow" */,
+				2686122D2CCA222300DE1F6F /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
+				268612302CCA226400DE1F6F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
+				8494AC212CCB533E00FB8206 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8406DAB02CA5510C0003EA40 /* Products */;
@@ -258,6 +299,109 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3EC2A1778F29EACC031C5B37 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Kroya_UI_Project/Pods-Kroya_UI_Project-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Kroya_UI_Project/Pods-Kroya_UI_Project-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Kroya_UI_Project/Pods-Kroya_UI_Project-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4DD5A94D536EF053F6461784 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Kroya_UI_Project-Kroya_UI_ProjectUITests/Pods-Kroya_UI_Project-Kroya_UI_ProjectUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Kroya_UI_Project-Kroya_UI_ProjectUITests/Pods-Kroya_UI_Project-Kroya_UI_ProjectUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Kroya_UI_Project-Kroya_UI_ProjectUITests/Pods-Kroya_UI_Project-Kroya_UI_ProjectUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7E81C6740FCAE4F887BD3800 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Kroya_UI_ProjectTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		880028045E23D31A2205CDBB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Kroya_UI_Project-Kroya_UI_ProjectUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DF23426D1DD1FDD5DA24406D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Kroya_UI_Project-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8406DAAB2CA5510C0003EA40 /* Sources */ = {
@@ -335,7 +479,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -350,7 +494,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -399,7 +543,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -408,7 +552,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -420,12 +564,15 @@
 		};
 		8406DAD42CA5510F0003EA40 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8998F9E06593DCC842A4717 /* Pods-Kroya_UI_Project.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Kroya_UI_Project/Preview Content\"";
+				DEVELOPMENT_TEAM = 62EMNW6G6D;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Kroya-UI-Project-Info.plist";
@@ -434,12 +581,13 @@
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Kroya needs access to your location to show it on the map.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Kroya needs access to your location to show it on the map.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Needed to save your image";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -448,6 +596,7 @@
 				OTHER_LIBTOOLFLAGS = "\"-WLinkingC true\" \"-XCBuildForPre true\" \"-XCExpApple true\"";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Kroya-UI-Project";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -456,12 +605,15 @@
 		};
 		8406DAD52CA5510F0003EA40 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 77AC2739FEBC9D34A702D269 /* Pods-Kroya_UI_Project.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Kroya_UI_Project/Preview Content\"";
+				DEVELOPMENT_TEAM = 62EMNW6G6D;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Kroya-UI-Project-Info.plist";
@@ -470,12 +622,13 @@
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Kroya needs access to your location to show it on the map.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Kroya needs access to your location to show it on the map.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Needed to save your image";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -484,6 +637,7 @@
 				OTHER_LIBTOOLFLAGS = "\"-WLinkingC true\" \"-XCBuildForPre true\" \"-XCExpApple true\"";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Kroya-UI-Project";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -492,6 +646,7 @@
 		};
 		8406DAD72CA5510F0003EA40 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 13AF4374E16431753B38C6AE /* Pods-Kroya_UI_ProjectTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -510,6 +665,7 @@
 		};
 		8406DAD82CA5510F0003EA40 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9A1F96A864688FE59AEACF37 /* Pods-Kroya_UI_ProjectTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -528,6 +684,7 @@
 		};
 		8406DADA2CA5510F0003EA40 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DA75323C5310338CF65880D3 /* Pods-Kroya_UI_Project-Kroya_UI_ProjectUITests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -544,6 +701,7 @@
 		};
 		8406DADB2CA5510F0003EA40 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 60E2EA42E0A2A676400F6787 /* Pods-Kroya_UI_Project-Kroya_UI_ProjectUITests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -600,6 +758,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		2686122D2CCA222300DE1F6F /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.1.1;
+			};
+		};
+		268612302CCA226400DE1F6F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jrendel/SwiftKeychainWrapper";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.1;
+			};
+		};
 		840C1FA92CB3BD0C0066027A /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -608,26 +782,49 @@
 				minimumVersion = 5.9.1;
 			};
 		};
-		840C1FAC2CB3BD610066027A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
+		844584382CB6793F00CA3C01 /* XCRemoteSwiftPackageReference "SwiftUIFlow" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
+			repositoryURL = "https://github.com/ciaranrobrien/SwiftUIFlow";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		8494AC212CCB533E00FB8206 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 9.1.1;
+				minimumVersion = 8.1.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		2686122E2CCA222300DE1F6F /* GoogleMaps */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2686122D2CCA222300DE1F6F /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMaps;
+		};
+		268612312CCA226400DE1F6F /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 268612302CCA226400DE1F6F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
 		840C1FAA2CB3BD0C0066027A /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 840C1FA92CB3BD0C0066027A /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
-		840C1FAD2CB3BD610066027A /* GoogleMaps */ = {
+		844584392CB6793F00CA3C01 /* SwiftUIFlow */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 840C1FAC2CB3BD610066027A /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
-			productName = GoogleMaps;
+			package = 844584382CB6793F00CA3C01 /* XCRemoteSwiftPackageReference "SwiftUIFlow" */;
+			productName = SwiftUIFlow;
+		};
+		8494AC222CCB533E00FB8206 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8494AC212CCB533E00FB8206 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

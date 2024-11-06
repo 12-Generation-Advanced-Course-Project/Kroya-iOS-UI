@@ -7,7 +7,7 @@
 import SwiftUI
 
 class CountdownTimer: ObservableObject {
-    @Published var countdown: Int = 60 {
+    @Published var countdown: Int = 180 {
         didSet {
             // Ensure countdown doesn't go below zero
             if countdown < 0 {
@@ -42,5 +42,9 @@ class CountdownTimer: ObservableObject {
         let minutes = countdown / 60
         let seconds = countdown % 60
         return String(format: "%02d:%02d", minutes, seconds)
+    }
+    
+    deinit {
+        timer?.invalidate()  // Clean up the timer when the instance is deallocated
     }
 }

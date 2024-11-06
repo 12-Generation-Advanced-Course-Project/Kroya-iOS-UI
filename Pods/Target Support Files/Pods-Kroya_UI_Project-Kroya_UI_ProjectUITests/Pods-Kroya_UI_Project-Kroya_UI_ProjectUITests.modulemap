@@ -1,0 +1,6 @@
+framework module Pods_Kroya_UI_Project_Kroya_UI_ProjectUITests {
+  umbrella header "Pods-Kroya_UI_Project-Kroya_UI_ProjectUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}

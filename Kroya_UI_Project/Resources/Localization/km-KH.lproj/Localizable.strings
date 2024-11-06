@@ -1,48 +1,249 @@
-/* 
-  Localizable.strings
-  Kroya_UI_Project
+//Authentication to Khmer
 
-  Created by Ounbonaliheng on 30/9/24.
-  
-*/
-"លេខទូរស័ព្ទ" = "Mobile phone";
-"បញ្ជូលលេខទូរស័ព្ទ" = "Enter phone number";
-"ចាប់ផ្តើម" = "GET STARTED";
-"ចូលជាភ្ងៀវ" = "Login as guest";
-"ដោយចុច \"ចាប់ផ្តើម\" អ្នកបានយល់ព្រមនឹងលក្ខខណ្ឌនៃសេវាកម្ម និងឯកជនភាពរបស់យើង" = "By clicking \"GET STARTED\" you agreed to our Terms of Service and Privacy";
-"បន្តជាមួយលេខសម្ងាត់" = "Continue with password";
-"លេខសម្ងាត់" = "Password";
-"បញ្ជូលលេខសម្ងាត់របស់អ្នក" = "Input your password";
-"ភ្លេចលេខសម្ងាត់?" = "Forget password?";
-"ចូល" = "Login";
-"លេខកូដផ្ទៀងផ្ទាត់" = "Verification Code";
-"សូមបញ្ជូលលេខកូដ៦ខ្ទង់ដែលបានផ្ញើទៅកាន់លេខទូរស័ព្ទរបស់អ្នក" = "Enter 6 digits code sent to your mobile number";
-"ផ្ញើលេខកូដម្តងទៀតនៅ ០២:០០" = "Resend code in 02:00";
-"បន្ទាប់" = "Next";
-"បង្កើតលេខសម្ងាត់ថ្មី" = "Create new password";
-"លេខសម្ងាត់ថ្មី" = "New password";
-"បញ្ជូលលេខសម្ងាត់របស់អ្នក" = "Input your password";
-"បញ្ជាក់ពាក្យសម្ងាត់ថ្មី" = "Confirm new password";
-"បញ្ជូលលេខសម្ងាត់របស់អ្នក" = "Input your password";
-"បង្កើតលេខសម្ងាត់" = "CREATE PASSWORD";
-"ព័ត៌មានមូលដ្ឋាន" = "Basic Information";
-"ឈ្មោះអ្នកប្រើប្រាស់" = "Username";
-"ឈ្មោះពេញ" = "Full name";
-"អ៊ីម៉ែល" = "Email";
+"Mobile phone" = "លេខទូរស័ព្ទ";
+"Enter phone number" = "បញ្ជូលលេខទូរស័ព្ទ";
+"GET STARTED" = "ចាប់ផ្តើម";
+"Login as guest" = "ចូលជាភ្ងៀវ";
+"By clicking GET STARTED you agreed to our Terms of Service and Privacy" = "ដោយចុច ចាប់ផ្តើម អ្នកបានយល់ព្រមនឹងលក្ខខណ្ឌនៃសេវាកម្ម និងឯកជនភាពរបស់យើង";
+"Continue with password" = "បន្តជាមួយលេខសម្ងាត់";
+"Password" = "លេខសម្ងាត់";
+"Input your password" = "បញ្ជូលលេខសម្ងាត់របស់អ្នក";
+"Forget Password?" = "ភ្លេចលេខសម្ងាត់?";
+"Login" = "ចូល";
+"Verification Code" = "លេខកូដផ្ទៀងផ្ទាត់";
+"Enter 6 digits code sent to your mobile number" = "សូមបញ្ជូលលេខកូដ៦ខ្ទង់ដែលបានផ្ញើទៅកាន់លេខទូរស័ព្ទរបស់អ្នក";
+"Resend code in ​02:00" = "ផ្ញើលេខកូដម្តងទៀតនៅ​០២:០០";
+"Next" = "បន្ទាប់";
+"Create new password" = "បង្កើតលេខសម្ងាត់ថ្មី";
+"New password" = "លេខសម្ងាត់ថ្មី";
+"Input your password" = "បញ្ជូលលេខសម្ងាត់របស់អ្នក";
+"Confirm New password" = "បញ្ជាក់ពាក្យសម្ងាត់ថ្មី";
+"Input your password" = "បញ្ជូលលេខសម្ងាត់របស់អ្នក" ;
+"CREATE PASSWORD" = "បង្កើតលេខសម្ងាត់" ;
+"SUCCESS" = "ជោគជ័យ";
+"Your account have been successful create." = "គណនីរបស់អ្នកបានបង្កើតដោយជោគជ័យ";
+"Basic Information" = "ព័ត៌មានមូលដ្ឋាន" ;
+"Username" = "ឈ្មោះអ្នកប្រើប្រាស់";
+"Full name" = "នាម-គោត្តនាម";
+"Email" = "អ៊ីម៉ែល";
 "example@mail.com" = "example@mail.com";
-"ឤស័យដ្ឋាន" = "Address";
-"ផ្លូវ 323 , ភ្នំពេញ" = "St.323, Phnom Penh";
-"រក្សាទុក" = "Save";
-"រំលង" = "Skip";
-"ឤស័យដ្ឋានរបស់ខ្ញុំ" = "My Address";
-"បន្ថែម" = "Add";
-"ជ្រើសរើសទីតាំងរបស់អ្នក" = "Select your location";
-"ឤស័យដ្ឋានលំអិត" = "Address Detail";
-"កំណត់ទីតាំងពេលក្រោយ" = "Tag this location for later";
-"ផ្ទះ" = "Home";
-"ការិយាល័យ" = "Office";
-"សាលារៀន" = "School";
-"ផ្សេងៗ" = "Other";
-"រក្សាទុកឤស័យដ្ឋាន" = "Save Address";
+"Address" = "ឤស័យដ្ឋាន";
+"St.323, Phnom Penh" = "ផ្លូវ 323 , ភ្នំពេញ" ;
+"Save" = "រក្សាទុក";
+"Skip" = "រំលង";
+"My Address" = "ឤស័យដ្ឋានរបស់ខ្ញុំ";
+"Add" = "បន្ថែម";
+"Select your location" = "ជ្រើសរើសទីតាំងរបស់អ្នក";
+"Address Detail" = "ឤស័យដ្ឋានលំអិត";
+"Tag this location for later" = "កំណត់ទីតាំងពេលក្រោយ";
+"Home" = "ផ្ទះ";
+"Office" = "ការិយាល័យ";
+"School" = "សាលារៀន";
+"Other" = "ផ្សេងៗ";
+"Save Address" = "រក្សាទុកឤស័យដ្ឋាន";
+"Please enter a valid email address." = "សូមបញ្ចូលអ៊ីមែលដែលត្រឹមត្រូវ";
+"Please input a valid password" = "សូមបញ្ចូលពាក្យសម្ងាត់ដែលត្រឹមត្រូវ";
+"Password is Incorrect" = "ពាក្យសម្ងាត់មិនត្រឹមត្រូវ";
+"Finding current address..." = "កំពុងស្វែងរកអាស័យដ្ឋានបច្ចុប្បន្ន...";
 
+//Home
+"What would you like to eat today ?" = "តើអ្នកចង់ញុំាអ្វីថ្ងៃនេះ?";
+"Food order" = "ការបញ្ជាទិញអាហារ";
+"Order what you love" = "បញ្ជាទិញអ្វីដែលអ្នកស្រឡាញ់";
+"Food Recipe" = "វិធីធ្វើម្ហូប";
+"Learn how to cook" = "រៀនពីរបៀបចម្អិន";
+"Category" = "ប្រភេទអាហារ";
+"Breakfast" = "អាហារពេលព្រឹក";
+"Lunch" = "អាហារថ្ងៃត្រង់";
+"Dinner" = "អាហារពេលល្ងាច";
+"Dessert" = "បង្អែម";
+"Popular Dishes" = "មុខម្ហូបពេញនិយម";
+"View all" = "មើលទាំងអស់";
+"Home" = "ទំព័រដើម";
+"Favorite" = "ចំណូលចិត្ត";
+"Orders" = "ការកម្មង់";
+"Me" = "អំពីខ្ញុំ";
+
+//Post
+"All" = "ទាំងអស់";
+"Search foods" = "ស្វែងរកមុខម្ហូប";
+"Food on sale" = "ម្ហូបសម្រាប់លក់";
+"Recipes" = "រូបមន្តធ្វើម្ហូប";
+
+//Orders
+"Orders" = "ការកម្មង់";
+"Search Item" = "ស្វែងរកការកម្មង់";
+"All" = "ទាំងអស់";
+"Sale" = "លក់";
+"Today" = "ថ្ងៃនេះ";
+"Yesterday" = "ម្សិលមិញ";
+"Last 2 days" = "2ថ្ងៃមុន";
+"This Week" = "សប្តាហ៍នេះ";
+"Notification" = "ការជូនដំណឹង";
+"You have" = "អ្នកមាន";
+
+
+
+//About me
+
+"Favorite" = "ចំណូលចិត្ត";
+"List of their favorite dishes" = "បញ្ជីមុខម្ហូបដែលចូលចិត្ត";
+"Addresses" = "អាស័យដ្ឋាន";
+"List of your addresses" = "បញ្ជីអាស័យដ្ឋានរបស់អ្នក";
+"Sale Reports" = "របាយការណ៍លក់";
+"List of their favorite dishes" = "បញ្ជីមុខម្ហូបដែលចូលចិត្ត";
+"Payment Method" = "វិធីសាស្រ្តទូទាត់";
+"Connected" = "បានភ្ជាប់";
+"App Settings" = "ការកំណត់កម្មវិធី";
+"Change location" = "ផ្លាស់ប្តូរទីតាំង";
+"Notifications" = "ការជូនដំណឹង";
+"Language" = "ប្តូរភាសា";
+"Log out" = "ចាកចេញ";
+
+//Search
+
+"Search" = "ស្វែងរក";
+"Search items" = "ស្វែងរកការកម្មង់";
+"Resent searches" = "ការស្វែងរកថ្មីៗ";
+"Suggested for you" = "បានណែនាំសម្រាប់អ្នក";
+
+//Add new food
+
+"Your dishes" = "មុខម្ហូបរបស់អ្នក";
+"Add dishes Photo" = "បញ្ជូលរូបភាពមុខម្ហូប";
+"up to 12 Mb" = "រហូតដល់ 12 Mb";
+"Food Name" = "ឈ្មោះម្ហូប";
+"Enter food name" = "បញ្ចូលឈ្មោះម្ហូប";
+"Description" = "ការពិពណ៌នា";
+"Tell me a little about your food" = "ពិពណ៌នាអំពីម្ហូបរបស់អ្នក";
+"Duration" = "រយៈពេល";
+"Level" = "កម្រិត";
+"Hard" = "លំបាក";
+"Medium" = "មធ្យម";
+"Easy" = "ងាយស្រួល";
+"Cuisines" = "មុខម្ហូប";
+"Soup" = "សម្ល";
+"Salad" = "សាឡាត់";
+"Grill" = "អាំង";
+"Dessert" = "បង្អែម";
+"Category" = "ប្រភេទអាហារ";
+"Breakfast" = "អាហារពេលព្រឹក";
+"Lunch" = "អាហារថ្ងៃត្រង់";
+"Dinner" = "អាហារពេលល្ងាច";
+"Snack" = "អាហារសម្រន់";
+"Next" = "បន្ទាប់";
+"Food name cannot be empty" = "ឈ្មោះមុខម្ហូបមិនអាចទទេបានទេ" ;
+"description cannot be empty" = "ការពិពណ៌នាមិនអាចទទេបានទេ";
+"Sale Report" = "របាយការណ៍ការលក់";
+
+//Recipe
+"Recipe" = "វិធីធ្វើម្ហូប";
+"Skip" = "រំលង";
+"Incredients" = "គ្រឿងផ្សំ";
+"Enter incredients" = "បញ្ជូលគ្រឿងផ្សំ";
+"Quantity" = "ចំនួន";
+"Input" = "បញ្ជូល";
+"Price" = "តម្លៃ";
+"Input" = "បញ្ជូល";
+"Steps" = "ជំហ៊ាន";
+"Enter incredients" = "បញ្ជូលគ្រឿងផ្សំ";
+"Back" = "ត្រឡប់";
+"Next" = "បន្ទាប់";
+"No items sold on this day" = "ថ្ងៃនេះគ្មានមុខម្ហូបសម្រាប់លក់ទេ";
+
+//Sale
+"Yes" = "យល់ព្រម";
+"No" = "មិនយល់ព្រម";
+"Details" = "ព័ត៏មានលម្អិត";
+"Cook date" = "កាលបរិច្អេទធ្វើម្ហូប";
+"Amount" = "ចំនួន";
+"Price" = "តម្លៃ";
+"Location" = "ទីតាំង";
+"Ingredient" = "គ្រឿងផ្សំ";
+"Back"= "ត្រឡប់";
+"Post" = "បង្ហោះ";
+"Is this food available for sale?" = "តើម្ហូបនេះដាក់សម្រាប់លក់ដែរឬទេ?";
+"Earning" = "ចំណូល";
+"Ingredient cannot be empty" = "គ្រឿងផ្សំមិនអាចទទេបានទេ";
+"quantity and price cannot be empty" = "ចំនួន និងតម្លៃមិនអាចទទេបានទេ";
+"Enter Ingredients" = "បញ្ជូលគ្រឿងផ្សំ";
+
+
+//Popup Sale
+"Save this as a draft?" = "រក្សាទុកជាការព្រាង?";
+"If you choose discard post, you'll lose this post that can't edit again" = "ប្រសិនបើអ្នកជ្រើសរើសបោះបង់ការបង្ហោះ អ្នកនឹងបាត់បង់ការបង្ហោះនេះដែលមិនអាចកែសម្រួលម្តងទៀត";
+"Save Draft" = "រក្សាទុកការព្រាង";
+"Discard Post" = "បោះបង់ការបង្ហោះ";
+
+//Food Details
+"Order" = "ការកម្មង់";
+"Description" = "ការពិពណ៌នា";
+"Ingredients" = "គ្រឿងផ្សំ";
+"Steps" = "ជំហាន";
+"Ratings & Review" = "ការវាយតម្លៃ & ពិនិត្យឡើងវិញ";
+"Tap to Rate" = "ចុចដើម្បីវាយតម្លៃ";
+"More" = "ច្រើនទៀត";
+"Write a Review" = "សរសេរការពិនិត្យឡើងវិញ";
+
+//PopUp Food Details
+"Describe your experience" = "ពិពណ៌នាបទពិសោធន៍របស់អ្នក";
+"Cancle" = "បោះបង់";
+"Post" = "បង្ហោះ";
+
+//Edit Profile
+"Edit Profile" = "កែប្រែប្រវត្តិរូប";
+"Personal info" = "ព័ត៏មានផ្ទាល់ខ្លួន";
+"Full name" = "នាម-គោត្តនាម";
+"Email" = "អ៊ីម៉ែល";
+"Mobile" = "លេខទូរស័ព្ទ";
+"Password" = "លេខសម្ងាត់";
+"Address" = "អាស័យដ្ឋាន";
+"Save" = "រក្សាទុក";
+"Delete Account?" = "លុបគណនី?";
+"Enter your full name" = "សូមបញ្ចូលឈ្មោះពេញរបស់អ្នក";
+"Enter your mobile number" = "សូមបញ្ចូលលេខទូរស័ព្ទរបស់អ្នក";
+"Enter your password" = "សូមបញ្ចូលពាក្យសម្ងាត់របស់អ្នក";
+"Enter your address" = "សូមបញ្ចូលអាស័យដ្ឋានរបស់អ្នក";
+
+
+//Delete account popup
+"Delete your account?" = "លុបគណនីរបស់អ្នកឬ?";
+"Delete" = "លុប";
+"Cancel" = "បោះបង់";
+"View all sales" = "មើលការលក់ទាំងអស់";
+"Edit" = "កែប្រែ";
+"All" = "ទាំងអស់";
+"Food on Sale" = "ម្ហូបសម្រាប់លក់";
+"Recipes" = "រូបមន្តម្ហូប";
+
+//SearchView
+"Recent Searches" = "ការស្វែងរកថ្មីៗ";
+
+//PopupMessage
+"Successfully" = "ទទួលបានជោគជ័យ";
+"Your account have been created successfully" = "គណនីរបស់អ្នកត្រូវបានបង្កើតដោយជោគជ័យ";
+"Allow Notification" = "អនុញ្ញាតអោយមានការជូនដំណឹង";
+"Not Now" = "មិនត្រូវការទេឥឡូវនេះ";
+"Detail information cannot be empty" = "ព័ត៌មានលម្អិតមិនអាចទទេបានទេ";
+"Do you want to turn on\nNotification?" = "តើអ្នកចង់បើក\nការជូនដំណឹងទេ?";
+
+//WeBill
+"Connect to WeBill365 account for e-payment" = "ភ្ជាប់ទៅគណនី WeBill365 សម្រាប់ការទូទាត់ e-payment";
+"Client ID" = "លេខសម្គាល់អតិថិជន";
+"Secret ID" = "លេខសម្គាល់សម្ងាត់";
+// Change language
+"Change Language" = "ផ្លាស់ប្តូរភាសា";
+"Which language do you prefer?" = "តើអ្នកពេញចិត្តភាសាមួយណា?";
+"Please check your " = "សូមពិនិត្យមើល";
+"Now" = "ឥឡូវនេះ";
+"New" = "ការជូនដំណឹងថ្មី";
+"Old" = "ការជូនដំណឹងចាស់";
+"Your account have connected with Webill365 successfully" = "គណនីរបស់អ្នកបានភ្ជាប់ជាមួយ Webill365 បានជោគជ័យ";
+"This food is not found" = "មុខម្ហូបនេះមិនមានទេ";
+"Orders request" = "ស្នើការកម្មង់";
+"Image cannot be empty" = "រូបភាពមិនអាចទទេបានទេ";
+"Please enter your food name" = "សូមបញ្ជូលឈ្មោះមុខម្ហូប";
+"Please describe your food" = "សូមពិពណ៏នាអំពីមុខម្ហូបរបស់អ្នក";
+"Enter your email" = "សូមបញ្ជូលអ៊ីម៉ែលរបស់អ្នក";
+"Choose Location" = "ជ្រើសទីតាំង";
 

@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   Kroya_UI_Project
 
@@ -6,6 +6,8 @@
   
 */
 
+
+//Authentication to English
 
 "Mobile phone" = "Mobile phone";
 "Enter phone number" = "Enter phone number";
@@ -15,7 +17,7 @@
 "Continue with password" = "Continue with password";
 "Password" = "Password";
 "Input your password" = "Input your password";
-"Forget password?" = "Forget password?";
+"Forget Password?" = "Forget Password?";
 "Login" = "Login";
 "Verification Code" = "Verification Code";
 "Enter 6 digits code sent to your mobile number" = "Enter 6 digits code sent to your mobile number";
@@ -27,9 +29,11 @@
 "Confirm New password" = "Confirm New password";
 "Input your password" = "Input your password" ;
 "CREATE PASSWORD" = "CREATE PASSWORD" ;
+"SUCCESS" = "SUCCESS";
+"Your account have been successful create." = "Your account have been successful create.";
 "Basic Information" = "Basic Information" ;
 "Username" = "Username";
-"Full name" = "Full name";
+"Full Name" = "Full name";
 "Email" = "Email";
 "example@mail.com" = "example@mail.com";
 "Address" = "Address";
@@ -46,4 +50,213 @@
 "School" = "School";
 "Other" = "Other";
 "Save Address" = "Save Address";
+"Please enter a valid email address." = "Please enter a valid email address.";
+"Please input a valid password" = "Please input a valid password";
+"Password is Incorrect" = "Password is Incorrect";
+"Finding current address..." = "Finding current address...";
+"Finding pin address..." = "Finding pin address...";
+"Finding pin address..." = "កំពុងស្វែងរកអាស័យដ្ឋានតំណ...";
 
+//Home
+"What would you like to eat today?" = "What would you like to eat today?";
+"Food order" = "Food Order";
+"Order what you love" = "Order what you love";
+"Food Recipe" = "Food Recipe";
+"Learn how to cook" = "Learn how to cook";
+"Category" = "Category";
+"Breakfast" = "Breakfast";
+"Lunch" = " Lunch";
+"Dinner" = "Dinner";
+"Dessert" = "Dessert";
+"Popular Dishes" = "Popular Dishes";
+"View all" = "View all";
+"Home" = "Home";
+"Favorite" = "Favorite";
+"Order" = "Order";
+"Me" = "Me";
+
+//Favorite
+"Favorite" = "Favorite";
+"Search foods" = "Search foods";
+"Food on sale" = "Food on sale";
+"Recipes" = "Recipes";
+
+//Orders
+"Orders" = "Orders";
+"Search item" = "Search item";
+"All" = "All";
+"Order" = "Order";
+"Sale" = "Sale";
+"Today" = "Today";
+"Yesterday" = "Yesterday";
+"Last 2 days" = "Last 2 Days";
+"This Week" = "This Week";
+"Notification" = "Notification";
+"You have" = "You have";
+
+//About me
+
+"Meng Chantha" = "Meng Chantha";
+"Since Oct,2021" = "Since Oct,2021";
+"Favorite" = "Favorite";
+"List of their favorite dishes" = "List of their favorite dishes";
+"Addresses" = "Addresses";
+"List of your addresses" = "List of your addresses";
+"Orders" = "Orders";
+"List your order and Sale" = "List your order and Sale";
+"Sale Reports" = "Sale Reports";
+"List of their favorite dishes" = "List of their favorite dishes";
+"Payment Method" = "Payment Method";
+"Connected" = "Connected";
+"App Settings" = "App Settings";
+"Change location" = "Change location";
+"Notifications" = "Notifications";
+"Language" = "Language";
+"Log out" = "Log out";
+ 
+//Search
+
+"Search" = "Search";
+"Search items" = "Search items";
+"Resent searches" = "Resent searches";
+"Suggested for you" = "Suggested for you";
+
+//Add new food
+
+"Your dishes" = "Your dishes";
+"Add dishes Photo" = "Add dishes Photo";
+"up to 12 Mb" = "up to 12 Mb";
+"Food Name" = "Food Name";
+"Enter food name" = "Enter food name";
+"Description" = "Description";
+"Tell me a little about your food" = "Tell me a little about your food";
+"Duration" = "Duration";
+"Level" = "Level";
+"Hard" = "Hard";
+"Medium" = "Medium";
+"Easy" = "Easy";
+"Cuisines" = "Cuisines";
+"Soup" = "Soup";
+"Salad" = "Salad";
+"Grill" = "Grill";
+"Dessert" = "Dessert";
+"Category" = "Category";
+"Breakfast" = "Breakfast";
+"Lunch" = "Lunch";
+"Dinner" = "Dinner";
+"Snack" = "Snack";
+"Next" = "Next";
+"Food name cannot be empty" = "Food name cannot be empty" ;
+"description cannot be empty" = "Description cannot be empty";
+
+
+//Recipe
+
+"Recipe" = "Recipe";
+"Skip" = "Skip";
+"Incredients" = "Incredients";
+"Enter incredients" = "Enter incredients";
+"Quantity" = "Quantity";
+"Input" = "Input";
+"Price" = "Price";
+"Input" = "Input";
+"Steps" = "Steps";
+"Enter incredients" = "Enter incredients";
+"Back" = "Back";
+"Next" = "Next";
+"No items sold on this day" = "No items sold on this day";
+
+//Sale
+"Yes" = "Yes";
+"No" = "No";
+"Details" = "Details";
+"Cook date" = "Cook date";
+"Amount" = "Amount";
+"Price" = "Price";
+"Location" = "Location";
+"Ingredient" = "Ingreadient";
+"Back"= "Back";
+"Post" = "Post";
+"Is this food available for sale?" = "Is this food available for sale?";
+"Sale Report" = "Sale Report";
+"Ingredient cannot be empty" = "Ingredient cannot be empty";
+"Enter ingredients" = "Enter ingredients";
+
+
+//Popup Sale
+"Save this as a draft?" = "Save this as a draft?";
+"If you choose discard post, you'll lose this post that can't edit again" = "If you choose discard post, you'll lose this post that can't edit again.";
+"Save Draft" = "Save Draft";
+"Discard Post" = "Discard Post";
+
+//Food Details
+"Order" = "Order";
+"Description" = "Description";
+"Ingredients" = "Ingredients";
+"Steps" = "Steps";
+"Ratings & Review" = "Rating & Review";
+"Tap to Rate" = "Tap to Rate";
+"More" = "More";
+"Write a Review" = "Write a Review";
+
+//PopUp Food Details
+"Describe your experience" = "Describe your experience";
+"Cancle" = "Cancle";
+"Post" =" Post";
+
+//Edit Profile
+"Edit profile" = "Edit profile";
+"Personal info" = "Personal info";
+"Full name" = "Full name";
+"Email" = "Email";
+"Mobile" = "Mobile";
+"Password" = "Password";
+"Address" = "Address";
+"Save" = "Save";
+"Delete Account?" = "Delete account?";
+"Enter your full name" = "Enter your full name";
+"Enter your mobile number" = "Enter your mobile number";
+"Enter your password" = "Enter your password";
+"Enter your address" = "Enter your address";
+
+
+//Delete account popup
+"Delete your account?" = "Delete your account?";
+"Delete" = "Delete";
+"Cancle" = "Cancle";
+"View all sales" = "View all sales";
+"Edit" = "Edit";
+"All" = "All";
+"Food on Sale" = "Food on Sale";
+"Recipes" = "Recipes";
+
+//SearchView
+"Recent Searches" = "Recent Searches";
+
+//PopupMessage
+"Successfully" = "Successfully";
+"Your account have been created successfully" = "Your account have been created successfully";
+"Allow Notification" = "Allow Notification";
+"Not Now" = "Not Now";
+"Detail information cannot be empty" = "Detail information cannot be empty";
+"Do you want to turn on\nNotification?" = "Do you want to turn on\nNotification?";
+
+//WeBill
+"Connect to WeBill365 account for e-payment" = "Connect to WeBill365 account for e-payment";
+"Client ID" = "Client ID" ;
+"Secret ID" = "Secret ID";
+
+// Change language
+"Change Language" = "Change Language";
+"Which language do you prefer?" = "Which language do you prefer?";
+"Please check your " = "Please check your ";
+"Now" = "now";
+"New" = "New";
+"Old" = "Old";
+"Your account have connected with Webill365 successfully" = "Your account have connected with Webill365 successfully";
+"This food is not found" = "This food is not found";
+"Orders request" = "Orders request";
+"Image cannot be empty" = "Image cannot be empty";
+"Please enter your food name" = "Please enter your food name";
+"Please describe your food" = "Please describe your food";
+"Enter your email" = "Enter your email";

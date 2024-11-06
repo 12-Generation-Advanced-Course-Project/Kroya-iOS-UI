@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CategoryCardView: View {
-    var title: String
+    var title: LocalizedStringKey
     var image: String
     var color: Color
     var x: CGFloat
@@ -19,7 +19,7 @@ struct CategoryCardView: View {
             HStack {
           
                 Text(title)
-                    .font(.customfont(.medium, fontSize: 14))
+                    .customFontMediumLocalize(size: 14)
                     .foregroundColor(.black)
                     .padding(.leading, 25)
                     .padding(.top, 10)
@@ -37,16 +37,21 @@ struct CategoryCardView: View {
                 .offset(x: x, y: y)
                 .clipped()
         }
+      
         .background(color)
         .cornerRadius(13)
         .overlay {
             RoundedRectangle(cornerRadius: 13)
                 .stroke(Color(hex: "#E6E6E6"), lineWidth: 0.8)
         }
+        
     }
 }
 
 #Preview {
-    CategoryCardView(title: "Lunch", image: "Somlorkoko", color: .gray, x: 60, y: 18)
+//    HStack{
+        CategoryCardView(title: "Lunch", image: "Somlorkoko", color: .gray, x: 60, y: 18)
+//        CategoryCardView(title: "Dinner", image: "DinnerPic", color: .gray, x: 50, y: 14)
+//    }
 }
 

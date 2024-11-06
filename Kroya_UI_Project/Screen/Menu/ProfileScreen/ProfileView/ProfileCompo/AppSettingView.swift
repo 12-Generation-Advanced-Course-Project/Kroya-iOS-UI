@@ -10,7 +10,7 @@ import SwiftUI
 struct AppSettingView: View {
     
     var imageName: String
-    var title: String
+    var title: LocalizedStringKey
     var iconName: String
     
     var body: some View {
@@ -23,7 +23,7 @@ struct AppSettingView: View {
                     .frame(width: 24, height: 24)
                 
                 Text(title)
-                    .font(.customfont(.medium, fontSize: 16))
+                    .customFontMediumLocalize(size: 16)
             }.padding(.horizontal,10)
             
             Spacer()
@@ -33,7 +33,8 @@ struct AppSettingView: View {
                 .frame(width: 25, height: 25)
                 .padding(.trailing,8)
         }
-        .frame(width: .screenWidth * 0.9, height: .screenHeight * 0.05)
+        .frame(maxWidth: .screenWidth * 0.9, minHeight: .screenHeight * 0.05)
+        .padding(.horizontal,10)
         .background(Color(hex: "#F4F5F7"))
         .cornerRadius(15)
         
@@ -44,7 +45,7 @@ struct AppSettingView: View {
 #Preview {
     VStack {
         AppSettingView(
-            imageName: "VectorLocation", title: "Change Location", iconName: "Rightarrow"
+            imageName: "VectorLocation", title: "Change location", iconName: "Rightarrow"
         )
         AppSettingView(
             imageName: "notification 1", title: "Notifications", iconName: "Rightarrow"

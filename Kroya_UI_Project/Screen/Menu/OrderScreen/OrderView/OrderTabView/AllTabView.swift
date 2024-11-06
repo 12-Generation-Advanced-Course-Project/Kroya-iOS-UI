@@ -1,86 +1,159 @@
-//
-//  AllTabView.swift
-//  Kroya_UI_Project
-//
-//  Created by Ounbonaliheng on 5/10/24.
-//
 
 import SwiftUI
 
-struct AllTabView:View {
-    var iselected:Int?
-    @State private var isExpandedToday = false
+struct AllTabView: View {
+    var iselected: Int?
+    
+    @State private var isExpandedToday = true
     @State private var isExpandedYTD = false
     @State private var isExpandedLst2Day = false
+    
     var body: some View {
-        ScrollView(.vertical,showsIndicators: false) {
-            VStack(alignment:.leading) {
-                DisclosureGroup("Today", isExpanded: $isExpandedToday) {
-                    ScrollView(.vertical, showsIndicators: false) {
-                        VStack(alignment:.leading,spacing: 15){
-                            
-                            OrderCard(isAccepted: true, isOrder: true)
-                            OrderCard(isAccepted: false, isOrder: false)
-                            OrderCard(isAccepted: true, isOrder: true)
-                            OrderCard(isAccepted: false, isOrder: false)
-                            Spacer().frame(height: 5)
-                        }
-                        .frame(height: .screenHeight * 0.5)
-                        .padding(.leading,10)
-                    }
-                    
-                }
-                .font(.customfont(.semibold, fontSize: 16))
-                .frame(width: .screenWidth * 0.9)
-                .foregroundStyle(.black)
-                .accentColor(.black)
-                
-                DisclosureGroup("Yesterday", isExpanded: $isExpandedYTD) {
-                    ScrollView(.vertical, showsIndicators: false) {
+        NavigationStack {
+            ScrollView { // Use ScrollView for a more customized look
+                VStack(alignment: .leading, spacing: 8) { // Adjust spacing as needed
+                    // Disclosure Group for Today
+                    DisclosureGroup("Today", isExpanded: $isExpandedToday) {
                         VStack(spacing: 15){
+                            NavigationLink(destination: OrderListView()){
+                                OrderCard(isAccepted: true, isOrder: false, showIcon: true)
+                            }
+                            NavigationLink(destination:  FoodDetailView(
+                                theMainImage: "Songvak",
+                                subImage1: "ahmok",
+                                subImage2: "brohok",
+                                subImage3: "SomlorKari",
+                                subImage4: "Songvak",
+                                showOrderButton: false,
+                                showPrice: true,
+                                showButtonInvoic: true,
+                                invoiceAccept: false
+                            )){
+                                OrderCard(isAccepted: false, isOrder: true, showIcon: false)
+                            }
                             
-                            OrderCard(isAccepted: true, isOrder: true)
-                            OrderCard(isAccepted: false, isOrder: false)
-                            OrderCard(isAccepted: true, isOrder: true)
-                            OrderCard(isAccepted: false, isOrder: false)
-                            Spacer().frame(height: 5)
-                        }
-                        .frame(height: .screenHeight * 0.5)
-                        .padding(.leading,10)
+                            NavigationLink(destination: FoodDetailView(
+                                theMainImage: "Songvak",
+                                subImage1: "ahmok",
+                                subImage2: "brohok",
+                                subImage3: "SomlorKari",
+                                subImage4: "Songvak",
+                                showOrderButton: false,
+                                showPrice: true,
+                                showButtonInvoic: true,
+                                invoiceAccept: true
+                                
+                            )){
+                                OrderCard(isAccepted: true, isOrder: true, showIcon: false)
+                            }}
                     }
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(.black)
+                    .accentColor(.black)
+                    .animation(.easeInOut(duration: 0.3), value: isExpandedToday)
                     
-                }
-                .font(.customfont(.semibold, fontSize: 16))
-                .frame(width: .screenWidth * 0.9)
-                .foregroundStyle(.black)
-                .accentColor(.black)
-                DisclosureGroup("Last 2 Days", isExpanded: $isExpandedLst2Day) {
-                    ScrollView(.vertical, showsIndicators: false) {
-                        VStack(spacing: 15){
+                    // Disclosure Group for Yesterday
+                    DisclosureGroup("Yesterday", isExpanded: $isExpandedYTD) {
+                        VStack(spacing: 15) {
+                            NavigationLink(destination: OrderListView()){
+                                OrderCard(isAccepted: true, isOrder: false, showIcon: true)
+                            }
                             
-                            OrderCard(isAccepted: true, isOrder: true)
-                            OrderCard(isAccepted: false, isOrder: false)
-                            OrderCard(isAccepted: true, isOrder: true)
-                            OrderCard(isAccepted: false, isOrder: false)
-                            Spacer().frame(height: 5)
+                            NavigationLink(destination:  FoodDetailView(
+                                theMainImage: "Songvak",
+                                subImage1: "ahmok",
+                                subImage2: "brohok",
+                                subImage3: "SomlorKari",
+                                subImage4: "Songvak",
+                                showOrderButton: false,
+                                showPrice: true,
+                                showButtonInvoic: true,
+                                invoiceAccept: false
+                            )){
+                                OrderCard(isAccepted: false, isOrder: true, showIcon: false)
+                            }
+                            
+                            NavigationLink(destination:  FoodDetailView(
+                                theMainImage: "Songvak",
+                                subImage1: "ahmok",
+                                subImage2: "brohok",
+                                subImage3: "SomlorKari",
+                                subImage4: "Songvak",
+                                showOrderButton: false,
+                                showPrice: true,
+                                showButtonInvoic: true,
+                                invoiceAccept: true
+                            )){
+                                OrderCard(isAccepted: true, isOrder: true, showIcon: false)
+                            }
                         }
-                        .frame(height: .screenHeight * 0.5)
-                        .padding(.leading,10)
                     }
+                    .customFontSemiBoldLocalize(size: 16)
+                    .foregroundColor(.black)
+                    .accentColor(.black)
+                    .animation(.easeInOut(duration: 0.3), value: isExpandedYTD)
                     
+                    // Disclosure Group for Last 2 Days
+                    DisclosureGroup("Last 2 days", isExpanded: $isExpandedLst2Day) {
+                        VStack(spacing: 15) {
+                            
+                            NavigationLink(destination:  FoodDetailView(
+                                theMainImage: "Songvak",
+                                subImage1: "ahmok",
+                                subImage2: "brohok",
+                                subImage3: "SomlorKari",
+                                subImage4: "Songvak",
+                                showOrderButton: false,
+                                showPrice: true,
+                                showButtonInvoic: true,
+                                invoiceAccept: true
+                            )){
+                                OrderCard(isAccepted: true, isOrder: true, showIcon: false)
+                            }
+                            
+                            NavigationLink(destination:  FoodDetailView(
+                                theMainImage: "Songvak",
+                                subImage1: "ahmok",
+                                subImage2: "brohok",
+                                subImage3: "SomlorKari",
+                                subImage4: "Songvak",
+                                showOrderButton: false,
+                                showPrice: true,
+                                showButtonInvoic: true,
+                                invoiceAccept: false
+                            )){
+                                OrderCard(isAccepted: false, isOrder: true, showIcon: false)
+                            }
+                            
+                            NavigationLink(destination:  FoodDetailView(
+                                theMainImage: "Songvak",
+                                subImage1: "ahmok",
+                                subImage2: "brohok",
+                                subImage3: "SomlorKari",
+                                subImage4: "Songvak",
+                                showOrderButton: false,
+                                showPrice: true,
+                                showButtonInvoic: true,
+                                invoiceAccept: true
+                            )){
+                                OrderCard(isAccepted: true, isOrder: true, showIcon: false)
+                            }}
+                    }
+                    .customFontSemiBoldLocalize(size: 16)
+                    .foregroundColor(.black)
+                    .accentColor(.black)
+                    .animation(.easeInOut(duration: 0.3), value: isExpandedLst2Day)
                 }
-                .font(.customfont(.semibold, fontSize: 16))
-                .frame(width: .screenWidth * 0.9)
-                .foregroundStyle(.black)
-                .accentColor(.black)
-                .padding(.bottom,10)
-                Spacer()
+                .padding(.horizontal)
+                .padding(.top, 5)
             }
+            .background(Color.clear)
+            .scrollIndicators(.hidden)
         }
-       
     }
 }
 
 #Preview {
     AllTabView()
 }
+ 

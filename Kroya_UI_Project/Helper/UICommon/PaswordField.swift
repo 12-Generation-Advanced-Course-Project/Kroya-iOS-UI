@@ -8,15 +8,15 @@ import SwiftUI
 
 struct PasswordField: View {
     var iconName: String
-    var placeholder: String
+    var placeholder: LocalizedStringKey
     @Binding var text: String
     @State var isSecure: Bool = true
     var iconColor: Color = .gray
     var backgroundColor: Color = Color(UIColor.systemGray6)
     var frameHeight: CGFloat = 60
-    var frameWidth: CGFloat = 60
     var cornerRadius: CGFloat = 10
-    
+    var frameWidth:CGFloat = 300
+
     @State private var isPasswordVisible: Bool = false
 
     // Function to check if the icon exists in SF Symbols
@@ -26,7 +26,6 @@ struct PasswordField: View {
 
     var body: some View {
         HStack {
-          
             if isSystemIcon(iconName) {
                 Image(systemName: iconName)
                     .foregroundColor(iconColor)
@@ -34,7 +33,7 @@ struct PasswordField: View {
             } else {
                 Image(iconName)
                     .resizable()
-                    .frame(width: 20, height: 20) 
+                    .frame(width: 20, height: 20)
                     .foregroundColor(iconColor)
                     .padding(.leading, 20)
             }
@@ -53,6 +52,7 @@ struct PasswordField: View {
             
             Button(action: {
                 isPasswordVisible.toggle()
+                isSecure.toggle() // Toggle between secure and regular text
             }) {
                 Image(systemName: isPasswordVisible ? "eye.fill" : "eye.slash.fill")
                     .foregroundColor(iconColor)
@@ -61,10 +61,7 @@ struct PasswordField: View {
         }
         .background(backgroundColor)
         .cornerRadius(cornerRadius)
-        .frame(width: frameWidth, height: frameHeight)
-        .onChange(of: isPasswordVisible) {
-            isSecure = !isPasswordVisible
-        }
+        .frame(maxWidth:frameWidth,minHeight: frameHeight) // Allow flexible width
     }
 }
 

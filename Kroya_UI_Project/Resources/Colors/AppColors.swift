@@ -69,3 +69,75 @@ struct SeconaryColor{
     
 }
 
+//
+///// adapted from [TabBarModifier](https://githubbbbbbb.com/artemisak/DiaCompanion_iOS/blob/360258e07d4a3e3521a1ec6893f29f175d67034f/dia/Extensions/extensions.swift#L86-L87)
+//extension View {
+//    func showTabBar() -> some View {
+//        if #available(iOS 16.0, *) {
+//            return toolbar(.visible, for: .tabBar)
+//        } else {
+//            return modifier(ShowTabBar())
+//        }
+//    }
+//    
+//    func hideTabBar() -> some View {
+//        if #available(iOS 16.0, *) {
+//            return toolbar(.hidden, for: .tabBar)
+//        } else {
+//            return modifier(HideTabBar())
+//        }
+//    }
+//}
+//
+//private struct HideTabBar: ViewModifier {
+//    func body(content: Content) -> some View {
+//        return content.padding(.zero).onAppear {
+//            TabBarModifier.hideTabBar()
+//        }
+//    }
+//}
+//
+//private struct ShowTabBar: ViewModifier {
+//    func body(content: Content) -> some View {
+//        return content.padding(.zero).onAppear {
+//            TabBarModifier.showTabBar()
+//        }
+//    }
+//}
+//
+//private struct TabBarModifier {
+//    static func showTabBar() {
+//        guard let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else {
+//            return
+//        }
+//        
+//        keyWindow.allSubviews().forEach { subView in
+//            if let tabBar = subView as? UITabBar {
+//                tabBar.isHidden = false
+//            }
+//        }
+//    }
+//    
+//    static func hideTabBar() {
+//        guard let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else {
+//            return
+//        }
+//        
+//        keyWindow.allSubviews().forEach { subView in
+//            if let tabBar = subView as? UITabBar {
+//                tabBar.isHidden = true
+//            }
+//        }
+//    }
+//}
+//
+//private extension UIView {
+//    func allSubviews() -> [UIView] {
+//        var subviews = [UIView]()
+//        subviews.append(contentsOf: self.subviews)
+//        subviews.forEach { subview in
+//            subviews.append(contentsOf: subview.allSubviews())
+//        }
+//        return subviews
+//    }
+//}

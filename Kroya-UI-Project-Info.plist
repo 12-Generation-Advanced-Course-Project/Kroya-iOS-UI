@@ -60,6 +60,17 @@
 	</dict>
 	<key>UIAppFonts</key>
 	<array>
+		<string>NotoSansKR-Black.ttf</string>
+		<string>NotoSansKR-Bold.ttf</string>
+		<string>NotoSansKR-Light.ttf</string>
+		<string>NotoSansKR-Medium.ttf</string>
+		<string>NotoSansKR-Regular.ttf</string>
+		<string>NotoSansKR-SemiBold.ttf</string>
+		<string>KantumruyPro-Bold.ttf</string>
+		<string>KantumruyPro-Light.ttf</string>
+		<string>KantumruyPro-Medium.ttf</string>
+		<string>KantumruyPro-Regular.ttf</string>
+		<string>KantumruyPro-SemiBold.ttf</string>
 		<string>Inter-Bold.ttf</string>
 		<string>Inter-Black.ttf</string>
 		<string>Inter-Medium.ttf</string>
@@ -67,5 +78,17 @@
 		<string>Inter-SemiBold.ttf</string>
 		<string>Inter-Light.ttf</string>
 	</array>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict/>
+	</array>
+	<key>UTTypeConformsTo</key>
+	<array>
+		<string>public.data</string>
+	</array>
+	<key>UTTypeDescription</key>
+	<string>Ingredient Object</string>
+	<key>UTTypeIdentifier</key>
+	<string>com.kroya.ingredient</string>
 </dict>
 </plist>
