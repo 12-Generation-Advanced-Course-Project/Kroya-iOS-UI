@@ -30,7 +30,7 @@ struct BottomSheetView<Content: View>: View {
             RoundedRectangle(cornerRadius: 8)
                 .fill(Color(hex: "#D0DBEA"))
                 .frame(width: 40, height: 5)
-                .padding(.top, 20)
+                .padding(.top, 22)
             
             HStack {
                 Text("Somlor Mju")
@@ -95,7 +95,7 @@ struct BottomSheetView<Content: View>: View {
             }
         }
         .padding(.horizontal, 15)
-        .padding(.top, 8)
+        .padding(.top, 12)
     }
     
     init(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat, showOrderButton: Bool = true, notificationType: Int? = nil, showButtonInvoic: Bool = false, invoiceAccept: Bool = false, @ViewBuilder content: () -> Content) {
