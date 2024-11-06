@@ -7,7 +7,7 @@
 import SwiftUI
 
 class CountdownTimer: ObservableObject {
-    @Published var countdown: Int = 60 {
+    @Published var countdown: Int = 180 {
         didSet {
             // Ensure countdown doesn't go below zero
             if countdown < 0 {
