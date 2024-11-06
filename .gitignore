@@ -1,0 +1,74 @@
+# Xcode
+.DS_Store
+!*.xcassets
+!*.xcworkspace
+*.pbxuser
+!*.plist
+!*.gitkeep
+
+# User-specific
+*.xccheckout
+*.moved-aside
+*.swp
+*.lock
+*~.nib/
+*.xcuserstate
+*.xcscmblueprint
+*.xcworkspace/xcuserdata
+DerivedData/
+.idea/
+*.xcuserdatad/
+*.xcuserstate/
+
+# Project data
+xcuserdata/
+xcschemes/
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcshareddata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcshareddata/xcschemes/xcschememanagement.plist
+*.xcodeproj/project.xcworkspace/xcuserdata/**/*.plist
+
+# Generated files
+*.ipa
+*.dSYM.zip
+*.dSYM
+*.app
+*.app.dSYM
+*.xcodeproj/xcshareddata/xcschemes
+*.plist
+
+# Build artifacts
+build/
+*.xcworkspace/
+*.pbxproj
+*.modulemap
+*.hmap
+
+# SwiftPM
+/.swiftpm/
+.build/
+Packages/
+
+# Carthage
+Carthage/Build/
+
+# CocoaPods
+Pods/
+Podfile.lock
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# Archives
+*.xcarchive
+
+# xcdebugger
+*.xcdebugger/
+
+# Swift Package Manager
+.xcpackage
