@@ -52,22 +52,16 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		8406DAB12CA5510C0003EA40 /* Kroya_UI_Project */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = Kroya_UI_Project;
 			sourceTree = "<group>";
 		};
 		8406DAC22CA5510F0003EA40 /* Kroya_UI_ProjectTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = Kroya_UI_ProjectTests;
 			sourceTree = "<group>";
 		};
 		8406DACC2CA5510F0003EA40 /* Kroya_UI_ProjectUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = Kroya_UI_ProjectUITests;
 			sourceTree = "<group>";
 		};
