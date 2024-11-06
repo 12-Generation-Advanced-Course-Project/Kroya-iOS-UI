@@ -148,7 +148,6 @@ struct MainScreen: View {
             .environment(\.modelContext, modelContext)
         }
     }
-
     private func getSpacerWidth(for selectedTab: Int, geometry: GeometryProxy) -> CGFloat {
         switch selectedTab {
         case 2:
