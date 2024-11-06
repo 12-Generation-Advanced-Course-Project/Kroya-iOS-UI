@@ -10,6 +10,7 @@ import SwiftUI
 struct AllowNotificationView: View {
     var localNotification = LocalNotificationManager.shared
     @Environment(\.dismiss) var dismiss
+    @StateObject var notificationManager = NotificationManager()
     @State var seletedDate = Date()
     @State private var notificationAllowed = false
     var body: some View {
@@ -32,13 +33,20 @@ struct AllowNotificationView: View {
                 Spacer()
             }
             VStack {
-                CustomButton(title: LocalizedStringKey("Allow Notification"), action: {    LocalNotificationManager.shared.askForNotificationPermission()
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        LocalNotificationManager.shared.sendImmediateNotification()
+                CustomButton(title: LocalizedStringKey("Allow Notification"), action: {
+//                    LocalNotificationManager.shared.askForNotificationPermission()
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+//                        LocalNotificationManager.shared.sendImmediateNotification()
+//                    }
+                    Task{
+                        await notificationManager.request()
                     }
                     
                 }, backgroundColor: .yellow,frameWidth: .screenWidth * 0.85)
+                .disabled(notificationManager.hasPermission)
+                .task {
+                    await notificationManager.getAuthStatus()
+                }
                 CustomButton(title: LocalizedStringKey("Not Now"), action: { dismiss() }, backgroundColor: .clear, textColor: .yellow)
             }
         }
