@@ -69,7 +69,7 @@ struct ProfileView: View {
                             isEdit.toggle()
                         }
                     
-                    NavigationLink(destination: EditingProfileView(profile: Profile,selectedAddress: $selectedAddress)
+                    NavigationLink(destination: EditingProfileView(profile: Profile,selectedAddress: $selectedAddress).environmentObject(userStore)
                ,isActive: $isEdit) {
                         EmptyView()
                     }.hidden()

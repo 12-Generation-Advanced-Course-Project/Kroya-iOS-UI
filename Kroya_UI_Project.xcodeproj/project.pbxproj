@@ -53,6 +53,9 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		8406DAB12CA5510C0003EA40 /* Kroya_UI_Project */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			explicitFileTypes = {
+				Core/AppDelegate.swift = sourcecode.swift;
+			};
 			path = Kroya_UI_Project;
 			sourceTree = "<group>";
 		};

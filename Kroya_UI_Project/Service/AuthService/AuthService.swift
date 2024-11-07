@@ -236,11 +236,10 @@ class AuthService {
 
     
     //MARK: Save UserInfo
-    func saveUserInfo(email: String, userName: String, phoneNumber: String, address: String, completion: @escaping (Result<UserInfoResponse, Error>) -> Void) {
+    func saveUserInfo(userName: String, phoneNumber: String, address: String, completion: @escaping (Result<UserInfoResponse, Error>) -> Void) {
         
         let url = Constants.KroyaUrlAuth + "save-user-info"
         let parameters: [String: String] = [
-            "email": email,
             "userName": userName,
             "phoneNumber": phoneNumber,
             "address": address

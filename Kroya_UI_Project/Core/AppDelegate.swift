@@ -9,10 +9,10 @@ import GoogleMaps
 import FirebaseCore
 import FirebaseMessaging
 
-class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+class AppDelegate: UIResponder , UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        
+        print("asdasd")
         // Initialize Google Maps
         GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
         

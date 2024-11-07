@@ -80,6 +80,11 @@
 		<string>Inter-SemiBold.ttf</string>
 		<string>Inter-Light.ttf</string>
 	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+		<string>fetch</string>
+	</array>
 	<key>UTImportedTypeDeclarations</key>
 	<array>
 		<dict/>

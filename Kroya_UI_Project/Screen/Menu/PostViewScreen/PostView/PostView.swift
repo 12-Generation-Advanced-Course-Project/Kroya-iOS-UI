@@ -22,38 +22,44 @@ struct PostViewScreen: View {
             VStack {
                 HStack {
                     HStack {
-                        if let profileImageUrl = Profile.userProfile?.profileImage, !profileImageUrl.isEmpty {
-                            
-                            KFImage(URL(string: "\(urlImagePost)\(profileImageUrl)"))
+                        if let profileImageUrl = Profile.userProfile?.profileImage, !profileImageUrl.isEmpty,
+                           let imageUrl = URL(string: Constants.fileupload + profileImageUrl) {
+                            KFImage(imageUrl)
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 40, height: 40)
                                 .clipShape(Rectangle())
                                 .cornerRadius(10)
                         } else {
+                            // Placeholder when image URL is nil or empty
                             Rectangle()
                                 .fill(Color(hex: "#D9D9D9"))
                                 .frame(width: 40, height: 40)
                                 .cornerRadius(10)
                                 .overlay(
-                                    Image(systemName: "person.fill")
+                                    Image("user-profile") // Placeholder image
                                         .resizable()
                                         .scaledToFit()
                                         .frame(width: 20, height: 20)
-                                        .foregroundStyle(Color.white)
+                                        .foregroundColor(.white)
                                 )
                         }
-                        
                         VStack(alignment: .leading) {
-                            Text(Profile.userProfile?.fullName ?? "")
+                            // Display "N/A" if fullName is nil or empty
+                            Text(Profile.userProfile?.fullName?.isEmpty == false ? Profile.userProfile?.fullName ?? "N/A" : "N/A")
                                 .customFontBoldLocalize(size: 16)
                                 .foregroundStyle(.black)
+
                             Spacer().frame(height: 5)
-                            Text("\(Profile.userProfile?.email ?? "")")
+                            
+                            // Display "N/A" if email is nil or empty
+                            Text(Profile.userProfile?.email?.isEmpty == false ? Profile.userProfile?.email ?? "N/A" : "N/A")
                                 .customFontLightLocalize(size: 12)
                                 .foregroundStyle(.black)
                         }
+
                     }
+
                     Spacer()
                     Button(action: { }) {
                         VStack {

@@ -219,7 +219,7 @@ class AuthViewModel: ObservableObject {
     func saveUserInfo(email: String, userName: String, phoneNumber: String, address: String, accessToken: String, refreshToken: String) {
         self.isLoading = true
         print("Email : \(email), UserName : \(userName), PhoneNumber : \(phoneNumber), Address : \(address)")
-        AuthService.shared.saveUserInfo(email: email, userName: userName, phoneNumber: phoneNumber, address: address) { [weak self] result in
+        AuthService.shared.saveUserInfo(userName: userName, phoneNumber: phoneNumber, address: address) { [weak self] result in
             DispatchQueue.main.async {
                 self?.isLoading = false
                 switch result {
