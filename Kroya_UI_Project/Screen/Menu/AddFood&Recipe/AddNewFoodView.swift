@@ -15,7 +15,7 @@ struct AddFoodView: View {
     @State private var navigateToNextView: Bool = false
     @State private var showDraftAlert = false
     @State private var foodName: String = ""
-    
+    @StateObject var cuisineVM = CuisineVM()
     let dismissToRoot: () -> Void
     var levels: [String] = ["Hard", "Medium", "Easy"]
     var cuisines: [String] = ["Soup", "Salad", "Dessert", "Grill"]
@@ -260,6 +260,9 @@ struct AddFoodView: View {
                             .cornerRadius(10)
                             .padding(.horizontal)
                     }
+                }
+                .onAppear{
+                    cuisineVM.fetchAllCuisines()
                 }
                 .navigationTitle("Your dishes")
                 .customFontSemiBoldLocalize(size: 16)
