@@ -6,6 +6,8 @@ import SwiftUI
 
 struct FoodOnSaleViewCell: View {
     
+//   var viewModel = FoodSellService()
+    
     @State private var isFavorite: Bool
     var foodSale: AddNewFoodModel
 

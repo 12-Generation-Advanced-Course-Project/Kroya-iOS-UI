@@ -2,12 +2,9 @@
 
 import Foundation
 
-
-import Foundation
-
-struct FoodSellListResponse: Codable {
+struct FoodSellListResponse<T:Decodable>: Decodable {
     let message: String
-    let payload: [FoodSell]
+    let payload: [FoodSell]?
     let status, timestamp: String
 }
 
@@ -15,7 +12,7 @@ struct FoodSellListResponse: Codable {
 struct FoodSell: Codable{
     let foodSellId: Int
     let photo : [Photo]
-    let name, dateCooking: String  // Corrected from "dsateCoooking" to "dateCooking"
+    let name, dateCooking: String
     let price: Double
     let currencyType: String
     let averageRating: Double
@@ -25,9 +22,6 @@ struct FoodSell: Codable{
     let isOrderable: Bool
     let sellerInformation: String
     
-    enum CodingKeys: String, CodingKey {
-        case foodSellId, photo, name, dateCooking, price, currencyType, averageRating, totalRaters, isFavorite, itemType, isOrderable, sellerInformation
-    }
 }
 //
 //
