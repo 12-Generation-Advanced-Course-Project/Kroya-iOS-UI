@@ -5,6 +5,7 @@
 //  Created by Ounbonaliheng on 26/9/24.
 //
 
+
 import SwiftUI
 import GoogleMaps
 import SwiftData
@@ -12,7 +13,7 @@ import Network
 
 @main
 struct Kroya_UI_ProjectApp: App {
-    @UIApplicationDelegateAdaptor var appdelegate: AppDelegateForLocalNotification
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject var userStore = UserStore()
     @StateObject var addNewFoodVM = AddNewFoodVM()
     @StateObject var addressViewModel = AddressViewModel(userStore: UserStore())
@@ -23,7 +24,7 @@ struct Kroya_UI_ProjectApp: App {
     private let monitor = NWPathMonitor()
 
     init() {
-        GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
+      //GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
         modelContainer = try! ModelContainer(for: Draft.self)
         setupNetworkMonitoring()
     }
@@ -37,7 +38,7 @@ struct Kroya_UI_ProjectApp: App {
                         .environmentObject(addNewFoodVM)
                         .environmentObject(addressViewModel)
                 } else {
-                    contentView // Show the main content view
+                    contentView
                         .overlay(
                             // Display OfflineMessageView as an overlay when disconnected
                             isConnected ? nil : OfflineMessageView(retryAction: checkNetworkAgain)
@@ -45,7 +46,7 @@ struct Kroya_UI_ProjectApp: App {
                 }
             }
             .onAppear {
-                checkInitialConnection() // Check connection immediately on app launch
+                checkInitialConnection()
             }
         }
     }
@@ -61,9 +62,6 @@ struct Kroya_UI_ProjectApp: App {
                         .environment(\.locale, .init(identifier: lang))
                         .environment(\.modelContext, modelContainer.mainContext)
                         .environmentObject(addNewFoodVM)
-                        .onAppear {
-                            UNUserNotificationCenter.current().delegate = appdelegate
-                        }
                 }
             } else {
                 NavigationView {

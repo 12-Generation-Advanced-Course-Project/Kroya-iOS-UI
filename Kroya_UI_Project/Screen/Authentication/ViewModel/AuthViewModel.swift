@@ -251,9 +251,8 @@ class AuthViewModel: ObservableObject {
     
     
     // MARK: Logout Email Account
-    func logout() {
+    func logoutApp() {
         isLoading = true
-//        isLoggedIn = false
         Auth.shared.logout()
         print("Tokens and access token deleted from Keychain.")
         if let email = userStore.user?.email {

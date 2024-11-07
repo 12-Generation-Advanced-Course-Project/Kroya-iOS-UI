@@ -15,6 +15,5 @@ struct KroyaAPIResponse<T: Decodable>: Decodable {
     let statusCode: String
     let timestamp: String?
 }
-
 //MARK: User Setting Profile
 typealias UserSettingProfileResponse = KroyaAPIResponse<ProfileModel>
