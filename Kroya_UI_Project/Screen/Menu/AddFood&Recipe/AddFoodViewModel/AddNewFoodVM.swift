@@ -42,34 +42,34 @@ class AddNewFoodVM: ObservableObject {
         ),
         
         // Food Sale Item 2 - McDonald's French Fries
-        AddNewFoodModel(
-            photos: [Photo(photo: "frenchfries.jpg")],
-            name: "Khmer Beef Salad",
-            description: "Crispy golden fries, salted to perfection - a McDonald's classic.",
-            durationInMinutes: 3,
-            level: "Easy",
-            cuisineId: 2, // Fast Food
-            categoryId: 1, // Snack
-            ingredients: [
-                RecipeIngredient(id: 6, name: "Potatoes", quantity: 200, price: 1.0, selectedCurrency: 1),
-                RecipeIngredient(id: 7, name: "Salt", quantity: 5, price: 0.1, selectedCurrency: 1),
-                RecipeIngredient(id: 8, name: "Vegetable Oil", quantity: 30, price: 0.5, selectedCurrency: 1)
-            ],
-            cookingSteps: [
-                CookingStep(id: 4, description: "Cut the potatoes into fries."),
-                CookingStep(id: 5, description: "Fry the potatoes until golden and crispy."),
-                CookingStep(id: 6, description: "Sprinkle with salt and serve.")
-            ],
-            saleIngredients: SaleIngredient(
-                cookDate: "2024-11-02",
-                amount: 10,
-                price: 2.99,
-                location: "McDonald's, Los Angeles",
-                selectedCurrency: 1
-            ),
-            rating: 4.3,
-            reviewCount: 2500
-        ),
+//        AddNewFoodModel(
+//            photos: [Photo(photo: "frenchfries.jpg")],
+//            name: "Khmer Beef Salad",
+//            description: "Crispy golden fries, salted to perfection - a McDonald's classic.",
+//            durationInMinutes: 3,
+//            level: "Easy",
+//            cuisineId: 2, // Fast Food
+//            categoryId: 1, // Snack
+//            ingredients: [
+//                RecipeIngredient(id: 6, name: "Potatoes", quantity: 200, price: 1.0, selectedCurrency: 1),
+//                RecipeIngredient(id: 7, name: "Salt", quantity: 5, price: 0.1, selectedCurrency: 1),
+//                RecipeIngredient(id: 8, name: "Vegetable Oil", quantity: 30, price: 0.5, selectedCurrency: 1)
+//            ],
+//            cookingSteps: [
+//                CookingStep(id: 4, description: "Cut the potatoes into fries."),
+//                CookingStep(id: 5, description: "Fry the potatoes until golden and crispy."),
+//                CookingStep(id: 6, description: "Sprinkle with salt and serve.")
+//            ],
+//            saleIngredients: SaleIngredient(
+//                cookDate: "2024-11-02",
+//                amount: 10,
+//                price: 2.99,
+//                location: "McDonald's, Los Angeles",
+//                selectedCurrency: 1
+//            ),
+//            rating: 4.3,
+//            reviewCount: 2500
+//        ),
         // Food Sale Item 3 - McDonald's French Fries
         AddNewFoodModel(
             photos: [Photo(photo: "frenchfries.jpg")],
@@ -100,34 +100,34 @@ class AddNewFoodVM: ObservableObject {
             reviewCount: 1500
         ),
         // Food Sale Item 4 - McDonald's French Fries
-        AddNewFoodModel(
-            photos: [Photo(photo: "frenchfries.jpg")],
-            name: "Nom Tnout",
-            description: "Crispy golden fries, salted to perfection - a McDonald's classic.",
-            durationInMinutes: 4,
-            level: "Easy",
-            cuisineId: 4, // Fast Food
-            categoryId: 1, // Snack
-            ingredients: [
-                RecipeIngredient(id: 6, name: "Potatoes", quantity: 200, price: 1.0, selectedCurrency: 1),
-                RecipeIngredient(id: 7, name: "Salt", quantity: 5, price: 0.1, selectedCurrency: 1),
-                RecipeIngredient(id: 8, name: "Vegetable Oil", quantity: 30, price: 0.5, selectedCurrency: 1)
-            ],
-            cookingSteps: [
-                CookingStep(id: 4, description: "Cut the potatoes into fries."),
-                CookingStep(id: 5, description: "Fry the potatoes until golden and crispy."),
-                CookingStep(id: 6, description: "Sprinkle with salt and serve.")
-            ],
-            saleIngredients: SaleIngredient(
-                cookDate: "2024-11-01",
-                amount: 10,
-                price: 3.29,
-                location: "McDonald's, Los Angeles",
-                selectedCurrency: 1
-            ),
-            rating: 4.2,
-            reviewCount: 3500
-        ),
+//        AddNewFoodModel(
+//            photos: [Photo(photo: "frenchfries.jpg")],
+//            name: "Nom Tnout",
+//            description: "Crispy golden fries, salted to perfection - a McDonald's classic.",
+//            durationInMinutes: 4,
+//            level: "Easy",
+//            cuisineId: 4, // Fast Food
+//            categoryId: 1, // Snack
+//            ingredients: [
+//                RecipeIngredient(id: 6, name: "Potatoes", quantity: 200, price: 1.0, selectedCurrency: 1),
+//                RecipeIngredient(id: 7, name: "Salt", quantity: 5, price: 0.1, selectedCurrency: 1),
+//                RecipeIngredient(id: 8, name: "Vegetable Oil", quantity: 30, price: 0.5, selectedCurrency: 1)
+//            ],
+//            cookingSteps: [
+//                CookingStep(id: 4, description: "Cut the potatoes into fries."),
+//                CookingStep(id: 5, description: "Fry the potatoes until golden and crispy."),
+//                CookingStep(id: 6, description: "Sprinkle with salt and serve.")
+//            ],
+//            saleIngredients: SaleIngredient(
+//                cookDate: "2024-11-01",
+//                amount: 10,
+//                price: 3.29,
+//                location: "McDonald's, Los Angeles",
+//                selectedCurrency: 1
+//            ),
+//            rating: 4.2,
+//            reviewCount: 3500
+//        ),
         
     // Recipe Item 1 - Kung Pao Chicken
         AddNewFoodModel(
