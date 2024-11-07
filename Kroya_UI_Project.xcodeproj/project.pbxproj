@@ -11,6 +11,7 @@
 		2686122F2CCA222300DE1F6F /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 2686122E2CCA222300DE1F6F /* GoogleMaps */; };
 		268612322CCA226400DE1F6F /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 268612312CCA226400DE1F6F /* SwiftKeychainWrapper */; };
 		840C1FAB2CB3BD0C0066027A /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 840C1FAA2CB3BD0C0066027A /* Alamofire */; };
+		84171E3E2CDCAAD0000FC361 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 84171E3D2CDCAAD0000FC361 /* FirebaseMessaging */; };
 		8445843A2CB6793F00CA3C01 /* SwiftUIFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 844584392CB6793F00CA3C01 /* SwiftUIFlow */; };
 		8494AC232CCB533E00FB8206 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 8494AC222CCB533E00FB8206 /* Kingfisher */; };
 		A1F0F280C2FB2A0237375308 /* Pods_Kroya_UI_ProjectTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7867E32E96FB8AD4F4B4B5 /* Pods_Kroya_UI_ProjectTests.framework */; };
@@ -74,6 +75,7 @@
 			files = (
 				8445843A2CB6793F00CA3C01 /* SwiftUIFlow in Frameworks */,
 				840C1FAB2CB3BD0C0066027A /* Alamofire in Frameworks */,
+				84171E3E2CDCAAD0000FC361 /* FirebaseMessaging in Frameworks */,
 				268612322CCA226400DE1F6F /* SwiftKeychainWrapper in Frameworks */,
 				2686122F2CCA222300DE1F6F /* GoogleMaps in Frameworks */,
 				8494AC232CCB533E00FB8206 /* Kingfisher in Frameworks */,
@@ -172,6 +174,7 @@
 				2686122E2CCA222300DE1F6F /* GoogleMaps */,
 				268612312CCA226400DE1F6F /* SwiftKeychainWrapper */,
 				8494AC222CCB533E00FB8206 /* Kingfisher */,
+				84171E3D2CDCAAD0000FC361 /* FirebaseMessaging */,
 			);
 			productName = Kroya_UI_Project;
 			productReference = 8406DAAF2CA5510C0003EA40 /* Kroya_UI_Project.app */;
@@ -263,6 +266,7 @@
 				2686122D2CCA222300DE1F6F /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
 				268612302CCA226400DE1F6F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
 				8494AC212CCB533E00FB8206 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				84171E3C2CDCAAD0000FC361 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8406DAB02CA5510C0003EA40 /* Products */;
@@ -782,6 +786,14 @@
 				minimumVersion = 5.9.1;
 			};
 		};
+		84171E3C2CDCAAD0000FC361 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.4.0;
+			};
+		};
 		844584382CB6793F00CA3C01 /* XCRemoteSwiftPackageReference "SwiftUIFlow" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ciaranrobrien/SwiftUIFlow";
@@ -815,6 +827,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 840C1FA92CB3BD0C0066027A /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		84171E3D2CDCAAD0000FC361 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84171E3C2CDCAAD0000FC361 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 		844584392CB6793F00CA3C01 /* SwiftUIFlow */ = {
 			isa = XCSwiftPackageProductDependency;
