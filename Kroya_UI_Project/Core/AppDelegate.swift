@@ -9,43 +9,81 @@ import GoogleMaps
 import FirebaseCore
 import FirebaseMessaging
 
-//MARK: For Google Maps
-class AppDelegate: NSObject, UIApplicationDelegate {
+class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        
+        // Initialize Google Maps
         GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
+        
+        // Initialize Firebase
+        FirebaseApp.configure()
+        
+        // Set FCM messaging delegate
+        Messaging.messaging().delegate = self
+        
+        // Set notification center delegate for handling foreground notifications
+        UNUserNotificationCenter.current().delegate = self
+        
+        // Request notification permissions
+        self.registerForRemoteNotifications(application)
+        
         return true
+    }
+    
+    fileprivate func registerForRemoteNotifications(_ application: UIApplication) {
+        if #available(iOS 10.0, *) {
+            // For iOS 10+, set the UNUserNotificationCenter delegate
+            UNUserNotificationCenter.current().delegate = self
+            
+            // Request notification authorization
+            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+            UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { (granted, error) in
+                print("Permission granted: \(granted)")
+                
+                if let error = error {
+                    print("Error in notification authorization: \(error.localizedDescription)")
+                    return
+                }
+                
+                if granted {
+                    DispatchQueue.main.async {
+                        application.registerForRemoteNotifications()
+                    }
+                }
+            }
+        } else {
+            // For iOS versions below 10
+            let settings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            application.registerUserNotificationSettings(settings)
+        }
+    }
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        print("APNs Device Token: \(deviceToken)")
+        
+        // Set the APNs token in Firebase Messaging
+        Messaging.messaging().apnsToken = deviceToken
+        
+        // Explicitly request the FCM token after setting the APNs token
+        Messaging.messaging().token { token, error in
+            if let error = error {
+                print("Error fetching FCM token after setting APNs token: \(error.localizedDescription)")
+            } else if let token = token {
+                print("Fetched FCM token after setting APNs token: \(token)")
+            }
+        }
+    }
+
+    
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print("Failed to register for remote notifications: \(error.localizedDescription)")
     }
 }
 
-
-//MARK: For Notification
-//class AppDelegateForMessage: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNotificationCenterDelegate {
-//    
-//    func application(_ application: UIApplication,
-//                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-//        FirebaseApp.configure()
-//        application.registerForRemoteNotifications()
-//        Messaging.messaging().delegate = self
-//        UNUserNotificationCenter.current().delegate = self
-//        return true
-//        
-//    }
-//    
-//    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-//        print("FCM registration token: \(fcmToken ?? "")")
-//        
-//        
-//        
-//        // Send token to your server if needed
-//        if let fcm = Messaging.messaging().fcmToken {
-//                    print("fcm", fcm)
-//        }
-//    }
-//    
-//    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-//        Messaging.messaging().apnsToken = deviceToken
-//    }
-//    
-//}
-
+// MARK: - FCM Messaging Delegate
+extension AppDelegate: MessagingDelegate {
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        print("Received FCM Token: \(fcmToken ?? "No token")")
+    }
+}
