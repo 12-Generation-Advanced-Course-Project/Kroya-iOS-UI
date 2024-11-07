@@ -108,3 +108,28 @@ struct RecipeViewCell: View {
         }
     }
 }
+
+#Preview {
+    let sampleRecipe = AddNewFoodModel(
+        photos: [Photo(photo: "sample_image")], // Replace "sample_image" with a valid image URL if available
+        name: "Sample Recipe",
+        description: "This is a sample recipe description that shows how to set up the UI preview.",
+        durationInMinutes: 30,
+        level: "Easy",
+        cuisineId: 1,
+        categoryId: 1,
+        ingredients: [
+            RecipeIngredient(id: 1, name: "Ingredient 1", quantity: 1.0, price: 1.0),
+            RecipeIngredient(id: 2, name: "Ingredient 2", quantity: 2.0, price: 2.0)
+        ],
+        cookingSteps: [
+            CookingStep(id: 1, description: "Step 1: Do something."),
+            CookingStep(id: 2, description: "Step 2: Do something else.")
+        ],
+        saleIngredients: nil, // You can provide data for SaleIngredient if you want to preview as a for-sale item
+        rating: 4.5,
+        reviewCount: 10
+    )
+    
+    RecipeViewCell(recipe: sampleRecipe, isFavorite: false)
+}

@@ -9,6 +9,7 @@ import Alamofire
 import SwiftUI
 
 class ProfileService {
+    
     static let shared = ProfileService()
     
     // MARK: Get User Profile

@@ -15,6 +15,7 @@ struct Kroya_UI_ProjectApp: App {
     @UIApplicationDelegateAdaptor var appdelegate: AppDelegateForLocalNotification
     @StateObject var userStore = UserStore()
     @StateObject var addNewFoodVM = AddNewFoodVM()
+
     @StateObject var addressViewModel = AddressViewModel(userStore: UserStore())
     @State private var isSplashScreenActive = true
     @State private var isConnected = true

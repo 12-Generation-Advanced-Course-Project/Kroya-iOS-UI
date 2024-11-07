@@ -51,3 +51,10 @@ struct ValidationOTPCode: Codable {
     let isEmailVerified: Bool
     let verifiedAt: String
 }
+
+struct userModel: Codable{
+    var id: Int
+    var fullName: String
+    var profileImage: String
+    
+}
