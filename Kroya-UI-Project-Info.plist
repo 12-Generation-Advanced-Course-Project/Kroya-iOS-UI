@@ -53,6 +53,8 @@
 			<string>Privacy - Location Always and When In Use Usage Description</string>
 		</dict>
 	</array>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

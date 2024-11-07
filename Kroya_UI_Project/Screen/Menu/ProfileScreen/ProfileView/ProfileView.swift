@@ -173,7 +173,7 @@ struct ProfileView: View {
                 // Logout Button
                 CustomButton(title: LocalizedStringKey("Log out"), action: {
                     isLoading = true
-                    authVM.logout()
+                    authVM.logoutApp()
                     
                 }, backgroundColor: .red, frameWidth: .screenWidth * 0.95)
                 
