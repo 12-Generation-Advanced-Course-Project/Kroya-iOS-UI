@@ -4,7 +4,7 @@ struct AllPopularTabView: View {
     
     @StateObject private var foodOnSaleViewModel = FoodOnSaleViewCellViewModel()
     @StateObject private var addNewFoodVM = AddNewFoodVM()
-    
+    @StateObject private var recipeViewModel = RecipeViewModel()
     var isSelected: Int?
     
     var body: some View {
@@ -27,7 +27,7 @@ struct AllPopularTabView: View {
                             .padding(.top, 8)
                     }
                 }
-                ForEach(addNewFoodVM.allNewFoodAndRecipes.filter { !$0.isForSale }) { recipe in
+                ForEach(recipeViewModel.RecipeFood) { recipe in
                     NavigationLink(destination:
                                     FoodDetailView(
                                        theMainImage:"Hotpot",
@@ -35,7 +35,7 @@ struct AllPopularTabView: View {
                                        subImage2:  "Chinese",
                                        subImage3:  "Fly-By-Jing",
                                        subImage4:  "Mixue",
-                                       showOrderButton: recipe.isForSale
+                                       showOrderButton: true
                                
                                    )
                     ) {

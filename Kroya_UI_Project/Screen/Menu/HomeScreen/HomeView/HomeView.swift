@@ -12,7 +12,7 @@ struct HomeView: View {
     
     @EnvironmentObject var addNewFoodVM: AddNewFoodVM
     let notification = [1, 2, 3, 4, 5]
-    
+    @StateObject private var recipeViewModel = RecipeViewModel()
     let categories: [Category] = [
         Category(title: .breakfast, image: "khmernoodle", color: Color(hex: "#F2F2F2"), x: 60, y: 18),
         Category(title: .lunch, image: "Somlorkoko", color: Color(hex: "#E6F4E8"), x: 60, y: 18),
@@ -133,7 +133,7 @@ struct HomeView: View {
                             }
                             
                             // Recipe/Food Cards from AddNewFoodVM (Limited to 2)
-                            ForEach(addNewFoodVM.allNewFoodAndRecipes) { recipe in
+                            ForEach(recipeViewModel.RecipeFood) { recipe in
                                 NavigationLink(destination:
                                                 FoodDetailView(
                                                    theMainImage:"Hotpot",
@@ -141,7 +141,7 @@ struct HomeView: View {
                                                    subImage2:  "Chinese",
                                                    subImage3:  "Fly-By-Jing",
                                                    subImage4:  "Mixue",
-                                                   showOrderButton: recipe.isForSale
+                                                   showOrderButton: true
                                                )
                                 ) {
                                     RecipeViewCell(recipe: recipe)
@@ -151,6 +151,7 @@ struct HomeView: View {
                         }
                     }
                 }
+             
                 .padding(.horizontal)
                 .navigationTitle("")
                 .navigationBarBackButtonHidden(true)

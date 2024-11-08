@@ -40,7 +40,9 @@ struct FoodonRecipe: View {
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding()
                 
-                Spacer().frame(height: 20)
+                
+                Spacer()
+                    .frame(height: 20)
                 
                 Text("All")
                     .font(.customfont(.bold, fontSize: 16))
@@ -49,6 +51,7 @@ struct FoodonRecipe: View {
                     .padding(.horizontal)
                 
                 RecipeView()
+                Spacer()
             }
             .navigationTitle("Food Recipe")
             .navigationBarTitleDisplayMode(.inline)
@@ -65,6 +68,7 @@ struct FoodonRecipe: View {
                     }
                 }
             }
+           
         }
         .searchable(text: $searchText, prompt: LocalizedStringKey("Search Item"))
         .navigationBarBackButtonHidden(true)

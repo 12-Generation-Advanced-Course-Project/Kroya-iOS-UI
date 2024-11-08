@@ -1,23 +1,25 @@
+//
+//  BreakfastRecipeTab.swift
+//  Kroya_UI_Project
+//
+//  Created by KAK-LY on 8/11/24.
+//
+
 import SwiftUI
-
-
-
-// MARK: - RecipeView
-struct RecipeView: View {
-    
+struct BreakfastRecipeTab:View {
     @StateObject private var recipeViewModel = RecipeViewModel() // Correctly initialize the view model
     var iselected: Int?
     var body: some View {
         VStack {
-            if recipeViewModel.RecipeFood.isEmpty && !recipeViewModel.isLoading {
-                Text("No Recipes Found")
+            if recipeViewModel.RecipeByCategory.isEmpty && !recipeViewModel.isLoading {
+                Text("No Recipes Food Found")
                     .font(.title3)
                     .foregroundColor(.gray)
                     .padding()
             } else {
                 ScrollView(showsIndicators: false) {
                     LazyVStack(spacing: 8) {
-                        ForEach(recipeViewModel.RecipeFood) { recipe in
+                        ForEach(recipeViewModel.RecipeByCategory) { recipe in
                             NavigationLink(destination: recipeDetailDestination(for: recipe)) {
                                 RecipeViewCell(recipe: recipe)
                                     .frame(maxWidth: .infinity)

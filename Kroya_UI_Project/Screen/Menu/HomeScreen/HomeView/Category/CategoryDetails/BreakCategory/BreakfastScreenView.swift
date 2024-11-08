@@ -19,7 +19,7 @@ struct BreakfastScreenView: View {
                         .onTapGesture {
                             withAnimation {
                                 selectedSegment = 0
-//                                fetchSegmentData() // Fetch food on sale data
+                                //                                fetchSegmentData() // Fetch food on sale data
                             }
                         }
                     
@@ -32,7 +32,7 @@ struct BreakfastScreenView: View {
                         .onTapGesture {
                             withAnimation {
                                 selectedSegment = 1
-//                                fetchSegmentData() // Fetch recipes data
+                                //                                fetchSegmentData() // Fetch recipes data
                             }
                         }
                     
@@ -61,7 +61,7 @@ struct BreakfastScreenView: View {
                 
                 RecipeView(iselected: selectedSegment)
                     .tag(1)
-                    .environmentObject(addNewFoodVM)
+                
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         }
@@ -83,18 +83,18 @@ struct BreakfastScreenView: View {
         }
     }
     
-//    // Function to fetch data based on selected segment
-//    private func fetchSegmentData() {
-//        if selectedSegment == 0 {
-//            // Fetch Food on Sale only if data is empty
-//            if addNewFoodVM.allNewFoodAndRecipes.isEmpty || !addNewFoodVM.allNewFoodAndRecipes.contains(where: { $0.isForSale }) {
-//                addNewFoodVM.fetchRecipeOrFood(forSaleOnly: true)
-//            }
-//        } else {
-//            // Fetch Recipes only if data is empty or no recipes loaded
-//            if addNewFoodVM.allNewFoodAndRecipes.isEmpty || !addNewFoodVM.allNewFoodAndRecipes.contains(where: { !$0.isForSale }) {
-//                addNewFoodVM.fetchRecipeOrFood(forSaleOnly: false)
-//            }
-//        }
-//    }
+    //    // Function to fetch data based on selected segment
+    //    private func fetchSegmentData() {
+    //        if selectedSegment == 0 {
+    //            // Fetch Food on Sale only if data is empty
+    //            if addNewFoodVM.allNewFoodAndRecipes.isEmpty || !addNewFoodVM.allNewFoodAndRecipes.contains(where: { $0.isForSale }) {
+    //                addNewFoodVM.fetchRecipeOrFood(forSaleOnly: true)
+    //            }
+    //        } else {
+    //            // Fetch Recipes only if data is empty or no recipes loaded
+    //            if addNewFoodVM.allNewFoodAndRecipes.isEmpty || !addNewFoodVM.allNewFoodAndRecipes.contains(where: { !$0.isForSale }) {
+    //                addNewFoodVM.fetchRecipeOrFood(forSaleOnly: false)
+    //            }
+    //        }
+    //    }
 }

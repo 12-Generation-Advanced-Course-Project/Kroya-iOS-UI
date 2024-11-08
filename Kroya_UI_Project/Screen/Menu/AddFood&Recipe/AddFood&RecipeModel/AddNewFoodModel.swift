@@ -36,9 +36,9 @@ struct AddNewFoodModel: Identifiable, Codable {
 
 // MARK: - Photo
 struct Photo: Codable {
-    var photo: String
-}
 
+    let photo: String
+}
 // MARK: - Recipe Ingredient (For RecipeModal)
 struct RecipeIngredient: Identifiable, Codable {
     var id: Int
