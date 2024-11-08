@@ -24,7 +24,7 @@ struct Kroya_UI_ProjectApp: App {
     private let monitor = NWPathMonitor()
 
     init() {
-      //GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
+//        GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
         modelContainer = try! ModelContainer(for: Draft.self)
         setupNetworkMonitoring()
     }
@@ -40,16 +40,17 @@ struct Kroya_UI_ProjectApp: App {
                 } else {
                     contentView
                         .overlay(
-                            // Display OfflineMessageView as an overlay when disconnected
                             isConnected ? nil : OfflineMessageView(retryAction: checkNetworkAgain)
                         )
                 }
             }
             .onAppear {
                 checkInitialConnection()
+           
             }
         }
     }
+
     
     private var contentView: some View {
         Group {
