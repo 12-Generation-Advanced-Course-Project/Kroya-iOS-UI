@@ -10,12 +10,12 @@ struct FoodOnSaleView: View {
     // Properties
     var iselected: Int?
     @EnvironmentObject var addNewFoodVM: AddNewFoodVM
-    
+    @StateObject private var foodsellVm = FoodSellViewModel()
     var body: some View {
         List {
             ForEach(addNewFoodVM.allNewFoodAndRecipes.filter { $0.saleIngredients != nil }) { foodSale in
                 ZStack {
-                    FoodOnSaleViewCell(foodSale: foodSale)
+                   // FoodOnSaleViewCell(foodSale: foodSale)
                     NavigationLink(destination: FoodDetailView(
                         theMainImage:"ahmok",
                         subImage1: "ahmok1",
@@ -34,6 +34,9 @@ struct FoodOnSaleView: View {
                 .listRowSeparator(.hidden)
                 .padding(.vertical, -6)
             }
+        }
+        .onAppear{
+            foodsellVm.getAllFoodSell()
         }
         .scrollIndicators(.hidden)
         .buttonStyle(PlainButtonStyle())
