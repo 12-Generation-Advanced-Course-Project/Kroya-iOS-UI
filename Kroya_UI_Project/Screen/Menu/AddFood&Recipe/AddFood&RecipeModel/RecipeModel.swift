@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct RecipeModel: Identifiable, Codable {
+    
     var id: Int
     let photo: [Photo]
     let name: String

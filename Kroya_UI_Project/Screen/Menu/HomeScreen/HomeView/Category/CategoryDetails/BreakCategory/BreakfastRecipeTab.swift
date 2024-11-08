@@ -7,19 +7,20 @@
 
 import SwiftUI
 struct BreakfastRecipeTab:View {
+    
     @StateObject private var recipeViewModel = RecipeViewModel() // Correctly initialize the view model
     var iselected: Int?
     var body: some View {
         VStack {
-            if recipeViewModel.RecipeByCategory.isEmpty && !recipeViewModel.isLoading {
-                Text("No Recipes Food Found")
+            if recipeViewModel.RecipeFood.isEmpty && !recipeViewModel.isLoading {
+                Text("No Recipes Found")
                     .font(.title3)
                     .foregroundColor(.gray)
                     .padding()
             } else {
                 ScrollView(showsIndicators: false) {
                     LazyVStack(spacing: 8) {
-                        ForEach(recipeViewModel.RecipeByCategory) { recipe in
+                        ForEach(recipeViewModel.RecipeFood) { recipe in
                             NavigationLink(destination: recipeDetailDestination(for: recipe)) {
                                 RecipeViewCell(recipe: recipe)
                                     .frame(maxWidth: .infinity)
