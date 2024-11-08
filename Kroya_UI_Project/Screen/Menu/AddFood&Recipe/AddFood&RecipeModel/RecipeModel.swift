@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct RecipeModel: Identifiable, Codable {
-    
     var id = UUID()
     let photo: Photo
     let name:String
