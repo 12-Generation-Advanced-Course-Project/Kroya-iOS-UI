@@ -7,24 +7,45 @@
 
 import Foundation
 import Alamofire
+import SwiftUICore
 
-class CategoryMV: ObservableObject{
+class CategoryMV: ObservableObject {
     
-    @Published var categoryShow: [CategoryModel]?
+    @Published var categoryShowModel: [CategoryModel] = []
+    @Published var displayCategories: [Category] = []
     
-    @Published var isLoading: Bool = false
-    @Published var successMessage: String = ""
-    @Published var showError: Bool = false
-    @Published var errorMessage: String = ""
+    func fetchAllCategory() {
+        CategoryService.shared.getAllCategory { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let response):
+                    if response.statusCode == "200", let payload = response.payload {
+                        self?.categoryShowModel = payload
+                        self?.displayCategories = self?.mapCategories(payload) ?? []
+                    } else {
+                        print("Error fetching categories: \(response.message)")
+                    }
+                case .failure(let error):
+                    print("Request failed with error: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
     
-    
-    //MARK: Fetch Category
-    func fetchAllCategory(){
-        self.isLoading = true
-        CategoryService.shared.getAllCategory{ [weak self] result in
-            DispatchQueue.main.async{
-                self?.isLoading = false
-                
+    // Mapping function to convert API category names to local Category objects
+    private func mapCategories(_ categories: [CategoryModel]) -> [Category] {
+        categories.compactMap { categoryModel in
+            switch categoryModel.categoryName.lowercased() {
+            case "breakfast":
+                return Category(title: .breakfast, image: "khmernoodle", color: Color(hex: "#F2F2F2"), x: 60, y: 18)
+            case "lunch":
+                return Category(title: .lunch, image: "Somlorkoko", color: Color(hex: "#E6F4E8"), x: 60, y: 18)
+            case "dinner":
+                return Category(title: .dinner, image: "DinnerPic", color: .yellow.opacity(0.2), x: 50, y: 14)
+            case "dessert":
+                return Category(title: .dessert, image: "DessertPic", color: .blue.opacity(0.2), x: 50, y: 14)
+            default:
+                return nil  // Ignore unmatched categories
             }
         }
     }

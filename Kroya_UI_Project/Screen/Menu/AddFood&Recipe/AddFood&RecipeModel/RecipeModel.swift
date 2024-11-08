@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct RecipeModel: Identifiable, Codable {
-    var id = UUID()
-    let photo: Photo
-    let name:String
-    let description:String
-    let level:String
-    let averageRating:Double?
-    let totalRaters:Int?
-    let isFavorite:Bool
+    var id: Int
+    let photo: [Photo]
+    let name: String
+    let description: String
+    let level: String
+    let averageRating: Double?
+    let totalRaters: Int?
+    let isFavorite: Bool
     let itemType: String
     let user: userModel
 }

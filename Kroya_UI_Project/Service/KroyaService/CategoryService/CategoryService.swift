@@ -8,27 +8,30 @@
 import SwiftUI
 import Alamofire
 
-class CategoryService{
+class CategoryService {
     static let shared = CategoryService()
     
-    //MARK: Get All Category
-    func getAllCategory(completion: @escaping (Result<CategoryResponses, Error>) -> Void){
-        let url = Constants.CategoryUrl + "all"
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(Auth.shared.getAccessToken() ?? "")"
-        ]
+    // MARK: Get All Categories
+    func getAllCategory(completion: @escaping (Result<CategoryResponses, Error>) -> Void) {
+        guard let accessToken = Auth.shared.getAccessToken() else {
+            print("Error: Access token is nil.")
+            let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token is missing"])
+            completion(.failure(error))
+            return
+        }
         
-        AF.request(url, method: .get , headers: headers).validate()
-            .responseDecodable(of: CategoryResponses.self){ response in
+        let url = Constants.CategoryUrl + "all"
+        let headers: HTTPHeaders = ["Authorization": "Bearer \(accessToken)"]
+        
+        AF.request(url, method: .get, headers: headers).validate()
+            .responseDecodable(of: CategoryResponses.self) { response in
                 debugPrint(response)
-                switch response.result{
+                switch response.result {
                 case .success(let apiResponse):
-                    if let statusCode = Int(apiResponse.statusCode), statusCode == 200{
-                        print("List of categories retrieved successfully.")
-                        print("This is the user profile:\(String(describing: apiResponse.payload))")
+                    if apiResponse.statusCode == "200" {
+                        print("Categories retrieved successfully.")
                         completion(.success(apiResponse))
-                    }else{
-                        print("Failed to retrieve categories.")
+                    } else {
                         let error = NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: apiResponse.message])
                         completion(.failure(error))
                     }
@@ -39,3 +42,4 @@ class CategoryService{
             }
     }
 }
+

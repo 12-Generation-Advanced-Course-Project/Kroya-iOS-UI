@@ -4,11 +4,11 @@ import SwiftUI
 import Kingfisher
 
 struct RecipeViewCell: View {
-    var recipe: AddNewFoodModel
+    var recipe: RecipeModel // Corrected to use RecipeModel
     @State private var isFavorite: Bool
     var urlImagePrefix: String = "https://kroya-api.up.railway.app/api/v1/fileView/"
     
-    init(recipe: AddNewFoodModel, isFavorite: Bool = false) {
+    init(recipe: RecipeModel, isFavorite: Bool = false) {
         self.recipe = recipe
         _isFavorite = State(initialValue: isFavorite)
     }
@@ -16,13 +16,23 @@ struct RecipeViewCell: View {
     var body: some View {
         VStack {
             ZStack(alignment: .topLeading) {
-                // Display recipe image with NavigationLink only on the image and background
-                Image(.chineseHotpot)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(height: 160)
-                    .cornerRadius(15, corners: [.topLeft, .topRight])
-                    .clipped()
+                // Display recipe image with URL
+                if let photo = recipe.photo.first?.photo, let url = URL(string: photo) {
+                    KFImage(url)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: 160)
+                        .cornerRadius(15, corners: [.topLeft, .topRight])
+                        .clipped()
+                } else {
+                    Image(systemName: "photo") // Placeholder image
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: 160)
+                        .cornerRadius(15, corners: [.topLeft, .topRight])
+                        .clipped()
+                }
+                
                 // Rating and Favorite Button
                 HStack {
                     // Rating Section
@@ -33,11 +43,11 @@ struct RecipeViewCell: View {
                             .frame(width: 14, height: 14)
                             .foregroundColor(.yellow)
                         
-                        Text(String(format: "%.1f", recipe.rating ?? 0))
-                            .font(.customfont(.medium, fontSize: 12))
+                        Text(String(format: "%.1f", recipe.averageRating ?? 20))
+                            .customFontMedium(size: 16)
                             .foregroundColor(.black)
                         
-                        Text("(\(recipe.reviewCount ?? 0)+)")
+                        Text("(\(recipe.totalRaters ?? 0)+)")
                             .font(.system(size: 12))
                             .foregroundColor(.gray)
                     }
@@ -70,27 +80,27 @@ struct RecipeViewCell: View {
             VStack(alignment: .leading, spacing: 5) {
                 // Dish Name
                 Text(recipe.name)
-                    .font(.customfont(.medium, fontSize: 14))
+                    .customFontMedium(size: 14)
                     .foregroundColor(.black)
                 
                 // Description for Recipe
                 Text(recipe.description)
-                    .font(.customfont(.light, fontSize: 10))
+                    .customFontMedium(size: 14)
                     .foregroundColor(.gray)
                     .multilineTextAlignment(.leading)
-                    .lineLimit(2)
+                    .lineLimit(1)
                 
                 HStack {
                     // Status Type: "Recipe" label if not for sale
-                    if !recipe.isForSale {
+                    if recipe.itemType == "FOOD_RECIPE" { // Example check
                         Text("Recipe")
-                            .font(.customfont(.medium, fontSize: 12))
+                            .customFontMedium(size: 12)
                             .foregroundColor(.yellow)
                     }
                     
                     // Difficulty Level
                     Text(recipe.level)
-                        .font(.customfont(.light, fontSize: 12))
+                        .customFontMedium(size: 12)
                         .foregroundColor(.gray)
                     
                     Spacer()
@@ -107,29 +117,4 @@ struct RecipeViewCell: View {
                 .stroke(Color(hex: "#E6E6E6"), lineWidth: 0.8)
         }
     }
-}
-
-#Preview {
-    let sampleRecipe = AddNewFoodModel(
-        photos: [Photo(photo: "sample_image")], // Replace "sample_image" with a valid image URL if available
-        name: "Sample Recipe",
-        description: "This is a sample recipe description that shows how to set up the UI preview.",
-        durationInMinutes: 30,
-        level: "Easy",
-        cuisineId: 1,
-        categoryId: 1,
-        ingredients: [
-            RecipeIngredient(id: 1, name: "Ingredient 1", quantity: 1.0, price: 1.0),
-            RecipeIngredient(id: 2, name: "Ingredient 2", quantity: 2.0, price: 2.0)
-        ],
-        cookingSteps: [
-            CookingStep(id: 1, description: "Step 1: Do something."),
-            CookingStep(id: 2, description: "Step 2: Do something else.")
-        ],
-        saleIngredients: nil, // You can provide data for SaleIngredient if you want to preview as a for-sale item
-        rating: 4.5,
-        reviewCount: 10
-    )
-    
-    RecipeViewCell(recipe: sampleRecipe, isFavorite: false)
 }

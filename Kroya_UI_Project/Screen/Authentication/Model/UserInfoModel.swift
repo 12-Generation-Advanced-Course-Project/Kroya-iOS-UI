@@ -51,9 +51,8 @@ struct ValidationOTPCode: Codable {
     let verifiedAt: String
 }
 
-struct userModel: Codable{
+struct userModel: Codable {
     var id: Int
     var fullName: String
     var profileImage: String
-    
 }

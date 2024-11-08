@@ -11,7 +11,7 @@ import SwiftUI
 // Generic API response model
 struct KroyaAPIResponse<T: Decodable>: Decodable {
     let message: String
-    let payload: T?
+    let payload: [T]?
     let statusCode: String
     let timestamp: String?
 }

@@ -33,18 +33,11 @@ struct FoodSaleandRecipeView: View {
                             }
                         }
                         
-                        // Display Recipe items
-                        ForEach(addNewFoodVM.allNewFoodAndRecipes.filter { !$0.isForSale }.prefix(10)) { recipe in
-                            NavigationLink(destination: foodDetailDestination(for: recipe)) {
-                                RecipeViewCell(recipe: recipe)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.horizontal, 20)
-                            }
+                   
                         }
                     }
                 }
             }
-        }
         .padding(.top, 8)
         .navigationBarBackButtonHidden(true)
     }

@@ -28,26 +28,19 @@ struct ProfileView: View {
                 HStack {
                     HStack {
                         if let profileImageUrl = Profile.userProfile?.profileImage, !profileImageUrl.isEmpty {
-                          
-                            KFImage(URL(string: "\(urlImagePrefix)\(profileImageUrl)"))
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 40, height: 40)
-                                .clipShape(Rectangle())
-                                .cornerRadius(10)
-                        } else {
-                            Rectangle()
-                                .fill(Color(hex: "#D9D9D9"))
-                                .frame(width: 40, height: 40)
-                                .cornerRadius(10)
-                                .overlay(
-                                    Image(systemName: "person.fill")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 20, height: 20)
-                                        .foregroundStyle(Color.white)
-                                )
-                        }
+                        KFImage(URL(string: "\(urlImagePrefix)\(profileImageUrl)"))
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 40, height: 40)
+                            .clipShape(Rectangle())
+                            .cornerRadius(10)
+                    } else {
+                        Image("user-profile") // Placeholder image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 40, height: 40)
+                            .foregroundColor(.white)
+                    }
                         
                         VStack(alignment: .leading) {
                             Text(Profile.userProfile?.fullName ?? "")

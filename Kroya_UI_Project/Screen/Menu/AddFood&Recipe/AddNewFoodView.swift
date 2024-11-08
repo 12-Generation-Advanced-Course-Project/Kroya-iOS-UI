@@ -16,6 +16,8 @@ struct AddFoodView: View {
     @State private var showDraftAlert = false
     @State private var foodName: String = ""
     @StateObject var cuisineVM = CuisineVM()
+    @StateObject private var categoryvm = CategoryMV()
+
     let dismissToRoot: () -> Void
     var levels: [String] = ["Hard", "Medium", "Easy"]
     var cuisines: [String] = ["Soup", "Salad", "Dessert", "Grill"]
@@ -24,7 +26,9 @@ struct AddFoodView: View {
     @ObservedObject var addressVM: AddressViewModel
     @ObservedObject var draftModelData: DraftModelData
     @ObservedObject var addNewFoodVM: AddNewFoodVM
+    
     var body: some View {
+        
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack {
@@ -215,12 +219,16 @@ struct AddFoodView: View {
                         Spacer().frame(height: 10)
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
-                                ForEach(cuisines.indices, id: \.self) { index in
-                                    let cuisine = cuisines[index]
-                                    ChipCheckView(text: cuisine, isSelected: draftModelData.selectedCuisine == cuisine) {
-                                        draftModelData.selectedCuisine = draftModelData.selectedCuisine == cuisine ? nil : cuisine
+                                
+                                ForEach(cuisineVM.cuisineShowModel , id: \.id) { data in
+                                    
+//                                    print("data fetch \(index.cuisineName)")
+//                                    let cuisine = cuisines[index]
+                                    ChipCheckView(text: data.cuisineName , isSelected: draftModelData.selectedCuisine ==  data.cuisineName ) {
+                                        draftModelData.selectedCuisine = draftModelData.selectedCuisine ==  data.cuisineName ? nil :  data.cuisineName
                                     }
                                 }
+                                
                             }.padding(.leading, .screenWidth * 0.02)
                         }
                         
@@ -231,10 +239,10 @@ struct AddFoodView: View {
                         Spacer().frame(height: 10)
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
-                                ForEach(categories.indices, id: \.self) { index in
-                                    let category = categories[index]
-                                    ChipCheckView(text: category, isSelected: draftModelData.selectedCategory == category) {
-                                        draftModelData.selectedCategory = draftModelData.selectedCategory == category ? nil : category
+                                ForEach(categoryvm.categoryShowModel) { data in
+//                                    let category = categories[index]
+                                    ChipCheckView(text: data.categoryName , isSelected: draftModelData.selectedCategory == data.categoryName) {
+                                        draftModelData.selectedCategory = draftModelData.selectedCategory == data.categoryName ? nil : data.categoryName
                                     }
                                 }
                             }.padding(.leading, .screenWidth * 0.02)
@@ -263,6 +271,7 @@ struct AddFoodView: View {
                 }
                 .onAppear{
                     cuisineVM.fetchAllCuisines()
+                    categoryvm.fetchAllCategory()
                 }
                 .navigationTitle("Your dishes")
                 .customFontSemiBoldLocalize(size: 16)

@@ -31,18 +31,11 @@ struct PostViewScreen: View {
                                 .clipShape(Rectangle())
                                 .cornerRadius(10)
                         } else {
-                            // Placeholder when image URL is nil or empty
-                            Rectangle()
-                                .fill(Color(hex: "#D9D9D9"))
+                            Image("user-profile") // Placeholder image
+                                .resizable()
+                                .scaledToFit()
                                 .frame(width: 40, height: 40)
-                                .cornerRadius(10)
-                                .overlay(
-                                    Image("user-profile") // Placeholder image
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 20, height: 20)
-                                        .foregroundColor(.white)
-                                )
+                                .foregroundColor(.white)
                         }
                         VStack(alignment: .leading) {
                             // Display "N/A" if fullName is nil or empty

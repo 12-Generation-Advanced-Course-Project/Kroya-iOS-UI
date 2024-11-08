@@ -11,6 +11,7 @@ import Foundation
 class RecipeViewModel: ObservableObject {
     
     @Published var RecipeFood: [RecipeModel] = []
+    @Published var RecipeByCategory: [RecipeModel] = []
     @Published var isLoading: Bool = false
     @Published var successMessage: String = ""
     @Published var showError: Bool = false
@@ -26,7 +27,7 @@ class RecipeViewModel: ObservableObject {
                 case .success(let response):
                     if response.statusCode == "200" {
                         if let payload = response.payload {
-                            self?.RecipeFood = [payload]
+                            self?.RecipeFood = payload
                         }
                         self?.successMessage = "Recipe food fetched successfully."
                         self?.showError = false
@@ -43,4 +44,8 @@ class RecipeViewModel: ObservableObject {
         }
     }
     
+    //MARK: Get all Recipe By Category
+    func getRecipeAllByCategory(category: Int) {
+        
+    }
 }

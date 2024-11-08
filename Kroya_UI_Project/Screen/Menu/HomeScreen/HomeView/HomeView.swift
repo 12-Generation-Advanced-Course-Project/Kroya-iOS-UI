@@ -8,29 +8,32 @@ struct Category {
     let y: CGFloat
 }
 
+enum FoodCategory: String {
+    case breakfast = "Breakfast"
+    case lunch = "Lunch"
+    case dinner = "Dinner"
+    case dessert = "Dessert"
+}
+
 struct HomeView: View {
     
     @EnvironmentObject var addNewFoodVM: AddNewFoodVM
     let notification = [1, 2, 3, 4, 5]
-    
-    let categories: [Category] = [
-        Category(title: .breakfast, image: "khmernoodle", color: Color(hex: "#F2F2F2"), x: 60, y: 18),
-        Category(title: .lunch, image: "Somlorkoko", color: Color(hex: "#E6F4E8"), x: 60, y: 18),
-        Category(title: .dinner, image: "DinnerPic", color: .yellow.opacity(0.2), x: 50, y: 14),
-        Category(title: .dessert, image: "DessertPic", color: .blue.opacity(0.2), x: 50, y: 14)
-    ]
+    @StateObject private var recipeViewModel = RecipeViewModel()
+    @StateObject private var categoryvm = CategoryMV()
     @State var isSearching: Bool = false
     @Environment(\.locale) var locale
     
     var body: some View {
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 20) { // Added spacing between sections
                     // Title Section
-                    VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 8) { // Added spacing between text elements
                         Text(LocalizedStringKey("What would you like to eat today ?"))
                             .frame(width: locale.identifier == "ko" ? 170 : locale.identifier == "km-KH" ? 120 : 250)
                             .customFontSemiBoldLocalize(size: 23)
+                            .padding(.horizontal)
                         
                         // Recipe Order Cards
                         HStack(spacing: 16) {
@@ -62,18 +65,18 @@ struct HomeView: View {
                                 )
                             }
                         }
+                        .padding(.horizontal)
                     }
                     
-                    Spacer().frame(height: 25)
-                    
                     // Category Section
-                    VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 8) { // Added spacing between elements
                         Text(LocalizedStringKey("Category"))
                             .customFontSemiBoldLocalize(size: 16)
+                            .padding(.horizontal)
                         
                         ScrollView(.horizontal, showsIndicators: false) {
-                            HStack {
-                                ForEach(categories, id: \.title) { category in
+                            HStack(spacing: 16) { // Added spacing between category cards
+                                ForEach(categoryvm.displayCategories, id: \.title) { category in
                                     NavigationLink(destination: destinationView(for: category.title)) {
                                         CategoryCardView(
                                             title: LocalizedStringKey(category.title.rawValue),
@@ -85,10 +88,9 @@ struct HomeView: View {
                                     }
                                 }
                             }
+                            .padding(.horizontal)
                         }
                     }
-                    
-                    Spacer().frame(height: 30)
                     
                     // Popular Dishes Section
                     HStack {
@@ -104,28 +106,27 @@ struct HomeView: View {
                                     .customFontSemiBoldLocalize(size: 16)
                                 Image(systemName: "arrow.right")
                                     .foregroundStyle(PrimaryColor.normal)
-                                    .offset(y:2)
+                                    .offset(y: 2)
                             }
                         }
                     }
+                    .padding(.horizontal)
                     
-                    Spacer().frame(height: 20)
-                    
-                    // Scrollable Dishes (Show only a few cards)
+                    // Scrollable Dishes
                     ScrollView(.horizontal, showsIndicators: false) {
-                        HStack{
+                        HStack(spacing: 16) { // Added spacing between food cards
                             // Food on Sale Cards (Limited to 2)
                             ForEach(addNewFoodVM.allNewFoodAndRecipes) { foodSale in
                                 NavigationLink(destination:
                                                 FoodDetailView(
-                                                   theMainImage:"Hotpot",
-                                                   subImage1:  "Chinese Hotpot",
-                                                   subImage2:  "Chinese",
-                                                   subImage3:  "Fly-By-Jing",
-                                                   subImage4:  "Mixue",
-                                                   showOrderButton: true,
-                                                   showPrice: foodSale.isForSale
-                                               )
+                                                    theMainImage:"Hotpot",
+                                                    subImage1:  "Chinese Hotpot",
+                                                    subImage2:  "Chinese",
+                                                    subImage3:  "Fly-By-Jing",
+                                                    subImage4:  "Mixue",
+                                                    showOrderButton: true,
+                                                    showPrice: foodSale.isForSale
+                                                )
                                 ) {
                                     FoodOnSaleViewCell(foodSale: foodSale)
                                         .frame(width: 360)
@@ -133,25 +134,26 @@ struct HomeView: View {
                             }
                             
                             // Recipe/Food Cards from AddNewFoodVM (Limited to 2)
-                            ForEach(addNewFoodVM.allNewFoodAndRecipes) { recipe in
+                            ForEach(recipeViewModel.RecipeFood) { recipe in
                                 NavigationLink(destination:
                                                 FoodDetailView(
-                                                   theMainImage:"Hotpot",
-                                                   subImage1:  "Chinese Hotpot",
-                                                   subImage2:  "Chinese",
-                                                   subImage3:  "Fly-By-Jing",
-                                                   subImage4:  "Mixue",
-                                                   showOrderButton: recipe.isForSale
-                                               )
+                                                    theMainImage:"Hotpot",
+                                                    subImage1:  "Chinese Hotpot",
+                                                    subImage2:  "Chinese",
+                                                    subImage3:  "Fly-By-Jing",
+                                                    subImage4:  "Mixue",
+                                                    showOrderButton: true
+                                                )
                                 ) {
                                     RecipeViewCell(recipe: recipe)
                                         .frame(width: 360)
                                 }
                             }
                         }
+                        .padding(.horizontal)
                     }
                 }
-                .padding(.horizontal)
+                .padding(.top, 16) // Added padding to top
                 .navigationTitle("")
                 .navigationBarBackButtonHidden(true)
                 .toolbar {
@@ -201,8 +203,10 @@ struct HomeView: View {
                     }
                 }
             }
+            .onAppear {
+                categoryvm.fetchAllCategory()
+            }
         }
-        .environmentObject(addNewFoodVM)
     }
     
     @ViewBuilder
@@ -223,10 +227,4 @@ struct HomeView: View {
 #Preview {
     HomeView()
         .environmentObject(AddNewFoodVM())
-}
-enum FoodCategory: String {
-    case breakfast = "Breakfast"
-    case lunch = "Lunch"
-    case dinner = "Dinner"
-    case dessert = "Dessert"
 }

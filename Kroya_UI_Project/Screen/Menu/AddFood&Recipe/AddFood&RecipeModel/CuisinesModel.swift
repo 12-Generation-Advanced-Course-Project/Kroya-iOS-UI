@@ -7,15 +7,18 @@
 import SwiftUI
 
 struct CuisinesResponse<T: Decodable>: Decodable {
-    let message: String
-    let payload: T?
-    let statusCode: String
-    let timestamp: String?
+    
+    let message     : String
+    let payload     : [T]?
+    let statusCode  : String
+    let timestamp   : String?
 }
 
-struct CuisinesModel: Decodable{
-    var id: Int
+struct CuisinesModel: Identifiable , Decodable{
+    
+    var id          : Int
     var cuisineName : String
+    
 }
 
 typealias CuisineResponse = CuisinesResponse<CuisinesModel>
