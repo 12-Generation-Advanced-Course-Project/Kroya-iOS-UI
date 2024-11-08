@@ -19,6 +19,7 @@ struct HomeView: View {
         Category(title: .dinner, image: "DinnerPic", color: .yellow.opacity(0.2), x: 50, y: 14),
         Category(title: .dessert, image: "DessertPic", color: .blue.opacity(0.2), x: 50, y: 14)
     ]
+    @StateObject private var categoryvm = CategoryMV()
     @State var isSearching: Bool = false
     @Environment(\.locale) var locale
     
@@ -73,7 +74,7 @@ struct HomeView: View {
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
-                                ForEach(categories, id: \.title) { category in
+                                ForEach(categoryvm.displayCategories, id: \.title) { category in
                                     NavigationLink(destination: destinationView(for: category.title)) {
                                         CategoryCardView(
                                             title: LocalizedStringKey(category.title.rawValue),
@@ -84,9 +85,11 @@ struct HomeView: View {
                                         )
                                     }
                                 }
+
                             }
                         }
                     }
+                    
                     
                     Spacer().frame(height: 30)
                     
@@ -118,14 +121,14 @@ struct HomeView: View {
                             ForEach(addNewFoodVM.allNewFoodAndRecipes) { foodSale in
                                 NavigationLink(destination:
                                                 FoodDetailView(
-                                                   theMainImage:"Hotpot",
-                                                   subImage1:  "Chinese Hotpot",
-                                                   subImage2:  "Chinese",
-                                                   subImage3:  "Fly-By-Jing",
-                                                   subImage4:  "Mixue",
-                                                   showOrderButton: true,
-                                                   showPrice: foodSale.isForSale
-                                               )
+                                                    theMainImage:"Hotpot",
+                                                    subImage1:  "Chinese Hotpot",
+                                                    subImage2:  "Chinese",
+                                                    subImage3:  "Fly-By-Jing",
+                                                    subImage4:  "Mixue",
+                                                    showOrderButton: true,
+                                                    showPrice: foodSale.isForSale
+                                                )
                                 ) {
                                     FoodOnSaleViewCell(foodSale: foodSale)
                                         .frame(width: 360)
@@ -142,22 +145,26 @@ struct HomeView: View {
                                                    subImage3:  "Fly-By-Jing",
                                                    subImage4:  "Mixue",
                                                    showOrderButton: true
+                                                   theMainImage:"Hotpot",
+                                                   subImage1:  "Chinese Hotpot",
+                                                   subImage2:  "Chinese",
+                                                   subImage3:  "Fly-By-Jing",
+                                                   subImage4:  "Mixue",
+                                                   showOrderButton: true
                                                )
-                                ) {
-                                    RecipeViewCell(recipe: recipe)
-                                        .frame(width: 360)
-                                }
-                            }
-                        }
                     }
                 }
-             
+                                                    .onAppear{
+                                                        categoryvm.fetchAllCategory()
+                                                    }
+                                                    
                 .padding(.horizontal)
                 .navigationTitle("")
                 .navigationBarBackButtonHidden(true)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        Image("KroyaYellowLogo")
+               
+                
                             .resizable()
                             .scaledToFit()
                             .frame(width: 73, height: 73)

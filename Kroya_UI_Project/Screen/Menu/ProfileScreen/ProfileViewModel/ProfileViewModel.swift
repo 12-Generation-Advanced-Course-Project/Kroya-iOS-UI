@@ -10,6 +10,7 @@ import Alamofire
 
 class ProfileViewModel: ObservableObject {
     @Published var userProfile: ProfileModel?
+    
     @Published var isLoading: Bool = false
     @Published var successMessage: String = ""
     @Published var showError: Bool = false
