@@ -33,9 +33,8 @@ struct RefreshTokenPay: Decodable {
     let refreshToken: String
 }
 // MARK: - Payload for User Info
-struct Payload: Codable {
-    let email: String
-    let fullName: String
+struct UserPayload: Codable {
+    let userName: String
     let phoneNumber: String
     let address: String
 }

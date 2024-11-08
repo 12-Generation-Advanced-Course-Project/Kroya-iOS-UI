@@ -55,9 +55,9 @@ class ProfileService {
            ]
 
            let parameters: [String: Any] = [
+               "profileImage": profileImageName,
                "fullName": fullName,
                "phoneNumber": phoneNumber,
-               "profileImage": profileImageName,
                "location": address
            ]
 

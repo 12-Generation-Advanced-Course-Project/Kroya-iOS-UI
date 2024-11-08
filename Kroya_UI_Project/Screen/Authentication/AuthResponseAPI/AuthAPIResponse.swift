@@ -10,20 +10,20 @@ import SwiftUI
 
 // Generic API response model
 struct AuthAPIResponse<T: Decodable>: Decodable {
-    let payload: T?
     let message: String
+    let payload: T?
     let statusCode: String
     let timestamp: String?
 }
 
 
 typealias EmailCheckResponse = AuthAPIResponse<String>
-typealias SendOTPResponse = AuthAPIResponse<String>
-typealias VerificationCodeRequestResponse = AuthAPIResponse<String>
+typealias SendOTPResponse = AuthAPIResponse<OtpResponse>
+typealias VerificationCodeRequestResponse = AuthAPIResponse<ValidationOTPCode>
 typealias CreatePasswordResponse = AuthAPIResponse<LoginandRegisterResponse>
 typealias LoginAccountResponse = AuthAPIResponse<LoginandRegisterResponse>
 typealias RefreshTokenResponse = AuthAPIResponse<RefreshTokenPay>
-typealias UserInfoResponse = AuthAPIResponse<Payload>
+typealias UserInfoResponse = AuthAPIResponse<UserPayload>
 
 
 
