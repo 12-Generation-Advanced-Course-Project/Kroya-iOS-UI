@@ -15,4 +15,5 @@ struct Constants {
     static let FoodRecipeUrl = "https://kroya-api-production.up.railway.app/api/v1/food-recipe/"
     static let CuisineUrl = "https://kroya-api-production.up.railway.app/api/v1/cuisine/"
     static let CategoryUrl = "https://kroya-api-production.up.railway.app/api/v1/category/"
+    static let UserFoodUrl = "https://kroya-api-production.up.railway.app/api/v1/user/"
 }

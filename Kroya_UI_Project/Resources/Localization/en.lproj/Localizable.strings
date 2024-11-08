@@ -260,3 +260,12 @@
 "Please enter your food name" = "Please enter your food name";
 "Please describe your food" = "Please describe your food";
 "Enter your email" = "Enter your email";
+"Payment" = "Payment";
+"Pay with" = "Pay with";
+"Accept" = "Accept";
+"Reject" = "Reject";
+"Invoice" = "Invoice";
+"Total" = "Tatal";
+"Pay with cash" = "Pay with cash";
+"Pay with KHQR" = "Pay with KHQR";
+"Checkout" = "Checkout";

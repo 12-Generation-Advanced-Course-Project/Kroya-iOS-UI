@@ -18,3 +18,5 @@ struct KroyaAPIResponse<T: Decodable>: Decodable {
 //MARK: User Setting Profile
 typealias UserSettingProfileResponse = KroyaAPIResponse<ProfileModel>
 typealias foodrecipeResponse = KroyaAPIResponse<RecipeModel>
+typealias userFoodResponse = KroyaAPIResponse<UserFoodModel>
+

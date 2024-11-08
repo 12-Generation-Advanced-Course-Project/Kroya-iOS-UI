@@ -21,7 +21,7 @@ struct PaymentButtonView: View {
                         .resizable()
                         .frame(width: 20, height: 20)
                         .foregroundColor(Color.black)
-                    Text("Pay with cash")
+                    Text(LocalizedStringKey("Pay with cash"))
                         .font(.customfont(.medium, fontSize: 16))
                         .foregroundColor(Color.black)
                 }
@@ -50,7 +50,7 @@ struct PaymentButtonView: View {
                             .scaledToFit()
                             .frame(width: 70, height: 15)
                     }
-                    Text("Pay with KHQR")
+                    Text(LocalizedStringKey("Pay with KHQR"))
                         .font(.customfont(.medium, fontSize: 16))
                         .foregroundColor(Color.black)
                 }

@@ -65,10 +65,10 @@ struct DeliveryCardDetailView: View {
             // Remarks and notes
             HStack {
                 HStack(spacing: 50){
-                    Text("Remarks")
+                    Text(LocalizedStringKey("Remarks"))
                         .font(.customfont(.medium, fontSize: 16))
                     // Replace Text with TextField
-                    TextField("Notes (optional)",
+                    TextField(LocalizedStringKey("Notes (optional)"),
                               text: Binding(
                                 get: { viewModel.deliveryInfo.remarks ?? "" },
                                 set: { viewModel.deliveryInfo.remarks = $0.isEmpty ? nil : $0 }

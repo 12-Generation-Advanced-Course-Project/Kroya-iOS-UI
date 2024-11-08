@@ -40,7 +40,7 @@ struct BottomSheetView<Content: View>: View {
                 // Show Accept or Reject from Notification
                 if let notificationType = notificationType {
 
-                    Text(notificationType == 1 ? "Rejected" : "Accepted ")
+                    Text(notificationType == 1 ? LocalizedStringKey("Rejected") : LocalizedStringKey("Accepted "))
                         .font(.customfont(.medium, fontSize: 16))
                         .foregroundStyle(.white)
                         .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.height * 0.04)
@@ -77,7 +77,7 @@ struct BottomSheetView<Content: View>: View {
                         navigateToReceipt = true
                     }) {
                         HStack {
-                            Text("Invoice")
+                            Text(LocalizedStringKey("Invoice"))
                                 .font(.customfont(.medium, fontSize: 16))
                                 .foregroundStyle(.white)
                         }

@@ -121,7 +121,7 @@ struct PostViewScreen: View {
                         .tag(0)
                     FoodOnSaleView(iselected: selectedSegment)
                         .tag(1)
-                    RecipeView(iselected: selectedSegment)
+                    UserFoodRecipeTab(iselected: selectedSegment)
                         .tag(2)
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
