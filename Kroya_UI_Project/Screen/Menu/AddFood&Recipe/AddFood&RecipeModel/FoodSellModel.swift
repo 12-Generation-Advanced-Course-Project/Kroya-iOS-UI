@@ -8,9 +8,9 @@
 import Foundation
 
 
-struct FoodSellModel : Codable {
+struct FoodSellModel: Codable, Identifiable {
     var id: Int
-    var photo : [Photo]
+    var photo: [Photo]
     var name, dateCooking: String
     var price: Double
     var currencyType: String
@@ -20,5 +20,5 @@ struct FoodSellModel : Codable {
     var itemType: String
     var isOrderable: Bool
     var sellerInformation: User
-    var rating : String
+    var rating: String
 }

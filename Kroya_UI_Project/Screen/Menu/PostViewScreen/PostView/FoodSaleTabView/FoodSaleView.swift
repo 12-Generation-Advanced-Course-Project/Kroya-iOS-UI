@@ -1,22 +1,14 @@
-//
-//  FoodSaleView.swift
-//  Kroya_UI_Project
-//
-//
-// 29/10/24
-// Hengly
-//
-
 import SwiftUI
 
 // MARK: - FoodSaleandRecipeView
 struct FoodSaleandRecipeView: View {
-    @EnvironmentObject var addNewFoodVM: AddNewFoodVM
+    
+    @StateObject private var foodViewModel = FoodSellViewModel()
     var iselected: Int?
-
+    
     var body: some View {
         VStack {
-            if addNewFoodVM.allNewFoodAndRecipes.isEmpty {
+            if foodViewModel.FoodOnSale.isEmpty && !foodViewModel.isLoading {
                 Text("No Food Items Available")
                     .font(.title3)
                     .foregroundColor(.gray)
@@ -24,37 +16,54 @@ struct FoodSaleandRecipeView: View {
             } else {
                 ScrollView(showsIndicators: false) {
                     LazyVStack(spacing: 8) {
-                        // Display Food on Sale items
-                        ForEach(addNewFoodVM.allNewFoodAndRecipes.filter { $0.isForSale }.prefix(10)) { foodSale in
+                        ForEach(foodViewModel.FoodOnSale) { foodSale in
                             NavigationLink(destination: foodDetailDestination(for: foodSale)) {
-//                                FoodOnSaleViewCell(foodSale: foodSale)
-//                                    .frame(maxWidth: .infinity)
-//                                    .padding(.horizontal, 20)
+                                FoodOnSaleViewCell(foodSale: foodSale)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.horizontal, 20)
                             }
-                        }
-                        
-                   
                         }
                     }
                 }
+                .overlay(
+                    // Show a loading indicator if data is being fetched
+                    Group {
+                        if foodViewModel.isLoading {
+                            ZStack {
+                                Color.white
+                                    .edgesIgnoringSafeArea(.all)
+                                
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
+                                    .scaleEffect(2)
+                                    .offset(y: -50)
+                            }
+                            .padding()
+                        }
+                    }
+                )
             }
+        }
         .padding(.top, 8)
         .navigationBarBackButtonHidden(true)
+        .onAppear {
+            if foodViewModel.FoodOnSale.isEmpty {
+                foodViewModel.getAllFoodSell()
+            }
+        }
     }
     
     // Destination setup for FoodDetailView with appropriate images and options
     @ViewBuilder
-    private func foodDetailDestination(for item: AddNewFoodModel) -> some View {
+    private func foodDetailDestination(for item: FoodSellModel) -> some View {
         FoodDetailView(
-            theMainImage:"Mixue",
+            theMainImage: "Mixue",
             subImage1: "Chinese Hotpot",
             subImage2: "Chinese",
             subImage3: "Fly-By-Jing",
             subImage4: "Mixue",
-            showOrderButton: item.isForSale,
-            showPrice: item.isForSale
+            showOrderButton: item.isOrderable,
+            showPrice: item.isOrderable
         )
     }
 }
-
-

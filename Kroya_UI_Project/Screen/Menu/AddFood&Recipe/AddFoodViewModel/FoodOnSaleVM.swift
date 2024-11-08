@@ -3,7 +3,7 @@ import Alamofire
 
 class FoodSellViewModel: ObservableObject {
     
-    @Published var foodCard: [FoodSellModel] = []
+    @Published var FoodOnSale: [FoodSellModel] = []
     @Published var isLoading: Bool = false
     @Published var successMessage: String = ""
     @Published var showError: Bool = false
@@ -19,7 +19,7 @@ class FoodSellViewModel: ObservableObject {
                 case .success(let response):
                     if response.statusCode == "200" {
                         if let payload = response.payload {
-                            self?.foodCard = payload
+                            self?.FoodOnSale = payload // Update FoodOnSale here
                         }
                         self?.successMessage = "FoodCard fetched successfully."
                         self?.showError = false
@@ -36,5 +36,4 @@ class FoodSellViewModel: ObservableObject {
         }
     }
 }
-
 

@@ -1,8 +1,3 @@
-// New Code
-// 29/10/24
-// Hengly
-
-
 import SwiftUI
 
 struct FoodOnSaleView: View {
@@ -11,35 +6,61 @@ struct FoodOnSaleView: View {
     var iselected: Int?
     @EnvironmentObject var addNewFoodVM: AddNewFoodVM
     @StateObject private var foodsellVm = FoodSellViewModel()
+    
     var body: some View {
-        List {
-            ForEach(addNewFoodVM.allNewFoodAndRecipes.filter { $0.saleIngredients != nil }) { foodSale in
-                ZStack {
-                   // FoodOnSaleViewCell(foodSale: foodSale)
-                    NavigationLink(destination: FoodDetailView(
-                        theMainImage:"ahmok",
-                        subImage1: "ahmok1",
-                        subImage2: "ahmok2",
-                        subImage3: "ahmok3",
-                        subImage4: "ahmok4",
-                        showOrderButton: foodSale.isForSale,
-                        showPrice: foodSale.isForSale
-                        
-                    )) {
-                        EmptyView()
+        VStack {
+            if foodsellVm.FoodOnSale.isEmpty && !foodsellVm.isLoading {
+                Text("No Food Items Available")
+                    .font(.title3)
+                    .foregroundColor(.gray)
+                    .padding()
+            } else {
+                List {
+                    ForEach(foodsellVm.FoodOnSale) { foodSale in
+                        ZStack {
+                            FoodOnSaleViewCell(foodSale: foodSale)
+                            NavigationLink(destination: FoodDetailView(
+                                theMainImage: "ahmok",
+                                subImage1: "ahmok1",
+                                subImage2: "ahmok2",
+                                subImage3: "ahmok3",
+                                subImage4: "ahmok4",
+                                showOrderButton: foodSale.isOrderable,
+                                showPrice: foodSale.isOrderable
+                            )) {
+                                EmptyView()
+                            }
+                            .opacity(0)
+                        }
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                        .padding(.vertical, -6)
                     }
-                    .opacity(0)
+                    .overlay(
+                        // Show a loading indicator if data is being fetched
+                        Group {
+                            if foodsellVm.isLoading {
+                                ZStack {
+                                    Color.white
+                                        .edgesIgnoringSafeArea(.all)
+                                    
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
+                                        .scaleEffect(2)
+                                        .offset(y: -50)
+                                }
+                                .padding()
+                            }
+                        }
+                    )
                 }
-                .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
-                .padding(.vertical, -6)
+                .listStyle(.plain)
+                .scrollIndicators(.hidden)
+                .buttonStyle(PlainButtonStyle())
             }
         }
-        .onAppear{
+        .onAppear {
             foodsellVm.getAllFoodSell()
         }
-        .scrollIndicators(.hidden)
-        .buttonStyle(PlainButtonStyle())
-        .listStyle(.plain)
     }
 }
