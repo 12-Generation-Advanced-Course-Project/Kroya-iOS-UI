@@ -19,6 +19,8 @@ struct ItemFoodOrderCard: View {
     var showEllipsis: Bool = true // Default to true for other uses
     @State private var showPopover = false
     @Binding  var show3dot :Bool
+    let Keyaccept = "Accept"
+    let Keyreject = "Reject"
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -38,7 +40,7 @@ struct ItemFoodOrderCard: View {
                             .foregroundColor(.black)
                         ZStack {
                             RoundedRectangle(cornerRadius: 8)
-                                .fill(item.status == "Accept" ? Color(hex: "#DDF6C3") : (item.status == "Reject" ? Color(hex: "#FFD8E4") : Color.clear))
+                                .fill(item.status == Keyaccept ? Color(hex: "#DDF6C3") : (item.status == Keyreject ? Color(hex: "#FFD8E4") : Color.clear))
                                 .frame(width: 50, height: 23)
                             if show3dot == true {
                                 Text(item.status != nil ? (item.status == "Accept" ? "Accept" : "Reject") : "")
@@ -157,7 +159,7 @@ struct ItemFoodOrderCard: View {
                 Spacer()
                 VStack(alignment: .trailing, spacing: 10) {
                     HStack {
-                        Text("Total")
+                        Text(LocalizedStringKey("Total"))
                         Spacer()
                         Text("$\(String(format: "%.2f", item.price))")
                     }
@@ -165,7 +167,7 @@ struct ItemFoodOrderCard: View {
                     .font(.customfont(.semibold, fontSize: 14))
                     
                     HStack {
-                        Text("Pay with \(item.paymentMethod)")
+                        Text(LocalizedStringKey("Pay with \(item.paymentMethod)"))
                         Spacer()
                         Text("$\(String(format: "%.2f", item.price))")
                     }

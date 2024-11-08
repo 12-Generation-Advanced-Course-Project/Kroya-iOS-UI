@@ -47,7 +47,7 @@ struct FoodCheckOutView: View {
                     Section {
                         PaymentButtonView()
                     } header: {
-                        Text("Payment")
+                        Text(LocalizedStringKey("Payment"))
                             .font(.customfont(.semibold, fontSize: 16))
                             .foregroundColor(.black)
                             .padding(.bottom, 15)
@@ -78,7 +78,7 @@ struct FoodCheckOutView: View {
                 
             }
             .padding(.horizontal)
-            .navigationTitle("Checkout")
+            .navigationTitle(LocalizedStringKey("Checkout"))
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             

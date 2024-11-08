@@ -13,6 +13,46 @@ class UserFoodService {
     
     static let shared = UserFoodService()
     
-    
     //MARK: Get all User Food
+    func getAllUserFood(complitiion: @escaping (Result <userFoodResponse , Error> ) -> Void){
+        let url = Constants.FoodRecipeUrl + "foods"
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(Auth.shared.getAccessToken() ?? "")"
+        ]
+        
+        AF.request(url, method: .get , headers:  headers).validate()
+            .responseDecodable(of: userFoodResponse.self){ response in
+                if let data = response.data {
+                    do {
+                        let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+                        let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
+                        if let prettyString = String(data: prettyData, encoding: .utf8) {
+                            print("Pretty JSON Response:\n\(prettyString)")
+                        }
+                    } catch {
+                        print("Failed to convert response data to pretty JSON: \(error)")
+                    }
+                } else {
+                    print("No response data available")
+                }
+                debugPrint(response)
+                switch response.result{
+                case .success(let apiResponse):
+                    
+                    if let statusCode = Int(apiResponse.statusCode), statusCode == 200{
+                        print("Food listings retrieved successfully.")
+                        complitiion(.success(apiResponse))
+                    }
+                    else{
+                        print("Failed to retrieved Food listings")
+                        let error = NSError(domain: "", code: 400 , userInfo: [NSLocalizedDescriptionKey: apiResponse.message])
+                        complitiion(.failure(error))
+                    }
+                case .failure(let error):
+                    print("Request failed with error: \(error)")
+                    complitiion(.failure(error))
+                }
+            }
+    }
+    
 }
