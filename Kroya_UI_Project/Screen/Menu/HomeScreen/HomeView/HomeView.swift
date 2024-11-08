@@ -33,7 +33,7 @@ struct HomeView: View {
                         Text(LocalizedStringKey("What would you like to eat today ?"))
                             .frame(width: locale.identifier == "ko" ? 170 : locale.identifier == "km-KH" ? 120 : 250)
                             .customFontSemiBoldLocalize(size: 23)
-                            .padding(.horizontal)
+                            .padding(.horizontal, 10)
                         
                         // Recipe Order Cards
                         HStack(spacing: 16) {

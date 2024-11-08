@@ -44,8 +44,56 @@ class RecipeViewModel: ObservableObject {
         }
     }
     
+    
+    
     //MARK: Get all Recipe By Category
-    func getRecipeAllByCategory(category: Int) {
-        
+    func getRecipesByCuisine(cuisineId: Int) {
+        self.isLoading = true
+        FoodRecipeService.shared.getAllFoodRecipeByCategory(category: cuisineId) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                switch result {
+                case .success(let response):
+                    if response.statusCode == "200", let payload = response.payload {
+                        self?.RecipeByCategory = payload
+                    } else {
+                        self?.showError = true
+                        self?.errorMessage = response.message
+                    }
+                case .failure(let error):
+                    self?.showError = true
+                    self?.errorMessage = "Failed to load recipes: \(error.localizedDescription)"
+                }
+            }
+        }
     }
+
+    
+    
+    //MARK: Get Search Food Recipe By Name
+    func getSearchFoodRecipeByName(searchText: String) {
+        self.isLoading = true
+        FoodRecipeService.shared.getSearchFoodRecipeByName(searchText: searchText) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                switch result {
+                case .success(let response):
+                    if response.statusCode == "200", let payload = response.payload {
+                        self?.RecipeByCategory = payload // Storing search results here
+                    } else {
+                        self?.showError = true
+                        self?.errorMessage = response.message
+                    }
+                case .failure(let error):
+                    self?.showError = true
+                    self?.errorMessage = "Failed to load recipes: \(error.localizedDescription)"
+                }
+            }
+        }
+    }
+
+    
+    
+    
+    
 }
