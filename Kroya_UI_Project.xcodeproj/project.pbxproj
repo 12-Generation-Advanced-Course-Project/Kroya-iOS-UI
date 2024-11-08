@@ -184,7 +184,6 @@
 				268612312CCA226400DE1F6F /* SwiftKeychainWrapper */,
 				8494AC222CCB533E00FB8206 /* Kingfisher */,
 				84171E3D2CDCAAD0000FC361 /* FirebaseMessaging */,
-				26CF04A62CDDC12C0052E449 /* Shimmer */,
 				84FBFF0D2CDE17FF005CC231 /* FirebaseAnalytics */,
 				84FBFF0F2CDE17FF005CC231 /* FirebaseAppCheck */,
 				84FBFF112CDE17FF005CC231 /* FirebaseAuth */,
