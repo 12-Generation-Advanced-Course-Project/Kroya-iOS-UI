@@ -7,6 +7,7 @@
 
 // Constants.swift
 struct Constants {
+    
     static let KroyaUrlAuth = "https://kroya-api-production.up.railway.app/api/v1/auth/"
     static let KroyaUrlUser = "https://kroya-api-production.up.railway.app/api/v1/user/"
     static let GoogleMapsAPIkeys = "AIzaSyCMUPCDeGjXm5kBNpFa-JosXCOur4SvlI8"
@@ -15,5 +16,8 @@ struct Constants {
     static let FoodRecipeUrl = "https://kroya-api-production.up.railway.app/api/v1/food-recipe/"
     static let CuisineUrl = "https://kroya-api-production.up.railway.app/api/v1/cuisine/"
     static let CategoryUrl = "https://kroya-api-production.up.railway.app/api/v1/category/"
+    static let FoodRecipeByCategoryUrl = "https://kroya-api-production.up.railway.app/api/v1/food-recipe/cuisine/"
+    static let SearchFoodRecipeByNameUrl = "https://kroya-api-production.up.railway.app/api/v1/food-recipe/search/"
     static let foodSellUrl = "https://kroya-api-production.up.railway.app/api/v1/food-sell/"
+    static let UserFoodUrl = "https://kroya-api-production.up.railway.app/api/v1/user/"
 }

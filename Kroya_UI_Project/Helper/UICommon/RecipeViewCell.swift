@@ -4,6 +4,7 @@ import SwiftUI
 import Kingfisher
 
 struct RecipeViewCell: View {
+    
     var recipe: RecipeModel // Corrected to use RecipeModel
     @State private var isFavorite: Bool
     var urlImagePrefix: String = "https://kroya-api.up.railway.app/api/v1/fileView/"

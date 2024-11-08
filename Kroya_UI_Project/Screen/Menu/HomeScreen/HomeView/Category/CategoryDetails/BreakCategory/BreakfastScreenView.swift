@@ -32,7 +32,9 @@ struct BreakfastScreenView: View {
                         .onTapGesture {
                             withAnimation {
                                 selectedSegment = 1
-                                //                                fetchSegmentData() // Fetch recipes data
+                                
+                                
+//                                                                fetchSegmentData() // Fetch recipes data
                             }
                         }
                     
@@ -59,7 +61,7 @@ struct BreakfastScreenView: View {
                     .tag(0)
                     .environmentObject(addNewFoodVM)
                 
-                RecipeView(iselected: selectedSegment)
+                BreakfastRecipeTab(iselected: selectedSegment)
                     .tag(1)
                 
             }

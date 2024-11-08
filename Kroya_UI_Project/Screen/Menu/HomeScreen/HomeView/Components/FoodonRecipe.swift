@@ -1,20 +1,19 @@
-//
-//  FoodonRecipe.swift
-//  Kroya_UI_Project
-//
-//  Created by Ounbonaliheng on 14/10/24.
-//
+
 import SwiftUI
 
 struct FoodonRecipe: View {
+    
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var addNewFoodVM: AddNewFoodVM
+    
+    @StateObject private var recipeViewModel = RecipeViewModel()
     
     let imageofOrder: [String] = ["SoupPic", "SaladPic", "GrillPic", "DessertPic 1"]
     let titleofOrder: [String] = ["Soup", "Salad", "Grill", "Dessert"]
     
     @State private var selectedOrderIndex: Int? = nil
     @State private var searchText = ""
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -22,6 +21,7 @@ struct FoodonRecipe: View {
                     ForEach(0..<imageofOrder.count, id: \.self) { index in
                         Button(action: {
                             selectedOrderIndex = index
+                            recipeViewModel.getRecipesByCuisine(cuisineId: index + 1)
                         }) {
                             VStack {
                                 Image(imageofOrder[index])
@@ -40,7 +40,6 @@ struct FoodonRecipe: View {
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding()
                 
-                
                 Spacer()
                     .frame(height: 20)
                 
@@ -50,7 +49,22 @@ struct FoodonRecipe: View {
                     .foregroundStyle(.black.opacity(0.8))
                     .padding(.horizontal)
                 
-                RecipeView()
+                if recipeViewModel.isLoading {
+                    ProgressView("Loading...")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                } else {
+                    ScrollView {
+                        LazyVStack {
+                            ForEach(recipeViewModel.RecipeByCategory) { recipe in
+                                RecipeViewCell(recipe: recipe)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.horizontal, 20)
+                            }
+                        }
+                    }
+                }
+                
                 Spacer()
             }
             .navigationTitle("Food Recipe")
@@ -68,9 +82,13 @@ struct FoodonRecipe: View {
                     }
                 }
             }
-           
         }
         .searchable(text: $searchText, prompt: LocalizedStringKey("Search Item"))
+        .onChange(of: searchText) { newValue in
+            if !newValue.isEmpty {
+                recipeViewModel.getSearchFoodRecipeByName(searchText: newValue)
+            }
+        }
         .navigationBarBackButtonHidden(true)
     }
 }

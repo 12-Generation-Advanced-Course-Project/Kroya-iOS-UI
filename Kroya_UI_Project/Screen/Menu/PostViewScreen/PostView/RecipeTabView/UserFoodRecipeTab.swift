@@ -1,13 +1,13 @@
 //
-//  BreakfastRecipeTab.swift
+//  UserFoodRecipeTab.swift
 //  Kroya_UI_Project
 //
-//  Created by KAK-LY on 8/11/24.
+//  Created by kosign on 8/11/24.
 //
 
 import SwiftUI
-struct BreakfastRecipeTab:View {
-    
+
+struct UserFoodRecipeTab:View {
     @StateObject private var recipeViewModel = RecipeViewModel() // Correctly initialize the view model
     var iselected: Int?
     var body: some View {

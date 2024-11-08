@@ -246,4 +246,16 @@
 "Please describe your food" = "សូមពិពណ៏នាអំពីមុខម្ហូបរបស់អ្នក";
 "Enter your email" = "សូមបញ្ជូលអ៊ីម៉ែលរបស់អ្នក";
 "Choose Location" = "ជ្រើសទីតាំង";
+"Payment" = "ការទូទាត់"; 
+"Pay with" = "បង់ដោយ";
+"Remarks" = "ចំណាំ";
+"Notes (optional)" = "កំណត់ចំណាំ (ជម្រើសបន្ថែម)";
+"Accept" = "បានទទួល";
+"Reject" = "បានបដិសេធ";
+"Invoice" = "វិក្កយបត្រ";
+"Total" = "សរុប";
+"Pay with cash" = "បង់ដោយ cash";
+"Pay with KHQR" = "បង់ដោយ KHQR";
+"Checkout" = "ការបញ្ចប់ការជាវ";
+
 

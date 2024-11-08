@@ -14,6 +14,7 @@ import Network
 @main
 struct Kroya_UI_ProjectApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+
     @StateObject var userStore = UserStore()
     @StateObject var addNewFoodVM = AddNewFoodVM()
 

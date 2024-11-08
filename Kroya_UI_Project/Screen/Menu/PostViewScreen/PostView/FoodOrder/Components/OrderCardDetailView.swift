@@ -84,7 +84,7 @@ struct OrderCardDetailView: View {
             // Total Price Section
             HStack {
                 HStack {
-                    Text("Total")
+                    Text(LocalizedStringKey("Total"))
                         .font(.customfont(.semibold, fontSize: 16))
                     Spacer()
                     Text("$ \(viewModel.totalPrice, specifier: "%.2f")")

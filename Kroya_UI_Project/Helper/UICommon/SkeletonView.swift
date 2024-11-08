@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Shimmer
 struct SkeletonView: View {
     var body: some View {
         RoundedRectangle(cornerRadius: 10)

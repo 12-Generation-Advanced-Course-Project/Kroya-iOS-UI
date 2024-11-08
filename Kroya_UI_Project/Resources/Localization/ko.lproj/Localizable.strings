@@ -248,3 +248,13 @@
 "Please describe your food" = "음식을 설명해 주세요";
 "Enter your email" = "이메일 입력";
 "Choose Location" = "위치 선택";
+"Payment" = "결제";
+"Pay with cash" = "결제 수단 cash";
+"Pay with KHQR" = "결제 수단 KHQR";
+"Remarks" = "비고";
+"Notes (optional)" = "메모 (선택 사항)";
+"Accept" = "수락됨";
+"Reject" = "거절됨";
+"Invoice" = "송장";
+"Total" = "총계";
+"Checkout" = "결제";
