@@ -21,4 +21,7 @@ struct FoodSellModel: Codable, Identifiable {
     var isOrderable: Bool
     var sellerInformation: User
     var rating: String
+    
+   
 }
+
