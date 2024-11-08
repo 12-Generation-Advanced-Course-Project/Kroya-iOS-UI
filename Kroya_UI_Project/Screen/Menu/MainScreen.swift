@@ -7,6 +7,7 @@ struct MainScreen: View {
     @State private var isModalPresented: Bool = false
     @EnvironmentObject var userStore: UserStore
     @EnvironmentObject var addNewFoodVM: AddNewFoodVM
+    @EnvironmentObject var RecipeFood: RecipeViewModel
     @StateObject private var authVM: AuthViewModel
     @StateObject private var addressViewModel: AddressViewModel
     @StateObject private var profileVM: ProfileViewModel
