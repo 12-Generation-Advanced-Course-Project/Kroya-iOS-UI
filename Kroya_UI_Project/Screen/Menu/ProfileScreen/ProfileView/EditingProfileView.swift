@@ -25,10 +25,9 @@ struct EditingProfileView: View {
     @Binding var selectedAddress: Address?
     @State private var imagefile: String = ""
     @EnvironmentObject var addressVM: AddressViewModel
+    @EnvironmentObject var userStore: UserStore
     @State private var isPasswordVisible = false
     @Environment(\.locale) var locale
-    var urlImagePrefix: String = "https://kroya-api.up.railway.app/api/v1/fileView/"
-    
     var body: some View {
         ZStack {
             VStack(spacing: 10) {
@@ -44,7 +43,7 @@ struct EditingProfileView: View {
                 ZStack(alignment: .bottomTrailing) {
                     if selectedImages.isEmpty {
                         if let profileImageUrl = profile.userProfile?.profileImage, !profileImageUrl.isEmpty {
-                            KFImage(URL(string: "\(urlImagePrefix)\(profileImageUrl)"))
+                            KFImage(URL(string: Constants.fileupload + "\(profileImageUrl)"))
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 94, height: 94)
@@ -280,6 +279,7 @@ struct EditingProfileView: View {
                 addressVM.fetchAllAddresses()
                 let lastaddress = addressVM.addresses.last
                 selectedAddress = lastaddress
+                profile.fetchUserProfile()
             }
             .onDisappear{
                 profile.fetchUserProfile()
