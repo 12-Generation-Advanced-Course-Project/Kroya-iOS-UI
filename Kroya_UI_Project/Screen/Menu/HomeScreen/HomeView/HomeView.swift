@@ -20,6 +20,7 @@ struct HomeView: View {
     @EnvironmentObject var addNewFoodVM: AddNewFoodVM
     let notification = [1, 2, 3, 4, 5]
     @StateObject private var recipeViewModel = RecipeViewModel()
+    @StateObject private var foodSellViemModel = FoodSellViewModel()
     @StateObject private var categoryvm = CategoryMV()
     @State var isSearching: Bool = false
     @Environment(\.locale) var locale
@@ -128,8 +129,8 @@ struct HomeView: View {
                                                     showPrice: foodSale.isForSale
                                                 )
                                 ) {
-                                    FoodOnSaleViewCell(foodSale: foodSale)
-                                        .frame(width: 360)
+//                                    FoodOnSaleViewCell(foodSale: foodSale)
+//                                        .frame(width: 360)
                                 }
                             }
                             
@@ -205,6 +206,7 @@ struct HomeView: View {
             }
             .onAppear {
                 categoryvm.fetchAllCategory()
+                foodSellViemModel.getAllFoodSell()
             }
         }
     }

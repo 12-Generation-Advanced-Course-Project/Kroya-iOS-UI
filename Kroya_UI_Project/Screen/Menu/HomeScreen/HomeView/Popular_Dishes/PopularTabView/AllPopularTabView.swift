@@ -2,7 +2,7 @@ import SwiftUI
 
 struct AllPopularTabView: View {
     
-    @StateObject private var foodOnSaleViewModel = FoodOnSaleViewCellViewModel()
+ 
     @StateObject private var addNewFoodVM = AddNewFoodVM()
     @StateObject private var recipeViewModel = RecipeViewModel()
     var isSelected: Int?
@@ -22,9 +22,9 @@ struct AllPopularTabView: View {
                                        showPrice: foodSale.isForSale
                                    )
                     ) {
-                        FoodOnSaleViewCell(foodSale: foodSale)
-                            .frame(width: 362)
-                            .padding(.top, 8)
+//                        FoodOnSaleViewCell(foodSale: foodSale)
+//                            .frame(width: 362)
+//                            .padding(.top, 8)
                     }
                 }
                 ForEach(recipeViewModel.RecipeFood) { recipe in
@@ -46,13 +46,12 @@ struct AllPopularTabView: View {
                 }
             }
         }
-        .environmentObject(foodOnSaleViewModel)
+
         .environmentObject(addNewFoodVM)
     }
 }
 
 #Preview {
     AllPopularTabView()
-        .environmentObject(FoodOnSaleViewCellViewModel()) // Injecting sample environment objects for preview
         .environmentObject(AddNewFoodVM())
 }
