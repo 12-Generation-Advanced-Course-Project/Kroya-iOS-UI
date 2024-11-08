@@ -6,19 +6,20 @@ import SwiftUI
 
 struct FoodOnSaleViewCell: View {
     
-//   var viewModel = FoodSellService()
+    @ObservedObject var foodCard : FoodSellViewModel
     
-    @State private var isFavorite: Bool
-    var foodSale: AddNewFoodModel
-
-    init(foodSale: AddNewFoodModel, isFavorite: Bool = false) {
-        self.foodSale = foodSale
-        _isFavorite = State(initialValue: isFavorite)
-    }
+    //@State private var isFavorite: Bool
+    //var foodSale: AddNewFoodModel
+//
+//    init(foodSale: AddNewFoodModel, isFavorite: Bool = false) {
+//        self.foodSale = foodSale
+//        _isFavorite = State(initialValue: isFavorite)
+//    }
 
     var body: some View {
         VStack {
             ZStack(alignment: .topLeading) {
+                
                 // Main Image
                 Image(.hotpot)
                     .resizable()
@@ -36,12 +37,12 @@ struct FoodOnSaleViewCell: View {
                             .scaledToFill()
                             .frame(width: 14, height: 14)
                             .foregroundColor(.yellow)
-                        
-                        Text(String(format: "%.1f", foodSale.rating ?? 0))
+                // Rating average
+                        Text(String(format: "%.1f", foodCard.foodSell?.averageRating ?? 0))
                             .font(.customfont(.medium, fontSize: 12))
                             .foregroundColor(.black)
-                        
-                        Text("(\(foodSale.reviewCount ?? 0)+)")
+                       
+                        Text("(\( foodCard.foodSell?.totalRaters ?? 0)+)")
                             .font(.system(size: 12))
                             .foregroundColor(.gray)
                     }
@@ -54,10 +55,10 @@ struct FoodOnSaleViewCell: View {
                     
                     // Favorite Button
                     Button(action: {
-                        isFavorite.toggle()
+                        //isFavorite.toggle()
                     }) {
                         Circle()
-                            .fill(isFavorite ? Color.red : Color.white.opacity(0.5))
+                            .fill((foodCard.foodSell?.isFavorite)! ? Color.red : Color.white.opacity(0.5))
                             .frame(width: 30, height: 30)
                             .overlay(
                                 Image(systemName: "heart.fill")
@@ -73,30 +74,30 @@ struct FoodOnSaleViewCell: View {
             
             VStack(alignment: .leading, spacing: 5) {
                 // Dish Name
-                Text(foodSale.name)
+                Text(foodCard.foodSell!.name)
                     .font(.customfont(.medium, fontSize: 16))
                     .foregroundColor(.black)
                 
                 // Cooking Date and Time of Day
-                if let saleIngredient = foodSale.saleIngredients {
-                    HStack {
-                        Text("It will be cooked on ")
-                            .font(.customfont(.light, fontSize: 10))
-                            .foregroundColor(.gray)
-                        
-                        Text(formatDate(saleIngredient.cookDate))
-                            .font(.customfont(.medium, fontSize: 10))
-                            .foregroundColor(.yellow)
-                        
-                        Text(determineTimeOfDay())
-                            .font(.customfont(.light, fontSize: 10))
-                            .foregroundColor(.gray)
-                    }
-                }
-                
+//                if let saleIngredient = foodSale.saleIngredients {
+//                    HStack {
+//                        Text("It will be cooked on ")
+//                            .font(.customfont(.light, fontSize: 10))
+//                            .foregroundColor(.gray)
+//                        
+//                        Text(formatDate(saleIngredient.cookDate))
+//                            .font(.customfont(.medium, fontSize: 10))
+//                            .foregroundColor(.yellow)
+//                        
+//                        Text(determineTimeOfDay())
+//                            .font(.customfont(.light, fontSize: 10))
+//                            .foregroundColor(.gray)
+//                    }
+//                }
+               
                 // Price and Delivery Info
                 HStack(spacing: 10) {
-                    Text("$ \(String(format: "%.2f", foodSale.saleIngredients?.price ?? 0.0))")
+                    Text("$ \(String(format: "%.2f",  foodCard.foodSell?.price ?? 0.0))")
                         .font(.customfont(.medium, fontSize: 14))
                         .foregroundColor(.yellow)
                     
@@ -116,12 +117,13 @@ struct FoodOnSaleViewCell: View {
             .padding(10)
             .frame(width: 350)
         }
-        .onAppear{
-            if let saleIngredient = foodSale.saleIngredients {
-                print(formatDate(saleIngredient.cookDate))
-            }
         
-        }
+//        .onAppear{
+//            if let saleIngredient = foodSale.saleIngredients {
+//                print(formatDate(saleIngredient.cookDate))
+//            }
+//        
+//        }
         .background(Color.white)
         .cornerRadius(15)
         .shadow(color: Color.gray.opacity(0.2), radius: 5, x: 0, y: 4)

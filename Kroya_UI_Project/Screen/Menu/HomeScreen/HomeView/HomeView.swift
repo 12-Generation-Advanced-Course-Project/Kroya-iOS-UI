@@ -127,7 +127,7 @@ struct HomeView: View {
                                                    showPrice: foodSale.isForSale
                                                )
                                 ) {
-                                    FoodOnSaleViewCell(foodSale: foodSale)
+                                    FoodOnSaleViewCell(foodCard: FoodSellViewModel())
                                         .frame(width: 360)
                                 }
                             }

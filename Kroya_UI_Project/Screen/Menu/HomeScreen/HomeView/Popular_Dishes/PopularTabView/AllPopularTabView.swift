@@ -11,21 +11,22 @@ struct AllPopularTabView: View {
         VStack {
             ScrollView(showsIndicators: false) {
                 ForEach(addNewFoodVM.allNewFoodAndRecipes.filter { $0.isForSale }.prefix(3)) { foodSale in
-                    NavigationLink(destination:
-                                    FoodDetailView(
-                                       theMainImage:"Hotpot",
-                                       subImage1:  "Chinese Hotpot",
-                                       subImage2:  "Chinese",
-                                       subImage3:  "Fly-By-Jing",
-                                       subImage4:  "Mixue",
-                                       showOrderButton: true,
-                                       showPrice: foodSale.isForSale
-                                   )
-                    ) {
-                        FoodOnSaleViewCell(foodSale: foodSale)
-                            .frame(width: 362)
-                            .padding(.top, 8)
-                    }
+//                    NavigationLink(<#LocalizedStringKey#>, destination:
+//                                    FoodDetailView(
+//                                       theMainImage:"Hotpot",
+//                                       subImage1:  "Chinese Hotpot",
+//                                       subImage2:  "Chinese",
+//                                       subImage3:  "Fly-By-Jing",
+//                                       subImage4:  "Mixue",
+//                                       showOrderButton: true,
+//                                       showPrice: foodSale.isForSale
+//                                   )
+//                    )
+//                    {
+//                        FoodOnSaleViewCell(foodSale: foodSale)
+//                            .frame(width: 362)
+//                            .padding(.top, 8)
+//                    }
                 }
                 ForEach(addNewFoodVM.allNewFoodAndRecipes.filter { !$0.isForSale }) { recipe in
                     NavigationLink(destination:

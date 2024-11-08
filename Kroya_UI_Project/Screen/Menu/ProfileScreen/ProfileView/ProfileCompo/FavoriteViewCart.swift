@@ -61,7 +61,7 @@ struct FavoriteViewCart: View {
                                 showOrderButton: foodSale.isForSale,
                                 showPrice: foodSale.isForSale
                             )) {
-                                FoodOnSaleViewCell(foodSale: foodSale, isFavorite: true)
+                                FoodOnSaleViewCell(foodCard: FoodSellViewModel())
                                     .padding(.horizontal)
                                     .padding(.vertical, 8)
                             }

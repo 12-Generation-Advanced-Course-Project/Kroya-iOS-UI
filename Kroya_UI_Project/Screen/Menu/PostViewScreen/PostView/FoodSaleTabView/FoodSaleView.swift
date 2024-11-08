@@ -27,7 +27,7 @@ struct FoodSaleandRecipeView: View {
                         // Display Food on Sale items
                         ForEach(addNewFoodVM.allNewFoodAndRecipes.filter { $0.isForSale }.prefix(10)) { foodSale in
                             NavigationLink(destination: foodDetailDestination(for: foodSale)) {
-                                FoodOnSaleViewCell(foodSale: foodSale)
+                                FoodOnSaleViewCell(foodCard: FoodSellViewModel())
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
                             }
