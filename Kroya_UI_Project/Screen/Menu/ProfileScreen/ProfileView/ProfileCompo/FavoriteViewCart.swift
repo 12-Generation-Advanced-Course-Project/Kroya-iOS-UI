@@ -7,6 +7,7 @@ struct FavoriteViewCart: View {
     @StateObject private var addNewFoodVM = AddNewFoodVM()
     @State private var searchText = ""
     @StateObject private var recipeViewModel = RecipeViewModel()
+    
     var body: some View {
             VStack(spacing: 0) {
                 // Segment Header
@@ -50,24 +51,25 @@ struct FavoriteViewCart: View {
                 // TabView Content
                 TabView(selection: $selectedSegment) {
                     // Food on Sale Tab
-                    ScrollView(showsIndicators: false) {
-                        ForEach(addNewFoodVM.allNewFoodAndRecipes.filter { $0.isForSale }) { foodSale in
-                            NavigationLink(destination: FoodDetailView(
-                                theMainImage: "Mixue",
-                                subImage1: "Chinese Hotpot",
-                                subImage2: "Chinese",
-                                subImage3: "Fly-By-Jing",
-                                subImage4: "Mixue",
-                                showOrderButton: foodSale.isForSale,
-                                showPrice: foodSale.isForSale
-                            )) {
-                                FoodOnSaleViewCell(foodSale: foodSale, isFavorite: true)
-                                    .padding(.horizontal)
-                                    .padding(.vertical, 8)
-                            }
-                        }
-                    }
-                    .tag(0)
+//                    ScrollView(showsIndicators: false) {
+//                        ForEach(addNewFoodVM.allNewFoodAndRecipes.filter { $0.isForSale }) { foodSale in
+//                            NavigationLink(destination: FoodDetailView(
+//                                theMainImage: "Mixue",
+//                                subImage1: "Chinese Hotpot",
+//                                subImage2: "Chinese",
+//                                subImage3: "Fly-By-Jing",
+//                                subImage4: "Mixue",
+//                                showOrderButton: foodSale.isForSale,
+//                                showPrice: foodSale.isForSale
+//                            ))
+//                            {
+//                                FoodOnSaleViewCell(foodSale: foodSale, isFavorite: true)
+//                                    .padding(.horizontal)
+//                                    .padding(.vertical, 8)
+//                            }
+//                        }
+//                    }
+                  //  .tag(0)
                     
                     // Recipes Tab
                     ScrollView(showsIndicators: false) {
