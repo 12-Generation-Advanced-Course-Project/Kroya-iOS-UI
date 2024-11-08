@@ -9,12 +9,12 @@ import SwiftUI
 
 struct CategoryResponse<T: Decodable>: Decodable{
     let message: String
-    let payload: T?
+    let payload:[T]?
     let statusCode: String
     let timestamp: String?
 }
 
-struct CategoryModel: Decodable{
+struct CategoryModel: Identifiable ,Decodable{
     var id: Int
     var categoryName: String
 }
