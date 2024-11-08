@@ -14,6 +14,9 @@
 		84171E3E2CDCAAD0000FC361 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 84171E3D2CDCAAD0000FC361 /* FirebaseMessaging */; };
 		8445843A2CB6793F00CA3C01 /* SwiftUIFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 844584392CB6793F00CA3C01 /* SwiftUIFlow */; };
 		8494AC232CCB533E00FB8206 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 8494AC222CCB533E00FB8206 /* Kingfisher */; };
+		84FBFF0E2CDE17FF005CC231 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 84FBFF0D2CDE17FF005CC231 /* FirebaseAnalytics */; };
+		84FBFF102CDE17FF005CC231 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 84FBFF0F2CDE17FF005CC231 /* FirebaseAppCheck */; };
+		84FBFF122CDE17FF005CC231 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 84FBFF112CDE17FF005CC231 /* FirebaseAuth */; };
 		A1F0F280C2FB2A0237375308 /* Pods_Kroya_UI_ProjectTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7867E32E96FB8AD4F4B4B5 /* Pods_Kroya_UI_ProjectTests.framework */; };
 		C0E4631E8E19C01080480355 /* Pods_Kroya_UI_Project_Kroya_UI_ProjectUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA8E4287C90F7037CC7E2F37 /* Pods_Kroya_UI_Project_Kroya_UI_ProjectUITests.framework */; };
 /* End PBXBuildFile section */
@@ -82,7 +85,10 @@
 				268612322CCA226400DE1F6F /* SwiftKeychainWrapper in Frameworks */,
 				2686122F2CCA222300DE1F6F /* GoogleMaps in Frameworks */,
 				8494AC232CCB533E00FB8206 /* Kingfisher in Frameworks */,
+				84FBFF122CDE17FF005CC231 /* FirebaseAuth in Frameworks */,
 				21E424A7EE788A519F13A1B9 /* Pods_Kroya_UI_Project.framework in Frameworks */,
+				84FBFF102CDE17FF005CC231 /* FirebaseAppCheck in Frameworks */,
+				84FBFF0E2CDE17FF005CC231 /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -178,6 +184,10 @@
 				268612312CCA226400DE1F6F /* SwiftKeychainWrapper */,
 				8494AC222CCB533E00FB8206 /* Kingfisher */,
 				84171E3D2CDCAAD0000FC361 /* FirebaseMessaging */,
+				26CF04A62CDDC12C0052E449 /* Shimmer */,
+				84FBFF0D2CDE17FF005CC231 /* FirebaseAnalytics */,
+				84FBFF0F2CDE17FF005CC231 /* FirebaseAppCheck */,
+				84FBFF112CDE17FF005CC231 /* FirebaseAuth */,
 			);
 			productName = Kroya_UI_Project;
 			productReference = 8406DAAF2CA5510C0003EA40 /* Kroya_UI_Project.app */;
@@ -845,6 +855,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8494AC212CCB533E00FB8206 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		84FBFF0D2CDE17FF005CC231 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84171E3C2CDCAAD0000FC361 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		84FBFF0F2CDE17FF005CC231 /* FirebaseAppCheck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84171E3C2CDCAAD0000FC361 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAppCheck;
+		};
+		84FBFF112CDE17FF005CC231 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84171E3C2CDCAAD0000FC361 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
