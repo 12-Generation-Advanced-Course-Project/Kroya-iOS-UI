@@ -65,5 +65,6 @@ class Auth: ObservableObject {
         KeychainWrapper.standard.removeObject(forKey: KeychainKey.refreshToken.rawValue)
         KeychainWrapper.standard.removeObject(forKey: KeychainKey.email.rawValue)
         loggedIn = false
+        print("User logged out - Logged In Status: \(loggedIn)")
     }
 }

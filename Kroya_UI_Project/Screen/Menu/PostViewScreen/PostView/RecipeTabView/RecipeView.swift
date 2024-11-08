@@ -2,8 +2,13 @@ import SwiftUI
 
 // MARK: - RecipeView
 struct RecipeView: View {
+    
     @EnvironmentObject var viewModel: AddNewFoodVM
+    
+    @StateObject var RecipeFood = RecipeViewModel()
+    
     var iselected: Int?
+    
     var body: some View {
         VStack {
             if viewModel.allNewFoodAndRecipes.isEmpty {
@@ -27,11 +32,9 @@ struct RecipeView: View {
         }
         .padding(.top, 8)
         .navigationBarBackButtonHidden(true)
-//        .onAppear {
-//            if viewModel.allNewFoodAndRecipes.isEmpty {
-//                print("Using static recipes:", viewModel.allNewFoodAndRecipes)
-//            }
-//        }
+        .onAppear {
+            RecipeFood.getRecipeFood()
+        }
     }
     
     // Destination setup for FoodDetailView with appropriate images

@@ -8,8 +8,8 @@
 import SwiftUI
 // MARK: - Full API Response
 struct UserProfileResponse: Codable {
-    let payload: ProfileModel?
     let message: String
+    let payload: ProfileModel?
     let statusCode: String
     let timestamp: String?
 }

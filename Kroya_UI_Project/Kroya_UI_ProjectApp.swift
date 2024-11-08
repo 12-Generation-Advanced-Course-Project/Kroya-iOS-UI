@@ -16,6 +16,7 @@ struct Kroya_UI_ProjectApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject var userStore = UserStore()
     @StateObject var addNewFoodVM = AddNewFoodVM()
+
     @StateObject var addressViewModel = AddressViewModel(userStore: UserStore())
     @State private var isSplashScreenActive = true
     @State private var isConnected = true
@@ -24,7 +25,7 @@ struct Kroya_UI_ProjectApp: App {
     private let monitor = NWPathMonitor()
 
     init() {
-      //GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
+//        GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
         modelContainer = try! ModelContainer(for: Draft.self)
         setupNetworkMonitoring()
     }
@@ -40,16 +41,17 @@ struct Kroya_UI_ProjectApp: App {
                 } else {
                     contentView
                         .overlay(
-                            // Display OfflineMessageView as an overlay when disconnected
                             isConnected ? nil : OfflineMessageView(retryAction: checkNetworkAgain)
                         )
                 }
             }
             .onAppear {
                 checkInitialConnection()
+           
             }
         }
     }
+
     
     private var contentView: some View {
         Group {
