@@ -117,25 +117,7 @@ struct HomeView: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16) { // Added spacing between food cards
                             // Food on Sale Cards (Limited to 2)
-//                            ForEach(addNewFoodVM.allNewFoodAndRecipes) { foodSale in
-//                                NavigationLink(destination:
-//                                                FoodDetailView(
-//                                                    theMainImage:"Hotpot",
-//                                                    subImage1:  "Chinese Hotpot",
-//                                                    subImage2:  "Chinese",
-//                                                    subImage3:  "Fly-By-Jing",
-//                                                    subImage4:  "Mixue",
-//                                                    showOrderButton: true,
-//                                                    showPrice: foodSale.isForSale
-//                                                )
-//                                ) {
-////                                    FoodOnSaleViewCell(foodSale: foodSale)
-////                                        .frame(width: 360)
-//                                }
-//                            }
-                            
-                            // Recipe/Food Cards from AddNewFoodVM (Limited to 2)
-                            ForEach(recipeViewModel.RecipeFood) { recipe in
+                            ForEach(foodSellViemModel.FoodOnSale.prefix(2)) { foodSale in
                                 NavigationLink(destination:
                                                 FoodDetailView(
                                                     theMainImage:"Hotpot",
@@ -143,7 +125,26 @@ struct HomeView: View {
                                                     subImage2:  "Chinese",
                                                     subImage3:  "Fly-By-Jing",
                                                     subImage4:  "Mixue",
-                                                    showOrderButton: true
+                                                    showOrderButton: true,
+                                                    showPrice: true
+                                                )
+                                ) {
+                                    FoodOnSaleViewCell(foodSale: foodSale)
+                                        .frame(width: 360)
+                                }
+                            }
+                            
+                            // Recipe/Food Cards from AddNewFoodVM (Limited to 2)
+                            ForEach(recipeViewModel.RecipeFood.prefix(2)) { recipe in
+                                NavigationLink(destination:
+                                                FoodDetailView(
+                                                    theMainImage:"Hotpot",
+                                                    subImage1:  "Chinese Hotpot",
+                                                    subImage2:  "Chinese",
+                                                    subImage3:  "Fly-By-Jing",
+                                                    subImage4:  "Mixue",
+                                                    showOrderButton: false,
+                                                    showPrice: false
                                                 )
                                 ) {
                                     RecipeViewCell(recipe: recipe)
@@ -206,7 +207,8 @@ struct HomeView: View {
             }
             .onAppear {
                 categoryvm.fetchAllCategory()
-//                foodSellViemModel.getAllFoodSell()
+                foodSellViemModel.getAllFoodSell()
+                recipeViewModel.getAllRecipeFood()
             }
         }
     }
