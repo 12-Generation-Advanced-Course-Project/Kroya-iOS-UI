@@ -11,7 +11,7 @@ struct FoodOnSaleView: View {
         VStack {
             if foodsellVm.FoodOnSale.isEmpty && !foodsellVm.isLoading {
                 Text("No Food Items Available")
-                    .font(.title3)
+                    .font(.customfont(.semibold, fontSize: 16))
                     .foregroundColor(.gray)
                     .padding()
             } else {

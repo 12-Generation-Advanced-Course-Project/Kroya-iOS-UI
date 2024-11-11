@@ -41,14 +41,14 @@ struct FoodOnSaleViewCell: View {
                             .frame(width: 14, height: 14)
                             .foregroundColor(.yellow)
                         
-                        Text(String(format: "%.1f", foodSale.averageRating))
+                        Text(String(format: "%.1f", foodSale.averageRating ?? 0.0))
                             .font(.customfont(.medium, fontSize: 12))
                             .foregroundColor(.black)
                         
-                        Text("(\(foodSale.totalRaters)+)")
+                        Text("(\(String(describing: foodSale.totalRaters ?? 0))+)")
                             .font(.system(size: 12))
                             .foregroundColor(.gray)
-                    }
+                    }                    
                     .padding(5)
                     .background(Color.white.opacity(0.8))
                     .cornerRadius(10)
@@ -80,7 +80,6 @@ struct FoodOnSaleViewCell: View {
                 Text(foodSale.name)
                     .font(.customfont(.medium, fontSize: 16))
                     .foregroundColor(.black)
-
                 // Price and Delivery Info
                 HStack(spacing: 10) {
                     Text("$ \(String(format: "%.2f", foodSale.price))")
@@ -102,9 +101,6 @@ struct FoodOnSaleViewCell: View {
             }
             .padding(10)
             .frame(width: 350)
-        }
-        .onAppear {
-            // Optionally handle actions or logic when view appears
         }
         .background(Color.white)
         .cornerRadius(15)

@@ -20,6 +20,7 @@ struct FoodRecipeModel: Identifiable, Codable {
     let isFavorite: Bool
     let itemType: String
     let user: userModel
+    
 }
 
 enum cuisine: String {

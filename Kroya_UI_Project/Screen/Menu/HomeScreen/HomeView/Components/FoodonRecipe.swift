@@ -7,12 +7,13 @@ struct FoodonRecipe: View {
 
     
     @StateObject private var recipeViewModel = RecipeViewModel()
-    
     let imageofOrder: [String] = ["SoupPic", "SaladPic", "GrillPic", "DessertPic 1"]
     let titleofOrder: [String] = ["Soup", "Salad", "Grill", "Dessert"]
     
     @State private var selectedOrderIndex: Int? = nil
     @State private var searchText = ""
+    @State private var doubleSelectedOrderIndex:Int? = nil
+    @State var isChooseCusine = false
     
     var body: some View {
         NavigationView {
@@ -20,10 +21,19 @@ struct FoodonRecipe: View {
                 HStack(spacing: 40) {
                     ForEach(0..<imageofOrder.count, id: \.self) { index in
                         Button(action: {
-                            selectedOrderIndex = index
-                            recipeViewModel.getRecipesByCuisine(cuisineId: index + 1)
+                            if selectedOrderIndex == index {
+                                recipeViewModel.getAllRecipeFood()
+                                isChooseCusine = false
+                              
+                            } else{
+                                selectedOrderIndex = index
+                                doubleSelectedOrderIndex = index
+                                recipeViewModel.getRecipesByCuisine(cuisineId: index + 1)
+                                isChooseCusine = true
+                            }
                         }) {
                             VStack {
+                              
                                 Image(imageofOrder[index])
                                     .resizable()
                                     .scaledToFit()
@@ -31,15 +41,13 @@ struct FoodonRecipe: View {
                                 
                                 Text(titleofOrder[index])
                                     .font(.customfont(.medium, fontSize: 16))
-                                    .foregroundColor(selectedOrderIndex == index ? Color.yellow : Color.gray)
+                                    .foregroundColor(selectedOrderIndex == index && isChooseCusine ? Color.yellow : Color.gray)
                             }
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
-                .padding()
-                
                 Spacer()
                     .frame(height: 20)
                 
@@ -63,7 +71,7 @@ struct FoodonRecipe: View {
                 } else {
                     ScrollView {
                         LazyVStack {
-                            ForEach(recipeViewModel.RecipeByCategory) { recipe in
+                            ForEach(isChooseCusine ? recipeViewModel.RecipeByCategory : recipeViewModel.RecipeFood) { recipe in
                                 RecipeViewCell(recipe: recipe)
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
@@ -100,5 +108,8 @@ struct FoodonRecipe: View {
             }
         }
         .navigationBarBackButtonHidden(true)
+        .onAppear{
+            recipeViewModel.getAllRecipeFood()
+        }
     }
 }

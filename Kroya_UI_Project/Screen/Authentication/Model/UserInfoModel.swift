@@ -56,3 +56,20 @@ struct userModel: Codable {
     var fullName: String
     var profileImage: String
 }
+
+struct SellerInformation: Identifiable, Codable {
+    var id: Int
+    var fullName: String
+    var phoneNumber: String
+    var profileImage: String
+    var location: String
+    
+    // Map userId from JSON to id in the struct
+    enum CodingKeys: String, CodingKey {
+        case id = "userId"
+        case fullName
+        case phoneNumber
+        case profileImage
+        case location
+    }
+}

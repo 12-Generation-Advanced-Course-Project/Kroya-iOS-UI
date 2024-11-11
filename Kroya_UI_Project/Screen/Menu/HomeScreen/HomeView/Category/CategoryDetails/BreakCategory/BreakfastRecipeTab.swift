@@ -53,7 +53,7 @@ struct BreakfastRecipeTab:View {
         .navigationBarBackButtonHidden(true)
         .onAppear {
             if recipeViewModel.RecipeFood.isEmpty {
-                recipeViewModel.getRecipeFood()
+                recipeViewModel.getAllRecipeFood()
             }
         }
     }

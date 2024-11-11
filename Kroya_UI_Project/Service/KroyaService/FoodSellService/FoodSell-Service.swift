@@ -10,13 +10,14 @@ import SwiftUI
 class FoodSellService {
     static let shared = FoodSellService()
     
+    //MARK:  Fetch on card food sell
     func fetchAllCardFood(completion: @escaping (Result<foodSellResponse, Error>) -> Void) {
         guard let accessToken = Auth.shared.getAccessToken() else {
             let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token not found."])
             completion(.failure(error))
             return
         }
-        let url = Constants.foodSellUrl + "list"
+        let url = Constants.FoodSellUrl + "list"
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(accessToken)"
         ]
@@ -53,6 +54,49 @@ class FoodSellService {
                     completion(.failure(error))
                 }
             }
+    }
+    
+    
+ //MARK: Get all Food Sell by Category
+    func getAllFoodSellByCategory(category: Int, completion: @escaping (Result<foodSellResponse, Error>) -> Void) {
+        guard let accessToken = Auth.shared.getAccessToken() else {
+            print("Error: Access token is nil.")
+            let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token is missing"])
+            completion(.failure(error))
+            return
+        }
+        
+        let url = "\(Constants.FoodSellCategoryUrl)\(category)"
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)"
+        ]
+        
+        AF.request(url, method: .get, headers: headers).validate().responseDecodable(of: foodSellResponse.self) { response in
+            if let data = response.data {
+                do {
+                    let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+                    let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
+                    if let Response = String(data: prettyData, encoding: .utf8) {
+                        print("JSON Response:\n\(Response)")
+                    }
+                } catch {
+                    print("Failed to convert response data to pretty JSON: \(error)")
+                }
+            }
+            
+            // Handle the result
+            switch response.result {
+            case .success(let apiResponse):
+                if let statusCode = Int(apiResponse.statusCode), statusCode == 200 {
+                    completion(.success(apiResponse))
+                } else {
+                    let error = NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: apiResponse.message])
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
     }
     
     // MARK: Post-Food-Sell
@@ -116,6 +160,21 @@ class FoodSellService {
             }
     }
 
+            // Handle the result
+            switch response.result {
+            case .success(let apiResponse):
+                if let statusCode = Int(apiResponse.statusCode), statusCode == 200 {
+                    completion(.success(apiResponse))
+                } else {
+                    let error = NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: apiResponse.message])
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
 }
 
 
