@@ -13,4 +13,5 @@ struct UserFoodModel : Codable{
     let totalPosts : Int
 //    let foodSells : [FoodModel]
     let foodRecipes : [FoodRecipeModel]
+    let foodSells : [FoodSellModel]
 }

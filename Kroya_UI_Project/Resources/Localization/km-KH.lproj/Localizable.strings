@@ -183,7 +183,7 @@
 "Ratings & Review" = "ការវាយតម្លៃ & ពិនិត្យឡើងវិញ";
 "Tap to Rate" = "ចុចដើម្បីវាយតម្លៃ";
 "More" = "ច្រើនទៀត";
-"Write a Review" = "សរសេរការពិនិត្យឡើងវិញ";
+"Write a Review" = "សរសេរមតិយោបល់";
 
 //PopUp Food Details
 "Describe your experience" = "ពិពណ៌នាបទពិសោធន៍របស់អ្នក";
@@ -250,12 +250,14 @@
 "Pay with" = "បង់ដោយ";
 "Remarks" = "ចំណាំ";
 "Notes (optional)" = "កំណត់ចំណាំ (ជម្រើសបន្ថែម)";
-"Accept" = "បានទទួល";
-"Reject" = "បានបដិសេធ";
+"Accept" = "ទទួល";
+"Reject" = "បដិសេធ";
 "Invoice" = "វិក្កយបត្រ";
 "Total" = "សរុប";
 "Pay with cash" = "បង់ដោយ cash";
 "Pay with KHQR" = "បង់ដោយ KHQR";
 "Checkout" = "ការបញ្ចប់ការជាវ";
-
-
+"No Food Items Available"  = "មិនមានមុខម្ហូបទេ";
+"Receipt" = "បង្កាន់ដៃ";
+"Receive an order" = "ទទួលការបញ្ជាទិញ";
+"Confirm" = "បញ្ចាក់";
