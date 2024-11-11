@@ -18,7 +18,7 @@ class RecipeViewModel: ObservableObject {
     @Published var errorMessage: String = ""
     
     //MARK: Get Recipe Food
-    func getRecipeFood() {
+    func getAllRecipeFood() {
         self.isLoading = true
         FoodRecipeService.shared.getFoodRecipe{ [weak self] result in
             DispatchQueue.main.async {

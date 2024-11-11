@@ -18,6 +18,10 @@ struct Constants {
     static let CategoryUrl = "https://kroya-api-production.up.railway.app/api/v1/category/"
     static let FoodRecipeByCategoryUrl = "https://kroya-api-production.up.railway.app/api/v1/food-recipe/cuisine/"
     static let SearchFoodRecipeByNameUrl = "https://kroya-api-production.up.railway.app/api/v1/food-recipe/search/"
-    static let foodSellUrl = "https://kroya-api-production.up.railway.app/api/v1/food-sell/"
     static let UserFoodUrl = "https://kroya-api-production.up.railway.app/api/v1/user/"
+    
+    //Food Sell
+    static let FoodSellUrl = "https://kroya-api-production.up.railway.app/api/v1/food-sell/"
+    static let FoodSellCategoryUrl = "https://kroya-api-production.up.railway.app/api/v1/food-sell/cuisine/"
+
 }

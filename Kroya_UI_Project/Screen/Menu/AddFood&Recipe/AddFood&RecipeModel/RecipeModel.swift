@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct RecipeModel: Identifiable, Codable {
-    
     var id: Int
     let photo: [Photo]
     let name: String
@@ -19,4 +18,6 @@ struct RecipeModel: Identifiable, Codable {
     let isFavorite: Bool
     let itemType: String
     let user: userModel
+    
 }
+

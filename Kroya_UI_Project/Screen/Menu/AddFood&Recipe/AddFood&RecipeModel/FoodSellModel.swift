@@ -8,20 +8,26 @@
 import Foundation
 
 
-struct FoodSellModel: Codable, Identifiable {
+struct FoodSellModel: Identifiable, Codable {
     var id: Int
     var photo: [Photo]
     var name, dateCooking: String
     var price: Double
     var currencyType: String
-    var averageRating: Double
-    var totalRaters: Int
+    var averageRating: Double?
+    var totalRaters: Int?
     var isFavorite: Bool
     var itemType: String
     var isOrderable: Bool
-    var sellerInformation: User
-    var rating: String
+    var sellerInformation: SellerInformation
+    var rating: String?
     
-   
+    // Map foodSellId from JSON to id in the struct
+    enum CodingKeys: String, CodingKey {
+        case id = "foodSellId"
+        case photo, name,dateCooking, price, currencyType, averageRating, totalRaters, isFavorite, itemType, isOrderable, sellerInformation, rating
+    }
+      
 }
+
 
