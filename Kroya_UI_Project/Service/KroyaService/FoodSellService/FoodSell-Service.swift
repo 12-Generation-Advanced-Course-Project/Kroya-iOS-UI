@@ -57,7 +57,7 @@ class FoodSellService {
     }
     
     
- //MARK: Get all Food Sell by Category
+    //MARK: Get all Food Sell by Category
     func getAllFoodSellByCategory(category: Int, completion: @escaping (Result<foodSellResponse, Error>) -> Void) {
         guard let accessToken = Auth.shared.getAccessToken() else {
             print("Error: Access token is nil.")
@@ -101,7 +101,7 @@ class FoodSellService {
     
     // MARK: Post-Food-Sell
     func postFoodSell(
-       _ foodSellRequest: FoodSellRequest,
+        _ foodSellRequest: FoodSellRequest,
         foodRecipeId: Int,
         currencyType: String,
         completion: @escaping (Result<SaveFoodSellResponse, Error>) -> Void
@@ -112,7 +112,7 @@ class FoodSellService {
             return
         }
         
-        let url = "\(Constants.foodSellUrl)post-food-sell?foodRecipeId=\(foodRecipeId)&currencyType=\(currencyType)"
+        let url = "\(Constants.FoodSellUrl)post-food-sell?foodRecipeId=\(foodRecipeId)&currencyType=\(currencyType)"
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(accessToken)",
             "Content-Type": "application/json"
@@ -159,7 +159,37 @@ class FoodSellService {
                 }
             }
     }
-
+    
+    
+    //MARK: Get Search Food Sell By Name
+    func getSearchFoodSellByName(searchText: String, completion: @escaping (Result<foodSellResponse, Error>) -> Void) {
+        guard let accessToken = Auth.shared.getAccessToken() else {
+            print("Error: Access token is nil.")
+            let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token is missing"])
+            completion(.failure(error))
+            return
+        }
+        
+        // Construct the URL with the search query
+        let url = "\(Constants.FoodSellUrl)search?name=\(searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")"
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)"
+        ]
+        
+        AF.request(url, method: .get, headers: headers).validate().responseDecodable(of: foodSellResponse.self) { response in
+            // Print response data for debugging
+            if let data = response.data {
+                do {
+                    let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+                    let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
+                    if let prettyString = String(data: prettyData, encoding: .utf8) {
+                        print("Pretty JSON Response:\n\(prettyString)")
+                    }
+                } catch {
+                    print("Failed to convert response data to pretty JSON: \(error)")
+                }
+            }
+            
             // Handle the result
             switch response.result {
             case .success(let apiResponse):

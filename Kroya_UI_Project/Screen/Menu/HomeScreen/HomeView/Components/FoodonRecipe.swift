@@ -99,7 +99,7 @@ struct FoodonRecipe: View {
             }
         }
         .onAppear{
-            recipeViewModel.getRecipeFood()
+            recipeViewModel.getAllRecipeFood()
         }
         .searchable(text: $searchText, prompt: LocalizedStringKey("Search Item"))
         .onChange(of: searchText) { newValue in

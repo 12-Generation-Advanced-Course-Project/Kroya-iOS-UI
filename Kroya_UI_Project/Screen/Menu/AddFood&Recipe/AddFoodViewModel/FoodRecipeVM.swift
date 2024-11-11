@@ -81,7 +81,7 @@ class RecipeViewModel: ObservableObject {
                     if response.statusCode == "200", let payload = response.payload {
                         self?.RecipeByCategory = payload // Storing search results here
                         //Food-Recipe-Refresh
-                        self?.getRecipeFood()
+                        self?.getAllRecipeFood()
                     } else {
                         self?.showError = true
                         self?.errorMessage = response.message
@@ -106,7 +106,7 @@ class RecipeViewModel: ObservableObject {
                 case .success(let response):
                     if let createdRecipeId = response.payload?.first {
                         self?.successMessage = "Recipe created successfully with ID: \(createdRecipeId)"
-                        self?.getRecipeFood()
+                        self?.getAllRecipeFood()
                     } else {
                         self?.successMessage = "Recipe created successfully"
                     }
