@@ -37,7 +37,7 @@ class FoodSellService {
                 } else {
                     print("No response data available")
                 }
-                debugPrint(response)
+            
                 switch response.result{
                 case .success(let apiResponse):
                     if let statusCode = Int(apiResponse.statusCode), statusCode == 200 {
