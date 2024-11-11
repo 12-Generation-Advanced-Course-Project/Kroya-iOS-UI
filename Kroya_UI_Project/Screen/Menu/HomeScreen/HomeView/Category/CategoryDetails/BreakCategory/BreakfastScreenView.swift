@@ -32,8 +32,6 @@ struct BreakfastScreenView: View {
                         .onTapGesture {
                             withAnimation {
                                 selectedSegment = 1
-                                
-                                
 //                                                                fetchSegmentData() // Fetch recipes data
                             }
                         }

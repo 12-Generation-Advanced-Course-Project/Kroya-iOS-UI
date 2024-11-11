@@ -9,7 +9,6 @@ import SwiftUI
 import Foundation
 
 class RecipeViewModel: ObservableObject {
-    
     @Published var RecipeFood: [FoodRecipeModel] = []
     @Published var RecipeByCategory: [FoodRecipeModel] = []
     @Published var isLoading: Bool = false
@@ -17,18 +16,25 @@ class RecipeViewModel: ObservableObject {
     @Published var showError: Bool = false
     @Published var errorMessage: String = ""
     
-    //MARK: Get Recipe Food
+    // MARK: Helper functions for loading state
+    private func startLoading() {
+        isLoading = true
+    }
+    
+    private func endLoading() {
+        isLoading = false
+    }
+
+    // MARK: Get All Recipe Food
     func getAllRecipeFood() {
-        self.isLoading = true
-        FoodRecipeService.shared.getFoodRecipe{ [weak self] result in
+        startLoading()
+        FoodRecipeService.shared.getFoodRecipe { [weak self] result in
             DispatchQueue.main.async {
-                self?.isLoading = false
+                self?.endLoading()
                 switch result {
                 case .success(let response):
-                    if response.statusCode == "200" {
-                        if let payload = response.payload {
-                            self?.RecipeFood = payload
-                        }
+                    if response.statusCode == "200", let payload = response.payload {
+                        self?.RecipeFood = payload
                         self?.successMessage = "Recipe food fetched successfully."
                         self?.showError = false
                     } else {
@@ -43,15 +49,13 @@ class RecipeViewModel: ObservableObject {
             }
         }
     }
-    
-    
-    
-    //MARK: Get all Recipe By Category
+
+    // MARK: Get Recipes by Category
     func getRecipesByCuisine(cuisineId: Int) {
-        self.isLoading = true
+        startLoading()
         FoodRecipeService.shared.getAllFoodRecipeByCategory(category: cuisineId) { [weak self] result in
             DispatchQueue.main.async {
-                self?.isLoading = false
+                self?.endLoading()
                 switch result {
                 case .success(let response):
                     if response.statusCode == "200", let payload = response.payload {
@@ -67,20 +71,17 @@ class RecipeViewModel: ObservableObject {
             }
         }
     }
-    
-    
-    
-    //MARK: Get Search Food Recipe By Name
+
+    // MARK: Search Food Recipe by Name
     func getSearchFoodRecipeByName(searchText: String) {
-        self.isLoading = true
+        startLoading()
         FoodRecipeService.shared.getSearchFoodRecipeByName(searchText: searchText) { [weak self] result in
             DispatchQueue.main.async {
-                self?.isLoading = false
+                self?.endLoading()
                 switch result {
                 case .success(let response):
                     if response.statusCode == "200", let payload = response.payload {
-                        self?.RecipeByCategory = payload // Storing search results here
-                        //Food-Recipe-Refresh
+                        self?.RecipeByCategory = payload
                         self?.getAllRecipeFood()
                     } else {
                         self?.showError = true
@@ -93,15 +94,13 @@ class RecipeViewModel: ObservableObject {
             }
         }
     }
-    
-    // MARK: Function to create a new recipe
+
+    // MARK: Create a New Recipe
     func createFoodRecipe(from foodRecipeRequest: FoodRecipeRequest) {
-        self.isLoading = true
-        
-        // Call the service function with the pre-constructed FoodRecipeRequest
+        startLoading()
         FoodRecipeService.shared.saveFoodRecipe(foodRecipeRequest) { [weak self] result in
             DispatchQueue.main.async {
-                self?.isLoading = false
+                self?.endLoading()
                 switch result {
                 case .success(let response):
                     if let createdRecipeId = response.payload?.first {
@@ -118,7 +117,4 @@ class RecipeViewModel: ObservableObject {
             }
         }
     }
-    
-    
-    
 }

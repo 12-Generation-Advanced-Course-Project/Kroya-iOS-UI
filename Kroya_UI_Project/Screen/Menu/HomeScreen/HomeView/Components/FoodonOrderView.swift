@@ -14,29 +14,27 @@ struct FoodonOrderView: View {
     
     @State private var selectedOrderIndex: Int? = nil
     @State private var searchText = ""
-    @State private var doubleSelectedOrderIndex:Int? = nil
-    @State var isChooseCusine = false
+    @State private var doubleSelectedOrderIndex: Int? = nil
+    @State var isChooseCuisine = false
     
     var body: some View {
         NavigationView {
             VStack {
-                // Category Selection Buttons
+                // Cuisine Category Buttons
                 HStack(spacing: 40) {
                     ForEach(0..<imageofOrder.count, id: \.self) { index in
                         Button(action: {
                             if selectedOrderIndex == index {
                                 foodViewModel.getAllFoodSell()
-                                isChooseCusine = false
-                              
-                            } else{
+                                isChooseCuisine = false
+                            } else {
                                 selectedOrderIndex = index
                                 doubleSelectedOrderIndex = index
                                 foodViewModel.getFoodByCuisine(cuisineId: index + 1)
-                                isChooseCusine = true
+                                isChooseCuisine = true
                             }
                         }) {
                             VStack {
-                              
                                 Image(imageofOrder[index])
                                     .resizable()
                                     .scaledToFit()
@@ -44,7 +42,7 @@ struct FoodonOrderView: View {
                                 
                                 Text(titleofOrder[index])
                                     .font(.customfont(.medium, fontSize: 16))
-                                    .foregroundColor(selectedOrderIndex == index && isChooseCusine ? Color.yellow : Color.gray)
+                                    .foregroundColor(selectedOrderIndex == index && isChooseCuisine ? Color.yellow : Color.gray)
                             }
                         }
                         .buttonStyle(PlainButtonStyle())
@@ -59,16 +57,22 @@ struct FoodonOrderView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundStyle(.black.opacity(0.8))
                     .padding(.horizontal)
-                // Show Loading Indicator if data is being loaded
+                
+                // Loading Indicator or Content
                 if foodViewModel.isLoading {
-                    ProgressView("Loading...")
-                        .frame(maxWidth: .infinity)
-                        .padding()
+                    ZStack {
+                        Color.white
+                            .edgesIgnoringSafeArea(.all)
+                        
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
+                            .scaleEffect(2)
+                            .offset(y: -50)
+                    }
                 } else {
-                    // Display either filtered or all food items
                     ScrollView {
                         LazyVStack {
-                            ForEach(isChooseCusine ? foodViewModel.FoodSellByCategory : foodViewModel.FoodOnSale){ food in
+                            ForEach(isChooseCuisine ? foodViewModel.FoodSellByCategory : foodViewModel.FoodOnSale) { food in
                                 FoodOnSaleViewCell(foodSale: food)
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
@@ -76,15 +80,14 @@ struct FoodonOrderView: View {
                         }
                     }
                 }
+                
                 Spacer()
             }
-            .navigationTitle(LocalizedStringKey("Food order"))
+            .navigationTitle("Food Order")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        dismiss()
-                    }) {
+                    Button(action: { dismiss() }) {
                         Image(systemName: "arrow.left")
                             .resizable()
                             .scaledToFit()
@@ -98,6 +101,8 @@ struct FoodonOrderView: View {
         .onChange(of: searchText) { newValue in
             if !newValue.isEmpty {
                 foodViewModel.getSearchFoodFoodByName(searchText: newValue)
+            } else {
+                foodViewModel.getAllFoodSell()
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -106,9 +111,3 @@ struct FoodonOrderView: View {
         }
     }
 }
-
-
-//
-//#Preview {
-//    FoodonOrderView()
-//}
