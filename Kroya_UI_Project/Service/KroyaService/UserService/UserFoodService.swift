@@ -14,14 +14,21 @@ class UserFoodService {
     static let shared = UserFoodService()
     
     //MARK: Get all User Food
-    func getAllUserFood(complitiion: @escaping (Result <userFoodResponse , Error> ) -> Void){
+    func getAllUserFood(completion: @escaping (Result<UserFoodResponse, Error>) -> Void){
+        guard let accessToken = Auth.shared.getAccessToken() else {
+            print("Error: Access token is nil.")
+            let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token is missing"])
+            completion(.failure(error))
+            return
+        }
+        
         let url = Constants.FoodRecipeUrl + "foods"
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(Auth.shared.getAccessToken() ?? "")"
         ]
         
         AF.request(url, method: .get , headers:  headers).validate()
-            .responseDecodable(of: userFoodResponse.self){ response in
+            .responseDecodable(of: UserFoodResponse.self){ response in
                 if let data = response.data {
                     do {
                         let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
@@ -36,21 +43,19 @@ class UserFoodService {
                     print("No response data available")
                 }
                 debugPrint(response)
-                switch response.result{
+                switch response.result {
                 case .success(let apiResponse):
-                    
-                    if let statusCode = Int(apiResponse.statusCode), statusCode == 200{
+                    if apiResponse.statusCode == "200" {
                         print("Food listings retrieved successfully.")
-                        complitiion(.success(apiResponse))
-                    }
-                    else{
+                        completion(.success(apiResponse))
+                    } else {
                         print("Failed to retrieved Food listings")
-                        let error = NSError(domain: "", code: 400 , userInfo: [NSLocalizedDescriptionKey: apiResponse.message])
-                        complitiion(.failure(error))
+                        let error = NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: apiResponse.message])
+                        completion(.failure(error))
                     }
                 case .failure(let error):
                     print("Request failed with error: \(error)")
-                    complitiion(.failure(error))
+                    completion(.failure(error))
                 }
             }
     }

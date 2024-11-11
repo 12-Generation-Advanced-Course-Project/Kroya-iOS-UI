@@ -9,7 +9,7 @@ struct FoodSaleandRecipeView: View {
     var body: some View {
         VStack {
             if foodViewModel.FoodOnSale.isEmpty && !foodViewModel.isLoading {
-                Text("No Food Items Available")
+                Text(LocalizedStringKey("No Food Items Available"))
                     .font(.title3)
                     .foregroundColor(.gray)
                     .padding()

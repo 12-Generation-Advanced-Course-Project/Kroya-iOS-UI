@@ -11,6 +11,6 @@ struct UserFoodModel : Codable{
     let totalFoodRecipes: Int
     let totalFoodSells: Int
     let totalPosts : Int
-//    let foodSells : [FoodModel]
+    let foodSells : [FoodSellModel]
     let foodRecipes : [RecipeModel]
 }
