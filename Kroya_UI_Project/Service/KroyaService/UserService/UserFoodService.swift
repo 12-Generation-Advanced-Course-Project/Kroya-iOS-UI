@@ -14,7 +14,7 @@ class UserFoodService {
     static let shared = UserFoodService()
     
     //MARK: Get all User Food
-    func getAllUserFood(completion: @escaping (Result<UserFoodResponse, Error>) -> Void){
+    func getAllUserFood(completion: @escaping (Result<userFoodResponse, Error>) -> Void){
         guard let accessToken = Auth.shared.getAccessToken() else {
             print("Error: Access token is nil.")
             let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token is missing"])
@@ -28,7 +28,7 @@ class UserFoodService {
         ]
         
         AF.request(url, method: .get , headers:  headers).validate()
-            .responseDecodable(of: UserFoodResponse.self){ response in
+            .responseDecodable(of: userFoodResponse.self){ response in
                 if let data = response.data {
                     do {
                         let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
