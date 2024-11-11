@@ -5,7 +5,6 @@
 //  Created by Ounbonaliheng on 27/9/24.
 //
 
-// Constants.swift
 struct Constants {
     
     static let KroyaUrlAuth = "https://kroya-api-production.up.railway.app/api/v1/auth/"
