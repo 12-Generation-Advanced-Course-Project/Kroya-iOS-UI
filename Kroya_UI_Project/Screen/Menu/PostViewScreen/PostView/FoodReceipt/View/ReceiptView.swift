@@ -29,7 +29,7 @@ struct ReceiptView: View {
                             .resizable()
                             .frame(width: 50, height: 50)
                             .foregroundColor(.green)
-                        Text("Receive an order") 
+                        Text(LocalizedStringKey("Receive an order"))
                             .font(.system(size: 21, weight: .medium))
                     }
                 } else {
@@ -52,7 +52,7 @@ struct ReceiptView: View {
                     Button(action: {
                         dismiss()
                     }) {
-                        Text("Confirm")
+                        Text(LocalizedStringKey("Confirm"))
                             .font(.system(size: 16, weight: .bold))
                             .frame(maxWidth: .infinity)
                             .padding()

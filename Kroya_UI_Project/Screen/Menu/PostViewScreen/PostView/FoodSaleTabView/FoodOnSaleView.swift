@@ -10,7 +10,7 @@ struct FoodOnSaleView: View {
     var body: some View {
         VStack {
             if foodsellVm.FoodOnSale.isEmpty && !foodsellVm.isLoading {
-                Text("No Food Items Available")
+                Text(LocalizedStringKey("No Food Items Available"))
                     .font(.title3)
                     .foregroundColor(.gray)
                     .padding()
