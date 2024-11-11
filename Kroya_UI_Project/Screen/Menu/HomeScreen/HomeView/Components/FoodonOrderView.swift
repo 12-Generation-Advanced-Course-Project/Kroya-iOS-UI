@@ -12,7 +12,7 @@ struct FoodonOrderView: View {
     
     let imageofOrder: [String] = ["SoupPic", "SaladPic", "GrillPic", "DessertPic 1"]
     let titleofOrder: [String] = ["Soup", "Salad", "Grill", "Dessert"]
-    @EnvironmentObject var addNewFoodVM: AddNewFoodVM
+    
     @State private var selectedOrderIndex: Int? = nil
     @State private var searchText = ""
     

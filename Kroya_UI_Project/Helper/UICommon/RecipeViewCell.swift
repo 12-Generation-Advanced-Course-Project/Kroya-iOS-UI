@@ -5,11 +5,11 @@ import Kingfisher
 
 struct RecipeViewCell: View {
     
-    var recipe: RecipeModel // Corrected to use RecipeModel
+    var recipe: FoodRecipeModel // Corrected to use RecipeModel
     @State private var isFavorite: Bool
     var urlImagePrefix: String = "https://kroya-api.up.railway.app/api/v1/fileView/"
     
-    init(recipe: RecipeModel, isFavorite: Bool = false) {
+    init(recipe: FoodRecipeModel, isFavorite: Bool = false) {
         self.recipe = recipe
         _isFavorite = State(initialValue: isFavorite)
     }

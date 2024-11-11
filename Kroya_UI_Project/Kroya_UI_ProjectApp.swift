@@ -16,9 +16,9 @@ struct Kroya_UI_ProjectApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
     @StateObject var userStore = UserStore()
-    @StateObject var addNewFoodVM = AddNewFoodVM()
 
-    @StateObject var addressViewModel = AddressViewModel(userStore: UserStore())
+
+    @StateObject var addressViewModel = AddressViewModel()
     @State private var isSplashScreenActive = true
     @State private var isConnected = true
     @State var lang: String = UserDefaults.standard.string(forKey: "AppLanguage") ?? "en"
@@ -26,7 +26,6 @@ struct Kroya_UI_ProjectApp: App {
     private let monitor = NWPathMonitor()
 
     init() {
-//        GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
         modelContainer = try! ModelContainer(for: Draft.self)
         setupNetworkMonitoring()
     }
@@ -37,7 +36,7 @@ struct Kroya_UI_ProjectApp: App {
                 if isSplashScreenActive {
                     SplashScreen(isSplashScreenActive: $isSplashScreenActive, lang: $lang)
                         .environmentObject(userStore)
-                        .environmentObject(addNewFoodVM)
+
                         .environmentObject(addressViewModel)
                 } else {
                     contentView
@@ -64,7 +63,6 @@ struct Kroya_UI_ProjectApp: App {
                         .environmentObject(addressViewModel)
                         .environment(\.locale, .init(identifier: lang))
                         .environment(\.modelContext, modelContainer.mainContext)
-                        .environmentObject(addNewFoodVM)
                 }
             } else {
                 NavigationView {
@@ -74,7 +72,6 @@ struct Kroya_UI_ProjectApp: App {
                         .environmentObject(addressViewModel)
                         .environment(\.locale, .init(identifier: lang))
                         .environment(\.modelContext, modelContainer.mainContext)
-                        .environmentObject(addNewFoodVM)
                 }
             }
         }

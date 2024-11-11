@@ -7,7 +7,7 @@ struct ViewAllPopularDishesView: View {
     @State private var currentPage = 0
     let images = ["slide1", "slide2", "slide3"]
     let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
-    @EnvironmentObject var addNewFoodVM: AddNewFoodVM
+ 
     var body: some View {
         VStack(spacing: 10) {
             // Image Slider

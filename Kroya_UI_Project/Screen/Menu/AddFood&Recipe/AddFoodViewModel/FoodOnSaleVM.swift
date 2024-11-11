@@ -35,5 +35,30 @@ class FoodSellViewModel: ObservableObject {
             }
         }
     }
+    
+    // MARK: Post New Food Sell
+    func createFoodSell(foodSellRequest: FoodSellRequest, foodRecipeId: Int, currencyType: String) {
+        self.isLoading = true
+        FoodSellService.shared.postFoodSell(foodSellRequest, foodRecipeId: foodRecipeId, currencyType: currencyType) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                switch result {
+                case .success(let response):
+                    if response.statusCode == "201" {
+                        self?.successMessage = "Food sell posted successfully."
+                        self?.showError = false
+                        // Optionally refresh the list if you want to show the new item
+                        self?.getAllFoodSell()
+                    } else {
+                        self?.showError = true
+                        self?.errorMessage = response.message
+                    }
+                case .failure(let error):
+                    self?.showError = true
+                    self?.errorMessage = "Failed to post food sell: \(error.localizedDescription)"
+                    print("Error: \(error)")
+                }
+            }
+        }
+    }
 }
-

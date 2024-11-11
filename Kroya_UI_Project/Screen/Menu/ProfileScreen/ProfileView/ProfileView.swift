@@ -12,10 +12,10 @@ struct ProfileView: View {
     @State private var showLogoutSuccessAlert = false
     @ObservedObject  var authVM : AuthViewModel
     @State private var selectedAddress: Address?
-    @EnvironmentObject var addressVM: AddressViewModel
+    @StateObject private var addressVM =  AddressViewModel()
     @EnvironmentObject var userStore: UserStore
     @State private var showMapSheet = false
-    @ObservedObject  var Profile : ProfileViewModel
+    @StateObject private  var Profile =  ProfileViewModel()
     @State private var isgotoBill = false
     @State private var isEdit: Bool = false
     @State private var addressToUpdate: Address? = nil

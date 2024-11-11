@@ -10,7 +10,7 @@ import SwiftUI
 struct DessertScreenView: View {
     @State private var selectedSegment = 0
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var addNewFoodVM: AddNewFoodVM
+  
     var body: some View {
         
         VStack {

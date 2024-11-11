@@ -4,7 +4,7 @@ import SwiftUI
 struct FoodonRecipe: View {
     
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var addNewFoodVM: AddNewFoodVM
+
     
     @StateObject private var recipeViewModel = RecipeViewModel()
     
@@ -50,9 +50,16 @@ struct FoodonRecipe: View {
                     .padding(.horizontal)
                 
                 if recipeViewModel.isLoading {
-                    ProgressView("Loading...")
-                        .frame(maxWidth: .infinity)
-                        .padding()
+                    ZStack {
+                        Color.white
+                            .edgesIgnoringSafeArea(.all)
+                        
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
+                            .scaleEffect(2)
+                            .offset(y: -50)
+                    }
+                    .padding()
                 } else {
                     ScrollView {
                         LazyVStack {
@@ -82,6 +89,9 @@ struct FoodonRecipe: View {
                     }
                 }
             }
+        }
+        .onAppear{
+            recipeViewModel.getRecipeFood()
         }
         .searchable(text: $searchText, prompt: LocalizedStringKey("Search Item"))
         .onChange(of: searchText) { newValue in

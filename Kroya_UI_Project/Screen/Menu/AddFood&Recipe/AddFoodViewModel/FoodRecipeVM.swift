@@ -10,8 +10,8 @@ import Foundation
 
 class RecipeViewModel: ObservableObject {
     
-    @Published var RecipeFood: [RecipeModel] = []
-    @Published var RecipeByCategory: [RecipeModel] = []
+    @Published var RecipeFood: [FoodRecipeModel] = []
+    @Published var RecipeByCategory: [FoodRecipeModel] = []
     @Published var isLoading: Bool = false
     @Published var successMessage: String = ""
     @Published var showError: Bool = false
@@ -67,7 +67,7 @@ class RecipeViewModel: ObservableObject {
             }
         }
     }
-
+    
     
     
     //MARK: Get Search Food Recipe By Name
@@ -80,6 +80,8 @@ class RecipeViewModel: ObservableObject {
                 case .success(let response):
                     if response.statusCode == "200", let payload = response.payload {
                         self?.RecipeByCategory = payload // Storing search results here
+                        //Food-Recipe-Refresh
+                        self?.getRecipeFood()
                     } else {
                         self?.showError = true
                         self?.errorMessage = response.message
@@ -91,8 +93,31 @@ class RecipeViewModel: ObservableObject {
             }
         }
     }
-
     
+    // MARK: Function to create a new recipe
+    func createFoodRecipe(from foodRecipeRequest: FoodRecipeRequest) {
+        self.isLoading = true
+        
+        // Call the service function with the pre-constructed FoodRecipeRequest
+        FoodRecipeService.shared.saveFoodRecipe(foodRecipeRequest) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                switch result {
+                case .success(let response):
+                    if let createdRecipeId = response.payload?.first {
+                        self?.successMessage = "Recipe created successfully with ID: \(createdRecipeId)"
+                        self?.getRecipeFood()
+                    } else {
+                        self?.successMessage = "Recipe created successfully"
+                    }
+                    self?.showError = false
+                case .failure(let error):
+                    self?.errorMessage = "Failed to create recipe: \(error.localizedDescription)"
+                    self?.showError = true
+                }
+            }
+        }
+    }
     
     
     

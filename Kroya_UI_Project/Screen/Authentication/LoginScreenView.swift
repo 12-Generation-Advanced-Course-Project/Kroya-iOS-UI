@@ -13,7 +13,7 @@ struct LoginScreenView: View {
     @Binding var lang:String
     @StateObject private var authVM: AuthViewModel
     @EnvironmentObject var userStore: UserStore
-    @EnvironmentObject var addNewFoodVM: AddNewFoodVM
+  
     @EnvironmentObject var addressViewModel:AddressViewModel
     init(userStore: UserStore, lang: Binding<String>) {
         _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
@@ -126,7 +126,7 @@ struct LoginScreenView: View {
                                 rootView: MainScreen(userStore: userStore, lang: $lang)
                                     .environmentObject(userStore)
                                     .environmentObject(Auth.shared)
-                                    .environmentObject(addNewFoodVM)
+                      
                                     .environmentObject(addressViewModel)
                             )
                             rootWindow.makeKeyAndVisible()

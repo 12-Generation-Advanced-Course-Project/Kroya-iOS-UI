@@ -4,7 +4,7 @@ struct FoodOnSaleView: View {
     
     // Properties
     var iselected: Int?
-    @EnvironmentObject var addNewFoodVM: AddNewFoodVM
+
     @StateObject private var foodsellVm = FoodSellViewModel()
     
     var body: some View {

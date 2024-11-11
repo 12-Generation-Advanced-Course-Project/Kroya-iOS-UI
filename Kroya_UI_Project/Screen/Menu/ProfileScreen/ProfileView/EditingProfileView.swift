@@ -287,16 +287,20 @@ struct EditingProfileView: View {
                 addressVM.fetchAllAddresses()
             }
             .sheet(isPresented: $showImagePicker) {
-                ImagePicker(selectedImages: $selectedImages)
-                    .onChange(of: selectedImages) { newImages in
-                        if let selectedImage = newImages.last,
-                           let imageData = selectedImage.jpegData(compressionQuality: 0.8) {
-                            let imageExtension = detectImageFormat(data: imageData)
-                            let imageName = "\(UUID().uuidString).\(imageExtension)"
-                            print("Generated Image Name: \(imageName)")
+                ImagePicker { selectedImages, filenames in
+                    for (index, filename) in filenames.enumerated() {
+                        // Handle each filename and associated UIImage
+                        print("Selected image filename: \(filename)")
+                        
+                        // Append each selected image to the list
+                        if index < selectedImages.count {
+                            let uiImage = selectedImages[index]
+                            self.selectedImages.append(uiImage)
                         }
                     }
+                }
             }
+
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -310,6 +314,17 @@ struct EditingProfileView: View {
                 }
             }
         }
+    }
+    
+    // Function to load UIImage from filename if needed
+    private func loadImageFromFile(_ filename: String) -> UIImage? {
+        let fileURL = getDocumentsDirectory().appendingPathComponent(filename)
+        return UIImage(contentsOfFile: fileURL.path)
+    }
+
+    // Helper to get the Documents directory path
+    private func getDocumentsDirectory() -> URL {
+        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     }
     
     private func loadProfileData() {
@@ -368,4 +383,6 @@ struct DeleteAccountDialog: View {
         .background(Color.white)
         .cornerRadius(20)
     }
+    
+
 }

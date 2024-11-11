@@ -50,30 +50,30 @@ struct IngredientEntryView: View {
             
             // Quantity and Price Input Fields
             VStack(alignment: .leading, spacing: 10) {
-                          HStack {
-                              Text("Quantity")
-                                  .customFontMediumLocalize(size: 15)
-                                  .foregroundStyle(.black.opacity(0.6))
-                                  
-                              Spacer().frame(width: 25)
-                              
-                              TextField("Input", text: Binding(
-                                  get: { quantityText },
-                                  set: { newValue in
-                                      quantityText = filterQuantityInput(newValue)
-                                      ingredient.quantity = Double(quantityText) ?? 0.0
-                                  }
-                              ))
-                              .multilineTextAlignment(.leading)
-                              .customFontMediumLocalize(size: 15)
-                              .keyboardType(.decimalPad)
-                              .foregroundStyle(.black.opacity(0.6))
-                              .padding(.leading, 10)
-                              .frame(width: .screenWidth * 0.2, height: 30)
-                              .onAppear {
-                                  quantityText = ingredient.quantity == 0 ? "" : String(ingredient.quantity)
-                              }
-                          }
+                HStack {
+                    Text("Quantity")
+                        .customFontMediumLocalize(size: 15)
+                        .foregroundStyle(.black.opacity(0.6))
+                    
+                    Spacer().frame(width: 25)
+                    
+                    TextField("Input", text: Binding(
+                        get: { quantityText },
+                        set: { newValue in
+                            quantityText = filterQuantityInput(newValue)
+                            ingredient.quantity = Double(quantityText) ?? 0.0
+                        }
+                    ))
+                    .multilineTextAlignment(.leading)
+                    .customFontMediumLocalize(size: 15)
+                    .keyboardType(.decimalPad)
+                    .foregroundStyle(.black.opacity(0.6))
+                    .padding(.leading, 10)
+                    .frame(width: .screenWidth * 0.2, height: 30)
+                    .onAppear {
+                        quantityText = ingredient.quantity == 0 ? "" : String(ingredient.quantity)
+                    }
+                }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 16)
                 
@@ -82,7 +82,7 @@ struct IngredientEntryView: View {
                     Text("Price")
                         .customFontMediumLocalize(size: 15)
                         .foregroundStyle(.black.opacity(0.6))
-                        
+                    
                     Spacer()
                         .frame(width: locale.identifier == "ko" ? 40 : locale.identifier == "km-KH" ? 40 : 60)
                     
@@ -101,8 +101,8 @@ struct IngredientEntryView: View {
                     .onChange(of: ingredient.price) { _ in
                         showValidationError = false
                     }
-                   
-                   
+                    
+                    
                     Spacer()
                     
                     Picker("", selection: $ingredient.selectedCurrency) {
@@ -121,7 +121,7 @@ struct IngredientEntryView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 13)
                 .padding(.top, 5)
-  
+                
             }
             .padding(.vertical, 10)
             .overlay(
@@ -153,7 +153,7 @@ struct IngredientEntryView: View {
     private func filterQuantityInput(_ input: String) -> String {
         let maxDecimalPlaces = 2
         var filtered = input.filter { "0123456789.".contains($0) }
-
+        
         if filtered == "." {
             filtered = "0."
         }
@@ -177,8 +177,8 @@ struct IngredientEntryView: View {
         
         return filtered
     }
-
-        
+    
+    
     // MARK: Function to format the price based on currency selection
     private func formatPrice() -> String {
         let formatter = NumberFormatter()
@@ -189,16 +189,16 @@ struct IngredientEntryView: View {
         return formatter.string(from: NSNumber(value: ingredient.price)) ?? ""
     }
     
-  
-
+    
+    
     // MARK: Function to filter and format the price input based on the selected currency
     private func filterPriceInput(_ input: String) -> String {
         let maxDecimalPlaces = ingredient.selectedCurrency == 0 ? 4 : 2
         var filtered = input.filter { "0123456789.,".contains($0) }
         
         if filtered == "." {
-               filtered = "0."
-           }
+            filtered = "0."
+        }
         // Remove commas if currency is Riels, as we only format with commas for USD
         if ingredient.selectedCurrency == 0 {
             filtered = filtered.replacingOccurrences(of: ",", with: "")
@@ -206,24 +206,24 @@ struct IngredientEntryView: View {
         
         // Prevent the price from starting with zero unless followed by a decimal
         if filtered.hasPrefix("0") && !filtered.hasPrefix("0.") && filtered.count > 1 {
-                filtered.removeFirst()
-            }
+            filtered.removeFirst()
+        }
         
         // Handle multiple decimal points
         let components = filtered.components(separatedBy: ".")
-            if components.count > 2 {
-                filtered = components[0] + "." + components[1]
-            } else if components.count == 2 {
-                // Limit decimal places based on currency
-                let decimalIndex = filtered.firstIndex(of: ".") ?? filtered.endIndex
-                let integerPart = filtered[..<decimalIndex]
-                let decimalPart = filtered[decimalIndex...].prefix(maxDecimalPlaces + 1)
-                filtered = String(integerPart + decimalPart)
-            }
-            
-            return filtered
+        if components.count > 2 {
+            filtered = components[0] + "." + components[1]
+        } else if components.count == 2 {
+            // Limit decimal places based on currency
+            let decimalIndex = filtered.firstIndex(of: ".") ?? filtered.endIndex
+            let integerPart = filtered[..<decimalIndex]
+            let decimalPart = filtered[decimalIndex...].prefix(maxDecimalPlaces + 1)
+            filtered = String(integerPart + decimalPart)
+        }
+        
+        return filtered
     }
-
+    
     
     // MARK: Function to convert the currency value when switching between Riel and USD
     private func convertCurrency(_ price: Double) -> Double {
@@ -239,9 +239,9 @@ struct IngredientEntryView: View {
         showValidationError = ingredient.name.isEmpty || ingredient.quantity <= 0 || ingredient.price == 0
     }
     private func isValidDecimalInput(_ input: String) -> Bool {
-          // Regular expression to allow only numbers with optional decimal points
-          let decimalRegex = #"^\d*(\.\d*)?$"#
-          return input.range(of: decimalRegex, options: .regularExpression) != nil
-      }
-
+        // Regular expression to allow only numbers with optional decimal points
+        let decimalRegex = #"^\d*(\.\d*)?$"#
+        return input.range(of: decimalRegex, options: .regularExpression) != nil
+    }
+    
 }

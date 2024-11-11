@@ -81,10 +81,5 @@ class AddNewFoodVM: ObservableObject {
     }
 
     
-    // MARK: - Fetch Specific Recipe/Food based on For Sale status
-    func fetchRecipeOrFood(forSaleOnly: Bool) {
-        allNewFoodAndRecipes = allNewFoodAndRecipes.filter { $0.isForSale == forSaleOnly }
-        print("Fetched recipes for sale only (\(forSaleOnly)): \(allNewFoodAndRecipes)")
-    }
 
 }

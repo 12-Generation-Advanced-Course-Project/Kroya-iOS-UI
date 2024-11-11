@@ -314,3 +314,9 @@ extension View {
         self.modifier(CustomFontLightLocalization(size: size))
     }
 }
+
+extension View {
+    func loadingOverlay(isLoading: Binding<Bool>, message: String = "Loading...") -> some View {
+        self.modifier(LoadingViewModifier(isLoading: isLoading, message: message))
+    }
+}

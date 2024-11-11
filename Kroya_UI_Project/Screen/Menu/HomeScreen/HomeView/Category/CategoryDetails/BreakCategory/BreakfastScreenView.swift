@@ -3,7 +3,7 @@ import SwiftUI
 struct BreakfastScreenView: View {
     @State private var selectedSegment = 0
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var addNewFoodVM: AddNewFoodVM
+
     
     var body: some View {
         VStack {
@@ -59,7 +59,7 @@ struct BreakfastScreenView: View {
             TabView(selection: $selectedSegment) {
                 FoodOnSaleView(iselected: selectedSegment)
                     .tag(0)
-                    .environmentObject(addNewFoodVM)
+        
                 
                 BreakfastRecipeTab(iselected: selectedSegment)
                     .tag(1)
@@ -84,19 +84,5 @@ struct BreakfastScreenView: View {
             }
         }
     }
-    
-    //    // Function to fetch data based on selected segment
-    //    private func fetchSegmentData() {
-    //        if selectedSegment == 0 {
-    //            // Fetch Food on Sale only if data is empty
-    //            if addNewFoodVM.allNewFoodAndRecipes.isEmpty || !addNewFoodVM.allNewFoodAndRecipes.contains(where: { $0.isForSale }) {
-    //                addNewFoodVM.fetchRecipeOrFood(forSaleOnly: true)
-    //            }
-    //        } else {
-    //            // Fetch Recipes only if data is empty or no recipes loaded
-    //            if addNewFoodVM.allNewFoodAndRecipes.isEmpty || !addNewFoodVM.allNewFoodAndRecipes.contains(where: { !$0.isForSale }) {
-    //                addNewFoodVM.fetchRecipeOrFood(forSaleOnly: false)
-    //            }
-    //        }
-    //    }
+
 }
