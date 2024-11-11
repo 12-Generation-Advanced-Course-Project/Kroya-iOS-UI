@@ -5,11 +5,11 @@ import Kingfisher
 
 struct RecipeViewCell: View {
     
-    var recipe: RecipeModel // Corrected to use RecipeModel
+    var recipe: FoodRecipeModel // Corrected to use RecipeModel
     @State private var isFavorite: Bool
     var urlImagePrefix: String = "https://kroya-api.up.railway.app/api/v1/fileView/"
     
-    init(recipe: RecipeModel, isFavorite: Bool = false) {
+    init(recipe: FoodRecipeModel, isFavorite: Bool = false) {
         self.recipe = recipe
         _isFavorite = State(initialValue: isFavorite)
     }
@@ -45,11 +45,11 @@ struct RecipeViewCell: View {
                             .foregroundColor(.yellow)
                         
                         Text(String(format: "%.1f", recipe.averageRating ?? 20))
-                            .customFontMedium(size: 16)
+                            .font(.customfont(.medium, fontSize: 12))
                             .foregroundColor(.black)
                         
                         Text("(\(recipe.totalRaters ?? 0)+)")
-                            .font(.system(size: 12))
+                            .font(.customfont(.medium, fontSize: 12))
                             .foregroundColor(.gray)
                     }
                     .padding(5)
@@ -81,7 +81,7 @@ struct RecipeViewCell: View {
             VStack(alignment: .leading, spacing: 5) {
                 // Dish Name
                 Text(recipe.name)
-                    .customFontMedium(size: 14)
+                    .font(.customfont(.medium, fontSize: 14))
                     .foregroundColor(.black)
                 
                 // Description for Recipe

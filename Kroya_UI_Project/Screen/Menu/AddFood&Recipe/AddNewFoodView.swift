@@ -22,10 +22,8 @@ struct AddFoodView: View {
     var levels: [String] = ["Hard", "Medium", "Easy"]
     var cuisines: [String] = ["Soup", "Salad", "Dessert", "Grill"]
     var categories: [String] = ["Breakfast", "Lunch", "Dinner", "Snack"]
-    
-    @ObservedObject var addressVM: AddressViewModel
     @ObservedObject var draftModelData: DraftModelData
-    @ObservedObject var addNewFoodVM: AddNewFoodVM
+
     
     var body: some View {
         
@@ -112,6 +110,7 @@ struct AddFoodView: View {
                             RoundedRectangle(cornerRadius: 16)
                                 .strokeBorder(Color(hex: "#D0DBEA"), style: StrokeStyle(lineWidth: 2, dash: [10, 5]))
                         )
+
                         HStack{
                             if showValidationMessage && draftModelData.selectedImages.isEmpty {
                                 validationMessage("Image cannot be empty")
@@ -221,9 +220,6 @@ struct AddFoodView: View {
                             HStack {
                                 
                                 ForEach(cuisineVM.cuisineShowModel , id: \.id) { data in
-                                    
-//                                    print("data fetch \(index.cuisineName)")
-//                                    let cuisine = cuisines[index]
                                     ChipCheckView(text: data.cuisineName , isSelected: draftModelData.selectedCuisine ==  data.cuisineName ) {
                                         draftModelData.selectedCuisine = draftModelData.selectedCuisine ==  data.cuisineName ? nil :  data.cuisineName
                                     }
@@ -240,7 +236,6 @@ struct AddFoodView: View {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
                                 ForEach(categoryvm.categoryShowModel) { data in
-//                                    let category = categories[index]
                                     ChipCheckView(text: data.categoryName , isSelected: draftModelData.selectedCategory == data.categoryName) {
                                         draftModelData.selectedCategory = draftModelData.selectedCategory == data.categoryName ? nil : data.categoryName
                                     }
@@ -303,14 +298,23 @@ struct AddFoodView: View {
                     )
                 }
                 .background(
-                    NavigationLink(destination: RecipeModalView(dismissToRoot: dismissToRoot, addressVM: addressVM, draftModelData: draftModelData, addNewFoodVM: addNewFoodVM), isActive: $navigateToNextView) {
+                    NavigationLink(destination: RecipeModalView(dismissToRoot: dismissToRoot, draftModelData: draftModelData), isActive: $navigateToNextView) {
                         EmptyView()
                     }
                 )
             }
             .fullScreenCover(isPresented: $isImagePickerPresented) {
-                ImagePicker(selectedImages: $draftModelData.selectedImages)
+                ImagePicker { selectedImages, filenames in
+                    // Append each filename to DraftModelData’s selectedImageNames
+                    draftModelData.selectedImageNames.append(contentsOf: filenames)
+                    // Append each UIImage to DraftModelData’s selectedImages
+                    draftModelData.selectedImages.append(contentsOf: selectedImages)
+                    
+                    print("Selected image filenames: \(filenames)")
+                    print("Selected images: \(selectedImages)")
+                }
             }
+
         }
     }
     

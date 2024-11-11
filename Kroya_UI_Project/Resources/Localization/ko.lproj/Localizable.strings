@@ -258,3 +258,7 @@
 "Invoice" = "송장";
 "Total" = "총계";
 "Checkout" = "결제";
+"No Food Items Available"  = "음식 항목이 없습니다";
+"Receipt" = "영수증";
+"Receive an order" = "주문 받기";
+"Confirm" = "확인";

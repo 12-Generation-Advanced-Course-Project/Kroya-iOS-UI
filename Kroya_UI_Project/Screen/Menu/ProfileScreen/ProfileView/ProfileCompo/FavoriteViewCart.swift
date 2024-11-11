@@ -4,7 +4,7 @@ struct FavoriteViewCart: View {
     
     @State private var selectedSegment = 0
     @Environment(\.dismiss) var dismiss
-    @StateObject private var addNewFoodVM = AddNewFoodVM()
+
     @State private var searchText = ""
     @StateObject private var recipeViewModel = RecipeViewModel()
     
@@ -109,11 +109,7 @@ struct FavoriteViewCart: View {
                 }
             }
         
-        .environmentObject(addNewFoodVM)
+    
     }
 }
 
-#Preview {
-    FavoriteViewCart()
-        .environmentObject(AddNewFoodVM())
-}

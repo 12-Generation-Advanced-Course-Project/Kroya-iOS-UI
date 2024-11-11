@@ -9,11 +9,10 @@ struct RecipeModalView: View {
     @State private var navigateToNextView: Bool = false
     @State private var showValidationError: Bool = false
     @State private var ingret = SaleIngredient(cookDate: "", amount: 0, price: 0, location: "", selectedCurrency: 0)
-    @ObservedObject var addressVM: AddressViewModel
     @ObservedObject var draftModelData: DraftModelData
     @Environment(\.modelContext) var modelContext
     @State var showDraftAlert: Bool = false
-    @ObservedObject var addNewFoodVM: AddNewFoodVM // Injected ViewModel
+
 
     var body: some View {
         VStack {
@@ -148,8 +147,7 @@ struct RecipeModalView: View {
                         ingret: $ingret,
                         totalRiels: calculateTotal(ingredients: draftModelData.ingredients).totalRiels,
                         totalUSD: calculateTotal(ingredients: draftModelData.ingredients).totalUSD,
-                        addressStore: addressVM,
-                        draftModelData: draftModelData, addNewFoodVM: addNewFoodVM
+                        draftModelData: draftModelData
                     )
                     .environment(\.modelContext, modelContext),
                     isActive: $navigateToNextView
@@ -179,8 +177,7 @@ struct RecipeModalView: View {
                         ingret: $ingret,
                         totalRiels: calculateTotal(ingredients: draftModelData.ingredients).totalRiels,
                         totalUSD: calculateTotal(ingredients: draftModelData.ingredients).totalUSD,
-                        addressStore: addressVM,
-                        draftModelData: draftModelData, addNewFoodVM: addNewFoodVM
+                        draftModelData: draftModelData
                     )
                 ) {
                     Text("Skip")

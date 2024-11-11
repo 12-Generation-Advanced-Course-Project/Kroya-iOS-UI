@@ -314,3 +314,4 @@ extension View {
         self.modifier(CustomFontLightLocalization(size: size))
     }
 }
+

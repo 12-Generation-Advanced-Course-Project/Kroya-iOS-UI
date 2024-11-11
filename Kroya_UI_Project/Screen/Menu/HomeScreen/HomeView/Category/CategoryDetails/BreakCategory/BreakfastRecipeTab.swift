@@ -53,14 +53,14 @@ struct BreakfastRecipeTab:View {
         .navigationBarBackButtonHidden(true)
         .onAppear {
             if recipeViewModel.RecipeFood.isEmpty {
-                recipeViewModel.getRecipeFood()
+                recipeViewModel.getAllRecipeFood()
             }
         }
     }
     
     // Destination setup for FoodDetailView with appropriate images
     @ViewBuilder
-    private func recipeDetailDestination(for recipe: RecipeModel) -> some View { // Use RecipeModel as parameter type
+    private func recipeDetailDestination(for recipe: FoodRecipeModel) -> some View { // Use RecipeModel as parameter type
         FoodDetailView(
             theMainImage: "Hotpot",
             subImage1: "Chinese Hotpot",

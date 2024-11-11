@@ -5,10 +5,10 @@ class DraftModelData: ObservableObject {
     @ObservedObject var userStore: UserStore
     
     init(userStore: UserStore) {
-           self.userStore = userStore
-           self.ingredients = [RecipeIngredient(id: UUID().hashValue, name: "", quantity: 0, price: 0, selectedCurrency: 0)]
-           self.cookingSteps = [CookingStep(id: UUID().hashValue, description: "")]
-       }
+        self.userStore = userStore
+        self.ingredients = [RecipeIngredient(id: UUID().hashValue, name: "", quantity: 0, price: 0, selectedCurrency: 0)]
+        self.cookingSteps = [CookingStep(id: UUID().hashValue, description: "")]
+    }
     
     //MARK: Fields for AddNewFood
     @Published var foodName: String = ""
@@ -31,13 +31,13 @@ class DraftModelData: ObservableObject {
     
     //MARK: Images
     @Published var selectedImages: [UIImage] = []
-    
+    @Published var selectedImageNames: [String] = []
     // MARK: - Save Draft
     func saveDraft(in context: ModelContext) {
         guard let email = Auth.shared.getCredentials().email else {
-                   print("No user email found. Cannot save draft.")
-                   return
-               }
+            print("No user email found. Cannot save draft.")
+            return
+        }
         // Encode selectedImages as a single Data object with image names
         var imageDetails = [(data: Data, name: String)]()
         selectedImages.forEach { image in
@@ -95,11 +95,11 @@ class DraftModelData: ObservableObject {
                     ingredients: ingredients,
                     cookingSteps: cookingSteps
                 )
-
+                
                 context.insert(draft)
                 print("New draft saved to SwiftData!")
             }
-
+            
             try context.save()
             // Log details to verify data
             print("Draft saved to SwiftData with details:")
@@ -114,18 +114,18 @@ class DraftModelData: ObservableObject {
             print("location: \(location)")
             print("isForSale: \(isForSale)")
             print("cookDate: \(cookDate)")
-
+            
         } catch {
             print("Failed to save draft: \(error.localizedDescription)")
         }
     }
-
+    
     // MARK: - Load Draft
     func loadDraft(from context: ModelContext) {
         guard let email = Auth.shared.getCredentials().email else {
-                   print("No user email found. Cannot load draft.")
-                   return
-               }
+            print("No user email found. Cannot load draft.")
+            return
+        }
         let fetchRequest = FetchDescriptor<Draft>()
         do {
             let drafts = try context.fetch(fetchRequest)
@@ -164,7 +164,7 @@ class DraftModelData: ObservableObject {
             print("No user email found. Cannot clear draft.")
             return
         }
-
+        
         let fetchRequest = FetchDescriptor<Draft>()
         do {
             let drafts = try context.fetch(fetchRequest)
@@ -206,4 +206,52 @@ class DraftModelData: ObservableObject {
             return "jpeg"
         }
     }
+    
+    //MARK: Convert Draft to Food-Recipe-Request from DraftModelData
+    func toFoodRecipeRequest() -> FoodRecipeRequest? {
+        let photoArray = selectedImageNames.map { filename in
+            FoodRecipeRequest.Photo(photo: filename)
+        }
+
+        let cuisineId = cuisine(rawValue: selectedCuisine ?? "")?.id ?? 0
+        let categoryId = category(rawValue: selectedCategory ?? "")?.id ?? 0
+
+        return FoodRecipeRequest(
+            photo: photoArray,
+            name: foodName,
+            description: descriptionText,
+            durationInMinutes: Int(duration),
+            level: selectedLevel ?? "",
+            cuisineId: cuisineId,
+            categoryId: categoryId,
+            ingredients: ingredients.map {
+                FoodRecipeRequest.Ingredient(
+                    name: $0.name,
+                    quantity: $0.quantity,
+                    price: $0.price
+                )
+            },
+            cookingSteps: cookingSteps.map {
+                FoodRecipeRequest.CookingStep(
+                    description: $0.description
+                )
+            }
+        )
+    }
+    
+    // MARK: Convert Draft to Food-Sell-Request from DraftModelData
+    func toFoodSellRequest() -> FoodSellRequest? {
+        // Format cookDate to ISO8601 string
+        let dateFormatter = ISO8601DateFormatter()
+        let dateCookingString = dateFormatter.string(from: cookDate)
+        
+        return FoodSellRequest(
+            dateCooking: dateCookingString,
+            amount: Int(amount),
+            price: Int(price),
+            location: location
+        )
+    }
+
+
 }

@@ -36,23 +36,11 @@ struct AddNewFoodModel: Identifiable, Codable {
 
 // MARK: - Photo
 struct Photo: Codable {
-
     let photo: String
 }
-// MARK: - Recipe Ingredient (For RecipeModal)
-struct RecipeIngredient: Identifiable, Codable {
-    var id: Int
-    var name: String
-    var quantity: Double
-    var price: Double
-    var selectedCurrency: Int = 0
-}
 
-// MARK: - Cooking Step (For RecipeModal)
-struct CookingStep: Identifiable, Codable {
-    var id: Int
-    var description: String
-}
+
+
 
 // MARK: - Sale Ingredient (For SaleModalView)
 struct SaleIngredient: Identifiable, Codable {
@@ -64,34 +52,3 @@ struct SaleIngredient: Identifiable, Codable {
     var selectedCurrency: Int
 }
 
-enum cuisine: String {
-    case Soup = "Soup"
-    case Salad = "Salad"
-    case Dessert = "Dessert"
-    case Grill = "Grill"
-    
-    var id: Int {
-        switch self {
-        case .Soup: return 1
-        case .Salad: return 2
-        case .Dessert: return 3
-        case .Grill: return 4
-        }
-    }
-}
-
-enum category: String {
-    case Breakfast = "Breakfast"
-    case Lunch = "Lunch"
-    case Dinner = "Dinner"
-    case Snack = "Snack"
-    
-    var id: Int {
-        switch self {
-        case .Breakfast: return 1
-        case .Lunch: return 2
-        case .Dinner: return 3
-        case .Snack: return 4
-        }
-    }
-}

@@ -7,11 +7,9 @@
 
 import GoogleMaps
 // new import for FCM Store
-import FirebaseCore
+
 import FirebaseMessaging
 import UserNotifications
-import FirebaseAuth
-import FirebaseAppCheck
 import Firebase
 import SwiftUI
 ///

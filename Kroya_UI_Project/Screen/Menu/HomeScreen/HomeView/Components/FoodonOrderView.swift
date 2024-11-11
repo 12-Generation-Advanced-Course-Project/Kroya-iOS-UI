@@ -7,23 +7,32 @@
 import SwiftUI
 
 struct FoodonOrderView: View {
-    
     @Environment(\.dismiss) var dismiss
-    
+    @StateObject private var foodViewModel = FoodSellViewModel()
     let imageofOrder: [String] = ["SoupPic", "SaladPic", "GrillPic", "DessertPic 1"]
     let titleofOrder: [String] = ["Soup", "Salad", "Grill", "Dessert"]
-    @EnvironmentObject var addNewFoodVM: AddNewFoodVM
+    
     @State private var selectedOrderIndex: Int? = nil
     @State private var searchText = ""
+    @State private var doubleSelectedOrderIndex: Int? = nil
+    @State var isChooseCuisine = false
     
     var body: some View {
-        NavigationView{
+        NavigationView {
             VStack {
-                // Loop through images and titles
+                // Cuisine Category Buttons
                 HStack(spacing: 40) {
                     ForEach(0..<imageofOrder.count, id: \.self) { index in
                         Button(action: {
-                            selectedOrderIndex = index // Update the selected index
+                            if selectedOrderIndex == index {
+                                foodViewModel.getAllFoodSell()
+                                isChooseCuisine = false
+                            } else {
+                                selectedOrderIndex = index
+                                doubleSelectedOrderIndex = index
+                                foodViewModel.getFoodByCuisine(cuisineId: index + 1)
+                                isChooseCuisine = true
+                            }
                         }) {
                             VStack {
                                 Image(imageofOrder[index])
@@ -33,33 +42,52 @@ struct FoodonOrderView: View {
                                 
                                 Text(titleofOrder[index])
                                     .font(.customfont(.medium, fontSize: 16))
-                                    .foregroundColor(selectedOrderIndex == index ? Color.yellow : Color.gray)
+                                    .foregroundColor(selectedOrderIndex == index && isChooseCuisine ? Color.yellow : Color.gray)
                             }
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
-                .padding()
-                Spacer()
-                    .frame(height: 20)
-                Text(LocalizedStringKey("All"))
+                
+                Spacer().frame(height: 20)
+                
+                Text("All")
                     .font(.customfont(.bold, fontSize: 16))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundStyle(.black.opacity(0.8))
                     .padding(.horizontal)
                 
-                FoodOnSaleView()
+                // Loading Indicator or Content
+                if foodViewModel.isLoading {
+                    ZStack {
+                        Color.white
+                            .edgesIgnoringSafeArea(.all)
+                        
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
+                            .scaleEffect(2)
+                            .offset(y: -50)
+                    }
+                } else {
+                    ScrollView {
+                        LazyVStack {
+                            ForEach(isChooseCuisine ? foodViewModel.FoodSellByCategory : foodViewModel.FoodOnSale) { food in
+                                FoodOnSaleViewCell(foodSale: food)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.horizontal, 20)
+                            }
+                        }
+                    }
+                }
                 
                 Spacer()
             }
-            .navigationTitle(LocalizedStringKey("Food order"))
+            .navigationTitle("Food Order")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        dismiss()
-                    }) {
+                    Button(action: { dismiss() }) {
                         Image(systemName: "arrow.left")
                             .resizable()
                             .scaledToFit()
@@ -68,14 +96,18 @@ struct FoodonOrderView: View {
                     }
                 }
             }
-
-            
         }
         .searchable(text: $searchText, prompt: LocalizedStringKey("Search Item"))
+        .onChange(of: searchText) { newValue in
+            if !newValue.isEmpty {
+                foodViewModel.getSearchFoodFoodByName(searchText: newValue)
+            } else {
+                foodViewModel.getAllFoodSell()
+            }
+        }
         .navigationBarBackButtonHidden(true)
+        .onAppear {
+            foodViewModel.getAllFoodSell()
+        }
     }
-}
-
-#Preview {
-    FoodonOrderView()
 }

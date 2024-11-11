@@ -17,8 +17,6 @@ struct UserBasicInfoView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var userStore: UserStore
     @EnvironmentObject var addressVM: AddressViewModel
-    @EnvironmentObject var addNewFoodVM: AddNewFoodVM
-    @EnvironmentObject var RecipeFood: RecipeViewModel
     @ObservedObject var authVM = AuthViewModel(userStore: UserStore())
     @Binding var lang: String
     
@@ -162,8 +160,6 @@ struct UserBasicInfoView: View {
             // NavigationLink to MainScreen for save action
             NavigationLink(destination: MainScreen(userStore: userStore, lang: $lang)
                 .environmentObject(userStore)
-                .environmentObject(addNewFoodVM)
-                .environmentObject(RecipeFood)
                 .environmentObject(addressVM)
                            , isActive: $authVM.isUserSave, label: {
                 EmptyView()
@@ -181,7 +177,7 @@ struct UserBasicInfoView: View {
         .navigationBarHidden(true)
         .navigationDestination(isPresented: $isSkip) {
             MainScreen(userStore: userStore, lang: $lang)
-                .environmentObject(addNewFoodVM)
+             
                 .environmentObject(userStore)
                 .navigationBarHidden(true)
         }

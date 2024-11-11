@@ -6,13 +6,13 @@
 //
 
 import Alamofire
-import Combine
 import Foundation
+
+import UIKit
 
 class ImageUploadViewModel: ObservableObject {
     @Published var data: ImageResponse?
-
-    // Upload image function
+    
     func uploadFile(image: Data, completion: @escaping (String) -> Void) {
         let baseUrl = Constants.fileupload + "file"
         let headers: HTTPHeaders = [
@@ -27,19 +27,40 @@ class ImageUploadViewModel: ObservableObject {
             debugPrint(response)
             switch response.result {
             case .success(let res):
-                self.data = res
                 if let imageUrl = res.payload.first {
                     completion(imageUrl)
-                    print("This is the image URL: \(imageUrl)")
                 } else {
-                    print("Image URL is nil")
                     completion("")
                 }
-            case .failure(let error):
-                print("Image upload failed: \(error)")
+            case .failure:
                 completion("")
             }
         }
     }
-
+    
+    func uploadImages(_ images: [UIImage], completion: @escaping (Result<[String], Error>) -> Void) {
+        var uploadedImageNames: [String] = []
+        let dispatchGroup = DispatchGroup()
+        
+        for image in images {
+            if let imageData = image.jpegData(compressionQuality: 0.8) {
+                dispatchGroup.enter()
+                
+                uploadFile(image: imageData) { imageUrl in
+                    if !imageUrl.isEmpty {
+                        uploadedImageNames.append(imageUrl)
+                    }
+                    dispatchGroup.leave()
+                }
+            }
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            if uploadedImageNames.count == images.count {
+                completion(.success(uploadedImageNames))
+            } else {
+                completion(.failure(NSError(domain: "Upload failed for some images", code: 0, userInfo: nil)))
+            }
+        }
+    }
 }

@@ -2,8 +2,7 @@ import SwiftUI
 
 // MARK: - RecipeView
 struct RecipeView: View {
-    
-    @StateObject private var recipeViewModel = RecipeViewModel() // Correctly initialize the view model
+    @StateObject private var recipeViewModel = RecipeViewModel()
     var iselected: Int?
     var body: some View {
         VStack {
@@ -25,20 +24,9 @@ struct RecipeView: View {
                     }
                 }
                 .overlay(
-                    // Show a loading indicator if data is being fetched
                     Group {
                         if recipeViewModel.isLoading {
-                            ZStack {
-                                Color.white
-                                    .edgesIgnoringSafeArea(.all)
-                                
-                                ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
-                                    .scaleEffect(2)
-                                    .offset(y:-50)
-                            }
-                                .padding()
-                                
+                            LoadingOverlay()
                         }
                     }
                 )
@@ -48,14 +36,13 @@ struct RecipeView: View {
         .navigationBarBackButtonHidden(true)
         .onAppear {
             if recipeViewModel.RecipeFood.isEmpty {
-                recipeViewModel.getRecipeFood()
+                recipeViewModel.getAllRecipeFood()
             }
         }
     }
-    
-    // Destination setup for FoodDetailView with appropriate images
+
     @ViewBuilder
-    private func recipeDetailDestination(for recipe: RecipeModel) -> some View { // Use RecipeModel as parameter type
+    private func recipeDetailDestination(for recipe: FoodRecipeModel) -> some View {
         FoodDetailView(
             theMainImage: "Hotpot",
             subImage1: "Chinese Hotpot",

@@ -14,10 +14,7 @@ class AddressViewModel: ObservableObject {
     @Published var addresses: [Address] = []
    
     @Published var selectedAddress: Address?
-    @ObservedObject var userStore: UserStore
-    init(userStore: UserStore) {
-        self.userStore = userStore
-    }
+
 
     // Save address through the service
     func saveAddress(addressDetail: String, specificLocation: String, tag: String, latitude: Double, longitude: Double) {

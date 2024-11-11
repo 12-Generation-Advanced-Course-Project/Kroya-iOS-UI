@@ -17,7 +17,7 @@ enum FoodCategory: String {
 
 struct HomeView: View {
     
-    @EnvironmentObject var addNewFoodVM: AddNewFoodVM
+
     let notification = [1, 2, 3, 4, 5]
     @StateObject private var recipeViewModel = RecipeViewModel()
     @StateObject private var foodSellViemModel = FoodSellViewModel()
@@ -117,22 +117,22 @@ struct HomeView: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16) { // Added spacing between food cards
                             // Food on Sale Cards (Limited to 2)
-                            ForEach(addNewFoodVM.allNewFoodAndRecipes) { foodSale in
-                                NavigationLink(destination:
-                                                FoodDetailView(
-                                                    theMainImage:"Hotpot",
-                                                    subImage1:  "Chinese Hotpot",
-                                                    subImage2:  "Chinese",
-                                                    subImage3:  "Fly-By-Jing",
-                                                    subImage4:  "Mixue",
-                                                    showOrderButton: true,
-                                                    showPrice: foodSale.isForSale
-                                                )
-                                ) {
-//                                    FoodOnSaleViewCell(foodSale: foodSale)
-//                                        .frame(width: 360)
-                                }
-                            }
+//                            ForEach(addNewFoodVM.allNewFoodAndRecipes) { foodSale in
+//                                NavigationLink(destination:
+//                                                FoodDetailView(
+//                                                    theMainImage:"Hotpot",
+//                                                    subImage1:  "Chinese Hotpot",
+//                                                    subImage2:  "Chinese",
+//                                                    subImage3:  "Fly-By-Jing",
+//                                                    subImage4:  "Mixue",
+//                                                    showOrderButton: true,
+//                                                    showPrice: foodSale.isForSale
+//                                                )
+//                                ) {
+////                                    FoodOnSaleViewCell(foodSale: foodSale)
+////                                        .frame(width: 360)
+//                                }
+//                            }
                             
                             // Recipe/Food Cards from AddNewFoodVM (Limited to 2)
                             ForEach(recipeViewModel.RecipeFood) { recipe in
@@ -206,7 +206,7 @@ struct HomeView: View {
             }
             .onAppear {
                 categoryvm.fetchAllCategory()
-                foodSellViemModel.getAllFoodSell()
+//                foodSellViemModel.getAllFoodSell()
             }
         }
     }
@@ -226,7 +226,3 @@ struct HomeView: View {
     }
 }
 
-#Preview {
-    HomeView()
-        .environmentObject(AddNewFoodVM())
-}

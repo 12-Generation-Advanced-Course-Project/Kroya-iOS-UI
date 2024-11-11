@@ -6,19 +6,15 @@ struct MainScreen: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var isModalPresented: Bool = false
     @EnvironmentObject var userStore: UserStore
-    @EnvironmentObject var addNewFoodVM: AddNewFoodVM
-    @EnvironmentObject var RecipeFood: RecipeViewModel
     @StateObject private var authVM: AuthViewModel
     @StateObject private var addressViewModel: AddressViewModel
-    @StateObject private var profileVM: ProfileViewModel
     @StateObject private var draftModelData: DraftModelData
     @Environment(\.modelContext) var modelContext
     @Binding var lang: String
     
     init(userStore: UserStore, lang: Binding<String>) {
         _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
-        _addressViewModel = StateObject(wrappedValue: AddressViewModel(userStore: userStore))
-        _profileVM = StateObject(wrappedValue: ProfileViewModel(userStore: userStore))
+        _addressViewModel = StateObject(wrappedValue: AddressViewModel())
         _draftModelData = StateObject(wrappedValue: DraftModelData(userStore: userStore))
         self._lang = lang
     }
@@ -41,7 +37,7 @@ struct MainScreen: View {
                                 }
                             }
                             .tag(1)
-                        PostViewScreen(Profile: profileVM)
+                        PostViewScreen()
                             .tabItem {
                                 VStack {
                                     Image(selectedTab == 2 ? "PostVectorYellow" : "PostVector")
@@ -68,9 +64,8 @@ struct MainScreen: View {
                                 }
                             }
                             .tag(3)
-
-                        ProfileView(authVM: authVM, Profile: profileVM, lang: $lang)
-                            .environmentObject(addressViewModel)
+                        
+                        ProfileView(authVM: authVM, lang: $lang)
                             .environmentObject(userStore)
                             .tabItem {
                                 VStack {
@@ -87,7 +82,7 @@ struct MainScreen: View {
                     }
                     .padding(.top, 30)
                     .accentColor(PrimaryColor.normal)
-
+                    
                     GeometryReader { geometry in
                         Divider().frame(height: 0.1).background(.black.opacity(0.1))
                         HStack {
@@ -105,7 +100,7 @@ struct MainScreen: View {
                 }
                 .frame(width: .screenWidth, height: .screenHeight)
                 .padding(.bottom, .screenHeight * 0.072)
-
+                
                 GeometryReader { geometry in
                     VStack {
                         Spacer()
@@ -132,10 +127,10 @@ struct MainScreen: View {
             .frame(width: .screenWidth, height: .screenHeight)
         }
         .onAppear {
-            profileVM.fetchUserProfile()
+            
             addressViewModel.fetchAllAddresses()
             draftModelData.loadDraft(from: modelContext)
-           
+            
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
@@ -143,8 +138,7 @@ struct MainScreen: View {
             AddFoodView(
                 rootIsActive1: $isActive,
                 dismissToRoot: { isModalPresented = false },
-                addressVM: addressViewModel,
-                draftModelData: draftModelData, addNewFoodVM: addNewFoodVM
+                draftModelData: draftModelData
             )
             .environment(\.modelContext, modelContext)
         }

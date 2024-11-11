@@ -12,14 +12,16 @@ struct SaleModalView: View {
     let totalUSD: Double
     let currencies = ["៛", "$"]
     @State private var addressSelect: String = ""
-    @ObservedObject var addressStore: AddressViewModel
+    @StateObject private var addressStore = AddressViewModel()
     @ObservedObject var draftModelData: DraftModelData
     @Environment(\.modelContext) var modelContext
     @State var showDraftAlert: Bool = false
     @State private var formattedDate: String = ""
     private let conversionRate: Double = 4100.0
     @State private var priceText: String = ""
-    @ObservedObject var addNewFoodVM: AddNewFoodVM
+    @StateObject private var recipeVM = RecipeViewModel()
+    @StateObject private var saleVM = FoodSellViewModel()
+    @StateObject private var imageVM = ImageUploadViewModel()
     var body: some View {
         VStack {
             ScrollView(.vertical, showsIndicators: false) {
@@ -27,7 +29,7 @@ struct SaleModalView: View {
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Is this food available for sale?")
                             .customFontBoldLocalize(size: 16)
-                             
+                        
                         VStack(spacing: 15) {
                             Button(action: {
                                 draftModelData.isForSale = true
@@ -261,27 +263,17 @@ struct SaleModalView: View {
                     )
                     .foregroundColor(.black)
             }
-            
+            //MARK: Buttom Post-FoodRecipe and FoodSell
             Button(action: {
-                // If the item is marked as for sale, validate sale-specific fields
-                if draftModelData.isForSale {
-                    validateFields()
-                    if !showError {
-                        // All required sale fields are valid, proceed with saving and clearing
-                        draftModelData.saveDraft(in: modelContext)
-                        addNewFoodVM.addNewRecipeFood(from: draftModelData)
-                        print("Current recipes after adding new one:", addNewFoodVM.allNewFoodAndRecipes)
-                        draftModelData.clearDraft(from: modelContext)
-                        
-                        dismissToRoot()
-                    }
-                } else {
-                    // If not for sale, skip sale-specific validation and proceed
-                    draftModelData.saveDraft(in: modelContext)
-                    addNewFoodVM.addNewRecipeFood(from: draftModelData)
-                    draftModelData.clearDraft(from: modelContext)
-                    dismissToRoot()
-                }
+//                if draftModelData.isForSale {
+//                    validateFields()
+//                    if !showError {
+//                        uploadImagesAndPostRecipe()
+//                    }
+//                } else {
+//                    // Not for sale, just upload images and post the recipe
+//                    uploadImagesAndPostRecipe()
+//                }
             }) {
                 Text("Post")
                     .customFontSemiBoldLocalize(size: 16)
@@ -294,7 +286,7 @@ struct SaleModalView: View {
                     )
             }
             .disabled(draftModelData.isForSale && showError)
-            .navigationTitle("Sale")
+            
             
         }
         .padding()
@@ -336,6 +328,73 @@ struct SaleModalView: View {
             }
         }
     }
+    
+    //MARK: Logic for Add Food as Recipe
+    private func uploadImagesAndPostRecipe() {
+        imageVM.uploadImages(draftModelData.selectedImages) { result in
+            switch result {
+            case .success(let uploadedImageNames):
+                draftModelData.selectedImageNames = uploadedImageNames
+                postRecipe()
+            case .failure(let error):
+                print("Image upload failed: \(error.localizedDescription)")
+                recipeVM.showError = true
+                recipeVM.errorMessage = "Failed to upload images."
+            }
+        }
+    }
+    
+    // MARK: Post Recipe
+    private func postRecipe() {
+        if let foodRecipeRequest = draftModelData.toFoodRecipeRequest() {
+            // Directly call FoodRecipeService
+            FoodRecipeService.shared.saveFoodRecipe(foodRecipeRequest) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let response):
+                        if let foodRecipeId = response.payload?.first?.id {
+                            // If item is for sale, proceed to post food sell
+                            if draftModelData.isForSale {
+                                postFoodSell(foodRecipeId: foodRecipeId)
+                            } else {
+                                // If not for sale, clear draft and navigate back
+                                draftModelData.clearDraft(from: modelContext)
+                                dismissToRoot()
+                            }
+                        }
+                    case .failure(let error):
+                        print("Failed to create food recipe: \(error.localizedDescription)")
+                        recipeVM.showError = true
+                        recipeVM.errorMessage = "Failed to post food recipe."
+                    }
+                }
+            }
+        }
+    }
+
+    // MARK: Post Food Sell
+    private func postFoodSell(foodRecipeId: Int) {
+        if let foodSellRequest = draftModelData.toFoodSellRequest() {
+            let currencyType = draftModelData.price > 1000 ? "RIEL" : "DOLLAR"
+            
+            // Directly call FoodSellService
+            FoodSellService.shared.postFoodSell(foodSellRequest, foodRecipeId: foodRecipeId, currencyType: currencyType) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        draftModelData.clearDraft(from: modelContext)
+                        dismissToRoot()
+                    case .failure(let error):
+                        print("Failed to create food sell: \(error.localizedDescription)")
+                        recipeVM.showError = true
+                        recipeVM.errorMessage = "Failed to post food for sale."
+                    }
+                }
+            }
+        }
+    }
+
+    
     
     private func handleCancel() {
         if hasDraftData {

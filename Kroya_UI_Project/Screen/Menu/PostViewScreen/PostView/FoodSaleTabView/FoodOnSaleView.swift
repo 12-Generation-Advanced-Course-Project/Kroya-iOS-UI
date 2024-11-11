@@ -1,10 +1,8 @@
 import SwiftUI
 
+// MARK: - FoodOnSaleView
 struct FoodOnSaleView: View {
-    
-    // Properties
     var iselected: Int?
-    @EnvironmentObject var addNewFoodVM: AddNewFoodVM
     @StateObject private var foodsellVm = FoodSellViewModel()
     
     var body: some View {
@@ -15,52 +13,46 @@ struct FoodOnSaleView: View {
                     .foregroundColor(.gray)
                     .padding()
             } else {
-                List {
-                    ForEach(foodsellVm.FoodOnSale) { foodSale in
-                        ZStack {
-                            FoodOnSaleViewCell(foodSale: foodSale)
-                            NavigationLink(destination: FoodDetailView(
-                                theMainImage: "ahmok",
-                                subImage1: "ahmok1",
-                                subImage2: "ahmok2",
-                                subImage3: "ahmok3",
-                                subImage4: "ahmok4",
-                                showOrderButton: foodSale.isOrderable,
-                                showPrice: foodSale.isOrderable
-                            )) {
-                                EmptyView()
+                ScrollView(showsIndicators: false) {
+                    LazyVStack(spacing: 8) {
+                        ForEach(foodsellVm.FoodOnSale) { foodSale in
+                            NavigationLink(destination: foodDetailDestination(for: foodSale)) {
+                                FoodOnSaleViewCell(foodSale: foodSale)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.horizontal, 20)
                             }
-                            .opacity(0)
                         }
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
-                        .padding(.vertical, -6)
                     }
-                    .overlay(
-                        // Show a loading indicator if data is being fetched
-                        Group {
-                            if foodsellVm.isLoading {
-                                ZStack {
-                                    Color.white
-                                        .edgesIgnoringSafeArea(.all)
-                                    
-                                    ProgressView()
-                                        .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
-                                        .scaleEffect(2)
-                                        .offset(y: -50)
-                                }
-                                .padding()
-                            }
-                        }
-                    )
                 }
-                .listStyle(.plain)
-                .scrollIndicators(.hidden)
-                .buttonStyle(PlainButtonStyle())
+                .overlay(
+                    Group {
+                        if foodsellVm.isLoading {
+                            LoadingOverlay()
+                        }
+                    }
+                )
             }
         }
+        .padding(.top, 8)
+        .navigationBarBackButtonHidden(true)
         .onAppear {
-            foodsellVm.getAllFoodSell()
+            if foodsellVm.FoodOnSale.isEmpty {
+                foodsellVm.getAllFoodSell()
+            }
         }
+    }
+    
+    // MARK: - Food Detail Destination
+    @ViewBuilder
+    private func foodDetailDestination(for foodSale: FoodSellModel) -> some View {
+        FoodDetailView(
+            theMainImage: "ahmok",
+            subImage1: "ahmok1",
+            subImage2: "ahmok2",
+            subImage3: "ahmok3",
+            subImage4: "ahmok4",
+            showOrderButton: foodSale.isOrderable,
+            showPrice: foodSale.isOrderable
+        )
     }
 }

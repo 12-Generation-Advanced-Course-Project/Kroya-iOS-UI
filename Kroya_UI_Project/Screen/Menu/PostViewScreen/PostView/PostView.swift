@@ -13,7 +13,7 @@ struct PostViewScreen: View {
     @State private var selectedSegment = 0
     var urlImagePost: String = "https://kroya-api.up.railway.app/api/v1/fileView/"
     @Environment(\.dismiss) var dismiss
-    @ObservedObject  var Profile : ProfileViewModel
+    @StateObject private  var Profile = ProfileViewModel()
     var tabTitles = ["All", "Food on Sale", "Recipes"]
     
     var body: some View {
@@ -126,6 +126,12 @@ struct PostViewScreen: View {
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
+        }
+        .onAppear{
+            Profile.fetchUserProfile()
+        }
+        .onDisappear{
+            Profile.fetchUserProfile()
         }
     }
     
