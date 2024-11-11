@@ -9,8 +9,11 @@ import SwiftUI
 import Foundation
 
 class RecipeViewModel: ObservableObject {
+    
     @Published var RecipeFood: [FoodRecipeModel] = []
     @Published var RecipeByCategory: [FoodRecipeModel] = []
+    @Published var RecipeCuisine: [CuisinesModel] = []
+    
     @Published var isLoading: Bool = false
     @Published var successMessage: String = ""
     @Published var showError: Bool = false
@@ -117,4 +120,28 @@ class RecipeViewModel: ObservableObject {
             }
         }
     }
+    
+    
+    
+    // MARK: Get All Cuisines
+       func getAllCuisines() {
+           self.isLoading = true
+           FoodRecipeService.shared.getAllCuisines { [weak self] result in
+               DispatchQueue.main.async {
+                   self?.isLoading = false
+                   switch result {
+                   case .success(let response):
+                       if response.statusCode == "200", let payload = response.payload {
+                           self?.RecipeCuisine = payload // Assign fetched cuisines
+                       } else {
+                           self?.showError = true
+                           self?.errorMessage = response.message
+                       }
+                   case .failure(let error):
+                       self?.showError = true
+                       self?.errorMessage = "Failed to load cuisines: \(error.localizedDescription)"
+                   }
+               }
+           }
+       }
 }

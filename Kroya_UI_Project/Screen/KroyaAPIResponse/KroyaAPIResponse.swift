@@ -25,6 +25,3 @@ typealias userFoodResponse = KroyaAPIResponse<UserFoodModel>
 //MARK: Food-Sell get all
 typealias foodSellResponse = KroyaAPIResponse<FoodSellModel>
 typealias SaveFoodSellResponse = KroyaAPIResponse<FoodSellResponse>
-
-
-
