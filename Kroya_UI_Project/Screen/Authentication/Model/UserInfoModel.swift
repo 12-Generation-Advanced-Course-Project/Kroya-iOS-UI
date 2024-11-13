@@ -54,7 +54,11 @@ struct ValidationOTPCode: Codable {
 struct userModel: Codable {
     var id: Int
     var fullName: String
-    var profileImage: String
+    var profileImage: String?
+    var email: String?
+}
+struct DeviceTokenModel: Codable {
+    var deviceToken: String
 }
 
 struct SellerInformation: Identifiable, Codable {

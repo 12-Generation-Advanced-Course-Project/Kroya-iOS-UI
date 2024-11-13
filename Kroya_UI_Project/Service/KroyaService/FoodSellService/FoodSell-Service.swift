@@ -37,7 +37,7 @@ class FoodSellService {
                 } else {
                     print("No response data available")
                 }
-            
+                
                 switch response.result{
                 case .success(let apiResponse):
                     if let statusCode = Int(apiResponse.statusCode), statusCode == 200 {
@@ -130,6 +130,8 @@ class FoodSellService {
         AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
             .validate()
             .responseDecodable(of: SaveFoodSellResponse.self) { response in
+                debugPrint(response)
+                
                 if let data = response.data {
                     do {
                         let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
@@ -159,6 +161,7 @@ class FoodSellService {
                 }
             }
     }
+    
     
     
     //MARK: Get Search Food Sell By Name

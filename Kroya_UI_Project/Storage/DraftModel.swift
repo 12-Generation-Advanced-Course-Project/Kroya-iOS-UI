@@ -207,17 +207,19 @@ class DraftModelData: ObservableObject {
         }
     }
     
-    //MARK: Convert Draft to Food-Recipe-Request from DraftModelData
+    // MARK: Convert Draft to Food-Recipe-Request from DraftModelData
     func toFoodRecipeRequest() -> FoodRecipeRequest? {
-        let photoArray = selectedImageNames.map { filename in
-            FoodRecipeRequest.Photo(photo: filename)
-        }
-
         let cuisineId = cuisine(rawValue: selectedCuisine ?? "")?.id ?? 0
         let categoryId = category(rawValue: selectedCategory ?? "")?.id ?? 0
+        // Extract only file names from URLs
+        let photoArray = selectedImageNames.compactMap { urlString -> String? in
+            return URL(string: urlString)?.lastPathComponent
+        }
 
         return FoodRecipeRequest(
-            photo: photoArray,
+            photo: photoArray.map { filename in
+                FoodRecipeRequest.Photo(photo: filename)
+            },
             name: foodName,
             description: descriptionText,
             durationInMinutes: Int(duration),
@@ -238,6 +240,8 @@ class DraftModelData: ObservableObject {
             }
         )
     }
+
+
     
     // MARK: Convert Draft to Food-Sell-Request from DraftModelData
     func toFoodSellRequest() -> FoodSellRequest? {

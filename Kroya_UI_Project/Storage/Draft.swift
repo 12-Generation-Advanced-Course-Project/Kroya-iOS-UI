@@ -23,7 +23,7 @@ class Draft {
     var location: String
     var isForSale: Bool
     var cookDate: Date
-    var selectedImagesData: Data? // Use Data instead of Array<Data>
+    var selectedImagesData: Data?
     var ingredients: [RecipeIngredient]
     var cookingSteps: [CookingStep]
     init(id: UUID = UUID(), email: String ,foodName: String = "", descriptionText: String = "", selectedLevel: String? = nil,

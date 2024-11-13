@@ -12,8 +12,8 @@ struct RecipeModalView: View {
     @ObservedObject var draftModelData: DraftModelData
     @Environment(\.modelContext) var modelContext
     @State var showDraftAlert: Bool = false
-    
-    
+
+
     var body: some View {
         VStack {
             ScrollView(.vertical, showsIndicators: false) {
@@ -172,13 +172,14 @@ struct RecipeModalView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 NavigationLink(
-                    destination: SaleModalView(
+                    destination:  SaleModalView(
                         dismissToRoot: dismissToRoot,
                         ingret: $ingret,
                         totalRiels: calculateTotal(ingredients: draftModelData.ingredients).totalRiels,
                         totalUSD: calculateTotal(ingredients: draftModelData.ingredients).totalUSD,
                         draftModelData: draftModelData
                     )
+                    .environment(\.modelContext, modelContext)
                 ) {
                     Text("Skip")
                         .foregroundColor(.black.opacity(0.6))
@@ -200,78 +201,77 @@ struct RecipeModalView: View {
                 }
             )
         }
-    }
-    
-    // MARK: - Helper Methods
-    private func handleCancel() {
-        if hasDraftData {
-            showDraftAlert = true
-        } else {
-            dismiss()
-        }
-    }
-    private var hasDraftData: Bool {
-        return !draftModelData.foodName.isEmpty ||
-        !draftModelData.descriptionText.isEmpty ||
-        draftModelData.selectedImages.isEmpty == false ||
-        draftModelData.selectedLevel != nil ||
-        draftModelData.selectedCuisine != nil ||
-        draftModelData.selectedCategory != nil ||
-        draftModelData.duration > 0 ||
-        draftModelData.amount > 0 ||
-        draftModelData.price > 0 ||
-        !draftModelData.location.isEmpty ||
-        draftModelData.isForSale
-    }
-    
-    private func addNewIngredient() {
-        let newIngredient = RecipeIngredient(id: UUID().hashValue, name: "", quantity: 0, price: 0, selectedCurrency: 0)
-        draftModelData.ingredients.append(newIngredient)
-    }
-    
-    private func addNewStep() {
-        let newStep = CookingStep(id: UUID().hashValue, description: "")
-        draftModelData.cookingSteps.append(newStep)
-    }
-    
-    private func deleteIngredient(_ ingredient: RecipeIngredient) {
-        draftModelData.ingredients.removeAll { $0.id == ingredient.id }
-    }
-    
-    private func deleteStep(_ step: CookingStep) {
-        draftModelData.cookingSteps.removeAll { $0.id == step.id }
-    }
-    
-    private var allFieldsFilled: Bool {
-        draftModelData.ingredients.allSatisfy { !$0.name.isEmpty && $0.quantity != 0 && $0.price != 0 } &&
-        draftModelData.cookingSteps.allSatisfy { !$0.description.isEmpty }
-    }
-    
-    private func validateAndProceed() {
-        if draftModelData.ingredients.isEmpty || draftModelData.cookingSteps.isEmpty ||
-            showValidationError == true {
-        } else {
-            showValidationError = false
-            navigateToNextView = true
-        }
-    }
-    //MARK: Function to calculate the total in Riels and USD across all ingredients
-    private func calculateTotal(ingredients: [RecipeIngredient]) -> (totalRiels: Double, totalUSD: Double) {
-        let conversionRate = 4100.0
-        var totalRiels: Double = 0.0
-        var totalUSD: Double = 0.0
-        
-        for ingredient in ingredients {
-            let totalForIngredient = ingredient.price * (ingredient.quantity)
-            if ingredient.selectedCurrency == 0 {
-                totalRiels += totalForIngredient
-                totalUSD += totalForIngredient / conversionRate
-            } else {
-                totalUSD += totalForIngredient
-                totalRiels += totalForIngredient * conversionRate
-            }
-        }
-        return (totalRiels, totalUSD)
-    }
 }
 
+// MARK: - Helper Methods
+private func handleCancel() {
+    if hasDraftData {
+        showDraftAlert = true
+    } else {
+        dismiss()
+    }
+}
+private var hasDraftData: Bool {
+    return !draftModelData.foodName.isEmpty ||
+    !draftModelData.descriptionText.isEmpty ||
+    draftModelData.selectedImages.isEmpty == false ||
+    draftModelData.selectedLevel != nil ||
+    draftModelData.selectedCuisine != nil ||
+    draftModelData.selectedCategory != nil ||
+    draftModelData.duration > 0 ||
+    draftModelData.amount > 0 ||
+    draftModelData.price > 0 ||
+    !draftModelData.location.isEmpty ||
+    draftModelData.isForSale
+}
+
+private func addNewIngredient() {
+    let newIngredient = RecipeIngredient(id: UUID().hashValue, name: "", quantity: 0, price: 0, selectedCurrency: 0)
+    draftModelData.ingredients.append(newIngredient)
+}
+
+private func addNewStep() {
+    let newStep = CookingStep(id: UUID().hashValue, description: "")
+    draftModelData.cookingSteps.append(newStep)
+}
+
+private func deleteIngredient(_ ingredient: RecipeIngredient) {
+    draftModelData.ingredients.removeAll { $0.id == ingredient.id }
+}
+
+private func deleteStep(_ step: CookingStep) {
+    draftModelData.cookingSteps.removeAll { $0.id == step.id }
+}
+
+private var allFieldsFilled: Bool {
+    draftModelData.ingredients.allSatisfy { !$0.name.isEmpty && $0.quantity != 0 && $0.price != 0 } &&
+    draftModelData.cookingSteps.allSatisfy { !$0.description.isEmpty }
+}
+
+private func validateAndProceed() {
+    if draftModelData.ingredients.isEmpty || draftModelData.cookingSteps.isEmpty ||
+        showValidationError == true {
+    } else {
+        showValidationError = false
+        navigateToNextView = true
+    }
+}
+//MARK: Function to calculate the total in Riels and USD across all ingredients
+private func calculateTotal(ingredients: [RecipeIngredient]) -> (totalRiels: Double, totalUSD: Double) {
+    let conversionRate = 4100.0
+    var totalRiels: Double = 0.0
+    var totalUSD: Double = 0.0
+    
+    for ingredient in ingredients {
+        let totalForIngredient = ingredient.price * (ingredient.quantity)
+        if ingredient.selectedCurrency == 0 {
+            totalRiels += totalForIngredient
+            totalUSD += totalForIngredient / conversionRate
+        } else {
+            totalUSD += totalForIngredient
+            totalRiels += totalForIngredient * conversionRate
+        }
+    }
+    return (totalRiels, totalUSD)
+}
+}

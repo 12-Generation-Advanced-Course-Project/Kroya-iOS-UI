@@ -21,7 +21,7 @@ class CountdownTimer: ObservableObject {
     
     func start() {
         isResendDisabled = true
-        countdown = 60
+        countdown = 180
         timer?.invalidate()  // Stop any previous timers
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] timer in
             guard let self = self else { return }

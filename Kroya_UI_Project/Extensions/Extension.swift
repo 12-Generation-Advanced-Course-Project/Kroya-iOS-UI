@@ -165,57 +165,6 @@ extension View {
 }
 
 
-// MARK: Using for Native Navigation Swap
-extension UINavigationController: UIGestureRecognizerDelegate {
-    override open func viewDidLoad() {
-        super.viewDidLoad()
-        interactivePopGestureRecognizer?.delegate = self
-    }
-    
-    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return viewControllers.count > 1
-    }
-}
-
-struct NavigationControllerWrapper<Content: View>: UIViewControllerRepresentable {
-    let content: Content
-    
-    init(@ViewBuilder content: () -> Content) {
-        self.content = content()
-    }
-    
-    func makeUIViewController(context: Context) -> UINavigationController {
-        let hostingController = UIHostingController(rootView: content)
-        let navigationController = UINavigationController(rootViewController: hostingController)
-        navigationController.navigationBar.isTranslucent = true // Make the navigation bar translucent
-        navigationController.navigationBar.isUserInteractionEnabled = false
-        navigationController.navigationBar.isHidden = true
-        
-        hostingController.view.backgroundColor = .clear // Ensure the background is clear to avoid white space issues
-        
-
-        
-        navigationController.interactivePopGestureRecognizer?.delegate = context.coordinator
-        return navigationController
-    }
-    
-    func updateUIViewController(_ uiViewController: UINavigationController, context: Context) {
-        if let hostingController = uiViewController.viewControllers.first as? UIHostingController<Content> {
-            hostingController.rootView = content
-        }
-    }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator()
-    }
-    
-    class Coordinator: NSObject, UIGestureRecognizerDelegate {
-        func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-            return true
-        }
-    }
-}
-
 //Change fonts base on Language
 
 struct CustomFontLocalization: ViewModifier {
