@@ -17,6 +17,10 @@ struct CategoryResponse<T: Decodable>: Decodable{
 struct CategoryModel: Identifiable ,Decodable{
     var id: Int
     var categoryName: String
+
 }
 
 typealias CategoryResponses = CategoryResponse<CategoryModel>
+
+
+
