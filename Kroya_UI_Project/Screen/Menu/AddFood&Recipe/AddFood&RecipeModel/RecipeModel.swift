@@ -10,7 +10,7 @@ import Foundation
 
 //MARK: FoodRecipe for get all
 struct FoodRecipeModel: Identifiable, Codable {
-    var id: Int
+    let id: Int
     let photo: [Photo]
     let name: String
     let description: String
@@ -20,7 +20,6 @@ struct FoodRecipeModel: Identifiable, Codable {
     let isFavorite: Bool
     let itemType: String
     let user: userModel
-    
 }
 
 enum cuisine: String {
