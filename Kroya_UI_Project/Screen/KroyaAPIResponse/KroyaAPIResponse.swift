@@ -17,14 +17,22 @@ struct KroyaAPIResponse<T: Decodable>: Decodable {
 }
 //MARK: User Setting Profile
 typealias UserSettingProfileResponse = KroyaAPIResponse<ProfileModel>
+typealias DeviceTokenResponse = KroyaAPIResponse<DeviceTokenModel>
 //MARK: Food-Recipe get all
 typealias foodrecipeResponse = KroyaAPIResponse<FoodRecipeModel>
-typealias SavefoodRecipeResponse = KroyaAPIResponse<FoodRecipeResponse>
+typealias SavefoodRecipeResponse = KroyaSingleAPIResponse<FoodRecipeResponse>
 //MARK: UserFoodResponse
 typealias userFoodResponse = KroyaAPIResponse<UserFoodModel>
 //MARK: Food-Sell get all
 typealias foodSellResponse = KroyaAPIResponse<FoodSellModel>
-typealias SaveFoodSellResponse = KroyaAPIResponse<FoodSellResponse>
-
-
+typealias SaveFoodSellResponse = KroyaSingleAPIResponse<FoodSellResponse>
+//MARK: Get all Food by category
+typealias getAllFoodCategoryResponse = KroyaAPIResponse<payloadCategory>
+// Generic API response for a single object payload
+struct KroyaSingleAPIResponse<T: Decodable>: Decodable {
+    let message: String
+    let payload: T?
+    let statusCode: String
+    let timestamp: String?
+}
 

@@ -10,6 +10,7 @@ import SwiftUI
 import Alamofire
 
 class FoodRecipeService {
+    
     static let shared = FoodRecipeService()
     
     //MARK: Get all Food Recipe
@@ -47,7 +48,7 @@ class FoodRecipeService {
             case .success(let apiResponse):
                 if let statusCode = Int(apiResponse.statusCode), statusCode == 200 {
                     print("getFoodRecipe successfully.")
-                    print("recipe response: \(String(describing: apiResponse.payload))")
+//                    print("recipe response: \(String(describing: apiResponse.payload))")
                     completion(.success(apiResponse))
                 } else {
                     print("Failed to retrieve recipes.")
@@ -151,7 +152,6 @@ class FoodRecipeService {
         }
     }
     
-    
     // MARK: - Save Food Recipe
     func saveFoodRecipe(_ foodRecipe: FoodRecipeRequest, completion: @escaping (Result<SavefoodRecipeResponse, Error>) -> Void) {
         guard let accessToken = Auth.shared.getAccessToken() else {
@@ -167,26 +167,26 @@ class FoodRecipeService {
             "Content-Type": "application/json"
         ]
         
-        // Encode the request model to JSON and send the request
         AF.request(url, method: .post, parameters: foodRecipe, encoder: JSONParameterEncoder.default, headers: headers)
             .validate()
             .responseDecodable(of: SavefoodRecipeResponse.self) { response in
-                // Print response data for debugging
-                if let data = response.data {
-                    do {
-                        let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-                        let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-                        if let prettyString = String(data: prettyData, encoding: .utf8) {
-                            print("Pretty JSON Response For Post Food-Recipe:\n\(prettyString)")
-                        }
-                    } catch {
-                        print("Failed to convert response data to pretty JSON: \(error)")
-                    }
-                }
-                
+               
+                                if let data = response.data {
+                                    do {
+                                        let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+                                        let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
+                                        if let prettyString = String(data: prettyData, encoding: .utf8) {
+                                            print("Pretty JSON Response For Post Food-Recipe:\n\(prettyString)")
+                                        }
+                                    } catch {
+                                        print("Failed to convert response data to pretty JSON: \(error)")
+                                    }
+                                }
                 switch response.result {
                 case .success(let saveResponse):
-                    print("Food recipe created successfully with Id: \(String(describing: saveResponse.payload?.first))")
+                    if let recipeId = saveResponse.payload?.id {
+                        print("Food recipe created successfully with Id: \(recipeId)")
+                    }
                     completion(.success(saveResponse))
                 case .failure(let error):
                     print("Error creating food recipe: \(error)")
@@ -194,4 +194,53 @@ class FoodRecipeService {
                 }
             }
     }
+
+    
+    
+    
+    // MARK: - Get All Cuisines
+    func getAllCuisines(completion: @escaping (Result<CuisineResponse, Error>) -> Void) {
+        guard let accessToken = Auth.shared.getAccessToken() else {
+            print("Error: Access token is nil.")
+            let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token is missing"])
+            completion(.failure(error))
+            return
+        }
+
+        let url = Constants.CuisineUrl + "all"
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)"
+        ]
+
+        AF.request(url, method: .get, headers: headers).validate().responseDecodable(of: CuisineResponse.self) { response in
+            // Print response data for debugging
+            if let data = response.data {
+                do {
+                    let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+                    let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
+                    if let prettyString = String(data: prettyData, encoding: .utf8) {
+                        print("Pretty JSON Response:\n\(prettyString)")
+                    }
+                } catch {
+                    print("Failed to convert response data to pretty JSON: \(error)")
+                }
+            }
+
+            // Handle the result
+            switch response.result {
+            case .success(let apiResponse):
+                if let statusCode = Int(apiResponse.statusCode), statusCode == 200 {
+                    completion(.success(apiResponse))
+                } else {
+                    let error = NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: apiResponse.message])
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    
+    
 }

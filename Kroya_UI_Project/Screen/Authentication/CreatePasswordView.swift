@@ -117,6 +117,7 @@ struct CreatePasswordView: View {
             NavigationLink(destination: UserBasicInfoView(authVM: authVM, lang: $lang)
                 .environmentObject(userStore)
                 .environmentObject(addressViewModel)
+              
                            , isActive: $isNavigating) {
                 EmptyView()
             }

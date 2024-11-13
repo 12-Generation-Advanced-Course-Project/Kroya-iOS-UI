@@ -22,286 +22,311 @@ struct SaleModalView: View {
     @StateObject private var recipeVM = RecipeViewModel()
     @StateObject private var saleVM = FoodSellViewModel()
     @StateObject private var imageVM = ImageUploadViewModel()
+    @State private var showLoadingOverlay = false
+    @State private var showSuccessPopup = false
+    
     var body: some View {
-        VStack {
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(alignment: .trailing, spacing: 15) {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Is this food available for sale?")
-                            .customFontBoldLocalize(size: 16)
-                        
-                        VStack(spacing: 15) {
-                            Button(action: {
-                                draftModelData.isForSale = true
-                                isAvailableForSale = true
-                            }) {
-                                Text("Yes")
-                                    .customFontSemiBoldLocalize(size: 16)
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(draftModelData.isForSale ? Color.yellow.opacity(0.3) : Color.gray.opacity(0.3))
-                                    .foregroundColor(.black)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 12)
-                                            .stroke(draftModelData.isForSale ? Color.yellow.opacity(0.3) : Color.gray.opacity(0.3), lineWidth: 4)
-                                    )
-                                    .cornerRadius(12)
-                            }
-                            .padding(.horizontal, 5)
-                            
-                            Button(action: {
-                                draftModelData.isForSale = false
-                            }) {
-                                Text("No")
-                                    .customFontSemiBoldLocalize(size: 16)
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(draftModelData.isForSale == false ? Color.yellow.opacity(0.3) : Color.gray.opacity(0.3))
-                                    .foregroundColor(.black)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 12)
-                                            .stroke(draftModelData.isForSale == false ? Color.yellow.opacity(0.3) : Color.gray.opacity(0.3), lineWidth: 4)
-                                    )
-                                    .cornerRadius(12)
-                            }
-                            .padding(.horizontal, 5)
-                        }
-                        .padding(.vertical, 20)
-                    }
-                    
-                    // Show details only if available for sale is Yes
-                    if draftModelData.isForSale {
-                        VStack(alignment: .leading) {
-                            Text("Details")
-                                .customFontBoldLocalize(size: 16)
-                                .padding(.vertical, 10)
-                            VStack(spacing: 10) {
-                                // Cook Date Section
-                                HStack(spacing: 10) {
-                                    Text("Cook date")
-                                        .customFontLightLocalize(size: 15)
-                                        .foregroundStyle(.black.opacity(0.6))
-                                        .frame(minWidth: 100, alignment: .leading)
-                                    Spacer()
-                                    TextField("", text: $formattedDate)
-                                        .customFontMediumLocalize(size: 15)
-                                        .multilineTextAlignment(.leading)
-                                        .foregroundStyle(.gray.opacity(0.8))
-                                        .disabled(true)
-                                    
-                                    Button {
-                                        isDatePickerVisible.toggle()
-                                    } label: {
-                                        Image(systemName: "calendar")
-                                            .customFontLightLocalize(size: 25)
-                                            .foregroundColor(.gray)
+        ZStack{
+            VStack{
+                VStack {
+                    ScrollView(.vertical, showsIndicators: false) {
+                        VStack(alignment: .trailing, spacing: 15) {
+                            VStack(alignment: .leading, spacing: 10) {
+                                Text("Is this food available for sale?")
+                                    .customFontBoldLocalize(size: 16)
+                                
+                                VStack(spacing: 15) {
+                                    Button(action: {
+                                        draftModelData.isForSale = true
+                                        isAvailableForSale = true
+                                    }) {
+                                        Text("Yes")
+                                            .customFontSemiBoldLocalize(size: 16)
+                                            .frame(maxWidth: .infinity)
+                                            .padding()
+                                            .background(draftModelData.isForSale ? Color.yellow.opacity(0.3) : Color.gray.opacity(0.3))
+                                            .foregroundColor(.black)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 12)
+                                                    .stroke(draftModelData.isForSale ? Color.yellow.opacity(0.3) : Color.gray.opacity(0.3), lineWidth: 4)
+                                            )
+                                            .cornerRadius(12)
                                     }
-                                    .overlay(
-                                        Group {
-                                            if isDatePickerVisible {
-                                                DatePicker(
-                                                    selection: $draftModelData.cookDate,
-                                                    in: Date()...,
-                                                    displayedComponents: .date
-                                                ) {
-                                                    
-                                                }
-                                                .fixedSize()
-                                                .labelsHidden()
-                                                .colorMultiply(.clear)
-                                                .onChange(of: draftModelData.cookDate) { newDate in
-                                                    formattedDate = newDate.formatted(.dateTime.day().month().year())
-                                                }
-                                                
+                                    .padding(.horizontal, 5)
+                                    
+                                    Button(action: {
+                                        draftModelData.isForSale = false
+                                    }) {
+                                        Text("No")
+                                            .customFontSemiBoldLocalize(size: 16)
+                                            .frame(maxWidth: .infinity)
+                                            .padding()
+                                            .background(draftModelData.isForSale == false ? Color.yellow.opacity(0.3) : Color.gray.opacity(0.3))
+                                            .foregroundColor(.black)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 12)
+                                                    .stroke(draftModelData.isForSale == false ? Color.yellow.opacity(0.3) : Color.gray.opacity(0.3), lineWidth: 4)
+                                            )
+                                            .cornerRadius(12)
+                                    }
+                                    .padding(.horizontal, 5)
+                                }
+                                .padding(.vertical, 20)
+                            }
+                            
+                            // Show details only if available for sale is Yes
+                            if draftModelData.isForSale {
+                                VStack(alignment: .leading) {
+                                    Text("Details")
+                                        .customFontBoldLocalize(size: 16)
+                                        .padding(.vertical, 10)
+                                    VStack(spacing: 10) {
+                                        // Cook Date Section
+                                        HStack(spacing: 10) {
+                                            Text("Cook date")
+                                                .customFontLightLocalize(size: 15)
+                                                .foregroundStyle(.black.opacity(0.6))
+                                                .frame(minWidth: 100, alignment: .leading)
+                                            Spacer()
+                                            TextField("", text: $formattedDate)
+                                                .customFontMediumLocalize(size: 15)
+                                                .multilineTextAlignment(.leading)
+                                                .foregroundStyle(.gray.opacity(0.8))
+                                                .disabled(true)
+                                            
+                                            Button {
+                                                isDatePickerVisible.toggle()
+                                            } label: {
+                                                Image(systemName: "calendar")
+                                                    .customFontLightLocalize(size: 25)
+                                                    .foregroundColor(.gray)
                                             }
-                                        },
-                                        alignment: .trailing
-                                    )
-                                    Spacer()
-                                }
-                                .padding(.horizontal)
-                                Divider()
-                                
-                                HStack {
-                                    Text("Amount")
-                                        .customFontLightLocalize(size: 15)
-                                        .foregroundStyle(.black.opacity(0.6))
-                                        .frame(maxWidth: 120, alignment: .leading)
-                                    TextField("", value: $draftModelData.amount, format: .number)
-                                        .customFontMediumLocalize(size: 15)
-                                        .multilineTextAlignment(.leading)
-                                        .keyboardType(.numberPad)
-                                        .foregroundStyle(.gray.opacity(0.8))
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .onChange(of: draftModelData.amount) { _ in
-                                            validateFields()
+                                            .overlay(
+                                                Group {
+                                                    if isDatePickerVisible {
+                                                        DatePicker(
+                                                            selection: $draftModelData.cookDate,
+                                                            in: Date()...,
+                                                            displayedComponents: .date
+                                                        ) {
+                                                            
+                                                        }
+                                                        .fixedSize()
+                                                        .labelsHidden()
+                                                        .colorMultiply(.clear)
+                                                        .onChange(of: draftModelData.cookDate) { newDate in
+                                                            formattedDate = newDate.formatted(.dateTime.day().month().year())
+                                                        }
+                                                        
+                                                    }
+                                                },
+                                                alignment: .trailing
+                                            )
+                                            Spacer()
                                         }
-                                }
-                                .padding(.horizontal)
-                                Divider()
-                                
-                                // Price Input Section
-                                HStack {
-                                    Text("Price")
-                                        .customFontLightLocalize(size: 16)
-                                        .foregroundStyle(.black.opacity(0.6))
-                                        .frame(maxWidth: 120, alignment: .leading)
-                                    
-                                    TextField(getCurrencyPlaceholder(), text: Binding(
-                                        get: { formatPrice() },
-                                        set: { newValue in
-                                            priceText = filterPriceInput(newValue)
-                                            ingret.price = Double(priceText) ?? 0.0
-                                        }
-                                    ))
-                                    .customFontMediumLocalize(size: 15)
-                                    .multilineTextAlignment(.leading)
-                                    .keyboardType(.decimalPad)
-                                    .foregroundStyle(.gray.opacity(0.8))
-                                    .onChange(of: ingret.price) { _ in
-                                        validateFields()
-                                    }
-                                    
-                                    Picker("", selection: $ingret.selectedCurrency) {
-                                        ForEach(0..<currencies.count) { index in
-                                            Text(currencies[index])
-                                                .tag(index)
-                                                .customFontMediumLocalize(size: 20)
-                                        }
-                                    }
-                                    .pickerStyle(SegmentedPickerStyle())
-                                    .frame(width: 60)
-                                    .onChange(of: ingret.selectedCurrency) { newCurrency in
-                                        if newCurrency == 1 {
-                                            // Convert Riel to USD if switching to USD
-                                            ingret.price = convertCurrency(ingret.price)
-                                        } else {
-                                            // Convert USD to Riel if switching to Riel
-                                            ingret.price = ingret.price * conversionRate
-                                        }
-                                    }
-                                    
-                                }
-                                .padding(.horizontal)
-                                
-                                Divider()
-                                
-                                NavigationLink(destination: AddressView(viewModel: addressStore)) {
-                                    HStack {
-                                        Text("Location")
-                                            .customFontLightLocalize(size: 15)
-                                            .foregroundStyle(.black.opacity(0.8))
-                                            .frame(maxWidth: 120, alignment: .leading)
+                                        .padding(.horizontal)
+                                        Divider()
                                         
-                                        TextField("Choose Location", text: Binding(
-                                            get: { addressStore.selectedAddress?.specificLocation ?? "" },
-                                            set: { _ in }
-                                        ))
-                                        .customFontMediumLocalize(size: 15)
-                                        .multilineTextAlignment(.leading)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .foregroundStyle(.gray.opacity(0.8))
-                                        .disabled(true)
+                                        HStack {
+                                            Text("Amount")
+                                                .customFontLightLocalize(size: 15)
+                                                .foregroundStyle(.black.opacity(0.6))
+                                                .frame(maxWidth: 120, alignment: .leading)
+                                            TextField("", value: $draftModelData.amount, format: .number)
+                                                .customFontMediumLocalize(size: 15)
+                                                .multilineTextAlignment(.leading)
+                                                .keyboardType(.numberPad)
+                                                .foregroundStyle(.gray.opacity(0.8))
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .onChange(of: draftModelData.amount) { _ in
+                                                    validateFields()
+                                                }
+                                        }
+                                        .padding(.horizontal)
+                                        Divider()
+                                        
+                                        // Price Input Section
+                                        HStack {
+                                            Text("Price")
+                                                .customFontLightLocalize(size: 16)
+                                                .foregroundStyle(.black.opacity(0.6))
+                                                .frame(maxWidth: 120, alignment: .leading)
+                                            
+                                            TextField(getCurrencyPlaceholder(), text: Binding(
+                                                get: { formatPrice() },
+                                                set: { newValue in
+                                                    priceText = filterPriceInput(newValue)
+                                                    let price = Double(priceText) ?? 0.0
+                                                    ingret.price = price
+                                                    draftModelData.price = price // Save to draftModelData
+                                                }
+                                            ))
+                                            .customFontMediumLocalize(size: 15)
+                                            .multilineTextAlignment(.leading)
+                                            .keyboardType(.decimalPad)
+                                            .foregroundStyle(.gray.opacity(0.8))
+                                            .onChange(of: draftModelData.price) { _ in
+                                                validateFields()
+                                            }
+                                            
+                                            Picker("", selection: $ingret.selectedCurrency) {
+                                                ForEach(0..<currencies.count) { index in
+                                                    Text(currencies[index])
+                                                        .tag(index)
+                                                        .customFontMediumLocalize(size: 20)
+                                                }
+                                            }
+                                            .pickerStyle(SegmentedPickerStyle())
+                                            .frame(width: 60)
+                                            .onChange(of: ingret.selectedCurrency) { newCurrency in
+                                                // Convert currency on selection change
+                                                if newCurrency == 1 {
+                                                    ingret.price = convertCurrency(ingret.price)
+                                                } else {
+                                                    ingret.price = ingret.price * conversionRate
+                                                }
+                                                draftModelData.price = ingret.price
+                                                validateFields()
+                                            }
+                                        }
+                                        .padding(.horizontal)
+                                        Divider()
+                                        NavigationLink(destination: AddressView(viewModel: addressStore)) {
+                                            HStack {
+                                                Text("Location")
+                                                    .customFontLightLocalize(size: 15)
+                                                    .foregroundStyle(.black.opacity(0.8))
+                                                    .frame(maxWidth: 120, alignment: .leading)
+                                                TextField("Choose Location", text: Binding(
+                                                    get: { draftModelData.location },
+                                                    set: { newValue in draftModelData.location = newValue }
+                                                ))
+                                                .customFontMediumLocalize(size: 15)
+                                                .multilineTextAlignment(.leading)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .foregroundStyle(.gray.opacity(0.8))
+                                                .disabled(true)
+                                            }
+                                            .padding(.vertical, 5)
+                                            .padding(.horizontal)
+                                        }
                                     }
-                                    .padding(.vertical, 5)
-                                    .padding(.horizontal)
-                                }
-                            }
-                            .padding(.vertical, 12)
-                            .frame(maxWidth: .infinity)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 15)
-                                    .strokeBorder(Color(hex: "#D0DBEA"), lineWidth: 1)
-                            )
-                            
-                            HStack {
-                                if showError {
+                                    .padding(.vertical, 12)
+                                    .frame(maxWidth: .infinity)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 15)
+                                            .strokeBorder(Color(hex: "#D0DBEA"), lineWidth: 1)
+                                    )
+                                    
                                     HStack {
-                                        Image(systemName: "exclamationmark.triangle.fill")
-                                            .foregroundColor(.red)
-                                        Text("Detail information cannot be empty")
-                                            .customFontLightLocalize(size: 10)
-                                            .foregroundColor(.red)
+                                        if showError {
+                                            HStack {
+                                                Image(systemName: "exclamationmark.triangle.fill")
+                                                    .foregroundColor(.red)
+                                                Text("Detail information cannot be empty")
+                                                    .customFontLightLocalize(size: 10)
+                                                    .foregroundColor(.red)
+                                            }
+                                        }
+                                        Spacer()
+                                        VStack {
+                                            HStack{
+                                                Text("Ingredient ")
+                                                    .customFontMediumLocalize(size: 13)
+                                                    .foregroundColor(.black.opacity(0.4))
+                                                Text("\(totalRiels, specifier: "%.2f") ៛")
+                                                    .foregroundStyle(.yellow)
+                                                    .customFontMediumLocalize(size: 13)
+                                                Text("(\(totalUSD, specifier: "%.2f")$)")
+                                                    .customFontMediumLocalize(size: 13)
+                                                    .foregroundColor(.black.opacity(0.4))
+                                            }
+                                        }
                                     }
-                                }
-                                Spacer()
-                                VStack {
-                                    HStack{
-                                        Text("Ingredient ")
-                                            .customFontMediumLocalize(size: 13)
-                                            .foregroundColor(.black.opacity(0.4))
-                                        Text("\(totalRiels, specifier: "%.2f") ៛")
-                                            .foregroundStyle(.yellow)
-                                            .customFontMediumLocalize(size: 13)
-                                        Text("(\(totalUSD, specifier: "%.2f")$)")
-                                            .customFontMediumLocalize(size: 13)
-                                            .foregroundColor(.black.opacity(0.4))
-                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                                 }
                             }
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        
+                    }
+                    .padding()
+                }
+                Spacer()
+                HStack(spacing: 10) {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Text("Back")
+                            .customFontSemiBoldLocalize(size: 16)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(.gray.opacity(0.3))
+                            )
+                            .foregroundColor(.black)
+                    }
+                    //MARK: Buttom Post-FoodRecipe and FoodSell
+                    Button(action: {
+                        if draftModelData.isForSale {
+                            validateFields()
+                            if !showError {
+                                uploadImagesAndPostRecipe()
+                            }
+                        } else {
+                            uploadImagesAndPostRecipe()
+                        }
+                    }) {
+                        Text("Post")
+                            .customFontSemiBoldLocalize(size: 16)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .foregroundColor(.white)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(showError ? Color.gray.opacity(0.3) : PrimaryColor.normal)
+                            )
+                    }
+                    .disabled(draftModelData.isForSale && showError)
+                    
+                }
+                .padding()
+            }
+            // Loading Overlay
+            if showLoadingOverlay {
+                LoadingOverlay()
+            }
+            
+            // Success Popup
+            if showSuccessPopup {
+                PopupMessage()
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            showSuccessPopup = false
+            
                         }
                     }
-                }
             }
-            .padding()
-        }
-        
-        Spacer()
-        
-        HStack(spacing: 10) {
-            Button(action: {
-                dismiss()
-            }) {
-                Text("Back")
-                    .customFontSemiBoldLocalize(size: 16)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(.gray.opacity(0.3))
-                    )
-                    .foregroundColor(.black)
-            }
-            //MARK: Buttom Post-FoodRecipe and FoodSell
-            Button(action: {
-//                if draftModelData.isForSale {
-//                    validateFields()
-//                    if !showError {
-//                        uploadImagesAndPostRecipe()
-//                    }
-//                } else {
-//                    // Not for sale, just upload images and post the recipe
-//                    uploadImagesAndPostRecipe()
-//                }
-            }) {
-                Text("Post")
-                    .customFontSemiBoldLocalize(size: 16)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .foregroundColor(.white)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(showError ? Color.gray.opacity(0.3) : PrimaryColor.normal)
-                    )
-            }
-            .disabled(draftModelData.isForSale && showError)
             
             
         }
-        .padding()
         .navigationBarBackButtonHidden(true)
         .navigationTitle("Sale")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             addressStore.fetchAllAddresses()
             formattedDate = draftModelData.cookDate.formatted(.dateTime.day().month().year())
+            draftModelData.location = addressStore.selectedAddress?.specificLocation ?? "" // Set location on appear
             _ = formatPrice()
         }
-        .onChange(of: addressStore.selectedAddress) { _ in
-            addressSelect = addressStore.selectedAddress?.specificLocation ?? ""
+        
+        .onChange(of: addressStore.selectedAddress) { newAddress in
+            // Set location on address selection
+            draftModelData.location = newAddress?.specificLocation ?? ""
+            // Re-validate fields after location change
             validateFields()
         }
+        
         .alert(isPresented: $showDraftAlert) {
             Alert(
                 title: Text("Save this as a draft?"),
@@ -331,37 +356,42 @@ struct SaleModalView: View {
     
     //MARK: Logic for Add Food as Recipe
     private func uploadImagesAndPostRecipe() {
+        showLoadingOverlay = true // Start loading
         imageVM.uploadImages(draftModelData.selectedImages) { result in
-            switch result {
-            case .success(let uploadedImageNames):
-                draftModelData.selectedImageNames = uploadedImageNames
-                postRecipe()
-            case .failure(let error):
-                print("Image upload failed: \(error.localizedDescription)")
-                recipeVM.showError = true
-                recipeVM.errorMessage = "Failed to upload images."
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let uploadedImageNames):
+                    draftModelData.selectedImageNames = uploadedImageNames
+                    postRecipe()
+                case .failure(let error):
+                    showLoadingOverlay = false // End loading on error
+                    print("Image upload failed: \(error.localizedDescription)")
+                    recipeVM.showError = true
+                    recipeVM.errorMessage = "Failed to upload images."
+                }
             }
         }
     }
     
+    
+    
     // MARK: Post Recipe
     private func postRecipe() {
         if let foodRecipeRequest = draftModelData.toFoodRecipeRequest() {
-            // Directly call FoodRecipeService
             FoodRecipeService.shared.saveFoodRecipe(foodRecipeRequest) { result in
                 DispatchQueue.main.async {
+                    self.showLoadingOverlay = false
                     switch result {
                     case .success(let response):
-                        if let foodRecipeId = response.payload?.first?.id {
-                            // If item is for sale, proceed to post food sell
+                        if let foodRecipeId = response.payload?.id {
                             if draftModelData.isForSale {
                                 postFoodSell(foodRecipeId: foodRecipeId)
                             } else {
-                                // If not for sale, clear draft and navigate back
+                                showSuccessPopup = true
                                 draftModelData.clearDraft(from: modelContext)
-                                dismissToRoot()
                             }
                         }
+                        dismissToRoot()
                     case .failure(let error):
                         print("Failed to create food recipe: \(error.localizedDescription)")
                         recipeVM.showError = true
@@ -371,17 +401,17 @@ struct SaleModalView: View {
             }
         }
     }
-
+    
     // MARK: Post Food Sell
     private func postFoodSell(foodRecipeId: Int) {
         if let foodSellRequest = draftModelData.toFoodSellRequest() {
             let currencyType = draftModelData.price > 1000 ? "RIEL" : "DOLLAR"
-            
-            // Directly call FoodSellService
             FoodSellService.shared.postFoodSell(foodSellRequest, foodRecipeId: foodRecipeId, currencyType: currencyType) { result in
                 DispatchQueue.main.async {
+                    showLoadingOverlay = false // End loading on success or error
                     switch result {
                     case .success:
+                        showSuccessPopup = true
                         draftModelData.clearDraft(from: modelContext)
                         dismissToRoot()
                     case .failure(let error):
@@ -393,8 +423,6 @@ struct SaleModalView: View {
             }
         }
     }
-
-    
     
     private func handleCancel() {
         if hasDraftData {
@@ -420,13 +448,12 @@ struct SaleModalView: View {
     
     private func validateFields() {
         if draftModelData.isForSale {
-            // Validate sale-specific fields if the item is marked for sale
             showError = draftModelData.amount <= 0 ||
-            ingret.price <= 0 ||
+            draftModelData.price <= 0 ||
             addressStore.selectedAddress == nil ||
-            draftModelData.cookDate < Date()  // Ensures date is not in the past
+            draftModelData.location.isEmpty ||
+            draftModelData.cookDate < Date()
         } else {
-            // No error if not for sale, allowing post without these details
             showError = false
         }
     }
