@@ -192,7 +192,7 @@ struct RecipeModalView: View {
                 title: Text("Save this as a draft?"),
                 message: Text("If you choose discard post, you'll lose this post that can't edit again."),
                 primaryButton: .default(Text("Save Draft")) {
-                    draftModelData.saveDraft(in: modelContext) // Save to SwiftData
+                    draftModelData.saveDraft(in: modelContext)
                     dismissToRoot()
                 },
                 secondaryButton: .destructive(Text("Discard Post")) {

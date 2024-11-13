@@ -114,7 +114,8 @@ class DraftModelData: ObservableObject {
             print("location: \(location)")
             print("isForSale: \(isForSale)")
             print("cookDate: \(cookDate)")
-            
+            print("Draft saved to SwiftData with details:")
+            print("price: \(price)")
         } catch {
             print("Failed to save draft: \(error.localizedDescription)")
         }

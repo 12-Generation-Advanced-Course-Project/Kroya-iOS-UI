@@ -158,7 +158,7 @@ struct SaleModalView: View {
                                                     priceText = filterPriceInput(newValue)
                                                     let price = Double(priceText) ?? 0.0
                                                     ingret.price = price
-                                                    draftModelData.price = price // Save to draftModelData
+                                                    draftModelData.price = price
                                                 }
                                             ))
                                             .customFontMediumLocalize(size: 15)
@@ -168,7 +168,7 @@ struct SaleModalView: View {
                                             .onChange(of: draftModelData.price) { _ in
                                                 validateFields()
                                             }
-                                            
+
                                             Picker("", selection: $ingret.selectedCurrency) {
                                                 ForEach(0..<currencies.count) { index in
                                                     Text(currencies[index])
@@ -179,7 +179,6 @@ struct SaleModalView: View {
                                             .pickerStyle(SegmentedPickerStyle())
                                             .frame(width: 60)
                                             .onChange(of: ingret.selectedCurrency) { newCurrency in
-                                                // Convert currency on selection change
                                                 if newCurrency == 1 {
                                                     ingret.price = convertCurrency(ingret.price)
                                                 } else {
@@ -188,6 +187,7 @@ struct SaleModalView: View {
                                                 draftModelData.price = ingret.price
                                                 validateFields()
                                             }
+
                                         }
                                         .padding(.horizontal)
                                         Divider()
@@ -326,7 +326,6 @@ struct SaleModalView: View {
             // Re-validate fields after location change
             validateFields()
         }
-        
         .alert(isPresented: $showDraftAlert) {
             Alert(
                 title: Text("Save this as a draft?"),
