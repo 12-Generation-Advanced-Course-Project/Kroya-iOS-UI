@@ -20,8 +20,14 @@ typealias UserSettingProfileResponse = KroyaAPIResponse<ProfileModel>
 //MARK: Food-Recipe get all
 typealias foodrecipeResponse = KroyaAPIResponse<FoodRecipeModel>
 typealias SavefoodRecipeResponse = KroyaAPIResponse<FoodRecipeResponse>
+
 //MARK: UserFoodResponse
 typealias userFoodResponse = KroyaAPIResponse<UserFoodModel>
 //MARK: Food-Sell get all
 typealias foodSellResponse = KroyaAPIResponse<FoodSellModel>
 typealias SaveFoodSellResponse = KroyaAPIResponse<FoodSellResponse>
+
+
+
+//MARK: Get all Food by category
+typealias getAllFoodCategoryResponse = KroyaAPIResponse<payloadCategory>
