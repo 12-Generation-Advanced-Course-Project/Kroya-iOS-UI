@@ -17,7 +17,6 @@ import SwiftUI
 class AppDelegate: UIResponder , UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        print("asdasd")
         // Initialize Google Maps
         GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
         
@@ -79,7 +78,7 @@ class AppDelegate: UIResponder , UIApplicationDelegate, UNUserNotificationCenter
             }
         }
     }
-
+    
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("Failed to register for remote notifications: \(error.localizedDescription)")
@@ -90,7 +89,10 @@ class AppDelegate: UIResponder , UIApplicationDelegate, UNUserNotificationCenter
 extension AppDelegate: MessagingDelegate {
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         print("Received FCM Token: \(fcmToken ?? "No token")")
+        
+        if let fcmToken = fcmToken {
+            // Save FCM token in Keychain
+            Auth.shared.saveFCMToken(fcmToken)
+        }
     }
 }
-
-

@@ -1,62 +1,74 @@
-
 import SwiftUI
 
 struct FoodonRecipe: View {
     
     @Environment(\.dismiss) var dismiss
-
-    
     @StateObject private var recipeViewModel = RecipeViewModel()
-    let imageofOrder: [String] = ["SoupPic", "SaladPic", "GrillPic", "DessertPic 1"]
-    let titleofOrder: [String] = ["Soup", "Salad", "Grill", "Dessert"]
     
     @State private var selectedOrderIndex: Int? = nil
     @State private var searchText = ""
-    @State private var doubleSelectedOrderIndex:Int? = nil
-    @State var isChooseCusine = false
+    @State private var isChooseCuisine = false
+    
+    // Static image mapping for cuisines
+    let cuisineImages: [String: String] = [
+        "Soup": "soupImage",
+        "Salad": "saladImage",
+        "Grill": "grillImage",
+        "Dessert": "dessertImage"
+    ]
     
     var body: some View {
         NavigationView {
             VStack {
-                HStack(spacing: 40) {
-                    ForEach(0..<imageofOrder.count, id: \.self) { index in
-                        Button(action: {
-                            if selectedOrderIndex == index {
-                                recipeViewModel.getAllRecipeFood()
-                                isChooseCusine = false
-                              
-                            } else{
-                                selectedOrderIndex = index
-                                doubleSelectedOrderIndex = index
-                                recipeViewModel.getRecipesByCuisine(cuisineId: index + 1)
-                                isChooseCusine = true
+                // Cuisine Selection Buttons (No loading indicator for cuisines)
+                if !recipeViewModel.RecipeCuisine.isEmpty {
+                    HStack(spacing: 40) {
+                        ForEach(recipeViewModel.RecipeCuisine) { cuisine in
+                            Button(action: {
+                                if selectedOrderIndex == cuisine.id {
+                                    recipeViewModel.getAllRecipeFood()
+                                    isChooseCuisine = false
+                                    selectedOrderIndex = nil
+                                } else {
+                                    selectedOrderIndex = cuisine.id
+                                    recipeViewModel.getRecipesByCuisine(cuisineId: cuisine.id)
+                                    isChooseCuisine = true
+                                }
+                            }) {
+                                VStack {
+                                    // Use static image based on cuisine name or a default image
+                                    let imageName = cuisineImages[cuisine.cuisineName] ?? "DefaultCuisineImage"
+                                    Image(imageName)
+                                        .resizable()
+                                        .frame(width: 60, height: 60)
+                                        .cornerRadius(12)
+                                    
+                                    Text(cuisine.cuisineName)
+                                        .font(.customfont(.medium, fontSize: 16))
+                                        .foregroundColor(selectedOrderIndex == cuisine.id && isChooseCuisine ? Color.yellow : Color.gray)
+                                }
                             }
-                        }) {
-                            VStack {
-                              
-                                Image(imageofOrder[index])
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 60, height: 60)
-                                
-                                Text(titleofOrder[index])
-                                    .font(.customfont(.medium, fontSize: 16))
-                                    .foregroundColor(selectedOrderIndex == index && isChooseCusine ? Color.yellow : Color.gray)
-                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
-                        .buttonStyle(PlainButtonStyle())
                     }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding()
+                } else if recipeViewModel.showError {
+                    Text(recipeViewModel.errorMessage)
+                        .foregroundColor(.red)
+                        .padding()
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
-                Spacer()
-                    .frame(height: 20)
                 
+                Spacer().frame(height: 20)
+                
+                // Display "All" title
                 Text("All")
                     .font(.customfont(.bold, fontSize: 16))
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .foregroundStyle(.black.opacity(0.8))
+                    .foregroundColor(.black.opacity(0.8))
                     .padding(.horizontal)
                 
+                // Recipe Display
                 if recipeViewModel.isLoading {
                     ZStack {
                         Color.white
@@ -67,11 +79,10 @@ struct FoodonRecipe: View {
                             .scaleEffect(2)
                             .offset(y: -50)
                     }
-                    .padding()
                 } else {
                     ScrollView {
                         LazyVStack {
-                            ForEach(isChooseCusine ? recipeViewModel.RecipeByCategory : recipeViewModel.RecipeFood) { recipe in
+                            ForEach(isChooseCuisine ? recipeViewModel.RecipeByCategory : recipeViewModel.RecipeFood) { recipe in
                                 RecipeViewCell(recipe: recipe)
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
@@ -93,13 +104,14 @@ struct FoodonRecipe: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 20, height: 20)
-                            .foregroundStyle(.black)
+                            .foregroundColor(.black)
                     }
                 }
             }
-        }
-        .onAppear{
-            recipeViewModel.getAllRecipeFood()
+            .onAppear {
+                recipeViewModel.getAllCuisines()
+                recipeViewModel.getAllRecipeFood()
+            }
         }
         .searchable(text: $searchText, prompt: LocalizedStringKey("Search Item"))
         .onChange(of: searchText) { newValue in
@@ -108,8 +120,5 @@ struct FoodonRecipe: View {
             }
         }
         .navigationBarBackButtonHidden(true)
-        .onAppear{
-            recipeViewModel.getAllRecipeFood()
-        }
     }
 }

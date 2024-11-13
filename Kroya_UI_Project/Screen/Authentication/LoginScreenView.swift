@@ -13,7 +13,7 @@ struct LoginScreenView: View {
     @Binding var lang:String
     @StateObject private var authVM: AuthViewModel
     @EnvironmentObject var userStore: UserStore
-  
+    @State private var showLoadingOverlay = false
     @EnvironmentObject var addressViewModel:AddressViewModel
     init(userStore: UserStore, lang: Binding<String>) {
         _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
@@ -117,21 +117,15 @@ struct LoginScreenView: View {
                     )
                     .hidden()
                     
+                    // Guest Login Button
                     Button(action: {
-                        // Guest login action
+                        // Guest login action without token
                         Auth.shared.loggedIn = true
-                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                           let rootWindow = windowScene.windows.first {
-                            rootWindow.rootViewController = UIHostingController(
-                                rootView: MainScreen(userStore: userStore, lang: $lang)
-                                    .environmentObject(userStore)
-                                    .environmentObject(Auth.shared)
-                      
-                                    .environmentObject(addressViewModel)
-                            )
-                            rootWindow.makeKeyAndVisible()
+                        showLoadingOverlay = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                            showLoadingOverlay = false
+                            navigateToMainScreen()
                         }
-
                     }) {
                         Text("Login as guest")
                             .font(.customfont(.bold, fontSize: 12))
@@ -175,6 +169,10 @@ struct LoginScreenView: View {
                 if authVM.isLoading {
                     ProgressIndicator()
                 }
+                
+                if showLoadingOverlay == true {
+                    LoadingOverlay()
+                }
             }
         }
     }
@@ -198,4 +196,17 @@ struct LoginScreenView: View {
             EmptyView()
         }
     }
+    func navigateToMainScreen() {
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let rootWindow = windowScene.windows.first {
+            rootWindow.rootViewController = UIHostingController(
+                rootView: MainScreen(userStore: userStore, lang: $lang)
+                    .environmentObject(userStore)
+                    .environmentObject(Auth.shared)
+                    .environmentObject(addressViewModel)
+            )
+            rootWindow.makeKeyAndVisible()
+        }
+    }
+
 }

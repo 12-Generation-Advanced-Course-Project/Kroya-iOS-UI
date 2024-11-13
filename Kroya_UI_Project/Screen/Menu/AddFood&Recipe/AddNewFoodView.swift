@@ -17,11 +17,8 @@ struct AddFoodView: View {
     @State private var foodName: String = ""
     @StateObject var cuisineVM = CuisineVM()
     @StateObject private var categoryvm = CategoryMV()
-
     let dismissToRoot: () -> Void
     var levels: [String] = ["Hard", "Medium", "Easy"]
-    var cuisines: [String] = ["Soup", "Salad", "Dessert", "Grill"]
-    var categories: [String] = ["Breakfast", "Lunch", "Dinner", "Snack"]
     @ObservedObject var draftModelData: DraftModelData
 
     
@@ -297,11 +294,9 @@ struct AddFoodView: View {
                         }
                     )
                 }
-                .background(
-                    NavigationLink(destination: RecipeModalView(dismissToRoot: dismissToRoot, draftModelData: draftModelData), isActive: $navigateToNextView) {
-                        EmptyView()
-                    }
-                )
+                NavigationLink(destination: RecipeModalView(dismissToRoot: dismissToRoot, draftModelData: draftModelData), isActive: $navigateToNextView) {
+                    EmptyView()
+                }.hidden()
             }
             .fullScreenCover(isPresented: $isImagePickerPresented) {
                 ImagePicker { selectedImages, filenames in

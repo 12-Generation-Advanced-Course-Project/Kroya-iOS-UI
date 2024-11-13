@@ -5,7 +5,7 @@ struct FoodOnSaleViewCell: View {
     
     @State private var isFavorite: Bool
     var foodSale: FoodSellModel
-    var urlImagePrefix: String = "https://kroya-api.up.railway.app/api/v1/fileView/"
+    private let urlImagePrefix = "https://kroya-api-production.up.railway.app/api/v1/fileView/"
     
     init(foodSale: FoodSellModel, isFavorite: Bool = false) {
         self.foodSale = foodSale
@@ -16,21 +16,23 @@ struct FoodOnSaleViewCell: View {
         VStack {
             ZStack(alignment: .topLeading) {
                 // Main Image
-                if let photo = foodSale.photo.first?.photo, let url = URL(string: photo) {
-                    KFImage(url)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(height: 160)
-                        .cornerRadius(15, corners: [.topLeft, .topRight])
-                        .clipped()
-                } else {
-                    Image(systemName: "photo") // Placeholder image
-                        .resizable()
-                        .scaledToFill()
-                        .frame(height: 160)
-                        .cornerRadius(15, corners: [.topLeft, .topRight])
-                        .clipped()
-                }
+                if let photoFilename = foodSale.photo.first?.photo, let url = URL(string: urlImagePrefix + photoFilename) {
+                                  KFImage(url)
+                                      .resizable()
+                                      .scaledToFill()
+                                      .frame(height: 160)
+                                      .cornerRadius(15, corners: [.topLeft, .topRight])
+                                      .clipped()
+                              } else {
+                                  // Placeholder image when no URL is available
+                                  Image(systemName: "photo")
+                                      .resizable()
+                                      .scaledToFill()
+                                      .frame(height: 160)
+                                      .cornerRadius(15, corners: [.topLeft, .topRight])
+                                      .clipped()
+                              }
+                              
                 // Rating and Favorite Button
                 HStack {
                     // Rating Section

@@ -5,13 +5,14 @@ struct MainScreen: View {
     @State var isActive: Bool = false
     @Environment(\.presentationMode) var presentationMode
     @State private var isModalPresented: Bool = false
+    @State private var showGuestAlert = false
     @EnvironmentObject var userStore: UserStore
     @StateObject private var authVM: AuthViewModel
     @StateObject private var addressViewModel: AddressViewModel
     @StateObject private var draftModelData: DraftModelData
     @Environment(\.modelContext) var modelContext
     @Binding var lang: String
-    
+    @State private var showLoadingOverlay = false
     init(userStore: UserStore, lang: Binding<String>) {
         _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
         _addressViewModel = StateObject(wrappedValue: AddressViewModel())
@@ -37,6 +38,7 @@ struct MainScreen: View {
                                 }
                             }
                             .tag(1)
+                        
                         PostViewScreen()
                             .tabItem {
                                 VStack {
@@ -50,7 +52,9 @@ struct MainScreen: View {
                                 }
                             }
                             .tag(2)
+                        
                         Spacer()
+                        
                         OrdersView()
                             .tabItem {
                                 VStack {
@@ -82,6 +86,9 @@ struct MainScreen: View {
                     }
                     .padding(.top, 30)
                     .accentColor(PrimaryColor.normal)
+                    .onChange(of: selectedTab) { newTab in
+                        handleTabChange(to: newTab)
+                    }
                     
                     GeometryReader { geometry in
                         Divider().frame(height: 0.1).background(.black.opacity(0.1))
@@ -105,7 +112,11 @@ struct MainScreen: View {
                     VStack {
                         Spacer()
                         Button(action: {
-                            isModalPresented.toggle()
+                            if Auth.shared.isUserLoggedIn() == false {
+                                showGuestAlert = true
+                            } else {
+                                isModalPresented.toggle()
+                            }
                         }) {
                             ZStack {
                                 Rectangle()
@@ -123,15 +134,33 @@ struct MainScreen: View {
                         .position(x: geometry.size.width / 2, y: geometry.size.height * 0.86)
                     }
                 }
+                // Loading overlay
+                if showLoadingOverlay {
+                    LoadingOverlay()
+                }
+                
+                // Custom alert overlay
+                if showGuestAlert {
+                    LoginAlertView(
+                        onCancel: { showGuestAlert = false },
+                        onLogin: {
+                            showLoadingOverlay = true
+                            showGuestAlert = false
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                showLoadingOverlay = false
+                                navigateToLogin()
+                            }
+                        }
+                    )
+                }
             }
             .frame(width: .screenWidth, height: .screenHeight)
         }
         .onAppear {
-            
             addressViewModel.fetchAllAddresses()
             draftModelData.loadDraft(from: modelContext)
-            
         }
+        
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .fullScreenCover(isPresented: $isModalPresented) {
@@ -143,6 +172,30 @@ struct MainScreen: View {
             .environment(\.modelContext, modelContext)
         }
     }
+    
+    private func handleTabChange(to newTab: Int) {
+        // Only allow access to other tabs if the user is logged in
+        if Auth.shared.isUserLoggedIn() == false && newTab != 1 {
+            showGuestAlert = true
+            selectedTab = 1 // Redirect back to Home if the user is not logged in
+        } else {
+            selectedTab = newTab
+        }
+    }
+    
+    private func navigateToLogin() {
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let rootWindow = windowScene.windows.first {
+            rootWindow.rootViewController = UIHostingController(
+                rootView: LoginScreenView(userStore: userStore, lang: $lang)
+                    .environmentObject(userStore)
+                    .environmentObject(Auth.shared)
+                    .environmentObject(addressViewModel)
+            )
+            rootWindow.makeKeyAndVisible()
+        }
+    }
+    
     private func getSpacerWidth(for selectedTab: Int, geometry: GeometryProxy) -> CGFloat {
         switch selectedTab {
         case 2:

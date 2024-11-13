@@ -7,7 +7,7 @@ struct RecipeViewCell: View {
     
     var recipe: FoodRecipeModel // Corrected to use RecipeModel
     @State private var isFavorite: Bool
-    var urlImagePrefix: String = "https://kroya-api.up.railway.app/api/v1/fileView/"
+    private let urlImagePrefix = "https://kroya-api-production.up.railway.app/api/v1/fileView/"
     
     init(recipe: FoodRecipeModel, isFavorite: Bool = false) {
         self.recipe = recipe
@@ -17,8 +17,8 @@ struct RecipeViewCell: View {
     var body: some View {
         VStack {
             ZStack(alignment: .topLeading) {
-                // Display recipe image with URL
-                if let photo = recipe.photo.first?.photo, let url = URL(string: photo) {
+                // Construct the full URL for the image
+                if let photoFilename = recipe.photo.first?.photo, let url = URL(string: urlImagePrefix + photoFilename) {
                     KFImage(url)
                         .resizable()
                         .scaledToFill()
@@ -26,7 +26,8 @@ struct RecipeViewCell: View {
                         .cornerRadius(15, corners: [.topLeft, .topRight])
                         .clipped()
                 } else {
-                    Image(systemName: "photo") // Placeholder image
+                    // Placeholder image when no URL is available
+                    Image(systemName: "photo")
                         .resizable()
                         .scaledToFill()
                         .frame(height: 160)
@@ -36,7 +37,6 @@ struct RecipeViewCell: View {
                 
                 // Rating and Favorite Button
                 HStack {
-                    // Rating Section
                     HStack(spacing: 3) {
                         Image(systemName: "star.fill")
                             .resizable()
@@ -44,7 +44,7 @@ struct RecipeViewCell: View {
                             .frame(width: 14, height: 14)
                             .foregroundColor(.yellow)
                         
-                        Text(String(format: "%.1f", recipe.averageRating ?? 20))
+                        Text(String(format: "%.1f", recipe.averageRating ?? 0))
                             .font(.customfont(.medium, fontSize: 12))
                             .foregroundColor(.black)
                         
@@ -59,7 +59,7 @@ struct RecipeViewCell: View {
                     
                     Spacer()
                     
-                    // Favorite Button (outside of NavigationLink area)
+                    // Favorite Button
                     Button(action: {
                         isFavorite.toggle()
                     }) {
@@ -79,12 +79,10 @@ struct RecipeViewCell: View {
             .frame(height: 140)
             
             VStack(alignment: .leading, spacing: 5) {
-                // Dish Name
                 Text(recipe.name)
                     .font(.customfont(.medium, fontSize: 14))
                     .foregroundColor(.black)
                 
-                // Description for Recipe
                 Text(recipe.description)
                     .customFontMedium(size: 14)
                     .foregroundColor(.gray)
@@ -92,14 +90,12 @@ struct RecipeViewCell: View {
                     .lineLimit(1)
                 
                 HStack {
-                    // Status Type: "Recipe" label if not for sale
-                    if recipe.itemType == "FOOD_RECIPE" { // Example check
+                    if recipe.itemType == "FOOD_RECIPE" {
                         Text("Recipe")
                             .customFontMedium(size: 12)
                             .foregroundColor(.yellow)
                     }
                     
-                    // Difficulty Level
                     Text(recipe.level)
                         .customFontMedium(size: 12)
                         .foregroundColor(.gray)
@@ -118,6 +114,7 @@ struct RecipeViewCell: View {
                 .stroke(Color(hex: "#E6E6E6"), lineWidth: 0.8)
         }
     }
+    
 }
 
 

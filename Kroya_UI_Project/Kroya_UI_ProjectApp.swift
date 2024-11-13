@@ -1,11 +1,3 @@
-//
-//  Kroya_UI_ProjectApp.swift
-//  Kroya_UI_Project
-//
-//  Created by Ounbonaliheng on 26/9/24.
-//
-
-
 import SwiftUI
 import GoogleMaps
 import SwiftData
@@ -14,10 +6,7 @@ import Network
 @main
 struct Kroya_UI_ProjectApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-
     @StateObject var userStore = UserStore()
-
-
     @StateObject var addressViewModel = AddressViewModel()
     @State private var isSplashScreenActive = true
     @State private var isConnected = true
@@ -26,32 +15,35 @@ struct Kroya_UI_ProjectApp: App {
     private let monitor = NWPathMonitor()
 
     init() {
+        GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
         modelContainer = try! ModelContainer(for: Draft.self)
         setupNetworkMonitoring()
+        // Clear Keychain on first launch after reinstall
+        if isFirstLaunchAfterReinstall() {
+            Auth.shared.clearAllCredentials()
+        }
     }
-    
+
     var body: some Scene {
         WindowGroup {
             ZStack {
                 if isSplashScreenActive {
                     SplashScreen(isSplashScreenActive: $isSplashScreenActive, lang: $lang)
                         .environmentObject(userStore)
-
                         .environmentObject(addressViewModel)
                 } else {
-                    contentView
-                        .overlay(
-                            isConnected ? nil : OfflineMessageView(retryAction: checkNetworkAgain)
-                        )
+                    if isConnected {
+                        contentView
+                    } else {
+                        OfflineMessageView(retryAction: checkNetworkAgain)
+                    }
                 }
             }
             .onAppear {
                 checkInitialConnection()
-           
             }
         }
     }
-
     
     private var contentView: some View {
         Group {
@@ -88,16 +80,25 @@ struct Kroya_UI_ProjectApp: App {
     }
 
     private func checkInitialConnection() {
-        // Manually check the connection status on app launch
         isConnected = monitor.currentPath.status == .satisfied
     }
 
     private func checkNetworkAgain() {
         isConnected = monitor.currentPath.status == .satisfied
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            // Check the network status again after the delay
-            isConnected = monitor.currentPath.status == .satisfied
+            if monitor.currentPath.status != .satisfied {
+                isConnected = false // Re-show the offline message if still offline
+            }
         }
     }
 
+    private func isFirstLaunchAfterReinstall() -> Bool {
+        let hasLaunchedBefore = UserDefaults.standard.bool(forKey: "HasLaunchedBefore")
+        if !hasLaunchedBefore {
+            UserDefaults.standard.set(true, forKey: "HasLaunchedBefore")
+            return true
+        }
+        return false
+    }
 }
+

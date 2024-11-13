@@ -172,13 +172,14 @@ struct RecipeModalView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 NavigationLink(
-                    destination: SaleModalView(
+                    destination:  SaleModalView(
                         dismissToRoot: dismissToRoot,
                         ingret: $ingret,
                         totalRiels: calculateTotal(ingredients: draftModelData.ingredients).totalRiels,
                         totalUSD: calculateTotal(ingredients: draftModelData.ingredients).totalUSD,
                         draftModelData: draftModelData
                     )
+                    .environment(\.modelContext, modelContext)
                 ) {
                     Text("Skip")
                         .foregroundColor(.black.opacity(0.6))
@@ -274,4 +275,3 @@ private func calculateTotal(ingredients: [RecipeIngredient]) -> (totalRiels: Dou
     return (totalRiels, totalUSD)
 }
 }
-

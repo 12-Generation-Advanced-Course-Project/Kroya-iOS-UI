@@ -148,7 +148,6 @@ struct UserBasicInfoView: View {
             // Skip Button
             Button(action: {
                 isSkip.toggle()
-                Auth.shared.loggedIn = true
             }) {
                 Text("Skip")
                     .font(.customfont(.semibold, fontSize: 16))
@@ -174,38 +173,42 @@ struct UserBasicInfoView: View {
             }
         }
         .padding(.horizontal, 20)
-        .navigationBarHidden(true)
-        .navigationDestination(isPresented: $isSkip) {
-            MainScreen(userStore: userStore, lang: $lang)
-             
-                .environmentObject(userStore)
-                .navigationBarHidden(true)
+        if isLoading {
+            LoadingOverlay()
         }
+        
+        NavigationLink(destination: MainScreen(userStore: userStore, lang: $lang)
+            .environmentObject(userStore)
+            .environmentObject(addressVM), isActive: $isSkip) {
+                EmptyView()
+            }
+            .hidden()
+        .navigationBarHidden(true)
     }
     
     func validateAndSaveUserInfo() {
-        // Reset validation flags
-        isNameEmpty = textName.isEmpty
-        isPhoneNumberEmpty = phoneNumber.isEmpty
-        isAddressEmpty = addressVM.selectedAddress == nil
-        
-        // If any field is empty, return without saving
-        if isNameEmpty || isPhoneNumberEmpty || isAddressEmpty || isPhoneNumberInvalid {
-            return
-        }
-        
-        // If all fields are valid, proceed to save
-        isLoading = true
-        authVM.saveUserInfo(
-            email: userStore.user?.email ?? "No Email",
-            userName: textName,
-            phoneNumber: phoneNumber,
-            address: addressVM.selectedAddress?.specificLocation ?? "No Address",
-            accessToken: userStore.user?.accesstoken ?? "",
-            refreshToken: userStore.user?.refreshtoken ?? ""
-        )
-        
-        isLoading = false
-    }
+           isNameEmpty = textName.isEmpty
+           isPhoneNumberEmpty = phoneNumber.isEmpty
+           isAddressEmpty = addressVM.selectedAddress == nil
+           
+           if isNameEmpty || isPhoneNumberEmpty || isAddressEmpty || isPhoneNumberInvalid {
+               return
+           }
+           
+           isLoading = true
+           authVM.saveUserInfo(
+               email: userStore.user?.email ?? "No Email",
+               userName: textName,
+               phoneNumber: phoneNumber,
+               address: addressVM.selectedAddress?.specificLocation ?? "No Address",
+               accessToken: userStore.user?.accesstoken ?? "",
+               refreshToken: userStore.user?.refreshtoken ?? ""
+           )
+           
+           DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+               isLoading = false
+               authVM.isUserSave = true
+           }
+       }
 }
 

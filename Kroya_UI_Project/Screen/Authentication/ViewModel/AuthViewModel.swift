@@ -158,10 +158,25 @@ class AuthViewModel: ObservableObject {
                         let refreshToken = register.refresh_token
                         Auth.shared.setCredentials(accessToken: accessToken, refreshToken: refreshToken, email: email)
                         self?.userStore.setUser(email: email, accesstoken: accessToken, password: newPassword)
-
+                        
                         self?.successMessage = "Register account successful"
                         self?.showError = false
                         Auth.shared.isRegistering = true
+                        
+                        // Add the FCM device token if it exists
+                        if let fcmToken = Auth.shared.getFCMToken() {
+                            DeviceTokenService.shared.addDeviceToken(deviceToken: fcmToken) { result in
+                                switch result {
+                                case .success:
+                                    print("Device token saved successfully.")
+                                case .failure(let error):
+                                    print("Failed to save device token: \(error.localizedDescription)")
+                                }
+                            }
+                        } else {
+                            print("FCM token is not available.")
+                        }
+                        
                         completion() // Trigger navigation check
                     } else {
                         print("Error: \(response.message)")
@@ -179,6 +194,7 @@ class AuthViewModel: ObservableObject {
     }
 
 
+
     
     
     
@@ -194,19 +210,34 @@ class AuthViewModel: ObservableObject {
                         // Save tokens using Auth class
                         let accessToken = token.access_token
                         let refreshToken = token.refresh_token
-                        let Email = Email.email
+                        let email = Email.email ?? ""
+                        
                         // Update userStore and state
-                        self?.userStore.setUser(email: Email ?? "",accesstoken: accessToken, refreshtoken: refreshToken)
-                        Auth.shared.setCredentials(accessToken: accessToken, refreshToken: refreshToken,email: Email!)
-                     
+                        self?.userStore.setUser(email: email, accesstoken: accessToken, refreshtoken: refreshToken)
+                        Auth.shared.setCredentials(accessToken: accessToken, refreshToken: refreshToken, email: email)
+                        
                         self?.successMessage = "Successfully logged in"
                         self?.showError = false
                         Auth.shared.loggedIn = true
-                    }
-                    if response.statusCode == "002"{
-                            self?.showError = true
-                            self?.errorMessage = "Password is incorrect. Please try again"
+                        
+                        // Check if FCM token is available and send it to the backend
+                        if let fcmToken = Auth.shared.getFCMToken() {
+                            DeviceTokenService.shared.addDeviceToken(deviceToken: fcmToken) { result in
+                                switch result {
+                                case .success:
+                                    print("Device token saved successfully.")
+                                case .failure(let error):
+                                    print("Failed to save device token: \(error.localizedDescription)")
+                                }
+                            }
+                        } else {
+                            print("FCM token is not available.")
                         }
+                    } else if response.statusCode == "002" {
+                        self?.showError = true
+                        self?.errorMessage = "Password is incorrect. Please try again"
+                    }
+                    
                 case .failure:
                     self?.successMessage = "Please enter a valid email and password"
                     self?.showError = true
@@ -214,6 +245,7 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
+
     
     //MARK: Save UserInfo
     func saveUserInfo(email: String, userName: String, phoneNumber: String, address: String, accessToken: String, refreshToken: String) {
@@ -271,6 +303,8 @@ class AuthViewModel: ObservableObject {
         }
         islogout = true
     }
+    
+  
 
     
     

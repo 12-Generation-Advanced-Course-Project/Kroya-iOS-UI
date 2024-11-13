@@ -9,26 +9,26 @@ import SwiftUI
 import Foundation
 
 //MARK: Payload for FoodRecipeResponse
-
-struct FoodRecipeResponse:Decodable {
+struct FoodRecipeResponse: Decodable {
     var id: Int
     var photo: [Photo]
     var name: String
     var description: String
     var durationInMinutes: Int
     var level: String
-    var cuisineName:String
-    var categoryName:String
+    var cuisineName: String
+    var categoryName: String
     var ingredients: [RecipeIngredient]
-    var CookingSteps: [CookingStep]
+    var cookingSteps: [CookingStep]
     var totalRaters: Int?
     var averageRating: Double?
     var isFavorite: Bool
     var itemType: String
-    var user: User
+    var user: userModel
     var createdAt: String
-    var ratingPercentage: Double?
+    var ratingPercentage: [String:Int]?
 }
+
 
 // MARK: - Cooking Step (For RecipeModal)
 struct CookingStep: Identifiable, Codable {
@@ -42,5 +42,5 @@ struct RecipeIngredient: Identifiable, Codable {
     var name: String
     var quantity: Double
     var price: Double
-    var selectedCurrency: Int = 0
+    var selectedCurrency: Int?
 }
