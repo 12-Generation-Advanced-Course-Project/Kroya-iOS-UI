@@ -15,7 +15,9 @@ class DraftModelData: ObservableObject {
     @Published var descriptionText: String = ""
     @Published var selectedLevel: String? = nil
     @Published var selectedCuisine: String? = nil
+    @Published var selectedCuisineId: Int? = nil
     @Published var selectedCategory: String? = nil
+    @Published var selectedCategoryId: Int? = nil
     @Published var duration: Double = 5
     
     //MARK: Fields for RecipeModal
@@ -28,6 +30,7 @@ class DraftModelData: ObservableObject {
     @Published var location: String = ""
     @Published var isForSale: Bool = false
     @Published var cookDate: Date = Date()
+    @Published var Currency: String = "RIEL"
     
     //MARK: Images
     @Published var selectedImages: [UIImage] = []
@@ -69,6 +72,7 @@ class DraftModelData: ObservableObject {
                 existingDraft.amount = amount
                 existingDraft.price = price
                 existingDraft.location = location
+                existingDraft.currency = Currency
                 existingDraft.isForSale = isForSale
                 existingDraft.cookDate = cookDate
                 existingDraft.selectedImagesData = imagesData
@@ -89,6 +93,7 @@ class DraftModelData: ObservableObject {
                     amount: amount,
                     price: price,
                     location: location,
+                    currency: Currency,
                     isForSale: isForSale,
                     cookDate: cookDate,
                     selectedImagesData: imagesData,
@@ -140,6 +145,7 @@ class DraftModelData: ObservableObject {
                 self.amount = draft.amount
                 self.price = draft.price
                 self.location = draft.location
+                self.Currency = draft.currency
                 self.isForSale = draft.isForSale
                 self.cookDate = draft.cookDate
                 self.ingredients = draft.ingredients
@@ -190,6 +196,7 @@ class DraftModelData: ObservableObject {
         amount = 0
         price = 0
         location = ""
+        Currency = "RIEL"
         isForSale = false
         cookDate = Date()
         selectedImages = []
@@ -210,13 +217,24 @@ class DraftModelData: ObservableObject {
     
     // MARK: Convert Draft to Food-Recipe-Request from DraftModelData
     func toFoodRecipeRequest() -> FoodRecipeRequest? {
-        let cuisineId = cuisine(rawValue: selectedCuisine ?? "")?.id ?? 0
-        let categoryId = category(rawValue: selectedCategory ?? "")?.id ?? 0
+        let cuisineId = selectedCuisineId ?? 0
+        let categoryId = selectedCategoryId ?? 0
         // Extract only file names from URLs
         let photoArray = selectedImageNames.compactMap { urlString -> String? in
             return URL(string: urlString)?.lastPathComponent
         }
 
+            // Print the request details before returning
+            print("Creating FoodRecipeRequest with the following details:")
+            print("Name: \(foodName)")
+            print("Description: \(descriptionText)")
+            print("Duration: \(Int(duration)) minutes")
+            print("Level: \(selectedLevel ?? "")")
+            print("Cuisine ID: \(cuisineId)")
+            print("Category ID: \(categoryId)")
+            print("Photos: \(photoArray)")
+            print("Ingredients: \(ingredients.map { "\($0.name): \($0.quantity), Price: \($0.price)" })")
+            print("Cooking Steps: \(cookingSteps.map { $0.description })")
         return FoodRecipeRequest(
             photo: photoArray.map { filename in
                 FoodRecipeRequest.Photo(photo: filename)

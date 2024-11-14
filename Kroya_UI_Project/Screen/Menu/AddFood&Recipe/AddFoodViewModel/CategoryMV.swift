@@ -12,47 +12,61 @@ import SwiftUICore
 
 class CategoryMV: ObservableObject {
     
-    @Published var categoryShowModel: [CategoryModel] = []
-    @Published var FoodRecipByCategory: [FoodRecipeModel] = []
-    @Published var FoodSellByCategory: [FoodSellModel] = []
-    
-    @Published var displayCategories: [Category] = []
+       @Published var categoryShowModel: [CategoryModel] = []
+       @Published var FoodRecipByCategory: [FoodRecipeModel] = []
+       @Published var FoodSellByCategory: [FoodSellModel] = []
+       @Published var displayCategories: [Category] = []
     
     func fetchAllCategory() {
-        CategoryService.shared.getAllCategory { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let response):
-                    if response.statusCode == "200", let payload = response.payload {
-                        self?.categoryShowModel = payload
-                        self?.displayCategories = self?.mapCategories(payload) ?? []
-                    } else {
-                        print("Error fetching categories: \(response.message)")
-                    }
-                case .failure(let error):
-                    print("Request failed with error: \(error.localizedDescription)")
-                }
-            }
-        }
-    }
+          CategoryService.shared.getAllCategory { [weak self] result in
+              DispatchQueue.main.async {
+                  switch result {
+                  case .success(let response):
+                      if response.statusCode == "200", let payload = response.payload {
+                          self?.categoryShowModel = payload
+                          self?.displayCategories = self?.mapCategories(payload) ?? []
+                          // Fetch data for each category after loading all categories
+                          self?.fetchDataForAllCategories()
+                      } else {
+                          print("Error fetching categories: \(response.message)")
+                      }
+                  case .failure(let error):
+                      print("Request failed with error: \(error.localizedDescription)")
+                  }
+              }
+          }
+      }
+    
+      //Fetch data for each category by looping through each category ID
+       private func fetchDataForAllCategories() {
+           for category in categoryShowModel {
+               fetchAllCategoryById(categoryId: category.id)
+           }
+       }
+       
+
     
     // Mapping function to convert API category names to local Category objects
     private func mapCategories(_ categories: [CategoryModel]) -> [Category] {
         categories.compactMap { categoryModel in
-            switch categoryModel.categoryName.lowercased() {
-            case "breakfast":
+            // Capitalize the category name from the API
+            let capitalizedCategoryName = categoryModel.categoryName.capitalized
+
+            switch capitalizedCategoryName {
+            case "Breakfast":
                 return Category(title: .breakfast, image: "khmernoodle", color: Color(hex: "#F2F2F2"), x: 60, y: 18)
-            case "lunch":
+            case "Lunch":
                 return Category(title: .lunch, image: "Somlorkoko", color: Color(hex: "#E6F4E8"), x: 60, y: 18)
-            case "dinner":
+            case "Dinner":
                 return Category(title: .dinner, image: "DinnerPic", color: .yellow.opacity(0.2), x: 50, y: 14)
-            case "dessert":
+            case "Dessert":
                 return Category(title: .dessert, image: "DessertPic", color: .blue.opacity(0.2), x: 50, y: 14)
             default:
                 return nil  // Ignore unmatched categories
             }
         }
     }
+
     
     
     //MARK: Get all Category by Id

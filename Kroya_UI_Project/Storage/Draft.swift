@@ -21,6 +21,7 @@ class Draft {
     var amount: Double
     var price: Double
     var location: String
+    var currency: String
     var isForSale: Bool
     var cookDate: Date
     var selectedImagesData: Data?
@@ -28,7 +29,7 @@ class Draft {
     var cookingSteps: [CookingStep]
     init(id: UUID = UUID(), email: String ,foodName: String = "", descriptionText: String = "", selectedLevel: String? = nil,
          selectedCuisine: String? = nil, selectedCategory: String? = nil, duration: Double = 0,
-         amount: Double = 0, price: Double = 0, location: String = "", isForSale: Bool = false,
+         amount: Double = 0, price: Double = 0, location: String = "",currency: String = "", isForSale: Bool = false,
          cookDate: Date = Date(), selectedImagesData: Data? = nil,
          ingredients: [RecipeIngredient] = [], cookingSteps: [CookingStep] = []) {
         self.id = id
@@ -42,6 +43,7 @@ class Draft {
         self.amount = amount
         self.price = price
         self.location = location
+        self.currency = currency
         self.isForSale = isForSale
         self.cookDate = cookDate
         self.selectedImagesData = selectedImagesData
