@@ -1,21 +1,5 @@
 import SwiftUI
 
-struct Category {
-    let title: FoodCategory
-    let image: String
-    let color: Color
-    let x: CGFloat
-    let y: CGFloat
-    let id: Int
-}
-
-enum FoodCategory: String {
-    case breakfast = "Breakfast"
-    case lunch = "Lunch"
-    case dinner = "Dinner"
-    case dessert = "Dessert"
-    case snack = "Snack"
-}
 
 struct HomeView: View {
     
@@ -25,7 +9,8 @@ struct HomeView: View {
     @StateObject private var categoryVM = CategoryMV()
     @State var isSearching: Bool = false
     @Environment(\.locale) var locale
-    
+    @StateObject private var recentSearchesData = RecentSearchesData()
+    @Environment(\.modelContext) var modelContext
     var body: some View {
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
@@ -175,7 +160,10 @@ struct HomeView: View {
                     }
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        NavigationLink(destination: SearchScreen()) {
+                        NavigationLink(destination:
+                        SearchScreen(recentSearchesData: recentSearchesData)
+                            .environment(\.modelContext, modelContext)
+                        ) {
                             Image("ico_search")
                                 .resizable()
                                 .scaledToFit()
@@ -214,23 +202,12 @@ struct HomeView: View {
             }
             .onAppear {
                 categoryVM.fetchAllCategory()
-                
+                recipeViewModel.getAllRecipeFood()
+                foodSellViemModel.getAllFoodSell()
+                recentSearchesData.loadSearches(from: modelContext)
             }
         }
     }
-    
-    //    @ViewBuilder
-    //    func destinationView(for title: FoodCategory) -> some View {
-    //        switch title {
-    //        case .breakfast:
-    //            BreakfastScreenView()
-    //        case .lunch:
-    //            LunchScreenView()
-    //        case .dinner:
-    //            DinnerScreenView()
-    //        case .dessert:
-    //            DessertScreenView()
-    //        }
-    //    }
+
 }
 
