@@ -12,11 +12,18 @@ class PopularFoodVM: ObservableObject {
     @Published var popularFoodSell: [FoodSellModel] = []
     @Published var popularFood: [PopularPayload] = []
     @Published var isLoading: Bool = false
-
+    
     @Published var successMessage: String = ""
     @Published var showError: Bool = false
     @Published var errorMessage: String = ""
     
+    
+    //MARK: Computed property to get all popular food names
+    var popularFoodNames: [String] {
+        let recipeNames = popularFoodRecipe.map { $0.name }
+        let sellNames = popularFoodSell.map { $0.name }
+        return recipeNames + sellNames
+    }
     private func startLoading(){
         isLoading = true
     }
@@ -37,8 +44,6 @@ class PopularFoodVM: ObservableObject {
                     if response.statusCode == "200", let payload = response.payload {
                         self?.popularFoodSell = payload.popularSells
                         self?.popularFoodRecipe = payload.popularRecipes
-
-                        
                         self?.successMessage = "Popular food fetched successfully."
                         self?.showError = false
                     } else {
