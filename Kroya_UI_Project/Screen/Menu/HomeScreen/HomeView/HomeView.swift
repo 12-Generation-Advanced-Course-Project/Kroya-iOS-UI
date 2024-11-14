@@ -6,6 +6,7 @@ struct Category {
     let color: Color
     let x: CGFloat
     let y: CGFloat
+    let id: Int
 }
 
 enum FoodCategory: String {
@@ -13,15 +14,15 @@ enum FoodCategory: String {
     case lunch = "Lunch"
     case dinner = "Dinner"
     case dessert = "Dessert"
+    case snack = "Snack"
 }
 
 struct HomeView: View {
     
-
     let notification = [1, 2, 3, 4, 5]
     @StateObject private var recipeViewModel = RecipeViewModel()
     @StateObject private var foodSellViemModel = FoodSellViewModel()
-    @StateObject private var categoryvm = CategoryMV()
+    @StateObject private var categoryVM = CategoryMV()
     @State var isSearching: Bool = false
     @Environment(\.locale) var locale
     
@@ -69,16 +70,17 @@ struct HomeView: View {
                         .padding(.horizontal)
                     }
                     
-                    // Category Section
-                    VStack(alignment: .leading, spacing: 8) { // Added spacing between elements
+                    // category
+                    VStack(alignment: .leading, spacing: 8) {
                         Text(LocalizedStringKey("Category"))
                             .customFontSemiBoldLocalize(size: 16)
                             .padding(.horizontal)
                         
                         ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 16) { // Added spacing between category cards
-                                ForEach(categoryvm.displayCategories, id: \.title) { category in
-                                    NavigationLink(destination: destinationView(for: category.title)) {
+                            HStack(spacing: 16) {
+                                ForEach(categoryVM.displayCategories, id: \.id) { category in
+                                    
+                                    NavigationLink(destination: CategoryFoodDetails(category: category)){
                                         CategoryCardView(
                                             title: LocalizedStringKey(category.title.rawValue),
                                             image: category.image,
@@ -87,7 +89,12 @@ struct HomeView: View {
                                             y: category.y
                                         )
                                     }
+                                    .onTapGesture {
+                                        // Fetch data for the selected category by ID
+                                        categoryVM.fetchAllCategoryById(categoryId: category.id)
+                                    }
                                 }
+                                
                             }
                             .padding(.horizontal)
                         }
@@ -206,25 +213,24 @@ struct HomeView: View {
                 }
             }
             .onAppear {
-                categoryvm.fetchAllCategory()
-                foodSellViemModel.getAllFoodSell()
-                recipeViewModel.getAllRecipeFood()
+                categoryVM.fetchAllCategory()
+                
             }
         }
     }
     
-    @ViewBuilder
-    func destinationView(for title: FoodCategory) -> some View {
-        switch title {
-        case .breakfast:
-            BreakfastScreenView()
-        case .lunch:
-            LunchScreenView()
-        case .dinner:
-            DinnerScreenView()
-        case .dessert:
-            DessertScreenView()
-        }
-    }
+    //    @ViewBuilder
+    //    func destinationView(for title: FoodCategory) -> some View {
+    //        switch title {
+    //        case .breakfast:
+    //            BreakfastScreenView()
+    //        case .lunch:
+    //            LunchScreenView()
+    //        case .dinner:
+    //            DinnerScreenView()
+    //        case .dessert:
+    //            DessertScreenView()
+    //        }
+    //    }
 }
 

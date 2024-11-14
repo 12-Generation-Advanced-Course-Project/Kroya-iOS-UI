@@ -157,13 +157,13 @@ struct UserBasicInfoView: View {
             Spacer()
             
             // NavigationLink to MainScreen for save action
-            NavigationLink(destination: MainScreen(userStore: userStore, lang: $lang)
-                .environmentObject(userStore)
-                .environmentObject(addressVM)
-                           , isActive: $authVM.isUserSave, label: {
-                EmptyView()
-            })
-            .hidden()
+//            NavigationLink(destination: MainScreen(userStore: userStore, lang: $lang)
+//                .environmentObject(userStore)
+//                .environmentObject(addressVM)
+//                           , isActive: $authVM.isUserSave, label: {
+//                EmptyView()
+//            })
+//            .hidden()
             
         }
         .onAppear {
@@ -173,10 +173,6 @@ struct UserBasicInfoView: View {
             }
         }
         .padding(.horizontal, 20)
-        if isLoading {
-            LoadingOverlay()
-        }
-        
         NavigationLink(destination: MainScreen(userStore: userStore, lang: $lang)
             .environmentObject(userStore)
             .environmentObject(addressVM), isActive: $isSkip) {

@@ -215,13 +215,19 @@ struct AddFoodView: View {
                         Spacer().frame(height: 10)
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
-                                
-                                ForEach(cuisineVM.cuisineShowModel , id: \.id) { data in
-                                    ChipCheckView(text: data.cuisineName , isSelected: draftModelData.selectedCuisine ==  data.cuisineName ) {
-                                        draftModelData.selectedCuisine = draftModelData.selectedCuisine ==  data.cuisineName ? nil :  data.cuisineName
+                                ForEach(cuisineVM.cuisineShowModel, id: \.id) { data in
+                                    ChipCheckView(text: data.cuisineName, isSelected: draftModelData.selectedCuisine == data.cuisineName) {
+                                        if draftModelData.selectedCuisine == data.cuisineName {
+                                            // Deselect
+                                            draftModelData.selectedCuisine = nil
+                                            draftModelData.selectedCuisineId = nil
+                                        } else {
+                                            // Select
+                                            draftModelData.selectedCuisine = data.cuisineName
+                                            draftModelData.selectedCuisineId = data.id
+                                        }
                                     }
                                 }
-                                
                             }.padding(.leading, .screenWidth * 0.02)
                         }
                         
@@ -233,11 +239,20 @@ struct AddFoodView: View {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
                                 ForEach(categoryvm.categoryShowModel) { data in
-                                    ChipCheckView(text: data.categoryName , isSelected: draftModelData.selectedCategory == data.categoryName) {
-                                        draftModelData.selectedCategory = draftModelData.selectedCategory == data.categoryName ? nil : data.categoryName
+                                    ChipCheckView(text: data.categoryName.capitalized, isSelected: draftModelData.selectedCategory == data.categoryName) {
+                                        if draftModelData.selectedCategory == data.categoryName {
+                                            // Deselect
+                                            draftModelData.selectedCategory = nil
+                                            draftModelData.selectedCategoryId = nil
+                                        } else {
+                                            // Select
+                                            draftModelData.selectedCategory = data.categoryName
+                                            draftModelData.selectedCategoryId = data.id
+                                        }
                                     }
                                 }
-                            }.padding(.leading, .screenWidth * 0.02)
+                            }
+                            .padding(.leading, .screenWidth * 0.02)
                         }
                     }
                     .padding(.leading, .screenWidth * 0.02)

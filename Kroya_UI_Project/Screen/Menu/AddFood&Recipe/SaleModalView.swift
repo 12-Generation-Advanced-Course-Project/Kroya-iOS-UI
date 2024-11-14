@@ -10,7 +10,8 @@ struct SaleModalView: View {
     @State private var showError: Bool = false
     let totalRiels: Double
     let totalUSD: Double
-    let currencies = ["៛", "$"]
+    let displayCurrencies = ["៛", "$"]
+    let parameterCurrencies = ["RIEL", "DOLLAR"]
     @State private var addressSelect: String = ""
     @StateObject private var addressStore = AddressViewModel()
     @ObservedObject var draftModelData: DraftModelData
@@ -158,7 +159,7 @@ struct SaleModalView: View {
                                                     priceText = filterPriceInput(newValue)
                                                     let price = Double(priceText) ?? 0.0
                                                     ingret.price = price
-                                                    draftModelData.price = price // Save to draftModelData
+                                                    draftModelData.price = price
                                                 }
                                             ))
                                             .customFontMediumLocalize(size: 15)
@@ -168,10 +169,10 @@ struct SaleModalView: View {
                                             .onChange(of: draftModelData.price) { _ in
                                                 validateFields()
                                             }
-                                            
+
                                             Picker("", selection: $ingret.selectedCurrency) {
-                                                ForEach(0..<currencies.count) { index in
-                                                    Text(currencies[index])
+                                                ForEach(0..<displayCurrencies.count) { index in
+                                                    Text(displayCurrencies[index])  // Show currency symbols in UI
                                                         .tag(index)
                                                         .customFontMediumLocalize(size: 20)
                                                 }
@@ -179,15 +180,10 @@ struct SaleModalView: View {
                                             .pickerStyle(SegmentedPickerStyle())
                                             .frame(width: 60)
                                             .onChange(of: ingret.selectedCurrency) { newCurrency in
-                                                // Convert currency on selection change
-                                                if newCurrency == 1 {
-                                                    ingret.price = convertCurrency(ingret.price)
-                                                } else {
-                                                    ingret.price = ingret.price * conversionRate
-                                                }
-                                                draftModelData.price = ingret.price
-                                                validateFields()
+                                                updateCurrencyAndPrice(newCurrency: newCurrency)
                                             }
+
+
                                         }
                                         .padding(.horizontal)
                                         Divider()
@@ -326,7 +322,6 @@ struct SaleModalView: View {
             // Re-validate fields after location change
             validateFields()
         }
-        
         .alert(isPresented: $showDraftAlert) {
             Alert(
                 title: Text("Save this as a draft?"),
@@ -353,7 +348,19 @@ struct SaleModalView: View {
             }
         }
     }
-    
+    //MARK: Func for change Currency
+    private func updateCurrencyAndPrice(newCurrency: Int) {
+        if newCurrency == 1 {
+            ingret.price = convertCurrency(ingret.price)
+            draftModelData.Currency = "DOLLAR"  // Set to "DOLLAR"
+        } else {
+            ingret.price = ingret.price * conversionRate
+            draftModelData.Currency = "RIEL"  // Set to "RIEL"
+        }
+        draftModelData.price = ingret.price
+        validateFields()
+    }
+
     //MARK: Logic for Add Food as Recipe
     private func uploadImagesAndPostRecipe() {
         showLoadingOverlay = true // Start loading
@@ -378,6 +385,9 @@ struct SaleModalView: View {
     // MARK: Post Recipe
     private func postRecipe() {
         if let foodRecipeRequest = draftModelData.toFoodRecipeRequest() {
+            // Print the request structure
+            print("Posting Food Recipe with request data: \(foodRecipeRequest)")
+            
             FoodRecipeService.shared.saveFoodRecipe(foodRecipeRequest) { result in
                 DispatchQueue.main.async {
                     self.showLoadingOverlay = false
@@ -399,13 +409,16 @@ struct SaleModalView: View {
                     }
                 }
             }
+        } else {
+            print("Failed to create FoodRecipeRequest.")
         }
     }
+
     
     // MARK: Post Food Sell
     private func postFoodSell(foodRecipeId: Int) {
         if let foodSellRequest = draftModelData.toFoodSellRequest() {
-            let currencyType = draftModelData.price > 1000 ? "RIEL" : "DOLLAR"
+            let currencyType = draftModelData.Currency  // Use the mapped currency here
             FoodSellService.shared.postFoodSell(foodSellRequest, foodRecipeId: foodRecipeId, currencyType: currencyType) { result in
                 DispatchQueue.main.async {
                     showLoadingOverlay = false // End loading on success or error
@@ -423,6 +436,7 @@ struct SaleModalView: View {
             }
         }
     }
+
     
     private func handleCancel() {
         if hasDraftData {

@@ -11,64 +11,58 @@ struct FoodonRecipe: View {
     
     // Static image mapping for cuisines
     let cuisineImages: [String: String] = [
-        "Soup": "soupImage",
-        "Salad": "saladImage",
-        "Grill": "grillImage",
-        "Dessert": "dessertImage"
+        "Soup": "SoupPic",
+        "Salad": "SaladPic",
+        "Grill": "GrillPic",
+        "Dessert": "DessertPic 1"
     ]
     
     var body: some View {
         NavigationView {
             VStack {
-                // Cuisine Selection Buttons (No loading indicator for cuisines)
-                if !recipeViewModel.RecipeCuisine.isEmpty {
-                    HStack(spacing: 40) {
-                        ForEach(recipeViewModel.RecipeCuisine) { cuisine in
-                            Button(action: {
-                                if selectedOrderIndex == cuisine.id {
-                                    recipeViewModel.getAllRecipeFood()
-                                    isChooseCuisine = false
-                                    selectedOrderIndex = nil
-                                } else {
-                                    selectedOrderIndex = cuisine.id
-                                    recipeViewModel.getRecipesByCuisine(cuisineId: cuisine.id)
-                                    isChooseCuisine = true
-                                }
-                            }) {
-                                VStack {
-                                    // Use static image based on cuisine name or a default image
-                                    let imageName = cuisineImages[cuisine.cuisineName] ?? "DefaultCuisineImage"
-                                    Image(imageName)
-                                        .resizable()
-                                        .frame(width: 60, height: 60)
-                                        .cornerRadius(12)
-                                    
-                                    Text(cuisine.cuisineName)
-                                        .font(.customfont(.medium, fontSize: 16))
-                                        .foregroundColor(selectedOrderIndex == cuisine.id && isChooseCuisine ? Color.yellow : Color.gray)
-                                }
+                // Cuisine Selection Buttons
+                HStack(spacing: 40) {
+                    ForEach(recipeViewModel.RecipeCuisine) { cuisine in
+                        Button(action: {
+                            if selectedOrderIndex == cuisine.id {
+                                recipeViewModel.getAllRecipeFood()
+                                isChooseCuisine = false
+                                selectedOrderIndex = nil
+                            } else {
+                                selectedOrderIndex = cuisine.id
+                                recipeViewModel.getRecipesByCuisine(cuisineId: cuisine.id)
+                                isChooseCuisine = true
                             }
-                            .buttonStyle(PlainButtonStyle())
+                        }) {
+                            VStack {
+                                // Display image based on cuisine name or a default placeholder
+                                let imageName = cuisineImages[cuisine.cuisineName] ?? "DefaultCuisineImage"
+                                Image(imageName)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 60, height: 60)
+                                    .cornerRadius(12)
+                                
+                                Text(cuisine.cuisineName)
+                                    .font(.customfont(.medium, fontSize: 16))
+                                    .foregroundColor(selectedOrderIndex == cuisine.id && isChooseCuisine ? Color.yellow : Color.gray)
+                            }
                         }
+                        .buttonStyle(PlainButtonStyle())
                     }
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding()
-                } else if recipeViewModel.showError {
-                    Text(recipeViewModel.errorMessage)
-                        .foregroundColor(.red)
-                        .padding()
                 }
+                .frame(maxWidth: .infinity, alignment: .center)
+    
                 
                 Spacer().frame(height: 20)
                 
-                // Display "All" title
                 Text("All")
                     .font(.customfont(.bold, fontSize: 16))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(.black.opacity(0.8))
                     .padding(.horizontal)
                 
-                // Recipe Display
+                // Content Display: Loading, Error, or Recipes
                 if recipeViewModel.isLoading {
                     ZStack {
                         Color.white
@@ -79,6 +73,10 @@ struct FoodonRecipe: View {
                             .scaleEffect(2)
                             .offset(y: -50)
                     }
+                } else if recipeViewModel.showError {
+                    Text(recipeViewModel.errorMessage)
+                        .foregroundColor(.red)
+                        .padding()
                 } else {
                     ScrollView {
                         LazyVStack {
@@ -117,6 +115,8 @@ struct FoodonRecipe: View {
         .onChange(of: searchText) { newValue in
             if !newValue.isEmpty {
                 recipeViewModel.getSearchFoodRecipeByName(searchText: newValue)
+            } else {
+                recipeViewModel.getAllRecipeFood()
             }
         }
         .navigationBarBackButtonHidden(true)
