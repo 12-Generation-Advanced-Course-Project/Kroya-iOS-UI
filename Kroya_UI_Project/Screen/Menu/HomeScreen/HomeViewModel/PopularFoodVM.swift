@@ -8,8 +8,11 @@ import SwiftUI
 import Foundation
 
 class PopularFoodVM: ObservableObject {
-    @Published var popularFood: [PopularFoodItem] = []
+    @Published var popularFoodRecipe: [FoodRecipeModel] = []
+    @Published var popularFoodSell: [FoodSellModel] = []
+    @Published var popularFood: [PopularPayload] = []
     @Published var isLoading: Bool = false
+
     @Published var successMessage: String = ""
     @Published var showError: Bool = false
     @Published var errorMessage: String = ""
@@ -31,12 +34,16 @@ class PopularFoodVM: ObservableObject {
                 self?.endLoading()
                 switch result {
                 case .success(let response):
-                    if response.statusCode == "200" {
-                        // Access the payload directly without optional binding
-                        let payload = response.payload
-                        self?.popularFood = payload.popularSells.map { PopularFoodItem.sell($0) } + payload.popularRecipes.map { PopularFoodItem.recipe($0) }
-                        self?.successMessage = "Popular Food Fetched successfullyy."
+                    if response.statusCode == "200", let payload = response.payload {
+                        self?.popularFoodSell = payload.popularSells
+                        self?.popularFoodRecipe = payload.popularRecipes
+
+                        
+                        self?.successMessage = "Popular food fetched successfully."
                         self?.showError = false
+                    } else {
+                        self?.showError = true
+                        self?.errorMessage = response.message
                     }
                 case .failure(let error):
                     self?.showError = true
@@ -46,4 +53,6 @@ class PopularFoodVM: ObservableObject {
             }
         }
     }
+    
+    
 }

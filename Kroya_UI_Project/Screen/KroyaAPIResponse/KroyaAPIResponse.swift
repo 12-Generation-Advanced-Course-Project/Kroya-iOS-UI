@@ -26,9 +26,9 @@ typealias SavefoodRecipeResponse = KroyaSingleAPIResponse<FoodRecipeResponse>
 typealias userFoodResponse = KroyaAPIResponse<UserFoodModel>
 //MARK: Food-Sell get all
 typealias foodSellResponse = KroyaAPIResponse<FoodSellModel>
-typealias SaveFoodSellResponse = KroyaAPIResponse<FoodSellResponse>
+
 //MARK: Popular
-typealias popularResponse = KroyaAPIResponsee<PopularPayload>
+typealias popularResponse = KroyaSingleAPIResponse<PopularPayload>
 
 typealias SaveFoodSellResponse = KroyaSingleAPIResponse<FoodSellResponse>
 //MARK: Get all Food by category

@@ -26,6 +26,7 @@ class Foods_Service {
         ]
         
         AF.request(url, method: .get, headers: headers).validate().responseDecodable(of: popularResponse.self) { response in
+            debugPrint(response)
             switch response.result {
             case .success(let apiResponse):
                 if apiResponse.statusCode == "200" {

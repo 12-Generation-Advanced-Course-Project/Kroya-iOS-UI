@@ -9,14 +9,9 @@ import Foundation
 
 
 // Payload Model
-struct PopularPayload: Codable {
+struct PopularPayload: Decodable {
     let popularSells: [FoodSellModel]
     let popularRecipes: [FoodRecipeModel]
 
 
-}
-
-enum PopularFoodItem {
-    case sell(FoodSellModel)
-    case recipe(FoodRecipeModel)
 }

@@ -20,13 +20,14 @@ struct ViewAllPopularDishesView: View {
                 .frame(height: 30)
             // Content for Each Tab
             TabView(selection: $selectedSegment) {
-                AllPopularTabView(isSelected: selectedSegment, popularFood: [])
+                AllPopularTabView(isSelected: selectedSegment) // This should work now
                     .tag(0)
-                SaleTab(isselected: selectedSegment)
+                PopularSellTab(isSelected: selectedSegment) // This should work now
                     .tag(1)
-                RecipeTab(isselected: selectedSegment)
+                PopularRecipeTab(isSelected: selectedSegment) // This should work now
                     .tag(2)
             }
+            
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         }
         .navigationTitle(LocalizedStringKey("Popular Dishes"))
@@ -90,7 +91,6 @@ struct ViewAllPopularDishesView: View {
         }
     }
     
-    
     struct SegmentedControlView: View {
         
         @Binding var selectedSegment: Int
@@ -151,3 +151,4 @@ struct ViewAllPopularDishesView: View {
         }
     }
 }
+
