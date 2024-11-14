@@ -27,7 +27,7 @@ typealias userFoodResponse = KroyaAPIResponse<UserFoodModel>
 typealias foodSellResponse = KroyaAPIResponse<FoodSellModel>
 typealias SaveFoodSellResponse = KroyaSingleAPIResponse<FoodSellResponse>
 //MARK: Get all Food by category
-typealias getAllFoodCategoryResponse = KroyaAPIResponse<payloadCategory>
+typealias getAllFoodCategoryResponse = KroyaSingleAPIResponse<PayloadCategory>
 // Generic API response for a single object payload
 struct KroyaSingleAPIResponse<T: Decodable>: Decodable {
     let message: String
