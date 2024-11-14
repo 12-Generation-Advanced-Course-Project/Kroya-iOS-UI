@@ -7,15 +7,25 @@
 
 import Foundation
 import Alamofire
-import SwiftUICore
+import SwiftUI
 
-
+// MARK: - Category View Model
 class CategoryMV: ObservableObject {
     
-       @Published var categoryShowModel: [CategoryModel] = []
-       @Published var FoodRecipByCategory: [FoodRecipeModel] = []
-       @Published var FoodSellByCategory: [FoodSellModel] = []
-       @Published var displayCategories: [Category] = []
+    @Published var categoryShowModel: [CategoryModel] = []
+    @Published var FoodRecipByCategory: [FoodRecipeModel] = []
+    @Published var FoodSellByCategory: [FoodSellModel] = []
+    @Published var displayCategories: [Category] = []
+    @Published var isLoading: Bool = false
+    
+    // MARK: - Helper Methods for Loading State
+    private func startLoading() {
+        isLoading = true
+    }
+    
+    private func endLoading() {
+        isLoading = false
+    }
     
     func fetchAllCategory() {
           CategoryService.shared.getAllCategory { [weak self] result in
@@ -46,6 +56,7 @@ class CategoryMV: ObservableObject {
        
 
     
+    
     // Mapping function to convert API category names to local Category objects
     private func mapCategories(_ categories: [CategoryModel]) -> [Category] {
         categories.compactMap { categoryModel in
@@ -69,15 +80,17 @@ class CategoryMV: ObservableObject {
 
     
     
-    //MARK: Get all Category by Id
+    
+    // MARK: Get all Category by Id
     func fetchAllCategoryById(categoryId: Int) {
         CategoryService.shared.getAllCategoryById(category: categoryId) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let response):
                     if response.statusCode == "200", let payload = response.payload {
-
-                       
+                        // Directly accessing categoryFoodRecipes and categoryFoodSells
+                        self?.FoodRecipByCategory = payload.foodRecipes
+                        self?.FoodSellByCategory = payload.foodSells
                     } else {
                         print("Error fetching categories by ID: \(response.message)")
                     }
@@ -87,11 +100,12 @@ class CategoryMV: ObservableObject {
             }
         }
     }
-    
-    
-    
-
-
-
-    
 }
+
+
+
+
+
+
+
+

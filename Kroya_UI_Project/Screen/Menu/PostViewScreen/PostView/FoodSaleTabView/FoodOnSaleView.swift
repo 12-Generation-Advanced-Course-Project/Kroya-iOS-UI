@@ -36,9 +36,7 @@ struct FoodOnSaleView: View {
         .padding(.top, 8)
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            if foodsellVm.FoodOnSale.isEmpty {
-                foodsellVm.getAllFoodSell()
-            }
+           
         }
     }
     

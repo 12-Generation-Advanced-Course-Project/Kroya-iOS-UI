@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct payloadCategory: Decodable {
-    let foodRecipes:[FoodRecipeModel]
-    let foodSells:[FoodSellModel]
+struct PayloadCategory: Decodable {
+    let foodRecipes: [FoodRecipeModel]
+    let foodSells: [FoodSellModel]
 }
