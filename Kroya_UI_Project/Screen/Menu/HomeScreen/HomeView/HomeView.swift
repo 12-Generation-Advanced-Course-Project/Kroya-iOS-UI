@@ -218,19 +218,5 @@ struct HomeView: View {
             }
         }
     }
-    
-    //    @ViewBuilder
-    //    func destinationView(for title: FoodCategory) -> some View {
-    //        switch title {
-    //        case .breakfast:
-    //            BreakfastScreenView()
-    //        case .lunch:
-    //            LunchScreenView()
-    //        case .dinner:
-    //            DinnerScreenView()
-    //        case .dessert:
-    //            DessertScreenView()
-    //        }
-    //    }
 }
 
