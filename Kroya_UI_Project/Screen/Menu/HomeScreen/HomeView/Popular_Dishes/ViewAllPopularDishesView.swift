@@ -3,6 +3,7 @@ import Combine
 
 struct ViewAllPopularDishesView: View {
     @State private var selectedSegment = 0
+    @StateObject private var popularAllFood = PopularFoodVM()
     @Environment(\.dismiss) var dismiss
     @State private var currentPage = 0
     let images = ["slide1", "slide2", "slide3"]
@@ -14,20 +15,19 @@ struct ViewAllPopularDishesView: View {
             ImageSliderView(currentPage: $currentPage, images: images, timer: timer)
                 .padding(.horizontal)
                 .padding(.top, 10)
-            
             // Segmented Control
             SegmentedControlView(selectedSegment: $selectedSegment)
                 .frame(height: 30)
-            
             // Content for Each Tab
             TabView(selection: $selectedSegment) {
-                AllPopularTabView(isSelected: selectedSegment)
+                AllPopularTabView(isSelected: selectedSegment) // This should work now
                     .tag(0)
-                SaleTab(isselected: selectedSegment)
+                PopularSellTab(isSelected: selectedSegment) // This should work now
                     .tag(1)
-                RecipeTab(isselected: selectedSegment)
+                PopularRecipeTab(isSelected: selectedSegment) // This should work now
                     .tag(2)
             }
+            
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         }
         .navigationTitle(LocalizedStringKey("Popular Dishes"))
@@ -91,7 +91,6 @@ struct ViewAllPopularDishesView: View {
         }
     }
     
-    
     struct SegmentedControlView: View {
         
         @Binding var selectedSegment: Int
@@ -152,3 +151,4 @@ struct ViewAllPopularDishesView: View {
         }
     }
 }
+

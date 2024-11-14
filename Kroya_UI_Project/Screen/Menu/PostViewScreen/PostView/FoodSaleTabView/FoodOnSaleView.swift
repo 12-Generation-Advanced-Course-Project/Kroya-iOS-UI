@@ -4,7 +4,7 @@ import SwiftUI
 struct FoodOnSaleView: View {
     var iselected: Int?
     @StateObject private var foodsellVm = FoodSellViewModel()
-    
+  
     var body: some View {
         VStack {
             if foodsellVm.FoodOnSale.isEmpty && !foodsellVm.isLoading {

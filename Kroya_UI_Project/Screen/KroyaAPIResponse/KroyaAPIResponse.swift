@@ -15,6 +15,7 @@ struct KroyaAPIResponse<T: Decodable>: Decodable {
     let statusCode: String
     let timestamp: String?
 }
+
 //MARK: User Setting Profile
 typealias UserSettingProfileResponse = KroyaAPIResponse<ProfileModel>
 typealias DeviceTokenResponse = KroyaAPIResponse<DeviceTokenModel>
@@ -25,6 +26,10 @@ typealias SavefoodRecipeResponse = KroyaSingleAPIResponse<FoodRecipeResponse>
 typealias userFoodResponse = KroyaAPIResponse<UserFoodModel>
 //MARK: Food-Sell get all
 typealias foodSellResponse = KroyaAPIResponse<FoodSellModel>
+
+//MARK: Popular
+typealias popularResponse = KroyaSingleAPIResponse<PopularPayload>
+
 typealias SaveFoodSellResponse = KroyaSingleAPIResponse<FoodSellResponse>
 //MARK: Get all Food by category
 typealias getAllFoodCategoryResponse = KroyaAPIResponse<payloadCategory>
