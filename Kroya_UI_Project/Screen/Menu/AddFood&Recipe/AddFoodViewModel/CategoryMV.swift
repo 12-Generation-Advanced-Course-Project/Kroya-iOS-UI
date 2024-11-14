@@ -65,13 +65,13 @@ class CategoryMV: ObservableObject {
 
             switch capitalizedCategoryName {
             case "Breakfast":
-                return Category(title: .breakfast, image: "khmernoodle", color: Color(hex: "#F2F2F2"), x: 60, y: 18)
+                return Category(title: .breakfast, image: "khmernoodle", color: Color(hex: "#F2F2F2"), x: 60, y: 18, id: categoryModel.id)
             case "Lunch":
-                return Category(title: .lunch, image: "Somlorkoko", color: Color(hex: "#E6F4E8"), x: 60, y: 18)
+                return Category(title: .lunch, image: "Somlorkoko", color: Color(hex: "#E6F4E8"), x: 60, y: 18, id: categoryModel.id)
             case "Dinner":
-                return Category(title: .dinner, image: "DinnerPic", color: .yellow.opacity(0.2), x: 50, y: 14)
+                return Category(title: .dinner, image: "DinnerPic", color: .yellow.opacity(0.2), x: 50, y: 14, id: categoryModel.id)
             case "Dessert":
-                return Category(title: .dessert, image: "DessertPic", color: .blue.opacity(0.2), x: 50, y: 14)
+                return Category(title: .dessert, image: "DessertPic", color: .blue.opacity(0.2), x: 50, y: 14, id: categoryModel.id)
             default:
                 return nil  // Ignore unmatched categories
             }
