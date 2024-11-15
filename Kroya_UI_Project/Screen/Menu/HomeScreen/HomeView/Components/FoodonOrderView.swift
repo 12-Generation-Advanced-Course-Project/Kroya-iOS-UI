@@ -11,7 +11,6 @@ struct FoodonOrderView: View {
     @StateObject private var foodViewModel = FoodSellViewModel()
     let imageofOrder: [String] = ["SoupPic", "SaladPic", "GrillPic", "DessertPic 1"]
     let titleofOrder: [String] = ["Soup", "Salad", "Grill", "Dessert"]
-    
     @State private var selectedOrderIndex: Int? = nil
     @State private var searchText = ""
     @State private var doubleSelectedOrderIndex: Int? = nil

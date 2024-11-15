@@ -39,7 +39,8 @@ struct HomeView: View {
                         
                         // Recipe Order Cards
                         HStack(spacing: 16) {
-                            NavigationLink(destination: FoodonOrderView()) {
+                            NavigationLink(destination: FoodonOrderView()
+                            ) {
                                 Recipe_OrderCard(
                                     title: LocalizedStringKey("Food order"),
                                     subtitle: LocalizedStringKey("Order what you love"),
@@ -136,8 +137,8 @@ struct HomeView: View {
                                                     showPrice: true
                                                 )
                                 ) {
-                                    FoodOnSaleViewCell(foodSale: foodSale)
-                                        .frame(width: 360)
+//                                    FoodOnSaleViewCell(foodSale: foodSale)
+//                                        .frame(width: 360)
                                 }
                             }
                             

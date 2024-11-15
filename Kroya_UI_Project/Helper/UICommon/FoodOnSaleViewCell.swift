@@ -2,9 +2,8 @@ import SwiftUI
 import Kingfisher
 
 struct FoodOnSaleViewCell: View {
-    
-    @State private var isFavorite: Bool
     var foodSale: FoodSellModel
+    @State private var isFavorite: Bool
     private let urlImagePrefix = "https://kroya-api-production.up.railway.app/api/v1/fileView/"
     
     init(foodSale: FoodSellModel, isFavorite: Bool = false) {
@@ -63,7 +62,7 @@ struct FoodOnSaleViewCell: View {
                         isFavorite.toggle()
                     }) {
                         Circle()
-                            .fill(isFavorite ? Color.red : Color.white.opacity(0.5))
+                            .fill(foodSale.isFavorite ? Color.red : Color.white.opacity(0.5))
                             .frame(width: 30, height: 30)
                             .overlay(
                                 Image(systemName: "heart.fill")

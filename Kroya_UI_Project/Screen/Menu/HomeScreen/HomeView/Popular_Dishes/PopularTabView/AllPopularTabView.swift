@@ -26,10 +26,16 @@ struct AllPopularTabView: View {
                     }
                 }
             }
+            
             .overlay(
                 Group {
                     if popularFoodVM.isLoading {
-                        LoadingOverlay()
+                        Color.white
+                            .edgesIgnoringSafeArea(.all)
+                        
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
+                            .scaleEffect(2)
                     }
                 }
             )

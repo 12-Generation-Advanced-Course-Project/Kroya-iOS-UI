@@ -1,38 +1,37 @@
 //
-//  recipe.swift
+//  FavoriteRecipesTabView.swift
 //  Kroya_UI_Project
 //
-//  Created by Macbook on 10/14/24.
+//  Created by Macbook on 11/15/24.
 //
 
 import SwiftUI
 
-
-struct PopularRecipeTab: View {
-    @StateObject private var popularRecipe = PopularFoodVM()
-    var isSelected: Int?
+struct FavoriteRecipesTabView: View {
+    @StateObject private var favoriteFoodRecipe = FavoriteVM()
+    
     var body: some View {
         VStack {
-            if popularRecipe.popularFoodRecipe.isEmpty && !popularRecipe.isLoading {
-                Text("No Popular Recipes Found!")
+            if favoriteFoodRecipe.favoriteFoodRecipe.isEmpty && !favoriteFoodRecipe.isLoading{
+                Text("No Favorite Food Recipe Found!")
                     .font(.title3)
                     .foregroundColor(.gray)
                     .padding()
             } else {
                 ScrollView(showsIndicators: false) {
                     LazyVStack(spacing: 8) {
-                        ForEach(popularRecipe.popularFoodRecipe) { popularrecipe in
-                            NavigationLink(destination: recipeDetailDestination(for: popularrecipe)) {
-                                RecipeViewCell(recipe: popularrecipe)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.horizontal, 20)
+                        ForEach(favoriteFoodRecipe.favoriteFoodRecipe) { favorite in
+                            NavigationLink(destination: recipeDetailDestination(for: favorite)) {
+                                RecipeViewCell(recipe: favorite)
+                                                     .padding(.horizontal)
+                                                     .padding(.vertical, 8)
                             }
                         }
                     }
                 }
                 .overlay(
                     Group {
-                        if popularRecipe.isLoading {
+                        if favoriteFoodRecipe.isLoading {
                             Color.white
                                 .edgesIgnoringSafeArea(.all)
                             
@@ -47,12 +46,12 @@ struct PopularRecipeTab: View {
         .padding(.top, 8)
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            if popularRecipe.popularFoodRecipe.isEmpty {
-                popularRecipe.getAllPopular()
+            if favoriteFoodRecipe.favoriteFoodRecipe.isEmpty {
+                favoriteFoodRecipe.getAllFavoriteFood()
             }
         }
     }
-    
+    // MARK: - Food Detail Destination
     @ViewBuilder
     private func recipeDetailDestination(for recipe: FoodRecipeModel) -> some View {
         FoodDetailView(

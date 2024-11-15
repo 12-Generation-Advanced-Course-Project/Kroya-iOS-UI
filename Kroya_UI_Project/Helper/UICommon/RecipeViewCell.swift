@@ -64,7 +64,7 @@ struct RecipeViewCell: View {
                         isFavorite.toggle()
                     }) {
                         Circle()
-                            .fill(isFavorite ? Color.red : Color.white.opacity(0.5))
+                            .fill(recipe.isFavorite ? Color.red : Color.white.opacity(0.5))
                             .frame(width: 30, height: 30)
                             .overlay(
                                 Image(systemName: "heart.fill")

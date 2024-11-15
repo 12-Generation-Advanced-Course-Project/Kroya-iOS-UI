@@ -1,38 +1,38 @@
 //
-//  sale.swift
+//  FoodOnSaleTabView.swift
 //  Kroya_UI_Project
 //
-//  Created by Macbook on 10/14/24.
+//  Created by Macbook on 11/15/24.
 //
 
 import SwiftUI
 
-struct PopularSellTab: View {
-    var isSelected: Int?
-    @StateObject private var popularSell = PopularFoodVM()
-  
+struct FavoriteFoodOnSaleTabView: View {
+   // @StateObject private var foodViewModel = FoodSellViewModel()
+    @StateObject private var favoriteFoodSale = FavoriteVM()
+    
     var body: some View {
         VStack {
-            if popularSell.popularFoodSell.isEmpty && !popularSell.isLoading{
-                Text("No Popular Food Sell Found!")
+            if favoriteFoodSale.favoriteFoodSell.isEmpty && !favoriteFoodSale.isLoading{
+                Text("No Favorite Food Sell Found!")
                     .font(.title3)
                     .foregroundColor(.gray)
                     .padding()
             } else {
                 ScrollView(showsIndicators: false) {
                     LazyVStack(spacing: 8) {
-                        ForEach(popularSell.popularFoodSell) { popularsell in
-                            NavigationLink(destination: foodDetailDestination(for: popularsell)) {
-                                FoodOnSaleViewCell(foodSale: popularsell)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.horizontal, 20)
+                        ForEach(favoriteFoodSale.favoriteFoodSell) { favorite in
+                            NavigationLink(destination: foodDetailDestination(for: favorite)) {
+                                FoodOnSaleViewCell(foodSale: favorite, isFavorite: true)
+                                                     .padding(.horizontal)
+                                                     .padding(.vertical, 8)
                             }
                         }
                     }
                 }
                 .overlay(
                     Group {
-                        if popularSell.isLoading {
+                        if favoriteFoodSale.isLoading {
                             Color.white
                                 .edgesIgnoringSafeArea(.all)
                             
@@ -47,12 +47,11 @@ struct PopularSellTab: View {
         .padding(.top, 8)
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            if popularSell.popularFoodSell.isEmpty {
-                popularSell.getAllPopular()
+            if favoriteFoodSale.favoriteFoodSell.isEmpty {
+                favoriteFoodSale.getAllFavoriteFood()
             }
         }
     }
-    
     // MARK: - Food Detail Destination
     @ViewBuilder
     private func foodDetailDestination(for foodSale: FoodSellModel) -> some View {
@@ -62,11 +61,8 @@ struct PopularSellTab: View {
             subImage2: "ahmok2",
             subImage3: "ahmok3",
             subImage4: "ahmok4",
-            showOrderButton: foodSale.isOrderable,
-            showPrice: foodSale.isOrderable
+            showOrderButton: true,
+            showPrice: true
         )
     }
 }
-//#Preview {
-//   SaleTab()
-//}
