@@ -9,6 +9,7 @@ import SwiftUI
 import Alamofire
 
 class CategoryService {
+    
     static let shared = CategoryService()
     
     // MARK: Get All Categories

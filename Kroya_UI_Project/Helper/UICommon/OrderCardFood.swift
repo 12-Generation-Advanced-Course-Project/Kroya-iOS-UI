@@ -1,83 +1,100 @@
 
-
 import SwiftUI
+import Kingfisher
 
 struct OrderCard: View {
     
+    var order: OrderModel // Accept an OrderModel instance
     var isAccepted: Bool
     var isOrder: Bool
-    var showIcon: Bool = false
+    var showIcon: Bool
     @State private var navigateToOrderListView = false
-
+    private let urlImagePrefix = "https://kroya-api-production.up.railway.app/api/v1/fileView/"
+    
     var body: some View {
         
         HStack {
-            // Image on the left
-            Image("Songvak")
-                .resizable()
-                .frame(width: 61, height: 62)
-                .cornerRadius(8)
+            // Display the first photo from the order if available using KFImage
+            if let photoFilename = order.photo.first?.photo, let url = URL(string: urlImagePrefix + photoFilename) {
+                KFImage(url)
+                    .resizable()
+                    .frame(width: 61, height: 62)
+                    .cornerRadius(8)
+            } else {
+                Image(systemName: "photo") // Fallback image
+                    .resizable()
+                    .frame(width: 61, height: 62)
+                    .cornerRadius(8)
+            }
 
             VStack(alignment: .leading, spacing: 5) {
                 HStack {
-                    // Title and subtitle
-                    Text("Somlor Kari")
+                    Text(order.name) // Display the order name
                         .customFontMediumLocalize(size: 15)
                         .fontWeight(.medium)
+                        .lineLimit(1)
+                    
+                    Spacer()
 
-                    // Conditional display for Accept/Reject or Icon
-                    if showIcon {
-                        Spacer()
-                        Button(action: {
-                            navigateToOrderListView = true
-                        }) {
-                            ZStack {
-                                Image(systemName: "list.clipboard")
-                                    .foregroundColor(.gray)
-
-                                // Notification bubble
-                                Text("3")
-                                    .customFontSemiBoldLocalize(size: 9)
-                                    .foregroundColor(.white)
-                                    .padding(4)
-                                    .background(Circle().fill(Color.red))
-                                    .offset(x: 8, y: -6)
-                            }
-                        }
-                      
-                        .background(
-                            NavigationLink(destination: OrderListView(), isActive: $navigateToOrderListView) {
-                                EmptyView()
-                            }
-                        )
-                    } else {
-                        Spacer()
-                        Text(isAccepted ? "Accept" : "Reject")
+                    // Conditional rendering based on order type
+                    if order.foodCardType == "ORDER" {
+                        Text(order.itemType == "Accept" ? "Accept" : "Reject")
                             .customFontMediumLocalize(size: 15)
                             .foregroundColor(isAccepted ? .green : .red)
+                    } else if order.foodCardType == "SALE" {
+                        if showIcon {
+                            Button(action: {
+                                navigateToOrderListView = true
+                            }) {
+                                ZStack {
+                                    Image(systemName: "list.clipboard")
+                                        .foregroundColor(.gray)
+                                    Text("\(order.quantity ?? 0)") // Safely unwrap optional
+                                        .customFontSemiBoldLocalize(size: 9)
+                                        .foregroundColor(.white)
+                                        .padding(4)
+                                        .background(Circle().fill(Color.red))
+                                        .offset(x: 8, y: -6)
+                                }
+                            }
+                            .background(
+                                NavigationLink(destination: OrderListView(), isActive: $navigateToOrderListView) {
+                                    EmptyView()
+                                }
+                            )
+                        }
                     }
                 }
+                
+//                Text("You are selling now")
+//                    .customFontLightLocalize(size: 12)
+//                    .opacity(0.6)
+                
+                // Conditional rendering of text
+                if order.foodCardType != "SALE" {
+                    Text("You are selling now")
+                        .customFontLightLocalize(size: 12)
+                        .opacity(0.6)
+                } else {
+//                    EmptyView() // Removes the text entirely when condition is not met
+                    Text("")
+                }
 
-                Text("you are selling now")
-                    .customFontLightLocalize(size: 12)
-                    .opacity(0.6)
-
-                // Price and Order/Sale Button
+                
                 HStack(spacing: 15) {
-                    Text("$3.05")
+                    Text("$\(order.totalPrice ?? 0)") // Safely unwrap optional
                         .customFontMediumLocalize(size: 15)
                         .fontWeight(.medium)
-
-                    // Order/Sale Button based on isOrder boolean
-                    Text(isOrder ? "Order" : "Sale")
-                        .customFontMediumLocalize(size: 15)
+                    
+                    Text(order.foodCardType)
+                        .customFontMediumLocalize(size: 12)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
                         .background(
                             RoundedRectangle(cornerRadius: 8)
-                                .fill(isOrder ? PrimaryColor.normal.opacity(0.2) : Color(hex: "#DDF6C3"))
+                                .fill(order.foodCardType == "ORDER" ? Color.yellow.opacity(0.2) : Color.green.opacity(0.2)) // Set background color based on type
                         )
-                        .foregroundColor(isOrder ? .yellow : .green)
+                        .foregroundColor(order.foodCardType == "ORDER" ? Color.yellow : Color.green) // Set text color based on type
                 }
             }
         }

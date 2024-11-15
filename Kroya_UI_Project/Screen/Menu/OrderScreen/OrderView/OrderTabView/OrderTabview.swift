@@ -33,7 +33,7 @@ struct OrderTabView: View {
                             
                         ))
                         {
-                            OrderCard(isAccepted: true, isOrder: true, showIcon: false)
+//                            OrderCard(isAccepted: true, isOrder: true, showIcon: false)
                         }
                         
                         NavigationLink(destination:
@@ -48,7 +48,7 @@ struct OrderTabView: View {
                                                  showButtonInvoic: true,
                                                  invoiceAccept: false
                                              )){
-                                   OrderCard(isAccepted: false, isOrder: true, showIcon: false)
+//                                   OrderCard(isAccepted: false, isOrder: true, showIcon: false)
                                }
                     }
                 }
@@ -71,7 +71,7 @@ struct OrderTabView: View {
                                     showButtonInvoic: true,
                                     invoiceAccept: true
                                )){
-                                   OrderCard(isAccepted: true, isOrder: true, showIcon: false)
+//                                   OrderCard(isAccepted: true, isOrder: true, showIcon: false)
                                }
                     }
                 }
@@ -93,7 +93,7 @@ struct OrderTabView: View {
                                     showButtonInvoic: true,
                                     invoiceAccept: false
                                )){
-                                   OrderCard(isAccepted: false, isOrder: true, showIcon: false)
+//                                   OrderCard(isAccepted: false, isOrder: true, showIcon: false)
                                }
                     }
                 }

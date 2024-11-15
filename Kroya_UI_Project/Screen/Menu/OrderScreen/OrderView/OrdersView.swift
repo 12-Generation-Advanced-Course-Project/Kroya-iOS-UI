@@ -1,12 +1,17 @@
+
 import SwiftUI
 
 struct OrdersView: View {
+    
     @State private var searchText = ""
     @State private var selectedSegment = 0
     @Environment(\.dismiss) var dismiss
     @Environment(\.locale) var locale
     @State private var languageChangeTrigger = false
     
+    // Add the OrderViewModel instance
+    @StateObject private var orderViewModel = OrderViewModel()
+
     var body: some View {
         NavigationView {
             VStack {
@@ -54,8 +59,9 @@ struct OrdersView: View {
                 
                 // TabView for Content
                 TabView(selection: $selectedSegment) {
-                    AllTabView(iselected: selectedSegment)
+                    AllTabView()
                         .tag(0)
+                        .environmentObject(orderViewModel) // Pass the view model to AllTabView
                     OrderTabView(iselected: selectedSegment)
                         .tag(1)
                     SaleTabView(iselected: selectedSegment)
@@ -71,8 +77,9 @@ struct OrdersView: View {
         }
         .searchable(text: $searchText, prompt: "Search Item")
         .customFontSemiBoldLocalize(size: 16)
-
-        
+        .onAppear {
+            orderViewModel.fetchAllPurchase() // Fetch orders when view appears
+        }
     }
     
     private func underlineWidth(for selectedSegment: Int) -> CGFloat {
@@ -122,4 +129,3 @@ struct OrdersView: View {
         return offset
     }
 }
-

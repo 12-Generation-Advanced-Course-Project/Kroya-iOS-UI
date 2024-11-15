@@ -21,7 +21,7 @@ struct SaleTabView: View {
                 DisclosureGroup("Today", isExpanded: $isExpandedToday) {
                     VStack(spacing: 15) {
                         NavigationLink(destination: OrderListView()){
-                            OrderCard(isAccepted: true, isOrder: false, showIcon: true)
+//                            OrderCard(isAccepted: true, isOrder: false, showIcon: true)
                         }
                     }
                 }
@@ -33,7 +33,7 @@ struct SaleTabView: View {
                 DisclosureGroup("Yesterday", isExpanded: $isExpandedYTD) {
                     VStack(spacing: 15) {
                         NavigationLink(destination: OrderListView()){
-                            OrderCard(isAccepted: true, isOrder: false, showIcon: true)
+//                            OrderCard(isAccepted: true, isOrder: false, showIcon: true)
                         }
                     }
                 }
@@ -45,7 +45,7 @@ struct SaleTabView: View {
                 DisclosureGroup("Last 2 days", isExpanded: $isExpandedLst2Day) {
                     VStack(spacing: 15) {
                         NavigationLink(destination: OrderListView()){
-                            OrderCard(isAccepted: true, isOrder: false, showIcon: true)
+//                            OrderCard(isAccepted: true, isOrder: false, showIcon: true)
                         }
                     }
                 }

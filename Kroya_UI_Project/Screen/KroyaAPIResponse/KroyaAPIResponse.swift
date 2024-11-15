@@ -41,3 +41,6 @@ struct KroyaSingleAPIResponse<T: Decodable>: Decodable {
     let timestamp: String?
 }
 
+// MARK: fetch purchase all
+typealias purchaseResponse = KroyaAPIResponse<OrderModel>
+
