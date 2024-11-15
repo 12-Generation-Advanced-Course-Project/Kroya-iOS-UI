@@ -49,9 +49,23 @@ struct CategoryCardView: View {
 }
 
 #Preview {
-//    HStack{
         CategoryCardView(title: "Lunch", image: "Somlorkoko", color: .gray, x: 60, y: 18)
-//        CategoryCardView(title: "Dinner", image: "DinnerPic", color: .gray, x: 50, y: 14)
-//    }
+}
+
+struct Category {
+    let title: FoodCategory
+    let image: String
+    let color: Color
+    let x: CGFloat
+    let y: CGFloat
+    let id: Int
+}
+
+enum FoodCategory: String {
+    case breakfast = "Breakfast"
+    case lunch = "Lunch"
+    case dinner = "Dinner"
+    case dessert = "Dessert"
+    case snack = "Snack"
 }
 
