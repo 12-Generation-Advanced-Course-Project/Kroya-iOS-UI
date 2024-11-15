@@ -1,9 +1,3 @@
-
-
-// New Code
-// 29/10/24
-// Hengly
-
 import SwiftUI
 
 struct ResultSearchView: View {
@@ -11,8 +5,9 @@ struct ResultSearchView: View {
     @State private var selectedSegment = 0
     @Binding var isTabBarHidden: Bool
     @Environment(\.dismiss) var dismiss
-    var menuName: String = "Somlor"
-    
+    var menuName: String
+    @Environment(\.modelContext) var modelContext
+    @ObservedObject var recentSearchesData: RecentSearchesData
     var body: some View {
         NavigationView {
             VStack {
@@ -75,6 +70,12 @@ struct ResultSearchView: View {
                 }
             }
         }
+        .onAppear {
+            // Only save non-empty search terms
+            if !menuName.isEmpty {
+                recentSearchesData.saveSearch(menuName, in: modelContext)
+            }
+        }
         .navigationBarBackButtonHidden(true)
     }
     
@@ -95,9 +96,4 @@ struct ResultSearchView: View {
         default: return 0
         }
     }
-}
-
-
-#Preview {
-    ResultSearchView(isTabBarHidden: .constant(false))
 }

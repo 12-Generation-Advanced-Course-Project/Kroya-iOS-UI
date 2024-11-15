@@ -16,8 +16,10 @@ struct Kroya_UI_ProjectApp: App {
 
     init() {
         GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
-        modelContainer = try! ModelContainer(for: Draft.self)
+        // Initialize modelContainer with both Draft and RecentSearchesModel
+        modelContainer = try! ModelContainer(for: Draft.self, RecentSearchesModel.self)
         setupNetworkMonitoring()
+        
         // Clear Keychain on first launch after reinstall
         if isFirstLaunchAfterReinstall() {
             Auth.shared.clearAllCredentials()
@@ -46,28 +48,28 @@ struct Kroya_UI_ProjectApp: App {
     }
     
     private var contentView: some View {
-        Group {
-            if Auth.shared.loggedIn {
-                NavigationView {
-                    MainScreen(userStore: userStore, lang: $lang)
-                        .environmentObject(userStore)
-                        .environmentObject(Auth.shared)
-                        .environmentObject(addressViewModel)
-                        .environment(\.locale, .init(identifier: lang))
-                        .environment(\.modelContext, modelContainer.mainContext)
-                }
-            } else {
-                NavigationView {
-                    LoginScreenView(userStore: userStore, lang: $lang)
-                        .environmentObject(userStore)
-                        .environmentObject(Auth.shared)
-                        .environmentObject(addressViewModel)
-                        .environment(\.locale, .init(identifier: lang))
-                        .environment(\.modelContext, modelContainer.mainContext)
+            Group {
+                if Auth.shared.loggedIn {
+                    NavigationView {
+                        MainScreen(userStore: userStore, lang: $lang)
+                            .environmentObject(userStore)
+                            .environmentObject(Auth.shared)
+                            .environmentObject(addressViewModel)
+                            .environment(\.locale, .init(identifier: lang))
+                            .environment(\.modelContext, modelContainer.mainContext)
+                    }
+                } else {
+                    NavigationView {
+                        LoginScreenView(userStore: userStore, lang: $lang)
+                            .environmentObject(userStore)
+                            .environmentObject(Auth.shared)
+                            .environmentObject(addressViewModel)
+                            .environment(\.locale, .init(identifier: lang))
+                            .environment(\.modelContext, modelContainer.mainContext)
+                    }
                 }
             }
         }
-    }
 
     private func setupNetworkMonitoring() {
         monitor.pathUpdateHandler = { path in
