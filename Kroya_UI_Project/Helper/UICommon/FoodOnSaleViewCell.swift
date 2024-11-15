@@ -17,22 +17,22 @@ struct FoodOnSaleViewCell: View {
             ZStack(alignment: .topLeading) {
                 // Main Image
                 if let photoFilename = foodSale.photo.first?.photo, let url = URL(string: urlImagePrefix + photoFilename) {
-                                  KFImage(url)
-                                      .resizable()
-                                      .scaledToFill()
-                                      .frame(height: 160)
-                                      .cornerRadius(15, corners: [.topLeft, .topRight])
-                                      .clipped()
-                              } else {
-                                  // Placeholder image when no URL is available
-                                  Image(systemName: "photo")
-                                      .resizable()
-                                      .scaledToFill()
-                                      .frame(height: 160)
-                                      .cornerRadius(15, corners: [.topLeft, .topRight])
-                                      .clipped()
-                              }
-                              
+                    KFImage(url)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: 160)
+                        .cornerRadius(15, corners: [.topLeft, .topRight])
+                        .clipped()
+                } else {
+                    // Placeholder image when no URL is available
+                    Image(systemName: "photo")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: 160)
+                        .cornerRadius(15, corners: [.topLeft, .topRight])
+                        .clipped()
+                }
+                
                 // Rating and Favorite Button
                 HStack {
                     // Rating Section
@@ -50,7 +50,7 @@ struct FoodOnSaleViewCell: View {
                         Text("(\(String(describing: foodSale.totalRaters ?? 0))+)")
                             .font(.system(size: 12))
                             .foregroundColor(.gray)
-                    }                    
+                    }
                     .padding(5)
                     .background(Color.white.opacity(0.8))
                     .cornerRadius(10)
@@ -82,9 +82,11 @@ struct FoodOnSaleViewCell: View {
                 Text(foodSale.name)
                     .font(.customfont(.medium, fontSize: 16))
                     .foregroundColor(.black)
+                
                 // Price and Delivery Info
                 HStack(spacing: 10) {
-                    Text("$ \(String(format: "%.2f", foodSale.price))")
+                    // Display currency symbol based on currencyType
+                    Text("\(currencySymbol(for: foodSale.currencyType)) \(String(format: "%.2f", foodSale.price))")
                         .font(.customfont(.medium, fontSize: 14))
                         .foregroundColor(.yellow)
                     
@@ -113,6 +115,18 @@ struct FoodOnSaleViewCell: View {
         }
     }
     
+    // Helper function to get the currency symbol
+    private func currencySymbol(for currencyType: String) -> String {
+        switch currencyType {
+        case "DOLLAR":
+            return "$"
+        case "RIEL":
+            return "៛"
+        default:
+            return ""
+        }
+    }
+
     // Helper function to format date
     private func formatDate(_ dateString: String) -> String {
         let formatter = DateFormatter()
@@ -152,4 +166,3 @@ struct FoodOnSaleViewCell: View {
         }
     }
 }
-
