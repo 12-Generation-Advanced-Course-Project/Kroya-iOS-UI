@@ -8,6 +8,7 @@ import SwiftUI
 
 struct FoodonOrderView: View {
     @Environment(\.dismiss) var dismiss
+    @StateObject private var favoriteFoodSale = FavoriteVM()
     @StateObject private var foodViewModel = FoodSellViewModel()
     let imageofOrder: [String] = ["SoupPic", "SaladPic", "GrillPic", "DessertPic 1"]
     let titleofOrder: [String] = ["Soup", "Salad", "Grill", "Dessert"]
@@ -72,7 +73,9 @@ struct FoodonOrderView: View {
                     ScrollView {
                         LazyVStack {
                             ForEach(isChooseCuisine ? foodViewModel.FoodSellByCategory : foodViewModel.FoodOnSale) { food in
-                                FoodOnSaleViewCell(foodSale: food)
+                                FoodOnSaleViewCell(foodSale: food, onFavoriteToggle: { foodId in
+                                    favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
+                                })
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
                             }

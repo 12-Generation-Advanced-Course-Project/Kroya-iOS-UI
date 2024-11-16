@@ -21,14 +21,18 @@ struct FavoriteRecipesTabView: View {
                 ScrollView(showsIndicators: false) {
                     LazyVStack(spacing: 8) {
                         ForEach(favoriteFoodRecipe.favoriteFoodRecipe) { favorite in
-                            NavigationLink(destination: recipeDetailDestination(for: favorite)) {
-                                RecipeViewCell(recipe: favorite)
-                                                     .padding(.horizontal)
-                                                     .padding(.vertical, 8)
+                                 RecipeViewCell(
+                                                recipe: favorite,
+                                              isFavorite: favorite.isFavorite,
+                                              onFavoriteToggle: { foodId in
+                                                  favoriteFoodRecipe.createFavoriteFood(foodId: foodId, itemType: "FOOD_RECIPE")
+                                              }
+                                          )
+                                .padding(.horizontal)
+                                .padding(.vertical, 8)
                             }
                         }
                     }
-                }
                 .overlay(
                     Group {
                         if favoriteFoodRecipe.isLoading {

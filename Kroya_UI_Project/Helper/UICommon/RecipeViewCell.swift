@@ -4,14 +4,15 @@ import SwiftUI
 import Kingfisher
 
 struct RecipeViewCell: View {
-    
     var recipe: FoodRecipeModel // Corrected to use RecipeModel
+    @StateObject private var favoriteFoodRecipe = FavoriteVM()
     @State private var isFavorite: Bool
+    let onFavoriteToggle: (Int) -> Void  // Callback to notify favorite toggle
     private let urlImagePrefix = "https://kroya-api-production.up.railway.app/api/v1/fileView/"
-    
-    init(recipe: FoodRecipeModel, isFavorite: Bool = false) {
+    init(recipe: FoodRecipeModel, isFavorite: Bool = false,onFavoriteToggle: @escaping (Int) -> Void) {
         self.recipe = recipe
         _isFavorite = State(initialValue: isFavorite)
+        self.onFavoriteToggle = onFavoriteToggle
     }
     
     var body: some View {
@@ -62,9 +63,10 @@ struct RecipeViewCell: View {
                     // Favorite Button
                     Button(action: {
                         isFavorite.toggle()
+                        onFavoriteToggle(recipe.id)  // Notify the parent to toggle favorite
                     }) {
                         Circle()
-                            .fill(recipe.isFavorite ? Color.red : Color.white.opacity(0.5))
+                            .fill(isFavorite ? Color.red : Color.white.opacity(0.5))
                             .frame(width: 30, height: 30)
                             .overlay(
                                 Image(systemName: "heart.fill")

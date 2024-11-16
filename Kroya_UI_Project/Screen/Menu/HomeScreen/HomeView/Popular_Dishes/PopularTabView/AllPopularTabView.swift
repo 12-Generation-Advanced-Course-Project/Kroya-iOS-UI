@@ -2,6 +2,8 @@ import SwiftUI
 
 struct AllPopularTabView: View {
     @StateObject private var popularFoodVM = PopularFoodVM() // Use a single ViewModel instance
+    @StateObject private var favoriteFoodSale = FavoriteVM()
+    @StateObject private var favoriteFoodRecipe = FavoriteVM()
     var isSelected: Int?
     var body: some View {
         VStack(spacing: 10) {
@@ -10,7 +12,9 @@ struct AllPopularTabView: View {
                     // Display popular sell items
                     ForEach(popularFoodVM.popularFoodSell) { popularsell in
                         NavigationLink(destination: foodDetailDestination(for: popularsell)) {
-                            FoodOnSaleViewCell(foodSale: popularsell)
+                            FoodOnSaleViewCell(foodSale: popularsell, onFavoriteToggle: { foodId in
+                                favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
+                            })
                                 .frame(maxWidth: .infinity)
                                 .padding(.horizontal, 20)
                         }
@@ -19,7 +23,9 @@ struct AllPopularTabView: View {
                     // Display popular recipe items
                     ForEach(popularFoodVM.popularFoodRecipe) { popularrecipe in
                         NavigationLink(destination: recipeDetailDestination(for: popularrecipe)) {
-                            RecipeViewCell(recipe: popularrecipe)
+                            RecipeViewCell(recipe: popularrecipe, onFavoriteToggle: { foodId in
+                                favoriteFoodRecipe.createFavoriteFood(foodId: foodId, itemType: "FOOD_RECIPE")
+                            })
                                 .frame(maxWidth: .infinity)
                                 .padding(.horizontal, 20)
                         }

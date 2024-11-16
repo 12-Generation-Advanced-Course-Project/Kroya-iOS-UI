@@ -42,7 +42,7 @@ class FavoriteService{
     
     
     // MARK: - Post Favorite Food
-    func saveFavoriteFood(_ favoriteFood: FavoriteRequest, completion: @escaping (Result<getAllFavoriteResponse, Error>) -> Void) {
+    func saveFavoriteFood(foodId: Int, itemType: String, completion: @escaping (Result<getAllFavoriteResponse, Error>) -> Void) {
         guard let accessToken = Auth.shared.getAccessToken() else {
             print("Error: Access token is nil.")
             let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token is missing"])
@@ -52,30 +52,32 @@ class FavoriteService{
         
         let url = Constants.FavoriteFoodUrl + "add-favorite"
         let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(accessToken)",
-            "Content-Type": "application/json"
+            "Authorization": "Bearer \(accessToken)"
         ]
         
-        AF.request(url, method: .post, parameters: favoriteFood, encoder: JSONParameterEncoder.default, headers: headers)
+        let parameters: [String: Any] = [
+            "foodId": foodId,
+            "itemType": itemType
+        ]
+        
+        AF.request(url, method: .post, parameters: parameters, encoding: URLEncoding.queryString, headers: headers)
             .validate()
             .responseDecodable(of: getAllFavoriteResponse.self) { response in
-               
-                                if let data = response.data {
-                                    do {
-                                        let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-                                        let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-                                        if let string = String(data: prettyData, encoding: .utf8) {
-                                            print(" JSON Response For Post Favorite Food:\n\(string)")
-                                        }
-                                    } catch {
-                                        print("Failed to convert response data to Favorite JSON: \(error)")
-                                    }
-                                }
+                if let data = response.data {
+                    do {
+                        let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+                        let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
+                        if let string = String(data: prettyData, encoding: .utf8) {
+                            print("JSON Response For Post Favorite Food:\n\(string)")
+                        }
+                    } catch {
+                        print("Failed to convert response data to Favorite JSON: \(error)")
+                    }
+                }
+                
                 switch response.result {
                 case .success(let saveResponse):
-                    if let recipeId = saveResponse.payload {
-                        print("Favorite Food created successfully with Id: \(recipeId)")
-                    }
+                    print("Favorite Food created successfully: \(saveResponse)")
                     completion(.success(saveResponse))
                 case .failure(let error):
                     print("Error creating Favorite Food: \(error)")
@@ -83,5 +85,7 @@ class FavoriteService{
                 }
             }
     }
+
+
 }
 

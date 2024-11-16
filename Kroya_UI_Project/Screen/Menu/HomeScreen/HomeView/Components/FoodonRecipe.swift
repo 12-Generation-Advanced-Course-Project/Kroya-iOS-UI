@@ -4,7 +4,7 @@ struct FoodonRecipe: View {
     
     @Environment(\.dismiss) var dismiss
     @StateObject private var recipeViewModel = RecipeViewModel()
-    
+    @StateObject private var favoriteFoodRecipe = FavoriteVM()
     @State private var selectedOrderIndex: Int? = nil
     @State private var searchText = ""
     @State private var isChooseCuisine = false
@@ -81,7 +81,9 @@ struct FoodonRecipe: View {
                     ScrollView {
                         LazyVStack {
                             ForEach(isChooseCuisine ? recipeViewModel.RecipeByCategory : recipeViewModel.RecipeFood) { recipe in
-                                RecipeViewCell(recipe: recipe)
+                                RecipeViewCell(recipe: recipe, onFavoriteToggle: { foodId in
+                                    favoriteFoodRecipe.createFavoriteFood(foodId: foodId, itemType: "FOOD_RECIPE")
+                                })
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
                             }

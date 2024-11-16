@@ -8,12 +8,11 @@
 import SwiftUI
 
 struct FavoriteFoodOnSaleTabView: View {
-   // @StateObject private var foodViewModel = FoodSellViewModel()
     @StateObject private var favoriteFoodSale = FavoriteVM()
     
     var body: some View {
         VStack {
-            if favoriteFoodSale.favoriteFoodSell.isEmpty && !favoriteFoodSale.isLoading{
+            if favoriteFoodSale.favoriteFoodSell.isEmpty && !favoriteFoodSale.isLoading {
                 Text("No Favorite Food Sell Found!")
                     .font(.title3)
                     .foregroundColor(.gray)
@@ -22,14 +21,19 @@ struct FavoriteFoodOnSaleTabView: View {
                 ScrollView(showsIndicators: false) {
                     LazyVStack(spacing: 8) {
                         ForEach(favoriteFoodSale.favoriteFoodSell) { favorite in
-                            NavigationLink(destination: foodDetailDestination(for: favorite)) {
-                                FoodOnSaleViewCell(foodSale: favorite, isFavorite: true)
-                                                     .padding(.horizontal)
-                                                     .padding(.vertical, 8)
+                                          FoodOnSaleViewCell(
+                                              foodSale: favorite,
+                                              isFavorite: favorite.isFavorite,
+                                              onFavoriteToggle: { foodId in
+                                                  favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
+                                              }
+                                          )
+                                .padding(.horizontal)
+                                .padding(.vertical, 8)
                             }
                         }
                     }
-                }
+                
                 .overlay(
                     Group {
                         if favoriteFoodSale.isLoading {
@@ -52,6 +56,7 @@ struct FavoriteFoodOnSaleTabView: View {
             }
         }
     }
+    
     // MARK: - Food Detail Destination
     @ViewBuilder
     private func foodDetailDestination(for foodSale: FoodSellModel) -> some View {

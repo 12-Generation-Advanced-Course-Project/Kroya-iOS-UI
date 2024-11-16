@@ -19,29 +19,29 @@ struct PopularSellTab: View {
                     .foregroundColor(.gray)
                     .padding()
             } else {
-                ScrollView(showsIndicators: false) {
-                    LazyVStack(spacing: 8) {
-                        ForEach(popularSell.popularFoodSell) { popularsell in
-                            NavigationLink(destination: foodDetailDestination(for: popularsell)) {
-                                FoodOnSaleViewCell(foodSale: popularsell)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.horizontal, 20)
-                            }
-                        }
-                    }
-                }
-                .overlay(
-                    Group {
-                        if popularSell.isLoading {
-                            Color.white
-                                .edgesIgnoringSafeArea(.all)
-                            
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
-                                .scaleEffect(2)
-                        }
-                    }
-                )
+//                ScrollView(showsIndicators: false) {
+//                    LazyVStack(spacing: 8) {
+//                        ForEach(popularSell.popularFoodSell) { popularsell in
+//                            NavigationLink(destination: foodDetailDestination(for: popularsell)) {
+//                                FoodOnSaleViewCell(foodSale: popularsell)
+//                                    .frame(maxWidth: .infinity)
+//                                    .padding(.horizontal, 20)
+//                            }
+//                        }
+//                    }
+//                }
+//                .overlay(
+//                    Group {
+//                        if popularSell.isLoading {
+//                            Color.white
+//                                .edgesIgnoringSafeArea(.all)
+//                            
+//                            ProgressView()
+//                                .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
+//                                .scaleEffect(2)
+//                        }
+//                    }
+//                )
             }
         }
         .padding(.top, 8)

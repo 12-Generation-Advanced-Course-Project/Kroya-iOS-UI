@@ -10,6 +10,8 @@ struct HomeView: View {
     @State var isSearching: Bool = false
     @Environment(\.locale) var locale
     @StateObject private var recentSearchesData = RecentSearchesData()
+    @StateObject private var favoriteFoodRecipe = FavoriteVM()
+    @StateObject private var favoriteFoodSale = FavoriteVM()
     @Environment(\.modelContext) var modelContext
     var body: some View {
         NavigationView {
@@ -122,8 +124,10 @@ struct HomeView: View {
                                                     showPrice: true
                                                 )
                                 ) {
-//                                    FoodOnSaleViewCell(foodSale: foodSale)
-//                                        .frame(width: 360)
+                                    FoodOnSaleViewCell(foodSale: foodSale, onFavoriteToggle: { foodId in
+                                        favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
+                                    })
+                                        .frame(width: 360)
                                 }
                             }
                             
@@ -140,7 +144,9 @@ struct HomeView: View {
                                                     showPrice: false
                                                 )
                                 ) {
-                                    RecipeViewCell(recipe: recipe)
+                                    RecipeViewCell(recipe: recipe, onFavoriteToggle: { foodId in
+                                        favoriteFoodRecipe.createFavoriteFood(foodId: foodId, itemType: "FOOD_RECIPE")
+                                    })
                                         .frame(width: 360)
                                 }
                             }

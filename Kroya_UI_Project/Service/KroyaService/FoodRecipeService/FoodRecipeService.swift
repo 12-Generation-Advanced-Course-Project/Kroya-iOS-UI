@@ -184,7 +184,7 @@ class FoodRecipeService {
                                 }
                 switch response.result {
                 case .success(let saveResponse):
-                    if let recipeId = saveResponse.payload?.id {
+                    if let recipeId = saveResponse.payload?.id{
                         print("Food recipe created successfully with Id: \(recipeId)")
                     }
                     completion(.success(saveResponse))

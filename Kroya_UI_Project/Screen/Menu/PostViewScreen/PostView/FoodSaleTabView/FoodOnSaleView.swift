@@ -4,7 +4,7 @@ import SwiftUI
 struct FoodOnSaleView: View {
     var iselected: Int?
     @StateObject private var foodsellVm = FoodSellViewModel()
-  
+    @StateObject private var favoriteFoodSale = FavoriteVM()
     var body: some View {
         VStack {
             if foodsellVm.FoodOnSale.isEmpty && !foodsellVm.isLoading {
@@ -17,7 +17,9 @@ struct FoodOnSaleView: View {
                     LazyVStack(spacing: 8) {
                         ForEach(foodsellVm.FoodOnSale) { foodSale in
                             NavigationLink(destination: foodDetailDestination(for: foodSale)) {
-                                FoodOnSaleViewCell(foodSale: foodSale)
+                                FoodOnSaleViewCell(foodSale: foodSale, onFavoriteToggle: { foodId in
+                                    favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
+                                })
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
                             }

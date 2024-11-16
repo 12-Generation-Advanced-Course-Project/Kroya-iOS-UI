@@ -10,6 +10,7 @@ import SwiftUI
 
 struct PopularRecipeTab: View {
     @StateObject private var popularRecipe = PopularFoodVM()
+    @StateObject private var favoriteFoodRecipe = FavoriteVM()
     var isSelected: Int?
     var body: some View {
         VStack {
@@ -23,7 +24,9 @@ struct PopularRecipeTab: View {
                     LazyVStack(spacing: 8) {
                         ForEach(popularRecipe.popularFoodRecipe) { popularrecipe in
                             NavigationLink(destination: recipeDetailDestination(for: popularrecipe)) {
-                                RecipeViewCell(recipe: popularrecipe)
+                                RecipeViewCell(recipe: popularrecipe, onFavoriteToggle: { foodId in
+                                    favoriteFoodRecipe.createFavoriteFood(foodId: foodId, itemType: "FOOD_RECIPE")
+                                })
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
                             }
