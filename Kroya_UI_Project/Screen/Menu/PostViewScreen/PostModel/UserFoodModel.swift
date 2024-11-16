@@ -7,7 +7,7 @@
 import SwiftUI
 
 //MARK: UserFoodModel
-struct UserFoodModel : Codable{
+struct UserFoodModel : Decodable{
     let totalFoodRecipes: Int
     let totalFoodSells: Int
     let totalPosts : Int

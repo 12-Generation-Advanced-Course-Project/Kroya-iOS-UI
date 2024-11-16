@@ -1,30 +1,29 @@
 //
-//  sale.swift
+//  UserPostFoodSale.swift
 //  Kroya_UI_Project
 //
-//  Created by Macbook on 10/14/24.
+//  Created by Macbook on 11/16/24.
 //
-
 import SwiftUI
 
-struct PopularSellTab: View {
+struct UserPostFoodSale: View {
     var isSelected: Int?
-    @StateObject private var popularSell = PopularFoodVM()
+    @StateObject private var userPostFoodsale = UserFoodViewModel()
+   // @StateObject private var foodsellVm = FoodSellViewModel()
     @StateObject private var favoriteFoodSale = FavoriteVM()
-  
     var body: some View {
         VStack {
-            if popularSell.popularFoodSell.isEmpty && !popularSell.isLoading{
-                Text("No Popular Food Sell Found!")
+            if userPostFoodsale.userPostFoodSale.isEmpty && !userPostFoodsale.isLoading {
+                Text("No Food Sale Available")
                     .font(.title3)
                     .foregroundColor(.gray)
                     .padding()
             } else {
                 ScrollView(showsIndicators: false) {
                     LazyVStack(spacing: 8) {
-                        ForEach(popularSell.popularFoodSell) { popularsell in
-                            NavigationLink(destination: foodDetailDestination(for: popularsell)) {
-                                FoodOnSaleViewCell(foodSale: popularsell, onFavoriteToggle: { foodId in
+                        ForEach(userPostFoodsale.userPostFoodSale) { foodSale in
+                            NavigationLink(destination: foodDetailDestination(for: foodSale)) {
+                                FoodOnSaleViewCell(foodSale: foodSale, onFavoriteToggle: { foodId in
                                     favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
                                 })
                                     .frame(maxWidth: .infinity)
@@ -35,7 +34,7 @@ struct PopularSellTab: View {
                 }
                 .overlay(
                     Group {
-                        if popularSell.isLoading {
+                        if userPostFoodsale.isLoading {
                             Color.white
                                 .edgesIgnoringSafeArea(.all)
                             
@@ -50,8 +49,8 @@ struct PopularSellTab: View {
         .padding(.top, 8)
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            if popularSell.popularFoodSell.isEmpty {
-                popularSell.getAllPopular()
+            if userPostFoodsale.userPostFood.isEmpty {
+                userPostFoodsale.getAllUserFood()
             }
         }
     }
@@ -70,6 +69,3 @@ struct PopularSellTab: View {
         )
     }
 }
-//#Preview {
-//   SaleTab()
-//}

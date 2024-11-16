@@ -23,7 +23,7 @@ typealias DeviceTokenResponse = KroyaAPIResponse<DeviceTokenModel>
 typealias foodrecipeResponse = KroyaAPIResponse<FoodRecipeModel>
 typealias SavefoodRecipeResponse = KroyaSingleAPIResponse<FoodRecipeResponse>
 //MARK: UserFoodResponse
-typealias userFoodResponse = KroyaAPIResponse<UserFoodModel>
+typealias userFoodResponse = KroyaSingleAPIResponse<UserFoodModel>
 //MARK: Food-Sell get all
 typealias foodSellResponse = KroyaAPIResponse<FoodSellModel>
 
