@@ -26,7 +26,7 @@ struct FoodRecipeResponse: Decodable {
     var itemType: String
     var user: userModel
     var createdAt: String
-    var ratingPercentage: [String:Int]?
+    var ratingPercentages: RatingPercentages? 
 }
 
 

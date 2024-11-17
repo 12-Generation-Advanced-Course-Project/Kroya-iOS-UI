@@ -109,16 +109,19 @@ struct NotificationItem: Identifiable {
                 }
                 .background(
                     NavigationLink(
-                        destination: FoodDetailView(
-                            theMainImage: selectedNotification?.image ?? "Songvak",
-                            subImage1: "ahmok",
-                            subImage2: "brohok",
-                            subImage3: "SomlorKari",
-                            subImage4: "Songvak",
-                            showOrderButton: false,
-                            showPrice: true,
-                            notificationType: selectedNotification?.notificationType // Pass notificationType here
-                        ),
+                        destination:
+//                            FoodDetailView(
+//                            theMainImage: selectedNotification?.image ?? "Songvak",
+//                            subImage1: "ahmok",
+//                            subImage2: "brohok",
+//                            subImage3: "SomlorKari",
+//                            subImage4: "Songvak",
+//                            showOrderButton: false,
+//                            showPrice: true,
+//                            notificationType: selectedNotification?.notificationType // Pass notificationType here
+//                        )
+                        EmptyView()
+                        ,
                         isActive: Binding(
                             get: { selectedNotification != nil },
                             set: { if !$0 { selectedNotification = nil } }

@@ -1,150 +1,183 @@
-
 import SwiftUI
-import Kingfisher
+import SDWebImageSwiftUI
 
 struct FoodDetailView: View {
     @State private var isFavorite: Bool = false
-    @State private var currentImage: String
+    @State private var currentImage: String = ""
     @State private var isBottomSheetOpen: Bool = false
-    @State private var isShowPopup: Bool = false  // Popup control here
+    @State private var isShowPopup: Bool = false
+    @StateObject private var FoodDetailsVM = FoodDetailsViewModel()
+    @StateObject private var FeedbackVM = FeedbackViewModel()
+   
     var showPrice: Bool
     var showOrderButton: Bool
-    var showButtonInvoic: Bool
-    var invoiceAccept: Bool
-    var notificationType: Int? // Notification type for status display
-    var theMainImage: String
-    var subImage1: String
-    var subImage2: String
-    var subImage3: String
-    var subImage4: String
+    var showButtonInvoic: Bool?
+    var invoiceAccept: Bool?
+    var notificationType: Int?
+    var FoodId: Int
+    var ItemType: String
+    @State private var refreshID = UUID()
     @Environment(\.dismiss) var dismiss
     
-    init(theMainImage: String, subImage1: String, subImage2: String, subImage3: String, subImage4: String, showOrderButton: Bool = true, showPrice: Bool = false, showButtonInvoic: Bool = false, invoiceAccept: Bool = false, notificationType: Int? = nil) {
-          self.theMainImage = theMainImage
-          self.subImage1 = subImage1
-          self.subImage2 = subImage2
-          self.subImage3 = subImage3
-          self.subImage4 = subImage4
-          self.showOrderButton = showOrderButton
-          self.showPrice = showPrice
-          self.showButtonInvoic = showButtonInvoic
-          self.invoiceAccept = invoiceAccept
-          self.notificationType = notificationType
-          _currentImage = State(initialValue: theMainImage)
-      }
-    
     var body: some View {
-        
         GeometryReader { geometry in
             let screenHeight = geometry.size.height
             let screenWidth = geometry.size.width
-            let frameHeight = screenHeight * 0.4
             
             ZStack {
-                // Main Food Detail Content
                 VStack {
-                    Image(currentImage)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: .screenWidth, height: .screenHeight * 0.4)
-                        .clipped()
-                        .edgesIgnoringSafeArea(.top)
-                        .overlay {
-                            HStack {
-                                Button(action: {
-                                    dismiss()
-                                }) {
-                                    Circle()
-                                        .fill(.white)
-                                        .frame(width: .screenWidth * 0.07, height: .screenHeight * 0.07)
-                                        .overlay(
-                                            Image(systemName: "arrow.left")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 17))
-                                        )
-                                }
-                                Spacer()
-                                Button(action: {
-                                    isFavorite.toggle()
-                                }) {
-                                    Circle()
-                                        .fill(isFavorite ? Color(hex: "#FE724C") : Color.white.opacity(0.5))
-                                        .frame(width: .screenWidth * 0.07, height: .screenHeight * 0.07)
-                                        .overlay(
-                                            Image(systemName: "heart.fill")
-                                                .foregroundColor(.white)
-                                                .font(.system(size: 18))
-                                        )
-                                }
-                                .shadow(color: isFavorite ? Color.red.opacity(0.5) : Color.gray.opacity(0.5), radius: 4, x: 0, y: 4)
-                            }
-                            .offset(y: -.screenHeight * 0.185)
-                            .padding(.horizontal,. screenWidth * 0.045)
-                        }
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 11)
-                                .fill(Color.white.opacity(0.5))
-                                .frame(width: .screenWidth * 0.55, height: .screenHeight * 0.068)
-                                .overlay(
-                                    HStack(spacing: 5) {
-                                        Group {
-                                            Image(subImage1)
-                                                .resizable()
-                                                .onTapGesture {
-                                                    currentImage = subImage1
-                                                }
-                                            Image(subImage2)
-                                                .resizable()
-                                                .onTapGesture {
-                                                    currentImage = subImage2
-                                                }
-                                            Image(subImage3)
-                                                .resizable()
-                                                .onTapGesture {
-                                                    currentImage = subImage3
-                                                }
-                                            Image(subImage4)
-                                                .resizable()
-                                                .onTapGesture {
-                                                    currentImage = subImage4
-                                                }
-                                        }
-                                        .frame(width: .screenWidth * 0.12, height: .screenWidth * 0.11)
-                                        .cornerRadius(7)
-                                       
+                    if !currentImage.isEmpty, let mainImageURL = URL(string: currentImage) {
+                        WebImage(url: mainImageURL)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: screenWidth, height: screenHeight * 0.4)
+                            .clipped()
+                            .edgesIgnoringSafeArea(.top)
+                            .overlay {
+                                HStack {
+                                    Button(action: { dismiss() }) {
+                                        Circle()
+                                            .fill(Color.white)
+                                            .frame(width: screenWidth * 0.07, height: screenHeight * 0.07)
+                                            .overlay(
+                                                Image(systemName: "arrow.left")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 17))
+                                            )
                                     }
-                                       
-                                ) .offset(y: .screenHeight * 0.045)
-
-                        )
-                   Spacer()
+                                    Spacer()
+                                    Button(action: { isFavorite.toggle() }) {
+                                        Circle()
+                                            .fill(isFavorite ? Color(hex: "#FE724C") : Color.white.opacity(0.5))
+                                            .frame(width: screenWidth * 0.07, height: screenHeight * 0.07)
+                                            .overlay(
+                                                Image(systemName: "heart.fill")
+                                                    .foregroundColor(.white)
+                                                    .font(.system(size: 18))
+                                            )
+                                    }
+                                    .shadow(color: isFavorite ? Color.red.opacity(0.5) : Color.gray.opacity(0.5), radius: 4, x: 0, y: 4)
+                                }
+                                .padding(.horizontal, screenWidth * 0.045)
+                                .offset(y: -screenHeight * 0.18)
+                            }
+                            .overlay(
+                                thumbnailsOverlay
+                                    .offset(y: .screenHeight * 0.05)
+                            )
+                        
+                    } else {
+                        ProgressView()
+                            .frame(height: screenHeight * 0.4)
+                            .edgesIgnoringSafeArea(.top)
+                    }
+                    Spacer()
                 }
                 
                 // Bottom Sheet Content
-                BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.625, showOrderButton: showOrderButton, notificationType: notificationType, showButtonInvoic: showButtonInvoic, invoiceAccept: invoiceAccept) {
-                                  ContentView(showPrice: showPrice, isShowPopup: $isShowPopup)
-                                      .padding(.horizontal, 15)
+                BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.67, showOrderButton: showOrderButton, notificationType: notificationType, showButtonInvoic: showButtonInvoic ?? false, invoiceAccept: invoiceAccept ?? false,itemType: ItemType, FoodDetails: FoodDetailsVM)
+                {
+                    ContentView(showPrice: showPrice, isShowPopup: $isShowPopup,itemType: ItemType, FoodId: FoodId, FoodDetails: FoodDetailsVM)
+                        .padding(.horizontal, 10)
+                    
                 }
                 .edgesIgnoringSafeArea(.all)
-                // Show the popup in full screen
+                
                 if isShowPopup {
-                    PopupReview(profile: "Songvak", userName: "Chhoy Sreynoch", description: "", isReviewPopupOpen: $isShowPopup)
-                        .background(Color.black.opacity(0.5))  // Background dim effect
+                    PopupReview(isReviewPopupOpen: $isShowPopup, FeedbackVM: FeedbackVM, ItemType: ItemType, FoodId: FoodId)
+                        .background(Color.black.opacity(0.5))
                         .edgesIgnoringSafeArea(.all)
                 }
             }
-            
+            .onAppear {
+                // Fetch the food details
+                FoodDetailsVM.fetchFoodDetails(id: FoodId, itemType: ItemType)
+                if ItemType == "FOOD_RECIPE" {
+                    observeRecipeDetails()
+                } else if ItemType == "FOOD_SELL" {
+                    observeSellDetails()
+                }
+
+                // Fetch the feedback
+                FeedbackVM.getFeedback(
+                    itemType: ItemType,
+                    foodId: FoodId
+                ) { success, message in
+                    if success {
+                        print("Feedback loaded successfully!")
+                        print("Selected Rating: \(FeedbackVM.selectedRating)")
+                        refreshID = UUID()
+                    } else {
+                        print("Error loading feedback: \(message)")
+                    }
+                }
+            }
+            .onChange(of: FeedbackVM.selectedRating) { newRating in
+                print("UI should reflect new rating: \(newRating)")
+            }
+
             .navigationBarBackButtonHidden(true)
         }
     }
+    
+    // MARK: Observe Recipe Details
+    private func observeRecipeDetails() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            if let recipeDetail = FoodDetailsVM.foodRecipeDetail {
+                setImages(from: recipeDetail.photo)
+            } else {
+                observeRecipeDetails()
+            }
+        }
+    }
+    
+    // MARK: Observe Sell Details
+    private func observeSellDetails() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            if let sellDetail = FoodDetailsVM.foodSellDetail {
+                setImages(from: sellDetail.foodRecipeDTO.photo)
+            } else {
+                observeSellDetails()
+            }
+        }
+    }
+    
+    // MARK: Set Current and Thumbnail Images
+    private func setImages(from photos: [Photo]) {
+        guard let firstPhoto = photos.first else { return }
+        currentImage = "https://kroya-api-production.up.railway.app/api/v1/fileView/\(firstPhoto.photo)"
+    }
+    
+    // MARK: Thumbnails Overlay
+    private var thumbnailsOverlay: some View {
+        ScrollView(.horizontal, showsIndicators: false) { // Enable horizontal scrolling
+            HStack(spacing: 5) {
+                if let photos = ItemType == "FOOD_RECIPE" ? FoodDetailsVM.foodRecipeDetail?.photo : FoodDetailsVM.foodSellDetail?.foodRecipeDTO.photo {
+                    ForEach(photos, id: \.photo) { photo in
+                        if let url = URL(string: "https://kroya-api-production.up.railway.app/api/v1/fileView/\(photo.photo)") {
+                            WebImage(url: url)
+                                .resizable()
+                                .onTapGesture {
+                                    currentImage = url.absoluteString
+                                }
+                                .frame(width: 50, height: 50)
+                                .cornerRadius(7)
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal, 2)
+        }
+        .padding(.top, 0)
+        .frame(
+            width: CGFloat((FoodDetailsVM.foodRecipeDetail?.photo.count ?? FoodDetailsVM.foodSellDetail?.foodRecipeDTO.photo.count ?? 0)) * 55,
+            height: 60
+        )
+        .background(Color.white.opacity(0.5))
+        .cornerRadius(11)
+        .animation(.easeInOut, value: FoodDetailsVM.foodRecipeDetail?.photo.count ?? FoodDetailsVM.foodSellDetail?.foodRecipeDTO.photo.count ?? 0)
+    }
+    
+    
 }
 
-#Preview {
-    FoodDetailView(
-        theMainImage: "Songvak",
-        subImage1: "ahmok",
-        subImage2: "brohok",
-        subImage3: "somlorKari",
-        subImage4: "Songvak"
-    )
-}

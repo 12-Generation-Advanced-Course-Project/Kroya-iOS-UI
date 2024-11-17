@@ -26,5 +26,5 @@ struct FoodRecipeDetail: Decodable {
     let itemType: String
     let user: userModel
     let createdAt: String
-    let ratingPercentages: RatingPercentages
+    let ratingPercentages: RatingPercentages?
 }

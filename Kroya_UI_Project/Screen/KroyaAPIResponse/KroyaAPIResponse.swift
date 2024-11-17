@@ -42,4 +42,10 @@ struct KroyaSingleAPIResponse<T: Decodable>: Decodable {
     let statusCode: String
     let timestamp: String?
 }
+//MARK: Feedback Response
+typealias FeedbackResponse = KroyaSingleAPIResponse<FeedBackModel>
+typealias GetAllUserFeedbackResponse = KroyaSingleAPIResponse<FeedBackModel>
+
+//MARK: Fetch all User Food (View Account)
+typealias ViewAccountResponse = KroyaSingleAPIResponse<ViewAccountUserFoodModel>
 

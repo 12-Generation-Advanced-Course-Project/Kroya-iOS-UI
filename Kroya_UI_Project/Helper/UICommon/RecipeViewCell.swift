@@ -2,7 +2,7 @@
 
 import SwiftUI
 import Kingfisher
-
+import SDWebImageSwiftUI
 struct RecipeViewCell: View {
     
     var recipe: FoodRecipeModel // Corrected to use RecipeModel
@@ -19,7 +19,7 @@ struct RecipeViewCell: View {
             ZStack(alignment: .topLeading) {
                 // Construct the full URL for the image
                 if let photoFilename = recipe.photo.first?.photo, let url = URL(string: urlImagePrefix + photoFilename) {
-                    KFImage(url)
+                    WebImage(url: url)
                         .resizable()
                         .scaledToFill()
                         .frame(height: 160)

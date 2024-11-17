@@ -12,6 +12,4 @@ import Foundation
 struct PopularPayload: Decodable {
     let popularSells: [FoodSellModel]
     let popularRecipes: [FoodRecipeModel]
-
-
 }

@@ -4,7 +4,7 @@ struct FavoriteViewCart: View {
     
     @State private var selectedSegment = 0
     @Environment(\.dismiss) var dismiss
-
+    
     @State private var searchText = ""
     @StateObject private var recipeViewModel = RecipeViewModel()
     
@@ -74,14 +74,17 @@ struct FavoriteViewCart: View {
                     // Recipes Tab
                     ScrollView(showsIndicators: false) {
                         ForEach(recipeViewModel.RecipeFood) { recipe in
-                            NavigationLink(destination: FoodDetailView(
-                                theMainImage: "Mixue",
-                                subImage1: "Chinese Hotpot",
-                                subImage2: "Chinese",
-                                subImage3: "Fly-By-Jing",
-                                subImage4: "Mixue",
-                                showOrderButton: true
-                            )) {
+                            NavigationLink(destination:
+//                        FoodDetailView(
+//                                theMainImage: "Mixue",
+//                                subImage1: "Chinese Hotpot",
+//                                subImage2: "Chinese",
+//                                subImage3: "Fly-By-Jing",
+//                                subImage4: "Mixue",
+//                                showOrderButton: true
+//                            )
+                                           EmptyView()
+                            ) {
                                 RecipeViewCell(recipe: recipe, isFavorite: true)
                                     .padding(.horizontal)
                                     .padding(.vertical, 8)

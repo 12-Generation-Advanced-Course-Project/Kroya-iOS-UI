@@ -18,32 +18,38 @@ struct AllTabView: View {
                             NavigationLink(destination: OrderListView()){
                                 OrderCard(isAccepted: true, isOrder: false, showIcon: true)
                             }
-                            NavigationLink(destination:  FoodDetailView(
-                                theMainImage: "Songvak",
-                                subImage1: "ahmok",
-                                subImage2: "brohok",
-                                subImage3: "SomlorKari",
-                                subImage4: "Songvak",
-                                showOrderButton: false,
-                                showPrice: true,
-                                showButtonInvoic: true,
-                                invoiceAccept: false
-                            )){
+                            NavigationLink(destination:
+//                            FoodDetailView(
+//                                theMainImage: "Songvak",
+//                                subImage1: "ahmok",
+//                                subImage2: "brohok",
+//                                subImage3: "SomlorKari",
+//                                subImage4: "Songvak",
+//                                showOrderButton: false,
+//                                showPrice: true,
+//                                showButtonInvoic: true,
+//                                invoiceAccept: false
+//                            )
+                                           EmptyView()
+                            ){
                                 OrderCard(isAccepted: false, isOrder: true, showIcon: false)
                             }
                             
-                            NavigationLink(destination: FoodDetailView(
-                                theMainImage: "Songvak",
-                                subImage1: "ahmok",
-                                subImage2: "brohok",
-                                subImage3: "SomlorKari",
-                                subImage4: "Songvak",
-                                showOrderButton: false,
-                                showPrice: true,
-                                showButtonInvoic: true,
-                                invoiceAccept: true
-                                
-                            )){
+                            NavigationLink(destination:
+//                                            FoodDetailView(
+//                                theMainImage: "Songvak",
+//                                subImage1: "ahmok",
+//                                subImage2: "brohok",
+//                                subImage3: "SomlorKari",
+//                                subImage4: "Songvak",
+//                                showOrderButton: false,
+//                                showPrice: true,
+//                                showButtonInvoic: true,
+//                                invoiceAccept: true
+//                                
+//                            )
+                                           EmptyView()
+                            ){
                                 OrderCard(isAccepted: true, isOrder: true, showIcon: false)
                             }}
                     }
@@ -59,31 +65,37 @@ struct AllTabView: View {
                                 OrderCard(isAccepted: true, isOrder: false, showIcon: true)
                             }
                             
-                            NavigationLink(destination:  FoodDetailView(
-                                theMainImage: "Songvak",
-                                subImage1: "ahmok",
-                                subImage2: "brohok",
-                                subImage3: "SomlorKari",
-                                subImage4: "Songvak",
-                                showOrderButton: false,
-                                showPrice: true,
-                                showButtonInvoic: true,
-                                invoiceAccept: false
-                            )){
+                            NavigationLink(destination:
+//                                            FoodDetailView(
+//                                theMainImage: "Songvak",
+//                                subImage1: "ahmok",
+//                                subImage2: "brohok",
+//                                subImage3: "SomlorKari",
+//                                subImage4: "Songvak",
+//                                showOrderButton: false,
+//                                showPrice: true,
+//                                showButtonInvoic: true,
+//                                invoiceAccept: false
+//                            )
+                                           EmptyView()
+                            ){
                                 OrderCard(isAccepted: false, isOrder: true, showIcon: false)
                             }
                             
-                            NavigationLink(destination:  FoodDetailView(
-                                theMainImage: "Songvak",
-                                subImage1: "ahmok",
-                                subImage2: "brohok",
-                                subImage3: "SomlorKari",
-                                subImage4: "Songvak",
-                                showOrderButton: false,
-                                showPrice: true,
-                                showButtonInvoic: true,
-                                invoiceAccept: true
-                            )){
+                            NavigationLink(destination:
+//                            FoodDetailView(
+//                                theMainImage: "Songvak",
+//                                subImage1: "ahmok",
+//                                subImage2: "brohok",
+//                                subImage3: "SomlorKari",
+//                                subImage4: "Songvak",
+//                                showOrderButton: false,
+//                                showPrice: true,
+//                                showButtonInvoic: true,
+//                                invoiceAccept: true
+//                            )
+                                           EmptyView()
+                            ){
                                 OrderCard(isAccepted: true, isOrder: true, showIcon: false)
                             }
                         }
@@ -97,45 +109,54 @@ struct AllTabView: View {
                     DisclosureGroup("Last 2 days", isExpanded: $isExpandedLst2Day) {
                         VStack(spacing: 15) {
                             
-                            NavigationLink(destination:  FoodDetailView(
-                                theMainImage: "Songvak",
-                                subImage1: "ahmok",
-                                subImage2: "brohok",
-                                subImage3: "SomlorKari",
-                                subImage4: "Songvak",
-                                showOrderButton: false,
-                                showPrice: true,
-                                showButtonInvoic: true,
-                                invoiceAccept: true
-                            )){
+                            NavigationLink(destination:
+//                                            FoodDetailView(
+//                                theMainImage: "Songvak",
+//                                subImage1: "ahmok",
+//                                subImage2: "brohok",
+//                                subImage3: "SomlorKari",
+//                                subImage4: "Songvak",
+//                                showOrderButton: false,
+//                                showPrice: true,
+//                                showButtonInvoic: true,
+//                                invoiceAccept: true
+//                            )
+                                           EmptyView()
+                            ){
                                 OrderCard(isAccepted: true, isOrder: true, showIcon: false)
                             }
                             
-                            NavigationLink(destination:  FoodDetailView(
-                                theMainImage: "Songvak",
-                                subImage1: "ahmok",
-                                subImage2: "brohok",
-                                subImage3: "SomlorKari",
-                                subImage4: "Songvak",
-                                showOrderButton: false,
-                                showPrice: true,
-                                showButtonInvoic: true,
-                                invoiceAccept: false
-                            )){
+                            NavigationLink(destination:
+//                                            FoodDetailView(
+//                                theMainImage: "Songvak",
+//                                subImage1: "ahmok",
+//                                subImage2: "brohok",
+//                                subImage3: "SomlorKari",
+//                                subImage4: "Songvak",
+//                                showOrderButton: false,
+//                                showPrice: true,
+//                                showButtonInvoic: true,
+//                                invoiceAccept: false
+//                            )
+                                           EmptyView()
+                            ){
                                 OrderCard(isAccepted: false, isOrder: true, showIcon: false)
                             }
                             
-                            NavigationLink(destination:  FoodDetailView(
-                                theMainImage: "Songvak",
-                                subImage1: "ahmok",
-                                subImage2: "brohok",
-                                subImage3: "SomlorKari",
-                                subImage4: "Songvak",
-                                showOrderButton: false,
-                                showPrice: true,
-                                showButtonInvoic: true,
-                                invoiceAccept: true
-                            )){
+                            NavigationLink(destination:
+//                                            FoodDetailView(
+//                                theMainImage: "Songvak",
+//                                subImage1: "ahmok",
+//                                subImage2: "brohok",
+//                                subImage3: "SomlorKari",
+//                                subImage4: "Songvak",
+//                                showOrderButton: false,
+//                                showPrice: true,
+//                                showButtonInvoic: true,
+//                                invoiceAccept: true
+//                            )
+                                           EmptyView()
+                            ){
                                 OrderCard(isAccepted: true, isOrder: true, showIcon: false)
                             }}
                     }

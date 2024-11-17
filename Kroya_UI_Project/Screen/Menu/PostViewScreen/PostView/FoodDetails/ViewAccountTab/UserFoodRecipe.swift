@@ -1,18 +1,16 @@
-//
-//  UserFoodRecipeTab.swift
-//  Kroya_UI_Project
-//
-//  Created by kosign on 8/11/24.
-//
+
+
 
 import SwiftUI
 
-struct UserFoodRecipeTab:View {
-    @StateObject private var recipeViewModel = RecipeViewModel() // Correctly initialize the view model
+struct UserFoodRecipe:View {
+    @StateObject private var recipeViewModel = RecipeViewModel()
+    @ObservedObject var ViewAccountUser: ViewaccountViewmodel
     var iselected: Int?
+
     var body: some View {
         VStack {
-            if recipeViewModel.RecipeFood.isEmpty && !recipeViewModel.isLoading {
+            if ViewAccountUser.UserFoodDataRecipe.isEmpty && !ViewAccountUser.isLoading {
                 Text("No Recipes Found")
                     .font(.title3)
                     .foregroundColor(.gray)
@@ -20,19 +18,24 @@ struct UserFoodRecipeTab:View {
             } else {
                 ScrollView(showsIndicators: false) {
                     LazyVStack(spacing: 8) {
-                        ForEach(recipeViewModel.RecipeFood) { recipe in
+                        ForEach(ViewAccountUser.UserFoodDataRecipe, id: \.id) { recipe in
                             NavigationLink(destination: recipeDetailDestination(for: recipe)) {
                                 RecipeViewCell(recipe: recipe)
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
                             }
+                            .simultaneousGesture(
+                                TapGesture().onEnded {
+                                    print("Recipe ID: \(recipe.id)")
+                                    print("Item Type: \(recipe.itemType)")
+                                }
+                            )
                         }
                     }
                 }
                 .overlay(
-                    // Show a loading indicator if data is being fetched
                     Group {
-                        if recipeViewModel.isLoading {
+                        if ViewAccountUser.isLoading {
                             ZStack {
                                 Color.white
                                     .edgesIgnoringSafeArea(.all)
@@ -40,10 +43,8 @@ struct UserFoodRecipeTab:View {
                                 ProgressView()
                                     .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
                                     .scaleEffect(2)
-                                    .offset(y:-50)
+                                    .offset(y: -50)
                             }
-                                .padding()
-                                
                         }
                     }
                 )
@@ -52,13 +53,13 @@ struct UserFoodRecipeTab:View {
         .padding(.top, 8)
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            if recipeViewModel.RecipeFood.isEmpty {
-                recipeViewModel.getAllRecipeFood()
-            }
+//            if recipeViewModel.RecipeFood.isEmpty {
+//                recipeViewModel.getAllRecipeFood()
+//            }
         }
     }
-    
-    // Destination setup for FoodDetailView with appropriate images
+
+    // MARK: Recipe Detail Destination
     @ViewBuilder
     private func recipeDetailDestination(for recipe: FoodRecipeModel) -> some View {
         FoodDetailView(

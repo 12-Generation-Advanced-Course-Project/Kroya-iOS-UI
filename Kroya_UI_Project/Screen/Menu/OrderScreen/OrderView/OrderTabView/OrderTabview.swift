@@ -21,33 +21,37 @@ struct OrderTabView: View {
                     VStack(spacing: 15) {
                         
                         NavigationLink(destination:
-                                        FoodDetailView(
-                                            theMainImage: "Songvak",
-                                            subImage1: "ahmok",
-                                            subImage2: "brohok",
-                                            subImage3: "SomlorKari",
-                                            subImage4: "Songvak",
-                                            showOrderButton: false,
-                                            showButtonInvoic: true,
-                                            invoiceAccept: true
-                            
-                        ))
+//                                        FoodDetailView(
+//                                            theMainImage: "Songvak",
+//                                            subImage1: "ahmok",
+//                                            subImage2: "brohok",
+//                                            subImage3: "SomlorKari",
+//                                            subImage4: "Songvak",
+//                                            showOrderButton: false,
+//                                            showButtonInvoic: true,
+//                                            invoiceAccept: true
+//                            
+//                        )
+                                       EmptyView()
+                        )
                         {
                             OrderCard(isAccepted: true, isOrder: true, showIcon: false)
                         }
                         
                         NavigationLink(destination:
-                                             FoodDetailView(
-                                                 theMainImage: "Songvak",
-                                                 subImage1: "ahmok",
-                                                 subImage2: "brohok",
-                                                 subImage3: "SomlorKari",
-                                                 subImage4: "Songvak",
-                                                 showOrderButton: false,
-                                                 showPrice: true,
-                                                 showButtonInvoic: true,
-                                                 invoiceAccept: false
-                                             )){
+//                                             FoodDetailView(
+//                                                 theMainImage: "Songvak",
+//                                                 subImage1: "ahmok",
+//                                                 subImage2: "brohok",
+//                                                 subImage3: "SomlorKari",
+//                                                 subImage4: "Songvak",
+//                                                 showOrderButton: false,
+//                                                 showPrice: true,
+//                                                 showButtonInvoic: true,
+//                                                 invoiceAccept: false
+//                                             )
+                                       EmptyView()
+                        ){
                                    OrderCard(isAccepted: false, isOrder: true, showIcon: false)
                                }
                     }
@@ -60,17 +64,19 @@ struct OrderTabView: View {
                     VStack(spacing: 15) {
                         
                         NavigationLink(destination:
-                               FoodDetailView(
-                                    theMainImage: "Songvak",
-                                    subImage1: "ahmok",
-                                    subImage2: "brohok",
-                                    subImage3: "SomlorKari",
-                                    subImage4: "Songvak",
-                                    showOrderButton: false,
-                                    showPrice: true,
-                                    showButtonInvoic: true,
-                                    invoiceAccept: true
-                               )){
+//                               FoodDetailView(
+//                                    theMainImage: "Songvak",
+//                                    subImage1: "ahmok",
+//                                    subImage2: "brohok",
+//                                    subImage3: "SomlorKari",
+//                                    subImage4: "Songvak",
+//                                    showOrderButton: false,
+//                                    showPrice: true,
+//                                    showButtonInvoic: true,
+//                                    invoiceAccept: true
+//                               )
+                                       EmptyView()
+                        ){
                                    OrderCard(isAccepted: true, isOrder: true, showIcon: false)
                                }
                     }
@@ -82,17 +88,19 @@ struct OrderTabView: View {
                     VStack(spacing: 15) {
                         
                         NavigationLink(destination:
-                               FoodDetailView(
-                                    theMainImage: "Songvak",
-                                    subImage1: "ahmok",
-                                    subImage2: "brohok",
-                                    subImage3: "SomlorKari",
-                                    subImage4: "Songvak",
-                                    showOrderButton: false,
-                                    showPrice: true,
-                                    showButtonInvoic: true,
-                                    invoiceAccept: false
-                               )){
+//                               FoodDetailView(
+//                                    theMainImage: "Songvak",
+//                                    subImage1: "ahmok",
+//                                    subImage2: "brohok",
+//                                    subImage3: "SomlorKari",
+//                                    subImage4: "Songvak",
+//                                    showOrderButton: false,
+//                                    showPrice: true,
+//                                    showButtonInvoic: true,
+//                                    invoiceAccept: false
+//                               )
+                                       EmptyView()
+                        ){
                                    OrderCard(isAccepted: false, isOrder: true, showIcon: false)
                                }
                     }

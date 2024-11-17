@@ -62,6 +62,7 @@ class Foods_Service {
         ]
         
         AF.request(url, method: .get, headers: headers).validate().responseData { response in
+            debugPrint(response)
             switch response.result {
             case .success(let data):
                 do {

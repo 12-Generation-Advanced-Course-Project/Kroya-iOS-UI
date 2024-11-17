@@ -20,16 +20,16 @@ struct FoodSellDetails: Decodable {
     let itemType: String
     let isFavorite: Bool
     let isOrderable: Bool
-    let ratingPercentages: RatingPercentages
+    let ratingPercentages: RatingPercentages?
 }
 
 struct RatingPercentages: Decodable {
-    let one: Int
-    let two: Int
-    let three: Int
-    let four: Int
-    let five: Int
-    
+    let one: Double
+    let two: Double
+    let three: Double
+    let four: Double
+    let five: Double
+
     // Custom initializer to map from JSON keys "1", "2", "3", etc.
     enum CodingKeys: String, CodingKey {
         case one = "1"
@@ -38,5 +38,17 @@ struct RatingPercentages: Decodable {
         case four = "4"
         case five = "5"
     }
+
+    // Converts the object into a `[String: Double]` dictionary for easier access.
+    func toDictionary() -> [String: Double] {
+        return [
+            "1": one,
+            "2": two,
+            "3": three,
+            "4": four,
+            "5": five
+        ]
+    }
 }
+
 

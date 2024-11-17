@@ -1,10 +1,8 @@
 import SwiftUI
 
 struct FoodonRecipe: View {
-    
     @Environment(\.dismiss) var dismiss
     @StateObject private var recipeViewModel = RecipeViewModel()
-    
     @State private var selectedOrderIndex: Int? = nil
     @State private var searchText = ""
     @State private var isChooseCuisine = false
@@ -35,7 +33,6 @@ struct FoodonRecipe: View {
                             }
                         }) {
                             VStack {
-                                // Display image based on cuisine name or a default placeholder
                                 let imageName = cuisineImages[cuisine.cuisineName] ?? "DefaultCuisineImage"
                                 Image(imageName)
                                     .resizable()
@@ -52,7 +49,6 @@ struct FoodonRecipe: View {
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
-    
                 
                 Spacer().frame(height: 20)
                 
@@ -73,22 +69,28 @@ struct FoodonRecipe: View {
                             .scaleEffect(2)
                             .offset(y: -50)
                     }
-                } else if recipeViewModel.showError {
-                    Text(recipeViewModel.errorMessage)
-                        .foregroundColor(.red)
-                        .padding()
                 } else {
                     ScrollView {
                         LazyVStack {
                             ForEach(isChooseCuisine ? recipeViewModel.RecipeByCategory : recipeViewModel.RecipeFood) { recipe in
-                                RecipeViewCell(recipe: recipe)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.horizontal, 20)
+                                NavigationLink(destination:
+                                                FoodDetailView(
+                                                    showPrice: false, // Always false for recipes
+                                                    showOrderButton: false, // Always false for recipes
+                                                    showButtonInvoic: nil, // Not applicable
+                                                    invoiceAccept: nil, // Not applicable
+                                                    FoodId: recipe.id,
+                                                    ItemType: recipe.itemType
+                                                )
+                                ) {
+                                    RecipeViewCell(recipe: recipe)
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.horizontal, 20)
+                                }
                             }
                         }
                     }
                 }
-                
                 Spacer()
             }
             .navigationTitle("Food Recipe")
@@ -106,10 +108,11 @@ struct FoodonRecipe: View {
                     }
                 }
             }
-            .onAppear {
-                recipeViewModel.getAllCuisines()
-                recipeViewModel.getAllRecipeFood()
-            }
+           
+        }
+        .onAppear {
+            recipeViewModel.getAllCuisines()
+            recipeViewModel.getAllRecipeFood()
         }
         .searchable(text: $searchText, prompt: LocalizedStringKey("Search Item"))
         .onChange(of: searchText) { newValue in

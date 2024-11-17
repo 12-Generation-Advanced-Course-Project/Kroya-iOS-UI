@@ -13,7 +13,7 @@ struct FoodSellModel: Identifiable, Codable {
     var id: Int
     var photo: [Photo]
     var name: String
-    var dateCooking: String
+    var dateCooking: String?
     var price: Double
     var currencyType: String
     var averageRating: Double?
@@ -21,9 +21,9 @@ struct FoodSellModel: Identifiable, Codable {
     var isFavorite: Bool
     var itemType: String
     var isOrderable: Bool
-    var sellerInformation: SellerInformation
+    var sellerInformation: SellerInformation?
     
-    // Mapping foodSellId from JSON to id in the struct
+    // Map `foodSellId` from JSON to `id` in the struct
     enum CodingKeys: String, CodingKey {
         case id = "foodSellId"
         case photo, name, dateCooking, price, currencyType, averageRating, totalRaters, isFavorite, itemType, isOrderable, sellerInformation

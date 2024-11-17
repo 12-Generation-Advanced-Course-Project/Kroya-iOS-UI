@@ -51,12 +51,12 @@ struct PopularRecipeTab: View {
     @ViewBuilder
     private func recipeDetailDestination(for recipe: FoodRecipeModel) -> some View {
         FoodDetailView(
-            theMainImage: "Hotpot",
-            subImage1: "Chinese Hotpot",
-            subImage2: "Chinese",
-            subImage3: "Fly-By-Jing",
-            subImage4: "Mixue",
-            showOrderButton: false
-        )
+        showPrice: false, // Always false for recipes
+        showOrderButton: false, // Always false for recipes
+        showButtonInvoic: nil, // Not applicable
+        invoiceAccept: nil, // Not applicable
+        FoodId: recipe.id,
+        ItemType: recipe.itemType
+    )
     }
 }
