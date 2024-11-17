@@ -13,6 +13,7 @@
 		840C1FAB2CB3BD0C0066027A /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 840C1FAA2CB3BD0C0066027A /* Alamofire */; };
 		84171E3E2CDCAAD0000FC361 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 84171E3D2CDCAAD0000FC361 /* FirebaseMessaging */; };
 		8445843A2CB6793F00CA3C01 /* SwiftUIFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 844584392CB6793F00CA3C01 /* SwiftUIFlow */; };
+		844DB00C2CE7A7E900A66299 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 844DB00B2CE7A7E900A66299 /* SDWebImageSwiftUI */; };
 		8494AC232CCB533E00FB8206 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 8494AC222CCB533E00FB8206 /* Kingfisher */; };
 		84FBFF0E2CDE17FF005CC231 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 84FBFF0D2CDE17FF005CC231 /* FirebaseAnalytics */; };
 		84FBFF102CDE17FF005CC231 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 84FBFF0F2CDE17FF005CC231 /* FirebaseAppCheck */; };
@@ -87,6 +88,7 @@
 				8494AC232CCB533E00FB8206 /* Kingfisher in Frameworks */,
 				84FBFF122CDE17FF005CC231 /* FirebaseAuth in Frameworks */,
 				21E424A7EE788A519F13A1B9 /* Pods_Kroya_UI_Project.framework in Frameworks */,
+				844DB00C2CE7A7E900A66299 /* SDWebImageSwiftUI in Frameworks */,
 				84FBFF102CDE17FF005CC231 /* FirebaseAppCheck in Frameworks */,
 				84FBFF0E2CDE17FF005CC231 /* FirebaseAnalytics in Frameworks */,
 			);
@@ -187,6 +189,7 @@
 				84FBFF0D2CDE17FF005CC231 /* FirebaseAnalytics */,
 				84FBFF0F2CDE17FF005CC231 /* FirebaseAppCheck */,
 				84FBFF112CDE17FF005CC231 /* FirebaseAuth */,
+				844DB00B2CE7A7E900A66299 /* SDWebImageSwiftUI */,
 			);
 			productName = Kroya_UI_Project;
 			productReference = 8406DAAF2CA5510C0003EA40 /* Kroya_UI_Project.app */;
@@ -279,6 +282,7 @@
 				268612302CCA226400DE1F6F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
 				8494AC212CCB533E00FB8206 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				84171E3C2CDCAAD0000FC361 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				844DB00A2CE7A7E900A66299 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8406DAB02CA5510C0003EA40 /* Products */;
@@ -818,6 +822,14 @@
 				kind = branch;
 			};
 		};
+		844DB00A2CE7A7E900A66299 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.3;
+			};
+		};
 		8494AC212CCB533E00FB8206 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher";
@@ -853,6 +865,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 844584382CB6793F00CA3C01 /* XCRemoteSwiftPackageReference "SwiftUIFlow" */;
 			productName = SwiftUIFlow;
+		};
+		844DB00B2CE7A7E900A66299 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 844DB00A2CE7A7E900A66299 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
 		};
 		8494AC222CCB533E00FB8206 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
