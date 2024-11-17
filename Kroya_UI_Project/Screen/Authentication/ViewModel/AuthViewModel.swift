@@ -247,30 +247,30 @@ class AuthViewModel: ObservableObject {
     }
 
     
-    //MARK: Save UserInfo
-    func saveUserInfo(email: String, userName: String, phoneNumber: String, address: String, accessToken: String, refreshToken: String) {
-        self.isLoading = true
-        print("Email : \(email), UserName : \(userName), PhoneNumber : \(phoneNumber), Address : \(address)")
-        AuthService.shared.saveUserInfo(userName: userName, phoneNumber: phoneNumber, address: address) { [weak self] result in
-            DispatchQueue.main.async {
-                self?.isLoading = false
-                switch result {
-                case .success(_):
-                    // Success scenario
-                    self?.successMessage = "User information saved successfully."
-                    self?.showError = false
-                    self?.userStore.setUser(email: email, userName: userName, phoneNumber: phoneNumber, address: address)
-
-                    self?.isUserSave = true
-                case .failure(let error):
-                    // Failure scenario
-                    self?.successMessage = "Email not found. Please register before updating info."
-                    self?.showError = true
-                    print("Error: \(error.localizedDescription)")
-                }
-            }
-        }
-    }
+//    //MARK: Save UserInfo
+//    func saveUserInfo(email: String, userName: String, phoneNumber: String, address: String, accessToken: String, refreshToken: String) {
+//        self.isLoading = true
+//        print("Email : \(email), UserName : \(userName), PhoneNumber : \(phoneNumber), Address : \(address)")
+//        AuthService.shared.saveUserInfo(userName: userName, phoneNumber: phoneNumber, address: address) { [weak self] result in
+//            DispatchQueue.main.async {
+//                self?.isLoading = false
+//                switch result {
+//                case .success(_):
+//                    // Success scenario
+//                    self?.successMessage = "User information saved successfully."
+//                    self?.showError = false
+//                    self?.userStore.setUser(email: email, userName: userName, phoneNumber: phoneNumber, address: address)
+//
+//                    self?.isUserSave = true
+//                case .failure(let error):
+//                    // Failure scenario
+//                    self?.successMessage = "Email not found. Please register before updating info."
+//                    self?.showError = true
+//                    print("Error: \(error.localizedDescription)")
+//                }
+//            }
+//        }
+//    }
 
     
     

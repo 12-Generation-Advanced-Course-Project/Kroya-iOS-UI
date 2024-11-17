@@ -7,7 +7,7 @@ struct SplashScreen: View {
     @EnvironmentObject var auth: Auth
     @Binding var lang: String
     @StateObject var userStore = UserStore()
-    @StateObject var addressViewModel = AddressViewModel()
+//    @StateObject var addressViewModel = AddressViewModel()
     var body: some View {
        
         ZStack {
