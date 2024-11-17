@@ -17,7 +17,7 @@ struct BottomSheetView<Content: View>: View {
     let showButtonInvoic : Bool // Control ler Button Invoice from Orders
     var invoiceAccept : Bool
     @GestureState private var translation: CGFloat = 0
-    
+    @State private var imageName: String = ""
     private var offset: CGFloat {
         isOpen ? 0 : maxHeight - minHeight
     }
@@ -26,29 +26,29 @@ struct BottomSheetView<Content: View>: View {
         isOpen && translation == 0
     }
     init(
-            isOpen: Binding<Bool>,
-            maxHeight: CGFloat,
-            minHeight: CGFloat,
-            showOrderButton: Bool = true,
-            notificationType: Int? = nil,
-            showButtonInvoic: Bool = false,
-            invoiceAccept: Bool = false,
-            itemType: String,
-            FoodDetails: FoodDetailsViewModel,
-            @ViewBuilder content: () -> Content
-        ) {
-            self.content = content()
-            self._isOpen = isOpen
-            self.maxHeight = maxHeight
-            self.minHeight = minHeight
-            self.showOrderButton = showOrderButton
-            self.notificationType = notificationType
-            self.showButtonInvoic = showButtonInvoic
-            self.invoiceAccept = invoiceAccept
-            self.itemType = itemType // Initialize itemType
-            self.FoodDetails = FoodDetails // Initialize FoodDetails
-        }
-     
+        isOpen: Binding<Bool>,
+        maxHeight: CGFloat,
+        minHeight: CGFloat,
+        showOrderButton: Bool = true,
+        notificationType: Int? = nil,
+        showButtonInvoic: Bool = false,
+        invoiceAccept: Bool = false,
+        itemType: String,
+        FoodDetails: FoodDetailsViewModel,
+        @ViewBuilder content: () -> Content
+    ) {
+        self.content = content()
+        self._isOpen = isOpen
+        self.maxHeight = maxHeight
+        self.minHeight = minHeight
+        self.showOrderButton = showOrderButton
+        self.notificationType = notificationType
+        self.showButtonInvoic = showButtonInvoic
+        self.invoiceAccept = invoiceAccept
+        self.itemType = itemType // Initialize itemType
+        self.FoodDetails = FoodDetails // Initialize FoodDetails
+    }
+    
     var body: some View {
         GeometryReader { geometry in
             VStack {
@@ -82,7 +82,7 @@ struct BottomSheetView<Content: View>: View {
                         }
                     }
             )
-
+            
         }
     }
     
@@ -119,8 +119,8 @@ struct BottomSheetView<Content: View>: View {
                             .edgesIgnoringSafeArea(.top)
                     }
                 }
-
-              
+                
+                
                 Spacer()
                 //MARK: Show Accept or Reject from Notification
                 if let notificationType = notificationType {
@@ -133,52 +133,119 @@ struct BottomSheetView<Content: View>: View {
                 }
                 //MARK: Show Order button if showOrderButton is true and not accessed from Notification
                 else if showOrderButton {
-                    Button(action: {
-                        navigateToCheckout = true
-                    }) {
-                        HStack {
-                            Text("Order")
-                                .font(.customfont(.medium, fontSize: 16))
-                                .foregroundStyle(.white)
-                            Image(systemName: "plus")
-                                .resizable()
-                                .frame(width: 14, height: 14)
-                                .foregroundStyle(.white)
+                    if itemType == "FOOD_SELL" {
+                        if let sellDetails = FoodDetails.foodSellDetail {
+                            let imageName = sellDetails.foodRecipeDTO.photo.first?.photo ?? ""
+                            Button(action: {
+                                navigateToCheckout = true
+                            }) {
+                                HStack {
+                                    Text("Order")
+                                        .font(.customfont(.medium, fontSize: 16))
+                                        .foregroundStyle(.white)
+                                    Image(systemName: "plus")
+                                        .resizable()
+                                        .frame(width: 14, height: 14)
+                                        .foregroundStyle(.white)
+                                }
+                                .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.height * 0.04)
+                                .background(PrimaryColor.normal)
+                                .cornerRadius(UIScreen.main.bounds.width * 0.022)
+                            }
+                            .background(
+                                NavigationLink(
+                                    destination: FoodCheckOutView(
+                                        imageName: .constant(imageName), // Use a constant binding
+                                        Foodname: sellDetails.foodRecipeDTO.name,
+                                        FoodId: sellDetails.id,
+                                        Date: sellDetails.dateCooking,
+                                        Price: sellDetails.price,
+                                        Currency: sellDetails.currencyType
+                                    ),
+                                    isActive: $navigateToCheckout
+                                ) {
+                                    EmptyView()
+                                }
+                            )
                         }
-                        .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.height * 0.04)
-                        .background(PrimaryColor.normal)
-                        .cornerRadius(UIScreen.main.bounds.width * 0.022)
                     }
-                    .background(
-                        NavigationLink(destination: FoodCheckOutView(), isActive: $navigateToCheckout) {
-                            EmptyView()
+                    //MARK: Show Button Invoice from Order
+                    else if showButtonInvoic {
+                        Button(action: {
+                            navigateToReceipt = true
+                        }) {
+                            HStack {
+                                Text(LocalizedStringKey("Invoice"))
+                                    .font(.customfont(.medium, fontSize: 16))
+                                    .foregroundStyle(.white)
+                            }
+                            .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.height * 0.04)
+                            .background(invoiceAccept ? Color(hex: "#00BD4E") : Color.red)
+                            .cornerRadius(UIScreen.main.bounds.width * 0.022)
                         }
-                    )
-                }
-                //MARK: Show Button Invoice from Order
-                else if showButtonInvoic {
-                    Button(action: {
-                        navigateToReceipt = true
-                    }) {
-                        HStack {
-                            Text(LocalizedStringKey("Invoice"))
-                                .font(.customfont(.medium, fontSize: 16))
-                                .foregroundStyle(.white)
-                        }
-                        .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.height * 0.04)
-                        .background(invoiceAccept ? Color(hex: "#00BD4E") : Color.red)
-                        .cornerRadius(UIScreen.main.bounds.width * 0.022)
+                        .background(
+                            NavigationLink(destination: ReceiptView(isPresented: $isPresented, isOrderReceived: false), isActive: $navigateToReceipt) {
+                                EmptyView()
+                            }
+                        )
                     }
-                    .background(
-                        NavigationLink(destination: ReceiptView(isPresented: $isPresented, isOrderReceived: false), isActive: $navigateToReceipt) {
-                            EmptyView()
-                        }
-                    )
+                    
                 }
-                
+            }
+            .padding(.horizontal, 10)
+            .padding(.top, 12)
+        }
+    }
+    
+    //MARK: Helper function to format date
+    private func parseDate(_ dateString: String) -> Date? {
+        let dateFormats = [
+            "yyyy-MM-dd'T'HH:mm:ss.SSS",  // With milliseconds
+            "yyyy-MM-dd'T'HH:mm:ss"       // Without milliseconds
+        ]
+        
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0) // Ensure consistent parsing
+        
+        for format in dateFormats {
+            formatter.dateFormat = format
+            if let date = formatter.date(from: dateString) {
+                return date
             }
         }
-        .padding(.horizontal, 10)
-        .padding(.top, 12)
+        return nil // Return nil if none of the formats match
     }
+
+    
+    //MARK: Helper function to determine time of day based on the cook date time (if available)
+    private func formatDate(_ dateString: String) -> String {
+        guard let date = parseDate(dateString) else { return "Invalid Date" }
+        
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        
+        // Output format
+        formatter.dateFormat = "dd MMM yyyy" // Example: "23 Nov 2024"
+        return formatter.string(from: date)
+    }
+
+    private func determineTimeOfDay(from dateString: String) -> String {
+        guard let date = parseDate(dateString) else { return "at current time." }
+        let hour = Calendar.current.component(.hour, from: date)
+        
+        switch hour {
+        case 5..<12:
+            return "in the morning."
+        case 12..<17:
+            return "in the afternoon."
+        case 17..<21:
+            return "in the evening."
+        default:
+            return "at night."
+        }
+    }
+
+    
 }

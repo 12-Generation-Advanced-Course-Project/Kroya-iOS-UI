@@ -4,21 +4,23 @@ import SDWebImageSwiftUI
 
 struct FoodOnSaleViewCell: View {
     var foodSale: FoodSellModel
-    @StateObject private var favoriteFoodSale = FavoriteVM()
     @State private var isFavorite: Bool
-     let onFavoriteToggle: (Int) -> Void  // Callback to notify favorite toggle
-     private let urlImagePrefix = "https://kroya-api-production.up.railway.app/api/v1/fileView/"
-     
-     init(foodSale: FoodSellModel, isFavorite: Bool = false, onFavoriteToggle: @escaping (Int) -> Void) {
-         self.foodSale = foodSale
-         self._isFavorite = State(initialValue: isFavorite)
-         self.onFavoriteToggle = onFavoriteToggle
-     }
+    let onFavoriteToggle: (Int) -> Void  // Callback to notify parent of favorite toggle
+    
+    private let urlImagePrefix = "https://kroya-api-production.up.railway.app/api/v1/fileView/"
+    
+    init(foodSale: FoodSellModel, isFavorite: Bool = false, onFavoriteToggle: @escaping (Int) -> Void) {
+        self.foodSale = foodSale
+        self._isFavorite = State(initialValue: isFavorite)
+        self.onFavoriteToggle = onFavoriteToggle
+    }
+    
     var body: some View {
         VStack {
             ZStack(alignment: .topLeading) {
-                // Main Image
-                if let photoFilename = foodSale.photo.first?.photo, let url = URL(string: urlImagePrefix + photoFilename) {
+                // Display Main Image
+                if let photoFilename = foodSale.photo.first?.photo,
+                   let url = URL(string: urlImagePrefix + photoFilename) {
                     WebImage(url: url)
                         .resizable()
                         .scaledToFill()
@@ -26,6 +28,7 @@ struct FoodOnSaleViewCell: View {
                         .cornerRadius(15, corners: [.topLeft, .topRight])
                         .clipped()
                 } else {
+                    // Placeholder image if no photo available
                     Image(systemName: "photo")
                         .resizable()
                         .scaledToFill()
@@ -36,6 +39,7 @@ struct FoodOnSaleViewCell: View {
                 
                 // Rating and Favorite Button
                 HStack {
+                    // Star Rating Section
                     HStack(spacing: 3) {
                         Image(systemName: "star.fill")
                             .resizable()
@@ -47,7 +51,7 @@ struct FoodOnSaleViewCell: View {
                             .font(.system(size: 12, weight: .medium))
                             .foregroundColor(.black)
                         
-                        Text("(\(String(describing: foodSale.totalRaters ?? 0))+)")
+                        Text("(\(foodSale.totalRaters ?? 0)+)")
                             .font(.system(size: 12))
                             .foregroundColor(.gray)
                     }
@@ -60,28 +64,31 @@ struct FoodOnSaleViewCell: View {
                     
                     // Favorite Button
                     Button(action: {
-                                    isFavorite.toggle()
-                                    onFavoriteToggle(foodSale.id)  // Notify the parent to toggle favorite
-                                }) {
-                                    Circle()
-                                        .fill(isFavorite ? Color.red : Color.white.opacity(0.5))
-                                        .frame(width: 30, height: 30)
-                                        .overlay(
-                                            Image(systemName: "heart.fill")
-                                                .foregroundColor(.white)
-                                                .font(.system(size: 16))
-                                        )
-                                }
+                        isFavorite.toggle()
+                        onFavoriteToggle(foodSale.id) // Notify the parent view of the toggle
+                    }) {
+                        Circle()
+                            .fill(isFavorite ? Color.red : Color.white.opacity(0.5))
+                            .frame(width: 30, height: 30)
+                            .overlay(
+                                Image(systemName: "heart.fill")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 16))
+                            )
+                    }
                 }
                 .padding(.top, 20)
                 .padding(.horizontal, 10)
             }
             .frame(height: 140)
-
+            
             VStack(alignment: .leading, spacing: 5) {
+                // Food Name
                 Text(foodSale.name)
                     .font(.system(size: 16, weight: .medium))
                     .foregroundColor(.black)
+                
+                // Cooking Date Information
                 if let cookingDate = foodSale.dateCooking {
                     Text("It will be cooked on \(formatDate(cookingDate)) \(determineTimeOfDay(from: cookingDate))")
                         .font(.system(size: 14, weight: .medium))
@@ -89,15 +96,16 @@ struct FoodOnSaleViewCell: View {
                         .multilineTextAlignment(.leading)
                         .lineLimit(2)
                 }
-
+                
                 HStack(spacing: 10) {
                     // Display currency symbol based on currencyType
                     Text("\(currencySymbol(for: foodSale.currencyType)) \(String(format: "%.2f", foodSale.price))")
                         .font(.system(size: 14, weight: .medium))
                         .foregroundColor(.yellow)
                     
+                    // Free Delivery Information
                     HStack(spacing: 4) {
-                        Image(.motorbike)
+                        Image(systemName: "bicycle")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 16, height: 16)
@@ -120,7 +128,8 @@ struct FoodOnSaleViewCell: View {
                 .stroke(Color(hex: "#E6E6E6"), lineWidth: 0.8)
         }
     }
-    // Helper function to get the currency symbol
+    
+    // MARK: - Helper function to get the currency symbol
     private func currencySymbol(for currencyType: String) -> String {
         switch currencyType {
         case "DOLLAR":
@@ -131,31 +140,43 @@ struct FoodOnSaleViewCell: View {
             return ""
         }
     }
-
+    
     //MARK: Helper function to format date
-    private func formatDate(_ dateString: String) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX") // Ensure consistent parsing
-        formatter.timeZone = TimeZone(secondsFromGMT: 0) // Set timezone to GMT if needed
-
-        // Match the input date format exactly
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss" // Matches "2024-11-21T17:05:00"
-        guard let date = formatter.date(from: dateString) else { return "Invalid Date" }
+    private func parseDate(_ dateString: String) -> Date? {
+        let dateFormats = [
+            "yyyy-MM-dd'T'HH:mm:ss.SSS",  // With milliseconds
+            "yyyy-MM-dd'T'HH:mm:ss"       // Without milliseconds
+        ]
         
-        // Format the output date
-        formatter.dateFormat = "dd MMM yyyy" // Output format: "21 Nov 2024"
-        return formatter.string(from: date)
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0) // Ensure consistent parsing
+        
+        for format in dateFormats {
+            formatter.dateFormat = format
+            if let date = formatter.date(from: dateString) {
+                return date
+            }
+        }
+        return nil // Return nil if none of the formats match
     }
-
 
     
     //MARK: Helper function to determine time of day based on the cook date time (if available)
-    private func determineTimeOfDay(from dateString: String) -> String {
+    private func formatDate(_ dateString: String) -> String {
+        guard let date = parseDate(dateString) else { return "Invalid Date" }
+        
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss" // Matches "2024-11-21T17:05:00"
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
         
-        guard let date = formatter.date(from: dateString) else { return "at current time." }
+        // Output format
+        formatter.dateFormat = "dd MMM yyyy" // Example: "23 Nov 2024"
+        return formatter.string(from: date)
+    }
+
+    private func determineTimeOfDay(from dateString: String) -> String {
+        guard let date = parseDate(dateString) else { return "at current time." }
         let hour = Calendar.current.component(.hour, from: date)
         
         switch hour {

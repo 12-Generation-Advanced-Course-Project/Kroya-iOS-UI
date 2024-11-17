@@ -8,11 +8,17 @@
 import SwiftUI
 
 struct FoodCheckOutView: View {
-    
     // properties
     @Environment(\.dismiss) var dismiss
     @State private var isReceiptActive = false
     @State private var isPresented = false
+    @Binding var imageName:String
+    var Foodname:String
+    var FoodId: Int
+    var Date: String
+    var Price: Double
+    var Currency: String
+   
     var body: some View {
         NavigationStack {
             VStack {
@@ -20,10 +26,10 @@ struct FoodCheckOutView: View {
                     // Order Card Section
                     Section {
                         OrderCardDetailView(viewModel: OrderCardDetailViewModel(orderItem: OrderItem(
-                            name: "Somlor Kari",
-                            price: 2.24,
-                            date: "5 May 2023 ( Morning )"
-                        )))
+                            name: Foodname,
+                            price: Price,
+                            date: Date
+                        )), imageName: $imageName, currency: Currency)
                     }
                     .listRowInsets(EdgeInsets())
                     .padding(.bottom, 12)
@@ -104,8 +110,42 @@ struct FoodCheckOutView: View {
             }
         }
     }
-}
-
-#Preview {
-    FoodCheckOutView()
+    
+    //MARK: Helper function to format date
+    private func formatDate(_ dateString: String) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX") // Ensure consistent parsing
+        formatter.timeZone = TimeZone(secondsFromGMT: 0) // Set timezone to GMT if needed
+        
+        // Match the input date format exactly
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss" // Matches "2024-11-21T17:05:00"
+        guard let date = formatter.date(from: dateString) else { return "Invalid Date" }
+        
+        // Format the output date
+        formatter.dateFormat = "dd MMM yyyy" // Output format: "21 Nov 2024"
+        return formatter.string(from: date)
+    }
+    
+    
+    
+    //MARK: Helper function to determine time of day based on the cook date time (if available)
+    private func determineTimeOfDay(from dateString: String) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss" // Matches "2024-11-21T17:05:00"
+        
+        guard let date = formatter.date(from: dateString) else { return "at current time." }
+        let hour = Calendar.current.component(.hour, from: date)
+        
+        switch hour {
+        case 5..<12:
+            return "in the morning."
+        case 12..<17:
+            return "in the afternoon."
+        case 17..<21:
+            return "in the evening."
+        default:
+            return "at night."
+        }
+    }
 }
