@@ -149,7 +149,7 @@ struct SaleReportView: View {
         }
         .navigationTitle(LocalizedStringKey("Sale Report"))
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
+//        .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 HStack {

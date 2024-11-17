@@ -38,7 +38,7 @@ struct AllowNotificationView: View {
                 CustomButton(title: LocalizedStringKey("Not Now"), action: { dismiss() }, backgroundColor: .clear, textColor: .yellow)
             }
         }
-        .navigationBarBackButtonHidden(true)
+//        .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 HStack {

@@ -84,7 +84,6 @@
 				840C1FAB2CB3BD0C0066027A /* Alamofire in Frameworks */,
 				84171E3E2CDCAAD0000FC361 /* FirebaseMessaging in Frameworks */,
 				268612322CCA226400DE1F6F /* SwiftKeychainWrapper in Frameworks */,
-				2686122F2CCA222300DE1F6F /* GoogleMaps in Frameworks */,
 				8494AC232CCB533E00FB8206 /* Kingfisher in Frameworks */,
 				84FBFF122CDE17FF005CC231 /* FirebaseAuth in Frameworks */,
 				21E424A7EE788A519F13A1B9 /* Pods_Kroya_UI_Project.framework in Frameworks */,
@@ -182,7 +181,6 @@
 			packageProductDependencies = (
 				840C1FAA2CB3BD0C0066027A /* Alamofire */,
 				844584392CB6793F00CA3C01 /* SwiftUIFlow */,
-				2686122E2CCA222300DE1F6F /* GoogleMaps */,
 				268612312CCA226400DE1F6F /* SwiftKeychainWrapper */,
 				8494AC222CCB533E00FB8206 /* Kingfisher */,
 				84171E3D2CDCAAD0000FC361 /* FirebaseMessaging */,
@@ -278,7 +276,6 @@
 			packageReferences = (
 				840C1FA92CB3BD0C0066027A /* XCRemoteSwiftPackageReference "Alamofire" */,
 				844584382CB6793F00CA3C01 /* XCRemoteSwiftPackageReference "SwiftUIFlow" */,
-				2686122D2CCA222300DE1F6F /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
 				268612302CCA226400DE1F6F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
 				8494AC212CCB533E00FB8206 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				84171E3C2CDCAAD0000FC361 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
