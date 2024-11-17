@@ -20,12 +20,13 @@ struct CustomMenuView: View {
                 HStack {
                     Text("Edit")
                         .foregroundStyle(.yellow)
-                    Spacer()
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     Image(systemName: "square.and.pencil")
                         .foregroundStyle(.yellow)
                 }
                 .padding(.horizontal, 10)
                 .padding(.vertical, 8)
+                .contentShape(Rectangle())
             }
             Divider()
             
@@ -36,12 +37,13 @@ struct CustomMenuView: View {
                 HStack {
                     Text("Delete")
                         .foregroundStyle(.red)
-                    Spacer()
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     Image(systemName: "trash")
                         .foregroundStyle(.red)
                 }
                 .padding(.horizontal, 10)
                 .padding(.vertical, 8)
+                .contentShape(Rectangle())
             }
         }
         .buttonStyle(PlainButtonStyle())
@@ -53,4 +55,8 @@ struct CustomMenuView: View {
                 .stroke(Color.gray.opacity(0.2), lineWidth: 1)
         )
     }
+}
+
+#Preview {
+    CustomMenuView(showPopup: .constant(true), onUpdate: {}, onDelete: {})
 }

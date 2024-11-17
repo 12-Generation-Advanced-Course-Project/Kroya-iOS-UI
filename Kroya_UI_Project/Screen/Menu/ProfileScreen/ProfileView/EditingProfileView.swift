@@ -24,7 +24,7 @@ struct EditingProfileView: View {
     @Environment(\.dismiss) var dismiss
     @Binding var selectedAddress: Address?
     @State private var imagefile: String = ""
-    @EnvironmentObject var addressVM: AddressViewModel
+//    @EnvironmentObject var addressVM: AddressViewModel
     @EnvironmentObject var userStore: UserStore
     @State private var isPasswordVisible = false
     @Environment(\.locale) var locale
@@ -276,15 +276,15 @@ struct EditingProfileView: View {
             }
             .onAppear {
                 loadProfileData()
-                addressVM.fetchAllAddresses()
-                let lastaddress = addressVM.addresses.last
-                selectedAddress = lastaddress
+//                addressVM.fetchAllAddresses()
+//                let lastaddress = addressVM.addresses.last
+//                selectedAddress = lastaddress
                 profile.fetchUserProfile()
             }
             .onDisappear{
                 profile.fetchUserProfile()
                 loadProfileData()
-                addressVM.fetchAllAddresses()
+//                addressVM.fetchAllAddresses()
             }
             .sheet(isPresented: $showImagePicker) {
                 ImagePicker { selectedImages, filenames in

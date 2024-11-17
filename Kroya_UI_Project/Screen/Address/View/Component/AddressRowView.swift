@@ -1,30 +1,32 @@
-//
-//  AddressRowView.swift
-//  Kroya_UI_Project
-//
-//  Created by Ounbonaliheng on 7/10/24.
-//
-
 import SwiftUI
 
 struct AddressRowView: View {
     
     var address: Address
-    var onUpdate: () -> Void
-    var onDelete: () -> Void
-    var isSelected: Bool
-    @State var isShowPopup  : Bool = false
+    var onUpdate: () -> Void = {}
+    var onDelete: () -> Void = {}
+    var isDefault: Bool = false
+    @State var isShowPopup : Bool = false
+    
+    private var cleanedAddressDetail: String {
+        // Remove any "(ID: ...)" from the address detail for display purposes
+        if let range = address.addressDetail.range(of: #"\(ID: \d+\)"#, options: .regularExpression) {
+            return address.addressDetail.replacingCharacters(in: range, with: "").trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+        return address.addressDetail
+    }
     
     var body: some View {
         VStack {
             HStack {
                 VStack(alignment: .leading, spacing: 5) {
                     HStack{
-                        Text(address.addressDetail)
-                            .font(.system(size: 15, weight: .medium, design: .rounded))
+                        Text(cleanedAddressDetail)
+                            .font(.system(size: 15, weight: .medium))
                             .foregroundColor(.black)
                             .opacity(0.6)
-                        if isSelected {
+                            .lineLimit(1)
+                        if isDefault {
                             Text("Default")
                                 .font(.customfont(.light, fontSize: 10))
                                 .fontWeight(.medium)
@@ -44,14 +46,14 @@ struct AddressRowView: View {
                 Spacer()
                 Text(address.tag)
                     .foregroundColor(PrimaryColor.normal)
-                    .font(.system(size: 15, weight: .semibold, design: .rounded))
+                    .font(.system(size: 15, weight: .semibold))
                 Button(action: {
                     isShowPopup.toggle()
                 }) {
-                    Image("dot")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 18, height: 18)
+                    Image(systemName: "ellipsis")
+                        .font(.system(size: 19, weight: .medium))
+                        .foregroundColor(.gray)
+                        .rotationEffect(.degrees(90))
                 }
                 .popover(isPresented: $isShowPopup, attachmentAnchor: .point(.topTrailing), arrowEdge: .top) {
                     CustomMenuView(showPopup: $isShowPopup, onUpdate: onUpdate, onDelete: onDelete)
@@ -64,7 +66,7 @@ struct AddressRowView: View {
         }
    
         .onTapGesture {
-            // Handle tap if needed
+           
         }
     }
 }
