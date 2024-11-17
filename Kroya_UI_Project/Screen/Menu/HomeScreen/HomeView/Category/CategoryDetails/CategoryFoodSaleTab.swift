@@ -46,12 +46,12 @@ struct CategoryFoodSaleTab: View {
     @ViewBuilder
     private func foodDetailDestination(for foodSale: FoodSellModel) -> some View {
         FoodDetailView(
-            theMainImage: "Hotpot",
-            subImage1: "Chinese Hotpot",
-            subImage2: "Chinese",
-            subImage3: "Fly-By-Jing",
-            subImage4: "Mixue",
-            showOrderButton: foodSale.isOrderable
-        )
+        showPrice: true, // Always false for recipes
+        showOrderButton: true, // Always false for recipes
+        showButtonInvoic: nil, // Not applicable
+        invoiceAccept: nil, // Not applicable
+        FoodId: foodSale.id ?? 0,
+        ItemType: foodSale.itemType
+    )
     }
 }

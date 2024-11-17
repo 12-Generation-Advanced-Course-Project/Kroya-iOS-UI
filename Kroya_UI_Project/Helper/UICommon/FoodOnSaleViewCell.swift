@@ -1,8 +1,8 @@
 import SwiftUI
 import Kingfisher
+import SDWebImageSwiftUI
 
 struct FoodOnSaleViewCell: View {
-    
     @State private var isFavorite: Bool
     var foodSale: FoodSellModel
     private let urlImagePrefix = "https://kroya-api-production.up.railway.app/api/v1/fileView/"
@@ -17,22 +17,22 @@ struct FoodOnSaleViewCell: View {
             ZStack(alignment: .topLeading) {
                 // Main Image
                 if let photoFilename = foodSale.photo.first?.photo, let url = URL(string: urlImagePrefix + photoFilename) {
-                                  KFImage(url)
-                                      .resizable()
-                                      .scaledToFill()
-                                      .frame(height: 160)
-                                      .cornerRadius(15, corners: [.topLeft, .topRight])
-                                      .clipped()
-                              } else {
-                                  // Placeholder image when no URL is available
-                                  Image(systemName: "photo")
-                                      .resizable()
-                                      .scaledToFill()
-                                      .frame(height: 160)
-                                      .cornerRadius(15, corners: [.topLeft, .topRight])
-                                      .clipped()
-                              }
-                              
+                    WebImage(url: url)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: 160)
+                        .cornerRadius(15, corners: [.topLeft, .topRight])
+                        .clipped()
+                } else {
+                    // Placeholder image when no URL is available
+                    Image(systemName: "photo")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: 160)
+                        .cornerRadius(15, corners: [.topLeft, .topRight])
+                        .clipped()
+                }
+                
                 // Rating and Favorite Button
                 HStack {
                     // Rating Section
@@ -44,13 +44,13 @@ struct FoodOnSaleViewCell: View {
                             .foregroundColor(.yellow)
                         
                         Text(String(format: "%.1f", foodSale.averageRating ?? 0.0))
-                            .font(.customfont(.medium, fontSize: 12))
+                            .font(.system(size: 12, weight: .medium))
                             .foregroundColor(.black)
                         
                         Text("(\(String(describing: foodSale.totalRaters ?? 0))+)")
                             .font(.system(size: 12))
                             .foregroundColor(.gray)
-                    }                    
+                    }
                     .padding(5)
                     .background(Color.white.opacity(0.8))
                     .cornerRadius(10)
@@ -80,12 +80,21 @@ struct FoodOnSaleViewCell: View {
             VStack(alignment: .leading, spacing: 5) {
                 // Dish Name
                 Text(foodSale.name)
-                    .font(.customfont(.medium, fontSize: 16))
+                    .font(.system(size: 16, weight: .medium))
                     .foregroundColor(.black)
+                
+                if let cookingDate = foodSale.dateCooking {
+                    Text("It will be cooked on \(formatDate(cookingDate)) \(determineTimeOfDay(from: cookingDate))")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(2)
+                }
                 // Price and Delivery Info
                 HStack(spacing: 10) {
-                    Text("$ \(String(format: "%.2f", foodSale.price))")
-                        .font(.customfont(.medium, fontSize: 14))
+                    // Display currency symbol based on currencyType
+                    Text("\(currencySymbol(for: foodSale.currencyType)) \(String(format: "%.2f", foodSale.price))")
+                        .font(.system(size: 14, weight: .medium))
                         .foregroundColor(.yellow)
                     
                     HStack(spacing: 4) {
@@ -95,7 +104,7 @@ struct FoodOnSaleViewCell: View {
                             .frame(width: 16, height: 16)
                             .opacity(0.60)
                         Text("Free")
-                            .font(.customfont(.light, fontSize: 12))
+                            .font(.system(size: 12, weight: .light))
                             .foregroundColor(.gray)
                     }
                     Spacer()
@@ -113,32 +122,43 @@ struct FoodOnSaleViewCell: View {
         }
     }
     
-    // Helper function to format date
+    // Helper function to get the currency symbol
+    private func currencySymbol(for currencyType: String) -> String {
+        switch currencyType {
+        case "DOLLAR":
+            return "$"
+        case "RIEL":
+            return "៛"
+        default:
+            return ""
+        }
+    }
+
+    //MARK: Helper function to format date
     private func formatDate(_ dateString: String) -> String {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.locale = Locale(identifier: "en_US_POSIX") // Ensure consistent parsing
+        formatter.timeZone = TimeZone(secondsFromGMT: 0) // Set timezone to GMT if needed
+
+        // Match the input date format exactly
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss" // Matches "2024-11-21T17:05:00"
+        guard let date = formatter.date(from: dateString) else { return "Invalid Date" }
         
-        // Try parsing with different date formats
-        let dateFormats = ["yyyy-MM-dd HH:mm:ss Z", "yyyy-MM-dd"]
-        var date: Date?
-        
-        for format in dateFormats {
-            formatter.dateFormat = format
-            if let parsedDate = formatter.date(from: dateString) {
-                date = parsedDate
-                break
-            }
-        }
-        
-        guard let validDate = date else { return dateString }
-        
-        formatter.dateFormat = "dd MMM yyyy" // Output format
-        return formatter.string(from: validDate)
+        // Format the output date
+        formatter.dateFormat = "dd MMM yyyy" // Output format: "21 Nov 2024"
+        return formatter.string(from: date)
     }
+
+
     
-    // Helper function to determine time of day based on the cook date time (if available)
-    private func determineTimeOfDay() -> String {
-        let hour = Calendar.current.component(.hour, from: Date())
+    //MARK: Helper function to determine time of day based on the cook date time (if available)
+    private func determineTimeOfDay(from dateString: String) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss" // Matches "2024-11-21T17:05:00"
+        
+        guard let date = formatter.date(from: dateString) else { return "at current time." }
+        let hour = Calendar.current.component(.hour, from: date)
         
         switch hour {
         case 5..<12:
@@ -151,5 +171,5 @@ struct FoodOnSaleViewCell: View {
             return "at night."
         }
     }
-}
 
+}

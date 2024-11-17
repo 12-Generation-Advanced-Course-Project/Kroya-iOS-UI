@@ -88,7 +88,7 @@ class CategoryService {
         }
         
         // Construct the URL with the category ID
-        let url = "\(Constants.CategoryByIdUrl)\(category)"
+        let url = "\(Constants.FoodsUrl)\(category)"
         let headers: HTTPHeaders = ["Authorization": "Bearer \(accessToken)"]
         
         AF.request(url, method: .get, headers: headers).validate()

@@ -9,7 +9,7 @@
 import SwiftUI
 import Kingfisher
 import Combine
-
+import SDWebImageSwiftUI
 struct EditingProfileView: View {
     @State private var userInputName: String = ""
     @State private var userInputEmail: String = ""
@@ -43,7 +43,7 @@ struct EditingProfileView: View {
                 ZStack(alignment: .bottomTrailing) {
                     if selectedImages.isEmpty {
                         if let profileImageUrl = profile.userProfile?.profileImage, !profileImageUrl.isEmpty {
-                            KFImage(URL(string: Constants.fileupload + "\(profileImageUrl)"))
+                            WebImage(url:URL(string: Constants.fileupload + "\(profileImageUrl)"))
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 94, height: 94)

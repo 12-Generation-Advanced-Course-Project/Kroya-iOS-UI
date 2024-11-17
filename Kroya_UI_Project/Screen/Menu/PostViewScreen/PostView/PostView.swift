@@ -8,6 +8,7 @@
 import SwiftUI
 import Combine
 import Kingfisher
+import SDWebImageSwiftUI
 struct PostViewScreen: View {
     @State private var searchText = ""
     @State private var selectedSegment = 0
@@ -24,7 +25,7 @@ struct PostViewScreen: View {
                     HStack {
                         if let profileImageUrl = Profile.userProfile?.profileImage, !profileImageUrl.isEmpty,
                            let imageUrl = URL(string: Constants.fileupload + profileImageUrl) {
-                            KFImage(imageUrl)
+                            WebImage(url: imageUrl)
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 40, height: 40)

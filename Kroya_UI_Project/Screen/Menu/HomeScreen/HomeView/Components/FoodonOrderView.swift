@@ -72,10 +72,21 @@ struct FoodonOrderView: View {
                 } else {
                     ScrollView {
                         LazyVStack {
-                            ForEach(isChooseCuisine ? foodViewModel.FoodSellByCategory : foodViewModel.FoodOnSale) { food in
-                                FoodOnSaleViewCell(foodSale: food)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.horizontal, 20)
+                            ForEach(isChooseCuisine ? foodViewModel.FoodSellByCategory : foodViewModel.FoodOnSale) { foodSale in
+                                NavigationLink(destination:
+                                                FoodDetailView(
+                                                    showPrice: true, // Always false for recipes
+                                                    showOrderButton: true, // Always false for recipes
+                                                    showButtonInvoic: nil, // Not applicable
+                                                    invoiceAccept: nil, // Not applicable
+                                                    FoodId: foodSale.id ?? 0,
+                                                    ItemType: foodSale.itemType
+                                                )
+                                ) {
+                                    FoodOnSaleViewCell(foodSale: foodSale)
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.horizontal, 20)
+                                }
                             }
                         }
                     }
