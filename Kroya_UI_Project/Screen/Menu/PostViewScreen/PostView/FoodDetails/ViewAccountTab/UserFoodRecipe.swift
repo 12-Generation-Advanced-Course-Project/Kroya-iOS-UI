@@ -7,7 +7,7 @@ struct UserFoodRecipe:View {
     @StateObject private var recipeViewModel = RecipeViewModel()
     @ObservedObject var ViewAccountUser: ViewaccountViewmodel
     var iselected: Int?
-
+    @StateObject private var favoriteFoodRecipe = FavoriteVM()
     var body: some View {
         VStack {
             if ViewAccountUser.UserFoodDataRecipe.isEmpty && !ViewAccountUser.isLoading {
@@ -20,7 +20,9 @@ struct UserFoodRecipe:View {
                     LazyVStack(spacing: 8) {
                         ForEach(ViewAccountUser.UserFoodDataRecipe, id: \.id) { recipe in
                             NavigationLink(destination: recipeDetailDestination(for: recipe)) {
-                                RecipeViewCell(recipe: recipe)
+                                RecipeViewCell(recipe: recipe, onFavoriteToggle: { foodId in
+                                    favoriteFoodRecipe.createFavoriteFood(foodId: foodId, itemType: "FOOD_RECIPE")
+                                })
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
                             }

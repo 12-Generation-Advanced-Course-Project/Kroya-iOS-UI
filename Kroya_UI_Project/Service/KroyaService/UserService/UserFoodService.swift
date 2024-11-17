@@ -14,7 +14,7 @@ class UserFoodService {
     static let shared = UserFoodService()
     
     //MARK: Get all User Food
-    func getAllUserFood(completion: @escaping (Result<userFoodResponse, Error>) -> Void){
+    func fetchAllUserFood(completion: @escaping (Result<userFoodResponse, Error>) -> Void){
         guard let accessToken = Auth.shared.getAccessToken() else {
             print("Error: Access token is nil.")
             let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token is missing"])
@@ -22,7 +22,7 @@ class UserFoodService {
             return
         }
         
-        let url = Constants.FoodRecipeUrl + "foods"
+        let url = Constants.UserFoodUrl + "foods"
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(Auth.shared.getAccessToken() ?? "")"
         ]
@@ -34,19 +34,19 @@ class UserFoodService {
                         let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
                         let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
                         if let prettyString = String(data: prettyData, encoding: .utf8) {
-                            print("Pretty JSON Response:\n\(prettyString)")
+                            print("Get all user food JSON Response:\n\(prettyString)")
                         }
                     } catch {
-                        print("Failed to convert response data to pretty JSON: \(error)")
+                        print("Failed to convert response get all user food  to JSON: \(error)")
                     }
                 } else {
-                    print("No response data available")
+                    print("No response all food data available")
                 }
                 debugPrint(response)
                 switch response.result {
                 case .success(let apiResponse):
                     if apiResponse.statusCode == "200" {
-                        print("Food listings retrieved successfully.")
+                        print("Get all food retrieved successfully.")
                         completion(.success(apiResponse))
                     } else {
                         print("Failed to retrieved Food listings")

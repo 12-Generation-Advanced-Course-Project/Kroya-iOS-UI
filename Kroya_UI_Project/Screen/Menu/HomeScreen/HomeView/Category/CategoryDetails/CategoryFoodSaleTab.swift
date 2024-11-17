@@ -10,7 +10,7 @@ import SwiftUI
 struct CategoryFoodSaleTab: View {
     
     @ObservedObject var categoryVM: CategoryMV
-
+    @StateObject private var favoriteFoodSale = FavoriteVM()
     var body: some View {
         ZStack {
             VStack {
@@ -30,7 +30,9 @@ struct CategoryFoodSaleTab: View {
                         LazyVStack(spacing: 8) {
                             ForEach(categoryVM.FoodSellByCategory) { foodSale in
                                 NavigationLink(destination: foodDetailDestination(for: foodSale)) {
-                                    FoodOnSaleViewCell(foodSale: foodSale)
+                                    FoodOnSaleViewCell(foodSale: foodSale, onFavoriteToggle: { foodId in
+                                        favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
+                                    })
                                         .frame(maxWidth: .infinity)
                                         .padding(.horizontal, 20)
                                 }
@@ -50,7 +52,7 @@ struct CategoryFoodSaleTab: View {
         showOrderButton: true, // Always false for recipes
         showButtonInvoic: nil, // Not applicable
         invoiceAccept: nil, // Not applicable
-        FoodId: foodSale.id ?? 0,
+        FoodId: foodSale.id,
         ItemType: foodSale.itemType
     )
     }

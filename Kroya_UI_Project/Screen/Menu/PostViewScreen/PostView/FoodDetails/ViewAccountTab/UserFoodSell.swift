@@ -9,6 +9,7 @@ struct UserFoodSell:View {
     var iselected: Int?
     @StateObject private var foodsellVm = FoodSellViewModel()
     @ObservedObject var ViewAccountUser: ViewaccountViewmodel
+    @StateObject private var favoriteFoodVM = FavoriteVM()
     var body: some View {
         VStack {
             if ViewAccountUser.UserFoodDataFoodSell.isEmpty && !ViewAccountUser.isLoading {
@@ -26,12 +27,14 @@ struct UserFoodSell:View {
                                                 showOrderButton: true, // Always false for recipes
                                                 showButtonInvoic: nil, // Not applicable
                                                 invoiceAccept: nil, // Not applicable
-                                                FoodId: foodSale.id ?? 0,
+                                                FoodId: foodSale.id,
                                                 ItemType: foodSale.itemType
                                             )
                                            
                             ) {
-                                FoodOnSaleViewCell(foodSale: foodSale)
+                                FoodOnSaleViewCell(foodSale: foodSale, onFavoriteToggle: { foodId in
+                                    favoriteFoodVM.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
+                                })
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
                             }

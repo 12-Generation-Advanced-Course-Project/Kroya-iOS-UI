@@ -11,6 +11,8 @@ struct HomeView: View {
     @Environment(\.locale) var locale
     @StateObject private var recentSearchesData = RecentSearchesData()
     @StateObject private var PopularFoodsData =  PopularFoodVM()
+    @StateObject private var favoriteFoodRecipe = FavoriteVM()
+    @StateObject private var favoriteFoodSale = FavoriteVM()
     @Environment(\.modelContext) var modelContext
     var body: some View {
         NavigationView {
@@ -25,7 +27,8 @@ struct HomeView: View {
                         
                         // Recipe Order Cards
                         HStack(spacing: 16) {
-                            NavigationLink(destination: FoodonOrderView()) {
+                            NavigationLink(destination: FoodonOrderView()
+                            ) {
                                 Recipe_OrderCard(
                                     title: LocalizedStringKey("Food order"),
                                     subtitle: LocalizedStringKey("Order what you love"),
@@ -122,7 +125,9 @@ struct HomeView: View {
                                                 ItemType: foodSale.itemType
                                             )
                                 ) {
-                                    FoodOnSaleViewCell(foodSale: foodSale)
+                                    FoodOnSaleViewCell(foodSale: foodSale, onFavoriteToggle: { foodId in
+                                        favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
+                                    })
                                         .frame(width: 360)
                                 }
                             }
@@ -139,7 +144,9 @@ struct HomeView: View {
                                                 ItemType: recipe.itemType
                                             )
                                 ) {
-                                    RecipeViewCell(recipe: recipe)
+                                    RecipeViewCell(recipe: recipe, onFavoriteToggle: { foodId in
+                                        favoriteFoodRecipe.createFavoriteFood(foodId: foodId, itemType: "FOOD_RECIPE")
+                                    })
                                         .frame(width: 360)
                                 }
                             }

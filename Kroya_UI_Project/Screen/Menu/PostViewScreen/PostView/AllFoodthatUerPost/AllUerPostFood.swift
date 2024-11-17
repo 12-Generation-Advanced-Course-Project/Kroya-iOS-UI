@@ -1,7 +1,14 @@
+//
+//  AllUerPostFood.swift
+//  Kroya_UI_Project
+//
+//  Created by Macbook on 11/17/24.
+//
+
 import SwiftUI
 
-struct AllPopularTabView: View {
-    @StateObject private var popularFoodVM = PopularFoodVM() // Use a single ViewModel instance
+struct AllUerPostFood: View {
+    @StateObject private var allFoodUserPost = UserFoodViewModel()// Use a single ViewModel instance
     @StateObject private var favoriteFoodSale = FavoriteVM()
     @StateObject private var favoriteFoodRecipe = FavoriteVM()
     var isSelected: Int?
@@ -10,7 +17,7 @@ struct AllPopularTabView: View {
             ScrollView(showsIndicators: false) {
                 LazyVStack(spacing: 8) {
                     // Display popular sell items
-                    ForEach(popularFoodVM.popularFoodSell) { popularsell in
+                    ForEach(allFoodUserPost.userPostFoodSale) { popularsell in
                         NavigationLink(destination: foodDetailDestination(for: popularsell)) {
                             FoodOnSaleViewCell(foodSale: popularsell, onFavoriteToggle: { foodId in
                                 favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
@@ -21,7 +28,7 @@ struct AllPopularTabView: View {
                     }
                     
                     // Display popular recipe items
-                    ForEach(popularFoodVM.popularFoodRecipe) { popularrecipe in
+                    ForEach(allFoodUserPost.userPostRecipeFood) { popularrecipe in
                         NavigationLink(destination: recipeDetailDestination(for: popularrecipe)) {
                             RecipeViewCell(recipe: popularrecipe, onFavoriteToggle: { foodId in
                                 favoriteFoodRecipe.createFavoriteFood(foodId: foodId, itemType: "FOOD_RECIPE")
@@ -35,7 +42,7 @@ struct AllPopularTabView: View {
             
             .overlay(
                 Group {
-                    if popularFoodVM.isLoading {
+                    if allFoodUserPost.isLoading {
                         Color.white
                             .edgesIgnoringSafeArea(.all)
                         
@@ -47,8 +54,8 @@ struct AllPopularTabView: View {
             )
         }
         .onAppear {
-            if popularFoodVM.popularFoodSell.isEmpty || popularFoodVM.popularFoodRecipe.isEmpty {
-                popularFoodVM.getAllPopular()
+            if allFoodUserPost.userPostFoodSale.isEmpty || allFoodUserPost.userPostRecipeFood.isEmpty {
+                allFoodUserPost.getAllUserFood()
             }
         }
     }
@@ -57,24 +64,24 @@ struct AllPopularTabView: View {
     @ViewBuilder
     private func foodDetailDestination(for foodSale: FoodSellModel) -> some View {
         FoodDetailView(
-        showPrice: true, // Always false for recipes
-        showOrderButton: true, // Always false for recipes
-        showButtonInvoic: nil, // Not applicable
-        invoiceAccept: nil, // Not applicable
-        FoodId: foodSale.id ?? 0,
-        ItemType: foodSale.itemType
-    )
+            showPrice: true, // Always false for recipes
+            showOrderButton: true, // Always false for recipes
+            showButtonInvoic: nil, // Not applicable
+            invoiceAccept: nil, // Not applicable
+            FoodId: foodSale.id,
+            ItemType: foodSale.itemType
+        )
     }
     
     @ViewBuilder
     private func recipeDetailDestination(for recipe: FoodRecipeModel) -> some View {
         FoodDetailView(
-        showPrice: false, // Always false for recipes
-        showOrderButton: false, // Always false for recipes
-        showButtonInvoic: nil, // Not applicable
-        invoiceAccept: nil, // Not applicable
-        FoodId: recipe.id,
-        ItemType: recipe.itemType
-    )
+            showPrice: false, // Always false for recipes
+            showOrderButton: false, // Always false for recipes
+            showButtonInvoic: nil, // Not applicable
+            invoiceAccept: nil, // Not applicable
+            FoodId: recipe.id,
+            ItemType: recipe.itemType
+        )
     }
 }

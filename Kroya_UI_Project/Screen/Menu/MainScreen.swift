@@ -39,7 +39,8 @@ struct MainScreen: View {
                             }
                             .tag(1)
                         
-                        PostViewScreen()
+                            PostViewScreen()
+                       
                             .tabItem {
                                 VStack {
                                     Image(selectedTab == 2 ? "PostVectorYellow" : "PostVector")

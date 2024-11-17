@@ -1,30 +1,29 @@
 //
-//  recipe.swift
+//  UserPostRecipeFood.swift
 //  Kroya_UI_Project
 //
-//  Created by Macbook on 10/14/24.
+//  Created by Macbook on 11/17/24.
 //
 
 import SwiftUI
 
-
-struct PopularRecipeTab: View {
-    @StateObject private var popularRecipe = PopularFoodVM()
+struct UserPostRecipeFood:View {
+    @StateObject private var userPostRecipeFood = UserFoodViewModel()
     @StateObject private var favoriteFoodRecipe = FavoriteVM()
     var isSelected: Int?
     var body: some View {
         VStack {
-            if popularRecipe.popularFoodRecipe.isEmpty && !popularRecipe.isLoading {
-                Text("No Popular Recipes Found!")
+            if userPostRecipeFood.userPostRecipeFood.isEmpty && !userPostRecipeFood.isLoading {
+                Text("No Food Recipes Available")
                     .font(.title3)
                     .foregroundColor(.gray)
                     .padding()
             } else {
                 ScrollView(showsIndicators: false) {
                     LazyVStack(spacing: 8) {
-                        ForEach(popularRecipe.popularFoodRecipe) { popularrecipe in
-                            NavigationLink(destination: recipeDetailDestination(for: popularrecipe)) {
-                                RecipeViewCell(recipe: popularrecipe, onFavoriteToggle: { foodId in
+                        ForEach(userPostRecipeFood.userPostRecipeFood) { recipe in
+                            NavigationLink(destination: recipeDetailDestination(for: recipe)) {
+                                RecipeViewCell(recipe: recipe, onFavoriteToggle: { foodId in
                                     favoriteFoodRecipe.createFavoriteFood(foodId: foodId, itemType: "FOOD_RECIPE")
                                 })
                                     .frame(maxWidth: .infinity)
@@ -35,7 +34,7 @@ struct PopularRecipeTab: View {
                 }
                 .overlay(
                     Group {
-                        if popularRecipe.isLoading {
+                        if userPostRecipeFood.isLoading {
                             Color.white
                                 .edgesIgnoringSafeArea(.all)
                             
@@ -50,21 +49,22 @@ struct PopularRecipeTab: View {
         .padding(.top, 8)
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            if popularRecipe.popularFoodRecipe.isEmpty {
-                popularRecipe.getAllPopular()
+            if userPostRecipeFood.userPostRecipeFood.isEmpty {
+                userPostRecipeFood.getAllUserFood()
             }
         }
     }
     
+    // Destination setup for FoodDetailView with appropriate images
     @ViewBuilder
-    private func recipeDetailDestination(for recipe: FoodRecipeModel) -> some View {
+    private func recipeDetailDestination(for recipe: FoodRecipeModel) -> some View { // Use RecipeModel as parameter type
         FoodDetailView(
-        showPrice: false, // Always false for recipes
-        showOrderButton: false, // Always false for recipes
-        showButtonInvoic: nil, // Not applicable
-        invoiceAccept: nil, // Not applicable
-        FoodId: recipe.id,
-        ItemType: recipe.itemType
-    )
+            showPrice: false, // Always false for recipes
+            showOrderButton: false, // Always false for recipes
+            showButtonInvoic: nil, // Not applicable
+            invoiceAccept: nil, // Not applicable
+            FoodId: recipe.id,
+            ItemType: recipe.itemType
+        )
     }
 }

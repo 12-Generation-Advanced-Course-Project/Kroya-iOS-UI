@@ -8,10 +8,10 @@ import SwiftUI
 
 struct FoodonOrderView: View {
     @Environment(\.dismiss) var dismiss
+    @StateObject private var favoriteFoodSale = FavoriteVM()
     @StateObject private var foodViewModel = FoodSellViewModel()
     let imageofOrder: [String] = ["SoupPic", "SaladPic", "GrillPic", "DessertPic 1"]
     let titleofOrder: [String] = ["Soup", "Salad", "Grill", "Dessert"]
-    
     @State private var selectedOrderIndex: Int? = nil
     @State private var searchText = ""
     @State private var doubleSelectedOrderIndex: Int? = nil
@@ -73,52 +73,61 @@ struct FoodonOrderView: View {
                     ScrollView {
                         LazyVStack {
                             ForEach(isChooseCuisine ? foodViewModel.FoodSellByCategory : foodViewModel.FoodOnSale) { foodSale in
-                                NavigationLink(destination:
-                                                FoodDetailView(
-                                                    showPrice: true, // Always false for recipes
-                                                    showOrderButton: true, // Always false for recipes
-                                                    showButtonInvoic: nil, // Not applicable
-                                                    invoiceAccept: nil, // Not applicable
-                                                    FoodId: foodSale.id ?? 0,
-                                                    ItemType: foodSale.itemType
-                                                )
-                                ) {
-                                    FoodOnSaleViewCell(foodSale: foodSale)
+                                NavigationLink(destination: foodDetailDestination(for: foodSale)) {
+                                    FoodOnSaleViewCell(foodSale: foodSale, onFavoriteToggle: { foodId in
+                                        favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
+                                    })
                                         .frame(maxWidth: .infinity)
                                         .padding(.horizontal, 20)
                                 }
+                                
                             }
                         }
                     }
+                    
+                    Spacer()
                 }
                 
-                Spacer()
             }
             .navigationTitle("Food Order")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: { dismiss() }) {
+                    Button(action: {
+                        dismiss()
+                    }) {
                         Image(systemName: "arrow.left")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 20, height: 20)
-                            .foregroundStyle(.black)
+                            .foregroundColor(.black)
                     }
                 }
             }
         }
-        .searchable(text: $searchText, prompt: LocalizedStringKey("Search Item"))
-        .onChange(of: searchText) { newValue in
-            if !newValue.isEmpty {
-                foodViewModel.getSearchFoodFoodByName(searchText: newValue)
-            } else {
-                foodViewModel.getAllFoodSell()
-            }
-        }
-        .navigationBarBackButtonHidden(true)
-        .onAppear {
-            foodViewModel.getAllFoodSell()
-        }
+         .searchable(text: $searchText, prompt: LocalizedStringKey("Search Item"))
+         .onChange(of: searchText) { newValue in
+             if !newValue.isEmpty {
+                 foodViewModel.getSearchFoodFoodByName(searchText: newValue)
+             } else {
+                 foodViewModel.getAllFoodSell()
+             }
+         }
+         .onAppear {
+             foodViewModel.getAllFoodSell()
+         }
+         .navigationBarBackButtonHidden(true)
+    }
+    
+    @ViewBuilder
+    private func foodDetailDestination(for foodSale: FoodSellModel) -> some View {
+        FoodDetailView(
+        showPrice: true, // Always false for recipes
+        showOrderButton: true, // Always false for recipes
+        showButtonInvoic: nil, // Not applicable
+        invoiceAccept: nil, // Not applicable
+        FoodId: foodSale.id,
+        ItemType: foodSale.itemType
+    )
     }
 }

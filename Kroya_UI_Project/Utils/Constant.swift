@@ -27,5 +27,7 @@ struct Constants {
     static let FoodsUrl = "https://kroya-api-production.up.railway.app/api/v1/foods/"
     //FeedBack
     static let FeedBack = "https://kroya-api-production.up.railway.app/api/v1/feedback"
+  //Favorite
+    static let FavoriteFoodUrl = "https://kroya-api-production.up.railway.app/api/v1/favorite/"
 
 }

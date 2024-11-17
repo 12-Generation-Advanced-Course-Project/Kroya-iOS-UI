@@ -6,6 +6,7 @@ import SwiftUI
 struct AllUserFoodView:View {
     @StateObject private var popularFoodVM = PopularFoodVM()
     @ObservedObject var ViewAccountUser: ViewaccountViewmodel
+    @StateObject private var favoriteFoodVM = FavoriteVM()
     var isSelected: Int?
     var body: some View {
         VStack(spacing: 10) {
@@ -14,7 +15,11 @@ struct AllUserFoodView:View {
                     // Display popular sell items
                     ForEach(ViewAccountUser.UserFoodDataFoodSell) { userFoodDataFoodSell in
                         NavigationLink(destination: foodDetailDestination(for: userFoodDataFoodSell)) {
-                            FoodOnSaleViewCell(foodSale: userFoodDataFoodSell)
+                            FoodOnSaleViewCell(foodSale: userFoodDataFoodSell, onFavoriteToggle: { foodId in
+                                favoriteFoodVM.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
+                            })
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal, 20)
                                 .frame(maxWidth: .infinity)
                                 .padding(.horizontal, 20)
                         }
@@ -23,7 +28,9 @@ struct AllUserFoodView:View {
                     // Display popular recipe items
                     ForEach(ViewAccountUser.UserFoodDataRecipe) { userFoodDataRecipe in
                         NavigationLink(destination: recipeDetailDestination(for: userFoodDataRecipe)) {
-                            RecipeViewCell(recipe: userFoodDataRecipe)
+                            RecipeViewCell(recipe: userFoodDataRecipe, onFavoriteToggle: { foodId in
+                                favoriteFoodVM.createFavoriteFood(foodId: foodId, itemType: "FOOD_RECIPE")
+                            })
                                 .frame(maxWidth: .infinity)
                                 .padding(.horizontal, 20)
                         }
@@ -59,7 +66,7 @@ struct AllUserFoodView:View {
         showOrderButton: true, // Always false for recipes
         showButtonInvoic: nil, // Not applicable
         invoiceAccept: nil, // Not applicable
-        FoodId: userFoodDataFoodSell.id ?? 0,
+        FoodId: userFoodDataFoodSell.id,
         ItemType: userFoodDataFoodSell.itemType
     )
     }
