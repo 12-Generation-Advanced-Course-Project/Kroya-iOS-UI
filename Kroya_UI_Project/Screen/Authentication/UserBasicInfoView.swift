@@ -16,7 +16,7 @@ struct UserBasicInfoView: View {
     
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var userStore: UserStore
-    @EnvironmentObject var addressVM: AddressViewModel
+//    @EnvironmentObject var addressVM: AddressViewModel
     @ObservedObject var authVM = AuthViewModel(userStore: UserStore())
     @Binding var lang: String
     
@@ -91,33 +91,33 @@ struct UserBasicInfoView: View {
                     Text("Address")
                         .font(.customfont(.medium, fontSize: 14))
                         .foregroundColor(.gray)
-                    NavigationLink(destination: AddressView(viewModel: addressVM)) {
-                        HStack {
-                            Image("pinmap")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 24, height: 24)
-                                .foregroundColor(.gray)
-                            Text(addressVM.selectedAddress?.specificLocation ?? "Select Address")
-                                .font(.customfont(.regular, fontSize: 18))
-                                .padding(.vertical, 20)
-                                .foregroundColor(.gray)
-                                .frame(width: .screenWidth * 0.6, alignment: .leading)
-                            
-                            Spacer()
-                        }
-                        .padding(.horizontal, 10)
-                        .background(Color(hex: "#F2F2F7"))
-                        .cornerRadius(15)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 15)
-                                .stroke(Color.gray, lineWidth: 1)
-                        )
-                        .frame(height: 60)
-                    }
-                    .onChange(of: addressVM.selectedAddress) { newValue in
-                        isAddressEmpty = newValue == nil
-                    }
+//                    NavigationLink(destination: AddressView(viewModel: addressVM)) {
+//                        HStack {
+//                            Image("pinmap")
+//                                .resizable()
+//                                .scaledToFit()
+//                                .frame(width: 24, height: 24)
+//                                .foregroundColor(.gray)
+//                            Text(addressVM.selectedAddress?.specificLocation ?? "Select Address")
+//                                .font(.customfont(.regular, fontSize: 18))
+//                                .padding(.vertical, 20)
+//                                .foregroundColor(.gray)
+//                                .frame(width: .screenWidth * 0.6, alignment: .leading)
+//                            
+//                            Spacer()
+//                        }
+//                        .padding(.horizontal, 10)
+//                        .background(Color(hex: "#F2F2F7"))
+//                        .cornerRadius(15)
+//                        .overlay(
+//                            RoundedRectangle(cornerRadius: 15)
+//                                .stroke(Color.gray, lineWidth: 1)
+//                        )
+//                        .frame(height: 60)
+//                    }
+//                    .onChange(of: addressVM.selectedAddress) { newValue in
+//                        isAddressEmpty = newValue == nil
+//                    }
                     
                     if isAddressEmpty {
                         Text("Please select an address")
@@ -168,38 +168,38 @@ struct UserBasicInfoView: View {
         }
         .onAppear {
             // Update selected address from AddressViewModel on reappear
-            if let selectedAddress = addressVM.selectedAddress {
-                self.selectedAddress = selectedAddress
-            }
+//            if let selectedAddress = addressVM.selectedAddress {
+//                self.selectedAddress = selectedAddress
+//            }
         }
         .padding(.horizontal, 20)
-        NavigationLink(destination: MainScreen(userStore: userStore, lang: $lang)
-            .environmentObject(userStore)
-            .environmentObject(addressVM), isActive: $isSkip) {
-                EmptyView()
-            }
-            .hidden()
+//        NavigationLink(destination: MainScreen(userStore: userStore, lang: $lang)
+//            .environmentObject(userStore)
+//            .environmentObject(addressVM), isActive: $isSkip) {
+//                EmptyView()
+//            }
+//            .hidden()
         .navigationBarHidden(true)
     }
     
     func validateAndSaveUserInfo() {
            isNameEmpty = textName.isEmpty
            isPhoneNumberEmpty = phoneNumber.isEmpty
-           isAddressEmpty = addressVM.selectedAddress == nil
+//           isAddressEmpty = addressVM.selectedAddress == nil
            
            if isNameEmpty || isPhoneNumberEmpty || isAddressEmpty || isPhoneNumberInvalid {
                return
            }
            
            isLoading = true
-           authVM.saveUserInfo(
-               email: userStore.user?.email ?? "No Email",
-               userName: textName,
-               phoneNumber: phoneNumber,
-               address: addressVM.selectedAddress?.specificLocation ?? "No Address",
-               accessToken: userStore.user?.accesstoken ?? "",
-               refreshToken: userStore.user?.refreshtoken ?? ""
-           )
+//           authVM.saveUserInfo(
+//               email: userStore.user?.email ?? "No Email",
+//               userName: textName,
+//               phoneNumber: phoneNumber,
+//               address: addressVM.selectedAddress?.specificLocation ?? "No Address",
+//               accessToken: userStore.user?.accesstoken ?? "",
+//               refreshToken: userStore.user?.refreshtoken ?? ""
+//           )
            
            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                isLoading = false

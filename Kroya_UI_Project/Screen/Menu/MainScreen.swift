@@ -8,14 +8,14 @@ struct MainScreen: View {
     @State private var showGuestAlert = false
     @EnvironmentObject var userStore: UserStore
     @StateObject private var authVM: AuthViewModel
-    @StateObject private var addressViewModel: AddressViewModel
+//    @StateObject private var addressViewModel: AddressViewModel
     @StateObject private var draftModelData: DraftModelData
     @Environment(\.modelContext) var modelContext
     @Binding var lang: String
     @State private var showLoadingOverlay = false
     init(userStore: UserStore, lang: Binding<String>) {
         _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
-        _addressViewModel = StateObject(wrappedValue: AddressViewModel())
+//        _addressViewModel = StateObject(wrappedValue: AddressViewModel())
         _draftModelData = StateObject(wrappedValue: DraftModelData(userStore: userStore))
         self._lang = lang
     }
@@ -158,7 +158,7 @@ struct MainScreen: View {
             .frame(width: .screenWidth, height: .screenHeight)
         }
         .onAppear {
-            addressViewModel.fetchAllAddresses()
+//            addressViewModel.fetchAllAddresses()
             draftModelData.loadDraft(from: modelContext)
         }
         
@@ -191,7 +191,7 @@ struct MainScreen: View {
                 rootView: LoginScreenView(userStore: userStore, lang: $lang)
                     .environmentObject(userStore)
                     .environmentObject(Auth.shared)
-                    .environmentObject(addressViewModel)
+//                    .environmentObject(addressViewModel)
             )
             rootWindow.makeKeyAndVisible()
         }

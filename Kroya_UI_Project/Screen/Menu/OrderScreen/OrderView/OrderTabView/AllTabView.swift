@@ -70,11 +70,14 @@ struct AllTabView: View {
         for order in orderViewModel.orders {
             if let dateCookingStr = order.dateCooking,
                let dateCooking = dateFormatter.date(from: dateCookingStr) {
-                if Calendar.current.isDate(dateCooking, inSameDayAs: today) {
+                if dateCooking >= today {
+                    // Group orders with today's date or future dates in "Today"
                     groupedOrders["Today"]?.append(order)
                 } else if Calendar.current.isDate(dateCooking, inSameDayAs: yesterday) {
+                    // Group orders with yesterday's date in "Yesterday"
                     groupedOrders["Yesterday"]?.append(order)
-                } else if dateCooking >= twoDaysAgo {
+                } else if dateCooking <= twoDaysAgo {
+                    // Group orders with dates two days ago or older in "Last 2 Days"
                     groupedOrders["Last 2 Days"]?.append(order)
                 }
             }
