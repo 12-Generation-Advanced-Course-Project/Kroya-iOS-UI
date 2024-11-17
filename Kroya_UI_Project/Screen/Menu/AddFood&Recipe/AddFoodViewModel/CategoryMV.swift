@@ -16,7 +16,10 @@ class CategoryMV: ObservableObject {
     @Published var FoodRecipByCategory: [FoodRecipeModel] = []
     @Published var FoodSellByCategory: [FoodSellModel] = []
     @Published var displayCategories: [Category] = []
+    
     @Published var isLoading: Bool = false
+    @Published var showError: Bool = false
+    @Published var errorMessage: String = ""
     
     // MARK: - Helper Methods for Loading State
     private func startLoading() {
@@ -36,7 +39,7 @@ class CategoryMV: ObservableObject {
                           self?.categoryShowModel = payload
                           self?.displayCategories = self?.mapCategories(payload) ?? []
                           // Fetch data for each category after loading all categories
-                          self?.fetchDataForAllCategories()
+//                          self?.fetchDataForAllCategories()
                       } else {
                           print("Error fetching categories: \(response.message)")
                       }
@@ -46,16 +49,7 @@ class CategoryMV: ObservableObject {
               }
           }
       }
-    
-      //Fetch data for each category by looping through each category ID
-       private func fetchDataForAllCategories() {
-           for category in categoryShowModel {
-               fetchAllCategoryById(categoryId: category.id)
-           }
-       }
-       
 
-    
     
     // Mapping function to convert API category names to local Category objects
     private func mapCategories(_ categories: [CategoryModel]) -> [Category] {
@@ -72,6 +66,8 @@ class CategoryMV: ObservableObject {
                 return Category(title: .dinner, image: "DinnerPic", color: .yellow.opacity(0.2), x: 50, y: 14, id: categoryModel.id)
             case "Dessert":
                 return Category(title: .dessert, image: "DessertPic", color: .blue.opacity(0.2), x: 50, y: 14, id: categoryModel.id)
+            case "Snack":
+                return Category(title: .snack, image: "Somlorkoko", color: .pink.opacity(0.2), x: 50, y: 14, id: categoryModel.id)
             default:
                 return nil  // Ignore unmatched categories
             }
@@ -79,6 +75,15 @@ class CategoryMV: ObservableObject {
     }
 
     
+    
+//      //Fetch data for each category by looping through each category ID
+//       private func fetchDataForAllCategories() {
+//           for category in categoryShowModel {
+//               fetchAllCategoryById(categoryId: category.id)
+//           }
+//       }
+//       
+
     
     
     // MARK: Get all Category by Id
@@ -92,10 +97,12 @@ class CategoryMV: ObservableObject {
                         self?.FoodRecipByCategory = payload.foodRecipes
                         self?.FoodSellByCategory = payload.foodSells
                     } else {
-                        print("Error fetching categories by ID: \(response.message)")
+                        self?.showError = true
+                        self?.errorMessage = response.message
                     }
                 case .failure(let error):
-                    print("Request failed with error: \(error.localizedDescription)")
+                    self?.showError = true
+                    self?.errorMessage = "Failed to load catecory: \(error.localizedDescription)"
                 }
             }
         }

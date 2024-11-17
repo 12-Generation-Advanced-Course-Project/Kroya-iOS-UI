@@ -22,8 +22,9 @@ struct FoodSellResponse: Decodable {
     let itemType: String
     let isFavorite: Bool
     let isOrderable: Bool
-    let ratingPercentages: [String: Int]?
+    let ratingPercentages: RatingPercentages?
 }
+
 
 
 // MARK: - FoodRecipeDTO

@@ -23,16 +23,19 @@ typealias DeviceTokenResponse = KroyaAPIResponse<DeviceTokenModel>
 typealias foodrecipeResponse = KroyaAPIResponse<FoodRecipeModel>
 typealias SavefoodRecipeResponse = KroyaSingleAPIResponse<FoodRecipeResponse>
 //MARK: UserFoodResponse
-typealias userFoodResponse = KroyaAPIResponse<UserFoodModel>
+typealias userFoodResponse = KroyaSingleAPIResponse<UserFoodModel>
 //MARK: Food-Sell get all
 typealias foodSellResponse = KroyaAPIResponse<FoodSellModel>
 
-//MARK: Popular
+//MARK: Foods
 typealias popularResponse = KroyaSingleAPIResponse<PopularPayload>
+typealias FoodDetailSellResponse = KroyaSingleAPIResponse<FoodSellDetails>
+typealias FoodDetailRecipeResponse = KroyaSingleAPIResponse<FoodRecipeDetail>
 
 typealias SaveFoodSellResponse = KroyaSingleAPIResponse<FoodSellResponse>
 //MARK: Get all Food by category
 typealias getAllFoodCategoryResponse = KroyaSingleAPIResponse<PayloadCategory>
+typealias getAllFavoriteResponse = KroyaSingleAPIResponse<FavoritePayload>
 // Generic API response for a single object payload
 struct KroyaSingleAPIResponse<T: Decodable>: Decodable {
     let message: String
@@ -40,4 +43,14 @@ struct KroyaSingleAPIResponse<T: Decodable>: Decodable {
     let statusCode: String
     let timestamp: String?
 }
+//MARK: Feedback Response
+typealias FeedbackResponse = KroyaSingleAPIResponse<FeedBackModel>
+typealias GetAllUserFeedbackResponse = KroyaSingleAPIResponse<FeedBackModel>
+
+//MARK: Fetch all User Food (View Account)
+typealias ViewAccountResponse = KroyaSingleAPIResponse<ViewAccountUserFoodModel>
+
+
+// MARK: fetch purchase all
+typealias purchaseResponse = KroyaAPIResponse<OrderModel>
 

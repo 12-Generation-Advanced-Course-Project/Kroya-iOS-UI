@@ -4,6 +4,7 @@
 
 import SwiftUI
 import Kingfisher
+import SDWebImageSwiftUI
 struct ProfileView: View {
     @State private var showingCredits = false
     @State private var selectedLanguage: String? = nil
@@ -28,19 +29,19 @@ struct ProfileView: View {
                 HStack {
                     HStack {
                         if let profileImageUrl = Profile.userProfile?.profileImage, !profileImageUrl.isEmpty {
-                            KFImage(URL(string: "\(urlImagePrefix)\(profileImageUrl)"))
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 40, height: 40)
-                                .clipShape(Rectangle())
-                                .cornerRadius(10)
-                        } else {
-                            Image("user-profile") // Placeholder image
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 40, height: 40)
-                                .foregroundColor(.white)
-                        }
+                            WebImage(url:URL(string: "\(urlImagePrefix)\(profileImageUrl)"))
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 40, height: 40)
+                            .clipShape(Rectangle())
+                            .cornerRadius(10)
+                    } else {
+                        Image("user-profile") // Placeholder image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 40, height: 40)
+                            .foregroundColor(.white)
+                    }
                         
                         VStack(alignment: .leading) {
                             Text(Profile.userProfile?.fullName ?? "")

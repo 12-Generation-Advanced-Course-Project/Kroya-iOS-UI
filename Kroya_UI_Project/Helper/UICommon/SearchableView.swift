@@ -118,8 +118,7 @@ struct SearchScreen: View {
                                     
                                     ScrollView(.vertical) {
                                         Flow(.vertical, alignment: .topLeading) {
-                                            ForEach(PopularFoodsData.popularFoodNames,
-                                                    id: \.self) { suggestion in
+                                            ForEach(Array(Set(PopularFoodsData.popularFoodNames)), id: \.self) { suggestion in
                                                 Button(action: {
                                                     navigateTo(suggestion)
                                                 }) {
@@ -133,6 +132,7 @@ struct SearchScreen: View {
                                             }
                                         }
                                     }
+
                                 }
                             } else {
                                 // Filtered results

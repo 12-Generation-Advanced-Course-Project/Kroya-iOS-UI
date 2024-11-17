@@ -10,6 +10,7 @@ import SwiftUI
 struct PopularSellTab: View {
     var isSelected: Int?
     @StateObject private var popularSell = PopularFoodVM()
+    @StateObject private var favoriteFoodSale = FavoriteVM()
   
     var body: some View {
         VStack {
@@ -23,7 +24,9 @@ struct PopularSellTab: View {
                     LazyVStack(spacing: 8) {
                         ForEach(popularSell.popularFoodSell) { popularsell in
                             NavigationLink(destination: foodDetailDestination(for: popularsell)) {
-                                FoodOnSaleViewCell(foodSale: popularsell)
+                                FoodOnSaleViewCell(foodSale: popularsell, onFavoriteToggle: { foodId in
+                                    favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
+                                })
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
                             }
@@ -33,7 +36,12 @@ struct PopularSellTab: View {
                 .overlay(
                     Group {
                         if popularSell.isLoading {
-                            LoadingOverlay()
+                            Color.white
+                                .edgesIgnoringSafeArea(.all)
+                            
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
+                                .scaleEffect(2)
                         }
                     }
                 )
@@ -52,16 +60,12 @@ struct PopularSellTab: View {
     @ViewBuilder
     private func foodDetailDestination(for foodSale: FoodSellModel) -> some View {
         FoodDetailView(
-            theMainImage: "ahmok",
-            subImage1: "ahmok1",
-            subImage2: "ahmok2",
-            subImage3: "ahmok3",
-            subImage4: "ahmok4",
-            showOrderButton: foodSale.isOrderable,
-            showPrice: foodSale.isOrderable
-        )
+        showPrice: true, // Always false for recipes
+        showOrderButton: true, // Always false for recipes
+        showButtonInvoic: nil, // Not applicable
+        invoiceAccept: nil, // Not applicable
+        FoodId: foodSale.id ?? 0,
+        ItemType: foodSale.itemType
+    )
     }
 }
-//#Preview {
-//   SaleTab()
-//}

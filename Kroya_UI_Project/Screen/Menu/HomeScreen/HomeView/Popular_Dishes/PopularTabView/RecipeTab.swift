@@ -10,6 +10,7 @@ import SwiftUI
 
 struct PopularRecipeTab: View {
     @StateObject private var popularRecipe = PopularFoodVM()
+    @StateObject private var favoriteFoodRecipe = FavoriteVM()
     var isSelected: Int?
     var body: some View {
         VStack {
@@ -23,7 +24,9 @@ struct PopularRecipeTab: View {
                     LazyVStack(spacing: 8) {
                         ForEach(popularRecipe.popularFoodRecipe) { popularrecipe in
                             NavigationLink(destination: recipeDetailDestination(for: popularrecipe)) {
-                                RecipeViewCell(recipe: popularrecipe)
+                                RecipeViewCell(recipe: popularrecipe, onFavoriteToggle: { foodId in
+                                    favoriteFoodRecipe.createFavoriteFood(foodId: foodId, itemType: "FOOD_RECIPE")
+                                })
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
                             }
@@ -33,7 +36,12 @@ struct PopularRecipeTab: View {
                 .overlay(
                     Group {
                         if popularRecipe.isLoading {
-                            LoadingOverlay()
+                            Color.white
+                                .edgesIgnoringSafeArea(.all)
+                            
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
+                                .scaleEffect(2)
                         }
                     }
                 )
@@ -51,12 +59,12 @@ struct PopularRecipeTab: View {
     @ViewBuilder
     private func recipeDetailDestination(for recipe: FoodRecipeModel) -> some View {
         FoodDetailView(
-            theMainImage: "Hotpot",
-            subImage1: "Chinese Hotpot",
-            subImage2: "Chinese",
-            subImage3: "Fly-By-Jing",
-            subImage4: "Mixue",
-            showOrderButton: false
-        )
+        showPrice: false, // Always false for recipes
+        showOrderButton: false, // Always false for recipes
+        showButtonInvoic: nil, // Not applicable
+        invoiceAccept: nil, // Not applicable
+        FoodId: recipe.id,
+        ItemType: recipe.itemType
+    )
     }
 }

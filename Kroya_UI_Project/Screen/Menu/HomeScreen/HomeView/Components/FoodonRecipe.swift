@@ -1,10 +1,9 @@
 import SwiftUI
 
 struct FoodonRecipe: View {
-    
     @Environment(\.dismiss) var dismiss
     @StateObject private var recipeViewModel = RecipeViewModel()
-    
+    @StateObject private var favoriteFoodRecipe = FavoriteVM()
     @State private var selectedOrderIndex: Int? = nil
     @State private var searchText = ""
     @State private var isChooseCuisine = false
@@ -35,7 +34,6 @@ struct FoodonRecipe: View {
                             }
                         }) {
                             VStack {
-                                // Display image based on cuisine name or a default placeholder
                                 let imageName = cuisineImages[cuisine.cuisineName] ?? "DefaultCuisineImage"
                                 Image(imageName)
                                     .resizable()
@@ -52,7 +50,6 @@ struct FoodonRecipe: View {
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
-    
                 
                 Spacer().frame(height: 20)
                 
@@ -73,22 +70,21 @@ struct FoodonRecipe: View {
                             .scaleEffect(2)
                             .offset(y: -50)
                     }
-                } else if recipeViewModel.showError {
-                    Text(recipeViewModel.errorMessage)
-                        .foregroundColor(.red)
-                        .padding()
                 } else {
                     ScrollView {
                         LazyVStack {
                             ForEach(isChooseCuisine ? recipeViewModel.RecipeByCategory : recipeViewModel.RecipeFood) { recipe in
-                                RecipeViewCell(recipe: recipe)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.horizontal, 20)
+                                NavigationLink(destination: recipeDetailDestination(for: recipe)) {
+                                    RecipeViewCell(recipe: recipe, onFavoriteToggle: { foodId in
+                                        favoriteFoodRecipe.createFavoriteFood(foodId: foodId, itemType: "FOOD_RECIPE")
+                                    })
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.horizontal, 20)
+                                }
                             }
                         }
                     }
                 }
-                
                 Spacer()
             }
             .navigationTitle("Food Recipe")
@@ -106,11 +102,13 @@ struct FoodonRecipe: View {
                     }
                 }
             }
-            .onAppear {
-                recipeViewModel.getAllCuisines()
-                recipeViewModel.getAllRecipeFood()
-            }
+           
         }
+        .onAppear {
+            recipeViewModel.getAllCuisines()
+            recipeViewModel.getAllRecipeFood()
+        }
+        .navigationBarBackButtonHidden(true)
         .searchable(text: $searchText, prompt: LocalizedStringKey("Search Item"))
         .onChange(of: searchText) { newValue in
             if !newValue.isEmpty {
@@ -119,6 +117,18 @@ struct FoodonRecipe: View {
                 recipeViewModel.getAllRecipeFood()
             }
         }
-        .navigationBarBackButtonHidden(true)
+       
     }
+    @ViewBuilder
+    private func recipeDetailDestination(for recipe: FoodRecipeModel) -> some View {
+        FoodDetailView(
+        showPrice: false, // Always false for recipes
+        showOrderButton: false, // Always false for recipes
+        showButtonInvoic: nil, // Not applicable
+        invoiceAccept: nil, // Not applicable
+        FoodId: recipe.id,
+        ItemType: recipe.itemType
+    )
+    }
+    
 }

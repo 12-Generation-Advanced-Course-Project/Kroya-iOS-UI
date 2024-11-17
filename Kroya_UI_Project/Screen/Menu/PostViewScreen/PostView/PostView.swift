@@ -8,12 +8,14 @@
 import SwiftUI
 import Combine
 import Kingfisher
+import SDWebImageSwiftUI
 struct PostViewScreen: View {
     @State private var searchText = ""
     @State private var selectedSegment = 0
     var urlImagePost: String = "https://kroya-api.up.railway.app/api/v1/fileView/"
     @Environment(\.dismiss) var dismiss
     @StateObject private  var Profile = ProfileViewModel()
+    @StateObject private var userPostFood = UserFoodViewModel()
     var tabTitles = ["All", "Food on Sale", "Recipes"]
     
     var body: some View {
@@ -24,7 +26,7 @@ struct PostViewScreen: View {
                     HStack {
                         if let profileImageUrl = Profile.userProfile?.profileImage, !profileImageUrl.isEmpty,
                            let imageUrl = URL(string: Constants.fileupload + profileImageUrl) {
-                            KFImage(imageUrl)
+                            WebImage(url: imageUrl)
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 40, height: 40)
@@ -56,7 +58,7 @@ struct PostViewScreen: View {
                     Spacer()
                     Button(action: { }) {
                         VStack {
-                            Text("6")
+                            Text("\(userPostFood.totalPosts)") 
                                 .customFontMediumLocalize(size: 14)
                                 .foregroundStyle(PrimaryColor.normal)
                             Text("Post")
@@ -117,11 +119,11 @@ struct PostViewScreen: View {
                 }
                 // TabView for content
                 TabView(selection: $selectedSegment) {
-                    FoodSaleandRecipeView(iselected: selectedSegment)
+                    AllUerPostFood(isSelected: selectedSegment)
                         .tag(0)
-                    FoodOnSaleView(iselected: selectedSegment)
+                    UserPostFoodSale(isSelected: selectedSegment)
                         .tag(1)
-                    UserFoodRecipeTab(iselected: selectedSegment)
+                    UserPostRecipeFood(isSelected: selectedSegment)
                         .tag(2)
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))

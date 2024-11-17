@@ -5,7 +5,7 @@ struct FoodSaleandRecipeView: View {
     
     @StateObject private var foodViewModel = FoodSellViewModel()
     var iselected: Int?
-    
+    @StateObject private var favoriteFoodSale = FavoriteVM()
     var body: some View {
         VStack {
             if foodViewModel.FoodOnSale.isEmpty && !foodViewModel.isLoading {
@@ -18,7 +18,9 @@ struct FoodSaleandRecipeView: View {
                     LazyVStack(spacing: 8) {
                         ForEach(foodViewModel.FoodOnSale) { foodSale in
                             NavigationLink(destination: foodDetailDestination(for: foodSale)) {
-                                FoodOnSaleViewCell(foodSale: foodSale)
+                                FoodOnSaleViewCell(foodSale: foodSale, onFavoriteToggle: { foodId in
+                                    favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
+                                })
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
                             }
@@ -57,13 +59,12 @@ struct FoodSaleandRecipeView: View {
     @ViewBuilder
     private func foodDetailDestination(for item: FoodSellModel) -> some View {
         FoodDetailView(
-            theMainImage: "Mixue",
-            subImage1: "Chinese Hotpot",
-            subImage2: "Chinese",
-            subImage3: "Fly-By-Jing",
-            subImage4: "Mixue",
-            showOrderButton: item.isOrderable,
-            showPrice: item.isOrderable
+            showPrice: false, // Always false for recipes
+            showOrderButton: false, // Always false for recipes
+            showButtonInvoic: nil, // Not applicable
+            invoiceAccept: nil, // Not applicable
+            FoodId: item.id ?? 0,
+            ItemType: item.itemType
         )
     }
 }

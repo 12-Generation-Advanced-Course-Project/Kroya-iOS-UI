@@ -10,6 +10,9 @@ struct HomeView: View {
     @State var isSearching: Bool = false
     @Environment(\.locale) var locale
     @StateObject private var recentSearchesData = RecentSearchesData()
+    @StateObject private var PopularFoodsData =  PopularFoodVM()
+    @StateObject private var favoriteFoodRecipe = FavoriteVM()
+    @StateObject private var favoriteFoodSale = FavoriteVM()
     @Environment(\.modelContext) var modelContext
     var body: some View {
         NavigationView {
@@ -24,7 +27,8 @@ struct HomeView: View {
                         
                         // Recipe Order Cards
                         HStack(spacing: 16) {
-                            NavigationLink(destination: FoodonOrderView()) {
+                            NavigationLink(destination: FoodonOrderView()
+                            ) {
                                 Recipe_OrderCard(
                                     title: LocalizedStringKey("Food order"),
                                     subtitle: LocalizedStringKey("Order what you love"),
@@ -76,6 +80,7 @@ struct HomeView: View {
                                     }
                                     .onTapGesture {
                                         // Fetch data for the selected category by ID
+                                    print("this is Id \(category.id)")
                                         categoryVM.fetchAllCategoryById(categoryId: category.id)
                                     }
                                 }
@@ -112,16 +117,17 @@ struct HomeView: View {
                             ForEach(foodSellViemModel.FoodOnSale.prefix(2)) { foodSale in
                                 NavigationLink(destination:
                                                 FoodDetailView(
-                                                    theMainImage:"Hotpot",
-                                                    subImage1:  "Chinese Hotpot",
-                                                    subImage2:  "Chinese",
-                                                    subImage3:  "Fly-By-Jing",
-                                                    subImage4:  "Mixue",
-                                                    showOrderButton: true,
-                                                    showPrice: true
-                                                )
+                                                showPrice: true, // Always false for recipes
+                                                showOrderButton: true, // Always false for recipes
+                                                showButtonInvoic: nil, // Not applicable
+                                                invoiceAccept: nil, // Not applicable
+                                                FoodId: foodSale.id ?? 0,
+                                                ItemType: foodSale.itemType
+                                            )
                                 ) {
-                                    FoodOnSaleViewCell(foodSale: foodSale)
+                                    FoodOnSaleViewCell(foodSale: foodSale, onFavoriteToggle: { foodId in
+                                        favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
+                                    })
                                         .frame(width: 360)
                                 }
                             }
@@ -130,16 +136,17 @@ struct HomeView: View {
                             ForEach(recipeViewModel.RecipeFood.prefix(2)) { recipe in
                                 NavigationLink(destination:
                                                 FoodDetailView(
-                                                    theMainImage:"Hotpot",
-                                                    subImage1:  "Chinese Hotpot",
-                                                    subImage2:  "Chinese",
-                                                    subImage3:  "Fly-By-Jing",
-                                                    subImage4:  "Mixue",
-                                                    showOrderButton: false,
-                                                    showPrice: false
-                                                )
+                                                showPrice: false, // Always false for recipes
+                                                showOrderButton: false, // Always false for recipes
+                                                showButtonInvoic: nil, // Not applicable
+                                                invoiceAccept: nil, // Not applicable
+                                                FoodId: recipe.id,
+                                                ItemType: recipe.itemType
+                                            )
                                 ) {
-                                    RecipeViewCell(recipe: recipe)
+                                    RecipeViewCell(recipe: recipe, onFavoriteToggle: { foodId in
+                                        favoriteFoodRecipe.createFavoriteFood(foodId: foodId, itemType: "FOOD_RECIPE")
+                                    })
                                         .frame(width: 360)
                                 }
                             }
@@ -205,6 +212,7 @@ struct HomeView: View {
                 recipeViewModel.getAllRecipeFood()
                 foodSellViemModel.getAllFoodSell()
                 recentSearchesData.loadSearches(from: modelContext)
+                PopularFoodsData.getAllPopular()
             }
         }
     }

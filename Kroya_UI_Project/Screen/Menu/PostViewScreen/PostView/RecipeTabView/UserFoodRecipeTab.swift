@@ -9,6 +9,7 @@ import SwiftUI
 
 struct UserFoodRecipeTab:View {
     @StateObject private var recipeViewModel = RecipeViewModel() // Correctly initialize the view model
+    @StateObject private var favoriteFoodRecipe = FavoriteVM()
     var iselected: Int?
     var body: some View {
         VStack {
@@ -22,7 +23,9 @@ struct UserFoodRecipeTab:View {
                     LazyVStack(spacing: 8) {
                         ForEach(recipeViewModel.RecipeFood) { recipe in
                             NavigationLink(destination: recipeDetailDestination(for: recipe)) {
-                                RecipeViewCell(recipe: recipe)
+                                RecipeViewCell(recipe: recipe, onFavoriteToggle: { foodId in
+                                    favoriteFoodRecipe.createFavoriteFood(foodId: foodId, itemType: "FOOD_RECIPE")
+                                })
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
                             }
@@ -60,14 +63,14 @@ struct UserFoodRecipeTab:View {
     
     // Destination setup for FoodDetailView with appropriate images
     @ViewBuilder
-    private func recipeDetailDestination(for recipe: FoodRecipeModel) -> some View { // Use RecipeModel as parameter type
+    private func recipeDetailDestination(for recipe: FoodRecipeModel) -> some View {
         FoodDetailView(
-            theMainImage: "Hotpot",
-            subImage1: "Chinese Hotpot",
-            subImage2: "Chinese",
-            subImage3: "Fly-By-Jing",
-            subImage4: "Mixue",
-            showOrderButton: false
-        )
+        showPrice: false, // Always false for recipes
+        showOrderButton: false, // Always false for recipes
+        showButtonInvoic: nil, // Not applicable
+        invoiceAccept: nil, // Not applicable
+        FoodId: recipe.id,
+        ItemType: recipe.itemType
+    )
     }
 }
