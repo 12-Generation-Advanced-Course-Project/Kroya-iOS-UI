@@ -2,7 +2,8 @@
 import SwiftUI
 
 struct AllTabView: View {
-    var iselected: Int?
+    
+    @StateObject private var orderViewModel = OrderViewModel() // Initialize the OrderViewModel
     
     @State private var isExpandedToday = true
     @State private var isExpandedYTD = false
@@ -10,160 +11,40 @@ struct AllTabView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView { // Use ScrollView for a more customized look
-                VStack(alignment: .leading, spacing: 8) { // Adjust spacing as needed
-                    // Disclosure Group for Today
-                    DisclosureGroup("Today", isExpanded: $isExpandedToday) {
-                        VStack(spacing: 15){
-                            NavigationLink(destination: OrderListView()){
-                                OrderCard(isAccepted: true, isOrder: false, showIcon: true)
-                            }
-                            NavigationLink(destination:
-//                            FoodDetailView(
-//                                theMainImage: "Songvak",
-//                                subImage1: "ahmok",
-//                                subImage2: "brohok",
-//                                subImage3: "SomlorKari",
-//                                subImage4: "Songvak",
-//                                showOrderButton: false,
-//                                showPrice: true,
-//                                showButtonInvoic: true,
-//                                invoiceAccept: false
-//                            )
-                                           EmptyView()
-                            ){
-                                OrderCard(isAccepted: false, isOrder: true, showIcon: false)
-                            }
+            ScrollView {
+                VStack(alignment: .leading, spacing: 8) {
+                    // Loading and error handling
+                    if orderViewModel.isLoading {
+                        ZStack {
+                            Color.white
+                                .opacity(0.5)
+                                .ignoresSafeArea()
                             
-                            NavigationLink(destination:
-//                                            FoodDetailView(
-//                                theMainImage: "Songvak",
-//                                subImage1: "ahmok",
-//                                subImage2: "brohok",
-//                                subImage3: "SomlorKari",
-//                                subImage4: "Songvak",
-//                                showOrderButton: false,
-//                                showPrice: true,
-//                                showButtonInvoic: true,
-//                                invoiceAccept: true
-//                                
-//                            )
-                                           EmptyView()
-                            ){
-                                OrderCard(isAccepted: true, isOrder: true, showIcon: false)
-                            }}
-                    }
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.black)
-                    .accentColor(.black)
-                    .animation(.easeInOut(duration: 0.3), value: isExpandedToday)
-                    
-                    // Disclosure Group for Yesterday
-                    DisclosureGroup("Yesterday", isExpanded: $isExpandedYTD) {
-                        VStack(spacing: 15) {
-                            NavigationLink(destination: OrderListView()){
-                                OrderCard(isAccepted: true, isOrder: false, showIcon: true)
-                            }
-                            
-                            NavigationLink(destination:
-//                                            FoodDetailView(
-//                                theMainImage: "Songvak",
-//                                subImage1: "ahmok",
-//                                subImage2: "brohok",
-//                                subImage3: "SomlorKari",
-//                                subImage4: "Songvak",
-//                                showOrderButton: false,
-//                                showPrice: true,
-//                                showButtonInvoic: true,
-//                                invoiceAccept: false
-//                            )
-                                           EmptyView()
-                            ){
-                                OrderCard(isAccepted: false, isOrder: true, showIcon: false)
-                            }
-                            
-                            NavigationLink(destination:
-//                            FoodDetailView(
-//                                theMainImage: "Songvak",
-//                                subImage1: "ahmok",
-//                                subImage2: "brohok",
-//                                subImage3: "SomlorKari",
-//                                subImage4: "Songvak",
-//                                showOrderButton: false,
-//                                showPrice: true,
-//                                showButtonInvoic: true,
-//                                invoiceAccept: true
-//                            )
-                                           EmptyView()
-                            ){
-                                OrderCard(isAccepted: true, isOrder: true, showIcon: false)
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
+                                .scaleEffect(2)
+                                .offset(y: 230)
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else if !orderViewModel.errorMessage.isEmpty {
+                        Text("Error: \(orderViewModel.errorMessage)")
+                            .foregroundColor(.red)
+                    } else if orderViewModel.orders.isEmpty {
+                        Text("No orders available.")
+                            .foregroundColor(.gray)
+                    } else {
+                        let groupedOrders = groupOrdersByDate()
+                        
+                        // Display grouped orders
+                        ForEach(["Today", "Yesterday", "Last 2 Days"], id: \.self) { group in
+                            if let orders = groupedOrders[group], !orders.isEmpty {
+                                OrderSection(group: group, orders: orders, isExpandedToday: $isExpandedToday, isExpandedYTD: $isExpandedYTD, isExpandedLst2Day: $isExpandedLst2Day)
+                            } else {
+                                // Display the section header even if there are no orders
+                                OrderSection(group: group, orders: [], isExpandedToday: $isExpandedToday, isExpandedYTD: $isExpandedYTD, isExpandedLst2Day: $isExpandedLst2Day)
                             }
                         }
                     }
-                    .customFontSemiBoldLocalize(size: 16)
-                    .foregroundColor(.black)
-                    .accentColor(.black)
-                    .animation(.easeInOut(duration: 0.3), value: isExpandedYTD)
-                    
-                    // Disclosure Group for Last 2 Days
-                    DisclosureGroup("Last 2 days", isExpanded: $isExpandedLst2Day) {
-                        VStack(spacing: 15) {
-                            
-                            NavigationLink(destination:
-//                                            FoodDetailView(
-//                                theMainImage: "Songvak",
-//                                subImage1: "ahmok",
-//                                subImage2: "brohok",
-//                                subImage3: "SomlorKari",
-//                                subImage4: "Songvak",
-//                                showOrderButton: false,
-//                                showPrice: true,
-//                                showButtonInvoic: true,
-//                                invoiceAccept: true
-//                            )
-                                           EmptyView()
-                            ){
-                                OrderCard(isAccepted: true, isOrder: true, showIcon: false)
-                            }
-                            
-                            NavigationLink(destination:
-//                                            FoodDetailView(
-//                                theMainImage: "Songvak",
-//                                subImage1: "ahmok",
-//                                subImage2: "brohok",
-//                                subImage3: "SomlorKari",
-//                                subImage4: "Songvak",
-//                                showOrderButton: false,
-//                                showPrice: true,
-//                                showButtonInvoic: true,
-//                                invoiceAccept: false
-//                            )
-                                           EmptyView()
-                            ){
-                                OrderCard(isAccepted: false, isOrder: true, showIcon: false)
-                            }
-                            
-                            NavigationLink(destination:
-//                                            FoodDetailView(
-//                                theMainImage: "Songvak",
-//                                subImage1: "ahmok",
-//                                subImage2: "brohok",
-//                                subImage3: "SomlorKari",
-//                                subImage4: "Songvak",
-//                                showOrderButton: false,
-//                                showPrice: true,
-//                                showButtonInvoic: true,
-//                                invoiceAccept: true
-//                            )
-                                           EmptyView()
-                            ){
-                                OrderCard(isAccepted: true, isOrder: true, showIcon: false)
-                            }}
-                    }
-                    .customFontSemiBoldLocalize(size: 16)
-                    .foregroundColor(.black)
-                    .accentColor(.black)
-                    .animation(.easeInOut(duration: 0.3), value: isExpandedLst2Day)
                 }
                 .padding(.horizontal)
                 .padding(.top, 5)
@@ -171,10 +52,91 @@ struct AllTabView: View {
             .background(Color.clear)
             .scrollIndicators(.hidden)
         }
+        .onAppear {
+            orderViewModel.fetchAllPurchase()
+        }
+    }
+    
+    private func groupOrdersByDate() -> [String: [OrderModel]] {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS" // Adjust to your date format if needed
+        
+        var groupedOrders: [String: [OrderModel]] = ["Today": [], "Yesterday": [], "Last 2 Days": []]
+        
+        let today = Calendar.current.startOfDay(for: Date())
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today)!
+        let twoDaysAgo = Calendar.current.date(byAdding: .day, value: -2, to: today)!
+        
+        for order in orderViewModel.orders {
+            if let dateCookingStr = order.dateCooking,
+               let dateCooking = dateFormatter.date(from: dateCookingStr) {
+                if Calendar.current.isDate(dateCooking, inSameDayAs: today) {
+                    groupedOrders["Today"]?.append(order)
+                } else if Calendar.current.isDate(dateCooking, inSameDayAs: yesterday) {
+                    groupedOrders["Yesterday"]?.append(order)
+                } else if dateCooking >= twoDaysAgo {
+                    groupedOrders["Last 2 Days"]?.append(order)
+                }
+            }
+        }
+        
+        return groupedOrders
     }
 }
 
-#Preview {
-    AllTabView()
+struct OrderSection: View {
+    let group: String
+    let orders: [OrderModel]
+    
+    @Binding var isExpandedToday: Bool
+    @Binding var isExpandedYTD: Bool
+    @Binding var isExpandedLst2Day: Bool
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            // Custom label for the DisclosureGroup
+            DisclosureGroup(
+                isExpanded: bindingForGroup(),
+                content: {
+                    if orders.isEmpty {
+                        Text("No orders available for \(group).")
+                            .foregroundColor(.gray)
+                            .padding(.vertical, 5)
+                    } else {
+                        VStack(spacing: 15) {
+                            ForEach(orders, id: \.foodSellID) { order in
+                                NavigationLink(destination: OrderListView()) {
+                                    OrderCard(
+                                        order: order,
+                                        isAccepted: order.purchaseStatusType == "Accepted",
+                                        isOrder: order.isOrderable,
+                                        showIcon: true
+                                    )
+                                }
+                            }
+                        }
+                    }
+                },
+                label: {
+                    Text(group)
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(.black)
+                        .padding(.vertical, 5)
+                }
+            )
+            .accentColor(.black)
+        }
+    }
+    
+    private func bindingForGroup() -> Binding<Bool> {
+        switch group {
+        case "Today":
+            return $isExpandedToday
+        case "Yesterday":
+            return $isExpandedYTD
+        default:
+            return $isExpandedLst2Day
+        }
+    }
 }
- 
+

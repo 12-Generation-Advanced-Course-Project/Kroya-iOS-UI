@@ -1,12 +1,17 @@
+
 import SwiftUI
 
 struct OrdersView: View {
+    
     @State private var searchText = ""
     @State private var selectedSegment = 0
     @Environment(\.dismiss) var dismiss
     @Environment(\.locale) var locale
     @State private var languageChangeTrigger = false
     
+    // OrderViewModel instance
+    @StateObject private var orderViewModel = OrderViewModel()
+
     var body: some View {
         NavigationView {
             VStack {
@@ -54,12 +59,15 @@ struct OrdersView: View {
                 
                 // TabView for Content
                 TabView(selection: $selectedSegment) {
-                    AllTabView(iselected: selectedSegment)
+                    AllTabView()
                         .tag(0)
-                    OrderTabView(iselected: selectedSegment)
+                        .environmentObject(orderViewModel)
+                    OrderTabView()
                         .tag(1)
-                    SaleTabView(iselected: selectedSegment)
+                        .environmentObject(orderViewModel)
+                    SaleTabView()
                         .tag(2)
+                        .environmentObject(orderViewModel)
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
@@ -70,31 +78,35 @@ struct OrdersView: View {
             )
         }
         .searchable(text: $searchText, prompt: "Search Item")
-        .customFontSemiBoldLocalize(size: 16)
+        .onChange(of: searchText) { newValue in
+            if newValue.isEmpty {
+                orderViewModel.fetchAllPurchase()
+            } else {
+                // Example of client-side filtering (for testing)
+                orderViewModel.orders = orderViewModel.orders.filter { $0.name.contains(newValue) }
+            }
+        }
 
-        
+        .customFontSemiBoldLocalize(size: 16)
+        .onAppear {
+            orderViewModel.fetchAllPurchase()
+        }
     }
     
     private func underlineWidth(for selectedSegment: Int) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        
-        // Localized titles for each segment
         let localizedTitles = [
             NSLocalizedString("All", comment: ""),
             NSLocalizedString("Order", comment: ""),
             NSLocalizedString("Sale", comment: "")
         ]
-        
-        // Calculate title width for the selected segment
         let title = localizedTitles[selectedSegment]
         let titleWidth = title.size(withAttributes: [NSAttributedString.Key.font: font]).width
-        
-        // Adjust width based on locale
         switch locale.identifier {
         case "ko":
             return titleWidth + 16.5
         case "km-KH":
-            return  46
+            return 46
         default:
             return titleWidth + 10
         }
@@ -102,24 +114,17 @@ struct OrdersView: View {
     
     private func underlineOffset(for selectedSegment: Int) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        
-        // Localized titles for each segment
         let localizedTitles = [
             NSLocalizedString("All", comment: ""),
             NSLocalizedString("Order", comment: ""),
             NSLocalizedString("Sale", comment: "")
         ]
-        
         var offset: CGFloat = 15 // Initial padding
-        
-        // Calculate the offset for the selected segment based on the cumulative width of previous segments
         for index in 0..<selectedSegment {
             let titleWidth = localizedTitles[index].size(withAttributes: [NSAttributedString.Key.font: font]).width
             offset += (locale.identifier == "ko") ? (titleWidth + 23.5) :
-            (locale.identifier == "km-KH") ? (64) : (titleWidth + 15.5)
+                      (locale.identifier == "km-KH") ? (64) : (titleWidth + 15.5)
         }
-        
         return offset
     }
 }
-

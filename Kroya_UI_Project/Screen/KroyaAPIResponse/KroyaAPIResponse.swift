@@ -51,3 +51,6 @@ typealias GetAllUserFeedbackResponse = KroyaSingleAPIResponse<FeedBackModel>
 typealias ViewAccountResponse = KroyaSingleAPIResponse<ViewAccountUserFoodModel>
 
 
+// MARK: fetch purchase all
+typealias purchaseResponse = KroyaAPIResponse<OrderModel>
+
