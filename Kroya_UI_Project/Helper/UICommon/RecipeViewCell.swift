@@ -3,12 +3,15 @@
 import SwiftUI
 import Kingfisher
 import SDWebImageSwiftUI
+
 struct RecipeViewCell: View {
+    
     var recipe: FoodRecipeModel // Corrected to use RecipeModel
     @StateObject private var favoriteFoodRecipe = FavoriteVM()
     @State private var isFavorite: Bool
     let onFavoriteToggle: (Int) -> Void  // Callback to notify favorite toggle
     private let urlImagePrefix = "https://kroya-api-production.up.railway.app/api/v1/fileView/"
+    
     init(recipe: FoodRecipeModel, isFavorite: Bool = false,onFavoriteToggle: @escaping (Int) -> Void) {
         self.recipe = recipe
         _isFavorite = State(initialValue: isFavorite)
