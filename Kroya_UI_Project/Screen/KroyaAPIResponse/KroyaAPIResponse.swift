@@ -56,3 +56,7 @@ typealias purchaseResponse = KroyaAPIResponse<OrderModel>
 //MARK: Add Item to Favorite
 typealias AddFavouriteResponse = KroyaSingleAPIResponse<String>
 typealias RemoveFavoriteResponse = KroyaSingleAPIResponse<String>
+
+
+//MARK: Guest food popular
+typealias GuestFoodPopularResponses = KroyaSingleAPIResponse<PopularPayload>

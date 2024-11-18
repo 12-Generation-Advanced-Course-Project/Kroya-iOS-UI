@@ -11,44 +11,83 @@ struct PopularSellTab: View {
     var isSelected: Int?
     @StateObject private var popularSell = PopularFoodVM()
     @StateObject private var favoriteFoodSale = FavoriteVM()
+    @StateObject private var guestFoodPopular = GuestPopularFoodVM()
+    
   
     var body: some View {
         VStack {
-            if popularSell.popularFoodSell.isEmpty && !popularSell.isLoading{
-                Text("No Popular Food Sell Found!")
-                    .font(.title3)
-                    .foregroundColor(.gray)
-                    .padding()
-            } else {
-                ScrollView(showsIndicators: false) {
-                    LazyVStack(spacing: 8) {
-                        ForEach(popularSell.popularFoodSell) { popularsell in
-                            NavigationLink(destination: foodDetailDestination(for: popularsell)) {
-                                FoodOnSaleViewCell(
-                                    foodSale: popularsell,
-                                    foodId: popularsell.id,
-                                    itemType: "FOOD_SELL",
-                                    isFavorite: popularsell.isFavorite
-                                )
-                                .frame(maxWidth: .infinity)
-                                .padding(.horizontal, 20)
+            
+            if Auth.shared.hasAccessToken() {
+                if popularSell.popularFoodSell.isEmpty && !popularSell.isLoading{
+                    Text("No Popular Food Sell Found!")
+                        .font(.title3)
+                        .foregroundColor(.gray)
+                        .padding()
+                } else {
+                    ScrollView(showsIndicators: false) {
+                        LazyVStack(spacing: 8) {
+                            ForEach(popularSell.popularFoodSell) { popularsell in
+                                NavigationLink(destination: foodDetailDestination(for: popularsell)) {
+                                    FoodOnSaleViewCell(foodSale: popularsell, onFavoriteToggle: { foodId in
+                                        favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
+                                    })
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.horizontal, 20)
+                                }
                             }
                         }
                     }
+                    .overlay(
+                        Group {
+                            if popularSell.isLoading {
+                                Color.white
+                                    .edgesIgnoringSafeArea(.all)
+                                
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
+                                    .scaleEffect(2)
+                            }
+                        }
+                    )
                 }
-                .overlay(
-                    Group {
-                        if popularSell.isLoading {
-                            Color.white
-                                .edgesIgnoringSafeArea(.all)
-                            
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
-                                .scaleEffect(2)
+            } else {
+                if guestFoodPopular.guestPopularFoodSell.isEmpty && !guestFoodPopular.isLoading{
+                    Text("No Popular Food Sell Found!")
+                        .font(.title3)
+                        .foregroundColor(.gray)
+                        .padding()
+                } else {
+                    ScrollView(showsIndicators: false) {
+                        LazyVStack(spacing: 8) {
+                            ForEach(guestFoodPopular.guestPopularFoodSell) { popularsell in
+                                NavigationLink(destination: foodDetailDestination(for: popularsell)) {
+                                    FoodOnSaleViewCell(foodSale: popularsell, onFavoriteToggle: { foodId in
+                                        favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
+                                    })
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.horizontal, 20)
+                                }
+                            }
                         }
                     }
-                )
+                    .overlay(
+                        Group {
+                            if guestFoodPopular.isLoading {
+                                Color.white
+                                    .edgesIgnoringSafeArea(.all)
+                                
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
+                                    .scaleEffect(2)
+                            }
+                        }
+                    )
+                }
+                
+            
             }
+                
+            
         }
         .padding(.top, 8)
         .navigationBarBackButtonHidden(true)
@@ -56,6 +95,7 @@ struct PopularSellTab: View {
             if popularSell.popularFoodSell.isEmpty {
                 popularSell.getAllPopular()
             }
+           
         }
     }
     
