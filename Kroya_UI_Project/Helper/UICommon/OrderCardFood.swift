@@ -75,16 +75,20 @@ struct OrderCard: View {
                     }
                 }
                 
-                // Conditional rendering of text
-                if order.foodCardType != "ORDER" {
-                    Text("You are selling now")
+            
+                // Conditional rendering of text with quantity based on `foodCardType`
+                if let quantity = order.quantity {
+                    Text("\(quantity) items")
                         .customFontLightLocalize(size: 12)
                         .opacity(0.6)
                 } else {
-                    EmptyView() // Removes the text entirely when condition is not met
-                    //                    Text("")
+                    // Fallback text when `quantity` is not available
+                    Text(order.foodCardType == "SALE" ? (order.purchaseDate ?? "You are selling now") : (order.dateCooking ?? "No Cooking Date Available"))
+                        .customFontLightLocalize(size: 12)
+                        .opacity(0.6)
                 }
-                
+
+
                 
                 HStack(spacing: 15) {
                     Text(order.foodCardType == "ORDER" ?
@@ -116,3 +120,8 @@ struct OrderCard: View {
         )
     }
 }
+
+    
+
+    
+    
