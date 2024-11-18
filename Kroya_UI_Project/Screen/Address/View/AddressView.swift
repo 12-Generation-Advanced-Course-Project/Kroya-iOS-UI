@@ -8,6 +8,8 @@ struct AddressView: View {
     @StateObject private var viewModel = AddressViewModel()
     @StateObject private var locationViewModel = LocationViewModel()
     
+    var onAddressSelected: ((Address) -> Void)?
+    
     var body: some View {
         VStack(alignment: .leading) {
             Divider()
@@ -33,9 +35,13 @@ struct AddressView: View {
                                 },
                                 onDelete: {
                                     viewModel.deleteAddress(id: address.id)
-                                },
-                                isDefault: address.id == viewModel.defaultAddressId
+                                }
                             )
+                            .onTapGesture {
+                                print("Address selected: \(address)")
+                                onAddressSelected?(address)
+                                dismiss()
+                            }
                         }
                     }
                 }
@@ -65,12 +71,12 @@ struct AddressView: View {
             }
         }
         .fullScreenCover(isPresented: $showMapSheet, onDismiss: {
-            viewModel.fetchData()
+            viewModel.fetchAddresses()
         }) {
             MapSelectionView(addressIdToEdit: addressIdToEdit ,showMapSheet: $showMapSheet)
         }
         .onAppear {
-            viewModel.fetchData()
+            viewModel.fetchAddresses()
         }
     }
 }
