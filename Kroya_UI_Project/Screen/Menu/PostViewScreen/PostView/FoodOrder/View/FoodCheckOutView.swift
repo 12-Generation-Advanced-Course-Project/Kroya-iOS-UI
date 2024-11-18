@@ -18,7 +18,7 @@ struct FoodCheckOutView: View {
     var Date: String
     var Price: Double
     var Currency: String
-   
+    
     var body: some View {
         NavigationStack {
             VStack {

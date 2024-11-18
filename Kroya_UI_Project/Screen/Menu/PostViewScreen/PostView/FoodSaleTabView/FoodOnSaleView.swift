@@ -18,19 +18,22 @@ struct FoodOnSaleView: View {
                         ForEach(foodsellVm.FoodOnSale) { foodSale in
                             NavigationLink(destination:
                                             FoodDetailView(
-                                                showPrice: true, // Always false for recipes
+                                                isFavorite: foodSale.isFavorite, showPrice: true, // Always false for recipes
                                                 showOrderButton: true, // Always false for recipes
                                                 showButtonInvoic: nil, // Not applicable
                                                 invoiceAccept: nil, // Not applicable
                                                 FoodId: foodSale.id,
                                                 ItemType: foodSale.itemType
                                             )
-                                           
                             ) {
-                                FoodOnSaleViewCell(foodSale: foodSale, onFavoriteToggle: { foodId in
-                                    favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
-                                }) .frame(maxWidth: .infinity)
-                                    .padding(.horizontal, 20)
+                                FoodOnSaleViewCell(
+                                    foodSale: foodSale,
+                                    foodId: foodSale.id,
+                                    itemType: "FOOD_SELL",
+                                    isFavorite: foodSale.isFavorite
+                                )
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal, 20)
                             }
                         }
                     }

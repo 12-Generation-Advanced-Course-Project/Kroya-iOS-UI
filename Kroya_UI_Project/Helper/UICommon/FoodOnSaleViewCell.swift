@@ -1,26 +1,21 @@
 import SwiftUI
-import Kingfisher
 import SDWebImageSwiftUI
 
 struct FoodOnSaleViewCell: View {
     var foodSale: FoodSellModel
-    @State private var isFavorite: Bool
-    let onFavoriteToggle: (Int) -> Void  // Callback to notify parent of favorite toggle
-    
+    var foodId: Int
+    var itemType: String
+    @State var isFavorite: Bool
+    @StateObject private var favoriteVM = FavoriteVM()
+ 
+
     private let urlImagePrefix = "https://kroya-api-production.up.railway.app/api/v1/fileView/"
-    
-    init(foodSale: FoodSellModel, isFavorite: Bool = false, onFavoriteToggle: @escaping (Int) -> Void) {
-        self.foodSale = foodSale
-        self._isFavorite = State(initialValue: isFavorite)
-        self.onFavoriteToggle = onFavoriteToggle
-    }
-    
+
     var body: some View {
         VStack {
             ZStack(alignment: .topLeading) {
-                // Display Main Image
-                if let photoFilename = foodSale.photo.first?.photo,
-                   let url = URL(string: urlImagePrefix + photoFilename) {
+                // Main Image
+                if let photoFilename = foodSale.photo.first?.photo, let url = URL(string: urlImagePrefix + photoFilename) {
                     WebImage(url: url)
                         .resizable()
                         .scaledToFill()
@@ -28,7 +23,6 @@ struct FoodOnSaleViewCell: View {
                         .cornerRadius(15, corners: [.topLeft, .topRight])
                         .clipped()
                 } else {
-                    // Placeholder image if no photo available
                     Image(systemName: "photo")
                         .resizable()
                         .scaledToFill()
@@ -36,22 +30,21 @@ struct FoodOnSaleViewCell: View {
                         .cornerRadius(15, corners: [.topLeft, .topRight])
                         .clipped()
                 }
-                
+
                 // Rating and Favorite Button
                 HStack {
-                    // Star Rating Section
                     HStack(spacing: 3) {
                         Image(systemName: "star.fill")
                             .resizable()
                             .scaledToFill()
                             .frame(width: 14, height: 14)
                             .foregroundColor(.yellow)
-                        
+
                         Text(String(format: "%.1f", foodSale.averageRating ?? 0.0))
                             .font(.system(size: 12, weight: .medium))
                             .foregroundColor(.black)
-                        
-                        Text("(\(foodSale.totalRaters ?? 0)+)")
+
+                        Text("(\(String(describing: foodSale.totalRaters ?? 0))+)")
                             .font(.system(size: 12))
                             .foregroundColor(.gray)
                     }
@@ -59,13 +52,14 @@ struct FoodOnSaleViewCell: View {
                     .background(Color.white.opacity(0.8))
                     .cornerRadius(10)
                     .shadow(color: Color.black.opacity(0.15), radius: 5, y: 4)
-                    
+
                     Spacer()
-                    
+
                     // Favorite Button
+                    // Updated Favorite Button Logic
                     Button(action: {
-                        isFavorite.toggle()
-                        onFavoriteToggle(foodSale.id) // Notify the parent view of the toggle
+                        isFavorite.toggle() // Toggle locally for UI responsiveness
+                        favoriteVM.toggleFavorite(foodId: foodSale.id, itemType: foodSale.itemType, isCurrentlyFavorite: !isFavorite)
                     }) {
                         Circle()
                             .fill(isFavorite ? Color.red : Color.white.opacity(0.5))
@@ -76,19 +70,22 @@ struct FoodOnSaleViewCell: View {
                                     .font(.system(size: 16))
                             )
                     }
+
                 }
                 .padding(.top, 20)
                 .padding(.horizontal, 10)
             }
             .frame(height: 140)
-            
+            .onAppear {
+                // Fetch the favorite state on appear
+                favoriteVM.getAllFavoriteFood()
+            }
+
             VStack(alignment: .leading, spacing: 5) {
-                // Food Name
                 Text(foodSale.name)
                     .font(.system(size: 16, weight: .medium))
                     .foregroundColor(.black)
-                
-                // Cooking Date Information
+
                 if let cookingDate = foodSale.dateCooking {
                     Text("It will be cooked on \(formatDate(cookingDate)) \(determineTimeOfDay(from: cookingDate))")
                         .font(.system(size: 14, weight: .medium))
@@ -96,16 +93,15 @@ struct FoodOnSaleViewCell: View {
                         .multilineTextAlignment(.leading)
                         .lineLimit(2)
                 }
-                
+
                 HStack(spacing: 10) {
                     // Display currency symbol based on currencyType
                     Text("\(currencySymbol(for: foodSale.currencyType)) \(String(format: "%.2f", foodSale.price))")
                         .font(.system(size: 14, weight: .medium))
                         .foregroundColor(.yellow)
-                    
-                    // Free Delivery Information
+
                     HStack(spacing: 4) {
-                        Image(systemName: "bicycle")
+                        Image(.motorbike)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 16, height: 16)
@@ -128,8 +124,7 @@ struct FoodOnSaleViewCell: View {
                 .stroke(Color(hex: "#E6E6E6"), lineWidth: 0.8)
         }
     }
-    
-    // MARK: - Helper function to get the currency symbol
+    // MARK: - Helper Functions
     private func currencySymbol(for currencyType: String) -> String {
         switch currencyType {
         case "DOLLAR":
@@ -140,8 +135,8 @@ struct FoodOnSaleViewCell: View {
             return ""
         }
     }
-    
-    //MARK: Helper function to format date
+
+    // Helper functions for date and time remain unchanged
     private func parseDate(_ dateString: String) -> Date? {
         let dateFormats = [
             "yyyy-MM-dd'T'HH:mm:ss.SSS",  // With milliseconds
@@ -150,7 +145,7 @@ struct FoodOnSaleViewCell: View {
         
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone(secondsFromGMT: 0) // Ensure consistent parsing
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
         
         for format in dateFormats {
             formatter.dateFormat = format
@@ -158,27 +153,19 @@ struct FoodOnSaleViewCell: View {
                 return date
             }
         }
-        return nil // Return nil if none of the formats match
+        return nil
     }
 
-    
-    //MARK: Helper function to determine time of day based on the cook date time (if available)
     private func formatDate(_ dateString: String) -> String {
         guard let date = parseDate(dateString) else { return "Invalid Date" }
-        
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
-        
-        // Output format
-        formatter.dateFormat = "dd MMM yyyy" // Example: "23 Nov 2024"
+        formatter.dateFormat = "dd MMM yyyy"
         return formatter.string(from: date)
     }
 
     private func determineTimeOfDay(from dateString: String) -> String {
         guard let date = parseDate(dateString) else { return "at current time." }
         let hour = Calendar.current.component(.hour, from: date)
-        
         switch hour {
         case 5..<12:
             return "in the morning."
@@ -190,5 +177,4 @@ struct FoodOnSaleViewCell: View {
             return "at night."
         }
     }
-
 }

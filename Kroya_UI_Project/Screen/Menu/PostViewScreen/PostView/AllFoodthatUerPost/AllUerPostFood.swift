@@ -19,22 +19,28 @@ struct AllUerPostFood: View {
                     // Display popular sell items
                     ForEach(allFoodUserPost.userPostFoodSale) { popularsell in
                         NavigationLink(destination: foodDetailDestination(for: popularsell)) {
-                            FoodOnSaleViewCell(foodSale: popularsell, onFavoriteToggle: { foodId in
-                                favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
-                            })
-                                .frame(maxWidth: .infinity)
-                                .padding(.horizontal, 20)
+                            FoodOnSaleViewCell(
+                                foodSale: popularsell,
+                                foodId: popularsell.id,
+                                itemType: "FOOD_SELL",
+                                isFavorite: popularsell.isFavorite
+                            )
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal, 20)
                         }
                     }
                     
                     // Display popular recipe items
                     ForEach(allFoodUserPost.userPostRecipeFood) { popularrecipe in
                         NavigationLink(destination: recipeDetailDestination(for: popularrecipe)) {
-                            RecipeViewCell(recipe: popularrecipe, onFavoriteToggle: { foodId in
-                                favoriteFoodRecipe.createFavoriteFood(foodId: foodId, itemType: "FOOD_RECIPE")
-                            })
-                                .frame(maxWidth: .infinity)
-                                .padding(.horizontal, 20)
+                            RecipeViewCell(
+                                recipe: popularrecipe,
+                                foodId: popularrecipe.id,
+                                itemType: "FOOD_RECIPE",
+                                isFavorite: popularrecipe.isFavorite
+                            )
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal, 20)
                         }
                     }
                 }
@@ -64,6 +70,7 @@ struct AllUerPostFood: View {
     @ViewBuilder
     private func foodDetailDestination(for foodSale: FoodSellModel) -> some View {
         FoodDetailView(
+            isFavorite: foodSale.isFavorite,
             showPrice: true, // Always false for recipes
             showOrderButton: true, // Always false for recipes
             showButtonInvoic: nil, // Not applicable
@@ -76,12 +83,13 @@ struct AllUerPostFood: View {
     @ViewBuilder
     private func recipeDetailDestination(for recipe: FoodRecipeModel) -> some View {
         FoodDetailView(
-            showPrice: false, // Always false for recipes
-            showOrderButton: false, // Always false for recipes
-            showButtonInvoic: nil, // Not applicable
-            invoiceAccept: nil, // Not applicable
-            FoodId: recipe.id,
-            ItemType: recipe.itemType
-        )
+        isFavorite: recipe.isFavorite,
+        showPrice: false, // Always false for recipes
+        showOrderButton: false, // Always false for recipes
+        showButtonInvoic: nil, // Not applicable
+        invoiceAccept: nil, // Not applicable
+        FoodId: recipe.id,
+        ItemType: recipe.itemType
+    )
     }
 }
