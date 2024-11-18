@@ -54,3 +54,6 @@ typealias ViewAccountResponse = KroyaSingleAPIResponse<ViewAccountUserFoodModel>
 // MARK: fetch purchase all
 typealias purchaseResponse = KroyaAPIResponse<OrderModel>
 
+
+//MARK: Guest food popular
+typealias GuestFoodPopularResponses = KroyaSingleAPIResponse<PopularPayload>
