@@ -103,12 +103,13 @@ struct PopularSellTab: View {
     @ViewBuilder
     private func foodDetailDestination(for foodSale: FoodSellModel) -> some View {
         FoodDetailView(
-        showPrice: true, // Always false for recipes
-        showOrderButton: true, // Always false for recipes
-        showButtonInvoic: nil, // Not applicable
-        invoiceAccept: nil, // Not applicable
-        FoodId: foodSale.id ?? 0,
-        ItemType: foodSale.itemType
+            isFavorite: foodSale.isFavorite,
+            showPrice: true, // Always false for recipes
+            showOrderButton: true, // Always false for recipes
+            showButtonInvoic: nil, // Not applicable
+            invoiceAccept: nil, // Not applicable
+            FoodId: foodSale.id ?? 0,
+            ItemType: foodSale.itemType
     )
     }
 }

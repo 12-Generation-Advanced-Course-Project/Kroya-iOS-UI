@@ -23,7 +23,7 @@ struct UserFoodSell:View {
                         ForEach(ViewAccountUser.UserFoodDataFoodSell) { foodSale in
                             NavigationLink(destination:
                                             FoodDetailView(
-                                                showPrice: true, // Always false for recipes
+                                                isFavorite: foodSale.isFavorite, showPrice: true, // Always false for recipes
                                                 showOrderButton: true, // Always false for recipes
                                                 showButtonInvoic: nil, // Not applicable
                                                 invoiceAccept: nil, // Not applicable
@@ -32,11 +32,14 @@ struct UserFoodSell:View {
                                             )
                                            
                             ) {
-                                FoodOnSaleViewCell(foodSale: foodSale, onFavoriteToggle: { foodId in
-                                    favoriteFoodVM.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
-                                })
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.horizontal, 20)
+                                FoodOnSaleViewCell(
+                                    foodSale: foodSale,
+                                    foodId: foodSale.id,
+                                    itemType: "FOOD_SELL",
+                                    isFavorite: foodSale.isFavorite
+                                )
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal, 20)
                             }
                         }
                     }
