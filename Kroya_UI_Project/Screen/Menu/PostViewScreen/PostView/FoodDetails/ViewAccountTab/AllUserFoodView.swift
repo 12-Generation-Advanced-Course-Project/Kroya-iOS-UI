@@ -15,24 +15,28 @@ struct AllUserFoodView:View {
                     // Display popular sell items
                     ForEach(ViewAccountUser.UserFoodDataFoodSell) { userFoodDataFoodSell in
                         NavigationLink(destination: foodDetailDestination(for: userFoodDataFoodSell)) {
-                            FoodOnSaleViewCell(foodSale: userFoodDataFoodSell, onFavoriteToggle: { foodId in
-                                favoriteFoodVM.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
-                            })
-                                .frame(maxWidth: .infinity)
-                                .padding(.horizontal, 20)
-                                .frame(maxWidth: .infinity)
-                                .padding(.horizontal, 20)
+                            FoodOnSaleViewCell(
+                                foodSale: userFoodDataFoodSell,
+                                foodId: userFoodDataFoodSell.id,
+                                itemType: "FOOD_SELL",
+                                isFavorite: userFoodDataFoodSell.isFavorite
+                            )
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal, 20)
                         }
                     }
                     
                     // Display popular recipe items
                     ForEach(ViewAccountUser.UserFoodDataRecipe) { userFoodDataRecipe in
                         NavigationLink(destination: recipeDetailDestination(for: userFoodDataRecipe)) {
-                            RecipeViewCell(recipe: userFoodDataRecipe, onFavoriteToggle: { foodId in
-                                favoriteFoodVM.createFavoriteFood(foodId: foodId, itemType: "FOOD_RECIPE")
-                            })
-                                .frame(maxWidth: .infinity)
-                                .padding(.horizontal, 20)
+                            RecipeViewCell(
+                                recipe: userFoodDataRecipe,
+                                foodId: userFoodDataRecipe.id,
+                                itemType: "FOOD_RECIPE",
+                                isFavorite: userFoodDataRecipe.isFavorite
+                            )
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal, 20)
                         }
                     }
                 }
@@ -62,6 +66,7 @@ struct AllUserFoodView:View {
     @ViewBuilder
     private func foodDetailDestination(for userFoodDataFoodSell: FoodSellModel) -> some View {
         FoodDetailView(
+        isFavorite: userFoodDataFoodSell.isFavorite,
         showPrice: true, // Always false for recipes
         showOrderButton: true, // Always false for recipes
         showButtonInvoic: nil, // Not applicable
@@ -74,6 +79,7 @@ struct AllUserFoodView:View {
     @ViewBuilder
     private func recipeDetailDestination(for userFoodDataRecipe: FoodRecipeModel) -> some View {
         FoodDetailView(
+        isFavorite: userFoodDataRecipe.isFavorite,
         showPrice: false, // Always false for recipes
         showOrderButton: false, // Always false for recipes
         showButtonInvoic: nil, // Not applicable

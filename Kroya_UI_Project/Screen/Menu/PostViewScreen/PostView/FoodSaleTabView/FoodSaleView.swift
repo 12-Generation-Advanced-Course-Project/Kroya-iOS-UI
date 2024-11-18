@@ -18,11 +18,14 @@ struct FoodSaleandRecipeView: View {
                     LazyVStack(spacing: 8) {
                         ForEach(foodViewModel.FoodOnSale) { foodSale in
                             NavigationLink(destination: foodDetailDestination(for: foodSale)) {
-                                FoodOnSaleViewCell(foodSale: foodSale, onFavoriteToggle: { foodId in
-                                    favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
-                                })
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.horizontal, 20)
+                                FoodOnSaleViewCell(
+                                    foodSale: foodSale,
+                                    foodId: foodSale.id,
+                                    itemType: "FOOD_SELL",
+                                    isFavorite: foodSale.isFavorite
+                                )
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal, 20)
                             }
                         }
                     }
@@ -59,6 +62,7 @@ struct FoodSaleandRecipeView: View {
     @ViewBuilder
     private func foodDetailDestination(for item: FoodSellModel) -> some View {
         FoodDetailView(
+            isFavorite: item.isFavorite,
             showPrice: false, // Always false for recipes
             showOrderButton: false, // Always false for recipes
             showButtonInvoic: nil, // Not applicable

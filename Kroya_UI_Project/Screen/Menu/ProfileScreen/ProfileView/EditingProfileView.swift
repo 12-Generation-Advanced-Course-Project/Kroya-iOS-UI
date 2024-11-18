@@ -24,20 +24,21 @@ struct EditingProfileView: View {
     @Environment(\.dismiss) var dismiss
     @Binding var selectedAddress: Address?
     @State private var imagefile: String = ""
-//    @EnvironmentObject var addressVM: AddressViewModel
+    //    @EnvironmentObject var addressVM: AddressViewModel
     @EnvironmentObject var userStore: UserStore
     @State private var isPasswordVisible = false
     @Environment(\.locale) var locale
+    @State private var showAddressSheet = false
     var body: some View {
         ZStack {
             VStack(spacing: 10) {
-                HStack {
-                    Text(LocalizedStringKey("Edit Profile"))
-                        .font(.customfont(.bold, fontSize: 18))
-                        .opacity(0.84)
-                        .padding(.bottom, 20)
-                }
-                .frame(maxWidth: .infinity)
+//                HStack {
+//                    Text(LocalizedStringKey("Edit Profile"))
+//                        .font(.customfont(.bold, fontSize: 18))
+//                        .opacity(0.84)
+//                        .padding(.bottom, 20)
+//                }
+//                .frame(maxWidth: .infinity)
                 
                 // Profile Image and Edit Icon
                 ZStack(alignment: .bottomTrailing) {
@@ -81,6 +82,7 @@ struct EditingProfileView: View {
                             )
                     }
                 }
+                .padding(.top, 20)
                 // Personal Info Section
                 VStack(alignment: .leading) {
                     Text("Personal info")
@@ -98,13 +100,13 @@ struct EditingProfileView: View {
                                 .frame(width: locale.identifier == "ko" ? 80 : locale.identifier == "km-KH" ? 90 : 80, alignment: .leading)
                                 .font(.customfont(.medium, fontSize: 16))
                                 .foregroundColor(.black.opacity(0.8))
-                                
+                            
                             TextField("Enter your full name", text: $userInputName)
                                 .padding()
                                 .foregroundColor(.black)
                                 .cornerRadius(8)
                                 .font(.customfont(.medium, fontSize: 16))
-                               
+                            
                         }
                         .padding(.leading, 16)
                         .background(Color(hex: "F4F5F7"))
@@ -118,15 +120,15 @@ struct EditingProfileView: View {
                                 .frame(width: locale.identifier == "ko" ? 80 : locale.identifier == "km-KH" ? 90 : 80, alignment: .leading)
                                 .font(.customfont(.medium, fontSize: 16))
                                 .foregroundColor(.black.opacity(0.8))
-                               
+                            
                             TextField("Enter your email", text: $userInputEmail)
                                 .padding()
                                 .foregroundColor(.black.opacity(0.5))
                                 .cornerRadius(8)
                                 .font(.customfont(.medium, fontSize: 16))
                                 .disabled(true)
-                                
-                               
+                            
+                            
                         }
                         .padding(.leading, 16)
                         .background(Color(hex: "F4F5F7"))
@@ -141,12 +143,12 @@ struct EditingProfileView: View {
                                 .frame(width: locale.identifier == "ko" ? 80 : locale.identifier == "km-KH" ? 90 : 80, alignment: .leading)
                                 .font(.customfont(.medium, fontSize: 16))
                                 .foregroundColor(.black.opacity(0.8))
-                                
+                            
                             TextField("Enter your mobile number", text: $userInputContact)
                                 .padding()
                                 .foregroundColor(.black)
                                 .cornerRadius(8)
-                               
+                            
                                 .font(.customfont(.medium, fontSize: 16))
                         }
                         .padding(.leading, 16)
@@ -161,7 +163,7 @@ struct EditingProfileView: View {
                                 .frame(width: locale.identifier == "ko" ? 80 : locale.identifier == "km-KH" ? 90 : 80, alignment: .leading)
                                 .font(.customfont(.medium, fontSize: 16))
                                 .foregroundColor(.black.opacity(0.8))
-                               
+                            
                             // Toggleable password field
                             (isPasswordVisible ? AnyView(TextField("Enter your password", text: $userInputPassword)) : AnyView(SecureField("Enter your password", text: $userInputPassword)))
                                 .padding()
@@ -169,7 +171,7 @@ struct EditingProfileView: View {
                                 .cornerRadius(8)
                                 .font(.customfont(.medium, fontSize: 16))
                                 .disabled(true)
-                               
+                            
                         }
                         .padding(.leading, 16)
                         .background(Color(hex: "F4F5F7"))
@@ -177,24 +179,37 @@ struct EditingProfileView: View {
                     }
                     
                     
-                    // Address Label and TextField (disabled)
                     VStack(alignment: .leading) {
                         HStack {
                             Text("Address")
                                 .frame(width: locale.identifier == "ko" ? 80 : locale.identifier == "km-KH" ? 90 : 80, alignment: .leading)
                                 .font(.customfont(.medium, fontSize: 16))
                                 .foregroundColor(.black.opacity(0.8))
-                               
-                            TextField("Enter your address", text: $userInputAddress)
+                            
+                            Text(userInputAddress.isEmpty ? "Enter your address" : userInputAddress)
                                 .padding()
-                                .foregroundColor(.black.opacity(0.3))
+                                .foregroundColor(.black.opacity(userInputAddress.isEmpty ? 0.3 : 1.0))
                                 .font(.customfont(.medium, fontSize: 16))
-                                .disabled(true)
-                              
+                                .background(Color(hex: "F4F5F7"))
+                                .cornerRadius(8)
+                                .onTapGesture {
+                                    showAddressSheet = true
+                                    print("Tapped on address field. showAddressSheet is now \(showAddressSheet)")
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .padding(.leading, 16)
                         .background(Color(hex: "F4F5F7"))
                         .cornerRadius(8)
+                        .sheet(isPresented: $showAddressSheet) {
+                            NavigationStack {
+                                AddressView { selectedAddress in
+                                    // This is where you handle the selected address
+                                    userInputAddress = selectedAddress.addressDetail
+                                    print("Updated userInputAddress with selectedAddress.specificLocation: \(selectedAddress.addressDetail)")
+                                }
+                            }
+                        }
                     }
                 }
                 .padding(.horizontal, 20)
@@ -276,15 +291,15 @@ struct EditingProfileView: View {
             }
             .onAppear {
                 loadProfileData()
-//                addressVM.fetchAllAddresses()
-//                let lastaddress = addressVM.addresses.last
-//                selectedAddress = lastaddress
+                //                addressVM.fetchAllAddresses()
+                //                let lastaddress = addressVM.addresses.last
+                //                selectedAddress = lastaddress
                 profile.fetchUserProfile()
             }
             .onDisappear{
                 profile.fetchUserProfile()
                 loadProfileData()
-//                addressVM.fetchAllAddresses()
+                //                addressVM.fetchAllAddresses()
             }
             .sheet(isPresented: $showImagePicker) {
                 ImagePicker { selectedImages, filenames in
@@ -301,19 +316,22 @@ struct EditingProfileView: View {
                 }
             }
 
+            
         }
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: { dismiss() }) {
-                    Image(systemName: "arrow.left")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 20, height: 20)
-                        .foregroundStyle(.black)
-                }
-            }
-        }
+        .navigationTitle("Edit Profile")
+        .navigationBarTitleDisplayMode(.inline)
+//        .navigationBarBackButtonHidden(true)
+//        .toolbar {
+//            ToolbarItem(placement: .navigationBarLeading) {
+//                Button(action: { dismiss() }) {
+//                    Image(systemName: "arrow.left")
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(width: 20, height: 20)
+//                        .foregroundStyle(.black)
+//                }
+//            }
+//        }
     }
     
     // Function to load UIImage from filename if needed
@@ -321,7 +339,7 @@ struct EditingProfileView: View {
         let fileURL = getDocumentsDirectory().appendingPathComponent(filename)
         return UIImage(contentsOfFile: fileURL.path)
     }
-
+    
     // Helper to get the Documents directory path
     private func getDocumentsDirectory() -> URL {
         return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -384,5 +402,9 @@ struct DeleteAccountDialog: View {
         .cornerRadius(20)
     }
     
+    
+}
 
+#Preview {
+    EditingProfileView(profile: ProfileViewModel(), selectedAddress: .constant(nil))
 }
