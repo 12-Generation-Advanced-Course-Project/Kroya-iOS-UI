@@ -1,20 +1,12 @@
-//
-//  FoodonOrder.swift
-//  Kroya_UI_Project
-//
-//  Created by Ounbonaliheng on 14/10/24.
-//
 import SwiftUI
 
 struct FoodonOrderView: View {
     @Environment(\.dismiss) var dismiss
-    @StateObject private var favoriteFoodSale = FavoriteVM()
     @StateObject private var foodViewModel = FoodSellViewModel()
     let imageofOrder: [String] = ["SoupPic", "SaladPic", "GrillPic", "DessertPic 1"]
     let titleofOrder: [String] = ["Soup", "Salad", "Grill", "Dessert"]
     @State private var selectedOrderIndex: Int? = nil
     @State private var searchText = ""
-    @State private var doubleSelectedOrderIndex: Int? = nil
     @State var isChooseCuisine = false
     
     var body: some View {
@@ -29,7 +21,6 @@ struct FoodonOrderView: View {
                                 isChooseCuisine = false
                             } else {
                                 selectedOrderIndex = index
-                                doubleSelectedOrderIndex = index
                                 foodViewModel.getFoodByCuisine(cuisineId: index + 1)
                                 isChooseCuisine = true
                             }
@@ -73,21 +64,32 @@ struct FoodonOrderView: View {
                     ScrollView {
                         LazyVStack {
                             ForEach(isChooseCuisine ? foodViewModel.FoodSellByCategory : foodViewModel.FoodOnSale) { foodSale in
-                                NavigationLink(destination: foodDetailDestination(for: foodSale)) {
-                                    FoodOnSaleViewCell(foodSale: foodSale, onFavoriteToggle: { foodId in
-                                        favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
-                                    })
-                                        .frame(maxWidth: .infinity)
-                                        .padding(.horizontal, 20)
+                                NavigationLink(destination:
+                                                FoodDetailView(
+                                                isFavorite: foodSale.isFavorite,
+                                                showPrice: true, // Always false for recipes
+                                                showOrderButton: true, // Always false for recipes
+                                                showButtonInvoic: nil, // Not applicable
+                                                invoiceAccept: nil, // Not applicable
+                                                FoodId: foodSale.id,
+                                                ItemType: foodSale.itemType
+                                            )
+                                ) {
+                                    FoodOnSaleViewCell(
+                                        foodSale: foodSale,
+                                        foodId: foodSale.id,
+                                        itemType: "FOOD_SELL",
+                                        isFavorite: foodSale.isFavorite
+                                    )
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.horizontal, 20)
                                 }
-                                
                             }
                         }
                     }
-                    
+
                     Spacer()
                 }
-                
             }
             .navigationTitle("Food Order")
             .navigationBarTitleDisplayMode(.inline)
@@ -105,29 +107,18 @@ struct FoodonOrderView: View {
                 }
             }
         }
-         .searchable(text: $searchText, prompt: LocalizedStringKey("Search Item"))
-         .onChange(of: searchText) { newValue in
-             if !newValue.isEmpty {
-                 foodViewModel.getSearchFoodFoodByName(searchText: newValue)
-             } else {
-                 foodViewModel.getAllFoodSell()
-             }
-         }
-         .onAppear {
-             foodViewModel.getAllFoodSell()
-         }
-         .navigationBarBackButtonHidden(true)
+        .searchable(text: $searchText, prompt: LocalizedStringKey("Search Item"))
+        .onChange(of: searchText) { newValue in
+            if !newValue.isEmpty {
+                foodViewModel.getSearchFoodFoodByName(searchText: newValue)
+            } else {
+                foodViewModel.getAllFoodSell()
+            }
+        }
+        .onAppear {
+            foodViewModel.getAllFoodSell()
+        }
+        .navigationBarBackButtonHidden(true)
     }
     
-    @ViewBuilder
-    private func foodDetailDestination(for foodSale: FoodSellModel) -> some View {
-        FoodDetailView(
-        showPrice: true, // Always false for recipes
-        showOrderButton: true, // Always false for recipes
-        showButtonInvoic: nil, // Not applicable
-        invoiceAccept: nil, // Not applicable
-        FoodId: foodSale.id,
-        ItemType: foodSale.itemType
-    )
-    }
 }

@@ -20,11 +20,14 @@ struct UserFoodRecipe:View {
                     LazyVStack(spacing: 8) {
                         ForEach(ViewAccountUser.UserFoodDataRecipe, id: \.id) { recipe in
                             NavigationLink(destination: recipeDetailDestination(for: recipe)) {
-                                RecipeViewCell(recipe: recipe, onFavoriteToggle: { foodId in
-                                    favoriteFoodRecipe.createFavoriteFood(foodId: foodId, itemType: "FOOD_RECIPE")
-                                })
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.horizontal, 20)
+                                RecipeViewCell(
+                                    recipe: recipe,
+                                    foodId: recipe.id,
+                                    itemType: "FOOD_RECIPE",
+                                    isFavorite: recipe.isFavorite
+                                )
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal, 20)
                             }
                             .simultaneousGesture(
                                 TapGesture().onEnded {
@@ -65,7 +68,7 @@ struct UserFoodRecipe:View {
     @ViewBuilder
     private func recipeDetailDestination(for recipe: FoodRecipeModel) -> some View {
         FoodDetailView(
-        showPrice: false, // Always false for recipes
+        isFavorite: recipe.isFavorite, showPrice: false, // Always false for recipes
         showOrderButton: false, // Always false for recipes
         showButtonInvoic: nil, // Not applicable
         invoiceAccept: nil, // Not applicable

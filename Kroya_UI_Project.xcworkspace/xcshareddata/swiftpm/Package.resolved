@@ -1,5 +1,6 @@
 {
   "originHash" : "fb9e7327ac50fe9569a30b6db063172140cc3d137ff478824cb619906b257de3",
+  "originHash" : "80b3090900ca55ea51a8f427daf7426a259840698c3d13b70ef2be804773e15f",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -33,8 +34,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/firebase-ios-sdk",
       "state" : {
-        "revision" : "dbdfdc44bee8b8e4eaa5ec27eb12b9338f3f2bc1",
-        "version" : "11.5.0"
+        "revision" : "8328630971a8fdd8072b36bb22bef732eb15e1f0",
+        "version" : "11.4.0"
       }
     },
     {
@@ -139,7 +140,7 @@
     {
       "identity" : "sdwebimageswiftui",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SDWebImage/SDWebImageSwiftUI.git",
+      "location" : "https://github.com/SDWebImage/SDWebImageSwiftUI",
       "state" : {
         "revision" : "451c6dfd5ecec2cf626d1d9ca81c2d4a60355172",
         "version" : "3.1.3"

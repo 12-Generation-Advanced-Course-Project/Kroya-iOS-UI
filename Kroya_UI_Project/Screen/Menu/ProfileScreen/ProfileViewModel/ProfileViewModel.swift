@@ -10,12 +10,11 @@ import Alamofire
 
 class ProfileViewModel: ObservableObject {
     @Published var userProfile: ProfileModel?
-    
-    @Published var isLoading: Bool = false
-    @Published var successMessage: String = ""
-    @Published var showError: Bool = false
-    @Published var errorMessage: String = ""
-    @Published var isUpdate: Bool = false
+      @Published var isLoading: Bool = false
+      @Published var successMessage: String = ""
+      @Published var showError: Bool = false
+      @Published var errorMessage: String = ""
+      @Published var isUpdate: Bool = false
  
     // MARK: Fetch User Profile
     func fetchUserProfile() {
@@ -54,32 +53,31 @@ class ProfileViewModel: ObservableObject {
          
     }
 
-    private func sendUpdateProfile(fullName: String, phoneNumber: String, address: String, profileImageName: String, completion: @escaping (Bool) -> Void) {
-        ProfileService.shared.sendUpdateProfileRequest(fullName: fullName, phoneNumber: phoneNumber, address: address, profileImageName: profileImageName) { [weak self] result in
-            DispatchQueue.main.async {
-                self?.isLoading = false
-                switch result {
-                case .success(let updatedProfile):
-                    // Assuming `updatedProfile.payload` is of type `ProfileModel`
-                    if let profile = updatedProfile.payload as? ProfileModel {
-                        self?.userProfile = profile
-                    } else {
-                        print("Payload is not of type ProfileModel")
-                    }
-                   
-                    self?.successMessage = "Profile updated successfully."
-                    self?.showError = false
-                    completion(true)
-                case .failure(let error):
-                    self?.showError = true
-                    self?.errorMessage = "Failed to update profile: \(error.localizedDescription)"
-                    print("Error: \(error)")
-                    completion(false)
-                }
-            }
-        }
-    }
-    
+    //MARK: Function to handle updating the profile
+       func sendUpdateProfile(fullName: String, phoneNumber: String, address: String, profileImageName: String, completion: @escaping (Bool) -> Void) {
+           isLoading = true // Start loading indicator
+
+           ProfileService.shared.sendUpdateProfileRequest(fullName: fullName, phoneNumber: phoneNumber, address: address, profileImageName: profileImageName) { [weak self] result in
+               DispatchQueue.main.async {
+                   guard let self = self else { return }
+                   self.isLoading = false // Stop loading indicator
+
+                   switch result {
+                   case .success(let updatedProfile):
+                       self.userProfile = updatedProfile // Update user profile
+                       self.successMessage = "Profile updated successfully."
+                       self.showError = false
+                       self.isUpdate = true // Indicate a successful update
+                       completion(true)
+                   case .failure(let error):
+                       self.errorMessage = "Failed to update profile: \(error.localizedDescription)"
+                       self.showError = true
+                       self.isUpdate = false
+                       completion(false)
+                   }
+               }
+           }
+       }
     // MARK: Function to format the createdAt date
     func formatDate(from dateString: String) -> String {
         let inputFormatter = DateFormatter()
