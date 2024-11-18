@@ -42,39 +42,20 @@ class FavoriteService{
     
     
     // MARK: - Post Favorite Food
-    func saveFavoriteFood(foodId: Int, itemType: String, completion: @escaping (Result<getAllFavoriteResponse, Error>) -> Void) {
+    func saveFavoriteFood(foodId: Int, itemType: String, completion: @escaping (Result<AddFavouriteResponse, Error>) -> Void) {
         guard let accessToken = Auth.shared.getAccessToken() else {
-            print("Error: Access token is nil.")
             let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token is missing"])
             completion(.failure(error))
             return
         }
-        
         let url = Constants.FavoriteFoodUrl + "add-favorite"
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(accessToken)"
-        ]
-        
-        let parameters: [String: Any] = [
-            "foodId": foodId,
-            "itemType": itemType
-        ]
+        let headers: HTTPHeaders = ["Authorization": "Bearer \(accessToken)"]
+        let parameters: [String: Any] = ["foodId": foodId, "itemType": itemType]
         
         AF.request(url, method: .post, parameters: parameters, encoding: URLEncoding.queryString, headers: headers)
             .validate()
-            .responseDecodable(of: getAllFavoriteResponse.self) { response in
-                if let data = response.data {
-                    do {
-                        let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-                        let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-                        if let string = String(data: prettyData, encoding: .utf8) {
-                            print("JSON Response For Post Favorite Food:\n\(string)")
-                        }
-                    } catch {
-                        print("Failed to convert response data to Favorite JSON: \(error)")
-                    }
-                }
-                
+            .responseDecodable(of: AddFavouriteResponse.self) { response in
+                debugPrint(response)
                 switch response.result {
                 case .success(let saveResponse):
                     print("Favorite Food created successfully: \(saveResponse)")
@@ -84,8 +65,31 @@ class FavoriteService{
                     completion(.failure(error))
                 }
             }
-    }
+      }
+    
+    // Remove Favorite Food
+    func removeFavoriteFood(foodId: Int, itemType: String, completion: @escaping (Result<RemoveFavoriteResponse, Error>) -> Void) {
+        guard let accessToken = Auth.shared.getAccessToken() else {
+            let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token is missing"])
+            completion(.failure(error))
+            return
+        }
 
+        let url = Constants.FavoriteFoodUrl + "remove-favorite"
+        let headers: HTTPHeaders = ["Authorization": "Bearer \(accessToken)"]
+        let parameters: [String: Any] = ["foodId": foodId, "itemType": itemType]
+
+        AF.request(url, method: .delete, parameters: parameters, encoding: URLEncoding.queryString, headers: headers)
+            .validate()
+            .responseDecodable(of: RemoveFavoriteResponse.self) { response in
+                switch response.result {
+                case .success(let removeResponse):
+                    completion(.success(removeResponse))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+    }
 
 }
 

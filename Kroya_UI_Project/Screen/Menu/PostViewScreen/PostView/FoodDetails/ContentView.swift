@@ -503,29 +503,41 @@ struct ContentView: View {
         }
     }
     //MARK: Helper function to format date
-    private func formatDate(_ dateString: String) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX") // Ensure consistent parsing
-        formatter.timeZone = TimeZone(secondsFromGMT: 0) // Set timezone to GMT if needed
+    private func parseDate(_ dateString: String) -> Date? {
+        let dateFormats = [
+            "yyyy-MM-dd'T'HH:mm:ss.SSS",  // With milliseconds
+            "yyyy-MM-dd'T'HH:mm:ss"       // Without milliseconds
+        ]
         
-        // Match the input date format exactly
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss" // Matches "2024-11-21T17:05:00"
-        guard let date = formatter.date(from: dateString) else { return "Invalid Date" }
-        
-        // Format the output date
-        formatter.dateFormat = "dd MMM yyyy" // Output format: "21 Nov 2024"
-        return formatter.string(from: date)
-    }
-    
-    
-    
-    //MARK: Helper function to determine time of day based on the cook date time (if available)
-    private func determineTimeOfDay(from dateString: String) -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss" // Matches "2024-11-21T17:05:00"
+        formatter.timeZone = TimeZone(secondsFromGMT: 0) // Ensure consistent parsing
         
-        guard let date = formatter.date(from: dateString) else { return "at current time." }
+        for format in dateFormats {
+            formatter.dateFormat = format
+            if let date = formatter.date(from: dateString) {
+                return date
+            }
+        }
+        return nil // Return nil if none of the formats match
+    }
+
+    
+    //MARK: Helper function to determine time of day based on the cook date time (if available)
+    private func formatDate(_ dateString: String) -> String {
+        guard let date = parseDate(dateString) else { return "Invalid Date" }
+        
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        
+        // Output format
+        formatter.dateFormat = "dd MMM yyyy" // Example: "23 Nov 2024"
+        return formatter.string(from: date)
+    }
+
+    private func determineTimeOfDay(from dateString: String) -> String {
+        guard let date = parseDate(dateString) else { return "at current time." }
         let hour = Calendar.current.component(.hour, from: date)
         
         switch hour {
@@ -539,6 +551,7 @@ struct ContentView: View {
             return "at night."
         }
     }
+
     
     private func startAutoSubmitTimer() {
         guard !FeedbackVM.isFeedbackLocked else {
