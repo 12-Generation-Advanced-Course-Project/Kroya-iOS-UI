@@ -117,7 +117,7 @@ struct HomeView: View {
                             ForEach(foodSellViemModel.FoodOnSale.prefix(2)) { foodSale in
                                 NavigationLink(destination:
                                                 FoodDetailView(
-                                                showPrice: true, // Always false for recipes
+                                                    isFavorite: foodSale.isFavorite, showPrice: true, // Always false for recipes
                                                 showOrderButton: true, // Always false for recipes
                                                 showButtonInvoic: nil, // Not applicable
                                                 invoiceAccept: nil, // Not applicable
@@ -125,10 +125,13 @@ struct HomeView: View {
                                                 ItemType: foodSale.itemType
                                             )
                                 ) {
-                                    FoodOnSaleViewCell(foodSale: foodSale, onFavoriteToggle: { foodId in
-                                        favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
-                                    })
-                                        .frame(width: 360)
+                                    FoodOnSaleViewCell(
+                                        foodSale: foodSale,
+                                        foodId: foodSale.id,
+                                        itemType: "FOOD_SELL",
+                                        isFavorite: foodSale.isFavorite
+                                    )
+                                    .frame(width: 350)
                                 }
                             }
                             
@@ -136,7 +139,7 @@ struct HomeView: View {
                             ForEach(recipeViewModel.RecipeFood.prefix(2)) { recipe in
                                 NavigationLink(destination:
                                                 FoodDetailView(
-                                                showPrice: false, // Always false for recipes
+                                                isFavorite: recipe.isFavorite, showPrice: false, // Always false for recipes
                                                 showOrderButton: false, // Always false for recipes
                                                 showButtonInvoic: nil, // Not applicable
                                                 invoiceAccept: nil, // Not applicable
@@ -144,10 +147,13 @@ struct HomeView: View {
                                                 ItemType: recipe.itemType
                                             )
                                 ) {
-                                    RecipeViewCell(recipe: recipe, onFavoriteToggle: { foodId in
-                                        favoriteFoodRecipe.createFavoriteFood(foodId: foodId, itemType: "FOOD_RECIPE")
-                                    })
-                                        .frame(width: 360)
+                                    RecipeViewCell(
+                                        recipe: recipe,
+                                        foodId: recipe.id,
+                                        itemType: "FOOD_RECIPE",
+                                        isFavorite: recipe.isFavorite
+                                    )
+                                    .frame(width: 350)
                                 }
                             }
                         }
