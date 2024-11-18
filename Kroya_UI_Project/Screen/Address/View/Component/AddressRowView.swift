@@ -8,34 +8,16 @@ struct AddressRowView: View {
     var isDefault: Bool = false
     @State var isShowPopup : Bool = false
     
-    private var cleanedAddressDetail: String {
-        // Remove any "(ID: ...)" from the address detail for display purposes
-        if let range = address.addressDetail.range(of: #"\(ID: \d+\)"#, options: .regularExpression) {
-            return address.addressDetail.replacingCharacters(in: range, with: "").trimmingCharacters(in: .whitespacesAndNewlines)
-        }
-        return address.addressDetail
-    }
-    
     var body: some View {
         VStack {
             HStack {
                 VStack(alignment: .leading, spacing: 5) {
                     HStack{
-                        Text(cleanedAddressDetail)
+                        Text(address.addressDetail)
                             .font(.system(size: 15, weight: .medium))
                             .foregroundColor(.black)
                             .opacity(0.6)
-                            .lineLimit(1)
-                        if isDefault {
-                            Text("Default")
-                                .font(.customfont(.light, fontSize: 10))
-                                .fontWeight(.medium)
-                                .foregroundColor(PrimaryColor.normal)
-                                .frame(width: 46,height: 19)
-                                .background(Color(hex: "#FFFAE6"))
-                                .cornerRadius(6)
-                        }
-                        Spacer()
+                            .lineLimit(2)
                     }
                     Text(address.specificLocation)
                         .font(.customfont(.regular, fontSize: 12))
@@ -65,8 +47,8 @@ struct AddressRowView: View {
             Divider()
         }
    
-        .onTapGesture {
-           
-        }
+//        .onTapGesture {
+//           
+//        }
     }
 }

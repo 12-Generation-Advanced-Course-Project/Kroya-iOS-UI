@@ -53,7 +53,7 @@ struct MapSelectionView: View {
                 .transition(.move(edge: .bottom))
                 .animation(.spring(), value: showMapSheet)
                 .onDisappear {
-                    addressViewModel.fetchData()
+                    addressViewModel.fetchAddresses()
                 }
             }
             .offset(y: showMapSheet ? 40 : sheetHeight + 50)
@@ -136,14 +136,6 @@ struct AddressInputView: View {
     
     @StateObject private var addressViewModel = AddressViewModel()
     
-    private var cleanedAddressDetail: String {
-        // Remove any "(ID: ...)" from the address detail for display purposes
-        if let range = viewModel.addressDetail.range(of: #"\(ID: \d+\)"#, options: .regularExpression) {
-            return viewModel.addressDetail.replacingCharacters(in: range, with: "").trimmingCharacters(in: .whitespacesAndNewlines)
-        }
-        return viewModel.addressDetail
-    }
-    
     var body: some View {
         VStack(alignment: .leading) {
             Text("Select your location")
@@ -152,7 +144,7 @@ struct AddressInputView: View {
             
             HStack {
                 Image("Arrow-up-right")
-                Text(viewModel.addressDetail.isEmpty ? "Fetching address..." : cleanedAddressDetail)
+                Text(viewModel.addressDetail.isEmpty ? "Fetching address..." : viewModel.addressDetail)
                     .font(.system(size: 15))
                     .lineSpacing(3.2)
                     .fixedSize(horizontal: false, vertical: true)
