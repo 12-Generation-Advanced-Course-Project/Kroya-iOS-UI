@@ -36,33 +36,20 @@ struct OrderCard: View {
                     
                     Spacer()
                     
-                    // Conditional rendering based on order type
-                    //                    if order.foodCardType == "ORDER" {
-                    //                        Text(order.itemType == "Accept" ? "Accept" : "Reject")
-                    //                            .customFontMediumLocalize(size: 15)
-                    //                            .foregroundColor(isAccepted ? .green : .red)
-                    //                    }
                     if order.foodCardType == "ORDER" {
-                        if let status = order.purchaseStatusType {
-                            switch status {
-                            case "ACCEPT":
-                                Text("Accept")
-                                    .customFontMediumLocalize(size: 15)
-                                    .foregroundColor(.green)
-                            case "REJECT":
-                                Text("Reject")
-                                    .customFontMediumLocalize(size: 15)
-                                    .foregroundColor(.red)
-                            case "PENDING":
-                                Text("Pending")
-                                    .customFontMediumLocalize(size: 15)
-                                    .foregroundColor(.orange)
-                            default:
-                                Text("Unknown")
-                                    .customFontMediumLocalize(size: 15)
-                                    .foregroundColor(.gray)
-                            }
-                        }
+                        Text(
+                            order.purchaseStatusType == "ACCEPTED" ? "Accepted" :
+                            order.purchaseStatusType == "REJECTED" ? "Rejected" :
+                            order.purchaseStatusType == "PENDING" ? "Pending" :
+                            "Unknown Status"
+                        )
+                        .customFontMediumLocalize(size: 15)
+                        .foregroundColor(
+                            order.purchaseStatusType == "ACCEPTED" ? .green :
+                            order.purchaseStatusType == "REJECTED" ? .red :
+                            order.purchaseStatusType == "PENDING" ? .orange :
+                            .gray
+                        )
                     } else if order.foodCardType == "SALE" {
                         if showIcon {
                             Button(action: {
@@ -71,7 +58,7 @@ struct OrderCard: View {
                                 ZStack {
                                     Image(systemName: "list.clipboard")
                                         .foregroundColor(.gray)
-                                    Text("\(order.quantity ?? 0)") // Safely unwrap optional
+                                    Text("\(order.orderCount ?? 0)")
                                         .customFontSemiBoldLocalize(size: 9)
                                         .foregroundColor(.white)
                                         .padding(4)
@@ -88,23 +75,26 @@ struct OrderCard: View {
                     }
                 }
                 
-                //                Text("You are selling now")
-                //                    .customFontLightLocalize(size: 12)
-                //                    .opacity(0.6)
-                
-                // Conditional rendering of text
-                if order.foodCardType != "ORDER" {
-                    Text("You are selling now")
+            
+                // Conditional rendering of text with quantity based on `foodCardType`
+                if let quantity = order.quantity {
+                    Text("\(quantity) items")
                         .customFontLightLocalize(size: 12)
                         .opacity(0.6)
                 } else {
-                    EmptyView() // Removes the text entirely when condition is not met
-                    //                    Text("")
+                    // Fallback text when `quantity` is not available
+                    Text(order.foodCardType == "SALE" ? (order.purchaseDate ?? "You are selling now") : (order.dateCooking ?? "No Cooking Date Available"))
+                        .customFontLightLocalize(size: 12)
+                        .opacity(0.6)
                 }
-                
+
+
                 
                 HStack(spacing: 15) {
-                    Text("$\(order.totalPrice ?? 0)") // Safely unwrap optional
+                    Text(order.foodCardType == "ORDER" ?
+                            "$\(order.totalPrice ?? 0)" : // Show totalPrice for orders
+                            "$\(order.price ?? 0)" // Show price for sales
+                        )// Safely unwrap optional
                         .customFontMediumLocalize(size: 15)
                         .fontWeight(.medium)
                     
@@ -130,3 +120,8 @@ struct OrderCard: View {
         )
     }
 }
+
+    
+
+    
+    
