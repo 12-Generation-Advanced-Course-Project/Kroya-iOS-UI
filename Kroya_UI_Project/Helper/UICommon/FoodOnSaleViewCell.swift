@@ -58,7 +58,6 @@ struct FoodOnSaleViewCell: View {
                     // Favorite Button
                     // Updated Favorite Button Logic
                     Button(action: {
-                        isFavorite.toggle() // Toggle locally for UI responsiveness
                         favoriteVM.toggleFavorite(foodId: foodSale.id, itemType: foodSale.itemType, isCurrentlyFavorite: !isFavorite)
                     }) {
                         Circle()

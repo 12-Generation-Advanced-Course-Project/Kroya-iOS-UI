@@ -11,9 +11,9 @@ struct HomeView: View {
     @Environment(\.locale) var locale
     @StateObject private var recentSearchesData = RecentSearchesData()
     @StateObject private var PopularFoodsData =  PopularFoodVM()
-    @StateObject private var favoriteFoodRecipe = FavoriteVM()
-    @StateObject private var favoriteFoodSale = FavoriteVM()
+    @StateObject private var favoriteVM = FavoriteVM()
     @Environment(\.modelContext) var modelContext
+    @State var isLoading: Bool = false // New state for loading indicator
     var body: some View {
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
@@ -80,7 +80,7 @@ struct HomeView: View {
                                     }
                                     .onTapGesture {
                                         // Fetch data for the selected category by ID
-                                    print("this is Id \(category.id)")
+                                        print("this is Id \(category.id)")
                                         categoryVM.fetchAllCategoryById(categoryId: category.id)
                                     }
                                 }
@@ -118,12 +118,12 @@ struct HomeView: View {
                                 NavigationLink(destination:
                                                 FoodDetailView(
                                                     isFavorite: foodSale.isFavorite, showPrice: true, // Always false for recipes
-                                                showOrderButton: true, // Always false for recipes
-                                                showButtonInvoic: nil, // Not applicable
-                                                invoiceAccept: nil, // Not applicable
-                                                FoodId: foodSale.id ?? 0,
-                                                ItemType: foodSale.itemType
-                                            )
+                                                    showOrderButton: true, // Always false for recipes
+                                                    showButtonInvoic: nil, // Not applicable
+                                                    invoiceAccept: nil, // Not applicable
+                                                    FoodId: foodSale.id,
+                                                    ItemType: foodSale.itemType
+                                                )
                                 ) {
                                     FoodOnSaleViewCell(
                                         foodSale: foodSale,
@@ -139,13 +139,13 @@ struct HomeView: View {
                             ForEach(recipeViewModel.RecipeFood.prefix(2)) { recipe in
                                 NavigationLink(destination:
                                                 FoodDetailView(
-                                                isFavorite: recipe.isFavorite, showPrice: false, // Always false for recipes
-                                                showOrderButton: false, // Always false for recipes
-                                                showButtonInvoic: nil, // Not applicable
-                                                invoiceAccept: nil, // Not applicable
-                                                FoodId: recipe.id,
-                                                ItemType: recipe.itemType
-                                            )
+                                                    isFavorite: recipe.isFavorite, showPrice: false, // Always false for recipes
+                                                    showOrderButton: false, // Always false for recipes
+                                                    showButtonInvoic: nil, // Not applicable
+                                                    invoiceAccept: nil, // Not applicable
+                                                    FoodId: recipe.id,
+                                                    ItemType: recipe.itemType
+                                                )
                                 ) {
                                     RecipeViewCell(
                                         recipe: recipe,
@@ -174,7 +174,7 @@ struct HomeView: View {
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
                         NavigationLink(destination:
-                        SearchScreen(recentSearchesData: recentSearchesData)
+                                        SearchScreen(recentSearchesData: recentSearchesData)
                             .environment(\.modelContext, modelContext)
                         ) {
                             Image("ico_search")
@@ -213,15 +213,35 @@ struct HomeView: View {
                     }
                 }
             }
+            .refreshable {
+                           await refreshData() // Calls the refresh logic
+              }
             .onAppear {
-                categoryVM.fetchAllCategory()
-                recipeViewModel.getAllRecipeFood()
-                foodSellViemModel.getAllFoodSell()
-                recentSearchesData.loadSearches(from: modelContext)
-                PopularFoodsData.getAllPopular()
+                loadData()
             }
         }
     }
+    // MARK: - Fetch Data Logic
+      private func loadData() {
+          categoryVM.fetchAllCategory()
+          recipeViewModel.getAllRecipeFood()
+          foodSellViemModel.getAllFoodSell()
+          recentSearchesData.loadSearches(from: modelContext)
+          PopularFoodsData.getAllPopular()
+          favoriteVM.getAllFavoriteFood()
+      }
+    private func refreshData() async {
+           isLoading = true // Start loading state
+           defer { isLoading = false } // Ensure state is reset after execution
 
+           // Simulate a delay for demo purposes
+           try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
+
+           // Reload data
+           await MainActor.run {
+               loadData()
+           }
+       }
 }
+
 

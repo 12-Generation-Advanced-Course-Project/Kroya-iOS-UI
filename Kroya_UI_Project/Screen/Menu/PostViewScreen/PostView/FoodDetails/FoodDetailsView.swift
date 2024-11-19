@@ -50,11 +50,11 @@ struct FoodDetailView: View {
                                     Spacer()
                                     Button(action: {
                                         let newFavoriteStatus = !determineFavoriteStatus()
-                                        isFavorite = newFavoriteStatus // Update the local state immediately
+                                        isFavorite = newFavoriteStatus
                                         favoriteVM.toggleFavorite(foodId: FoodId, itemType: ItemType, isCurrentlyFavorite: !newFavoriteStatus)
                                     }) {
                                         Circle()
-                                            .fill(determineFavoriteStatus() ? Color.red : Color.white.opacity(0.5))
+                                            .fill(isFavorite ? Color.red : Color.white.opacity(0.5))
                                             .frame(width: screenWidth * 0.07, height: screenHeight * 0.07)
                                             .overlay(
                                                 Image(systemName: "heart.fill")
@@ -62,8 +62,11 @@ struct FoodDetailView: View {
                                                     .font(.system(size: 18))
                                             )
                                     }
-                                    .shadow(color: determineFavoriteStatus() ? Color.red.opacity(0.5) : Color.gray.opacity(0.5), radius: 4, x: 0, y: 4)
-
+                                    .shadow(color: isFavorite ? Color.red.opacity(0.5) : Color.gray.opacity(0.5), radius: 4, x: 0, y: 4)
+                                    .onAppear {
+                                        // Set the initial state of `isFavorite` when the view appears
+                                        isFavorite = determineFavoriteStatus()
+                                    }
                                 }
                                 .padding(.horizontal, screenWidth * 0.045)
                                 .offset(y: -screenHeight * 0.18)
@@ -97,15 +100,14 @@ struct FoodDetailView: View {
                 }
             }
             .onAppear {
+                // Fetch the favorites and details on appear
                 favoriteVM.getAllFavoriteFood()
-                // Fetch the food details
                 FoodDetailsVM.fetchFoodDetails(id: FoodId, itemType: ItemType)
                 if ItemType == "FOOD_RECIPE" {
                     observeRecipeDetails()
                 } else if ItemType == "FOOD_SELL" {
                     observeSellDetails()
                 }
-
                 // Fetch the feedback
                 FeedbackVM.getFeedback(
                     itemType: ItemType,
@@ -113,22 +115,23 @@ struct FoodDetailView: View {
                 ) { success, message in
                     if success {
                         print("Feedback loaded successfully!")
-                        print("Selected Rating: \(FeedbackVM.selectedRating)")
                         refreshID = UUID()
                     } else {
                         print("Error loading feedback: \(message)")
                     }
                 }
+                // Dynamically update `isFavorite` on load
+                DispatchQueue.main.async {
+                    isFavorite = determineFavoriteStatus()
+                }
             }
             .onChange(of: FeedbackVM.selectedRating) { newRating in
                 print("UI should reflect new rating: \(newRating)")
             }
-
             .navigationBarBackButtonHidden(true)
         }
     }
     
-    // MARK: - Determine Favorite Status
     func determineFavoriteStatus() -> Bool {
         if ItemType == "FOOD_RECIPE" {
             return favoriteVM.favoriteFoodRecipe.contains(where: { $0.id == FoodId })
@@ -138,7 +141,7 @@ struct FoodDetailView: View {
         return false
     }
 
-
+    
     // MARK: Observe Recipe Details
     private func observeRecipeDetails() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {

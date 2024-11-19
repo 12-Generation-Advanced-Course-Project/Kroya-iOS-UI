@@ -41,7 +41,6 @@ struct PopularSellTab: View {
                         if popularSell.isLoading {
                             Color.white
                                 .edgesIgnoringSafeArea(.all)
-                            
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
                                 .scaleEffect(2)
