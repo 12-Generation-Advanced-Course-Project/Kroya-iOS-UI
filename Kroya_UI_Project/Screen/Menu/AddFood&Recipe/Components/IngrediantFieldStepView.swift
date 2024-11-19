@@ -32,7 +32,7 @@ struct StepEntryView: View {
                     
                     ZStack(alignment: .trailing) {
                         TextField("Enter ingredients", text: Binding(
-                            get: { cookingStep.description },
+                            get: { cookingStep.description ?? ""  },
                             set: { newValue in
                                 cookingStep.description = newValue
                                 // Hide error message if the user enters text
