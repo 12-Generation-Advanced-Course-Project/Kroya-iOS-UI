@@ -70,7 +70,7 @@ struct AllUerPostFood: View {
     @ViewBuilder
     private func foodDetailDestination(for foodSale: FoodSellModel) -> some View {
         FoodDetailView(
-            isFavorite: foodSale.isFavorite ?? false,
+            isFavorite: foodSale.isFavorite,
             showPrice: true, // Always false for recipes
             showOrderButton: true, // Always false for recipes
             showButtonInvoic: nil, // Not applicable
