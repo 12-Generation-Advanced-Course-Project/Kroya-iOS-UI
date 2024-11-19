@@ -83,13 +83,13 @@ struct AllUerPostFood: View {
     @ViewBuilder
     private func recipeDetailDestination(for recipe: FoodRecipeModel) -> some View {
         FoodDetailView(
-        isFavorite: recipe.isFavorite ?? false,
+        isFavorite: recipe.isFavorite,
         showPrice: false, // Always false for recipes
         showOrderButton: false, // Always false for recipes
         showButtonInvoic: nil, // Not applicable
         invoiceAccept: nil, // Not applicable
         FoodId: recipe.id ,
-        ItemType: recipe.itemType ?? ""
+        ItemType: recipe.itemType
     )
     }
 }

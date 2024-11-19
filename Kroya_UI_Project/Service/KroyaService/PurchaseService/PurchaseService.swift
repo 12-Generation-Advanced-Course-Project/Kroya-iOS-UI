@@ -208,25 +208,11 @@ class PurchaseService: ObservableObject {
         }
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //MARK: Add a Purchase
+    //MARK: Add Purchaes
     func AddPurchase(
         purchase: PurchaseRequest,
         paymentType: String,
-        completion: @escaping (Result<AddPurchaseResponse, Error>) -> Void
+        completion: @escaping (Result<PurchaseResponse, Error>) -> Void
     ) {
         guard let accessToken = Auth.shared.getAccessToken() else {
             // Handle missing access token
@@ -248,19 +234,16 @@ class PurchaseService: ObservableObject {
             "Content-Type": "application/json"
         ]
 
-        // PurchaseRequest as Dictionary
-        let purchaseDict: [String: Any] = [
-            "foodSellId": purchase.foodSellId,
-            "remark": purchase.remark ?? "",
-            "location": purchase.location,
-            "quantity": purchase.quantity,
-            "totalPrice": purchase.totalPrice
-        ]
-
-        // Parameters
+        // Construct the parameters
         let parameters: [String: Any] = [
-            "paymentType": paymentType,
-            "purchaseRequest": purchaseDict
+            "purchaseRequest": [
+                "foodSellId": purchase.foodSellId,
+                "remark": purchase.remark ?? "",
+                "location": purchase.location,
+                "quantity": purchase.quantity,
+                "totalPrice": purchase.totalPrice // Ensure this is a Double
+            ],
+            "paymentType": paymentType
         ]
 
         // Alamofire Request
@@ -272,7 +255,7 @@ class PurchaseService: ObservableObject {
             headers: headers
         )
         .validate(statusCode: 200..<500) // Allow only successful responses
-        .responseDecodable(of: AddPurchaseResponse.self) { response in
+        .responseDecodable(of: PurchaseResponse.self) { response in
             // Log the response
             if let data = response.data {
                 do {

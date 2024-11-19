@@ -84,7 +84,7 @@ struct FoodCheckOutView: View {
                         remark: remark,
                         location: Location,
                         quantity: Quantity,
-                        totalPrice: Int(totalPrice)
+                        totalPrice: totalPrice
                     )
                     
                     PurchaesViewModel.addPurchase(purchase: purchase, paymentType: SelectPayment)

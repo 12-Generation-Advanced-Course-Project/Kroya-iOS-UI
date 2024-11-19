@@ -27,24 +27,35 @@ struct PurchaseRequest: Encodable {
     var remark: String?
     var location: String
     var quantity: Int
-    var totalPrice: Int
-    
-//    func toDictionary() -> [String: Any] {
-//        var dict: [String: Any] = [
-//            "foodSellId": self.foodSellId,
-//            "location": self.location,
-//            "quantity": self.quantity,
-//            "totalPrice": self.totalPrice
-//        ]
-//        
-//        // Add 'remark' if it's not nil
-//        if let remark = self.remark {
-//            dict["remark"] = remark
-//        }
-//        
-//        return dict
-//    }
+    var totalPrice: Double
+
 }
 struct PurchaseRequestType : Encodable {
     var paymentType : String
+}
+
+//MARK: Add a Purchase
+typealias PurchaseResponse = PurchaseAPIResponse<PurchaseModel>
+struct PurchaseAPIResponse<T: Decodable>: Decodable {
+    let message: String
+    let payload: T?
+    let statusCode: String
+    let timestamp: String?
+
+    enum CodingKeys: String, CodingKey {
+        case message, payload, statusCode, timestamp
+    }
+    init(from decoder: Decoder) throws {
+           let container = try decoder.container(keyedBy: CodingKeys.self)
+           self.message = try container.decode(String.self, forKey: .message)
+           self.statusCode = try container.decode(String.self, forKey: .statusCode)
+           self.timestamp = try? container.decode(String.self, forKey: .timestamp)
+
+           // Attempt to decode payload as T; fallback to nil if it's not decodable.
+           if let decodedPayload = try? container.decode(T.self, forKey: .payload) {
+               self.payload = decodedPayload
+           } else {
+               self.payload = nil
+           }
+       }
 }

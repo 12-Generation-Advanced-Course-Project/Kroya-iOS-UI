@@ -29,8 +29,8 @@ struct DeliveryCardDetailView: View {
                 NavigationStack {
                     AddressView { selected in
                         selectedAddress = selected
-                        userInputAddress = selected.specificLocation
                         userInputCity = selected.addressDetail
+                        userInputAddress = selected.specificLocation
                         print("Selected Address: \(selected)")
                     }
                 }

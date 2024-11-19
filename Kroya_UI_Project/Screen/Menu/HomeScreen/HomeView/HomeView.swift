@@ -13,7 +13,7 @@ struct HomeView: View {
     @StateObject private var PopularFoodsData =  PopularFoodVM()
     @StateObject private var favoriteVM = FavoriteVM()
     @Environment(\.modelContext) var modelContext
-    @State var isLoading: Bool = false // New state for loading indicator
+    @State var isLoading: Bool = false
     var body: some View {
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
@@ -215,7 +215,7 @@ struct HomeView: View {
             }
             .refreshable {
                            await refreshData() // Calls the refresh logic
-              }
+            }
             .onAppear {
                 loadData()
             }

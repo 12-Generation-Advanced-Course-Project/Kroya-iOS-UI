@@ -17,9 +17,8 @@ struct PostViewScreen: View {
     @StateObject private  var Profile = ProfileViewModel()
     @StateObject private var userPostFood = UserFoodViewModel()
     var tabTitles = ["All", "Food on Sale", "Recipes"]
-    
+    @State var isLoading: Bool = false
     var body: some View {
-        
         ZStack{
             VStack {
                 HStack {
@@ -129,6 +128,9 @@ struct PostViewScreen: View {
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
         }
+        .refreshable {
+                       await refreshPostView()
+         }.foregroundStyle(.yellow)
         .onAppear{
             Profile.fetchUserProfile()
         }
@@ -137,21 +139,29 @@ struct PostViewScreen: View {
         }
     }
     
-    
-    //// Calculate the underline width dynamically based on the text width
+    private func refreshPostView() async {
+           isLoading = true // Start loading state
+           defer { isLoading = false } // Ensure state is reset after execution
+
+           // Simulate a delay for demo purposes
+           try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
+
+           // Reload data
+           await MainActor.run {
+               loadPostData()
+           }
+       }
+
+    private func loadPostData() {
+        Profile.fetchUserProfile()
+    }
     private func underlineWidth(for selectedSegment: Int, in geometry: GeometryProxy) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         let title = tabTitles[selectedSegment]
         let titleWidth = title.size(withAttributes: [NSAttributedString.Key.font: font]).width
-        
-        // Add or subtract a fixed value from the calculated width
-        let widthAdjustment: CGFloat = 10 // Adjust this value to add/subtract pixels from the underline width
+        let widthAdjustment: CGFloat = 10
         return titleWidth + widthAdjustment
     }
-    
-    
-    
-    // Calculate the underline offset based on the cumulative width of the previous text items
     private func underlineOffset(for selectedSegment: Int, in geometry: GeometryProxy) -> CGFloat {
         // Calculate the width of the preceding tabs
         let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
@@ -159,7 +169,7 @@ struct PostViewScreen: View {
         
         for index in 0..<selectedSegment {
             let titleWidth = tabTitles[index].size(withAttributes: [NSAttributedString.Key.font: font]).width
-            offset += titleWidth + 20 // Add the width of the text and the trailing padding between titles
+            offset += titleWidth + 20
         }
         
         return offset
