@@ -95,10 +95,16 @@ struct FoodOnSaleViewCell: View {
                 }
 
                 HStack(spacing: 10) {
-                    // Display currency symbol based on currencyType
-                    Text("\(currencySymbol(for: foodSale.currencyType)) \(String(format: "%.2f", foodSale.price))")
+//                    // Display currency symbol based on currencyType
+//                    Text("\(currencySymbol(for: foodSale.currencyType)) \(String(format: "%.2f", foodSale.price))")
+//                        .font(.system(size: 14, weight: .medium))
+//                        .foregroundColor(.yellow)
+                    
+                    // update cuurncy symbol
+                    Text("\(currencySymbol(for: foodSale.currencyType ?? "")) \(String(format: "%.2f", foodSale.price))")
                         .font(.system(size: 14, weight: .medium))
                         .foregroundColor(.yellow)
+
 
                     HStack(spacing: 4) {
                         Image(.motorbike)

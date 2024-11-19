@@ -67,7 +67,7 @@ struct OrderCard: View {
                                 }
                             }
                             .background(
-                                NavigationLink(destination: OrderListView(), isActive: $navigateToOrderListView) {
+                                NavigationLink(destination: OrderListView(sellerId: order.foodSellID), isActive: $navigateToOrderListView) {
                                     EmptyView()
                                 }
                             )
