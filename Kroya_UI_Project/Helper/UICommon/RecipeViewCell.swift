@@ -58,7 +58,7 @@ struct RecipeViewCell: View {
                     // Favorite Button
                     Button(action: {
                         isFavorite.toggle() // Toggle locally for UI responsiveness
-                        favoriteVM.toggleFavorite(foodId: recipe.id, itemType: recipe.itemType, isCurrentlyFavorite: !isFavorite)
+                        favoriteVM.toggleFavorite(foodId: recipe.id, itemType: recipe.itemType ?? "", isCurrentlyFavorite: !isFavorite)
                     }) {
                         Circle()
                             .fill(isFavorite ? Color.red : Color.white.opacity(0.5))
@@ -80,7 +80,7 @@ struct RecipeViewCell: View {
                     .font(.customfont(.medium, fontSize: 14))
                     .foregroundColor(.black)
 
-                Text(recipe.description)
+                Text(recipe.description ?? "" )
                     .customFontMedium(size: 14)
                     .foregroundColor(.gray)
                     .multilineTextAlignment(.leading)
@@ -93,7 +93,7 @@ struct RecipeViewCell: View {
                             .foregroundColor(.yellow)
                     }
 
-                    Text(recipe.level)
+                    Text(recipe.level ?? "")
                         .customFontMedium(size: 12)
                         .foregroundColor(.gray)
 

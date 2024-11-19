@@ -37,5 +37,8 @@ struct Constants {
     static let PurchaseSalesUrl = "https://kroya-api-production.up.railway.app/api/v1/purchase/seller/"
     static let PurchaseAdd = "https://kroya-api-production.up.railway.app/api/v1/purchase"
     static let OrderRequestUrl = "https://kroya-api-production.up.railway.app/api/v1/purchase/orders/seller/"
+    
+    //Guest food popular
+    static let GuestFoodPopularUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user/foods"
 
 }
