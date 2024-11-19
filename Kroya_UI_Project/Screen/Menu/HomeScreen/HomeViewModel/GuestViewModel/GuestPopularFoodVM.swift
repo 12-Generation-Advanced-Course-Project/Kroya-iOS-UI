@@ -47,7 +47,7 @@ class GuestPopularFoodVM: ObservableObject {
                 case .failure(let error):
                     self?.showError = true
                     self?.errorMessage = "Guest failed to get popular food \(error.localizedDescription)"
-                    print("Error: \(error)")
+                    print("Errorggg: \(error)")
                   //  debugPrint("KUromi", response)
                 }
             }

@@ -30,7 +30,7 @@ struct PopularSellTab: View {
                                         foodSale: popularsell,
                                         foodId: popularsell.id,
                                         itemType: "FOOD_SELL",
-                                        isFavorite: popularsell.isFavorite
+                                        isFavorite: popularsell.isFavorite ?? false
                                     )
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
@@ -65,7 +65,7 @@ struct PopularSellTab: View {
                                         foodSale: popularsell,
                                         foodId: popularsell.id,
                                         itemType: "FOOD_SELL",
-                                        isFavorite: popularsell.isFavorite
+                                        isFavorite: popularsell.isFavorite ?? false
                                     )
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
@@ -106,7 +106,7 @@ struct PopularSellTab: View {
     @ViewBuilder
     private func foodDetailDestination(for foodSale: FoodSellModel) -> some View {
         FoodDetailView(
-            isFavorite: foodSale.isFavorite,
+            isFavorite: foodSale.isFavorite ?? false,
             showPrice: true, // Always false for recipes
             showOrderButton: true, // Always false for recipes
             showButtonInvoic: nil, // Not applicable

@@ -23,7 +23,7 @@ struct UserFoodSell:View {
                         ForEach(ViewAccountUser.UserFoodDataFoodSell) { foodSale in
                             NavigationLink(destination:
                                             FoodDetailView(
-                                                isFavorite: foodSale.isFavorite, showPrice: true, // Always false for recipes
+                                                isFavorite: foodSale.isFavorite ?? false, showPrice: true, // Always false for recipes
                                                 showOrderButton: true, // Always false for recipes
                                                 showButtonInvoic: nil, // Not applicable
                                                 invoiceAccept: nil, // Not applicable
@@ -36,7 +36,7 @@ struct UserFoodSell:View {
                                     foodSale: foodSale,
                                     foodId: foodSale.id,
                                     itemType: "FOOD_SELL",
-                                    isFavorite: foodSale.isFavorite
+                                    isFavorite: foodSale.isFavorite ?? false
                                 )
                                 .frame(maxWidth: .infinity)
                                 .padding(.horizontal, 20)
