@@ -9,18 +9,30 @@ import SwiftUI
 
 struct PaymentButtonView: View {
     @State private var isShowingQRModal = false
-
+    @State private var selectedPaymentMethod: String? = nil
+    @Binding var payment: String
+    
     var body: some View {
         HStack(spacing: 10) {
             // Pay with cash button
             Button(action: {
-                // Action for cash payment
+                selectedPaymentMethod = "CASH"
+                payment = "CASH"
             }) {
                 VStack(alignment: .leading, spacing: 10) {
-                    Image(systemName: "dollarsign.circle")
-                        .resizable()
-                        .frame(width: 20, height: 20)
-                        .foregroundColor(Color.black)
+                    HStack{
+                        Image(systemName: "dollarsign.circle")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                            .foregroundColor(Color.black)
+                        Spacer()
+                        // Show checkmark if the selected method is "CASH"
+                        if selectedPaymentMethod == "CASH" {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.green)
+                                .frame(width: 20, height: 20)
+                        }
+                    }
                     Text(LocalizedStringKey("Pay with cash"))
                         .font(.customfont(.medium, fontSize: 16))
                         .foregroundColor(Color.black)
@@ -30,7 +42,7 @@ struct PaymentButtonView: View {
                 .background(Color(red: 0.995, green: 0.969, blue: 0.852))
                 .cornerRadius(10)
             }
-            .buttonStyle(PlainButtonStyle()) // Remove default button style
+            .buttonStyle(PlainButtonStyle())
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(Color(red: 0.962, green: 0.941, blue: 0.854), lineWidth: 1)
@@ -38,7 +50,9 @@ struct PaymentButtonView: View {
             
             // Pay with KHQR button
             Button(action: {
-                isShowingQRModal = true  // Trigger the modal sheet
+                selectedPaymentMethod = "KHQR"
+                payment = "KHQR"
+                isShowingQRModal = true
             }) {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack {
@@ -49,6 +63,13 @@ struct PaymentButtonView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 70, height: 15)
+                        Spacer()
+                        // Show checkmark if the selected method is "KHQR"
+                        if selectedPaymentMethod == "KHQR" {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.green)
+                                .frame(width: 20, height: 20)
+                        }
                     }
                     Text(LocalizedStringKey("Pay with KHQR"))
                         .font(.customfont(.medium, fontSize: 16))
@@ -71,8 +92,4 @@ struct PaymentButtonView: View {
             }
         }
     }
-}
-
-#Preview {
-    PaymentButtonView()
 }
