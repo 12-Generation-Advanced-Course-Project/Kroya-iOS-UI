@@ -203,11 +203,14 @@ struct EditingProfileView: View {
                         .cornerRadius(8)
                         .sheet(isPresented: $showAddressSheet) {
                             NavigationStack {
-                                AddressView { selectedAddress in
-                                    // This is where you handle the selected address
-                                    userInputAddress = selectedAddress.addressDetail
-                                    print("Updated userInputAddress with selectedAddress.specificLocation: \(selectedAddress.addressDetail)")
-                                }
+                                AddressView(
+                                    onAddressSelected: { selectedAddress in
+                                        // Handle selected address
+                                        userInputAddress = selectedAddress.addressDetail
+                                        print("Updated userInputAddress with selectedAddress.specificLocation: \(selectedAddress.addressDetail)")
+                                    },
+                                    isFromEditingProfileView: true // Pass true to indicate this view is coming from EditingProfileView
+                                )
                             }
                         }
                     }
@@ -320,18 +323,6 @@ struct EditingProfileView: View {
         }
         .navigationTitle("Edit Profile")
         .navigationBarTitleDisplayMode(.inline)
-//        .navigationBarBackButtonHidden(true)
-//        .toolbar {
-//            ToolbarItem(placement: .navigationBarLeading) {
-//                Button(action: { dismiss() }) {
-//                    Image(systemName: "arrow.left")
-//                        .resizable()
-//                        .scaledToFit()
-//                        .frame(width: 20, height: 20)
-//                        .foregroundStyle(.black)
-//                }
-//            }
-//        }
     }
     
     // Function to load UIImage from filename if needed
