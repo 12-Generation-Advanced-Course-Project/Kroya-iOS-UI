@@ -14,7 +14,7 @@ struct LoginScreenView: View {
     @StateObject private var authVM: AuthViewModel
     @EnvironmentObject var userStore: UserStore
     @State private var showLoadingOverlay = false
-    @EnvironmentObject var addressViewModel:AddressViewModel
+//    @EnvironmentObject var addressViewModel:AddressViewModel
     init(userStore: UserStore, lang: Binding<String>) {
         _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
         self._lang = lang
@@ -203,7 +203,7 @@ struct LoginScreenView: View {
                 rootView: MainScreen(userStore: userStore, lang: $lang)
                     .environmentObject(userStore)
                     .environmentObject(Auth.shared)
-                    .environmentObject(addressViewModel)
+//                    .environmentObject(addressViewModel)
             )
             rootWindow.makeKeyAndVisible()
         }

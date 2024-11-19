@@ -29,12 +29,12 @@ struct SaleReportView: View {
         Calendar.current.date(from: DateComponents(year: 2024, month: 10, day: 3))!: 8.24
     ]
     
-    let soldItems: [Date: [FoodItem]] = [
-        Calendar.current.date(from: DateComponents(year: 2024, month: 10, day: 3))!: [
-            FoodItem(name: "Brohok", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: nil, timeAgo: nil),
-            FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 6, paymentMethod: "KHQR", timeAgo: "15m ago")
-        ]
-    ]
+//    let soldItems: [Date: [FoodItem]] = [
+//        Calendar.current.date(from: DateComponents(year: 2024, month: 10, day: 3))!: [
+//            FoodItem(name: "Brohok", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: nil, timeAgo: nil),
+//            FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 6, paymentMethod: "KHQR", timeAgo: "15m ago")
+//        ]
+//    ]
     
     init() {
         dateFormatter.dateFormat = "dd MMM"
@@ -135,21 +135,21 @@ struct SaleReportView: View {
             
             Spacer()
             
-            if let items = soldItems[selectedDate] {
-                NewItemFoodOrderCardView(show3dot: $ishow3dot, showEllipsis: false, foodItems: items) // Setting `showEllipsis` to false here
-//                    .padding(.top, 18)
-                    .padding(.vertical, 8)
-            } else {
-                Text(LocalizedStringKey("No items sold on this day"))
-                    .foregroundColor(.gray)
-                    .padding(.top)
-            }
+//            if let items = soldItems[selectedDate] {
+//                NewItemFoodOrderCardView(show3dot: $ishow3dot, showEllipsis: false, foodItems: items) // Setting `showEllipsis` to false here
+////                    .padding(.top, 18)
+//                    .padding(.vertical, 8)
+//            } else {
+//                Text(LocalizedStringKey("No items sold on this day"))
+//                    .foregroundColor(.gray)
+//                    .padding(.top)
+//            }
 
             Spacer()
         }
         .navigationTitle(LocalizedStringKey("Sale Report"))
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
+//        .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 HStack {

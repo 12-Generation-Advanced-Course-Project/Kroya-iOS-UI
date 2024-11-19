@@ -62,28 +62,36 @@ struct OrderTabView: View {
     
     private func groupOrdersByDate() -> [String: [OrderModel]] {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS" // Adjust date format if necessary
-        
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS" // Adjust to your date format if needed
+
         var groupedOrders: [String: [OrderModel]] = ["Today": [], "Yesterday": [], "Last 2 Days": []]
+
         let today = Calendar.current.startOfDay(for: Date())
         let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today)!
         let twoDaysAgo = Calendar.current.date(byAdding: .day, value: -2, to: today)!
         
         // Filter orders with foodCardType "ORDER"
-        let filteredOrders = orderViewModel.orders.filter { $0.foodCardType == "ORDER" }
-        
-        for order in filteredOrders {
-            if let dateCookingStr = order.dateCooking,
-               let dateCooking = dateFormatter.date(from: dateCookingStr) {
-                if Calendar.current.isDate(dateCooking, inSameDayAs: today) {
+        _ = orderViewModel.orders.filter { $0.foodCardType == "ORDER" }
+
+        for order in orderViewModel.orders {
+            if let purchaseDateStr = order.purchaseDate,
+               let purchaseDateStr = dateFormatter.date(from: purchaseDateStr) {
+                if purchaseDateStr >= today {
+                    // Group orders with today's date or future dates in "Today"
                     groupedOrders["Today"]?.append(order)
-                } else if Calendar.current.isDate(dateCooking, inSameDayAs: yesterday) {
+                } else if Calendar.current.isDate(purchaseDateStr, inSameDayAs: yesterday) {
+                    // Group orders with yesterday's date in "Yesterday"
                     groupedOrders["Yesterday"]?.append(order)
-                } else if dateCooking >= twoDaysAgo {
+                } else if purchaseDateStr <= twoDaysAgo {
+                    // Group orders with dates two days ago or older in "Last 2 Days"
                     groupedOrders["Last 2 Days"]?.append(order)
                 }
             }
         }
+
         return groupedOrders
     }
+
 }
+
+

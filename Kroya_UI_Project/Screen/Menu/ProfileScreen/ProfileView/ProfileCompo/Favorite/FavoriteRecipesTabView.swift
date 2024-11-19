@@ -23,7 +23,7 @@ struct FavoriteRecipesTabView: View {
                         ForEach(favoriteFoodRecipe.favoriteFoodRecipe) { favorite in
                             NavigationLink(destination:
                                             FoodDetailView(
-                                                showPrice: false, // Always false for recipes
+                                                isFavorite: favorite.isFavorite ?? false , showPrice: false, // Always false for recipes
                                                 showOrderButton: false, // Always false for recipes
                                                 showButtonInvoic: nil, // Not applicable
                                                 invoiceAccept: nil, // Not applicable
@@ -32,12 +32,11 @@ struct FavoriteRecipesTabView: View {
                                             )
                             ) {
                                 RecipeViewCell(
-                                               recipe: favorite,
-                                             isFavorite: favorite.isFavorite,
-                                             onFavoriteToggle: { foodId in
-                                                 favoriteFoodRecipe.createFavoriteFood(foodId: foodId, itemType: "FOOD_RECIPE")
-                                             }
-                                         )
+                                    recipe: favorite,
+                                    foodId: favorite.id,
+                                    itemType: "FOOD_RECIPE",
+                                    isFavorite: favorite.isFavorite ?? false
+                                )
                                .padding(.horizontal)
                                .padding(.vertical, 8)
                                

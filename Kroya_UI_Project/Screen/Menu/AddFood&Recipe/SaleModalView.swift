@@ -12,7 +12,8 @@ struct SaleModalView: View {
     let totalUSD: Double
     let displayCurrencies = ["៛", "$"]
     let parameterCurrencies = ["RIEL", "DOLLAR"]
-    @State private var addressSelect: String = ""
+    @State private var userInputAddress: String?
+    @State private var selectedAddress: Address?
     @StateObject private var addressStore = AddressViewModel()
     @ObservedObject var draftModelData: DraftModelData
     @Environment(\.modelContext) var modelContext
@@ -25,7 +26,7 @@ struct SaleModalView: View {
     @StateObject private var imageVM = ImageUploadViewModel()
     @State private var showLoadingOverlay = false
     @State private var showSuccessPopup = false
-    
+    @State private var showAddressSheet = false
     var body: some View {
         ZStack{
             VStack{
@@ -187,12 +188,14 @@ struct SaleModalView: View {
                                         }
                                         .padding(.horizontal)
                                         Divider()
-                                        NavigationLink(destination: AddressView(viewModel: addressStore)) {
-                                            HStack {
-                                                Text("Location")
-                                                    .customFontLightLocalize(size: 15)
-                                                    .foregroundStyle(.black.opacity(0.8))
-                                                    .frame(maxWidth: 120, alignment: .leading)
+                                        HStack {
+                                            Text("Location")
+                                                .customFontLightLocalize(size: 15)
+                                                .foregroundStyle(.black.opacity(0.8))
+                                                .frame(maxWidth: 120, alignment: .leading)
+                                            Button {
+                                                showAddressSheet = true
+                                            } label: {
                                                 TextField("Choose Location", text: Binding(
                                                     get: { draftModelData.location },
                                                     set: { newValue in draftModelData.location = newValue }
@@ -203,9 +206,19 @@ struct SaleModalView: View {
                                                 .foregroundStyle(.gray.opacity(0.8))
                                                 .disabled(true)
                                             }
-                                            .padding(.vertical, 5)
-                                            .padding(.horizontal)
+                                            .buttonStyle(PlainButtonStyle())
+
                                         }
+                                        .sheet(isPresented: $showAddressSheet) {
+                                            NavigationStack {
+                                                AddressView { selected in
+                                                    selectedAddress = selected
+                                                    userInputAddress = selected.specificLocation
+                                                }
+                                            }
+                                        }
+                                        .padding(.vertical, 5)
+                                        .padding(.horizontal)
                                     }
                                     .padding(.vertical, 12)
                                     .frame(maxWidth: .infinity)
@@ -310,18 +323,15 @@ struct SaleModalView: View {
         .navigationTitle("Sale")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            addressStore.fetchAllAddresses()
             formattedDate = draftModelData.cookDate.formatted(.dateTime.day().month().year())
-            draftModelData.location = addressStore.selectedAddress?.specificLocation ?? "" // Set location on appear
             _ = formatPrice()
         }
-        
-        .onChange(of: addressStore.selectedAddress) { newAddress in
-            // Set location on address selection
-            draftModelData.location = newAddress?.specificLocation ?? ""
-            // Re-validate fields after location change
-            validateFields()
-        }
+//        .onChange(of: selectedAddress) { newAddress in
+//            // Set location on address selection
+//            draftModelData.location = newAddress?.specificLocation ?? ""
+//            // Re-validate fields after location change
+//            validateFields()
+//        }
         .alert(isPresented: $showDraftAlert) {
             Alert(
                 title: Text("Save this as a draft?"),
@@ -464,7 +474,7 @@ struct SaleModalView: View {
         if draftModelData.isForSale {
             showError = draftModelData.amount <= 0 ||
             draftModelData.price <= 0 ||
-            addressStore.selectedAddress == nil ||
+//            addressStore.selectedAddress == nil ||
             draftModelData.location.isEmpty ||
             draftModelData.cookDate < Date()
         } else {

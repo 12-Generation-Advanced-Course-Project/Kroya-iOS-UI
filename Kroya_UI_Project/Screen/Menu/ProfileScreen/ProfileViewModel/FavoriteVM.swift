@@ -23,7 +23,7 @@ class FavoriteVM: ObservableObject {
         isLoading = false
     }
     
-    func getAllFavoriteFood() {
+    func getAllFavoriteFood(completion: (() -> Void)? = nil) {
         startLoading()
         FavoriteService.shared.fetchAllFavorite { [weak self] result in
             DispatchQueue.main.async {
@@ -49,35 +49,60 @@ class FavoriteVM: ObservableObject {
         }
     }
 
-    // MARK: Create or Toggle a Favorite Food
-    func createFavoriteFood(foodId: Int, itemType: String) {
-        startLoading() // Start loading state
-        
-        // Call the FavoriteService with foodId and itemType
-        FavoriteService.shared.saveFavoriteFood(foodId: foodId, itemType: itemType) { [weak self] result in
+
+    func removeFavorite(foodId: Int, itemType: String) {
+        FavoriteService.shared.removeFavoriteFood(foodId: foodId, itemType: itemType) { [weak self] result in
             DispatchQueue.main.async {
-                self?.endLoading() // End loading state
                 switch result {
                 case .success(let response):
-                    if response.statusCode == "201" { // Check for successful creation
-                        self?.successMessage = "Favorite food toggled successfully."
-                        self?.getAllFavoriteFood() // Refresh the list of favorite foods
+                    if response.statusCode == "200" {
+                        if itemType == "FOOD_RECIPE" {
+                            self?.favoriteFoodRecipe.removeAll { $0.id == foodId }
+                        } else if itemType == "FOOD_SELL" {
+                            self?.favoriteFoodSell.removeAll { $0.id == foodId }
+                        }
+                        print("Favorite removed successfully.")
                     } else {
-                        self?.errorMessage = response.message // Display backend error message
+                        print("Error: \(response.message)")
                     }
-                    self?.showError = false
                 case .failure(let error):
-                    self?.errorMessage = "Failed to toggle Favorite food: \(error.localizedDescription)"
-                    self?.showError = true
+                    print("Failed to remove favorite: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    func toggleFavorite(foodId: Int, itemType: String, isCurrentlyFavorite: Bool) {
+        if isCurrentlyFavorite {
+            removeFavorite(foodId: foodId, itemType: itemType)
+        } else {
+            createFavoriteFood(foodId: foodId, itemType: itemType)
+        }
+        getAllFavoriteFood() // Refresh the favorites list
+    }
+
+    func createFavoriteFood(foodId: Int, itemType: String) {
+        FavoriteService.shared.saveFavoriteFood(foodId: foodId, itemType: itemType) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let response):
+                    if response.statusCode == "201" {
+                        if itemType == "FOOD_RECIPE" {
+                            // Optionally add to favoriteFoodRecipe if needed
+                            self?.getAllFavoriteFood() // Refresh the favorites list
+                        } else if itemType == "FOOD_SELL" {
+                            // Optionally add to favoriteFoodSell if needed
+                            self?.getAllFavoriteFood() // Refresh the favorites list
+                        }
+                        print("Added to favorites successfully.")
+                    } else {
+                        print("Error adding favorite: \(response.message)")
+                    }
+                case .failure(let error):
+                    print("Failed to add favorite: \(error.localizedDescription)")
                 }
             }
         }
     }
 
-
-
-
-
-
-    
 }
+

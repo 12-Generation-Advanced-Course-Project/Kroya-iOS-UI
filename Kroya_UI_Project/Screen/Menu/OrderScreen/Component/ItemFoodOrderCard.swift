@@ -1,27 +1,16 @@
+
+
 import SwiftUI
-
-struct FoodItem: Identifiable {
-    
-    let id = UUID()
-    let name: String
-    let itemsCount: Int
-    let remarks: String
-    let price: Double
-    let paymentMethod: String
-    var status: String?
-    let timeAgo: String?
-}
-
 
 struct ItemFoodOrderCard: View {
     
-    @Binding var item: FoodItem
+    var orderRequest: OrderRequestModel
     var showEllipsis: Bool = true // Default to true for other uses
     @State private var showPopover = false
-    @Binding  var show3dot :Bool
+    @Binding var show3dot: Bool
     let Keyaccept = "Accept"
     let Keyreject = "Reject"
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 12) {
@@ -35,50 +24,33 @@ struct ItemFoodOrderCard: View {
                 VStack(alignment: .leading, spacing: 5) {
                     HStack(spacing: 8) {
                         // Food name
-                        Text(item.name)
+                        Text(orderRequest.foodSellCardResponse.name)
                             .font(.customfont(.semibold, fontSize: 17))
                             .foregroundColor(.black)
                         ZStack {
                             RoundedRectangle(cornerRadius: 8)
-                                .fill(item.status == Keyaccept ? Color(hex: "#DDF6C3") : (item.status == Keyreject ? Color(hex: "#FFD8E4") : Color.clear))
+                                .fill(orderRequest.purchaseStatusType == Keyaccept ? Color(hex: "#DDF6C3") : (orderRequest.purchaseStatusType == Keyreject ? Color(hex: "#FFD8E4") : Color.clear))
                                 .frame(width: 50, height: 23)
                             if show3dot == true {
-                                Text(item.status != nil ? (item.status == "Accept" ? "Accept" : "Reject") : "")
+                                Text(
+                                    orderRequest.purchaseStatusType == "ACCEPTED" ? "Accepted" :
+                                        orderRequest.purchaseStatusType == "REJECTED" ? "Rejected" :
+                                        orderRequest.purchaseStatusType == "PENDING" ? "Pending" :
+                                        "Unknown Status"
+                                )
+                                Text(orderRequest.purchaseStatusType != nil ? (orderRequest.purchaseStatusType == "Accept" ? "Accept" : "Reject") : "")
                                     .font(.customfont(.regular, fontSize: 12))
-                                    .foregroundColor(item.status == "Accept" ? .green : (item.status == "Reject" ? .red : .clear))
+                                    .foregroundColor(orderRequest.purchaseStatusType == "Accept" ? .green : (orderRequest.purchaseStatusType == "Reject" ? .red : .clear))
                             }
                         }
-                        
                         Spacer()
+                        
                         // Time
-                        if let timeAgo = item.timeAgo {
-                            Text(timeAgo)
+                        if let timeAgo = orderRequest.purchaseDate {
+                            Text(formatTimeAgo(from: timeAgo))
                                 .font(.customfont(.medium, fontSize: 12))
                                 .foregroundColor(.gray)
                         }
-                        
-                        // Ellipsis menu for options, only shown if showEllipsis is true
-                        //                        if showEllipsis {
-                        //                            Menu {
-                        //                                Button(role: .none ,action: {
-                        //                                    item.status = "Accept"
-                        //                                }) {
-                        //                                    Text("Accept")
-                        //                                }
-                        //
-                        //                                Button(role: .destructive, action: {
-                        //                                    item.status = "Reject"
-                        //                                }) {
-                        //                                    Text("Reject")
-                        //
-                        //                                }
-                        //                            } label: {
-                        //                                Image(systemName: "ellipsis")
-                        //                                    .rotationEffect(.degrees(90)) // Rotate to make it vertical
-                        //                                    .font(.system(size: 18))
-                        //                                    .foregroundColor(.gray)
-                        //                            }
-                        //                        }
                         
                         // Conditionally render the ellipsis button based on `showEllipsis`
                         if showEllipsis {
@@ -89,18 +61,16 @@ struct ItemFoodOrderCard: View {
                                     .rotationEffect(.degrees(90)) // Rotate to make it vertical
                                     .font(.system(size: 18))
                                     .foregroundColor(.gray)
-                                    .popover(isPresented: $showPopover,
-                                             attachmentAnchor: .point(.topLeading),
-                                             content: {
+                                    .popover(isPresented: $showPopover, attachmentAnchor: .point(.topLeading), content: {
                                         VStack(spacing: 8) {
                                             Button("Accept", action: {
-                                                item.status = "Accept"
+                                                orderRequest.purchaseStatusType
                                                 showPopover = false
                                             })
                                             .foregroundStyle(Color(hex: "#00941D"))
                                             
                                             Button("Reject", action: {
-                                                item.status = "Reject"
+                                                orderRequest.purchaseStatusType
                                                 showPopover = false
                                             })
                                             .foregroundStyle(Color(hex: "#FF3B30"))
@@ -110,16 +80,15 @@ struct ItemFoodOrderCard: View {
                                     })
                             })
                         }
-                        
                     }
                     
                     // Item count and remarks
-                    Text("\(item.itemsCount) items")
+                    Text("\(orderRequest.quantity) items")
                         .font(.customfont(.medium, fontSize: 12))
                         .foregroundColor(Color(hex: "#0A0019"))
                         .opacity(0.5)
                     
-                    Text("Remarks: \(item.remarks)")
+                    Text("Remarks: \(orderRequest.remark ?? "No remarks")")
                         .font(.customfont(.medium, fontSize: 16))
                         .foregroundColor(Color(hex: "#0A0019"))
                         .opacity(0.5)
@@ -130,19 +99,16 @@ struct ItemFoodOrderCard: View {
             // Location and contact details
             HStack {
                 Group {
-                    
                     Image(systemName: "scope")
                         .foregroundColor(.yellow)
                     Text("St 323 - Toeul kork")
                     
                     Spacer()
-                    
                         .frame(width: 22)
                     Image(systemName: "phone.fill")
                         .foregroundColor(.yellow)
                     Text("cheata, ")
-                    +
-                    Text("016 860 375")
+                    + Text("016 860 375")
                 }
                 .font(.customfont(.semibold, fontSize: 14))
             }
@@ -161,15 +127,15 @@ struct ItemFoodOrderCard: View {
                     HStack {
                         Text(LocalizedStringKey("Total"))
                         Spacer()
-                        Text("$\(String(format: "%.2f", item.price))")
+                        Text("$\(String(format: "%.2f", orderRequest.foodSellCardResponse.price))")
                     }
                     .foregroundStyle(Color(hex: "#0A0019"))
                     .font(.customfont(.semibold, fontSize: 14))
                     
                     HStack {
-                        Text(LocalizedStringKey("Pay with \(item.paymentMethod)"))
+                        Text(LocalizedStringKey("Pay with \(orderRequest.paymentType)"))
                         Spacer()
-                        Text("$\(String(format: "%.2f", item.price))")
+                        Text("$\(String(format: "%.2f", orderRequest.foodSellCardResponse.price))")
                     }
                     .foregroundStyle(Color(hex: "#0A0019"))
                     .font(.customfont(.semibold, fontSize: 14))
@@ -185,5 +151,39 @@ struct ItemFoodOrderCard: View {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color(red: 0.836, green: 0.875, blue: 0.924), lineWidth: 1.5)
         )
+    }
+    
+    // MARK: - Helper Functions
+    private func formatTimeAgo(from dateString: String) -> String {
+        guard let date = parseDate(dateString) else {
+            return "Invalid Date"
+        }
+        let now = Date()
+        let minutesAgo = Int(now.timeIntervalSince(date) / 60)
+        
+        if minutesAgo < 1 {
+            return "Just now"
+        } else {
+            return "\(minutesAgo) m ago"
+        }
+    }
+    
+    private func parseDate(_ dateString: String) -> Date? {
+        let dateFormats = [
+            "yyyy-MM-dd'T'HH:mm:ss.SSS",  // With milliseconds
+            "yyyy-MM-dd'T'HH:mm:ss"       // Without milliseconds
+        ]
+        
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        
+        for format in dateFormats {
+            formatter.dateFormat = format
+            if let date = formatter.date(from: dateString) {
+                return date
+            }
+        }
+        return nil
     }
 }

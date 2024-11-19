@@ -13,7 +13,7 @@ struct ProfileView: View {
     @State private var showLogoutSuccessAlert = false
     @ObservedObject  var authVM : AuthViewModel
     @State private var selectedAddress: Address?
-    @StateObject private var addressVM =  AddressViewModel()
+    //    @StateObject private var addressVM =  AddressViewModel()
     @EnvironmentObject var userStore: UserStore
     @State private var showMapSheet = false
     @StateObject private  var Profile =  ProfileViewModel()
@@ -64,10 +64,10 @@ struct ProfileView: View {
                         }
                     
                     NavigationLink(destination: EditingProfileView(profile: Profile,selectedAddress: $selectedAddress).environmentObject(userStore)
-               ,isActive: $isEdit) {
+                                   ,isActive: $isEdit) {
                         EmptyView()
                     }.hidden()
-                       
+                    
                 }
                 .padding(.horizontal, 10)
                 
@@ -83,7 +83,7 @@ struct ProfileView: View {
                             isTextCenter: false
                         )
                     }
-                    NavigationLink(destination: AddressView(viewModel: addressVM)) {
+                    NavigationLink(destination: AddressView()) {
                         UserInfoCardView(
                             title: "Addresses",
                             subtitle: "List of your addresses",
@@ -92,7 +92,16 @@ struct ProfileView: View {
                             isTextCenter: false
                         )
                     }
-
+                    //                    NavigationLink(destination: AddressView(viewModel: addressVM)) {
+                    //                        UserInfoCardView(
+                    //                            title: "Addresses",
+                    //                            subtitle: "List of your addresses",
+                    //                            width: .screenWidth * 0.44,
+                    //                            height: .screenHeight * 0.11,
+                    //                            isTextCenter: false
+                    //                        )
+                    //                    }
+                    
                 }
                 HStack {
                     NavigationLink(destination: SaleReportView()) {
@@ -180,7 +189,7 @@ struct ProfileView: View {
                 Spacer()
             }
             .fullScreenCover(isPresented: $showMapSheet, content: {
-                MapSelectionView(viewModel: addressVM, showMapSheet: $showMapSheet,addressToUpdate: addressToUpdate)
+                //                MapSelectionView(viewModel: addressVM, showMapSheet: $showMapSheet,addressToUpdate: addressToUpdate)
             })
             .padding(.horizontal, 10)
             if isLoading {
@@ -189,13 +198,13 @@ struct ProfileView: View {
         }
         .onAppear {
             Profile.fetchUserProfile()
-            addressVM.fetchAllAddresses()
-            selectedAddress = addressVM.selectedAddress
+            //            addressVM.fetchAllAddresses()
+            //            selectedAddress = addressVM.selectedAddress
         }
         .refreshable {
             Profile.fetchUserProfile()
-            addressVM.fetchAllAddresses()
-         }
+            //            addressVM.fetchAllAddresses()
+        }
         
     }
     

@@ -5,7 +5,7 @@
 //  Created by Ounbonaliheng on 7/10/24.
 //
 
-import GoogleMaps
+//import GoogleMaps
 // new import for FCM Store
 
 import FirebaseMessaging
@@ -18,7 +18,7 @@ class AppDelegate: UIResponder , UIApplicationDelegate, UNUserNotificationCenter
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         // Initialize Google Maps
-        GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
+//        GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
         
         // Initialize Firebase
         FirebaseApp.configure()

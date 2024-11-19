@@ -1,5 +1,5 @@
 import SwiftUI
-import GoogleMaps
+//import GoogleMaps
 import SwiftData
 import Network
 
@@ -7,7 +7,7 @@ import Network
 struct Kroya_UI_ProjectApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject var userStore = UserStore()
-    @StateObject var addressViewModel = AddressViewModel()
+//    @StateObject var addressViewModel = AddressViewModel()
     @State private var isSplashScreenActive = true
     @State private var isConnected = true
     @State var lang: String = UserDefaults.standard.string(forKey: "AppLanguage") ?? "en"
@@ -15,7 +15,31 @@ struct Kroya_UI_ProjectApp: App {
     private let monitor = NWPathMonitor()
 
     init() {
-        GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
+        
+        // Configure the navigation bar appearance
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+
+        // Configure back indicator image with template rendering
+        if let backImage = UIImage(systemName: "arrow.left")?.withRenderingMode(.alwaysTemplate) {
+            appearance.setBackIndicatorImage(backImage, transitionMaskImage: backImage)
+        }
+        appearance.backButtonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.clear] // Hides back button text
+
+        // Set shadow color to nil to remove underline
+        appearance.shadowColor = nil // This removes the underline/shadow under the navigation bar
+
+        // Apply appearance to UINavigationBar
+        let navigationBar = UINavigationBar.appearance()
+        navigationBar.standardAppearance = appearance
+        navigationBar.scrollEdgeAppearance = appearance
+        navigationBar.compactAppearance = appearance
+        navigationBar.tintColor = .black // Set tint color for the back arrow and other bar button items
+
+        // Apply global tint color for UIBarButtonItem as well
+        UIBarButtonItem.appearance().tintColor = .black
+        
+//        GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
         // Initialize modelContainer with both Draft and RecentSearchesModel
         modelContainer = try! ModelContainer(for: Draft.self, RecentSearchesModel.self)
         setupNetworkMonitoring()
@@ -32,7 +56,7 @@ struct Kroya_UI_ProjectApp: App {
                 if isSplashScreenActive {
                     SplashScreen(isSplashScreenActive: $isSplashScreenActive, lang: $lang)
                         .environmentObject(userStore)
-                        .environmentObject(addressViewModel)
+//                        .environmentObject(addressViewModel)
                 } else {
                     if isConnected {
                         contentView
@@ -54,7 +78,7 @@ struct Kroya_UI_ProjectApp: App {
                         MainScreen(userStore: userStore, lang: $lang)
                             .environmentObject(userStore)
                             .environmentObject(Auth.shared)
-                            .environmentObject(addressViewModel)
+//                            .environmentObject(addressViewModel)
                             .environment(\.locale, .init(identifier: lang))
                             .environment(\.modelContext, modelContainer.mainContext)
                     }
@@ -63,7 +87,7 @@ struct Kroya_UI_ProjectApp: App {
                         LoginScreenView(userStore: userStore, lang: $lang)
                             .environmentObject(userStore)
                             .environmentObject(Auth.shared)
-                            .environmentObject(addressViewModel)
+//                            .environmentObject(addressViewModel)
                             .environment(\.locale, .init(identifier: lang))
                             .environment(\.modelContext, modelContainer.mainContext)
                     }

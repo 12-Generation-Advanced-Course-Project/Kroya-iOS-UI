@@ -1,8 +1,6 @@
-
 import SwiftUI
 
 struct TagButton: View {
-    
     var title: String
     var isSelected: Bool
     var action: () -> Void
@@ -13,15 +11,15 @@ struct TagButton: View {
                 if isSelected {
                     Image(systemName: "checkmark")
                         .foregroundColor(.white)
-                        .font(.system(size: 14, weight: .medium, design: .rounded))
+                        .font(.system(size: 14, weight: .medium))
                 }
                 Text(title)
                     .foregroundColor(isSelected ? .white : .black)
-                    .font(.system(size: 13, weight: .medium, design: .rounded))
+                    .font(.system(size: 13, weight: .medium))
             }
-            .padding(.horizontal, 11)
+            .padding(.horizontal, 13)
             .padding(.vertical, 8)
-            .background(isSelected ? Color(PrimaryColor.normal) : Color.clear)
+            .background(isSelected ? Color.yellow : Color.clear)
             .cornerRadius(7)
             .overlay(
                 RoundedRectangle(cornerRadius: 7)
@@ -33,5 +31,7 @@ struct TagButton: View {
 }
 
 #Preview {
-    TagButton(title: "Home", isSelected: false, action: {})
+    TagButton(title: "Home", isSelected: false) {
+        // Action
+    }
 }
