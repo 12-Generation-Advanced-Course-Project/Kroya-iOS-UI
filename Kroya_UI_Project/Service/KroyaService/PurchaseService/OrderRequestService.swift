@@ -12,7 +12,6 @@ class OrderRequestService: ObservableObject {
     
     static let shared = OrderRequestService()
     
-    
     //MARK: Get Orders for Seller by Id
     func getOrderForSellerById(sellerId: Int, completion: @escaping (Result<OrderRequestResponse, Error>) -> Void) {
         guard let accessToken = Auth.shared.getAccessToken() else {
