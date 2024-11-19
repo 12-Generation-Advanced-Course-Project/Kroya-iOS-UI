@@ -14,33 +14,47 @@ struct NewItemFoodOrderCardView: View {
     @State private var isPresented = false
     @Binding  var show3dot: Bool
     let showEllipsis: Bool
-    
-    
-    @State var foodItems : [FoodItem] = [
-        FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: nil, timeAgo: "10m ago"),
-        FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: "Reject", timeAgo: "15m ago"),
-        FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: "Reject", timeAgo: "15m ago"),
-        FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: "Reject", timeAgo: "15m ago")
-    ]
-    
-    
+    @Environment(\.dismiss) var dismiss
+    @StateObject private var orderRequestVM = OrderRequestViewModel()
+    var sellerId:Int
     
     var body: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            VStack(spacing: 20) {
-                ForEach(foodItems.indices, id: \.self) { index in
-                    if foodItems[index].status != nil { // Check if status is not nil
-                        NavigationLink(destination: ReceiptView(isPresented: $isPresented, isOrderReceived: foodItems[index].status != nil)) {
-                            ItemFoodOrderCard(item: $foodItems[index], showEllipsis: showEllipsis, show3dot: $show3dot)
-                        }
-                    } else {
-                        ItemFoodOrderCard(item: $foodItems[index], showEllipsis: showEllipsis, show3dot: $show3dot)
+        NavigationView {
+            VStack {
+                // Loading Indicator or Content
+                if orderRequestVM.isLoading {
+                    ZStack {
+                        Color.white
+                            .edgesIgnoringSafeArea(.all)
+                        
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
+                            .scaleEffect(2)
+                            .offset(y: -80)
                     }
+                } else {
+                    ScrollView {
+                        LazyVStack {
+                            ForEach(orderRequestVM.ordersRequestModel) { foodSale in
+                                ItemFoodOrderCard(orderRequest: foodSale, show3dot: $show3dot)
+                            }
+                        }
+                    }
+                    .padding(.horizontal)
+
+                    Spacer()
                 }
             }
-            .padding(.horizontal, 15)
+            .onAppear{
+                orderRequestVM.fetchOrderForSellerById(sellerId:sellerId)
+            }
         }
-    }}
+    }
+    
+    
+    
+    
+}
     
 
 
