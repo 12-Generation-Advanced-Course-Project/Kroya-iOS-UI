@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - Payload
-struct OrderModel: Codable {
+struct OrderModel: Decodable {
     let foodSellID: Int
     let name: String
     let price: Int?
@@ -32,3 +32,5 @@ struct OrderModel: Codable {
     }
     
 }
+
+

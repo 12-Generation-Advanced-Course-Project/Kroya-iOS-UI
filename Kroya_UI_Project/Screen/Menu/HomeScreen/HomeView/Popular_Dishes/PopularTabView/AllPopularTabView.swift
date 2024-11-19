@@ -12,22 +12,28 @@ struct AllPopularTabView: View {
                     // Display popular sell items
                     ForEach(popularFoodVM.popularFoodSell) { popularsell in
                         NavigationLink(destination: foodDetailDestination(for: popularsell)) {
-                            FoodOnSaleViewCell(foodSale: popularsell, onFavoriteToggle: { foodId in
-                                favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
-                            })
-                                .frame(maxWidth: .infinity)
-                                .padding(.horizontal, 20)
+                            FoodOnSaleViewCell(
+                                foodSale: popularsell,
+                                foodId: popularsell.id,
+                                itemType: "FOOD_SELL",
+                                isFavorite: popularsell.isFavorite
+                            )
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal, 20)
                         }
                     }
                     
                     // Display popular recipe items
                     ForEach(popularFoodVM.popularFoodRecipe) { popularrecipe in
                         NavigationLink(destination: recipeDetailDestination(for: popularrecipe)) {
-                            RecipeViewCell(recipe: popularrecipe, onFavoriteToggle: { foodId in
-                                favoriteFoodRecipe.createFavoriteFood(foodId: foodId, itemType: "FOOD_RECIPE")
-                            })
-                                .frame(maxWidth: .infinity)
-                                .padding(.horizontal, 20)
+                            RecipeViewCell(
+                                recipe: popularrecipe,
+                                foodId: popularrecipe.id,
+                                itemType: "FOOD_RECIPE",
+                                isFavorite: popularrecipe.isFavorite ?? false
+                            )
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal, 20)
                         }
                     }
                 }
@@ -57,11 +63,12 @@ struct AllPopularTabView: View {
     @ViewBuilder
     private func foodDetailDestination(for foodSale: FoodSellModel) -> some View {
         FoodDetailView(
-        showPrice: true, // Always false for recipes
-        showOrderButton: true, // Always false for recipes
+        isFavorite: foodSale.isFavorite,
+        showPrice: false, // Always false for recipes
+        showOrderButton: false, // Always false for recipes
         showButtonInvoic: nil, // Not applicable
         invoiceAccept: nil, // Not applicable
-        FoodId: foodSale.id ?? 0,
+        FoodId: foodSale.id,
         ItemType: foodSale.itemType
     )
     }
@@ -69,6 +76,7 @@ struct AllPopularTabView: View {
     @ViewBuilder
     private func recipeDetailDestination(for recipe: FoodRecipeModel) -> some View {
         FoodDetailView(
+            isFavorite: recipe.isFavorite ?? false,
         showPrice: false, // Always false for recipes
         showOrderButton: false, // Always false for recipes
         showButtonInvoic: nil, // Not applicable

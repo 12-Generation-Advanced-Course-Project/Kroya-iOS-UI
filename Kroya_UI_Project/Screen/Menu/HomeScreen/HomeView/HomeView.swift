@@ -11,9 +11,9 @@ struct HomeView: View {
     @Environment(\.locale) var locale
     @StateObject private var recentSearchesData = RecentSearchesData()
     @StateObject private var PopularFoodsData =  PopularFoodVM()
-    @StateObject private var favoriteFoodRecipe = FavoriteVM()
-    @StateObject private var favoriteFoodSale = FavoriteVM()
+    @StateObject private var favoriteVM = FavoriteVM()
     @Environment(\.modelContext) var modelContext
+    @State var isLoading: Bool = false // New state for loading indicator
     var body: some View {
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
@@ -80,7 +80,7 @@ struct HomeView: View {
                                     }
                                     .onTapGesture {
                                         // Fetch data for the selected category by ID
-                                    print("this is Id \(category.id)")
+                                        print("this is Id \(category.id)")
                                         categoryVM.fetchAllCategoryById(categoryId: category.id)
                                     }
                                 }
@@ -117,18 +117,21 @@ struct HomeView: View {
                             ForEach(foodSellViemModel.FoodOnSale.prefix(2)) { foodSale in
                                 NavigationLink(destination:
                                                 FoodDetailView(
-                                                showPrice: true, // Always false for recipes
-                                                showOrderButton: true, // Always false for recipes
-                                                showButtonInvoic: nil, // Not applicable
-                                                invoiceAccept: nil, // Not applicable
-                                                FoodId: foodSale.id ?? 0,
-                                                ItemType: foodSale.itemType
-                                            )
+                                                    isFavorite: foodSale.isFavorite, showPrice: true, // Always false for recipes
+                                                    showOrderButton: true, // Always false for recipes
+                                                    showButtonInvoic: nil, // Not applicable
+                                                    invoiceAccept: nil, // Not applicable
+                                                    FoodId: foodSale.id,
+                                                    ItemType: foodSale.itemType
+                                                )
                                 ) {
-                                    FoodOnSaleViewCell(foodSale: foodSale, onFavoriteToggle: { foodId in
-                                        favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
-                                    })
-                                        .frame(width: 360)
+                                    FoodOnSaleViewCell(
+                                        foodSale: foodSale,
+                                        foodId: foodSale.id,
+                                        itemType: "FOOD_SELL",
+                                        isFavorite: foodSale.isFavorite
+                                    )
+                                    .frame(width: 350)
                                 }
                             }
                             
@@ -136,7 +139,7 @@ struct HomeView: View {
                             ForEach(recipeViewModel.RecipeFood.prefix(2)) { recipe in
                                 NavigationLink(destination:
                                                 FoodDetailView(
-                                                showPrice: false, // Always false for recipes
+                                                    isFavorite: recipe.isFavorite ?? false, showPrice: false, // Always false for recipes
                                                 showOrderButton: false, // Always false for recipes
                                                 showButtonInvoic: nil, // Not applicable
                                                 invoiceAccept: nil, // Not applicable
@@ -144,10 +147,13 @@ struct HomeView: View {
                                                 ItemType: recipe.itemType
                                             )
                                 ) {
-                                    RecipeViewCell(recipe: recipe, onFavoriteToggle: { foodId in
-                                        favoriteFoodRecipe.createFavoriteFood(foodId: foodId, itemType: "FOOD_RECIPE")
-                                    })
-                                        .frame(width: 360)
+                                    RecipeViewCell(
+                                        recipe: recipe,
+                                        foodId: recipe.id,
+                                        itemType: "FOOD_RECIPE",
+                                        isFavorite: recipe.isFavorite ?? false
+                                    )
+                                    .frame(width: 350)
                                 }
                             }
                         }
@@ -168,7 +174,7 @@ struct HomeView: View {
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
                         NavigationLink(destination:
-                        SearchScreen(recentSearchesData: recentSearchesData)
+                                        SearchScreen(recentSearchesData: recentSearchesData)
                             .environment(\.modelContext, modelContext)
                         ) {
                             Image("ico_search")
@@ -207,15 +213,35 @@ struct HomeView: View {
                     }
                 }
             }
+            .refreshable {
+                           await refreshData() // Calls the refresh logic
+              }
             .onAppear {
-                categoryVM.fetchAllCategory()
-                recipeViewModel.getAllRecipeFood()
-                foodSellViemModel.getAllFoodSell()
-                recentSearchesData.loadSearches(from: modelContext)
-                PopularFoodsData.getAllPopular()
+                loadData()
             }
         }
     }
+    // MARK: - Fetch Data Logic
+      private func loadData() {
+          categoryVM.fetchAllCategory()
+          recipeViewModel.getAllRecipeFood()
+          foodSellViemModel.getAllFoodSell()
+          recentSearchesData.loadSearches(from: modelContext)
+          PopularFoodsData.getAllPopular()
+          favoriteVM.getAllFavoriteFood()
+      }
+    private func refreshData() async {
+           isLoading = true // Start loading state
+           defer { isLoading = false } // Ensure state is reset after execution
 
+           // Simulate a delay for demo purposes
+           try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
+
+           // Reload data
+           await MainActor.run {
+               loadData()
+           }
+       }
 }
+
 

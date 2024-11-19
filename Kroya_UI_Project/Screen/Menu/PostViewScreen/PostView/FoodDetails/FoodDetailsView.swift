@@ -2,13 +2,15 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct FoodDetailView: View {
-    @State private var isFavorite: Bool = false
+    @State var isFavorite: Bool
     @State private var currentImage: String = ""
     @State private var isBottomSheetOpen: Bool = false
     @State private var isShowPopup: Bool = false
     @StateObject private var FoodDetailsVM = FoodDetailsViewModel()
+    @StateObject private var recipeViewModel = RecipeViewModel()
+    @StateObject private var foodSellViemModel = FoodSellViewModel()
     @StateObject private var FeedbackVM = FeedbackViewModel()
-   
+    @StateObject private var favoriteVM = FavoriteVM()
     var showPrice: Bool
     var showOrderButton: Bool
     var showButtonInvoic: Bool?
@@ -46,9 +48,13 @@ struct FoodDetailView: View {
                                             )
                                     }
                                     Spacer()
-                                    Button(action: { isFavorite.toggle() }) {
+                                    Button(action: {
+                                        let newFavoriteStatus = !determineFavoriteStatus()
+                                        isFavorite = newFavoriteStatus
+                                        favoriteVM.toggleFavorite(foodId: FoodId, itemType: ItemType, isCurrentlyFavorite: !newFavoriteStatus)
+                                    }) {
                                         Circle()
-                                            .fill(isFavorite ? Color(hex: "#FE724C") : Color.white.opacity(0.5))
+                                            .fill(isFavorite ? Color.red : Color.white.opacity(0.5))
                                             .frame(width: screenWidth * 0.07, height: screenHeight * 0.07)
                                             .overlay(
                                                 Image(systemName: "heart.fill")
@@ -57,6 +63,10 @@ struct FoodDetailView: View {
                                             )
                                     }
                                     .shadow(color: isFavorite ? Color.red.opacity(0.5) : Color.gray.opacity(0.5), radius: 4, x: 0, y: 4)
+                                    .onAppear {
+                                        // Set the initial state of `isFavorite` when the view appears
+                                        isFavorite = determineFavoriteStatus()
+                                    }
                                 }
                                 .padding(.horizontal, screenWidth * 0.045)
                                 .offset(y: -screenHeight * 0.18)
@@ -90,14 +100,14 @@ struct FoodDetailView: View {
                 }
             }
             .onAppear {
-                // Fetch the food details
+                // Fetch the favorites and details on appear
+                favoriteVM.getAllFavoriteFood()
                 FoodDetailsVM.fetchFoodDetails(id: FoodId, itemType: ItemType)
                 if ItemType == "FOOD_RECIPE" {
                     observeRecipeDetails()
                 } else if ItemType == "FOOD_SELL" {
                     observeSellDetails()
                 }
-
                 // Fetch the feedback
                 FeedbackVM.getFeedback(
                     itemType: ItemType,
@@ -105,20 +115,32 @@ struct FoodDetailView: View {
                 ) { success, message in
                     if success {
                         print("Feedback loaded successfully!")
-                        print("Selected Rating: \(FeedbackVM.selectedRating)")
                         refreshID = UUID()
                     } else {
                         print("Error loading feedback: \(message)")
                     }
                 }
+                // Dynamically update `isFavorite` on load
+                DispatchQueue.main.async {
+                    isFavorite = determineFavoriteStatus()
+                }
             }
             .onChange(of: FeedbackVM.selectedRating) { newRating in
                 print("UI should reflect new rating: \(newRating)")
             }
-
             .navigationBarBackButtonHidden(true)
         }
     }
+    
+    func determineFavoriteStatus() -> Bool {
+        if ItemType == "FOOD_RECIPE" {
+            return favoriteVM.favoriteFoodRecipe.contains(where: { $0.id == FoodId })
+        } else if ItemType == "FOOD_SELL" {
+            return favoriteVM.favoriteFoodSell.contains(where: { $0.id == FoodId })
+        }
+        return false
+    }
+
     
     // MARK: Observe Recipe Details
     private func observeRecipeDetails() {

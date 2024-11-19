@@ -17,7 +17,7 @@ struct KroyaAPIResponse<T: Decodable>: Decodable {
 }
 
 //MARK: User Setting Profile
-typealias UserSettingProfileResponse = KroyaAPIResponse<ProfileModel>
+typealias UserSettingProfileResponse = KroyaSingleAPIResponse<ProfileModel>
 typealias DeviceTokenResponse = KroyaAPIResponse<DeviceTokenModel>
 //MARK: Food-Recipe get all
 typealias foodrecipeResponse = KroyaAPIResponse<FoodRecipeModel>
@@ -53,4 +53,15 @@ typealias ViewAccountResponse = KroyaSingleAPIResponse<ViewAccountUserFoodModel>
 
 // MARK: fetch purchase all
 typealias purchaseResponse = KroyaAPIResponse<OrderModel>
+typealias OrderRequestResponse = KroyaAPIResponse<OrderRequestModel>
 
+
+//MARK: Add Item to Favorite
+typealias AddFavouriteResponse = KroyaSingleAPIResponse<String>
+typealias RemoveFavoriteResponse = KroyaSingleAPIResponse<String>
+//MARK: Add a Purchase
+typealias AddPurchaseResponse = KroyaSingleAPIResponse<PurchaseModel>
+
+
+//MARK: Guest food popular
+typealias GuestFoodPopularResponses = KroyaSingleAPIResponse<PopularPayload>

@@ -1,23 +1,15 @@
 
 
 import SwiftUI
-import Kingfisher
 import SDWebImageSwiftUI
-
 struct RecipeViewCell: View {
-    
-    var recipe: FoodRecipeModel // Corrected to use RecipeModel
-    @StateObject private var favoriteFoodRecipe = FavoriteVM()
-    @State private var isFavorite: Bool
-    let onFavoriteToggle: (Int) -> Void  // Callback to notify favorite toggle
+    var recipe: FoodRecipeModel
+    var foodId: Int
+    var itemType: String
+    @State var isFavorite: Bool
+    @StateObject private var favoriteVM = FavoriteVM()
     private let urlImagePrefix = "https://kroya-api-production.up.railway.app/api/v1/fileView/"
-    
-    init(recipe: FoodRecipeModel, isFavorite: Bool = false,onFavoriteToggle: @escaping (Int) -> Void) {
-        self.recipe = recipe
-        _isFavorite = State(initialValue: isFavorite)
-        self.onFavoriteToggle = onFavoriteToggle
-    }
-    
+
     var body: some View {
         VStack {
             ZStack(alignment: .topLeading) {
@@ -38,7 +30,7 @@ struct RecipeViewCell: View {
                         .cornerRadius(15, corners: [.topLeft, .topRight])
                         .clipped()
                 }
-                
+
                 // Rating and Favorite Button
                 HStack {
                     HStack(spacing: 3) {
@@ -47,11 +39,11 @@ struct RecipeViewCell: View {
                             .scaledToFill()
                             .frame(width: 14, height: 14)
                             .foregroundColor(.yellow)
-                        
+
                         Text(String(format: "%.1f", recipe.averageRating ?? 0))
                             .font(.customfont(.medium, fontSize: 12))
                             .foregroundColor(.black)
-                        
+
                         Text("(\(recipe.totalRaters ?? 0)+)")
                             .font(.customfont(.medium, fontSize: 12))
                             .foregroundColor(.gray)
@@ -60,13 +52,13 @@ struct RecipeViewCell: View {
                     .background(Color.white.opacity(0.8))
                     .cornerRadius(10)
                     .shadow(color: Color.black.opacity(0.15), radius: 5, y: 4)
-                    
+
                     Spacer()
-                    
+
                     // Favorite Button
                     Button(action: {
-                        isFavorite.toggle()
-                        onFavoriteToggle(recipe.id)  // Notify the parent to toggle favorite
+                        isFavorite.toggle() // Toggle locally for UI responsiveness
+                        favoriteVM.toggleFavorite(foodId: recipe.id, itemType: recipe.itemType ?? "", isCurrentlyFavorite: !isFavorite)
                     }) {
                         Circle()
                             .fill(isFavorite ? Color.red : Color.white.opacity(0.5))
@@ -82,34 +74,37 @@ struct RecipeViewCell: View {
                 .padding(.horizontal, 10)
             }
             .frame(height: 140)
-            
+
             VStack(alignment: .leading, spacing: 5) {
                 Text(recipe.name)
                     .font(.customfont(.medium, fontSize: 14))
                     .foregroundColor(.black)
-                
-                Text(recipe.description)
+
+                Text(recipe.description ?? "" )
                     .customFontMedium(size: 14)
                     .foregroundColor(.gray)
                     .multilineTextAlignment(.leading)
                     .lineLimit(1)
-                
+
                 HStack {
                     if recipe.itemType == "FOOD_RECIPE" {
                         Text("Recipe")
                             .customFontMedium(size: 12)
                             .foregroundColor(.yellow)
                     }
-                    
-                    Text(recipe.level)
+
+                    Text(recipe.level ?? "")
                         .customFontMedium(size: 12)
                         .foregroundColor(.gray)
-                    
+
                     Spacer()
                 }
             }
             .padding(10)
             .frame(width: 350)
+        }
+        .onAppear {
+            favoriteVM.getAllFavoriteFood()
         }
         .background(Color.white)
         .cornerRadius(15)
@@ -119,7 +114,4 @@ struct RecipeViewCell: View {
                 .stroke(Color(hex: "#E6E6E6"), lineWidth: 0.8)
         }
     }
-    
 }
-
-
