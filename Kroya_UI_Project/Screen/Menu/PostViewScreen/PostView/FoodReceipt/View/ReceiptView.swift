@@ -14,10 +14,10 @@ struct ReceiptView: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var isPresented: Bool
     @State private var presentPopup = false
-    @ObservedObject var viewModel   = ReceiptViewModel()
-    var isOrderReceived: Bool 
+    @ObservedObject var viewModel = ReceiptViewModel()
+    var isOrderReceived: Bool
     //@State private var isOrderReceived = true
-
+    
     
     var body: some View {
         
@@ -33,7 +33,7 @@ struct ReceiptView: View {
                             .font(.system(size: 21, weight: .medium))
                     }
                 } else {
-                   
+                    
                     VStack {
                         Image(systemName: "checkmark.circle.fill")
                             .resizable()
@@ -41,10 +41,10 @@ struct ReceiptView: View {
                             .foregroundColor(.green)
                         Text("Success") // Default text
                             .font(.system(size: 21, weight: .medium))
-                  
+                        
                     }
                 }
-          
+                
                 ReceiptCard(viewModel: viewModel, presentPopup: $presentPopup, isOrderReceived: isOrderReceived)
                 
                 // Confirm button
@@ -63,25 +63,25 @@ struct ReceiptView: View {
                     }
                     .padding(.top, 20)
                 }}
-          //  .padding(.bottom, 50)
+            //  .padding(.bottom, 50)
             .navigationTitle("Receipt")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)  // Hide back button
             .toolbar {
-                           ToolbarItem(placement: .navigationBarLeading) {
-                               if !presentPopup {
-                                   Button(action: {
-                                       dismiss()
-                                   }) {
-                                       Image(systemName: "arrow.left")
-                                           .resizable()
-                                           .scaledToFit()
-                                           .frame(width: 20, height: 20)
-                                           .foregroundColor(.black)
-                                   }
-                               }
-                           }
-                       }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    if !presentPopup {
+                        Button(action: {
+                            dismiss()
+                        }) {
+                            Image(systemName: "arrow.left")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 20, height: 20)
+                                .foregroundColor(.black)
+                        }
+                    }
+                }
+            }
             if presentPopup {
                 Popup(isPresented: $presentPopup, dismissOnTapOutside: true) {
                     ReceiptCard1(viewModel: viewModel, presentPopup: $presentPopup, isOrderReceived: isOrderReceived)
@@ -89,7 +89,7 @@ struct ReceiptView: View {
                         .animation(.easeInOut(duration: 0.3))
                 }
             }
-
+            
         }
         
     }
@@ -97,6 +97,6 @@ struct ReceiptView: View {
 
 #Preview {
     NavigationView {
-//        ReceiptView()
+        //        ReceiptView()
     }
 }
