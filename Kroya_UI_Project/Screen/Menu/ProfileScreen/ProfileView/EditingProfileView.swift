@@ -32,13 +32,13 @@ struct EditingProfileView: View {
     var body: some View {
         ZStack {
             VStack(spacing: 10) {
-//                HStack {
-//                    Text(LocalizedStringKey("Edit Profile"))
-//                        .font(.customfont(.bold, fontSize: 18))
-//                        .opacity(0.84)
-//                        .padding(.bottom, 20)
-//                }
-//                .frame(maxWidth: .infinity)
+                HStack {
+                    Text(LocalizedStringKey("Edit Profile"))
+                        .font(.customfont(.bold, fontSize: 18))
+                        .opacity(0.84)
+                        .padding(.bottom, 20)
+                }
+                .frame(maxWidth: .infinity)
                 
                 // Profile Image and Edit Icon
                 ZStack(alignment: .bottomTrailing) {

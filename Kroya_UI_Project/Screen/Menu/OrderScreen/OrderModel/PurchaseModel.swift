@@ -19,10 +19,10 @@ struct PurchaseModel: Codable {
     var payer:String
     var seller:String
     var quantity:Int
-    var totalPrice:Int
+    var totalPrice:Double
 }
 //MARK: Purchase Request
-struct PurchaseRequest: Encodable {
+struct PurchaseRequest: Codable {
     var foodSellId: Int
     var remark: String?
     var location: String
@@ -30,21 +30,18 @@ struct PurchaseRequest: Encodable {
     var totalPrice: Double
 
 }
-struct PurchaseRequestType : Encodable {
-    var paymentType : String
-}
 
 //MARK: Add a Purchase
-typealias PurchaseResponse = PurchaseAPIResponse<PurchaseModel>
-struct PurchaseAPIResponse<T: Decodable>: Decodable {
+struct PurchaseResponse: Decodable {
     let message: String
-    let payload: T?
+    let payload: PurchaseModel?
     let statusCode: String
     let timestamp: String?
-
+    
     enum CodingKeys: String, CodingKey {
         case message, payload, statusCode, timestamp
     }
+    
     init(from decoder: Decoder) throws {
            let container = try decoder.container(keyedBy: CodingKeys.self)
            self.message = try container.decode(String.self, forKey: .message)
@@ -52,7 +49,7 @@ struct PurchaseAPIResponse<T: Decodable>: Decodable {
            self.timestamp = try? container.decode(String.self, forKey: .timestamp)
 
            // Attempt to decode payload as T; fallback to nil if it's not decodable.
-           if let decodedPayload = try? container.decode(T.self, forKey: .payload) {
+           if let decodedPayload = try? container.decode(PurchaseModel.self, forKey: .payload) {
                self.payload = decodedPayload
            } else {
                self.payload = nil

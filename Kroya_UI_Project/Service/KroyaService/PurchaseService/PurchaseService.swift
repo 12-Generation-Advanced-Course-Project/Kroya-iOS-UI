@@ -212,10 +212,9 @@ class PurchaseService: ObservableObject {
     func AddPurchase(
         purchase: PurchaseRequest,
         paymentType: String,
-        completion: @escaping (Result<PurchaseResponse, Error>) -> Void
+        completion: @escaping (Result<PurchaseModel?, Error>) -> Void
     ) {
         guard let accessToken = Auth.shared.getAccessToken() else {
-            // Handle missing access token
             let error = NSError(
                 domain: "",
                 code: 401,
@@ -225,7 +224,7 @@ class PurchaseService: ObservableObject {
             return
         }
 
-        // API URL
+        // API URL with paymentType as a query parameter
         let url = Constants.PurchaseAdd + "?paymentType=\(paymentType)"
 
         // Headers
@@ -234,16 +233,13 @@ class PurchaseService: ObservableObject {
             "Content-Type": "application/json"
         ]
 
-        // Construct the parameters
+        // Parameters without nesting under "purchaseRequest"
         let parameters: [String: Any] = [
-            "purchaseRequest": [
-                "foodSellId": purchase.foodSellId,
-                "remark": purchase.remark ?? "",
-                "location": purchase.location,
-                "quantity": purchase.quantity,
-                "totalPrice": purchase.totalPrice // Ensure this is a Double
-            ],
-            "paymentType": paymentType
+            "foodSellId": purchase.foodSellId,
+            "remark": purchase.remark ?? "",
+            "location": purchase.location,
+            "quantity": purchase.quantity,
+            "totalPrice": purchase.totalPrice
         ]
 
         // Alamofire Request
@@ -274,7 +270,12 @@ class PurchaseService: ObservableObject {
             // Handle the response
             switch response.result {
             case .success(let purchaseResponse):
-                completion(.success(purchaseResponse))
+                if let payload = purchaseResponse.payload {
+                    completion(.success(payload)) // Pass the decoded payload here
+                } else {
+                    print("Message from server: \(purchaseResponse.message)")
+                    completion(.success(nil)) // Indicate no data, but not an error
+                }
             case .failure(let error):
                 completion(.failure(error))
             }

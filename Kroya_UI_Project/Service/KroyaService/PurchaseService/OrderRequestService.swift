@@ -1,7 +1,6 @@
 //
 //  OrderRequestService.swift
 //  Kroya_UI_Project
-//
 //  Created by KAK-LY on 19/11/24.
 //
 
@@ -11,7 +10,6 @@ import Alamofire
 class OrderRequestService: ObservableObject {
     
     static let shared = OrderRequestService()
-    
     
     //MARK: Get Orders for Seller by Id
     func getOrderForSellerById(sellerId: Int, completion: @escaping (Result<OrderRequestResponse, Error>) -> Void) {
