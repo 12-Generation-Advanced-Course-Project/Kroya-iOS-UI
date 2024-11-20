@@ -26,6 +26,4 @@ class ReceiptViewModel: ObservableObject {
             address: "HRD Center"
         )
     }
-    
-    // other logic
 }
