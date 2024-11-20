@@ -207,6 +207,81 @@ class PurchaseService: ObservableObject {
             }
         }
     }
+    
+    //MARK: Add Purchaes
+    func AddPurchase(
+        purchase: PurchaseRequest,
+        paymentType: String,
+        completion: @escaping (Result<PurchaseResponse, Error>) -> Void
+    ) {
+        guard let accessToken = Auth.shared.getAccessToken() else {
+            // Handle missing access token
+            let error = NSError(
+                domain: "",
+                code: 401,
+                userInfo: [NSLocalizedDescriptionKey: "Access token not found."]
+            )
+            completion(.failure(error))
+            return
+        }
+
+        // API URL
+        let url = Constants.PurchaseAdd + "?paymentType=\(paymentType)"
+
+        // Headers
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)",
+            "Content-Type": "application/json"
+        ]
+
+        // Construct the parameters
+        let parameters: [String: Any] = [
+            "purchaseRequest": [
+                "foodSellId": purchase.foodSellId,
+                "remark": purchase.remark ?? "",
+                "location": purchase.location,
+                "quantity": purchase.quantity,
+                "totalPrice": purchase.totalPrice // Ensure this is a Double
+            ],
+            "paymentType": paymentType
+        ]
+
+        // Alamofire Request
+        AF.request(
+            url,
+            method: .post,
+            parameters: parameters,
+            encoding: JSONEncoding.default, // Encode as JSON
+            headers: headers
+        )
+        .validate(statusCode: 200..<500) // Allow only successful responses
+        .responseDecodable(of: PurchaseResponse.self) { response in
+            // Log the response
+            if let data = response.data {
+                do {
+                    let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+                    let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
+                    if let prettyString = String(data: prettyData, encoding: .utf8) {
+                        print("Response Successfully for AddPurchase:\n\(prettyString)")
+                    }
+                } catch {
+                    print("Failed to convert response data to pretty JSON: \(error)")
+                }
+            }
+
+            debugPrint(response)
+
+            // Handle the response
+            switch response.result {
+            case .success(let purchaseResponse):
+                completion(.success(purchaseResponse))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+
+    
 }
 
 

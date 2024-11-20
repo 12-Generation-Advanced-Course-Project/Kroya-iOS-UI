@@ -334,7 +334,9 @@ struct AddFoodView: View {
                   draftModelData.selectedImages.isEmpty == false ||
                   draftModelData.selectedLevel != nil ||
                   draftModelData.selectedCuisine != nil ||
+                  draftModelData.selectedCuisineId != nil ||
                   draftModelData.selectedCategory != nil ||
+                  draftModelData.selectedCategoryId != nil ||
                   draftModelData.duration > 5 ||
                   draftModelData.amount > 0 ||
                   draftModelData.price > 0 ||

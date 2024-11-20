@@ -7,15 +7,15 @@
 
 import SwiftUI
 // MARK: - AddNewFoodModel
-struct AddNewFoodModel: Identifiable, Codable {
+struct AddNewFoodModel: Identifiable, Decodable {
     var id = UUID()
     var photos: [Photo]
-    var name: String
-    var description: String
-    var durationInMinutes: Int
-    var level: String
-    var cuisineId: Int
-    var categoryId: Int
+    var name: String?
+    var description: String?
+    var durationInMinutes: Int?
+    var level: String?
+    var cuisineId: Int?
+    var categoryId: Int?
     var ingredients: [RecipeIngredient]
     var cookingSteps: [CookingStep]
     var saleIngredients: SaleIngredient?
@@ -45,10 +45,10 @@ struct Photo: Codable {
 // MARK: - Sale Ingredient (For SaleModalView)
 struct SaleIngredient: Identifiable, Codable {
     var id = UUID()
-    var cookDate: String
+    var cookDate: String?
     var amount: Double
     var price: Double
-    var location: String
+    var location: String?
     var selectedCurrency: Int
 }
 

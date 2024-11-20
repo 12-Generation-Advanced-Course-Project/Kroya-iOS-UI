@@ -9,7 +9,7 @@ import Foundation
 
 
 // Payload Model
-struct PopularPayload: Decodable {
+struct PopularPayload: Codable {
     let popularSells: [FoodSellModel]
     let popularRecipes: [FoodRecipeModel]
 }

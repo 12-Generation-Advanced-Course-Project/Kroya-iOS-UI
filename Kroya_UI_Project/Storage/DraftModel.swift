@@ -247,14 +247,14 @@ class DraftModelData: ObservableObject {
             categoryId: categoryId,
             ingredients: ingredients.map {
                 FoodRecipeRequest.Ingredient(
-                    name: $0.name,
-                    quantity: $0.quantity,
-                    price: $0.price
+                    name: $0.name ?? "",
+                    quantity: $0.quantity ?? 0,
+                    price: $0.price ?? 0
                 )
             },
             cookingSteps: cookingSteps.map {
                 FoodRecipeRequest.CookingStep(
-                    description: $0.description
+                    description: $0.description ?? ""
                 )
             }
         )

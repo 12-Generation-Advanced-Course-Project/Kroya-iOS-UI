@@ -58,7 +58,7 @@ struct FoodOnSaleViewCell: View {
                     // Favorite Button
                     // Updated Favorite Button Logic
                     Button(action: {
-                        isFavorite.toggle() // Toggle locally for UI responsiveness
+                        isFavorite.toggle()
                         favoriteVM.toggleFavorite(foodId: foodSale.id, itemType: foodSale.itemType, isCurrentlyFavorite: !isFavorite)
                     }) {
                         Circle()
@@ -95,10 +95,11 @@ struct FoodOnSaleViewCell: View {
                 }
 
                 HStack(spacing: 10) {
-                    // Display currency symbol based on currencyType
+                    // update cuurncy symbol
                     Text("\(currencySymbol(for: foodSale.currencyType)) \(String(format: "%.2f", foodSale.price))")
-                        .font(.system(size: 14, weight: .medium))
+                        .font(.system(size: 16, weight: .medium))
                         .foregroundColor(.yellow)
+
 
                     HStack(spacing: 4) {
                         Image(.motorbike)

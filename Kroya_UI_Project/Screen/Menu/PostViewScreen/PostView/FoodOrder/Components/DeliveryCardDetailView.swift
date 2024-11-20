@@ -1,10 +1,13 @@
 
 
 import SwiftUI
-
 struct DeliveryCardDetailView: View {
-    
-    @StateObject var viewModel: DeliveryCardDetailViewModel
+    @State private var showAddressSheet = false
+    @State private var userInputAddress: String?
+    @State private var userInputCity: String?
+    @Binding var selectedAddress: Address?
+    @StateObject private var profileViewModel = ProfileViewModel()
+    @Binding var remark: String?
     
     var body: some View {
         VStack {
@@ -13,19 +16,24 @@ struct DeliveryCardDetailView: View {
                 Text("Delivery to")
                     .font(.customfont(.semibold, fontSize: 16))
                 Spacer()
-                //                AddressView()
-                
                 Button(action: {
-                    // Action for cash payment
+                    showAddressSheet = true
                 }) {
                     Image(systemName: "chevron.right")
                         .foregroundColor(.gray)
                         .frame(width: 24, height: 24)
                 }
-                .buttonStyle(PlainButtonStyle()) // Remove default button style
-                
-                
-                
+                .buttonStyle(PlainButtonStyle())
+            }
+            .sheet(isPresented: $showAddressSheet) {
+                NavigationStack {
+                    AddressView { selected in
+                        selectedAddress = selected
+                        userInputCity = selected.addressDetail
+                        userInputAddress = selected.specificLocation
+                        print("Selected Address: \(selected)")
+                    }
+                }
             }
             .padding(.horizontal)
             .padding(.top, 15)
@@ -33,29 +41,30 @@ struct DeliveryCardDetailView: View {
             // Delivery information
             HStack {
                 VStack(alignment: .leading, spacing: 15) {
-                    HStack(spacing: 15){
+                    HStack {
                         Image(systemName: "mappin.and.ellipse")
                             .frame(width: 20, height: 20)
-                        
                         VStack(alignment: .leading, spacing: 5) {
-                            Text(viewModel.deliveryInfo.locationName)
+                            Text(userInputCity ?? "Select your city")
                                 .font(.customfont(.medium, fontSize: 16))
-                            
-                            Text(viewModel.deliveryInfo.address)
+                            Text(userInputAddress ?? "Select your address")
                                 .font(.customfont(.medium, fontSize: 14))
-                                .foregroundColor(Color.gray)
+                                .foregroundColor(.gray)
                         }
                     }
+                    .frame(maxWidth:.infinity,alignment: .leading)
+                   
                     
                     HStack {
                         Image(systemName: "phone.fill")
                             .frame(width: 20, height: 20)
-                        
                         VStack(alignment: .leading) {
-                            Text("\(viewModel.deliveryInfo.recipient), \(viewModel.deliveryInfo.phoneNumber)")
+                            Text("\(profileViewModel.userProfile?.fullName ?? "Recipient"), \(profileViewModel.userProfile?.phoneNumber ?? "No phone")")
                                 .font(.customfont(.medium, fontSize: 16))
                         }
                     }
+                    .frame(maxWidth:.infinity,alignment: .leading)
+                    
                 }
                 Spacer()
             }
@@ -64,20 +73,16 @@ struct DeliveryCardDetailView: View {
             
             // Remarks and notes
             HStack {
-                HStack(spacing: 50){
-                    Text(LocalizedStringKey("Remarks"))
-                        .font(.customfont(.medium, fontSize: 16))
-                    // Replace Text with TextField
-                    TextField(LocalizedStringKey("Notes (optional)"),
-                              text: Binding(
-                                get: { viewModel.deliveryInfo.remarks ?? "" },
-                                set: { viewModel.deliveryInfo.remarks = $0.isEmpty ? nil : $0 }
-                              ))
+                Text(LocalizedStringKey("Remarks"))
                     .font(.customfont(.medium, fontSize: 16))
-                    .foregroundColor(viewModel.deliveryInfo.remarks == nil ? .gray : .primary)
-                }
-                .padding(.horizontal)
+                TextField(LocalizedStringKey("Notes (optional)"), text: Binding(
+                    get: { remark ?? "" },
+                    set: { remark = $0.isEmpty ? nil : $0 }
+                ))
+                .font(.customfont(.medium, fontSize: 16))
+                .foregroundColor(remark == nil ? .gray : .primary)
             }
+            .padding(.horizontal)
             .padding(.vertical)
             .frame(maxWidth: .infinity)
             .overlay(
@@ -87,21 +92,13 @@ struct DeliveryCardDetailView: View {
                 alignment: .top
             )
         }
+        .onAppear{
+            profileViewModel.fetchUserProfile()
+        }
         .frame(maxWidth: .infinity, minHeight: 200)
         .background(
             RoundedRectangle(cornerRadius: 12)
                 .stroke(Color(red: 0.836, green: 0.876, blue: 0.922), lineWidth: 1.5)
         )
     }
-}
-
-#Preview {
-    
-    DeliveryCardDetailView(viewModel: DeliveryCardDetailViewModel(deliveryInfo: DeliveryInfo(
-        locationName: "HRD Center",
-        address: "St 323 - Toul Kork",
-        recipient: "Cheata",
-        phoneNumber: "+85593333929",
-        remarks: nil
-    )))
 }

@@ -13,7 +13,6 @@ struct ProfileView: View {
     @State private var showLogoutSuccessAlert = false
     @ObservedObject  var authVM : AuthViewModel
     @State private var selectedAddress: Address?
-    //    @StateObject private var addressVM =  AddressViewModel()
     @EnvironmentObject var userStore: UserStore
     @State private var showMapSheet = false
     @StateObject private  var Profile =  ProfileViewModel()
@@ -83,7 +82,7 @@ struct ProfileView: View {
                             isTextCenter: false
                         )
                     }
-                    NavigationLink(destination: AddressView()) {
+                    NavigationLink(destination: AddressView(isFromEditingProfileView: false)) {
                         UserInfoCardView(
                             title: "Addresses",
                             subtitle: "List of your addresses",
@@ -92,16 +91,6 @@ struct ProfileView: View {
                             isTextCenter: false
                         )
                     }
-                    //                    NavigationLink(destination: AddressView(viewModel: addressVM)) {
-                    //                        UserInfoCardView(
-                    //                            title: "Addresses",
-                    //                            subtitle: "List of your addresses",
-                    //                            width: .screenWidth * 0.44,
-                    //                            height: .screenHeight * 0.11,
-                    //                            isTextCenter: false
-                    //                        )
-                    //                    }
-                    
                 }
                 HStack {
                     NavigationLink(destination: SaleReportView()) {

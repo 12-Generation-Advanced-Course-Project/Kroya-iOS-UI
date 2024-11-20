@@ -4,20 +4,30 @@
 //
 //  Created by KAK-LY on 11/10/24.
 //
-
 import SwiftUI
 
 struct FoodCheckOutView: View {
-    // properties
     @Environment(\.dismiss) var dismiss
     @State private var isReceiptActive = false
+    @StateObject private var PurchaesViewModel = OrderViewModel()
     @State private var isPresented = false
-    @Binding var imageName:String
-    var Foodname:String
+    @Binding var imageName: String
+    @State private var selectedAddress: Address?
+    var Foodname: String
     var FoodId: Int
     var Date: String
     var Price: Double
     var Currency: String
+    var PhoneNumber: String
+    var ReciptentName: String
+    @State private var remark: String? = ""
+    @State private var unitPrice: Int = 0
+    @State private var Quantity: Int = 0
+    @State private var SelectPayment: String = ""
+    
+    var Location: String {
+        selectedAddress?.specificLocation ?? ""
+    }
     
     var body: some View {
         NavigationStack {
@@ -25,33 +35,23 @@ struct FoodCheckOutView: View {
                 List {
                     // Order Card Section
                     Section {
-                        OrderCardDetailView(viewModel: OrderCardDetailViewModel(orderItem: OrderItem(
-                            name: Foodname,
-                            price: Price,
-                            date: Date
-                        )), imageName: $imageName, currency: Currency)
+                        OrderCardDetailView(viewModel: OrderCardDetailViewModel(orderItem: OrderItem(name: Foodname, price: Price, date: Date)), imageName: $imageName, currency: Currency, totalPrice: $unitPrice, quantity: $Quantity)
                     }
                     .listRowInsets(EdgeInsets())
                     .padding(.bottom, 12)
                     .padding(.top, 5)
-                    .listRowSeparator(.hidden) // Hide the separator
+                    .listRowSeparator(.hidden)
                     
                     // Delivery Card Section
                     Section {
-                        DeliveryCardDetailView(viewModel: DeliveryCardDetailViewModel(deliveryInfo: DeliveryInfo(
-                            locationName: "HRD Center",
-                            address: "St 323 - Toul Kork",
-                            recipient: "Cheata",
-                            phoneNumber: "+85593333929",
-                            remarks: nil
-                        )))
+                        DeliveryCardDetailView(selectedAddress: $selectedAddress, remark: $remark)
                     }
                     .listRowInsets(EdgeInsets())
-                    .listRowSeparator(.hidden) // Hide the separator
+                    .listRowSeparator(.hidden)
                     
                     // Payment Section
                     Section {
-                        PaymentButtonView()
+                        PaymentButtonView(payment: $SelectPayment)
                     } header: {
                         Text(LocalizedStringKey("Payment"))
                             .font(.customfont(.semibold, fontSize: 16))
@@ -60,20 +60,38 @@ struct FoodCheckOutView: View {
                     }
                     .listRowInsets(EdgeInsets())
                     .listRowSeparator(.hidden)
-                    
-                    
-                    
                 }
                 .listStyle(PlainListStyle())
                 .scrollContentBackground(.hidden)
                 
-                
                 Button("Place an order") {
-                    self.isReceiptActive = true
+                    guard !Location.isEmpty else {
+                        print("Error: Address not selected.")
+                        return
+                    }
+                    guard !SelectPayment.isEmpty else {
+                        print("Error: Payment method not selected.")
+                        return
+                    }
+                    guard Quantity > 0 else {
+                        print("Error: Quantity must be greater than zero.")
+                        return
+                    }
+                    
+                    let totalPrice = Double(unitPrice) * Double(Quantity)
+                    let purchase = PurchaseRequest(
+                        foodSellId: FoodId,
+                        remark: remark,
+                        location: Location,
+                        quantity: Quantity,
+                        totalPrice: totalPrice
+                    )
+                    
+                    PurchaesViewModel.addPurchase(purchase: purchase, paymentType: SelectPayment)
+                    print("This is Purchase \(purchase)")
                 }
                 .font(.customfont(.semibold, fontSize: 16))
-                .frame(maxWidth: .infinity , maxHeight: 44)
-                //                .padding(.bottom, 10)
+                .frame(maxWidth: .infinity, maxHeight: 44)
                 .background(Color.yellow)
                 .foregroundColor(.white)
                 .cornerRadius(12)
@@ -81,16 +99,13 @@ struct FoodCheckOutView: View {
                 NavigationLink(destination: ReceiptView(isPresented: $isPresented, isOrderReceived: false), isActive: $isReceiptActive) {
                     EmptyView()
                 }
-                
             }
             .padding(.horizontal)
             .navigationTitle(LocalizedStringKey("Checkout"))
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-            
-        }
-        
-        .toolbar {
+          }
+          .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 HStack {
                     Button(action: {
@@ -110,7 +125,9 @@ struct FoodCheckOutView: View {
             }
         }
     }
-    
+}
+
+
     //MARK: Helper function to format date
     private func formatDate(_ dateString: String) -> String {
         let formatter = DateFormatter()
@@ -125,8 +142,6 @@ struct FoodCheckOutView: View {
         formatter.dateFormat = "dd MMM yyyy" // Output format: "21 Nov 2024"
         return formatter.string(from: date)
     }
-    
-    
     
     //MARK: Helper function to determine time of day based on the cook date time (if available)
     private func determineTimeOfDay(from dateString: String) -> String {
@@ -148,4 +163,5 @@ struct FoodCheckOutView: View {
             return "at night."
         }
     }
-}
+
+

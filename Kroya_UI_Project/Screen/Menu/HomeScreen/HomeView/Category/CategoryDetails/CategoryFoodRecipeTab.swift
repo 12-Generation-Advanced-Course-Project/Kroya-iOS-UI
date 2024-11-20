@@ -32,9 +32,9 @@ struct CategoryFoodRecipeTab: View {
                                 NavigationLink(destination: recipeDetailDestination(for: recipe)) {
                                     RecipeViewCell(
                                         recipe: recipe,
-                                        foodId: recipe.id,
+                                        foodId: recipe.id ?? 0,
                                         itemType: "FOOD_RECIPE",
-                                        isFavorite: recipe.isFavorite
+                                        isFavorite: recipe.isFavorite ?? false
                                     )
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
@@ -51,13 +51,13 @@ struct CategoryFoodRecipeTab: View {
     @ViewBuilder
     private func recipeDetailDestination(for recipe: FoodRecipeModel) -> some View {
         FoodDetailView(
-        isFavorite: recipe.isFavorite,
+        isFavorite: recipe.isFavorite ?? false,
         showPrice: false, // Always false for recipes
         showOrderButton: false, // Always false for recipes
         showButtonInvoic: nil, // Not applicable
         invoiceAccept: nil, // Not applicable
-        FoodId: recipe.id,
-        ItemType: recipe.itemType
+        FoodId: recipe.id ?? 0,
+        ItemType: recipe.itemType ?? ""
     )
     }
 }

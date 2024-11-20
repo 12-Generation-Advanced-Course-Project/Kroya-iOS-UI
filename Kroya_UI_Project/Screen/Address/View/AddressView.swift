@@ -9,6 +9,7 @@ struct AddressView: View {
     @StateObject private var locationViewModel = LocationViewModel()
     
     var onAddressSelected: ((Address) -> Void)?
+    var isFromEditingProfileView: Bool = false
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -38,9 +39,11 @@ struct AddressView: View {
                                 }
                             )
                             .onTapGesture {
-                                print("Address selected: \(address)")
-                                onAddressSelected?(address)
-                                dismiss()
+                                if isFromEditingProfileView {
+                                    print("Address selected")
+                                    onAddressSelected?(address)
+                                    dismiss()
+                                }
                             }
                         }
                     }
@@ -83,7 +86,7 @@ struct AddressView: View {
 
 #Preview {
     NavigationView {
-        AddressView()
+        AddressView(isFromEditingProfileView: false)
     }
 }
 

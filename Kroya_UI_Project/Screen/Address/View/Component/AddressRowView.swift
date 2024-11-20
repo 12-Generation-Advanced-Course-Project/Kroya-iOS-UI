@@ -46,9 +46,5 @@ struct AddressRowView: View {
             .padding(.leading,5)
             Divider()
         }
-   
-//        .onTapGesture {
-//           
-//        }
     }
 }

@@ -13,7 +13,8 @@ struct OrderCardDetailView: View {
     @Binding var imageName: String
     var url = Constants.fileupload
     var currency: String // Pass currency dynamically to display correct symbol
-    
+    @Binding var totalPrice: Int // Binding totalPrice
+    @Binding var quantity: Int // Binding quantity
     var body: some View {
         VStack {
             // Header Section
@@ -66,6 +67,8 @@ struct OrderCardDetailView: View {
                     Spacer()
                     Button(action: {
                         viewModel.decrementQuantity()
+                        quantity = viewModel.quantity
+                        totalPrice = Int(viewModel.totalPrice)
                     }) {
                         Image(systemName: "minus.circle.fill")
                             .resizable()
@@ -80,6 +83,8 @@ struct OrderCardDetailView: View {
                     
                     Button(action: {
                         viewModel.incrementQuantity()
+                        quantity = viewModel.quantity
+                        totalPrice = Int(viewModel.totalPrice)
                     }) {
                         Image(systemName: "plus.circle.fill")
                             .resizable()
@@ -97,10 +102,14 @@ struct OrderCardDetailView: View {
                 Text(LocalizedStringKey("Total"))
                     .font(.customfont(.semibold, fontSize: 16))
                 Spacer()
-                Text("\(currencySymbol(for: currency)) \(viewModel.totalPrice, specifier: "%.2f")")
+                Text("\(currencySymbol(for: currency)) \(String(format: "%.2f", viewModel.totalPrice))")
                     .font(.customfont(.semibold, fontSize: 16))
                     .foregroundColor(.yellow)
+                    .onAppear {
+                        totalPrice = Int(viewModel.totalPrice)
+                    }
             }
+
             .padding(.horizontal)
             .padding(.vertical, 10)
             .offset(y: 6)
@@ -112,6 +121,10 @@ struct OrderCardDetailView: View {
                 alignment: .top
             )
         }
+        .onAppear {
+            totalPrice = Int(viewModel.totalPrice)
+        }
+
         .frame(maxWidth: .infinity, minHeight: 200)
         .background(
             RoundedRectangle(cornerRadius: 12)

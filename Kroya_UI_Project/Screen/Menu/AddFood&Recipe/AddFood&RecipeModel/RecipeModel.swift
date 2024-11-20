@@ -13,8 +13,8 @@ struct FoodRecipeModel: Identifiable, Codable {
     let id: Int
     let photo: [Photo]
     let name: String
-    let description: String
-    let level: String
+    let description: String?
+    let level: String?
     let averageRating: Double?
     let totalRaters: Int?
     var isFavorite: Bool

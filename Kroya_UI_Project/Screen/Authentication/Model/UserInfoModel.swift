@@ -56,6 +56,7 @@ struct userModel: Codable {
     var fullName: String
     var profileImage: String?
     var email: String?
+    var phoneNumber: String?
 }
 struct DeviceTokenModel: Codable {
     var deviceToken: String

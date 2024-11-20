@@ -12,8 +12,9 @@ struct SaleModalView: View {
     let totalUSD: Double
     let displayCurrencies = ["៛", "$"]
     let parameterCurrencies = ["RIEL", "DOLLAR"]
-    @State private var addressSelect: String = ""
-//    @StateObject private var addressStore = AddressViewModel()
+    @State private var userInputAddress: String?
+    @State private var selectedAddress: Address?
+    @StateObject private var addressStore = AddressViewModel()
     @ObservedObject var draftModelData: DraftModelData
     @Environment(\.modelContext) var modelContext
     @State var showDraftAlert: Bool = false
@@ -25,7 +26,7 @@ struct SaleModalView: View {
     @StateObject private var imageVM = ImageUploadViewModel()
     @State private var showLoadingOverlay = false
     @State private var showSuccessPopup = false
-    
+    @State private var showAddressSheet = false
     var body: some View {
         ZStack{
             VStack{
@@ -154,8 +155,12 @@ struct SaleModalView: View {
                                                 .frame(maxWidth: 120, alignment: .leading)
                                             
                                             TextField(getCurrencyPlaceholder(), text: Binding(
-                                                get: { formatPrice() },
+                                                get: {
+                                                    // Convert price to formatted string for display
+                                                    formatPrice(value: draftModelData.price)
+                                                },
                                                 set: { newValue in
+                                                    // Sanitize input and update price
                                                     priceText = filterPriceInput(newValue)
                                                     let price = Double(priceText) ?? 0.0
                                                     ingret.price = price
@@ -168,11 +173,13 @@ struct SaleModalView: View {
                                             .foregroundStyle(.gray.opacity(0.8))
                                             .onChange(of: draftModelData.price) { _ in
                                                 validateFields()
+                                                // Save draft whenever price changes
+                                                draftModelData.saveDraft(in: modelContext)
                                             }
-
+                                            
                                             Picker("", selection: $ingret.selectedCurrency) {
                                                 ForEach(0..<displayCurrencies.count) { index in
-                                                    Text(displayCurrencies[index])  // Show currency symbols in UI
+                                                    Text(displayCurrencies[index]) // Show currency symbols in UI
                                                         .tag(index)
                                                         .customFontMediumLocalize(size: 20)
                                                 }
@@ -181,31 +188,49 @@ struct SaleModalView: View {
                                             .frame(width: 60)
                                             .onChange(of: ingret.selectedCurrency) { newCurrency in
                                                 updateCurrencyAndPrice(newCurrency: newCurrency)
+                                                // Save draft when currency changes
+                                                draftModelData.saveDraft(in: modelContext)
                                             }
-
-
                                         }
                                         .padding(.horizontal)
+
                                         Divider()
-//                                        NavigationLink(destination: AddressView(viewModel: addressStore)) {
-//                                            HStack {
-//                                                Text("Location")
-//                                                    .customFontLightLocalize(size: 15)
-//                                                    .foregroundStyle(.black.opacity(0.8))
-//                                                    .frame(maxWidth: 120, alignment: .leading)
-//                                                TextField("Choose Location", text: Binding(
-//                                                    get: { draftModelData.location },
-//                                                    set: { newValue in draftModelData.location = newValue }
-//                                                ))
-//                                                .customFontMediumLocalize(size: 15)
-//                                                .multilineTextAlignment(.leading)
-//                                                .frame(maxWidth: .infinity, alignment: .leading)
-//                                                .foregroundStyle(.gray.opacity(0.8))
-//                                                .disabled(true)
-//                                            }
-//                                            .padding(.vertical, 5)
-//                                            .padding(.horizontal)
-//                                        }
+                                        HStack {
+                                            Text("Location")
+                                                .customFontLightLocalize(size: 15)
+                                                .foregroundStyle(.black.opacity(0.8))
+                                                .frame(maxWidth: 120, alignment: .leading)
+                                            
+                                            Button {
+                                                // Toggle the sheet
+                                                showAddressSheet.toggle()
+                                            } label: {
+                                                Text(draftModelData.location.isEmpty ? "Choose Location" : draftModelData.location)
+                                                    .customFontMediumLocalize(size: 15)
+                                                    .multilineTextAlignment(.leading)
+                                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                                    .foregroundStyle(draftModelData.location.isEmpty ? .gray.opacity(0.8) : .black)
+                                                    .padding(.vertical, 8)
+                                                    .lineLimit(2)
+                                                
+                                            }
+                                            .buttonStyle(PlainButtonStyle())
+                                        }
+                                        .sheet(isPresented: $showAddressSheet) {
+                                            NavigationStack {
+                                                AddressView { selected in
+                                                    // Update the selected address in the draft and locally
+                                                    selectedAddress = selected
+                                                    draftModelData.location = selected.addressDetail
+                                                    userInputAddress = selected.addressDetail
+                                                    // Close the sheet
+                                                    showAddressSheet = false
+                                                }
+                                            }
+                                        }
+                                        .padding(.vertical, 5)
+                                        .padding(.horizontal)
+
                                     }
                                     .padding(.vertical, 12)
                                     .frame(maxWidth: .infinity)
@@ -310,13 +335,9 @@ struct SaleModalView: View {
         .navigationTitle("Sale")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-//            addressStore.fetchAllAddresses()
             formattedDate = draftModelData.cookDate.formatted(.dateTime.day().month().year())
-//            draftModelData.location = addressStore.selectedAddress?.specificLocation ?? "" // Set location on appear
-            _ = formatPrice()
         }
-        
-//        .onChange(of: addressStore.selectedAddress) { newAddress in
+//        .onChange(of: selectedAddress) { newAddress in
 //            // Set location on address selection
 //            draftModelData.location = newAddress?.specificLocation ?? ""
 //            // Re-validate fields after location change
@@ -459,32 +480,32 @@ struct SaleModalView: View {
         !draftModelData.location.isEmpty ||
         draftModelData.isForSale
     }
-    
+
     private func validateFields() {
         if draftModelData.isForSale {
             showError = draftModelData.amount <= 0 ||
-            draftModelData.price <= 0 ||
-//            addressStore.selectedAddress == nil ||
-            draftModelData.location.isEmpty ||
-            draftModelData.cookDate < Date()
+                        draftModelData.price <= 0 ||
+                        draftModelData.location.isEmpty || // Validate location
+                        draftModelData.cookDate < Date()
         } else {
             showError = false
         }
     }
-    
+
     private func getCurrencyPlaceholder() -> String {
         return ingret.selectedCurrency == 0 ? "0" : "0.00"
     }
     
     // MARK: Function to format the price based on currency selection
-    private func formatPrice() -> String {
+    private func formatPrice(value: Double) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.minimumFractionDigits = 0
         formatter.maximumFractionDigits = ingret.selectedCurrency == 0 ? 4 : 2
         formatter.groupingSeparator = ingret.selectedCurrency == 1 ? "," : ""
-        return formatter.string(from: NSNumber(value: ingret.price)) ?? ""
+        return formatter.string(from: NSNumber(value: value)) ?? ""
     }
+
     
     // MARK: Function to filter and format the price input based on the selected currency
     private func filterPriceInput(_ input: String) -> String {
@@ -503,6 +524,7 @@ struct SaleModalView: View {
         
         return filtered
     }
+
     
     // MARK: Function to convert the price based on selected currency
     private func convertCurrency(_ price: Double) -> Double {

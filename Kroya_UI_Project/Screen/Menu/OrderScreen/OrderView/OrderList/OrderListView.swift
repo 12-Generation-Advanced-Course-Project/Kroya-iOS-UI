@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct OrderListView: View {
-    
+    var sellerId:Int
     @State private var show3dot:Bool = true
     @State private var searchText = ""
     @State private var selectedSegment = 0
@@ -61,12 +61,8 @@ struct OrderListView: View {
                 }
                 
             }.padding(.horizontal,15)
-            NewItemFoodOrderCardView(show3dot: $show3dot, showEllipsis: true)
+            NewItemFoodOrderCardView(show3dot: $show3dot, showEllipsis: true, sellerId: sellerId)
         }
         .navigationBarBackButtonHidden(true)
     }
-}
-
-#Preview {
-    OrderListView()
 }

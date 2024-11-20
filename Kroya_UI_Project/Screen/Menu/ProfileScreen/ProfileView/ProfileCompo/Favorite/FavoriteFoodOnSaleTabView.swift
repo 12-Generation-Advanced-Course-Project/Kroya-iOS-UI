@@ -23,7 +23,7 @@ struct FavoriteFoodOnSaleTabView: View {
                         ForEach(favoriteFoodSale.favoriteFoodSell) { favorite in
                             NavigationLink(destination:
                                             FoodDetailView(
-                                                isFavorite: favorite.isFavorite, showPrice: false, // Always false for recipes
+                                                isFavorite: favorite.isFavorite ?? false, showPrice: false, // Always false for recipes
                                                 showOrderButton: false, // Always false for recipes
                                                 showButtonInvoic: nil, // Not applicable
                                                 invoiceAccept: nil, // Not applicable
@@ -35,7 +35,7 @@ struct FavoriteFoodOnSaleTabView: View {
                                     foodSale: favorite,
                                     foodId: favorite.id,
                                     itemType: "FOOD_SELL",
-                                    isFavorite: favorite.isFavorite
+                                    isFavorite: favorite.isFavorite ?? false
                                 )
                                 .frame(maxWidth: .infinity)
                                 .padding(.horizontal, 20)

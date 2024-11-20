@@ -11,7 +11,7 @@ import Alamofire
 class OrderViewModel: ObservableObject {
     
     @Published var orders: [OrderModel] = []
-    
+    @Published var Purchases: PurchaseModel?
     @Published var isLoading: Bool = false
     @Published var successMessage: String = ""
     @Published var showError: Bool = false
@@ -109,6 +109,42 @@ class OrderViewModel: ObservableObject {
                 case .failure(let error):
                     self?.errorMessage = "Failed to fetch purchases: \(error.localizedDescription)"
                     print("Error: \(error)")
+                }
+            }
+        }
+    }
+    
+    //MARK: Add Purchase
+    func addPurchase(purchase: PurchaseRequest, paymentType: String) {
+        
+        self.startLoading()
+        PurchaseService.shared.AddPurchase(purchase: purchase, paymentType: paymentType) { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                self.endLoading()
+                switch result {
+                case .success(let purchaseResponse):
+                    // Handle a successful response
+                    if purchaseResponse.statusCode == "200", let payload = purchaseResponse.payload {
+                        self.successMessage = "Purchase added successfully!"
+                        self.Purchases = payload
+                    } else {
+                        
+                        self.errorMessage = "Error fetching purchase: \(purchaseResponse.message)"
+                        self.showError = true
+                        print("Unexpected response: \(purchaseResponse.message)")
+                    }
+                    
+                case .failure(let error):
+                    
+                    self.errorMessage = "Failed to add purchase: \(error.localizedDescription)"
+                    self.showError = true
+                    print("Error adding purchase: \(error.localizedDescription)")
+                    
+                    
+                    if let afError = error as? Alamofire.AFError, let underlyingError = afError.underlyingError {
+                        print("AFError underlying error: \(underlyingError.localizedDescription)")
+                    }
                 }
             }
         }

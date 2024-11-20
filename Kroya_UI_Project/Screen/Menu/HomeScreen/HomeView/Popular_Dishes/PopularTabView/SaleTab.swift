@@ -11,12 +11,10 @@ struct PopularSellTab: View {
     var isSelected: Int?
     @StateObject private var popularSell = PopularFoodVM()
     @StateObject private var favoriteFoodSale = FavoriteVM()
-    @StateObject private var guestFoodPopular = GuestPopularFoodVM()
+    @StateObject private var guestPopularFood = GuestPopularFoodVM()
     
-  
     var body: some View {
         VStack {
-            
             if Auth.shared.hasAccessToken() {
                 if popularSell.popularFoodSell.isEmpty && !popularSell.isLoading{
                     Text("No Popular Food Sell Found!")
@@ -32,7 +30,7 @@ struct PopularSellTab: View {
                                         foodSale: popularsell,
                                         foodId: popularsell.id,
                                         itemType: "FOOD_SELL",
-                                        isFavorite: popularsell.isFavorite
+                                        isFavorite: popularsell.isFavorite ?? false
                                     )
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
@@ -45,7 +43,6 @@ struct PopularSellTab: View {
                             if popularSell.isLoading {
                                 Color.white
                                     .edgesIgnoringSafeArea(.all)
-                                
                                 ProgressView()
                                     .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
                                     .scaleEffect(2)
@@ -53,8 +50,8 @@ struct PopularSellTab: View {
                         }
                     )
                 }
-            } else {
-                if guestFoodPopular.guestPopularFoodSell.isEmpty && !guestFoodPopular.isLoading{
+            }else {
+                if guestPopularFood.guestPopularFoodSell.isEmpty && !guestPopularFood.isLoading{
                     Text("No Popular Food Sell Found!")
                         .font(.title3)
                         .foregroundColor(.gray)
@@ -62,13 +59,13 @@ struct PopularSellTab: View {
                 } else {
                     ScrollView(showsIndicators: false) {
                         LazyVStack(spacing: 8) {
-                            ForEach(guestFoodPopular.guestPopularFoodSell) { popularsell in
+                            ForEach(guestPopularFood.guestPopularFoodSell) { popularsell in
                                 NavigationLink(destination: foodDetailDestination(for: popularsell)) {
                                     FoodOnSaleViewCell(
                                         foodSale: popularsell,
                                         foodId: popularsell.id,
                                         itemType: "FOOD_SELL",
-                                        isFavorite: popularsell.isFavorite
+                                        isFavorite: popularsell.isFavorite ?? false
                                     )
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
@@ -78,10 +75,9 @@ struct PopularSellTab: View {
                     }
                     .overlay(
                         Group {
-                            if guestFoodPopular.isLoading {
+                            if guestPopularFood.isLoading {
                                 Color.white
                                     .edgesIgnoringSafeArea(.all)
-                                
                                 ProgressView()
                                     .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
                                     .scaleEffect(2)
@@ -89,27 +85,28 @@ struct PopularSellTab: View {
                         }
                     )
                 }
-                
-            
             }
-                
-            
         }
         .padding(.top, 8)
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            if popularSell.popularFoodSell.isEmpty {
-                popularSell.getAllPopular()
+            if Auth.shared.hasAccessToken(){
+                
+                self.popularSell.getAllPopular()
+                
+            } else{
+                
+                self.guestPopularFood.getAllGuestPopular()
             }
-           
         }
+      
     }
     
     // MARK: - Food Detail Destination
     @ViewBuilder
     private func foodDetailDestination(for foodSale: FoodSellModel) -> some View {
         FoodDetailView(
-            isFavorite: foodSale.isFavorite,
+            isFavorite: foodSale.isFavorite ?? false,
             showPrice: true, // Always false for recipes
             showOrderButton: true, // Always false for recipes
             showButtonInvoic: nil, // Not applicable
