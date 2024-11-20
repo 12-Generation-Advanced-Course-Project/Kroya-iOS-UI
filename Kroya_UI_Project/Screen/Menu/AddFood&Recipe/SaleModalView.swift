@@ -179,7 +179,7 @@ struct SaleModalView: View {
                                             
                                             Picker("", selection: $ingret.selectedCurrency) {
                                                 ForEach(0..<displayCurrencies.count) { index in
-                                                    Text(displayCurrencies[index]) // Show currency symbols in UI
+                                                    Text(displayCurrencies[index])
                                                         .tag(index)
                                                         .customFontMediumLocalize(size: 20)
                                                 }
@@ -202,7 +202,7 @@ struct SaleModalView: View {
                                                 .frame(maxWidth: 120, alignment: .leading)
                                             
                                             Button {
-                                                // Toggle the sheet
+                                                // Open the address selection sheet
                                                 showAddressSheet.toggle()
                                             } label: {
                                                 Text(draftModelData.location.isEmpty ? "Choose Location" : draftModelData.location)
@@ -212,20 +212,21 @@ struct SaleModalView: View {
                                                     .foregroundStyle(draftModelData.location.isEmpty ? .gray.opacity(0.8) : .black)
                                                     .padding(.vertical, 8)
                                                     .lineLimit(2)
-                                                
                                             }
                                             .buttonStyle(PlainButtonStyle())
                                         }
                                         .sheet(isPresented: $showAddressSheet) {
                                             NavigationStack {
-                                                AddressView { selected in
-                                                    // Update the selected address in the draft and locally
-                                                    selectedAddress = selected
-                                                    draftModelData.location = selected.addressDetail
-                                                    userInputAddress = selected.addressDetail
-                                                    // Close the sheet
-                                                    showAddressSheet = false
-                                                }
+                                                AddressView(
+                                                    onAddressSelected: { selected in
+                                                        // Handle selected address
+                                                        selectedAddress = selected
+                                                        userInputAddress = selectedAddress?.addressDetail
+                                                        draftModelData.location = selectedAddress?.addressDetail ?? ""
+                                                        showAddressSheet = false
+                                                    },
+                                                    isFromEditingProfileView: true
+                                                )
                                             }
                                         }
                                         .padding(.vertical, 5)
@@ -337,12 +338,6 @@ struct SaleModalView: View {
         .onAppear {
             formattedDate = draftModelData.cookDate.formatted(.dateTime.day().month().year())
         }
-//        .onChange(of: selectedAddress) { newAddress in
-//            // Set location on address selection
-//            draftModelData.location = newAddress?.specificLocation ?? ""
-//            // Re-validate fields after location change
-//            validateFields()
-//        }
         .alert(isPresented: $showDraftAlert) {
             Alert(
                 title: Text("Save this as a draft?"),

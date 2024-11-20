@@ -116,31 +116,28 @@ class OrderViewModel: ObservableObject {
     
     //MARK: Add Purchase
     func addPurchase(purchase: PurchaseRequest, paymentType: String) {
-        
         self.startLoading()
         PurchaseService.shared.AddPurchase(purchase: purchase, paymentType: paymentType) { [weak self] result in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 self.endLoading()
+                
                 switch result {
                 case .success(let purchaseResponse):
-                    // Handle a successful response
-                    if purchaseResponse.statusCode == "200", let payload = purchaseResponse.payload {
+                    if let purchase = purchaseResponse {
                         self.successMessage = "Purchase added successfully!"
-                        self.Purchases = payload
+                        self.Purchases = purchase
+                        print("Purchase added successfully. Payload: \(purchase)")
                     } else {
-                        
-                        self.errorMessage = "Error fetching purchase: \(purchaseResponse.message)"
+                        self.errorMessage = "Purchase added successfully, but no data was returned."
                         self.showError = true
-                        print("Unexpected response: \(purchaseResponse.message)")
+                        print("No payload returned.")
                     }
                     
                 case .failure(let error):
-                    
                     self.errorMessage = "Failed to add purchase: \(error.localizedDescription)"
                     self.showError = true
                     print("Error adding purchase: \(error.localizedDescription)")
-                    
                     
                     if let afError = error as? Alamofire.AFError, let underlyingError = afError.underlyingError {
                         print("AFError underlying error: \(underlyingError.localizedDescription)")
@@ -149,5 +146,6 @@ class OrderViewModel: ObservableObject {
             }
         }
     }
-    
+
+
 }

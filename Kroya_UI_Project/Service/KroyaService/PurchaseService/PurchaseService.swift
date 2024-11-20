@@ -212,10 +212,9 @@ class PurchaseService: ObservableObject {
     func AddPurchase(
         purchase: PurchaseRequest,
         paymentType: String,
-        completion: @escaping (Result<PurchaseResponse, Error>) -> Void
+        completion: @escaping (Result<PurchaseModel?, Error>) -> Void
     ) {
         guard let accessToken = Auth.shared.getAccessToken() else {
-            // Handle missing access token
             let error = NSError(
                 domain: "",
                 code: 401,
@@ -225,38 +224,31 @@ class PurchaseService: ObservableObject {
             return
         }
 
-        // API URL
         let url = Constants.PurchaseAdd + "?paymentType=\(paymentType)"
-
-        // Headers
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(accessToken)",
             "Content-Type": "application/json"
         ]
-
-        // Construct the parameters
         let parameters: [String: Any] = [
             "purchaseRequest": [
                 "foodSellId": purchase.foodSellId,
                 "remark": purchase.remark ?? "",
                 "location": purchase.location,
                 "quantity": purchase.quantity,
-                "totalPrice": purchase.totalPrice // Ensure this is a Double
+                "totalPrice": purchase.totalPrice
             ],
             "paymentType": paymentType
         ]
 
-        // Alamofire Request
         AF.request(
             url,
             method: .post,
             parameters: parameters,
-            encoding: JSONEncoding.default, // Encode as JSON
+            encoding: JSONEncoding.default,
             headers: headers
         )
-        .validate(statusCode: 200..<500) // Allow only successful responses
+        .validate(statusCode: 200..<500)
         .responseDecodable(of: PurchaseResponse.self) { response in
-            // Log the response
             if let data = response.data {
                 do {
                     let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
@@ -271,10 +263,14 @@ class PurchaseService: ObservableObject {
 
             debugPrint(response)
 
-            // Handle the response
             switch response.result {
             case .success(let purchaseResponse):
-                completion(.success(purchaseResponse))
+                if let payload = purchaseResponse.payload {
+                    completion(.success(payload)) // Pass the valid payload
+                } else {
+                    print("Message from server: \(purchaseResponse.message)")
+                    completion(.success(nil)) // Indicate no data, but not an error
+                }
             case .failure(let error):
                 completion(.failure(error))
             }
