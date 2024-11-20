@@ -109,8 +109,8 @@ struct OrderSection: View {
                             .padding(.vertical, 5)
                     } else {
                         VStack(spacing: 15) {
-                            ForEach(orders, id: \.foodSellID) { order in
-                                NavigationLink(destination: OrderListView(sellerId: orders.first!.foodSellID)) {
+                            ForEach(orders, id: \.id) { order in
+                                NavigationLink(destination: OrderListView(sellerId: orders.first!.foodSellId )) {
                                     OrderCard(
                                         order: order,
                                         isAccepted: order.purchaseStatusType == "Accepted",

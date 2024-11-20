@@ -9,12 +9,14 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct OrderCardDetailView: View {
+    
     @StateObject var viewModel: OrderCardDetailViewModel
     @Binding var imageName: String
     var url = Constants.fileupload
     var currency: String // Pass currency dynamically to display correct symbol
     @Binding var totalPrice: Int // Binding totalPrice
     @Binding var quantity: Int // Binding quantity
+    
     var body: some View {
         VStack {
             // Header Section

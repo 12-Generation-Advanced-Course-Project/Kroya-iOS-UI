@@ -10,7 +10,7 @@ struct ItemFoodOrderCard: View {
     @Binding var show3dot: Bool
     let Keyaccept = "Accept"
     let Keyreject = "Reject"
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 12) {
@@ -48,7 +48,7 @@ struct ItemFoodOrderCard: View {
                         // Time
                         if let timeAgo = orderRequest.purchaseDate {
                             Text(formatTimeAgo(from: timeAgo))
-                            .font(.customfont(.semibold, fontSize: 12))
+                                .font(.customfont(.semibold, fontSize: 12))
                                 .foregroundColor(.gray)
                         }
                         

@@ -10,6 +10,7 @@ import Foundation
 
 // MARK: - Food Sell Model
 struct FoodSellModel: Identifiable, Codable {
+    
     var id: Int
     var photo: [Photo]
     var name: String

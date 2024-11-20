@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct OrderListView: View {
-
-//    var orderRequest: OrderRequestModel
+    
     var sellerId:Int
+    var orderCountText: String?
     @State private var show3dot:Bool = true
     @State private var searchText = ""
     @State private var selectedSegment = 0
@@ -20,7 +20,6 @@ struct OrderListView: View {
         
         VStack {
             Spacer().frame(height: 10)
-            
             NewItemFoodOrderCardView(show3dot: $show3dot, showEllipsis: true, sellerId: sellerId)
             
         }
@@ -40,7 +39,7 @@ struct OrderListView: View {
                             .frame(width: 16)
                             .padding([.bottom, .leading], 12)
                             .overlay(
-                                Text("2")
+                                Text(orderCountText!)
                                     .customFontSemiBoldLocalize(size: 10)
                                     .foregroundColor(.white)
                                     .padding([.bottom, .leading], 12)
@@ -50,10 +49,6 @@ struct OrderListView: View {
             
         }
     }
-}
-
-#Preview {
-    OrderListView(sellerId: 1)
 }
 
 
