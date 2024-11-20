@@ -9,7 +9,7 @@ struct AddressView: View {
     @StateObject private var locationViewModel = LocationViewModel()
     
     var onAddressSelected: ((Address) -> Void)?
-    var isFromEditingProfileView: Bool // New parameter
+    var isFromEditingProfileView: Bool = false
     
     var body: some View {
         VStack(alignment: .leading) {
