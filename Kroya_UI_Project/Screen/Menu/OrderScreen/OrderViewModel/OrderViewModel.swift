@@ -119,33 +119,21 @@ class OrderViewModel: ObservableObject {
         self.startLoading()
         PurchaseService.shared.AddPurchase(purchase: purchase, paymentType: paymentType) { [weak self] result in
             DispatchQueue.main.async {
-                guard let self = self else { return }
-                self.endLoading()
-                
+                self?.endLoading()
                 switch result {
-                case .success(let purchaseResponse):
-                    if let purchase = purchaseResponse {
-                        self.successMessage = "Purchase added successfully!"
-                        self.Purchases = purchase
-                        print("Purchase added successfully. Payload: \(purchase)")
+                case .success(let purchase):
+                    if let purchase = purchase {
+                        self?.successMessage = "Purchase added successfully!"
+                        self?.Purchases = purchase
                     } else {
-                        self.errorMessage = "Purchase added successfully, but no data was returned."
-                        self.showError = true
-                        print("No payload returned.")
+                        self?.errorMessage = "Failed to add purchase: Invalid response from server."
+                        self?.showError = true
                     }
-                    
                 case .failure(let error):
-                    self.errorMessage = "Failed to add purchase: \(error.localizedDescription)"
-                    self.showError = true
-                    print("Error adding purchase: \(error.localizedDescription)")
-                    
-                    if let afError = error as? Alamofire.AFError, let underlyingError = afError.underlyingError {
-                        print("AFError underlying error: \(underlyingError.localizedDescription)")
-                    }
+                    self?.errorMessage = "Failed to add purchase: \(error.localizedDescription)"
+                    self?.showError = true
                 }
             }
         }
     }
-
-
 }

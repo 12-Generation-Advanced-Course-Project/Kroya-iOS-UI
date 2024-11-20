@@ -22,16 +22,13 @@ struct PurchaseModel: Codable {
     var totalPrice:Double
 }
 //MARK: Purchase Request
-struct PurchaseRequest: Encodable {
+struct PurchaseRequest: Codable {
     var foodSellId: Int
     var remark: String?
     var location: String
     var quantity: Int
     var totalPrice: Double
 
-}
-struct PurchaseRequestType : Encodable {
-    var paymentType : String
 }
 
 //MARK: Add a Purchase
