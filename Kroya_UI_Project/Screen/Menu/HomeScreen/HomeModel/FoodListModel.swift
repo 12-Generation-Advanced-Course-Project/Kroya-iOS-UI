@@ -8,7 +8,7 @@
 import Foundation
 
 // Payload Model
-struct FoodListPayload: Decodable {
-    let listFoodSells: [FoodSellModel]
-    let listFoodRecipes: [FoodRecipeModel]
+struct FoodListPayload: Codable {
+    let foodSells: [FoodSellModel]
+    let foodRecipes: [FoodRecipeModel]
 }

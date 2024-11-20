@@ -7,6 +7,7 @@
 
 import Foundation
 struct SearchModel: Decodable {
-    let SearchFoodSells: [FoodSellModel]
-    let SearchFoodRecipes: [FoodRecipeModel]
+    let foodSells: [FoodSellModel]
+    let foodRecipes: [FoodRecipeModel]
 }
+

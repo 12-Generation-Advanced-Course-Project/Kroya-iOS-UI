@@ -1,14 +1,9 @@
-//
-//  AllUerPostFood.swift
-//  Kroya_UI_Project
-//
-//  Created by Macbook on 11/17/24.
-//
 
 import SwiftUI
 
-struct AllUerPostFood: View {
-    @StateObject private var allFoodUserPost = UserFoodViewModel()// Use a single ViewModel instance
+struct ListFoodSale: View {
+    @StateObject private var popularFoodVM = PopularFoodVM()
+    @StateObject private var recipeViewModel = RecipeViewModel()
     @StateObject private var favoriteFoodSale = FavoriteVM()
     @StateObject private var favoriteFoodRecipe = FavoriteVM()
     var isSelected: Int?
@@ -17,7 +12,7 @@ struct AllUerPostFood: View {
             ScrollView(showsIndicators: false) {
                 LazyVStack(spacing: 8) {
                     // Display popular sell items
-                    ForEach(allFoodUserPost.userPostFoodSale) { popularsell in
+                    ForEach(popularFoodVM.popularFoodSell) { popularsell in
                         NavigationLink(destination: foodDetailDestination(for: popularsell)) {
                             FoodOnSaleViewCell(
                                 foodSale: popularsell,
@@ -31,13 +26,13 @@ struct AllUerPostFood: View {
                     }
                     
                     // Display popular recipe items
-                    ForEach(allFoodUserPost.userPostRecipeFood) { popularrecipe in
+                    ForEach(popularFoodVM.popularFoodRecipe) { popularrecipe in
                         NavigationLink(destination: recipeDetailDestination(for: popularrecipe)) {
                             RecipeViewCell(
                                 recipe: popularrecipe,
                                 foodId: popularrecipe.id,
                                 itemType: "FOOD_RECIPE",
-                                isFavorite: popularrecipe.isFavorite ?? false
+                                isFavorite: popularrecipe.isFavorite
                             )
                             .frame(maxWidth: .infinity)
                             .padding(.horizontal, 20)
@@ -48,7 +43,7 @@ struct AllUerPostFood: View {
             
             .overlay(
                 Group {
-                    if allFoodUserPost.isLoading {
+                    if popularFoodVM.isLoading {
                         Color.white
                             .edgesIgnoringSafeArea(.all)
                         
@@ -60,8 +55,8 @@ struct AllUerPostFood: View {
             )
         }
         .onAppear {
-            if allFoodUserPost.userPostFoodSale.isEmpty || allFoodUserPost.userPostRecipeFood.isEmpty {
-                allFoodUserPost.getAllUserFood()
+            if popularFoodVM.popularFoodSell.isEmpty || popularFoodVM.popularFoodRecipe.isEmpty {
+                popularFoodVM.getAllPopular()
             }
         }
     }
@@ -71,24 +66,24 @@ struct AllUerPostFood: View {
     private func foodDetailDestination(for foodSale: FoodSellModel) -> some View {
         FoodDetailView(
             isFavorite: foodSale.isFavorite ?? false,
-            showPrice: true, // Always false for recipes
-            showOrderButton: true, // Always false for recipes
-            showButtonInvoic: nil, // Not applicable
-            invoiceAccept: nil, // Not applicable
-            FoodId: foodSale.id,
-            ItemType: foodSale.itemType
-        )
+        showPrice: false, // Always false for recipes
+        showOrderButton: false, // Always false for recipes
+        showButtonInvoic: nil, // Not applicable
+        invoiceAccept: nil, // Not applicable
+        FoodId: foodSale.id,
+        ItemType: foodSale.itemType
+    )
     }
     
     @ViewBuilder
     private func recipeDetailDestination(for recipe: FoodRecipeModel) -> some View {
         FoodDetailView(
-        isFavorite: recipe.isFavorite,
+            isFavorite: recipe.isFavorite ?? false,
         showPrice: false, // Always false for recipes
         showOrderButton: false, // Always false for recipes
         showButtonInvoic: nil, // Not applicable
         invoiceAccept: nil, // Not applicable
-        FoodId: recipe.id ,
+        FoodId: recipe.id,
         ItemType: recipe.itemType
     )
     }

@@ -11,9 +11,9 @@ struct HomeView: View {
     @Environment(\.locale) var locale
     @StateObject private var recentSearchesData = RecentSearchesData()
     @StateObject private var PopularFoodsData =  PopularFoodVM()
-    @StateObject private var favoriteFoodRecipe = FavoriteVM()
-    @StateObject private var favoriteFoodSale = FavoriteVM()
+    @StateObject private var favoriteVM = FavoriteVM()
     @Environment(\.modelContext) var modelContext
+    @State var isLoading: Bool = false
     var body: some View {
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
