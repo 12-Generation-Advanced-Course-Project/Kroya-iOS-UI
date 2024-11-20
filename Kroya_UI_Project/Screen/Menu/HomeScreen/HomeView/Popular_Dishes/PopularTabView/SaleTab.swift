@@ -28,9 +28,12 @@ struct PopularSellTab: View {
                         LazyVStack(spacing: 8) {
                             ForEach(popularSell.popularFoodSell) { popularsell in
                                 NavigationLink(destination: foodDetailDestination(for: popularsell)) {
-                                    FoodOnSaleViewCell(foodSale: popularsell, onFavoriteToggle: { foodId in
-                                        favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
-                                    })
+                                    FoodOnSaleViewCell(
+                                        foodSale: popularsell,
+                                        foodId: popularsell.id,
+                                        itemType: "FOOD_SELL",
+                                        isFavorite: popularsell.isFavorite
+                                    )
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
                                 }
@@ -61,9 +64,12 @@ struct PopularSellTab: View {
                         LazyVStack(spacing: 8) {
                             ForEach(guestFoodPopular.guestPopularFoodSell) { popularsell in
                                 NavigationLink(destination: foodDetailDestination(for: popularsell)) {
-                                    FoodOnSaleViewCell(foodSale: popularsell, onFavoriteToggle: { foodId in
-                                        favoriteFoodSale.createFavoriteFood(foodId: foodId, itemType: "FOOD_SELL")
-                                    })
+                                    FoodOnSaleViewCell(
+                                        foodSale: popularsell,
+                                        foodId: popularsell.id,
+                                        itemType: "FOOD_SELL",
+                                        isFavorite: popularsell.isFavorite
+                                    )
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
                                 }

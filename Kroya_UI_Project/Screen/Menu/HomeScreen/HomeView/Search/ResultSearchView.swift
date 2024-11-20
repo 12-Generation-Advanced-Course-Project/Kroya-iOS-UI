@@ -7,6 +7,7 @@ struct ResultSearchView: View {
     @Environment(\.dismiss) var dismiss
     var menuName: String
     @Environment(\.modelContext) var modelContext
+    @StateObject private var searchFood = SearchVM()
     @ObservedObject var recentSearchesData: RecentSearchesData
     var body: some View {
         NavigationView {

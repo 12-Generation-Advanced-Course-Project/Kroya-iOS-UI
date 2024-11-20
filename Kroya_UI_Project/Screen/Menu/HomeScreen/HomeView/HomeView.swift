@@ -80,7 +80,7 @@ struct HomeView: View {
                                     }
                                     .onTapGesture {
                                         // Fetch data for the selected category by ID
-                                    print("this is Id \(category.id)")
+                                        print("this is Id \(category.id)")
                                         categoryVM.fetchAllCategoryById(categoryId: category.id)
                                     }
                                 }
@@ -118,12 +118,12 @@ struct HomeView: View {
                                 NavigationLink(destination:
                                                 FoodDetailView(
                                                     isFavorite: foodSale.isFavorite, showPrice: true, // Always false for recipes
-                                                showOrderButton: true, // Always false for recipes
-                                                showButtonInvoic: nil, // Not applicable
-                                                invoiceAccept: nil, // Not applicable
-                                                FoodId: foodSale.id ?? 0,
-                                                ItemType: foodSale.itemType
-                                            )
+                                                    showOrderButton: true, // Always false for recipes
+                                                    showButtonInvoic: nil, // Not applicable
+                                                    invoiceAccept: nil, // Not applicable
+                                                    FoodId: foodSale.id ?? 0,
+                                                    ItemType: foodSale.itemType
+                                                )
                                 ) {
                                     FoodOnSaleViewCell(
                                         foodSale: foodSale,
@@ -139,13 +139,13 @@ struct HomeView: View {
                             ForEach(recipeViewModel.RecipeFood.prefix(2)) { recipe in
                                 NavigationLink(destination:
                                                 FoodDetailView(
-                                                isFavorite: recipe.isFavorite, showPrice: false, // Always false for recipes
-                                                showOrderButton: false, // Always false for recipes
-                                                showButtonInvoic: nil, // Not applicable
-                                                invoiceAccept: nil, // Not applicable
-                                                FoodId: recipe.id,
-                                                ItemType: recipe.itemType
-                                            )
+                                                    isFavorite: recipe.isFavorite, showPrice: false, // Always false for recipes
+                                                    showOrderButton: false, // Always false for recipes
+                                                    showButtonInvoic: nil, // Not applicable
+                                                    invoiceAccept: nil, // Not applicable
+                                                    FoodId: recipe.id,
+                                                    ItemType: recipe.itemType
+                                                )
                                 ) {
                                     RecipeViewCell(
                                         recipe: recipe,
@@ -174,7 +174,7 @@ struct HomeView: View {
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
                         NavigationLink(destination:
-                        SearchScreen(recentSearchesData: recentSearchesData)
+                                        SearchScreen(recentSearchesData: recentSearchesData)
                             .environment(\.modelContext, modelContext)
                         ) {
                             Image("ico_search")
@@ -222,6 +222,6 @@ struct HomeView: View {
             }
         }
     }
-
+    
 }
 
