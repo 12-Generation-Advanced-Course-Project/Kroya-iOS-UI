@@ -55,8 +55,5 @@ struct NewItemFoodOrderCardView: View {
     
     
 }
-    
-
-
 
 

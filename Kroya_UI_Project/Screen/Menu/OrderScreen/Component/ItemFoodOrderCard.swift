@@ -48,7 +48,7 @@ struct ItemFoodOrderCard: View {
                         // Time
                         if let timeAgo = orderRequest.purchaseDate {
                             Text(formatTimeAgo(from: timeAgo))
-                                .font(.customfont(.medium, fontSize: 12))
+                            .font(.customfont(.semibold, fontSize: 12))
                                 .foregroundColor(.gray)
                         }
                         
@@ -187,3 +187,7 @@ struct ItemFoodOrderCard: View {
         return nil
     }
 }
+
+
+
+
