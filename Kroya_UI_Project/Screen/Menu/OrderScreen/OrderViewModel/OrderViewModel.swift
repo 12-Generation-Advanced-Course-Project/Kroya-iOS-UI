@@ -117,27 +117,35 @@ class OrderViewModel: ObservableObject {
     //MARK: Add Purchase
     func addPurchase(purchase: PurchaseRequest, paymentType: String) {
         self.startLoading()
-        let puchaseType = ["paymentType" : "CASH"]
-        PurchaseService.shared.AddPurchase(purchase: purchase, paymentType: "CASH") { [weak self] result in
+        PurchaseService.shared.AddPurchase(purchase: purchase, paymentType: paymentType) { [weak self] result in
             DispatchQueue.main.async {
-                self?.endLoading()
+                guard let self = self else { return }
+                self.endLoading()
+                
                 switch result {
                 case .success(let purchaseResponse):
-                    // Handle success
-                    self?.successMessage = "Purchase added successfully!"
-                    if purchaseResponse.statusCode == "200", let payload = purchaseResponse.payload {
-                        self?.Purchases = payload
-                    }else {
-                        print("Error fetching purchase: \(purchaseResponse.message)")
+                    if let purchase = purchaseResponse {
+                        self.successMessage = "Purchase added successfully!"
+                        self.Purchases = purchase
+                        print("Purchase added successfully. Payload: \(purchase)")
+                    } else {
+                        self.errorMessage = "Purchase added successfully, but no data was returned."
+                        self.showError = true
+                        print("No payload returned.")
                     }
+                    
                 case .failure(let error):
-                    // Handle failure
-                    self?.errorMessage = "Failed to add purchase: \(error.localizedDescription)"
-                    self?.showError = true
-                    print("Error: \(error)")
+                    self.errorMessage = "Failed to add purchase: \(error.localizedDescription)"
+                    self.showError = true
+                    print("Error adding purchase: \(error.localizedDescription)")
+                    
+                    if let afError = error as? Alamofire.AFError, let underlyingError = afError.underlyingError {
+                        print("AFError underlying error: \(underlyingError.localizedDescription)")
+                    }
                 }
             }
         }
     }
-    
+
+
 }

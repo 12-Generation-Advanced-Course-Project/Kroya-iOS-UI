@@ -13,7 +13,7 @@ struct HomeView: View {
     @StateObject private var PopularFoodsData =  PopularFoodVM()
     @StateObject private var favoriteVM = FavoriteVM()
     @Environment(\.modelContext) var modelContext
-    @State var isLoading: Bool = false // New state for loading indicator
+    @State var isLoading: Bool = false
     var body: some View {
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
@@ -117,19 +117,19 @@ struct HomeView: View {
                             ForEach(foodSellViemModel.FoodOnSale.prefix(2)) { foodSale in
                                 NavigationLink(destination:
                                                 FoodDetailView(
-                                                    isFavorite: foodSale.isFavorite, showPrice: true, // Always false for recipes
-                                                    showOrderButton: true, // Always false for recipes
-                                                    showButtonInvoic: nil, // Not applicable
-                                                    invoiceAccept: nil, // Not applicable
-                                                    FoodId: foodSale.id,
-                                                    ItemType: foodSale.itemType
-                                                )
+                                                    isFavorite: foodSale.isFavorite ?? false, showPrice: true, // Always false for recipes
+                                                showOrderButton: true, // Always false for recipes
+                                                showButtonInvoic: nil, // Not applicable
+                                                invoiceAccept: nil, // Not applicable
+                                                FoodId: foodSale.id ?? 0,
+                                                ItemType: foodSale.itemType
+                                            )
                                 ) {
                                     FoodOnSaleViewCell(
                                         foodSale: foodSale,
                                         foodId: foodSale.id,
                                         itemType: "FOOD_SELL",
-                                        isFavorite: foodSale.isFavorite
+                                        isFavorite: foodSale.isFavorite ?? false
                                     )
                                     .frame(width: 350)
                                 }
@@ -215,7 +215,7 @@ struct HomeView: View {
             }
             .refreshable {
                            await refreshData() // Calls the refresh logic
-              }
+            }
             .onAppear {
                 loadData()
             }

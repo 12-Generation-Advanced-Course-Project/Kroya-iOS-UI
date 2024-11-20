@@ -23,7 +23,7 @@ struct AllUerPostFood: View {
                                 foodSale: popularsell,
                                 foodId: popularsell.id,
                                 itemType: "FOOD_SELL",
-                                isFavorite: popularsell.isFavorite
+                                isFavorite: popularsell.isFavorite ?? false
                             )
                             .frame(maxWidth: .infinity)
                             .padding(.horizontal, 20)
@@ -70,7 +70,7 @@ struct AllUerPostFood: View {
     @ViewBuilder
     private func foodDetailDestination(for foodSale: FoodSellModel) -> some View {
         FoodDetailView(
-            isFavorite: foodSale.isFavorite,
+            isFavorite: foodSale.isFavorite ?? false,
             showPrice: true, // Always false for recipes
             showOrderButton: true, // Always false for recipes
             showButtonInvoic: nil, // Not applicable
@@ -83,13 +83,13 @@ struct AllUerPostFood: View {
     @ViewBuilder
     private func recipeDetailDestination(for recipe: FoodRecipeModel) -> some View {
         FoodDetailView(
-        isFavorite: recipe.isFavorite ?? false,
+        isFavorite: recipe.isFavorite,
         showPrice: false, // Always false for recipes
         showOrderButton: false, // Always false for recipes
         showButtonInvoic: nil, // Not applicable
         invoiceAccept: nil, // Not applicable
         FoodId: recipe.id ,
-        ItemType: recipe.itemType ?? ""
+        ItemType: recipe.itemType
     )
     }
 }

@@ -27,7 +27,7 @@ struct UserPostFoodSale: View {
                                     foodSale: foodSale,
                                     foodId: foodSale.id,
                                     itemType: "FOOD_SELL",
-                                    isFavorite: foodSale.isFavorite
+                                    isFavorite: foodSale.isFavorite ?? false
                                 )
                                 .frame(maxWidth: .infinity)
                                 .padding(.horizontal, 20)
@@ -62,7 +62,7 @@ struct UserPostFoodSale: View {
     @ViewBuilder
     private func foodDetailDestination(for foodSale: FoodSellModel) -> some View {
         FoodDetailView(
-        isFavorite: foodSale.isFavorite,
+            isFavorite: foodSale.isFavorite ?? false,
         showPrice: false, // Always false for recipes
         showOrderButton: false, // Always false for recipes
         showButtonInvoic: nil, // Not applicable

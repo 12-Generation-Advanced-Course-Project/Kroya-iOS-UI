@@ -27,12 +27,16 @@ struct DeliveryCardDetailView: View {
             }
             .sheet(isPresented: $showAddressSheet) {
                 NavigationStack {
-                    AddressView { selected in
-                        selectedAddress = selected
-                        userInputAddress = selected.specificLocation
-                        userInputCity = selected.addressDetail
-                        print("Selected Address: \(selected)")
-                    }
+                    AddressView(
+                        onAddressSelected: { selected in
+                            // Handle selected address
+                            selectedAddress = selected
+                            userInputCity = selectedAddress?.specificLocation
+                            userInputAddress = selectedAddress?.addressDetail
+                            showAddressSheet = false
+                        },
+                        isFromEditingProfileView: true
+                    )
                 }
             }
             .padding(.horizontal)

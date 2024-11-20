@@ -75,7 +75,6 @@ struct OrderCardDetailView: View {
                             .frame(width: 20, height: 20)
                             .foregroundColor(.yellow)
                     }
-
                     .buttonStyle(PlainButtonStyle()) // Remove default button style
                     
                     Text("\(viewModel.quantity)")
@@ -92,7 +91,6 @@ struct OrderCardDetailView: View {
                             .frame(width: 20, height: 20)
                             .foregroundColor(.yellow)
                     }
-
                     .buttonStyle(PlainButtonStyle()) // Remove default button style
                 }
                 .padding(.vertical, 5)
@@ -104,13 +102,14 @@ struct OrderCardDetailView: View {
                 Text(LocalizedStringKey("Total"))
                     .font(.customfont(.semibold, fontSize: 16))
                 Spacer()
-                Text("\(currencySymbol(for: currency)) \(String(format: "%.2f", viewModel.orderItem.price))")
+                Text("\(currencySymbol(for: currency)) \(String(format: "%.2f", viewModel.totalPrice))")
                     .font(.customfont(.semibold, fontSize: 16))
                     .foregroundColor(.yellow)
-                    .onAppear{
+                    .onAppear {
                         totalPrice = Int(viewModel.totalPrice)
                     }
             }
+
             .padding(.horizontal)
             .padding(.vertical, 10)
             .offset(y: 6)

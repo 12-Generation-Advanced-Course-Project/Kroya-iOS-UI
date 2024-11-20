@@ -32,13 +32,13 @@ struct EditingProfileView: View {
     var body: some View {
         ZStack {
             VStack(spacing: 10) {
-//                HStack {
-//                    Text(LocalizedStringKey("Edit Profile"))
-//                        .font(.customfont(.bold, fontSize: 18))
-//                        .opacity(0.84)
-//                        .padding(.bottom, 20)
-//                }
-//                .frame(maxWidth: .infinity)
+                HStack {
+                    Text(LocalizedStringKey("Edit Profile"))
+                        .font(.customfont(.bold, fontSize: 18))
+                        .opacity(0.84)
+                        .padding(.bottom, 20)
+                }
+                .frame(maxWidth: .infinity)
                 
                 // Profile Image and Edit Icon
                 ZStack(alignment: .bottomTrailing) {
@@ -203,11 +203,14 @@ struct EditingProfileView: View {
                         .cornerRadius(8)
                         .sheet(isPresented: $showAddressSheet) {
                             NavigationStack {
-                                AddressView { selectedAddress in
-                                    // This is where you handle the selected address
-                                    userInputAddress = selectedAddress.addressDetail
-                                    print("Updated userInputAddress with selectedAddress.specificLocation: \(selectedAddress.addressDetail)")
-                                }
+                                AddressView(
+                                    onAddressSelected: { selectedAddress in
+                                        // Handle selected address
+                                        userInputAddress = selectedAddress.addressDetail
+                                        print("Updated userInputAddress with selectedAddress.specificLocation: \(selectedAddress.addressDetail)")
+                                    },
+                                    isFromEditingProfileView: true // Pass true to indicate this view is coming from EditingProfileView
+                                )
                             }
                         }
                     }
@@ -320,18 +323,6 @@ struct EditingProfileView: View {
         }
         .navigationTitle("Edit Profile")
         .navigationBarTitleDisplayMode(.inline)
-//        .navigationBarBackButtonHidden(true)
-//        .toolbar {
-//            ToolbarItem(placement: .navigationBarLeading) {
-//                Button(action: { dismiss() }) {
-//                    Image(systemName: "arrow.left")
-//                        .resizable()
-//                        .scaledToFit()
-//                        .frame(width: 20, height: 20)
-//                        .foregroundStyle(.black)
-//                }
-//            }
-//        }
     }
     
     // Function to load UIImage from filename if needed

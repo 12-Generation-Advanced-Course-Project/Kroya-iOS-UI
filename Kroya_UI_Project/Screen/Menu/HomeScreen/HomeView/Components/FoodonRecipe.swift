@@ -34,10 +34,10 @@ struct FoodonRecipe: View {
                             }
                         }) {
                             VStack {
-                                let imageName = cuisineImages[cuisine.cuisineName] ?? "DefaultCuisineImage"
+                                let imageName = cuisineImages[cuisine.cuisineName] ?? "snackPic"
                                 Image(imageName)
                                     .resizable()
-                                    .scaledToFit()
+                                    .scaledToFill()
                                     .frame(width: 60, height: 60)
                                     .cornerRadius(12)
                                 

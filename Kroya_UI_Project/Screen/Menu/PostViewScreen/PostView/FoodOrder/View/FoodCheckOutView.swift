@@ -22,11 +22,11 @@ struct FoodCheckOutView: View {
     var ReciptentName: String
     @State private var remark: String? = ""
     @State private var unitPrice: Int = 0
-    @State private var Quantity: Int = 0
+    @State private var Quantity: Int = 1
     @State private var SelectPayment: String = ""
     
     var Location: String {
-        selectedAddress?.specificLocation ?? ""
+        selectedAddress?.addressDetail ?? ""
     }
     
     var body: some View {
@@ -73,10 +73,6 @@ struct FoodCheckOutView: View {
                         print("Error: Payment method not selected.")
                         return
                     }
-                    guard Quantity > 0 else {
-                        print("Error: Quantity must be greater than zero.")
-                        return
-                    }
                     
                     let totalPrice = Double(unitPrice) * Double(Quantity)
                     let purchase = PurchaseRequest(
@@ -84,7 +80,7 @@ struct FoodCheckOutView: View {
                         remark: remark,
                         location: Location,
                         quantity: Quantity,
-                        totalPrice: Int(totalPrice)
+                        totalPrice: totalPrice
                     )
                     
                     PurchaesViewModel.addPurchase(purchase: purchase, paymentType: SelectPayment)
