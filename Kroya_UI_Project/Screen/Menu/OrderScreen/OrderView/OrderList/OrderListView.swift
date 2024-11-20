@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct OrderListView: View {
+
+    var orderRequest: OrderRequestModel?
     var sellerId:Int
     @State private var show3dot:Bool = true
     @State private var searchText = ""
     @State private var selectedSegment = 0
     @Environment(\.dismiss) var dismiss
+   
     
     var body: some View {
         
@@ -50,7 +53,7 @@ struct OrderListView: View {
                                 .frame(width: 16)
                                 .padding([.bottom, .leading], 12)
                                 .overlay(
-                                    Text("8")
+                                    Text("\(orderRequest?.quantity ?? 0)")
                                         .customFontSemiBoldLocalize(size: 10)
                                         .foregroundColor(.white)
                                         .padding([.bottom, .leading], 12)
