@@ -121,7 +121,7 @@ struct HomeView: View {
                                                 showOrderButton: true, // Always false for recipes
                                                 showButtonInvoic: nil, // Not applicable
                                                 invoiceAccept: nil, // Not applicable
-                                                FoodId: foodSale.id ?? 0,
+                                                FoodId: foodSale.id,
                                                 ItemType: foodSale.itemType
                                             )
                                 ) {

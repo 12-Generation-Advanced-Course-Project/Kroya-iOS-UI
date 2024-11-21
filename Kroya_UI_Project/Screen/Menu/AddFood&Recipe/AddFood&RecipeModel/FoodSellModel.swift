@@ -15,7 +15,7 @@ struct FoodSellModel: Identifiable, Codable {
     var name: String
     var dateCooking: String?
     var price: Double
-    var currencyType: String
+    var currencyType: String?
     var averageRating: Double?
     var totalRaters: Int?
     var isFavorite: Bool?

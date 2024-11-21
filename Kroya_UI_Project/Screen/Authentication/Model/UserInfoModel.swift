@@ -64,10 +64,10 @@ struct DeviceTokenModel: Codable {
 
 struct SellerInformation: Identifiable, Codable {
     var id: Int
-    var fullName: String
-    var phoneNumber: String
-    var profileImage: String
-    var location: String
+    var fullName: String?
+    var phoneNumber: String?
+    var profileImage: String?
+    var location: String?
     
     // Map userId from JSON to id in the struct
     enum CodingKeys: String, CodingKey {

@@ -329,8 +329,6 @@ struct SaleModalView: View {
                         }
                     }
             }
-            
-            
         }
         .navigationBarBackButtonHidden(true)
         .navigationTitle("Sale")
