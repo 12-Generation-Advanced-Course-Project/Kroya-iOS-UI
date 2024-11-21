@@ -16,13 +16,28 @@ struct ReceiptView: View {
     @State private var presentPopup = false
     @ObservedObject var viewModel = ReceiptViewModel()
     var isOrderReceived: Bool
-    //@State private var isOrderReceived = true
-    
-    
+    var PurchaseId:Int
     var body: some View {
         
         ZStack{
             VStack {
+                // Top bar with back button and title
+                HStack {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Image(systemName: "arrow.left")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 20, height: 20)
+                            .foregroundColor(.black)
+                    }.padding(.leading,15)
+                    
+                    Text("Receipt")
+                        .font(.system(size: 18, weight: .medium))
+                        .frame(maxWidth: .infinity,alignment: .center)
+                        .padding(.trailing,35)
+                }
                 if isOrderReceived {
                     VStack {
                         Image(systemName: "checkmark.circle.fill")
@@ -39,13 +54,14 @@ struct ReceiptView: View {
                             .resizable()
                             .frame(width: 50, height: 50)
                             .foregroundColor(.green)
-                        Text("Success") // Default text
-                            .font(.system(size: 21, weight: .medium))
+                        Text("Payment Successful")
+                            .font(.system(size: 18, weight: .medium))
+                            .frame(maxWidth: .infinity,alignment: .center)
                         
                     }
                 }
                 
-                ReceiptCard(viewModel: viewModel, presentPopup: $presentPopup, isOrderReceived: isOrderReceived)
+                ReceiptCard(viewModel: viewModel, presentPopup: $presentPopup, isOrderReceived: isOrderReceived, FoodSellId: PurchaseId)
                 
                 // Confirm button
                 if isOrderReceived{
@@ -63,40 +79,15 @@ struct ReceiptView: View {
                     }
                     .padding(.top, 20)
                 }}
-            //  .padding(.bottom, 50)
-            .navigationTitle("Receipt")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(true)  // Hide back button
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    if !presentPopup {
-                        Button(action: {
-                            dismiss()
-                        }) {
-                            Image(systemName: "arrow.left")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 20, height: 20)
-                                .foregroundColor(.black)
-                        }
-                    }
-                }
-            }
             if presentPopup {
                 Popup(isPresented: $presentPopup, dismissOnTapOutside: true) {
-                    ReceiptCard1(viewModel: viewModel, presentPopup: $presentPopup, isOrderReceived: isOrderReceived)
-                        .transition(.scale)  // Add a scale transition
+                    ReceiptCardForSuccess(viewModel: viewModel, presentPopup: $presentPopup, isOrderReceived: isOrderReceived, FoodSellId: PurchaseId)
+                        .transition(.scale)
                         .animation(.easeInOut(duration: 0.3))
                 }
             }
             
         }
         
-    }
-}
-
-#Preview {
-    NavigationView {
-        //        ReceiptView()
     }
 }

@@ -1,5 +1,4 @@
 import SwiftUI
-//import GoogleMaps
 import SwiftData
 import Network
 
@@ -7,7 +6,6 @@ import Network
 struct Kroya_UI_ProjectApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject var userStore = UserStore()
-//    @StateObject var addressViewModel = AddressViewModel()
     @State private var isSplashScreenActive = true
     @State private var isConnected = true
     @State var lang: String = UserDefaults.standard.string(forKey: "AppLanguage") ?? "en"
@@ -41,7 +39,7 @@ struct Kroya_UI_ProjectApp: App {
         
 //        GMSServices.provideAPIKey(Constants.GoogleMapsAPIkeys)
         // Initialize modelContainer with both Draft and RecentSearchesModel
-        modelContainer = try! ModelContainer(for: Draft.self, RecentSearchesModel.self)
+        modelContainer = try! ModelContainer(for: Draft.self, RecentSearchesModel.self, WeBillAccount.self)
         setupNetworkMonitoring()
         
         // Clear Keychain on first launch after reinstall
@@ -56,7 +54,6 @@ struct Kroya_UI_ProjectApp: App {
                 if isSplashScreenActive {
                     SplashScreen(isSplashScreenActive: $isSplashScreenActive, lang: $lang)
                         .environmentObject(userStore)
-//                        .environmentObject(addressViewModel)
                 } else {
                     if isConnected {
                         contentView
@@ -78,7 +75,6 @@ struct Kroya_UI_ProjectApp: App {
                         MainScreen(userStore: userStore, lang: $lang)
                             .environmentObject(userStore)
                             .environmentObject(Auth.shared)
-//                            .environmentObject(addressViewModel)
                             .environment(\.locale, .init(identifier: lang))
                             .environment(\.modelContext, modelContainer.mainContext)
                     }
@@ -87,7 +83,6 @@ struct Kroya_UI_ProjectApp: App {
                         LoginScreenView(userStore: userStore, lang: $lang)
                             .environmentObject(userStore)
                             .environmentObject(Auth.shared)
-//                            .environmentObject(addressViewModel)
                             .environment(\.locale, .init(identifier: lang))
                             .environment(\.modelContext, modelContainer.mainContext)
                     }

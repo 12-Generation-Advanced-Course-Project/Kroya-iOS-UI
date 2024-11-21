@@ -215,7 +215,7 @@ class AuthViewModel: ObservableObject {
                         // Update userStore and state
                         self?.userStore.setUser(email: email, accesstoken: accessToken, refreshtoken: refreshToken)
                         Auth.shared.setCredentials(accessToken: accessToken, refreshToken: refreshToken, email: email)
-                        
+                       
                         self?.successMessage = "Successfully logged in"
                         self?.showError = false
                         Auth.shared.loggedIn = true
@@ -246,31 +246,46 @@ class AuthViewModel: ObservableObject {
         }
     }
 
-    
-//    //MARK: Save UserInfo
-//    func saveUserInfo(email: String, userName: String, phoneNumber: String, address: String, accessToken: String, refreshToken: String) {
-//        self.isLoading = true
-//        print("Email : \(email), UserName : \(userName), PhoneNumber : \(phoneNumber), Address : \(address)")
-//        AuthService.shared.saveUserInfo(userName: userName, phoneNumber: phoneNumber, address: address) { [weak self] result in
-//            DispatchQueue.main.async {
-//                self?.isLoading = false
-//                switch result {
-//                case .success(_):
-//                    // Success scenario
-//                    self?.successMessage = "User information saved successfully."
-//                    self?.showError = false
-//                    self?.userStore.setUser(email: email, userName: userName, phoneNumber: phoneNumber, address: address)
-//
-//                    self?.isUserSave = true
-//                case .failure(let error):
-//                    // Failure scenario
-//                    self?.successMessage = "Email not found. Please register before updating info."
-//                    self?.showError = true
-//                    print("Error: \(error.localizedDescription)")
-//                }
+//    func saveUserInfo(email: String, userName: String, phoneNumber: String, address: String, accessToken: String, refreshToken: String, completion: @escaping (Result<UserInfoResponse, Error>) -> Void) {
+//        print("Starting API request to save user info.")
+//        AuthService.shared.saveUserInfo(userName: userName, phoneNumber: phoneNumber, address: address) { result in
+//            switch result {
+//            case .success(let userInfoResponse):
+//                // Success case
+//                completion(.success(userInfoResponse))
+//            case .failure(let error):
+//                // Failure case
+//                print("Failed to save user info: \(error.localizedDescription)")
+//                completion(.failure(error))
 //            }
 //        }
 //    }
+
+    
+//    //MARK: Save UserInfo
+    func saveUserInfo(email: String, userName: String, phoneNumber: String, address: String, accessToken: String, refreshToken: String) {
+        self.isLoading = true
+        print("Email : \(email), UserName : \(userName), PhoneNumber : \(phoneNumber), Address : \(address)")
+        AuthService.shared.saveUserInfo(userName: userName, phoneNumber: phoneNumber, address: address) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                switch result {
+                case .success(_):
+                    // Success scenario
+                    self?.successMessage = "User information saved successfully."
+                    self?.showError = false
+                    self?.userStore.setUser(email: email, userName: userName, phoneNumber: phoneNumber, address: address)
+
+                    self?.isUserSave = true
+                case .failure(let error):
+                    // Failure scenario
+                    self?.successMessage = "Email not found. Please register before updating info."
+                    self?.showError = true
+                    print("Error: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
 
     
     

@@ -20,7 +20,6 @@ struct FoodDetailView: View {
     var ItemType: String
     @State private var refreshID = UUID()
     @Environment(\.dismiss) var dismiss
-    
     var body: some View {
         GeometryReader { geometry in
             let screenHeight = geometry.size.height
@@ -85,13 +84,13 @@ struct FoodDetailView: View {
                 }
                 
                 // Bottom Sheet Content
-                BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.67, showOrderButton: showOrderButton, notificationType: notificationType, showButtonInvoic: showButtonInvoic ?? false, invoiceAccept: invoiceAccept ?? false,itemType: ItemType, FoodDetails: FoodDetailsVM)
-                {
+                BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.67, showOrderButton: showOrderButton, notificationType: notificationType, showButtonInvoic: showButtonInvoic ?? false, invoiceAccept: invoiceAccept ?? false, FoodetailsId: FoodId,itemType: ItemType, FoodDetails: FoodDetailsVM)
+                   {
                     ContentView(showPrice: showPrice, isShowPopup: $isShowPopup,itemType: ItemType, FoodId: FoodId, FoodDetails: FoodDetailsVM)
                         .padding(.horizontal, 10)
                     
-                }
-                .edgesIgnoringSafeArea(.all)
+                   }
+                   .edgesIgnoringSafeArea(.all)
                 
                 if isShowPopup {
                     PopupReview(isReviewPopupOpen: $isShowPopup, FeedbackVM: FeedbackVM, ItemType: ItemType, FoodId: FoodId)

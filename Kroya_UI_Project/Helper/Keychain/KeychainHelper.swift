@@ -13,6 +13,7 @@ class Auth: ObservableObject {
         var accessToken: String?
         var refreshToken: String?
         var email: String?
+        var WebillToken: String?
     }
     
     enum KeychainKey: String {
@@ -20,6 +21,9 @@ class Auth: ObservableObject {
         case refreshToken
         case email
         case fcmToken
+        case WebillToken
+        case webillClientId
+        case webillSecretId
     }
     
     static let shared: Auth = Auth()
@@ -46,8 +50,26 @@ class Auth: ObservableObject {
         keychain.set(refreshToken, forKey: KeychainKey.refreshToken.rawValue)
         keychain.set(email, forKey: KeychainKey.email.rawValue)
     }
+    // MARK: - WeBill Credentials
+    func setWeBillCredentials(clientId: String, secretId: String,webillToken:String?) {
+        keychain.set(clientId, forKey: KeychainKey.webillClientId.rawValue)
+        keychain.set(secretId, forKey: KeychainKey.webillSecretId.rawValue)
+        keychain.set(webillToken ?? "", forKey: KeychainKey.WebillToken.rawValue)
+    }
     
+    func getWeBillCredentials() -> (clientId: String?, secretId: String?, webillToken: String?) {
+        let clientId = keychain.string(forKey: KeychainKey.webillClientId.rawValue)
+        let secretId = keychain.string(forKey: KeychainKey.webillSecretId.rawValue)
+        let webillToken = keychain.string(forKey: KeychainKey.WebillToken.rawValue)
+        return (clientId, secretId, webillToken)
+    }
     
+    func clearWeBillCredentials() {
+        keychain.removeObject(forKey: KeychainKey.webillClientId.rawValue)
+        keychain.removeObject(forKey: KeychainKey.webillSecretId.rawValue)
+        keychain.removeObject(forKey: KeychainKey.WebillToken.rawValue)
+        
+    }
     func hasAccessToken() -> Bool {
         return getCredentials().accessToken != nil
     }

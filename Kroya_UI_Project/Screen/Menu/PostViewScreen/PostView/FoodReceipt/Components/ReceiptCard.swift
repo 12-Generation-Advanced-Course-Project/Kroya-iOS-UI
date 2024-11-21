@@ -7,14 +7,15 @@
 
 import SwiftUI
 import Photos
-
+import SDWebImageSwiftUI
 struct ReceiptCard: View {
-    
     @ObservedObject var viewModel: ReceiptViewModel
+    @StateObject private var ReceiptVM = OrderViewModel()
+    @StateObject private var Profile = ProfileViewModel()
     @Binding var presentPopup: Bool
-    @State private var downloadSuccess: Bool = false  // State variable for download status
+    @State private var downloadSuccess: Bool = false
     var isOrderReceived: Bool
-    
+    var FoodSellId:Int
     var body: some View {
         VStack {
             ZStack {
@@ -27,13 +28,24 @@ struct ReceiptCard: View {
                 
                 VStack(spacing: 20) {
                     HStack(spacing: 15) {
-                        Image("food_background")
-                            .resizable()
-                            .frame(width: 50, height: 50)
-                            .cornerRadius(50)
-                        
+                        if let FoodSellImage = Profile.userProfile?.profileImage, !FoodSellImage.isEmpty,
+                           let imageUrl = URL(string: Constants.fileupload + FoodSellImage) {
+                            WebImage(url: imageUrl)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 40, height: 40)
+                                .clipShape(Rectangle())
+                                .cornerRadius(10)
+                        } else {
+                            Image("user-profile") // Placeholder image
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 40, height: 40)
+                                .foregroundColor(.white)
+                        }
+                        //MARK: Price and Paid to Seller
                         VStack(alignment: .leading, spacing: 10) {
-                            Text(viewModel.receipt.amount)
+                            Text("\(ReceiptVM.Purchases?.totalPrice ?? 0, specifier: "%.2f") USD")
                                 .font(.system(size: 16, weight: .medium))
                                 .foregroundColor(.black)
                             
@@ -44,7 +56,7 @@ struct ReceiptCard: View {
                                         .frame(width: 14, height: 14)
                                         .foregroundColor(.green)
                                     
-                                    Text("From \(viewModel.receipt.payer)")
+                                    Text("Paid to \(ReceiptVM.Purchases?.seller ?? "Unknown")")
                                         .font(.system(size: 14, weight: .medium))
                                         .foregroundColor(.gray)
                                 } else {
@@ -53,7 +65,7 @@ struct ReceiptCard: View {
                                         .frame(width: 14, height: 14)
                                         .foregroundColor(.red)
                                     
-                                    Text(viewModel.receipt.paidTo)
+                                    Text("\(ReceiptVM.Purchases?.payer ?? "Unknown")")
                                         .font(.system(size: 14, weight: .medium))
                                         .foregroundColor(.gray)
                                 }
@@ -64,31 +76,33 @@ struct ReceiptCard: View {
                     .padding(.horizontal)
                     .padding(.leading, 20)
                     .offset(y: -7)
-        //Item
+                    //MARK: Item
                     VStack(alignment: .leading, spacing: 18) {
                         HStack {
                             Text("Item")
                                 .opacity(0.7)
                                 .font(.system(size: 16, weight: .medium))
                             Spacer()
-                            Text(viewModel.receipt.item)
+                            Text(ReceiptVM.Purchases?.foodSellCardResponse.name ?? "")
                                 .font(.system(size: 16, weight: .medium))
                                 .foregroundStyle(Color.yellow)
-                     
-                        Spacer()
-                        Text("x\(viewModel.receipt.qty)")
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundStyle(Color.black)
+                                .padding(.trailing,14)
+                            
+                            Spacer()
+                            Text("x\(ReceiptVM.Purchases?.quantity ?? 0)")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundStyle(Color.black)
                         }.padding(.horizontal)
                         Rectangle()
                             .fill(Color(red: 0.82, green: 0.816, blue: 0.82))
                             .frame(height: 1)
                         
-                        ReceiptRow(label: "Reference#", value: viewModel.receipt.referenceNumber)
-                        ReceiptRow(label: "Order date", value: viewModel.receipt.orderDate)
-                        ReceiptRow(label: "Paid by", value: viewModel.receipt.paidBy)
+                        ReceiptRow(label: "Reference#", value: ReceiptVM.Purchases?.reference ?? "")
+                        ReceiptRow(label: "Order Date", value: formatDate(from: ReceiptVM.Purchases?.orderDate ?? ""))
+                        ReceiptRow(label: "Paid by", value: ReceiptVM.Purchases?.paidBy ?? "")
                         
-            //Payer
+                        
+                        //MARK: Payer
                         if isOrderReceived {
                             HStack{
                                 Text("Payer")
@@ -96,7 +110,7 @@ struct ReceiptCard: View {
                                     .font(.system(size: 16, weight: .medium))
                                 Spacer()
                                 VStack(alignment: .leading) {
-                                    Text(viewModel.receipt.payer)
+                                    Text(ReceiptVM.Purchases?.payer ?? "")
                                         .font(.system(size: 16, weight: .medium))
                                     // ReceiptRow(label: "Payer", value: viewModel.receipt.payer)
                                     Text(viewModel.receipt.sellerPhone)
@@ -110,7 +124,7 @@ struct ReceiptCard: View {
                                     .foregroundColor(.yellow)
                             } .padding(.horizontal)
                         } else {
-                            ReceiptRow(label: "Payer", value: viewModel.receipt.payer)
+                            ReceiptRow(label: "Payer", value: ReceiptVM.Purchases?.payer ?? "")
                         }
                         
                         if isOrderReceived{
@@ -126,12 +140,13 @@ struct ReceiptCard: View {
                                 Text("Seller")
                                     .opacity(0.7)
                                     .font(.system(size: 16, weight: .medium))
-                                    
+                                
                                 Spacer()
                                 VStack(alignment: .leading) {
-                                    Text(viewModel.receipt.sellerName)
+                                    Text(ReceiptVM.Purchases?.foodSellCardResponse.sellerInformation?.fullName ?? "")
                                         .font(.system(size: 16, weight: .medium))
-                                    Text(viewModel.receipt.sellerPhone)
+                                        .padding(.trailing,35)
+                                    Text("\(ReceiptVM.Purchases?.foodSellCardResponse.sellerInformation?.phoneNumber ?? "")")
                                         .font(.system(size: 16, weight: .medium))
                                 }
                                 Spacer()
@@ -145,19 +160,23 @@ struct ReceiptCard: View {
                                 .fill(Color(red: 0.82, green: 0.816, blue: 0.82))
                                 .frame(height: 1)
                         }
-                     
+                        
                     }
                     .padding(.horizontal)
                     
                     VStack {
                         Button {
-                            if !downloadSuccess {
-                                presentPopup = true
+                            saveImage { success in
+                                if success {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                        withAnimation(.easeInOut) {
+                                            presentPopup = true
+                                        }
+                                    }
+                                    downloadSuccess = true
+                                }
                                 
-                                saveImage() // Save image as PNG
                             }
-                            
-                            
                         } label: {
                             HStack {
                                 if !downloadSuccess {
@@ -174,54 +193,128 @@ struct ReceiptCard: View {
                             }
                         }
                         .buttonStyle(PlainButtonStyle())
-               
                         .disabled(downloadSuccess)
                     }
+
                     
                 }
             }
             .frame(maxWidth: .infinity, minHeight: 530, alignment: .center)
-          
+            
             .background(Color.clear)
         }
-    }
-    
-    func saveImage() {
-        // Update the UI to show "Download Success" before capturing the image
-        withAnimation {
-            downloadSuccess = true
+        .onAppear{
+            ReceiptVM.getReceipt(purchaseId: FoodSellId)
+            Profile.fetchUserProfile()
         }
-        
-        // Define the size of the receipt content you want to capture (the ZStack)
-        let receiptSize = CGSize(width: UIScreen.main.bounds.width, height: 650) // Match the ZStack height
-        
-        // Capture the view inside ZStack after the state has updated
-        self.body
-            .captureUIView(size: receiptSize) { image in
-                guard let image = image else {
-                    print("Error capturing image")
-                    return
-                }
-                
-                // Save the image as PNG to the photo album
-                if let pngData = image.pngData() {
-                    PHPhotoLibrary.shared().performChanges({
-                        PHAssetChangeRequest.creationRequestForAsset(from: UIImage(data: pngData)!)
-                    }) { success, error in
-                        if success {
-                            // The image was successfully saved
-                            print("Receipt saved successfully!")
-                        } else if let error = error {
-                            print("Error saving receipt: \(error.localizedDescription)")
+    }
+    func saveImage(complete: @escaping (Bool) -> Void) {
+        guard let ImageProfile = Profile.userProfile?.profileImage,
+              !ImageProfile.isEmpty,
+              let imageUrl = URL(string: Constants.fileupload + ImageProfile) else {
+            print("Error: Invalid profile image URL")
+            complete(false)
+            return
+        }
+
+        // Step 1: Save the main receipt
+        let receiptSize = CGSize(width: UIScreen.main.bounds.width, height: 620)
+        self.body.captureUIView(size: receiptSize) { image in
+            guard let receiptImage = image else {
+                print("Error capturing receipt image")
+                complete(false)
+                return
+            }
+
+            // Save the receipt image
+            if let pngData = receiptImage.pngData() {
+                PHPhotoLibrary.shared().performChanges({
+                    PHAssetChangeRequest.creationRequestForAsset(from: UIImage(data: pngData)!)
+                }) { success, error in
+                    if success {
+                        print("Receipt saved successfully!")
+                        
+                        // Step 2: Save the profile image from WebImage
+                        self.downloadAndSaveImage(from: imageUrl) { imageSuccess in
+                            if imageSuccess {
+                                DispatchQueue.main.async {
+                                    self.downloadSuccess = true
+                                    print("All images saved successfully!")
+                                    complete(true)
+                                }
+                            } else {
+                                print("Error saving profile image")
+                                complete(false)
+                            }
                         }
+                    } else if let error = error {
+                        print("Error saving receipt: \(error.localizedDescription)")
+                        complete(false)
                     }
                 }
+            } else {
+                print("Error generating PNG data for receipt image")
+                complete(false)
             }
+        }
+        
+        
     }
+
+    private func downloadAndSaveImage(from url: URL, completion: @escaping (Bool) -> Void) {
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                print("Error downloading profile image: \(error.localizedDescription)")
+                completion(false)
+                return
+            }
+
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                print("Failed to download image: Invalid HTTP response or status code.")
+                completion(false)
+                return
+            }
+
+            guard let mimeType = httpResponse.mimeType, mimeType.starts(with: "image") else {
+                print("Invalid MIME type for image")
+                completion(false)
+                return
+            }
+
+            guard let data = data, let image = UIImage(data: data) else {
+                print("Error decoding profile image data")
+                completion(false)
+                return
+            }
+
+            PHPhotoLibrary.shared().performChanges({
+                PHAssetChangeRequest.creationRequestForAsset(from: image)
+            }) { success, error in
+                if success {
+                    print("Profile image saved successfully!")
+                    completion(true)
+                } else if let error = error {
+                    print("Error saving profile image: \(error.localizedDescription)")
+                    completion(false)
+                }
+            }
+        }.resume()
+    }
+
+    
+    func formatDate(from dateString: String) -> String {
+            let inputFormatter = DateFormatter()
+            inputFormatter.locale = Locale(identifier: "en_US_POSIX")
+            inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSS"
+            guard let date = inputFormatter.date(from: dateString) else {
+                return "Invalid Date"
+            }
+            let outputFormatter = DateFormatter()
+            outputFormatter.dateFormat = "MM/dd/yyyy @hh:mm a"
+            return outputFormatter.string(from: date)
+        }
     
 }
-
-
 struct ReceiptRow: View {
     var label: String
     var value: String
@@ -244,16 +337,18 @@ struct ReceiptRow: View {
     }
 }
 
-struct ReceiptCard1: View {
-    
+//
+struct ReceiptCardForSuccess: View {
     @ObservedObject var viewModel: ReceiptViewModel
+    @StateObject private var ReceiptVM = OrderViewModel()
     @Binding var presentPopup: Bool
-    @State private var downloadSuccess: Bool = false  // State variable for download status
+    @State private var downloadSuccess: Bool = false
     var isOrderReceived: Bool
-    
+    var FoodSellId:Int
     var body: some View {
         VStack {
             ZStack {
+                // Only capture this section
                 Image("receipt")
                     .resizable()
                     .frame(maxWidth: .infinity)
@@ -262,13 +357,24 @@ struct ReceiptCard1: View {
                 
                 VStack(spacing: 20) {
                     HStack(spacing: 15) {
-                        Image("food_background")
-                            .resizable()
-                            .frame(width: 50, height: 50)
-                            .cornerRadius(50)
-                        
+                        if let FoodSellImage = ReceiptVM.Purchases?.foodSellCardResponse.photo.first?.photo, !FoodSellImage.isEmpty,
+                           let imageUrl = URL(string: Constants.fileupload + FoodSellImage) {
+                            WebImage(url: imageUrl)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 40, height: 40)
+                                .clipShape(Rectangle())
+                                .cornerRadius(10)
+                        } else {
+                            Image("user-profile") // Placeholder image
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 40, height: 40)
+                                .foregroundColor(.white)
+                        }
+                        //MARK: Price and Paid to Seller
                         VStack(alignment: .leading, spacing: 10) {
-                            Text(viewModel.receipt.amount)
+                            Text("\(ReceiptVM.Purchases?.totalPrice ?? 0, specifier: "%.2f") USD")
                                 .font(.system(size: 16, weight: .medium))
                                 .foregroundColor(.black)
                             
@@ -279,7 +385,7 @@ struct ReceiptCard1: View {
                                         .frame(width: 14, height: 14)
                                         .foregroundColor(.green)
                                     
-                                    Text("From \(viewModel.receipt.payer)")
+                                    Text("Paid to \(ReceiptVM.Purchases?.seller ?? "Unknown")")
                                         .font(.system(size: 14, weight: .medium))
                                         .foregroundColor(.gray)
                                 } else {
@@ -288,7 +394,7 @@ struct ReceiptCard1: View {
                                         .frame(width: 14, height: 14)
                                         .foregroundColor(.red)
                                     
-                                    Text(viewModel.receipt.paidTo)
+                                    Text("\(ReceiptVM.Purchases?.payer ?? "Unknown")")
                                         .font(.system(size: 14, weight: .medium))
                                         .foregroundColor(.gray)
                                 }
@@ -299,29 +405,33 @@ struct ReceiptCard1: View {
                     .padding(.horizontal)
                     .padding(.leading, 20)
                     .offset(y: -7)
-                    
+                    //MARK: Item
                     VStack(alignment: .leading, spacing: 18) {
                         HStack {
                             Text("Item")
                                 .opacity(0.7)
                                 .font(.system(size: 16, weight: .medium))
                             Spacer()
-                            Text(viewModel.receipt.item)
+                            Text(ReceiptVM.Purchases?.foodSellCardResponse.name ?? "")
                                 .font(.system(size: 16, weight: .medium))
                                 .foregroundStyle(Color.yellow)
-                     
-                        Spacer()
-                        Text("x\(viewModel.receipt.qty)")
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundStyle(Color.black)
+                                .padding(.trailing,14)
+                            
+                            Spacer()
+                            Text("x\(ReceiptVM.Purchases?.quantity ?? 0)")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundStyle(Color.black)
                         }.padding(.horizontal)
                         Rectangle()
                             .fill(Color(red: 0.82, green: 0.816, blue: 0.82))
                             .frame(height: 1)
-                        ReceiptRow(label: "Reference#", value: viewModel.receipt.referenceNumber)
-                        ReceiptRow(label: "Order date", value: viewModel.receipt.orderDate)
-                        ReceiptRow(label: "Paid by", value: viewModel.receipt.paidBy)
-                        //Payer
+                        
+                        ReceiptRow(label: "Reference#", value: ReceiptVM.Purchases?.reference ?? "")
+                        ReceiptRow(label: "Order Date", value: formatDate(from: ReceiptVM.Purchases?.orderDate ?? ""))
+                        ReceiptRow(label: "Paid by", value: ReceiptVM.Purchases?.paidBy ?? "")
+                        
+                        
+                        //MARK: Payer
                         if isOrderReceived {
                             HStack{
                                 Text("Payer")
@@ -329,7 +439,7 @@ struct ReceiptCard1: View {
                                     .font(.system(size: 16, weight: .medium))
                                 Spacer()
                                 VStack(alignment: .leading) {
-                                    Text(viewModel.receipt.payer)
+                                    Text(ReceiptVM.Purchases?.payer ?? "")
                                         .font(.system(size: 16, weight: .medium))
                                     // ReceiptRow(label: "Payer", value: viewModel.receipt.payer)
                                     Text(viewModel.receipt.sellerPhone)
@@ -343,13 +453,15 @@ struct ReceiptCard1: View {
                                     .foregroundColor(.yellow)
                             } .padding(.horizontal)
                         } else {
-                            ReceiptRow(label: "Payer", value: viewModel.receipt.payer)
+                            ReceiptRow(label: "Payer", value: ReceiptVM.Purchases?.payer ?? "")
                         }
+                        
                         if isOrderReceived{
                             Rectangle()
                                 .fill(Color(red: 0.82, green: 0.816, blue: 0.82))
                                 .frame(height: 1)
                         }
+                        
                         if isOrderReceived {
                             ReceiptRow(label: "Address", value: viewModel.receipt.address)
                         } else{
@@ -357,12 +469,13 @@ struct ReceiptCard1: View {
                                 Text("Seller")
                                     .opacity(0.7)
                                     .font(.system(size: 16, weight: .medium))
-                                    
+                                
                                 Spacer()
                                 VStack(alignment: .leading) {
-                                    Text(viewModel.receipt.sellerName)
+                                    Text(ReceiptVM.Purchases?.foodSellCardResponse.sellerInformation?.fullName ?? "")
                                         .font(.system(size: 16, weight: .medium))
-                                    Text(viewModel.receipt.sellerPhone)
+                                        .padding(.trailing,35)
+                                    Text("\(ReceiptVM.Purchases?.foodSellCardResponse.sellerInformation?.phoneNumber ?? "")")
                                         .font(.system(size: 16, weight: .medium))
                                 }
                                 Spacer()
@@ -376,21 +489,77 @@ struct ReceiptCard1: View {
                                 .fill(Color(red: 0.82, green: 0.816, blue: 0.82))
                                 .frame(height: 1)
                         }
+                        
                     }
                     .padding(.horizontal)
                     
                     VStack {
-                        HStack {
-                            Text("Download Success")
-                                .font(.system(size: 16, weight: .bold))
-                                .foregroundColor(Color.yellow)
+                        Button {
+                        } label: {
+                            HStack {
+                                Text("Download Success")
+                                    .font(.system(size: 16, weight: .bold))
+                                    .foregroundColor(.yellow)
+                            }
                         }
-                        .disabled(downloadSuccess)
+                        .buttonStyle(PlainButtonStyle())
+                        .disabled(true)
                     }
+
+                    
                 }
             }
-            .frame(maxWidth: .infinity, minHeight: 550, alignment: .center)
+            .frame(maxWidth: .infinity, minHeight: 530, alignment: .center)
+            
             .background(Color.clear)
         }
+        .onAppear{
+            ReceiptVM.getReceipt(purchaseId: FoodSellId)
+        }
     }
+    func saveImage(complete: @escaping (Bool) -> Void) {
+        let receiptSize = CGSize(width: UIScreen.main.bounds.width, height: 620)
+        self.body
+            .captureUIView(size: receiptSize) { image in
+                guard let image = image else {
+                    print("Error capturing image")
+                    complete(false)
+                    return
+                }
+                
+                // Save the image as PNG to the photo album
+                if let pngData = image.pngData() {
+                    PHPhotoLibrary.shared().performChanges({
+                        PHAssetChangeRequest.creationRequestForAsset(from: UIImage(data: pngData)!)
+                    }) { success, error in
+                        if success {
+                            DispatchQueue.main.async {
+                                downloadSuccess = true
+                                print("Receipt saved successfully!")
+                                complete(true)
+                            }
+                        } else if let error = error {
+                            print("Error saving receipt: \(error.localizedDescription)")
+                            complete(false)
+                        }
+                    }
+                } else {
+                    complete(false)
+                }
+            }
+    }
+
+    
+    func formatDate(from dateString: String) -> String {
+            let inputFormatter = DateFormatter()
+            inputFormatter.locale = Locale(identifier: "en_US_POSIX")
+            inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSS"
+            guard let date = inputFormatter.date(from: dateString) else {
+                return "Invalid Date"
+            }
+            let outputFormatter = DateFormatter()
+            outputFormatter.dateFormat = "MM/dd/yyyy @hh:mm a"
+            return outputFormatter.string(from: date)
+        }
+    
 }

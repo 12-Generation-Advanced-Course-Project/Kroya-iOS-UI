@@ -30,8 +30,10 @@ class OrderRequestViewModel: ObservableObject {
     
     // MARK: Fetch Orders for Seller by Id
     func fetchOrderForSellerById(sellerId: Int) {
+        self.startLoading()
         OrderRequestService.shared.getOrderForSellerById(sellerId: sellerId) { [weak self] result in
             DispatchQueue.main.async {
+                self?.endLoading()
                 switch result {
                 case .success(let response):
                     if response.statusCode == "200", let payload = response.payload {
