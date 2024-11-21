@@ -9,10 +9,10 @@ import SwiftUI
 
 struct FavoriteRecipesTabView: View {
     @StateObject private var favoriteFoodRecipe = FavoriteVM()
-    
+    @Binding var searchText : String
     var body: some View {
         VStack {
-            if favoriteFoodRecipe.favoriteFoodRecipe.isEmpty && !favoriteFoodRecipe.isLoading{
+            if filteredFoodRecipe.isEmpty && !favoriteFoodRecipe.isLoading{
                 Text("No Favorite Food Recipe Found!")
                     .font(.title3)
                     .foregroundColor(.gray)
@@ -20,13 +20,13 @@ struct FavoriteRecipesTabView: View {
             } else {
                 ScrollView(showsIndicators: false) {
                     LazyVStack(spacing: 8) {
-                        ForEach(favoriteFoodRecipe.favoriteFoodRecipe) { favorite in
+                        ForEach(filteredFoodRecipe) { favorite in
                             NavigationLink(destination:
                                             FoodDetailView(
-                                                isFavorite: favorite.isFavorite ?? false , showPrice: false, // Always false for recipes
-                                                showOrderButton: false, // Always false for recipes
-                                                showButtonInvoic: nil, // Not applicable
-                                                invoiceAccept: nil, // Not applicable
+                                                isFavorite: favorite.isFavorite , showPrice: false,
+                                                showOrderButton: false,
+                                                showButtonInvoic: nil,
+                                                invoiceAccept: nil,
                                                 FoodId: favorite.id,
                                                 ItemType: favorite.itemType
                                             )
@@ -35,10 +35,10 @@ struct FavoriteRecipesTabView: View {
                                     recipe: favorite,
                                     foodId: favorite.id,
                                     itemType: "FOOD_RECIPE",
-                                    isFavorite: favorite.isFavorite ?? false
+                                    isFavorite: favorite.isFavorite
                                 )
-                               .padding(.horizontal)
-                               .padding(.vertical, 8)
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal, 20)
                                
                             }
                                
@@ -50,7 +50,6 @@ struct FavoriteRecipesTabView: View {
                         if favoriteFoodRecipe.isLoading {
                             Color.white
                                 .edgesIgnoringSafeArea(.all)
-                            
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
                                 .scaleEffect(2)
@@ -60,12 +59,18 @@ struct FavoriteRecipesTabView: View {
             }
         }
         .padding(.top, 8)
-        .navigationBarBackButtonHidden(true)
         .onAppear {
             if favoriteFoodRecipe.favoriteFoodRecipe.isEmpty {
                 favoriteFoodRecipe.getAllFavoriteFood()
             }
         }
     }
-  
+    // MARK: - Filtered Results
+    private var filteredFoodRecipe: [FoodRecipeModel]{
+        if searchText.isEmpty {
+            return favoriteFoodRecipe.favoriteFoodRecipe
+        } else {
+            return favoriteFoodRecipe.favoriteFoodRecipe.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+        }
+    }
 }

@@ -6,7 +6,10 @@ struct ResultSearchView: View {
     @Binding var isTabBarHidden: Bool
     @Environment(\.dismiss) var dismiss
     var menuName: String
+    var foodName: String
     @Environment(\.modelContext) var modelContext
+    @StateObject private var listFoodRecipe = FoodListVM()
+    //@StateObject private var searchFood = SearchVM()
     @ObservedObject var recentSearchesData: RecentSearchesData
     var body: some View {
         NavigationView {
@@ -40,11 +43,11 @@ struct ResultSearchView: View {
                 .padding(.top, 5)
                 
                 TabView(selection: $selectedSegment) {
-                    FoodSaleandRecipeView(iselected: selectedSegment)
+                    AllFoodTab(isSelected: selectedSegment, foodName: foodName)
                         .tag(0)
-                    FoodOnSaleView(iselected: selectedSegment)
+                    ListFoodSaleTabView(iSselected: selectedSegment, foodName: foodName)
                         .tag(1)
-                    RecipeView(iselected: selectedSegment)
+                    ListFoodRecipeTab(foodName: foodName, iSselected: selectedSegment)
                         .tag(2)
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
