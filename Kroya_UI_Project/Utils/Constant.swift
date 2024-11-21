@@ -46,4 +46,6 @@ struct Constants {
 
     //MARK: Generate Sales Report by Date
     static let SalesReportUrl = "https://kroya-api-production.up.railway.app/api/v1/sale-report/"
+    //Guest Category
+    static let GuestCategoryUrl = "https://kroya-api-production.up.railway.app/api/v1/category/"
 }

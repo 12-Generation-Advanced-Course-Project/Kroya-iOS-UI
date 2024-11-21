@@ -72,3 +72,7 @@ typealias GuestFoodPopularResponses = KroyaSingleAPIResponse<PopularPayload>
 typealias SearchFoodbyName = KroyaSingleAPIResponse <SearchModel>
 //MARK: Filter Sale Report By Date
 typealias SaleReportResponse = KroyaSingleAPIResponse <SaleReportModel>
+
+//MARK: Guest category
+typealias GuestCategoryAllFoodById = KroyaSingleAPIResponse<PayloadCategory>
+typealias GuestCategoryResponse = KroyaAPIResponse<CategoryModel>

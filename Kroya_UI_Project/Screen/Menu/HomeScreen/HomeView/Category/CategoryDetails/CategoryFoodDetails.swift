@@ -12,6 +12,7 @@ struct CategoryFoodDetails: View {
     
     var category: Category
     @StateObject private var categoryVM = CategoryMV()
+    @StateObject private var guestCategoryVM = GuestCategoryVM()
     @State private var selectedSegment = 0
     @Environment(\.dismiss) var dismiss
 
@@ -25,8 +26,13 @@ struct CategoryFoodDetails: View {
                         .font(.customfont(.semibold, fontSize: 16))
                         .foregroundColor(selectedSegment == 0 ? .black.opacity(0.8) : .black.opacity(0.5))
                         .onTapGesture {
-                            selectedSegment = 0
-                            categoryVM.fetchAllCategoryById(categoryId: category.id) // Ensure data is fetched
+                            if Auth.shared.hasAccessToken(){
+                                selectedSegment = 0
+                                categoryVM.fetchAllCategoryById(categoryId: category.id) // Ensure data is fetched
+                            }else{
+                                selectedSegment = 0
+                                guestCategoryVM.fetchAllfoodByCategoryId(categoryId: category.id) // Ensure data is fetched
+                            }
                         }
                     Spacer()
                     Text("Recipes")
@@ -34,8 +40,13 @@ struct CategoryFoodDetails: View {
                         .font(.customfont(.semibold, fontSize: 16))
                         .foregroundColor(selectedSegment == 1 ? .black.opacity(0.8) : .black.opacity(0.5))
                         .onTapGesture {
-                            selectedSegment = 1
-                            categoryVM.fetchAllCategoryById(categoryId: category.id) // Ensure data is fetched
+                            if Auth.shared.hasAccessToken(){
+                                selectedSegment = 1
+                                categoryVM.fetchAllCategoryById(categoryId: category.id) // Ensure data is fetched
+                            } else {
+                                selectedSegment = 1
+                                guestCategoryVM.fetchAllfoodByCategoryId(categoryId: category.id) // Ensure data is fetched
+                            }
                         }
                     Spacer()
                 }
@@ -56,17 +67,33 @@ struct CategoryFoodDetails: View {
 
             // Tab View Content
             TabView(selection: $selectedSegment) {
-                CategoryFoodSaleTab(categoryVM: categoryVM)
+                CategoryFoodSaleTab(categoryVM: categoryVM, guestCategoryVM: guestCategoryVM)
                     .tag(0)
-                CategoryFoodRecipeTab(categoryVM: categoryVM)
+                CategoryFoodRecipeTab(categoryVM: categoryVM, guestCategoryVM: guestCategoryVM)
                     .tag(1)
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         }
+//        .onAppear {
+//            if Auth.shared.hasAccessToken(){
+//                // Fetch data for the selected category
+//                categoryVM.fetchAllCategoryById(categoryId: category.id)
+//            } else {
+//                // Fetch data for the selected category
+//                guestCategoryVM.fetchAllfoodByCategoryId(categoryId: category.id)
+//            }
+//        }
         .onAppear {
-            // Fetch data for the selected category
-            categoryVM.fetchAllCategoryById(categoryId: category.id)
-        }
+                print("Selected Category ID: \(category.id)")
+                if Auth.shared.hasAccessToken() {
+                    categoryVM.fetchAllCategoryById(categoryId: category.id) // Call without closure
+                    print("Selected Categoryuser ID: \(category.id)")
+                } else {
+                    guestCategoryVM.fetchAllfoodByCategoryId(categoryId: category.id)
+                    print("Selected Categoryguest ID: \(category.id)")// Call without closure
+                }
+            }
+
         .navigationBarBackButtonHidden(true)
         .navigationTitle(category.title.rawValue)
         .navigationBarTitleDisplayMode(.inline)
