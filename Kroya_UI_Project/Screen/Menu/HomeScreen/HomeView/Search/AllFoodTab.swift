@@ -9,57 +9,62 @@ struct AllFoodTab: View {
     var foodName: String
     var body: some View {
         VStack(spacing: 10) {
-            ScrollView(showsIndicators: false) {
-                LazyVStack(spacing: 8) {
-                    // Display name sell
-                    ForEach(listFood.listFoodSell) { foodsell in
-                        NavigationLink(destination: foodDetailDestination(for: foodsell)) {
-                            FoodOnSaleViewCell(
-                                foodSale: foodsell,
-                                foodId: foodsell.id,
-                                itemType: "FOOD_SELL",
-                                isFavorite: foodsell.isFavorite ?? false
-                            )
-                            .frame(maxWidth: .infinity)
-                            .padding(.horizontal, 20)
+            if listFood.listFoodSell.isEmpty && listFood.listFoodRecipe.isEmpty && !listFood.isLoading {
+                Text("No Food Found!")
+                    .font(.title3)
+                    .foregroundColor(.gray)
+                    .padding()
+            } else {
+                ScrollView(showsIndicators: false) {
+                    LazyVStack(spacing: 8) {
+                        // Display name sell
+                        ForEach(listFood.listFoodSell) { foodsell in
+                            NavigationLink(destination: foodDetailDestination(for: foodsell)) {
+                                FoodOnSaleViewCell(
+                                    foodSale: foodsell,
+                                    foodId: foodsell.id,
+                                    itemType: "FOOD_SELL",
+                                    isFavorite: foodsell.isFavorite ?? false
+                                )
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal, 20)
+                            }
                         }
-                    }
-                    
-                    // Display name recipe
-                    ForEach(listFood.listFoodRecipe) { foodrecipe in
-                        NavigationLink(destination: recipeDetailDestination(for: foodrecipe)) {
-                            RecipeViewCell(
-                                recipe: foodrecipe,
-                                foodId: foodrecipe.id,
-                                itemType: "FOOD_RECIPE",
-                                isFavorite: foodrecipe.isFavorite
-                            )
-                            .frame(maxWidth: .infinity)
-                            .padding(.horizontal, 20)
-                        }
-                    }
-                }
-            }
-            
-            .overlay(
-                Group {
-                    if listFood.isLoading {
-                        Color.white
-                            .edgesIgnoringSafeArea(.all)
                         
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
-                            .scaleEffect(2)
+                        // Display name recipe
+                        ForEach(listFood.listFoodRecipe) { foodrecipe in
+                            NavigationLink(destination: recipeDetailDestination(for: foodrecipe)) {
+                                RecipeViewCell(
+                                    recipe: foodrecipe,
+                                    foodId: foodrecipe.id,
+                                    itemType: "FOOD_RECIPE",
+                                    isFavorite: foodrecipe.isFavorite
+                                )
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal, 20)
+                            }
+                        }
                     }
                 }
-            )
-        }
-        .onAppear {
-            if listFood.listFoodSell.isEmpty || listFood.listFoodRecipe.isEmpty {
-                listFood.searchFoodByName(foodName: foodName)
-            }
-        }
-    }
+                
+                .overlay(
+                    Group {
+                        if listFood.isLoading {
+                            Color.white
+                                .edgesIgnoringSafeArea(.all)
+                            
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
+                                .scaleEffect(2)
+                        }
+                    }
+                )
+            }}
+                .onAppear {
+                    if listFood.listFood.isEmpty || listFood.listFoodRecipe.isEmpty {
+                        listFood.searchFoodByName(foodName: foodName)
+                    }
+        }}
     
     // MARK: - Destination Views
     @ViewBuilder

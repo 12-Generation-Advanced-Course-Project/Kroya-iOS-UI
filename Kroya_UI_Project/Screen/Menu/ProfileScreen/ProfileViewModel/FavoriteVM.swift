@@ -10,6 +10,7 @@ import Foundation
 class FavoriteVM: ObservableObject {
     @Published var favoriteFoodRecipe: [FoodRecipeModel] = []
     @Published var favoriteFoodSell: [FoodSellModel] = []
+    @Published var favoriteFood : [FavoritePayload] = []
     @Published var isLoading: Bool = false
     @Published var successMessage: String = ""
     @Published var showError: Bool = false
@@ -22,6 +23,7 @@ class FavoriteVM: ObservableObject {
     private func endLoading() {
         isLoading = false
     }
+    
     
     func getAllFavoriteFood(completion: (() -> Void)? = nil) {
         startLoading()
@@ -99,6 +101,31 @@ class FavoriteVM: ObservableObject {
                     }
                 case .failure(let error):
                     print("Failed to add favorite: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
+    func searchFoodByName(foodName: String) {
+        startLoading()
+        FavoriteService.shared.fetchFavoriteByName(searchText: foodName) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.endLoading()
+                switch result {
+                case .success(let response):
+                    if response.statusCode == "200", let payload = response.payload {
+                        self?.favoriteFoodSell = payload.favoriteFoodSells ?? []
+                        self?.favoriteFoodRecipe = payload.favoriteFoodRecipes ?? []
+                        self?.successMessage = "Food Name fetched successfully."
+                        self?.showError = false
+                    } else {
+                        self?.showError = true
+                        self?.errorMessage = response.message
+                    }
+                case .failure(let error):
+                    self?.showError = true
+                    self?.errorMessage = "Failed to get food by name \(error.localizedDescription)"
+                    print("Error: \(error)")
                 }
             }
         }

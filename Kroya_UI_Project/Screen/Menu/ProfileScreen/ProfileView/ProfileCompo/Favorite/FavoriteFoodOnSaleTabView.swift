@@ -6,13 +6,13 @@
 //
 
 import SwiftUI
-
 struct FavoriteFoodOnSaleTabView: View {
     @StateObject private var favoriteFoodSale = FavoriteVM()
+    @Binding var searchText: String
     
     var body: some View {
         VStack {
-            if favoriteFoodSale.favoriteFoodSell.isEmpty && !favoriteFoodSale.isLoading {
+            if filteredFoodSell.isEmpty && !favoriteFoodSale.isLoading {
                 Text("No Favorite Food Sell Found!")
                     .font(.title3)
                     .foregroundColor(.gray)
@@ -20,13 +20,14 @@ struct FavoriteFoodOnSaleTabView: View {
             } else {
                 ScrollView(showsIndicators: false) {
                     LazyVStack(spacing: 8) {
-                        ForEach(favoriteFoodSale.favoriteFoodSell) { favorite in
+                        ForEach(filteredFoodSell) { favorite in
                             NavigationLink(destination:
                                             FoodDetailView(
-                                                isFavorite: favorite.isFavorite ?? false, showPrice: false, // Always false for recipes
-                                                showOrderButton: false, // Always false for recipes
-                                                showButtonInvoic: nil, // Not applicable
-                                                invoiceAccept: nil, // Not applicable
+                                                isFavorite: favorite.isFavorite ?? false,
+                                                showPrice: false,
+                                                showOrderButton: false,
+                                                showButtonInvoic: nil,
+                                                invoiceAccept: nil,
                                                 FoodId: favorite.id,
                                                 ItemType: favorite.itemType
                                             )
@@ -41,15 +42,13 @@ struct FavoriteFoodOnSaleTabView: View {
                                 .padding(.horizontal, 20)
                             }
                         }
-                        }
                     }
-                
+                }
                 .overlay(
                     Group {
                         if favoriteFoodSale.isLoading {
                             Color.white
                                 .edgesIgnoringSafeArea(.all)
-                            
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
                                 .scaleEffect(2)
@@ -59,11 +58,19 @@ struct FavoriteFoodOnSaleTabView: View {
             }
         }
         .padding(.top, 8)
-        .navigationBarBackButtonHidden(true)
         .onAppear {
             if favoriteFoodSale.favoriteFoodSell.isEmpty {
                 favoriteFoodSale.getAllFavoriteFood()
             }
+        }
+    }
+    
+    // MARK: - Filtered Results
+    private var filteredFoodSell: [FoodSellModel] {
+        if searchText.isEmpty {
+            return favoriteFoodSale.favoriteFoodSell
+        } else {
+            return favoriteFoodSale.favoriteFoodSell.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
         }
     }
 }
