@@ -16,6 +16,7 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct OrderCardDetailView: View {
+    
     @StateObject var viewModel: OrderCardDetailViewModel
     @Binding var imageName: String
     var url = Constants.fileupload

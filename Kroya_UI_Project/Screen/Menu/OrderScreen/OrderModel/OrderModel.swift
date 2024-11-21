@@ -8,8 +8,10 @@
 import Foundation
 
 // MARK: - Payload
-struct OrderModel: Decodable {
-    let foodSellID: Int
+struct OrderModel: Identifiable, Decodable {
+    
+    var id = UUID()
+    var foodSellId  : Int
     let name: String
     let price: Int?
     let orderCount: Int?
@@ -25,7 +27,7 @@ struct OrderModel: Decodable {
     let purchaseDate: String?
 
     enum CodingKeys: String, CodingKey {
-        case foodSellID = "foodSellId"
+        case foodSellId = "foodSellId"
         case name, price, orderCount, photo, dateCooking, isOrderable, itemType, foodCardType
         case purchaseID = "purchaseId"
         case quantity, totalPrice, purchaseStatusType, purchaseDate

@@ -41,7 +41,9 @@ struct NewItemFoodOrderCardView: View {
                         }
                     }
                     .padding(.horizontal)
-
+                    .scrollIndicators(.hidden)
+                    
+                    
                     Spacer()
                 }
             }
@@ -55,8 +57,5 @@ struct NewItemFoodOrderCardView: View {
     
     
 }
-    
-
-
 
 

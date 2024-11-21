@@ -9,6 +9,8 @@ struct OrderTabView: View {
     @State private var isExpandedYTD = false
     @State private var isExpandedLst2Day = false
     
+    @State private var arrayDays: [String] = ["Today", "Yesterday", "Last 2 Days"]
+    
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -27,7 +29,7 @@ struct OrderTabView: View {
                     } else {
                         // Display grouped orders
                         let groupedOrders = groupOrdersByDate()
-                        ForEach(["Today", "Yesterday", "Last 2 Days"], id: \.self) { group in
+                        ForEach(arrayDays, id: \.self) { group in
                             if let orders = groupedOrders[group], !orders.isEmpty {
                                 OrderSection(group: group, orders: orders, isExpandedToday: $isExpandedToday, isExpandedYTD: $isExpandedYTD, isExpandedLst2Day: $isExpandedLst2Day)
                             } else {
