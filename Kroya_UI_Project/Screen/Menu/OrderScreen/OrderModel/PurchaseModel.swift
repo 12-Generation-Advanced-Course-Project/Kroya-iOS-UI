@@ -10,6 +10,7 @@ import SwiftUI
 
 //MARK: Purchase Order
 struct PurchaseModel: Codable {
+    
     var recipeId:Int
     var purchaseId:Int
     var foodSellCardResponse: FoodSellModel
