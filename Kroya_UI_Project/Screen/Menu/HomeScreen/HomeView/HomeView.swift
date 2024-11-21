@@ -7,6 +7,7 @@ struct HomeView: View {
     @StateObject private var recipeViewModel = RecipeViewModel()
     @StateObject private var foodSellViemModel = FoodSellViewModel()
     @StateObject private var categoryVM = CategoryMV()
+    @StateObject private var guestCategoryVM = GuestCategoryVM()
     @State var isSearching: Bool = false
     @Environment(\.locale) var locale
     @StateObject private var recentSearchesData = RecentSearchesData()
@@ -65,28 +66,54 @@ struct HomeView: View {
                             .customFontSemiBoldLocalize(size: 16)
                             .padding(.horizontal)
                         
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 16) {
-                                ForEach(categoryVM.displayCategories, id: \.id) { category in
+                        if Auth.shared.hasAccessToken(){
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 16) {
+                                    ForEach(categoryVM.displayCategories, id: \.id) { category in
+                                        
+                                        NavigationLink(destination: CategoryFoodDetails(category: category)){
+                                            CategoryCardView(
+                                                title: LocalizedStringKey(category.title.rawValue),
+                                                image: category.image,
+                                                color: category.color,
+                                                x: category.x,
+                                                y: category.y
+                                            )
+                                        }
+                                        .onTapGesture {
+                                            // Fetch data for the selected category by ID
+                                            print("this is Id \(category.id)")
+                                            categoryVM.fetchAllCategoryById(categoryId: category.id)
+                                        }
+                                    }
                                     
-                                    NavigationLink(destination: CategoryFoodDetails(category: category)){
-                                        CategoryCardView(
-                                            title: LocalizedStringKey(category.title.rawValue),
-                                            image: category.image,
-                                            color: category.color,
-                                            x: category.x,
-                                            y: category.y
-                                        )
-                                    }
-                                    .onTapGesture {
-                                        // Fetch data for the selected category by ID
-                                        print("this is Id \(category.id)")
-                                        categoryVM.fetchAllCategoryById(categoryId: category.id)
-                                    }
                                 }
-                                
+                                .padding(.horizontal)
                             }
-                            .padding(.horizontal)
+                        } else {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 16) {
+                                    ForEach(guestCategoryVM.displayGuestCategories, id: \.id) { category in
+                                        
+                                        NavigationLink(destination: CategoryFoodDetails(category: category)){
+                                            CategoryCardView(
+                                                title: LocalizedStringKey(category.title.rawValue),
+                                                image: category.image,
+                                                color: category.color,
+                                                x: category.x,
+                                                y: category.y
+                                            )
+                                        }
+                                        .onTapGesture {
+                                            // Fetch data for the selected category by ID
+                                            print("this is Id \(category.id)")
+                                            guestCategoryVM.fetchAllfoodByCategoryId(categoryId: category.id)
+                                        }
+                                    }
+                                    
+                                }
+                                .padding(.horizontal)
+                            }
                         }
                     }
                     
@@ -229,6 +256,8 @@ struct HomeView: View {
           recentSearchesData.loadSearches(from: modelContext)
           PopularFoodsData.getAllPopular()
           favoriteVM.getAllFavoriteFood()
+          guestCategoryVM.fetchAllGuestCategory()
+          
       }
     private func refreshData() async {
            isLoading = true // Start loading state

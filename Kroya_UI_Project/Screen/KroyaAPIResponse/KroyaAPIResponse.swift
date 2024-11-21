@@ -65,3 +65,7 @@ typealias AddPurchaseResponse = KroyaSingleAPIResponse<PurchaseModel>
 
 //MARK: Guest food popular
 typealias GuestFoodPopularResponses = KroyaSingleAPIResponse<PopularPayload>
+
+//MARK: Guest category
+typealias GuestCategoryAllFoodById = KroyaSingleAPIResponse<PayloadCategory>
+typealias GuestCategoryResponse = KroyaAPIResponse<CategoryModel>
