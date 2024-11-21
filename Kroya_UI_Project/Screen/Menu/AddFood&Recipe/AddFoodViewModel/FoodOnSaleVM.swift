@@ -9,7 +9,7 @@ class FoodSellViewModel: ObservableObject {
     @Published var successMessage: String = ""
     @Published var showError: Bool = false
     @Published var errorMessage: String = ""
-    
+    @Published var searchText: String = ""
     // MARK: - Helper Methods for Loading State
     private func startLoading() {
         isLoading = true
@@ -18,7 +18,14 @@ class FoodSellViewModel: ObservableObject {
     private func endLoading() {
         isLoading = false
     }
-
+    var filteredFoodList: [FoodSellModel] {
+         // let foodList = isChooseCuisine ? FoodSellByCategory : FoodOnSale
+          if searchText.isEmpty {
+              return FoodOnSale
+          } else {
+              return FoodOnSale.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+          }
+      }
     // MARK: Fetch User CardSell
     func getAllFoodSell() {
         startLoading()
