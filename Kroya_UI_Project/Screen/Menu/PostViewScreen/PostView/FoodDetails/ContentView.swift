@@ -36,6 +36,7 @@ struct ContentView: View {
     @State private var remainingTime = 10
     @State private var autoSubmitTimer: Timer?
     @State private var refreshID = UUID()
+    @State private var checkedIngredients: [Int: Bool] = [:]
     var body: some View {
         GeometryReader { geometry in
             let screenHeight = geometry.size.height
@@ -151,27 +152,28 @@ struct ContentView: View {
                     }
                     
                     //MARK: Ingredients Section
-                    if let ingredients = FoodDetails.foodRecipeDetail?.ingredients ?? FoodDetails.foodSellDetail?.foodRecipeDTO.ingredients {
+                    if let ingredients = FoodDetails.foodRecipeDetail?.ingredients ?? FoodDetails.foodSellDetail?.foodRecipeDTO.ingredients, !ingredients.isEmpty {
                         Text("Ingredients")
                             .font(.customfont(.bold, fontSize: 18))
+                            .padding(.bottom, 10)
                         
                         ForEach(ingredients, id: \.id) { ingredient in
                             HStack(alignment: .top, spacing: 10) {
                                 // Checkmark Button
                                 Button(action: {
-                                    // Handle toggling for selected ingredient
-                                    // You can implement logic to toggle ingredient selection based on `ingredient.id`
+                                    // Toggle the checked state for this ingredient's ID
+                                    checkedIngredients[ingredient.id ?? 0, default: false].toggle()
                                 }) {
                                     Circle()
-                                        .fill(Color.green.opacity(0.2))
+                                        .fill(Color.clear)
                                         .frame(width: geometry.size.width * 0.07, height: geometry.size.width * 0.07)
                                         .overlay(
                                             Circle()
                                                 .stroke(Color.clear, lineWidth: 1)
                                         )
                                         .overlay(
-                                            Image(systemName: "checkmark")
-                                                .foregroundColor(.green)
+                                            Image(systemName: checkedIngredients[ingredient.id ?? 0, default: false] ? "checkmark.circle.fill" : "checkmark.circle")
+                                                .foregroundColor(checkedIngredients[ingredient.id ?? 0, default: false] ? .green : .gray)
                                         )
                                 }
                                 
@@ -183,18 +185,16 @@ struct ContentView: View {
                             .padding(.vertical, 5)
                         }
                     }
-                    
-                    
                     Divider()
                     
                     VStack(alignment: .leading, spacing: 10) {
-                        //MARK: step
-                        if let steps = FoodDetails.foodRecipeDetail?.cookingSteps ?? FoodDetails.foodSellDetail?.foodRecipeDTO.cookingSteps {
+                        // MARK: Steps Section
+                        if let steps = FoodDetails.foodRecipeDetail?.cookingSteps ?? FoodDetails.foodSellDetail?.foodRecipeDTO.cookingSteps, !steps.isEmpty {
                             // Title and Navigation Buttons
                             HStack {
                                 Text("Steps")
                                     .font(.customfont(.bold, fontSize: 20))
-                                Spacer().frame(width: .screenWidth * 0.60)
+                                Spacer()
                                 HStack(spacing: 10) {
                                     // Backward Button
                                     Button(action: {
@@ -206,17 +206,17 @@ struct ContentView: View {
                                         }
                                     }) {
                                         Circle()
-                                            .stroke(currentStep == 1 ? .gray.opacity(0.8) : .yellow, lineWidth: 2)
+                                            .stroke(currentStep <= 1 ? .gray.opacity(0.8) : .yellow, lineWidth: 2)
                                             .frame(width: 28, height: 28)
                                             .overlay(
                                                 Image(systemName: "arrow.backward")
                                                     .resizable()
                                                     .aspectRatio(contentMode: .fit)
                                                     .frame(width: 15, height: 15)
-                                                    .foregroundColor(currentStep == 1 ? .gray.opacity(0.8) : .yellow)
+                                                    .foregroundColor(currentStep <= 1 ? .gray.opacity(0.8) : .yellow)
                                             )
                                     }
-                                    .disabled(currentStep == 1) // Disable if at the first step
+                                    .disabled(currentStep <= 1)
                                     
                                     // Forward Button
                                     Button(action: {
@@ -228,60 +228,63 @@ struct ContentView: View {
                                         }
                                     }) {
                                         Circle()
-                                            .stroke(currentStep == steps.count ? .gray.opacity(0.8) : .yellow, lineWidth: 2)
+                                            .stroke(currentStep >= steps.count ? .gray.opacity(0.8) : .yellow, lineWidth: 2)
                                             .frame(width: 28, height: 28)
                                             .overlay(
                                                 Image(systemName: "arrow.right")
                                                     .resizable()
                                                     .aspectRatio(contentMode: .fit)
                                                     .frame(width: 15, height: 15)
-                                                    .foregroundColor(currentStep == steps.count ? .gray.opacity(0.8) : .yellow)
+                                                    .foregroundColor(currentStep >= steps.count ? .gray.opacity(0.8) : .yellow)
                                             )
                                     }
-                                    .disabled(currentStep == steps.count) // Disable if at the last step
+                                    .disabled(currentStep >= steps.count)
                                 }
                             }
                             .padding(.vertical, 10)
                             
-                            // Display Current Step
+                            // Step Details
                             VStack(alignment: .leading, spacing: 10) {
-                                HStack(alignment: .top, spacing: 8) {
-                                    // Step Number
-                                    ZStack {
-                                        Circle()
-                                            .fill(Color(hex: "2D3E50")) // Dark color for the circle
-                                            .frame(width: 24, height: 24)
-                                        Text("\(currentStep)")
-                                            .font(.system(size: 14))
-                                            .foregroundColor(.white)
-                                    }
-                                    
-                                    // Step Description
-                                    VStack(alignment: .leading, spacing: 5) {
-                                        Text(steps[currentStep - 1].description)
-                                            .font(.system(size: 14))
-                                            .foregroundColor(Color(hex: "#2E3E5C"))
-                                            .lineLimit(isExpanded ? nil : 3)
-                                            .truncationMode(.tail)
-                                            .transition(.slide)
-                                            .animation(.easeInOut(duration: 0.3), value: currentStep)
+                                if currentStep > 0 && currentStep <= steps.count {
+                                    HStack(alignment: .top, spacing: 8) {
+                                        // Step Number
+                                        ZStack {
+                                            Circle()
+                                                .fill(Color(hex: "2D3E50")) // Dark color for the circle
+                                                .frame(width: 24, height: 24)
+                                            Text("\(currentStep)")
+                                                .font(.system(size: 14))
+                                                .foregroundColor(.white)
+                                        }
                                         
-                                        // Expand/Collapse Button
-                                        if steps[currentStep - 1].description.count > 100 {
-                                            Text(isExpanded ? "Show Less" : "Show More")
-                                                .font(.customfont(.semibold, fontSize: 13))
-                                                .foregroundColor(.yellow)
-                                                .onTapGesture {
-                                                    withAnimation {
-                                                        isExpanded.toggle()
+                                        // Step Description
+                                        VStack(alignment: .leading, spacing: 5) {
+                                            Text(steps[currentStep - 1].description)
+                                                .font(.system(size: 14))
+                                                .foregroundColor(Color(hex: "#2E3E5C"))
+                                                .lineLimit(isExpanded ? nil : 3)
+                                                .truncationMode(.tail)
+                                                .transition(.slide)
+                                                .animation(.easeInOut(duration: 0.3), value: currentStep)
+                                            
+                                            // Expand/Collapse Button
+                                            if steps[currentStep - 1].description.count > 100 {
+                                                Text(isExpanded ? "Show Less" : "Show More")
+                                                    .font(.customfont(.semibold, fontSize: 13))
+                                                    .foregroundColor(.yellow)
+                                                    .onTapGesture {
+                                                        withAnimation {
+                                                            isExpanded.toggle()
+                                                        }
                                                     }
-                                                }
+                                            }
                                         }
                                     }
+                                    .padding(.vertical, 10)
                                 }
-                                .padding(.vertical, 10)
                             }
                         }
+
                         
                         //MARK: Ratings & Review
                         Text("Ratings & Review")

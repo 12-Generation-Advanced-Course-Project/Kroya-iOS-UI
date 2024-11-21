@@ -52,8 +52,8 @@ struct CategoryFoodSaleTab: View {
     private func foodDetailDestination(for foodSale: FoodSellModel) -> some View {
         FoodDetailView(
         isFavorite: foodSale.isFavorite ?? false,
-        showPrice: false, // Always false for recipes
-        showOrderButton: false, // Always false for recipes
+        showPrice: true, // Always false for recipes
+        showOrderButton: true, // Always false for recipes
         showButtonInvoic: nil, // Not applicable
         invoiceAccept: nil, // Not applicable
         FoodId: foodSale.id,

@@ -1,11 +1,10 @@
 import SwiftUI
-
-
 struct FavoriteViewCart: View {
     @State private var selectedSegment = 0
     @Environment(\.dismiss) var dismiss
     @State private var searchText = ""
-
+    @StateObject private var favorite = FavoriteVM()
+    
     var body: some View {
         VStack(spacing: 0) {
             // Segment Header
@@ -48,10 +47,10 @@ struct FavoriteViewCart: View {
             
             // TabView Content
             TabView(selection: $selectedSegment) {
-                FavoriteFoodOnSaleTabView() // Displays "Food on Sale" tab content
+                FavoriteFoodOnSaleTabView(searchText: $searchText) // Pass searchText as Binding
                     .tag(0)
                 
-                FavoriteRecipesTabView() // Displays "Recipes" tab content
+                FavoriteRecipesTabView(searchText: $searchText) // Pass searchText as Binding
                     .tag(1)
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))

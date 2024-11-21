@@ -9,24 +9,22 @@ import SwiftUI
 import Alamofire
 
 class OrderViewModel: ObservableObject {
-    
-    @Published var orders: [OrderModel] = []
-    @Published var Purchases: PurchaseModel?
-    @Published var isLoading: Bool = false
-    @Published var successMessage: String = ""
-    @Published var showError: Bool = false
-    @Published var errorMessage: String = ""
-    @Published var isUpdate: Bool = false
-    
+       @Published var orders: [OrderModel] = []
+       @Published var Purchases: PurchaseModel?
+       @Published var isLoading: Bool = false
+       @Published var successMessage: String = ""
+       @Published var showError: Bool = false
+       @Published var errorMessage: String = ""
+       @Published var isUpdate: Bool = false
+       @Published var isOrderSuccess: Bool = false
+  
     // MARK: - Helper Methods for Loading State
     private func startLoading() {
         isLoading = true
     }
-    
     private func endLoading() {
         isLoading = false
     }
-    
     // MARK: fetch purchase all
     func fetchAllPurchase() {
         self.startLoading()
@@ -47,10 +45,8 @@ class OrderViewModel: ObservableObject {
             }
         }
     }
-    
-    
     // MARK: Search Food Recipe by Name
-    func fetchSearchPurchaseByName(searchText: String) {
+    func fetchSearchPurchaseByName(searchText: String)  {
         PurchaseService.shared.getSearchPurchaseByName(searchText: searchText) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
@@ -69,8 +65,6 @@ class OrderViewModel: ObservableObject {
             }
         }
     }
-    
-    
     // MARK: fetch purchase all
     func fetchPurchaseOrder() {
         self.startLoading()
@@ -91,8 +85,6 @@ class OrderViewModel: ObservableObject {
             }
         }
     }
-    
-    
     // MARK: fetch purchase all
     func fetchPurchaseSale() {
         self.startLoading()
@@ -113,16 +105,42 @@ class OrderViewModel: ObservableObject {
             }
         }
     }
-    
     //MARK: Add Purchase
     func addPurchase(purchase: PurchaseRequest, paymentType: String) {
-        self.startLoading()
+        self.isLoading = true
         PurchaseService.shared.AddPurchase(purchase: purchase, paymentType: paymentType) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                switch result {
+                case .success(let purchaseResponse):
+                    if purchaseResponse.statusCode == "200", let Purchases = purchaseResponse.payload {
+                        self?.Purchases = Purchases
+                        self?.isOrderSuccess = true
+                        self?.showError = false
+                        self?.successMessage = purchaseResponse.message
+                    } else {
+                        self?.showError = true
+                        self?.errorMessage = "Failed to add purchase. Please try again."
+                    }
+                case .failure(let error):
+                    self?.errorMessage = "Failed to add purchase: \(error.localizedDescription)"
+                    self?.showError = true
+                    print("Error adding purchase: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+
+    
+    //MARK: Get Receipt by PurchaseId
+    func getReceipt(purchaseId: Int) {
+        self.startLoading()
+        PurchaseService.shared.getReceiptByPurchaseId(purchaseId: purchaseId) { [weak self] result in
             DispatchQueue.main.async {
                 self?.endLoading()
                 switch result {
-                case .success(let purchase):
-                    if let purchase = purchase {
+                case .success(let response):
+                    if let purchase = response {
                         self?.successMessage = "Purchase added successfully!"
                         self?.Purchases = purchase
                     } else {
@@ -130,8 +148,9 @@ class OrderViewModel: ObservableObject {
                         self?.showError = true
                     }
                 case .failure(let error):
-                    self?.errorMessage = "Failed to add purchase: \(error.localizedDescription)"
+                    self?.errorMessage = error.localizedDescription.contains("404") ? "No receipt found for this order." : "Failed to load receipt. Please try again."
                     self?.showError = true
+
                 }
             }
         }

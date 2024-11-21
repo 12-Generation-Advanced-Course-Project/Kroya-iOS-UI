@@ -90,6 +90,50 @@ class FavoriteService{
                 }
             }
     }
+    
+    // MARK: - Get Foods by Name
+    func fetchFavoriteByName(searchText: String, completion: @escaping (Result<getAllFavoriteResponse, Error>) -> Void) {
+        guard let accessToken = Auth.shared.getAccessToken() else {
+            print("Error: Access token is nil.")
+            let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token is missing"])
+            completion(.failure(error))
+            return
+        }
+    
+        let url = "\(Constants.FavoriteFoodUrl)search?name=\(searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")"
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)"
+        ]
+        
+        // Send the request
+        AF.request(url, method: .get, headers: headers).validate().responseDecodable(of: getAllFavoriteResponse.self) { response in
+            // Debugging: Print response data
+            if let data = response.data {
+                do {
+                    let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+                    let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
+                    if let prettyString = String(data: prettyData, encoding: .utf8) {
+                        print("Pretty JSON Response Favorite :\n\(prettyString)")
+                    }
+                } catch {
+                    print("Failed to convert response data to pretty JSON: favorite \(error)")
+                }
+            }
+            
+            // Handle the response
+            switch response.result {
+            case .success(let apiResponse):
+                if let statusCode = Int(apiResponse.statusCode), statusCode == 200 {
+                    completion(.success(apiResponse))
+                } else {
+                    let error = NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: apiResponse.message])
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
 
 }
 

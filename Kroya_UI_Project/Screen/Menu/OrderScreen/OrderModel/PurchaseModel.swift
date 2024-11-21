@@ -45,7 +45,7 @@ struct PurchaseResponse: Decodable {
     init(from decoder: Decoder) throws {
            let container = try decoder.container(keyedBy: CodingKeys.self)
            self.message = try container.decode(String.self, forKey: .message)
-           self.statusCode = try container.decode(String.self, forKey: .statusCode)
+        self.statusCode = try container.decode(String.self, forKey: .statusCode)
            self.timestamp = try? container.decode(String.self, forKey: .timestamp)
 
            // Attempt to decode payload as T; fallback to nil if it's not decodable.

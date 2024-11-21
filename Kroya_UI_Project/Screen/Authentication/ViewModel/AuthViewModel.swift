@@ -215,7 +215,7 @@ class AuthViewModel: ObservableObject {
                         // Update userStore and state
                         self?.userStore.setUser(email: email, accesstoken: accessToken, refreshtoken: refreshToken)
                         Auth.shared.setCredentials(accessToken: accessToken, refreshToken: refreshToken, email: email)
-                        
+                       
                         self?.successMessage = "Successfully logged in"
                         self?.showError = false
                         Auth.shared.loggedIn = true

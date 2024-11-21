@@ -96,7 +96,7 @@ struct FoodOnSaleViewCell: View {
 
                 HStack(spacing: 10) {
                     // update cuurncy symbol
-                    Text("\(currencySymbol(for: foodSale.currencyType!)) \(String(format: "%.2f", foodSale.price))")
+                    Text("\(currencySymbol(for: foodSale.currencyType ?? "")) \(String(format: "%.2f", foodSale.price))")
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(.yellow)
 

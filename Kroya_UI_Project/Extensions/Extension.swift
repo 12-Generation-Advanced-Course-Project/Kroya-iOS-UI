@@ -158,6 +158,7 @@ extension View {
         let renderer = UIGraphicsImageRenderer(size: size)
         let image = renderer.image { _ in
             hostingView?.drawHierarchy(in: hostingView!.bounds, afterScreenUpdates: true)
+            hostingView?.backgroundColor = .clear
         }
 
         completion(image)
