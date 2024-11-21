@@ -3,7 +3,7 @@ import Combine
 
 struct ViewAllPopularDishesView: View {
     @State private var selectedSegment = 0
-    @StateObject private var popularAllFood = PopularFoodVM()
+   @StateObject private var popularAllFood = PopularFoodVM()
     @Environment(\.dismiss) var dismiss
     @State private var currentPage = 0
     let images = ["slide1", "slide2", "slide3"]

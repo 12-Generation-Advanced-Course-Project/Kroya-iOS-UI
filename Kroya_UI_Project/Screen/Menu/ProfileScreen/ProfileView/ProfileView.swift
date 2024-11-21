@@ -20,6 +20,7 @@ struct ProfileView: View {
     @State private var isEdit: Bool = false
     @State private var addressToUpdate: Address? = nil
     var urlImagePrefix: String = Constants.fileupload
+    @Environment(\.modelContext) var modelContext
     @Binding var lang: String
     
     var body: some View {
@@ -104,7 +105,7 @@ struct ProfileView: View {
                     }
                 }
                 Spacer().frame(height: .screenHeight * 0.03)
-                NavigationLink(destination: WebillConnectView()) {
+                NavigationLink(destination: WebillConnectView().environment(\.modelContext, modelContext)) {
                     VStack(alignment: .leading) {
                         Text("Payment Method")
                             .customFontMediumLocalize(size: 14)

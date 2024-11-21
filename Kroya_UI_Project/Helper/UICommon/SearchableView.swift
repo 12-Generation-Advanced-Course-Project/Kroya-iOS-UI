@@ -9,6 +9,7 @@ struct SearchScreen: View {
     @State private var navigateToResult = false
     @State private var selectedMenuName = ""
     @StateObject private var PopularFoodsData =  PopularFoodVM()
+    @StateObject private var listFood = FoodListVM()
     let suggestedForYou = [
         "Somlor Mju Krerng",
         "Cha Ju Eam",
@@ -118,7 +119,7 @@ struct SearchScreen: View {
                                     
                                     ScrollView(.vertical) {
                                         Flow(.vertical, alignment: .topLeading) {
-                                            ForEach(Array(Set(PopularFoodsData.popularFoodNames)), id: \.self) { suggestion in
+                                            ForEach(Array(Set(PopularFoodsData.popularFoodNames.prefix(10))), id: \.self) { suggestion in
                                                 Button(action: {
                                                     navigateTo(suggestion)
                                                 }) {
@@ -172,7 +173,7 @@ struct SearchScreen: View {
             }
             .background(
                 NavigationLink(
-                    destination: ResultSearchView(isTabBarHidden: .constant(true), menuName: selectedMenuName, recentSearchesData: recentSearchesData),
+                    destination: ResultSearchView(isTabBarHidden: .constant(true), menuName: selectedMenuName, foodName: searchText, recentSearchesData: recentSearchesData),
                     isActive: $navigateToResult
                 ) {
                     EmptyView()
@@ -198,4 +199,5 @@ struct SearchScreen: View {
         recentSearchesData.saveSearch(menuName, in: modelContext)
         navigateToResult = true
     }
+    
 }

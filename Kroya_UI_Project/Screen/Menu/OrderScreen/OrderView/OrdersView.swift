@@ -90,6 +90,7 @@ struct OrdersView: View {
         .customFontSemiBoldLocalize(size: 16)
         .onAppear {
             orderViewModel.fetchAllPurchase()
+            orderViewModel.fetchPurchaseSale()
         }
     }
     
