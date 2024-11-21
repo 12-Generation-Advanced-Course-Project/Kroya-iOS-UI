@@ -54,7 +54,7 @@ struct AllTabView: View {
         }
         .onAppear {
             orderViewModel.fetchAllPurchase()
-            orderViewModel.fetchPurchaseSale()
+//            orderViewModel.fetchPurchaseSale()
         }
     }
     
