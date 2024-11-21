@@ -32,13 +32,13 @@ struct EditingProfileView: View {
     var body: some View {
         ZStack {
             VStack(spacing: 10) {
-                HStack {
-                    Text(LocalizedStringKey("Edit Profile"))
-                        .font(.customfont(.bold, fontSize: 18))
-                        .opacity(0.84)
-                        .padding(.bottom, 20)
-                }
-                .frame(maxWidth: .infinity)
+//                HStack {
+//                    Text(LocalizedStringKey("Edit Profile"))
+//                        .font(.customfont(.bold, fontSize: 18))
+//                        .opacity(0.84)
+//                        .padding(.bottom, 20)
+//                }
+//                .frame(maxWidth: .infinity)
                 
                 // Profile Image and Edit Icon
                 ZStack(alignment: .bottomTrailing) {
@@ -204,10 +204,12 @@ struct EditingProfileView: View {
                         .sheet(isPresented: $showAddressSheet) {
                             NavigationStack {
                                 AddressView(
-                                    onAddressSelected: { selectedAddress in
+                                    onAddressSelected: { selected in
                                         // Handle selected address
-                                        userInputAddress = selectedAddress.addressDetail
-                                        print("Updated userInputAddress with selectedAddress.specificLocation: \(selectedAddress.addressDetail)")
+                                        selectedAddress = selected
+                                        userInputAddress = selectedAddress?.addressDetail ?? ""
+                                        print("userInputAddress: " + userInputAddress)
+                                        print("Updated userInputAddress with selectedAddress.specificLocation: \(selectedAddress?.addressDetail)")
                                     },
                                     isFromEditingProfileView: true // Pass true to indicate this view is coming from EditingProfileView
                                 )
@@ -296,7 +298,7 @@ struct EditingProfileView: View {
                 loadProfileData()
                 //                addressVM.fetchAllAddresses()
                 //                let lastaddress = addressVM.addresses.last
-                //                selectedAddress = lastaddress
+//                                selectedAddress = lastaddress
                 profile.fetchUserProfile()
             }
             .onDisappear{
@@ -321,7 +323,7 @@ struct EditingProfileView: View {
 
             
         }
-        .navigationTitle("Edit Profile")
+        .navigationTitle(LocalizedStringKey("Edit Profile"))
         .navigationBarTitleDisplayMode(.inline)
     }
     
@@ -341,7 +343,8 @@ struct EditingProfileView: View {
         userInputEmail = profile.userProfile?.email ?? ""
         userInputContact = profile.userProfile?.phoneNumber ?? ""
         userInputPassword = profile.userProfile?.password ?? ""
-        userInputAddress = selectedAddress?.specificLocation ?? ""
+        userInputAddress = profile.userProfile?.location ?? ""
+        print("Loaded profile data: \(userInputName), \(userInputEmail), \(userInputContact), \(userInputPassword), \(userInputAddress)")
     }
     private func detectImageFormat(data: Data) -> String {
         let headerBytes = [UInt8](data.prefix(1))

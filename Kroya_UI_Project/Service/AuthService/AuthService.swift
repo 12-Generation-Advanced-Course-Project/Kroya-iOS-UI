@@ -234,6 +234,36 @@ class AuthService {
             }
     }
 
+//    func saveUserInfo(userName: String, phoneNumber: String, address: String, completion: @escaping (Result<UserInfoResponse, Error>) -> Void) {
+//        guard let accessToken = Auth.shared.getAccessToken() else {
+//            let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token is missing"])
+//            completion(.failure(error))
+//            return
+//        }
+//        
+//        let url = Constants.KroyaUrlAuth + "save-user-info"
+//        let parameters: [String: String] = [
+//            "userName": userName,
+//            "phoneNumber": phoneNumber,
+//            "address": address
+//        ]
+//        let headers: HTTPHeaders = [
+//            "Authorization": "Bearer \(accessToken)",
+//            "Content-Type": "application/json"
+//        ]
+//        
+//        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+//            .validate()
+//            .responseDecodable(of: UserInfoResponse.self) { response in
+//                switch response.result {
+//                case .success(let userInfoResponse):
+//                    completion(.success(userInfoResponse))
+//                case .failure(let error):
+//                    completion(.failure(error))
+//                }
+//            }
+//    }
+
     
     //MARK: Save UserInfo
     func saveUserInfo(userName: String, phoneNumber: String, address: String, completion: @escaping (Result<UserInfoResponse, Error>) -> Void) {
