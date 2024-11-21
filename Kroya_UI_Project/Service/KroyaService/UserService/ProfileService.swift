@@ -37,6 +37,18 @@ class ProfileService {
                     print("Request failed with error: \(error)")
                     completion(.failure(error))
                 }
+                
+                if let data = response.data {
+                    do {
+                        let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+                        let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
+                        if let prettyString = String(data: prettyData, encoding: .utf8) {
+                            print("Pretty JSON Response:\n\(prettyString)")
+                        }
+                    } catch {
+                        print("Failed to convert response data to pretty JSON: \(error)")
+                    }
+                }
             }
     }
     

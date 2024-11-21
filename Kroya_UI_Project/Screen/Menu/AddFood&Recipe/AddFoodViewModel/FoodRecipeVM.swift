@@ -18,7 +18,7 @@ class RecipeViewModel: ObservableObject {
     @Published var successMessage: String = ""
     @Published var showError: Bool = false
     @Published var errorMessage: String = ""
-    
+    @Published var searchText: String = ""
     // MARK: Helper functions for loading state
     private func startLoading() {
         isLoading = true
@@ -27,6 +27,14 @@ class RecipeViewModel: ObservableObject {
     private func endLoading() {
         isLoading = false
     }
+    var filteredFoodRecipeList: [FoodRecipeModel] {
+        //  let foodList = isChooseCuisine ? FoodSellByCategory : FoodOnSale
+          if searchText.isEmpty {
+              return RecipeFood
+          } else {
+              return RecipeFood.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+          }
+      }
 
     // MARK: Get All Recipe Food
     func getAllRecipeFood() {

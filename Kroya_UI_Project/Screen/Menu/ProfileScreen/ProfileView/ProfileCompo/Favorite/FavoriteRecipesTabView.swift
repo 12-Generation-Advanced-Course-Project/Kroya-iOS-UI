@@ -1,9 +1,3 @@
-//
-//  FavoriteRecipesTabView.swift
-//  Kroya_UI_Project
-//
-//  Created by Macbook on 11/15/24.
-//
 
 import SwiftUI
 

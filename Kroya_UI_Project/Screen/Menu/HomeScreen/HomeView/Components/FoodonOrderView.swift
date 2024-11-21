@@ -6,7 +6,6 @@ struct FoodonOrderView: View {
     let imageofOrder: [String] = ["SoupPic", "SaladPic", "GrillPic", "DessertPic 1"]
     let titleofOrder: [String] = ["Soup", "Salad", "Grill", "Dessert"]
     @State private var selectedOrderIndex: Int? = nil
-    @State private var searchText = ""
     @State var isChooseCuisine = false
     
     var body: some View {
@@ -46,14 +45,8 @@ struct FoodonOrderView: View {
                 }
             }
         }
-        .searchable(text: $searchText, prompt: LocalizedStringKey("Search Item"))
-        .onChange(of: searchText) { newValue in
-            if !newValue.isEmpty {
-                foodViewModel.getSearchFoodFoodByName(searchText: newValue)
-            } else {
-                foodViewModel.getAllFoodSell()
-            }
-        }
+        .searchable(text: $foodViewModel.searchText, prompt: LocalizedStringKey("Search Item")) // Bind to searchText
+    
         .onAppear {
             foodViewModel.getAllFoodSell()
         }
@@ -118,12 +111,11 @@ struct LoadingView: View {
 // Separate view for the Food List
 struct FoodListView: View {
     let isChooseCuisine: Bool
-    let foodViewModel: FoodSellViewModel
-    
+    @ObservedObject var foodViewModel: FoodSellViewModel
     var body: some View {
         ScrollView {
             LazyVStack {
-                ForEach(isChooseCuisine ? foodViewModel.FoodSellByCategory : foodViewModel.FoodOnSale) { foodSale in
+                ForEach(isChooseCuisine ? foodViewModel.FoodSellByCategory : foodViewModel.filteredFoodList) { foodSale in
                     NavigationLink(destination: FoodDetailView(
                         isFavorite: foodSale.isFavorite ?? false,
                         showPrice: true,

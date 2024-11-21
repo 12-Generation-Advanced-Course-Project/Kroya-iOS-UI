@@ -210,3 +210,7 @@ struct MainScreen: View {
         }
     }
 }
+
+#Preview {
+    MainScreen(userStore: UserStore(), lang: .constant("en"))
+}
