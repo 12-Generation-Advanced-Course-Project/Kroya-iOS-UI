@@ -80,7 +80,7 @@ struct OrdersView: View {
         .searchable(text: $searchText, prompt: "Search Item")
         .onChange(of: searchText) { newValue in
             if newValue.isEmpty {
-                orderViewModel.fetchAllPurchase()
+//                orderViewModel.fetchAllPurchase()
             } else {
                 // Example of client-side filtering (for testing)
                 orderViewModel.orders = orderViewModel.orders.filter { $0.name.contains(newValue) }

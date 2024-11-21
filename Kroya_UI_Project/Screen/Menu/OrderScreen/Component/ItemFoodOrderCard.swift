@@ -1,6 +1,7 @@
 
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct ItemFoodOrderCard: View {
     
@@ -10,39 +11,46 @@ struct ItemFoodOrderCard: View {
     @Binding var show3dot: Bool
     let Keyaccept = "Accept"
     let Keyreject = "Reject"
+    private let urlImagePrefix = "https://kroya-api-production.up.railway.app/api/v1/fileView/"
+
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            HStack(spacing: 12) {
-                // Food image
-                Image("brohok")
-                    .resizable()
-                    .frame(width: 65, height: 65)
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(8)
+            HStack(spacing: 10) {
+                
+                // Construct the full URL for the image
+                if let photoFilename = orderRequest.foodSellCardResponse.photo.first?.photo, let url = URL(string: urlImagePrefix + photoFilename) {
+                    WebImage(url: url)
+                        .resizable()
+                        .frame(width: 65, height: 65)
+                        .background(Color.gray.opacity(0.2))
+                        .cornerRadius(8)
+                } else {
+                    // Placeholder image when no URL is available
+                    Image(systemName: "photo")
+                        .resizable()
+                        .frame(width: 65, height: 65)
+                        .background(Color.gray.opacity(0.2))
+                        .cornerRadius(8)
+                }
                 
                 VStack(alignment: .leading, spacing: 5) {
                     HStack(spacing: 8) {
                         // Food name
                         Text(orderRequest.foodSellCardResponse.name)
-                            .font(.customfont(.semibold, fontSize: 17))
+                            .font(.customfont(.semibold, fontSize: 16))
                             .foregroundColor(.black)
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(orderRequest.purchaseStatusType == Keyaccept ? Color(hex: "#DDF6C3") : (orderRequest.purchaseStatusType == Keyreject ? Color(hex: "#FFD8E4") : Color.clear))
-                                .frame(width: 50, height: 23)
-                            if show3dot == true {
-                                Text(
-                                    orderRequest.purchaseStatusType == "ACCEPTED" ? "Accepted" :
-                                        orderRequest.purchaseStatusType == "REJECTED" ? "Rejected" :
-                                        orderRequest.purchaseStatusType == "PENDING" ? "Pending" :
-                                        "Unknown Status"
-                                )
-                                Text(orderRequest.purchaseStatusType != nil ? (orderRequest.purchaseStatusType == "Accept" ? "Accept" : "Reject") : "")
-                                    .font(.customfont(.regular, fontSize: 12))
-                                    .foregroundColor(orderRequest.purchaseStatusType == "Accept" ? .green : (orderRequest.purchaseStatusType == "Reject" ? .red : .clear))
-                            }
-                        }
+                            .lineLimit(1)
+                        
+                        Text(orderRequest.purchaseStatusType!)
+                            .font(.customfont(.semibold, fontSize: 10))
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(Color.green.opacity(0.2))
+                            )
+                            .foregroundColor(Color.green)
                         Spacer()
                         
                         // Time
@@ -64,13 +72,11 @@ struct ItemFoodOrderCard: View {
                                     .popover(isPresented: $showPopover, attachmentAnchor: .point(.topLeading), content: {
                                         VStack(spacing: 8) {
                                             Button("Accept", action: {
-                                                orderRequest.purchaseStatusType
                                                 showPopover = false
                                             })
                                             .foregroundStyle(Color(hex: "#00941D"))
                                             
                                             Button("Reject", action: {
-                                                orderRequest.purchaseStatusType
                                                 showPopover = false
                                             })
                                             .foregroundStyle(Color(hex: "#FF3B30"))
@@ -88,8 +94,8 @@ struct ItemFoodOrderCard: View {
                         .foregroundColor(Color(hex: "#0A0019"))
                         .opacity(0.5)
                     
-                    Text("Remarks: \(orderRequest.remark ?? "No remarks")")
-                        .font(.customfont(.medium, fontSize: 16))
+                    Text("Remarks: \(orderRequest.remark!)")
+                        .font(.customfont(.medium, fontSize: 14))
                         .foregroundColor(Color(hex: "#0A0019"))
                         .opacity(0.5)
                 }
@@ -100,17 +106,23 @@ struct ItemFoodOrderCard: View {
             HStack {
                 Group {
                     Image(systemName: "scope")
+                        .font(.customfont(.semibold, fontSize: 14))
                         .foregroundColor(.yellow)
-                    Text("St 323 - Toeul kork")
+                    Text(orderRequest.buyerInformation.location)
+                        .lineLimit(1)
                     
                     Spacer()
-                        .frame(width: 22)
+                    
                     Image(systemName: "phone.fill")
+                        .font(.customfont(.semibold, fontSize: 14))
                         .foregroundColor(.yellow)
-                    Text("cheata, ")
-                    + Text("016 860 375")
+                    HStack{
+                        Text("\(orderRequest.buyerInformation.fullName),")
+                        Text(orderRequest.buyerInformation.phoneNumber)
+                    }
+                    .lineLimit(1)
                 }
-                .font(.customfont(.semibold, fontSize: 14))
+                .font(.customfont(.semibold, fontSize: 12))
             }
             .padding(.horizontal, 10)
             .foregroundColor(Color(hex: "#7B7D92"))
