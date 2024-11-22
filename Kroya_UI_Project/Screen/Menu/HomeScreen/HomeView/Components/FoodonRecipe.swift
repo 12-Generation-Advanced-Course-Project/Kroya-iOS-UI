@@ -72,7 +72,7 @@ struct FoodonRecipe: View {
                             ForEach(isChooseCuisine ? recipeViewModel.RecipeByCategory : recipeViewModel.filteredFoodRecipeList) { recipe in
                                 NavigationLink(destination:
                                                 FoodDetailView(
-                                                    isFavorite: recipe.isFavorite,
+                                                    isFavorite: recipe.isFavorite ?? false,
                                                 showPrice: false, // Always false for recipes
                                                 showOrderButton: false, // Always false for recipes
                                                 showButtonInvoic: nil, // Not applicable
@@ -85,7 +85,7 @@ struct FoodonRecipe: View {
                                         recipe: recipe,
                                         foodId: recipe.id,
                                         itemType: "FOOD_RECIPE",
-                                        isFavorite: recipe.isFavorite // Use the value from `recipe.isFavorite`
+                                        isFavorite: recipe.isFavorite ?? false // Use the value from `recipe.isFavorite`
                                     )
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
