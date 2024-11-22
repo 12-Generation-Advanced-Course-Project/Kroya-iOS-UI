@@ -134,10 +134,17 @@ struct WebillConnectView: View {
                 }
             }
 
-
             // Loading Indicator
             if webillConnect.isLoading {
-                LoadingView()
+                ZStack {
+                    Color.white
+                        .edgesIgnoringSafeArea(.all)
+                    
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
+                        .scaleEffect(2)
+                        .offset(y: -50)
+                }
             }
 
             // Success Popup
