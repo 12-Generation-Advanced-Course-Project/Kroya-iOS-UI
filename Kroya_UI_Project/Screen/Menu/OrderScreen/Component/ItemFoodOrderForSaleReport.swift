@@ -1,20 +1,25 @@
+//
+//  ItemFoodOrderForSaleReport.swift
+//  Kroya_UI_Project
+//
+//  Created by KAK-LY on 22/11/24.
+//
+
 
 
 import SwiftUI
 import SDWebImageSwiftUI
 
-struct ItemFoodOrderCard: View {
+struct ItemFoodOrderForSaleReport: View {
     
-    @Binding var orderRequest: OrderRequestModel
+    var orderRequest: OrderRequestModel
     var showEllipsis: Bool = true
     @State private var showPopover = false
     @Binding var show3dot: Bool
     let Keyaccept = "Accept"
     let Keyreject = "Reject"
     private let urlImagePrefix = "https://kroya-api-production.up.railway.app/api/v1/fileView/"
-    @State private var purchaseStatus: String = "Pending" // Default status
-    @State private var statusColor: Color = .gray // Default color
-    
+
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -43,21 +48,7 @@ struct ItemFoodOrderCard: View {
                             .font(.customfont(.semibold, fontSize: 16))
                             .foregroundColor(.black)
                             .lineLimit(1)
-                            .frame(maxWidth: .infinity)
-                        // Dynamic Status
-                        Text(orderRequest.purchaseStatusType!)
-                            .font(.customfont(.semibold, fontSize: 10))
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 4)
-                            .foregroundColor(getStatusColor(status: orderRequest.purchaseStatusType!))
-                            .background(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(getStatusColor(status: orderRequest.purchaseStatusType!).opacity(0.2))
-                            )
-                        
-                        
-                        //
-                        
+                      
                         Spacer()
                         
                         // Time
@@ -65,37 +56,39 @@ struct ItemFoodOrderCard: View {
                             Text(formatTimeAgo(from: timeAgo))
                                 .font(.customfont(.semibold, fontSize: 12))
                                 .foregroundColor(.gray)
-                            
-                                .frame(maxWidth: .infinity)
                         }
-                        if showEllipsis {
-                            Button(action: {
-                                showPopover = true
-                            }, label: {
-                                Image(systemName: "ellipsis")
-                                    .rotationEffect(.degrees(90)) // Rotate to make it vertical
-                                    .font(.system(size: 18))
-                                    .foregroundColor(.gray)
-                                    .popover(isPresented: $showPopover, attachmentAnchor: .point(.topLeading), content: {
-                                        VStack(spacing: 8) {
-                                            Button("Accept", action: {
-                                                orderRequest.purchaseStatusType = "ACCEPTED" // Update the status
-                                                showPopover = false
-                                            })
-                                            .foregroundStyle(Color(hex: "#00941D"))
+                        
+                        // Conditionally render the ellipsis button based on `showEllipsis`
+                        if orderRequest.purchaseDate == "REJECTED" || orderRequest.purchaseDate == "PENDING" {
+                            if showEllipsis {
+                                Button(action: {
+                                    showPopover = true
+                                }, label: {
+                                    Image(systemName: "ellipsis")
+                                        .rotationEffect(.degrees(90)) // Rotate to make it vertical
+                                        .font(.system(size: 18))
+                                        .foregroundColor(.gray)
+                                        .popover(isPresented: $showPopover, attachmentAnchor: .point(.topLeading), content: {
                                             
-                                            Button("Reject", action: {
-                                                orderRequest.purchaseStatusType = "REJECTED" // Update the status
-                                                showPopover = false
-                                            })
-                                            .foregroundStyle(Color(hex: "#FF3B30"))
-                                        }
-                                        .frame(width: 130, height: 80)
-                                        .presentationCompactAdaptation(.popover)
-                                    })
-                            })
+                                            VStack(spacing: 8) {
+                                                Button("Accept", action: {
+                                                    showPopover = false
+                                                })
+                                                .foregroundStyle(Color(hex: "#00941D"))
+                                                
+                                                Button("Reject", action: {
+                                                    showPopover = false
+                                                })
+                                                .foregroundStyle(Color(hex: "#FF3B30"))
+                                            }
+                                            .frame(width: 130, height: 80)
+                                            .presentationCompactAdaptation(.popover)
+                                            
+                                        })
+                                })
+                            }
                         }
-
+                        
                     }
                     
                     // Item count and remarks
@@ -149,7 +142,7 @@ struct ItemFoodOrderCard: View {
                     HStack {
                         Text(LocalizedStringKey("Total"))
                         Spacer()
-                        //                        Text("$\(String(format: "%.2f", orderRequest.totalPrice))")
+//                        Text("$\(String(format: "%.2f", orderRequest.totalPrice))")
                         Text("$\(String(format: "%.2f", Double(orderRequest.totalPrice)))")
                     }
                     .foregroundStyle(Color(hex: "#0A0019"))
@@ -158,7 +151,7 @@ struct ItemFoodOrderCard: View {
                     HStack {
                         Text(LocalizedStringKey("Pay with \(orderRequest.paymentType)"))
                         Spacer()
-                        //                        Text("$\(String(format: "%.2f", orderRequest.totalPrice))")
+//                        Text("$\(String(format: "%.2f", orderRequest.totalPrice))")
                         Text("$\(String(format: "%.2f", Double(orderRequest.totalPrice)))")
                     }
                     .foregroundStyle(Color(hex: "#0A0019"))
@@ -210,20 +203,6 @@ struct ItemFoodOrderCard: View {
         }
         return nil
     }
-    private func getStatusColor(status: String) -> Color {
-        switch status.uppercased() {
-        case "ACCEPTED":
-            return Color(hex: "#00941D") // Green
-        case "REJECTED":
-            return Color(hex: "#FF3B30") // Red
-        case "PENDING":
-            return Color.orange // Orange
-        default:
-            return Color.gray // Default color for unknown statuses
-        }
-    }
-
-
 }
 
 

@@ -78,16 +78,36 @@ struct OrderCard: View {
                         }
                     }
                     
-                    if let quantity = order.quantity {
-                        Text("\(quantity) items")
-                            .customFontLightLocalize(size: 12)
-                            .opacity(0.6)
-                    } else {
-                        Text(order.foodCardType == "SALE" ? (order.dateCooking ?? "You are selling now") : (order.purchaseDate ?? "No Cooking Date Available"))
-                            .customFontLightLocalize(size: 12)
-                            .opacity(0.6)
+                    if order.foodCardType == "SALE" {
+                        HStack {
+                            if let quantity = order.quantity {
+                                Text("\(quantity) items")
+                                    .customFontLightLocalize(size: 12)
+                                    .opacity(0.6)
+                            } else {
+                                Text("No quantity specified")
+                                    .customFontLightLocalize(size: 12)
+                                    .opacity(0.6)
+                            }
+                            Text("Item selling now")
+                                .customFontLightLocalize(size: 12)
+                                .opacity(0.6)
+                        }
+                    } else if order.foodCardType == "ORDER" {
+                        HStack {
+                            if let quantity = order.quantity {
+                                Text("\(quantity) items")
+                                    .customFontLightLocalize(size: 12)
+                                    .opacity(0.6)
+                            } else {
+                                Text("No quantity specified")
+                                    .customFontLightLocalize(size: 12)
+                                    .opacity(0.6)
+                            }
+                            Spacer()
+                        }
                     }
-                    
+
                     HStack(spacing: 15) {
                         Text(order.foodCardType == "ORDER" ?
                              "$\(order.totalPrice ?? 0)" : // Show totalPrice for orders
@@ -108,6 +128,10 @@ struct OrderCard: View {
                     }
                 }
             }
+            .onAppear{
+                print(order.quantity ?? "")
+                print(order.foodCardType)
+            }
             .padding(.vertical, 7)
             .padding(.horizontal, 12)
             .frame(width: 360)
@@ -119,5 +143,54 @@ struct OrderCard: View {
         }
         .buttonStyle(PlainButtonStyle()) // Optional: remove the default button styling
         
+    }
+    //MARK: Helper function to format date
+    private func parseDate(_ dateString: String) -> Date? {
+        let dateFormats = [
+            "yyyy-MM-dd'T'HH:mm:ss.SSS",  // With milliseconds
+            "yyyy-MM-dd'T'HH:mm:ss"       // Without milliseconds
+        ]
+        
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0) // Ensure consistent parsing
+        
+        for format in dateFormats {
+            formatter.dateFormat = format
+            if let date = formatter.date(from: dateString) {
+                return date
+            }
+        }
+        return nil // Return nil if none of the formats match
+    }
+    
+    
+    //MARK: Helper function to determine time of day based on the cook date time (if available)
+    private func formatDate(_ dateString: String) -> String {
+        guard let date = parseDate(dateString) else { return "Invalid Date" }
+        
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        
+        // Output format
+        formatter.dateFormat = "dd MMM yyyy" // Example: "23 Nov 2024"
+        return formatter.string(from: date)
+    }
+    
+    private func determineTimeOfDay(from dateString: String) -> String {
+        guard let date = parseDate(dateString) else { return "at current time." }
+        let hour = Calendar.current.component(.hour, from: date)
+        
+        switch hour {
+        case 5..<12:
+            return "in the morning."
+        case 12..<17:
+            return "in the afternoon."
+        case 17..<21:
+            return "in the evening."
+        default:
+            return "at night."
+        }
     }
 }

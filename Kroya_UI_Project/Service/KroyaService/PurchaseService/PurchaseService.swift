@@ -50,7 +50,7 @@ class PurchaseService: ObservableObject {
                 }
             }
             
-            
+            debugPrint(respons)
             // Handle the response result
             switch respons.result {
             case .success(let payloads):
@@ -197,7 +197,7 @@ class PurchaseService: ObservableObject {
                     print("Failed to convert response data to pretty JSON: \(error)")
                 }
             }
-            
+            debugPrint(respons)
             // Handle the response result
             switch respons.result {
             case .success(let payloads):

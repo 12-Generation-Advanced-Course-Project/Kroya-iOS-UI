@@ -58,14 +58,17 @@ struct OrdersView: View {
                 }
                 
                 // TabView for Content
+                // TabView for Content
                 TabView(selection: $selectedSegment) {
-                    AllTabView()
+                    AllTabView(searchText: $searchText) // Pass searchText
                         .tag(0)
                         .environmentObject(orderViewModel)
-                    OrderTabView()
+                    
+                    OrderTabView(searchText: $searchText) // Pass searchText
                         .tag(1)
                         .environmentObject(orderViewModel)
-                    SaleTabView()
+                    
+                    SaleTabView(searchText: $searchText) // Pass searchText
                         .tag(2)
                         .environmentObject(orderViewModel)
                 }

@@ -1,3 +1,4 @@
+
 import SwiftUI
 
 struct SaleReportView: View {
@@ -7,7 +8,8 @@ struct SaleReportView: View {
     let dateFormatter = DateFormatter()
     let months = Calendar.current.monthSymbols
     @StateObject private var saleReportVM = SaleReportVM()
-    
+    @StateObject private var orderViewModel = OrderViewModel()
+    @State private var hasAppeared = false
     var daysInSelectedMonth: [Date] {
         var dates = [Date]()
         let calendar = Calendar.current
@@ -61,41 +63,55 @@ struct SaleReportView: View {
             .frame(maxWidth: .infinity)
             .padding()
             
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 20) {
-                    ForEach(daysInSelectedMonth, id: \.self) { date in
-                        let isFutureDate = date > Date()
-                        
-                        VStack {
-                            Text(dateFormatter.string(from: date).components(separatedBy: " ").first!) // Day
-                                .font(.customfont(.semibold, fontSize: 16))
-                                .foregroundStyle(isFutureDate ? Color.gray : (date == selectedDate ? PrimaryColor.normal : .black.opacity(0.6)))
-                            
-                            Text(dateFormatter.string(from: date).components(separatedBy: " ").last!) // Month
-                                .font(.customfont(.semibold, fontSize: 16))
-                                .foregroundStyle(isFutureDate ? Color.gray : (date == selectedDate ? PrimaryColor.normal : .black.opacity(0.8)))
-                            
-                            if date == selectedDate && !isFutureDate {
-                                Image("pyramid")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 15, height: 15)
-                            } else {
-                                Rectangle()
-                                    .fill(Color.clear)
-                                    .frame(width: 15, height: 15)
+           
+            ScrollViewReader { proxy in
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 20) {
+                        ForEach(daysInSelectedMonth, id: \.self) { date in
+                            let isFutureDate = date > Date()
+
+                            VStack {
+                                Text(dateFormatter.string(from: date).components(separatedBy: " ").first!) // Day
+                                    .font(.customfont(.semibold, fontSize: 16))
+                                    .foregroundStyle(isFutureDate ? Color.gray : (date == selectedDate ? PrimaryColor.normal : .black.opacity(0.6)))
+
+                                Text(dateFormatter.string(from: date).components(separatedBy: " ").last!) // Month
+                                    .font(.customfont(.semibold, fontSize: 16))
+                                    .foregroundStyle(isFutureDate ? Color.gray : (date == selectedDate ? PrimaryColor.normal : .black.opacity(0.8)))
+
+                                if date == selectedDate {
+                                    Image("pyramid")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 15, height: 15)
+                                } else {
+                                    Rectangle()
+                                        .fill(Color.clear)
+                                        .frame(width: 15, height: 15)
+                                }
                             }
-                        }
-                        .onTapGesture {
-                            if !isFutureDate {
-                                selectedDate = date
+                            .onTapGesture {
+                                if !isFutureDate {
+                                    selectedDate = date // Update the selected date
+                                }
                             }
+                            .padding(.horizontal, 5)
+                            .disabled(isFutureDate)
+                            .id(date) // Assign an ID for programmatic scrolling
                         }
-                        .padding(.horizontal, 5)
-                        .disabled(isFutureDate)
+                    }
+                    .padding(.horizontal)
+                }
+                .onAppear {
+                    // Scroll to today's date when the view appears
+                    if !hasAppeared {
+                        hasAppeared = true
+                        if let todayDate = daysInSelectedMonth.first(where: { Calendar.current.isDate($0, inSameDayAs: Date()) }) {
+                            selectedDate = todayDate // Explicitly set today as selected
+                            proxy.scrollTo(todayDate, anchor: .center)
+                        }
                     }
                 }
-                .padding(.horizontal)
             }
             
             HStack {
@@ -115,7 +131,7 @@ struct SaleReportView: View {
                 ScrollView {
                     LazyVStack {
                         ForEach(saleReportVM.purchaseResponses) { order in
-                            ItemFoodOrderCard(orderRequest: order, show3dot: $show3dot)
+                            ItemFoodOrderForSaleReport(orderRequest: order, show3dot: $show3dot)
                         }
                     }
                     .padding(.horizontal)
@@ -130,6 +146,7 @@ struct SaleReportView: View {
         }
         .onAppear {
             saleReportVM.fetchSaleReport(for: selectedDate)
+            orderViewModel.fetchPurchaseSale()
         }
         .onChange(of: selectedDate) { newDate in
             saleReportVM.fetchSaleReport(for: newDate)

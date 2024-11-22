@@ -3,7 +3,8 @@ import SwiftUI
 
 struct AllTabView: View {
     
-    @StateObject private var orderViewModel = OrderViewModel() // Initialize the OrderViewModel
+    @Binding var searchText: String
+    @StateObject private var orderViewModel = OrderViewModel() 
     
     @State private var isExpandedToday = true
     @State private var isExpandedYTD = false
@@ -29,7 +30,7 @@ struct AllTabView: View {
                     } else if !orderViewModel.errorMessage.isEmpty {
                         Text("Error: \(orderViewModel.errorMessage)")
                             .foregroundColor(.red)
-                    } else if orderViewModel.orders.isEmpty {
+                    } else if filteredOrders.isEmpty {
                         Text("No orders available.")
                             .foregroundColor(.gray)
                     } else {
@@ -54,8 +55,16 @@ struct AllTabView: View {
         }
         .onAppear {
             orderViewModel.fetchAllPurchase()
-//            orderViewModel.fetchPurchaseSale()
+            orderViewModel.fetchPurchaseSale()
         }
+    }
+    
+    // Filter orders by search text
+    private var filteredOrders: [OrderModel] {
+        if searchText.isEmpty {
+            return orderViewModel.orders
+        }
+        return orderViewModel.orders.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
     }
     
     private func groupOrdersByDate() -> [String: [OrderModel]] {
@@ -68,7 +77,7 @@ struct AllTabView: View {
         let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today)!
         let twoDaysAgo = Calendar.current.date(byAdding: .day, value: -2, to: today)!
         
-        for order in orderViewModel.orders {
+        for order in filteredOrders { // Use filtered orders here
             if let dateCookingStr = order.dateCooking,
                let dateCooking = dateFormatter.date(from: dateCookingStr) {
                 if dateCooking >= today {
@@ -110,7 +119,7 @@ struct OrderSection: View {
                     } else {
                         VStack(spacing: 15) {
                             ForEach(orders, id: \.id) { order in
-                                NavigationLink(destination: OrderListView(sellerId: orders.first!.foodSellId )) {
+                                NavigationLink(destination: OrderListView(sellerId: orders.first!.foodSellId)) {
                                     OrderCard(
                                         order: order,
                                         isAccepted: order.purchaseStatusType == "Accepted",
@@ -144,5 +153,3 @@ struct OrderSection: View {
         }
     }
 }
-
-
