@@ -21,7 +21,8 @@ struct MainScreen: View {
     }
     
     var body: some View {
-        NavigationStack {
+        
+//        NavigationView {
             ZStack {
                 VStack(spacing: 10) {
                     TabView(selection: $selectedTab) {
@@ -158,7 +159,9 @@ struct MainScreen: View {
                 }
             }
             .frame(width: .screenWidth, height: .screenHeight)
-        }
+//        }
+//        .edgesIgnoringSafeArea(.all)
+//        .ignoresSafeArea()
         .onAppear {
 //            addressViewModel.fetchAllAddresses()
             draftModelData.loadDraft(from: modelContext)

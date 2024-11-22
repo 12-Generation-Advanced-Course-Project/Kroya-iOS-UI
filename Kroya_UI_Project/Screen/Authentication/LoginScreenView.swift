@@ -71,6 +71,7 @@ struct LoginScreenView: View {
                             colorBorder: .white,
                             isMultiline: false
                         )
+                        .keyboardType(.emailAddress)
                         .onChange(of: email, perform: { newValue in
                             validateEmail(email: newValue) // Call validation function on email change
                         })
