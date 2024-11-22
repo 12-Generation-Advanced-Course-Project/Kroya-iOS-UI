@@ -20,6 +20,7 @@ struct FoodCheckOutView: View {
     @State private var Quantity: Int = 1
     @State private var SelectPayment: String = ""
     @State private var navigationTrigger = false
+    @State private var warningMessage: String? // For displaying warnings
     let exchangeRateToRiel: Double = 4100
     
     var totalPriceInRiel: Double {
@@ -63,8 +64,12 @@ struct FoodCheckOutView: View {
                         Section {
                             PaymentButtonView(
                                 payment: $SelectPayment,
+                                PurchaesViewModel: PurchaesViewModel,
                                 amount: Int(totalPriceInRiel),
-                                remark: remark ?? "Good"
+                                remark: remark ?? "Good",
+                                Location: Location,
+                                Qty: Quantity,
+                                FoodSellId: FoodId
                             ).environment(\.modelContext, context)
                         } header: {
                             Text(LocalizedStringKey("Payment"))
@@ -78,16 +83,27 @@ struct FoodCheckOutView: View {
                     .listStyle(PlainListStyle())
                     .scrollContentBackground(.hidden)
                     
+                    // Warning Message
+                    if let warningMessage = warningMessage {
+                        Text(warningMessage)
+                            .font(.customfont(.medium, fontSize: 14))
+                            .foregroundColor(.red)
+                            .padding(.vertical, 10)
+                    }
+                    
                     // Place Order Button
                     Button("Place an order") {
+                        // Validation Logic
                         guard !Location.isEmpty else {
-                            print("Error: Address not selected.")
+                            warningMessage = "Please select a delivery address."
                             return
                         }
                         guard !SelectPayment.isEmpty else {
-                            print("Error: Payment method not selected.")
+                            warningMessage = "Please select a payment method."
                             return
                         }
+                        
+                        warningMessage = nil // Clear any previous warning
                         
                         let Amount = totalPriceInRiel // Convert to RIEL
                         
@@ -122,7 +138,9 @@ struct FoodCheckOutView: View {
                 ReceiptView(
                     isPresented: $isPresented,
                     isOrderReceived: false,
-                    PurchaseId: PurchaesViewModel.Purchases?.purchaseId ?? 0
+                    PurchaseId: PurchaesViewModel.Purchases?.purchaseId ?? 0, dismissToRoot: {
+                        navigationTrigger = false
+                    }
                 )
             })
             .toolbar {
@@ -147,6 +165,7 @@ struct FoodCheckOutView: View {
         }
     }
 }
+
 
 // MARK: Helper functions
 private extension FoodCheckOutView {

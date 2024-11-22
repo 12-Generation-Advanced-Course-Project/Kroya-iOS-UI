@@ -14,6 +14,7 @@ struct ReceiptCard: View {
     @StateObject private var Profile = ProfileViewModel()
     @Binding var presentPopup: Bool
     @State private var downloadSuccess: Bool = false
+    @State private var isImageLoaded: Bool = false
     var isOrderReceived: Bool
     var FoodSellId:Int
     var body: some View {
@@ -209,16 +210,40 @@ struct ReceiptCard: View {
         }
     }
     func saveImage(complete: @escaping (Bool) -> Void) {
-        guard let ImageProfile = Profile.userProfile?.profileImage,
-              !ImageProfile.isEmpty,
-              let imageUrl = URL(string: Constants.fileupload + ImageProfile) else {
-            print("Error: Invalid profile image URL")
-            complete(false)
-            return
-        }
+          let receiptSize = CGSize(width: UIScreen.main.bounds.width, height: 620)
 
-        // Step 1: Save the main receipt
+          self.body.captureUIView(size: receiptSize) { image in
+              guard let receiptImage = image else {
+                  print("Error capturing receipt image")
+                  complete(false)
+                  return
+              }
+
+              // Save to Photos
+              if let pngData = receiptImage.pngData() {
+                  PHPhotoLibrary.shared().performChanges({
+                      PHAssetChangeRequest.creationRequestForAsset(from: UIImage(data: pngData)!)
+                  }) { success, error in
+                      if success {
+                          print("Receipt saved successfully!")
+                          complete(true)
+                      } else if let error = error {
+                          print("Error saving receipt: \(error.localizedDescription)")
+                          complete(false)
+                      }
+                  }
+              } else {
+                  print("Error generating PNG data")
+                  complete(false)
+              }
+          }
+      }
+
+
+    // Helper function to capture and save the view
+    private func captureAndSave(complete: @escaping (Bool) -> Void) {
         let receiptSize = CGSize(width: UIScreen.main.bounds.width, height: 620)
+
         self.body.captureUIView(size: receiptSize) { image in
             guard let receiptImage = image else {
                 print("Error capturing receipt image")
@@ -226,26 +251,16 @@ struct ReceiptCard: View {
                 return
             }
 
-            // Save the receipt image
+            // Save the captured receipt image to Photos
             if let pngData = receiptImage.pngData() {
                 PHPhotoLibrary.shared().performChanges({
                     PHAssetChangeRequest.creationRequestForAsset(from: UIImage(data: pngData)!)
                 }) { success, error in
                     if success {
-                        print("Receipt saved successfully!")
-                        
-                        // Step 2: Save the profile image from WebImage
-                        self.downloadAndSaveImage(from: imageUrl) { imageSuccess in
-                            if imageSuccess {
-                                DispatchQueue.main.async {
-                                    self.downloadSuccess = true
-                                    print("All images saved successfully!")
-                                    complete(true)
-                                }
-                            } else {
-                                print("Error saving profile image")
-                                complete(false)
-                            }
+                        print("Receipt (including WebImage) saved successfully!")
+                        DispatchQueue.main.async {
+                            self.downloadSuccess = true
+                            complete(true)
                         }
                     } else if let error = error {
                         print("Error saving receipt: \(error.localizedDescription)")
@@ -257,9 +272,8 @@ struct ReceiptCard: View {
                 complete(false)
             }
         }
-        
-        
     }
+
 
     private func downloadAndSaveImage(from url: URL, completion: @escaping (Bool) -> Void) {
         URLSession.shared.dataTask(with: url) { data, response, error in
@@ -341,6 +355,7 @@ struct ReceiptRow: View {
 struct ReceiptCardForSuccess: View {
     @ObservedObject var viewModel: ReceiptViewModel
     @StateObject private var ReceiptVM = OrderViewModel()
+    @StateObject private var Profile = ProfileViewModel()
     @Binding var presentPopup: Bool
     @State private var downloadSuccess: Bool = false
     var isOrderReceived: Bool
@@ -357,7 +372,7 @@ struct ReceiptCardForSuccess: View {
                 
                 VStack(spacing: 20) {
                     HStack(spacing: 15) {
-                        if let FoodSellImage = ReceiptVM.Purchases?.foodSellCardResponse.photo.first?.photo, !FoodSellImage.isEmpty,
+                        if let FoodSellImage = Profile.userProfile?.profileImage, !FoodSellImage.isEmpty,
                            let imageUrl = URL(string: Constants.fileupload + FoodSellImage) {
                             WebImage(url: imageUrl)
                                 .resizable()
@@ -498,8 +513,8 @@ struct ReceiptCardForSuccess: View {
                         } label: {
                             HStack {
                                 Text("Download Success")
-                                    .font(.system(size: 16, weight: .bold))
-                                    .foregroundColor(.yellow)
+                                    .font(.customfont(.medium, fontSize: 16))
+                                    .foregroundStyle(PrimaryColor.normal)
                             }
                         }
                         .buttonStyle(PlainButtonStyle())
@@ -514,42 +529,11 @@ struct ReceiptCardForSuccess: View {
             .background(Color.clear)
         }
         .onAppear{
+            Profile.fetchUserProfile()
             ReceiptVM.getReceipt(purchaseId: FoodSellId)
         }
     }
-    func saveImage(complete: @escaping (Bool) -> Void) {
-        let receiptSize = CGSize(width: UIScreen.main.bounds.width, height: 620)
-        self.body
-            .captureUIView(size: receiptSize) { image in
-                guard let image = image else {
-                    print("Error capturing image")
-                    complete(false)
-                    return
-                }
-                
-                // Save the image as PNG to the photo album
-                if let pngData = image.pngData() {
-                    PHPhotoLibrary.shared().performChanges({
-                        PHAssetChangeRequest.creationRequestForAsset(from: UIImage(data: pngData)!)
-                    }) { success, error in
-                        if success {
-                            DispatchQueue.main.async {
-                                downloadSuccess = true
-                                print("Receipt saved successfully!")
-                                complete(true)
-                            }
-                        } else if let error = error {
-                            print("Error saving receipt: \(error.localizedDescription)")
-                            complete(false)
-                        }
-                    }
-                } else {
-                    complete(false)
-                }
-            }
-    }
-
-    
+ 
     func formatDate(from dateString: String) -> String {
             let inputFormatter = DateFormatter()
             inputFormatter.locale = Locale(identifier: "en_US_POSIX")

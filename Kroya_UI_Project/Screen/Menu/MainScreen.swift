@@ -114,7 +114,9 @@ struct MainScreen: View {
                         Spacer()
                         Button(action: {
                             if Auth.shared.isUserLoggedIn() == false {
-                                showGuestAlert = true
+                                withAnimation{
+                                    showGuestAlert = true
+                                }
                             } else {
                                 isModalPresented.toggle()
                             }
@@ -177,8 +179,10 @@ struct MainScreen: View {
     private func handleTabChange(to newTab: Int) {
         // Only allow access to other tabs if the user is logged in
         if Auth.shared.isUserLoggedIn() == false && newTab != 1 {
-            showGuestAlert = true
-            selectedTab = 1 // Redirect back to Home if the user is not logged in
+            withAnimation{
+                showGuestAlert = true
+            }
+            selectedTab = 1
         } else {
             selectedTab = newTab
         }

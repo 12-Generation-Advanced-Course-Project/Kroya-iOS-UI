@@ -99,7 +99,6 @@ struct LoadingView: View {
         ZStack {
             Color.white
                 .edgesIgnoringSafeArea(.all)
-            
             ProgressView()
                 .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
                 .scaleEffect(2)

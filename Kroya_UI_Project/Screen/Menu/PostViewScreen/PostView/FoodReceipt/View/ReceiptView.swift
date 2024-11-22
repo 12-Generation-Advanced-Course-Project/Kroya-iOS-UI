@@ -17,7 +17,7 @@ struct ReceiptView: View {
     @ObservedObject var viewModel = ReceiptViewModel()
     var isOrderReceived: Bool
     var PurchaseId:Int
-   
+    let dismissToRoot: () -> Void
 
     var body: some View {
         NavigationView {
@@ -81,13 +81,13 @@ struct ReceiptView: View {
                         }
                         .padding(.top, 20)
                     }}
-//                if presentPopup {
-//                    Popup(isPresented: $presentPopup, dismissOnTapOutside: true) {
-//                        ReceiptCardForSuccess(viewModel: viewModel, presentPopup: $presentPopup, isOrderReceived: isOrderReceived, FoodSellId: PurchaseId)
-//                            .transition(.scale)
-//                            .animation(.easeInOut(duration: 0.3))
-//                    }
-//                }
+                if presentPopup {
+                    Popup(isPresented: $presentPopup, dismissOnTapOutside: true) {
+                        ReceiptCardForSuccess(viewModel: viewModel, presentPopup: $presentPopup, isOrderReceived: isOrderReceived, FoodSellId: PurchaseId)
+                            .transition(.scale)
+                            .animation(.easeInOut(duration: 0.3))
+                    }
+                }
                 
             }
         }
