@@ -11,7 +11,12 @@ struct PaymentButtonView: View {
     @State private var isShowingQRModal = false
     @State private var selectedPaymentMethod: String? = nil
     @Binding var payment: String
-    
+    @StateObject private var profileVM = ProfileViewModel()
+    @StateObject private var WeBillVM = WeBill365ViewModel()
+    @StateObject private var User = UserStore()
+    @Environment(\.modelContext) private var context
+    var amount:Int
+    var remark:String
     var body: some View {
         HStack(spacing: 10) {
             // Pay with cash button
@@ -51,8 +56,32 @@ struct PaymentButtonView: View {
             // Pay with KHQR button
             Button(action: {
                 selectedPaymentMethod = "KHQR"
-                payment = "KHQR"
-                isShowingQRModal = true
+                payment = "KHR"
+                let PaymentType = "1"
+                
+                let QRCollectionRequest = QRCollectionRequest(
+                    payername: "THYDY DANETH",
+                    parentAccountNo: WeBillVM.parentAccountNo,
+                    paymentType: PaymentType,
+                    currencyCode: payment,
+                    amount: 100,
+                    remark: remark
+                )
+                
+                print("QRCollectionRequest: \(QRCollectionRequest)")
+                
+                WeBillVM.fetchQRCollection(request: QRCollectionRequest) { billNo in
+                    guard let billNo = billNo else {
+                        print("Failed to generate QR or missing BillNo.")
+                        return
+                    }
+                    print("Starting QR status polling for BillNo: \(billNo)")
+                    WeBillVM.startPollingQRStatus(billNo: WeBillVM.qrCollectionData?.billNo ?? "")
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                    isShowingQRModal = true
+                })
+               
             }) {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack {
@@ -86,10 +115,14 @@ struct PaymentButtonView: View {
                     .stroke(Color(red: 0.836, green: 0.875, blue: 0.924), lineWidth: 1)
             )
             .sheet(isPresented: $isShowingQRModal) {
-                PaywithKHQRModalView()
+                PaywithKHQRModalView(khqrData:WeBillVM.qrCollectionData?.khqrdata ?? "")
                     .presentationDetents([.fraction(0.70)])
                     .presentationDragIndicator(.visible)
             }
+        }
+        .onAppear{
+            profileVM.fetchUserProfile()
+            WeBillVM.loadWeBillAccount(context: context)
         }
     }
 }

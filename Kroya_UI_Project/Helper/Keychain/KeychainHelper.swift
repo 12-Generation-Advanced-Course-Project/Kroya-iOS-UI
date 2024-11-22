@@ -77,6 +77,9 @@ class Auth: ObservableObject {
     func getAccessToken() -> String? {
         return getCredentials().accessToken
     }
+    func getAccessTokenWeBill() -> String? {
+        return getWeBillCredentials().webillToken
+    }
     
     func getRefreshToken() -> String? {
         return getCredentials().refreshToken
