@@ -32,13 +32,13 @@ struct EditingProfileView: View {
     var body: some View {
         ZStack {
             VStack(spacing: 10) {
-//                HStack {
-//                    Text(LocalizedStringKey("Edit Profile"))
-//                        .font(.customfont(.bold, fontSize: 18))
-//                        .opacity(0.84)
-//                        .padding(.bottom, 20)
-//                }
-//                .frame(maxWidth: .infinity)
+                //                HStack {
+                //                    Text(LocalizedStringKey("Edit Profile"))
+                //                        .font(.customfont(.bold, fontSize: 18))
+                //                        .opacity(0.84)
+                //                        .padding(.bottom, 20)
+                //                }
+                //                .frame(maxWidth: .infinity)
                 
                 // Profile Image and Edit Icon
                 ZStack(alignment: .bottomTrailing) {
@@ -298,7 +298,7 @@ struct EditingProfileView: View {
                 loadProfileData()
                 //                addressVM.fetchAllAddresses()
                 //                let lastaddress = addressVM.addresses.last
-//                                selectedAddress = lastaddress
+                //                                selectedAddress = lastaddress
                 profile.fetchUserProfile()
             }
             .onDisappear{
@@ -320,7 +320,7 @@ struct EditingProfileView: View {
                     }
                 }
             }
-
+            
             
         }
         .navigationTitle(LocalizedStringKey("Edit Profile"))
@@ -370,6 +370,7 @@ struct EditingProfileView: View {
 
 struct DeleteAccountDialog: View {
     @Environment(\.dismiss) var dismiss
+    @ObservedObject var profile: ProfileViewModel = ProfileViewModel()
     var body: some View {
         VStack(alignment: .center) {
             HStack {
@@ -381,7 +382,10 @@ struct DeleteAccountDialog: View {
                     .padding(.vertical)
             }
             VStack {
-                CustomButton(title: "Delete", action: {print("Delete Account Clicked")}, backgroundColor: .red, frameHeight: 55,cornerRadius: 16,frameWidth: .screenWidth * 0.9)
+                CustomButton(title: "Delete",
+                             action: {
+                    profile.deleteProfile()
+                }, backgroundColor: .red, frameHeight: 55,cornerRadius: 16,frameWidth: .screenWidth * 0.9)
                 
                 CustomButton(title: "Cancel", action: {print("Cancel Account Clicked")
                     dismiss()
