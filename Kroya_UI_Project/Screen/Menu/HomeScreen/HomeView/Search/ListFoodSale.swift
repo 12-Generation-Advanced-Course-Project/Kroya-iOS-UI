@@ -32,7 +32,7 @@ struct ListFoodSale: View {
                                 recipe: popularrecipe,
                                 foodId: popularrecipe.id,
                                 itemType: "FOOD_RECIPE",
-                                isFavorite: popularrecipe.isFavorite
+                                isFavorite: popularrecipe.isFavorite!
                             )
                             .frame(maxWidth: .infinity)
                             .padding(.horizontal, 20)

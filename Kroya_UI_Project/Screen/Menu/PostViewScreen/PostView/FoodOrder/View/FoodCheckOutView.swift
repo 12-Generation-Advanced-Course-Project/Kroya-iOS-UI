@@ -25,7 +25,7 @@ struct FoodCheckOutView: View {
     }
     
     var body: some View {
-        NavigationStack{
+        NavigationView{
             ZStack {
                 VStack {
                     List {
@@ -110,12 +110,12 @@ struct FoodCheckOutView: View {
 //                    EmptyView()
 //                }
             }
-//            .navigationDestination(isPresented: $navigationTrigger, destination: {
-//                ReceiptView(isPresented: $isPresented, isOrderReceived: false, PurchaseId: PurchaesViewModel.Purchases?.purchaseId ?? 0)
-//            })
-            .fullScreenCover(isPresented: $PurchaesViewModel.isOrderSuccess, content: {
+            .navigationDestination(isPresented: $navigationTrigger, destination: {
                 ReceiptView(isPresented: $isPresented, isOrderReceived: false, PurchaseId: PurchaesViewModel.Purchases?.purchaseId ?? 0)
             })
+//            .fullScreenCover(isPresented: $PurchaesViewModel.isOrderSuccess, content: {
+//                ReceiptView(isPresented: $isPresented, isOrderReceived: false, PurchaseId: PurchaesViewModel.Purchases?.purchaseId ?? 0)
+//            })
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     HStack {

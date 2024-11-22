@@ -76,3 +76,7 @@ typealias SaleReportResponse = KroyaSingleAPIResponse <SaleReportModel>
 //MARK: Guest category
 typealias GuestCategoryAllFoodById = KroyaSingleAPIResponse<PayloadCategory>
 typealias GuestCategoryResponse = KroyaAPIResponse<CategoryModel>
+
+//MARK: PurchaseUpdaeById
+
+typealias PurchaseUpdateResponse = KroyaAPIResponse<PurchaseModel>
