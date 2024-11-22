@@ -335,7 +335,23 @@ class PurchaseService: ObservableObject {
         
     }
     
-    //MARK: Update Purchase By Id and Status
+//    //MARK: Update Purchase By Id and Status
+//    func PurchaseUpdateById(purchaseId:Int,newStatus:String,complete: @escaping (Result<Purchase,Error>) -> Void){
+//        guard let accessToken = Auth.shared.getAccessToken() else {
+//            let error = NSError(
+//                domain: "",
+//                code: 401,
+//                userInfo: [NSLocalizedDescriptionKey: "Access token not found."]
+//            )
+//            completion(.failure(error))
+//            return
+//        }
+//        let url = Constants.Purchase + "/order/\(purchaseId)/status"
+//        let headers: HTTPHeaders = [
+//            "Authorization": "Bearer \(accessToken)",
+//            "Content-Type": "application/json"
+//        ]
+//    }
 }
 
 

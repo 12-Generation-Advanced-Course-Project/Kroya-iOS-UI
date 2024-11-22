@@ -10,41 +10,79 @@ import SwiftUI
 struct CategoryFoodRecipeTab: View {
     
     @ObservedObject var categoryVM: CategoryMV
+    @ObservedObject var guestCategoryVM: GuestCategoryVM
     @StateObject private var favoriteFoodRecipe = FavoriteVM()
     var body: some View {
-        ZStack {
-            VStack {
-                if categoryVM.FoodRecipByCategory.isEmpty && !categoryVM.isLoading {
-                    ZStack {
-                        Color.white
-                            .edgesIgnoringSafeArea(.all)
-                            .opacity(0.8) // Adjust opacity for a translucent background
-                        
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
-                            .scaleEffect(2)
-                            .offset(y: -50)
-                    }
-                } else {
-                    ScrollView(showsIndicators: false) {
-                        LazyVStack(spacing: 8) {
-                            ForEach(categoryVM.FoodRecipByCategory) { recipe in
-                                NavigationLink(destination: recipeDetailDestination(for: recipe)) {
-                                    RecipeViewCell(
-                                        recipe: recipe,
-                                        foodId: recipe.id ?? 0,
-                                        itemType: "FOOD_RECIPE",
-                                        isFavorite: recipe.isFavorite ?? false
-                                    )
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.horizontal, 20)
+        if Auth.shared.hasAccessToken(){
+            ZStack {
+                VStack {
+                    if categoryVM.FoodRecipByCategory.isEmpty && !categoryVM.isLoading {
+                        ZStack {
+                            Color.white
+                                .edgesIgnoringSafeArea(.all)
+                                .opacity(0.8) // Adjust opacity for a translucent background
+                            
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
+                                .scaleEffect(2)
+                                .offset(y: -50)
+                        }
+                    } else {
+                        ScrollView(showsIndicators: false) {
+                            LazyVStack(spacing: 8) {
+                                ForEach(categoryVM.FoodRecipByCategory) { recipe in
+                                    NavigationLink(destination: recipeDetailDestination(for: recipe)) {
+                                        RecipeViewCell(
+                                            recipe: recipe,
+                                            foodId: recipe.id ?? 0,
+                                            itemType: "FOOD_RECIPE",
+                                            isFavorite: recipe.isFavorite ?? false
+                                        )
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.horizontal, 20)
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                .padding(.top, 8)
             }
-            .padding(.top, 8)
+        } else {
+            ZStack {
+                VStack {
+                    if guestCategoryVM.guestFoodRecipByCategory.isEmpty && !guestCategoryVM.isLoading {
+                        ZStack {
+                            Color.white
+                                .edgesIgnoringSafeArea(.all)
+                                .opacity(0.8) // Adjust opacity for a translucent background
+                            
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
+                                .scaleEffect(2)
+                                .offset(y: -50)
+                        }
+                    } else {
+                        ScrollView(showsIndicators: false) {
+                            LazyVStack(spacing: 8) {
+                                ForEach(guestCategoryVM.guestFoodRecipByCategory) { recipe in
+                                    NavigationLink(destination: recipeDetailDestination(for: recipe)) {
+                                        RecipeViewCell(
+                                            recipe: recipe,
+                                            foodId: recipe.id ?? 0,
+                                            itemType: "FOOD_RECIPE",
+                                            isFavorite: recipe.isFavorite ?? false
+                                        )
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.horizontal, 20)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .padding(.top, 8)
+            }
         }
     }
 

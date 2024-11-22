@@ -7,8 +7,6 @@ struct FoodonRecipe: View {
     @State private var selectedOrderIndex: Int? = nil
     @State private var searchText = ""
     @State private var isChooseCuisine = false
-    
-    // Static image mapping for cuisines
     let cuisineImages: [String: String] = [
         "Soup": "SoupPic",
         "Salad": "SaladPic",
@@ -58,8 +56,6 @@ struct FoodonRecipe: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(.black.opacity(0.8))
                     .padding(.horizontal)
-                
-                // Content Display: Loading, Error, or Recipes
                 if recipeViewModel.isLoading {
                     ZStack {
                         Color.white
@@ -73,10 +69,10 @@ struct FoodonRecipe: View {
                 } else {
                     ScrollView {
                         LazyVStack {
-                            ForEach(isChooseCuisine ? recipeViewModel.RecipeByCategory : recipeViewModel.RecipeFood) { recipe in
+                            ForEach(isChooseCuisine ? recipeViewModel.RecipeByCategory : recipeViewModel.filteredFoodRecipeList) { recipe in
                                 NavigationLink(destination:
                                                 FoodDetailView(
-                                                isFavorite: recipe.isFavorite ?? false,
+                                                    isFavorite: recipe.isFavorite,
                                                 showPrice: false, // Always false for recipes
                                                 showOrderButton: false, // Always false for recipes
                                                 showButtonInvoic: nil, // Not applicable
@@ -89,7 +85,7 @@ struct FoodonRecipe: View {
                                         recipe: recipe,
                                         foodId: recipe.id,
                                         itemType: "FOOD_RECIPE",
-                                        isFavorite: recipe.isFavorite  ?? false // Use the value from `recipe.isFavorite`
+                                        isFavorite: recipe.isFavorite // Use the value from `recipe.isFavorite`
                                     )
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
@@ -124,13 +120,6 @@ struct FoodonRecipe: View {
         }
         .navigationBarBackButtonHidden(true)
         .searchable(text: $searchText, prompt: LocalizedStringKey("Search Item"))
-        .onChange(of: searchText) { newValue in
-            if !newValue.isEmpty {
-                recipeViewModel.getSearchFoodRecipeByName(searchText: newValue)
-            } else {
-                recipeViewModel.getAllRecipeFood()
-            }
-        }
        
     }
 }

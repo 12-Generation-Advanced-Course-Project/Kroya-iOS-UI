@@ -6,7 +6,7 @@ import SDWebImageSwiftUI
 struct ItemFoodOrderCard: View {
     
     var orderRequest: OrderRequestModel
-    var showEllipsis: Bool = true // Default to true for other uses
+    var showEllipsis: Bool = true
     @State private var showPopover = false
     @Binding var show3dot: Bool
     let Keyaccept = "Accept"

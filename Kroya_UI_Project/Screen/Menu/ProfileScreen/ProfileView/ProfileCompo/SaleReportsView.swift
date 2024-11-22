@@ -1,14 +1,12 @@
 import SwiftUI
 
 struct SaleReportView: View {
-    
-//    @State private var selectedDate: Date = Calendar.current.date(from: DateComponents(year: 2024, month: 10, day: 1))!
     @State private var selectedDate: Date = Date()
     @Environment(\.dismiss) var dismiss
-    @State private var ishow3dot: Bool = false
+    @State private var show3dot: Bool = false
     let dateFormatter = DateFormatter()
-    let years = Array(2020...2100)
     let months = Calendar.current.monthSymbols
+    @StateObject private var saleReportVM = SaleReportVM()
     
     var daysInSelectedMonth: [Date] {
         var dates = [Date]()
@@ -24,20 +22,8 @@ struct SaleReportView: View {
         return dates
     }
     
-    // Example data for daily earnings and sold items
-    let dailyEarnings: [Date: Double] = [
-        Calendar.current.date(from: DateComponents(year: 2024, month: 10, day: 3))!: 8.24
-    ]
-    
-//    let soldItems: [Date: [FoodItem]] = [
-//        Calendar.current.date(from: DateComponents(year: 2024, month: 10, day: 3))!: [
-//            FoodItem(name: "Brohok", itemsCount: 2, remarks: "Not spicy", price: 2.24, paymentMethod: "KHQR", status: nil, timeAgo: nil),
-//            FoodItem(name: "Somlor Kari", itemsCount: 2, remarks: "Not spicy", price: 6, paymentMethod: "KHQR", timeAgo: "15m ago")
-//        ]
-//    ]
-    
     init() {
-        dateFormatter.dateFormat = "dd MMM"
+        dateFormatter.dateFormat = "dd MMM" // For displaying dates as "01 Nov"
     }
     
     var selectedMonth: Int {
@@ -46,14 +32,6 @@ struct SaleReportView: View {
     
     var selectedYear: Int {
         Calendar.current.component(.year, from: selectedDate)
-    }
-    
-    var totalSalesForSelectedMonth: Double {
-        let monthStartDate = Calendar.current.date(from: DateComponents(year: selectedYear, month: selectedMonth, day: 1))!
-        let monthEndDate = Calendar.current.date(from: DateComponents(year: selectedYear, month: selectedMonth + 1, day: 1))!
-        return dailyEarnings.filter { (date, _) in
-            return date >= monthStartDate && date < monthEndDate
-        }.values.reduce(0, +)
     }
     
     var body: some View {
@@ -76,7 +54,7 @@ struct SaleReportView: View {
                 )
 
                 Spacer()
-                Text("$\(String(format: "%.2f", totalSalesForSelectedMonth))")
+                Text("$\(String(format: "%.2f", Double(saleReportVM.totalMonthlySales)))")
                     .font(.customfont(.semibold, fontSize: 18))
                     .foregroundStyle(PrimaryColor.normalHover)
             }
@@ -89,11 +67,11 @@ struct SaleReportView: View {
                         let isFutureDate = date > Date()
                         
                         VStack {
-                            Text(dateFormatter.string(from: date).components(separatedBy: " ").first!)
+                            Text(dateFormatter.string(from: date).components(separatedBy: " ").first!) // Day
                                 .font(.customfont(.semibold, fontSize: 16))
                                 .foregroundStyle(isFutureDate ? Color.gray : (date == selectedDate ? PrimaryColor.normal : .black.opacity(0.6)))
                             
-                            Text(dateFormatter.string(from: date).components(separatedBy: " ").last!)
+                            Text(dateFormatter.string(from: date).components(separatedBy: " ").last!) // Month
                                 .font(.customfont(.semibold, fontSize: 16))
                                 .foregroundStyle(isFutureDate ? Color.gray : (date == selectedDate ? PrimaryColor.normal : .black.opacity(0.8)))
                             
@@ -125,7 +103,7 @@ struct SaleReportView: View {
                     .font(.customfont(.semibold, fontSize: 18))
                     .foregroundStyle(.white)
                 Spacer()
-                Text("$\(String(format: "%.2f", dailyEarnings[selectedDate] ?? 0.0))")
+                Text("$\(String(format: "%.2f", Double(saleReportVM.totalDailySales)))")
                     .font(.customfont(.semibold, fontSize: 18))
                     .foregroundStyle(.white)
             }
@@ -133,38 +111,31 @@ struct SaleReportView: View {
             .frame(maxWidth: .infinity)
             .background(PrimaryColor.normalHover)
             
-            Spacer()
-            
-//            if let items = soldItems[selectedDate] {
-//                NewItemFoodOrderCardView(show3dot: $ishow3dot, showEllipsis: false, foodItems: items) // Setting `showEllipsis` to false here
-////                    .padding(.top, 18)
-//                    .padding(.vertical, 8)
-//            } else {
-//                Text(LocalizedStringKey("No items sold on this day"))
-//                    .foregroundColor(.gray)
-//                    .padding(.top)
-//            }
+            if !saleReportVM.purchaseResponses.isEmpty {
+                ScrollView {
+                    LazyVStack {
+                        ForEach(saleReportVM.purchaseResponses) { order in
+                            ItemFoodOrderCard(orderRequest: order, show3dot: $show3dot)
+                        }
+                    }
+                    .padding(.horizontal)
+                }
+            } else {
+                Text(LocalizedStringKey("No items sold on this day"))
+                    .foregroundColor(.gray)
+                    .padding(.top)
+            }
 
             Spacer()
         }
+        .onAppear {
+            saleReportVM.fetchSaleReport(for: selectedDate)
+        }
+        .onChange(of: selectedDate) { newDate in
+            saleReportVM.fetchSaleReport(for: newDate)
+        }
         .navigationTitle(LocalizedStringKey("Sale Report"))
         .navigationBarTitleDisplayMode(.inline)
-//        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                HStack {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Image(systemName: "arrow.left")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 20, height: 20)
-                            .foregroundStyle(.black)
-                    }
-                }
-            }
-        }
     }
 }
 

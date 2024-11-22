@@ -1,36 +1,36 @@
 //
-//  CategoryService.swift
+//  GuestCategoryService.swift
 //  Kroya_UI_Project
 //
-//  Created by Ounbonaliheng on 6/11/24.
+//  Created by kosign on 21/11/24.
 //
 
-import SwiftUI
+import Foundation
 import Alamofire
 
-class CategoryService {
+class GuestCategoryService {
     
-    static let shared = CategoryService()
+    static let shared = GuestCategoryService()
     
-    // MARK: Get All Categories
-    func getAllCategory(completion: @escaping (Result<CategoryResponses, Error>) -> Void) {
-        guard let accessToken = Auth.shared.getAccessToken() else {
-            print("Error: Access token is nil.")
-            let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token is missing"])
-            completion(.failure(error))
-            return
-        }
+    //MARK: Get all Guest Categories
+    func getAllGuestCategories(completion: @escaping (Result<GuestCategoryResponse, Error>) -> Void){
         
-        let url = Constants.CategoryUrl + "all"
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(accessToken)"]
+        let url = "https://kroya-api-production.up.railway.app/api/v1/category/all"
+        let headers: HTTPHeaders = [
+            
+            "accept": "*/*",
+            "content-Type": "application/json"
+            
+        ]
         
         AF.request(url, method: .get, headers: headers).validate()
-            .responseDecodable(of: CategoryResponses.self) { response in
+            .responseDecodable(of: GuestCategoryResponse.self){ response in
                 debugPrint(response)
+                
                 switch response.result {
                 case .success(let apiResponse):
                     if apiResponse.statusCode == "200" {
-                        print("Categories retrieved successfully.")
+                        print("Guest Categories retrieved successfully.")
                         completion(.success(apiResponse))
                     } else {
                         let error = NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: apiResponse.message])
@@ -43,29 +43,29 @@ class CategoryService {
             }
     }
     
-    //MARK: Get all Category by Id
-    func getAllCategoryById(category: Int, completion: @escaping (Result<getAllFoodCategoryResponse, Error>) -> Void) {
-        guard let accessToken = Auth.shared.getAccessToken() else {
-            print("Error: Access token is nil.")
-            let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token is missing"])
-            completion(.failure(error))
-            return
-        }
+    //MARK: Get all Guest Category by Id
+    func getAllGuestFoodCategoryById(category: Int, completion: @escaping (Result<GuestCategoryAllFoodById, Error>) -> Void) {
         
         // Construct the URL with the category ID
-        let url = Constants.FoodsUrl + "\(category)"
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(accessToken)"]
-        
-        AF.request(url, method: .get, headers: headers).validate().responseDecodable(of: getAllFoodCategoryResponse.self) { response in
+        let url = Constants.GuestFoodPopularUrl + "\(category)"
+        let headers: HTTPHeaders = [
             
-            if let statusCode = response.response?.statusCode {
-                // Check for 404 status code and handle it gracefully
-                if statusCode == 404 {
-                    print("No foods found for the specified category ID.")
-                    completion(.failure(NSError(domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "No foods found for the specified category ID."])))
-                    return
-                }
-            }
+            "accept" : "*/*",
+            "content-Type" : "application/json"
+            
+        ]
+        
+        AF.request(url, method: .get, headers: headers).validate()
+            .responseDecodable(of: GuestCategoryAllFoodById.self) { response in
+            
+//            if let statusCode = response.response?.statusCode {
+//                // Check for 404 status code and handle it gracefully
+//                if statusCode == 404 {
+//                    print("No foods found for the specified category ID.")
+//                    completion(.failure(NSError(domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "No foods found for the specified category ID."])))
+//                    return
+//                }
+//            }
             
             // Pretty print the JSON response for debugging
             if let data = response.data {
@@ -79,9 +79,10 @@ class CategoryService {
                     print("Failed to convert response data to pretty JSON: \(error)")
                 }
             }
-            
+                debugPrint(response)
             // Handle the response result
             switch response.result {
+                
             case .success(let apiResponse):
                 if let statusCode = Int(apiResponse.statusCode), statusCode == 200 {
                     completion(.success(apiResponse))
@@ -95,6 +96,5 @@ class CategoryService {
             }
         }
     }
-
 }
 

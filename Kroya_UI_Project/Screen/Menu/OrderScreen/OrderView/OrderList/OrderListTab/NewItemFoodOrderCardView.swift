@@ -37,6 +37,11 @@ struct NewItemFoodOrderCardView: View {
                         LazyVStack {
                             ForEach(orderRequestVM.ordersRequestModel) { foodSale in
                                 ItemFoodOrderCard(orderRequest: foodSale, show3dot: $show3dot)
+                                    .onTapGesture {
+                                        print(foodSale.id)
+                                        print(foodSale.purchaseDate ?? "")
+                                        
+                                    }
                             }
                         }
                     }
@@ -48,7 +53,7 @@ struct NewItemFoodOrderCardView: View {
                 }
             }
             .onAppear{
-                orderRequestVM.fetchOrderForSellerById(sellerId:sellerId)
+                orderRequestVM.fetchOrderForSellerById(sellerId:sellerId ?? 0)
             }
         }
     }
