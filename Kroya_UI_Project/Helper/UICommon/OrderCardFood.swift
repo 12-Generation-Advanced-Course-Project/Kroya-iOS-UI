@@ -141,8 +141,57 @@ struct OrderCard: View {
                     .background(Color.white.cornerRadius(12))
             )
         }
-        .buttonStyle(PlainButtonStyle()) // Optional: remove the default button styling
+        .buttonStyle(PlainButtonStyle())
         
+    }
+    //MARK: Helper function to format date
+    private func parseDate(_ dateString: String) -> Date? {
+        let dateFormats = [
+            "yyyy-MM-dd'T'HH:mm:ss.SSS",  // With milliseconds
+            "yyyy-MM-dd'T'HH:mm:ss"       // Without milliseconds
+        ]
+        
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        
+        for format in dateFormats {
+            formatter.dateFormat = format
+            if let date = formatter.date(from: dateString) {
+                return date
+            }
+        }
+        return nil // Return nil if none of the formats match
+    }
+    
+    
+    //MARK: Helper function to determine time of day based on the cook date time (if available)
+    private func formatDate(_ dateString: String) -> String {
+        guard let date = parseDate(dateString) else { return "Invalid Date" }
+        
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        
+        // Output format
+        formatter.dateFormat = "dd MMM yyyy" // Example: "23 Nov 2024"
+        return formatter.string(from: date)
+    }
+    
+    private func determineTimeOfDay(from dateString: String) -> String {
+        guard let date = parseDate(dateString) else { return "at current time." }
+        let hour = Calendar.current.component(.hour, from: date)
+        
+        switch hour {
+        case 5..<12:
+            return "in the morning."
+        case 12..<17:
+            return "in the afternoon."
+        case 17..<21:
+            return "in the evening."
+        default:
+            return "at night."
+        }
     }
     //MARK: Helper function to format date
     private func parseDate(_ dateString: String) -> Date? {
