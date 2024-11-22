@@ -12,7 +12,6 @@ struct WebillConnectView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) private var context
     @StateObject private var webillConnect = WeBill365ViewModel()
-    @StateObject private var keyboardResponder = KeyboardResponder()
     @State private var showMessage = false
     @State private var clientIDError: String? = nil
     @State private var secretIDError: String? = nil
@@ -158,7 +157,7 @@ struct WebillConnectView: View {
                 .ignoresSafeArea(.keyboard)
                 .navigationBarHidden(true)
                 .padding(.horizontal, 20)
-                .padding(.bottom, keyboardResponder.keyboardHeight)
+               
                 .onAppear {
                     webillConnect.loadWeBillAccount(context: context)
                 }
@@ -249,32 +248,7 @@ struct WebillConnectView: View {
   
     
 }
-// MARK: KeyboardResponder
-class KeyboardResponder: ObservableObject {
-    @Published var keyboardHeight: CGFloat = 0
-    
-    private var cancellable: AnyCancellable?
-    
-    init() {
-        cancellable = NotificationCenter.default
-            .publisher(for: UIResponder.keyboardWillChangeFrameNotification)
-            .merge(with: NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification))
-            .sink { notification in
-                if let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-                    if notification.name == UIResponder.keyboardWillHideNotification {
-                        self.keyboardHeight = 0
-                    } else {
-                        self.keyboardHeight = frame.height
-                    }
-                }
-            }
-    }
-    
-    deinit {
-        cancellable?.cancel()
-    }
-    
-}
+
 
 //MARK: Loading View
 struct LoadingViewForWebill: View {
