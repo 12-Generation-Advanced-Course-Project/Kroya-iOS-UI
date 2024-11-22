@@ -80,15 +80,6 @@ struct OrderCard: View {
                     
                     if order.foodCardType == "SALE" {
                         HStack {
-                            if let quantity = order.quantity {
-                                Text("\(quantity) items")
-                                    .customFontLightLocalize(size: 12)
-                                    .opacity(0.6)
-                            } else {
-                                Text("No quantity specified")
-                                    .customFontLightLocalize(size: 12)
-                                    .opacity(0.6)
-                            }
                             Text("Item selling now")
                                 .customFontLightLocalize(size: 12)
                                 .opacity(0.6)
@@ -107,7 +98,8 @@ struct OrderCard: View {
                             Spacer()
                         }
                     }
-
+                    
+                    
                     HStack(spacing: 15) {
                         Text(order.foodCardType == "ORDER" ?
                              "$\(order.totalPrice ?? 0)" : // Show totalPrice for orders
@@ -128,10 +120,6 @@ struct OrderCard: View {
                     }
                 }
             }
-            .onAppear{
-                print(order.quantity ?? "")
-                print(order.foodCardType)
-            }
             .padding(.vertical, 7)
             .padding(.horizontal, 12)
             .frame(width: 360)
@@ -141,7 +129,7 @@ struct OrderCard: View {
                     .background(Color.white.cornerRadius(12))
             )
         }
-        .buttonStyle(PlainButtonStyle()) // Optional: remove the default button styling
+        .buttonStyle(PlainButtonStyle())
         
     }
     //MARK: Helper function to format date
@@ -153,7 +141,7 @@ struct OrderCard: View {
         
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone(secondsFromGMT: 0) // Ensure consistent parsing
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
         
         for format in dateFormats {
             formatter.dateFormat = format
