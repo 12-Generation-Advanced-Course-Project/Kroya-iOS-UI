@@ -1,12 +1,11 @@
+
+
 import SwiftUI
 
 struct FoodonRecipe: View {
     @Environment(\.dismiss) var dismiss
     @StateObject private var recipeViewModel = RecipeViewModel()
-    @StateObject private var favoriteFoodRecipe = FavoriteVM()
     @State private var selectedOrderIndex: Int? = nil
-    @State private var searchText = ""
-    @State private var isChooseCuisine = false
     let cuisineImages: [String: String] = [
         "Soup": "SoupPic",
         "Salad": "SaladPic",
@@ -22,13 +21,13 @@ struct FoodonRecipe: View {
                     ForEach(recipeViewModel.RecipeCuisine) { cuisine in
                         Button(action: {
                             if selectedOrderIndex == cuisine.id {
-                                recipeViewModel.getAllRecipeFood()
-                                isChooseCuisine = false
+                                recipeViewModel.getAllRecipeFood() // Reset to all recipes
+                                recipeViewModel.isChooseCuisine = false
                                 selectedOrderIndex = nil
                             } else {
                                 selectedOrderIndex = cuisine.id
                                 recipeViewModel.getRecipesByCuisine(cuisineId: cuisine.id)
-                                isChooseCuisine = true
+                                recipeViewModel.isChooseCuisine = true
                             }
                         }) {
                             VStack {
@@ -41,7 +40,7 @@ struct FoodonRecipe: View {
                                 
                                 Text(cuisine.cuisineName)
                                     .font(.customfont(.medium, fontSize: 16))
-                                    .foregroundColor(selectedOrderIndex == cuisine.id && isChooseCuisine ? Color.yellow : Color.gray)
+                                    .foregroundColor(selectedOrderIndex == cuisine.id && recipeViewModel.isChooseCuisine ? Color.yellow : Color.gray)
                             }
                         }
                         .buttonStyle(PlainButtonStyle())
@@ -56,6 +55,7 @@ struct FoodonRecipe: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(.black.opacity(0.8))
                     .padding(.horizontal)
+                
                 if recipeViewModel.isLoading {
                     ZStack {
                         Color.white
@@ -67,33 +67,40 @@ struct FoodonRecipe: View {
                             .offset(y: -50)
                     }
                 } else {
-                    ScrollView {
-                        LazyVStack {
-                            ForEach(isChooseCuisine ? recipeViewModel.RecipeByCategory : recipeViewModel.filteredFoodRecipeList) { recipe in
-                                NavigationLink(destination:
-                                                FoodDetailView(
-                                                    isFavorite: recipe.isFavorite ?? false,
-                                                showPrice: false, // Always false for recipes
-                                                showOrderButton: false, // Always false for recipes
-                                                showButtonInvoic: nil, // Not applicable
-                                                invoiceAccept: nil, // Not applicable
-                                                FoodId: recipe.id,
-                                                ItemType: recipe.itemType
-                                            )
-                                ) {
-                                    RecipeViewCell(
-                                        recipe: recipe,
-                                        foodId: recipe.id,
-                                        itemType: "FOOD_RECIPE",
-                                        isFavorite: recipe.isFavorite ?? false // Use the value from `recipe.isFavorite`
-                                    )
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.horizontal, 20)
+                    if recipeViewModel.filteredFoodRecipeList.isEmpty {
+                        Text("No Food Recipe Available!")
+                            .font(.title3)
+                            .foregroundColor(.gray)
+                            .padding()
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                    } else {
+                        ScrollView {
+                            LazyVStack {
+                                ForEach(recipeViewModel.filteredFoodRecipeList) { recipe in
+                                    NavigationLink(destination:
+                                                    FoodDetailView(
+                                                        isFavorite: recipe.isFavorite ?? false,
+                                                        showPrice: false,
+                                                        showOrderButton: false,
+                                                        showButtonInvoic: nil,
+                                                        invoiceAccept: nil,
+                                                        FoodId: recipe.id,
+                                                        ItemType: recipe.itemType
+                                                    )
+                                    ) {
+                                        RecipeViewCell(
+                                            recipe: recipe,
+                                            foodId: recipe.id,
+                                            itemType: "FOOD_RECIPE",
+                                            isFavorite: recipe.isFavorite ?? false
+                                        )
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.horizontal, 20)
+                                    }
                                 }
                             }
                         }
                     }
-
                 }
                 Spacer()
             }
@@ -112,14 +119,13 @@ struct FoodonRecipe: View {
                     }
                 }
             }
-           
         }
         .onAppear {
             recipeViewModel.getAllCuisines()
             recipeViewModel.getAllRecipeFood()
         }
+        
+        .searchable(text: $recipeViewModel.searchText, prompt: LocalizedStringKey("Search Item"))
         .navigationBarBackButtonHidden(true)
-        .searchable(text: $searchText, prompt: LocalizedStringKey("Search Item"))
-       
     }
 }
