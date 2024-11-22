@@ -42,10 +42,16 @@ struct Constants {
     static let GuestFoodPopularUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user/foods/"
     //MARK:  Search food by name
     static let FoodNameUrl = "https://kroya-api-production.up.railway.app/api/v1/foods/"
-//    static let GuestFoodPopularUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user/foods"
+    //Guest food sale
+    static let GuestFoodSellUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user/food-sell"
 
     //MARK: Generate Sales Report by Date
     static let SalesReportUrl = "https://kroya-api-production.up.railway.app/api/v1/sale-report/"
     //Guest Category
     static let GuestCategoryUrl = "https://kroya-api-production.up.railway.app/api/v1/category/"
+    
+    //MARK: Guest food recipe
+    static let GuestFoodRecipeUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user/food-recipe"
+    static let GuestFoodRecipeByCuisineUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user/food-recipe/"
+    
 }

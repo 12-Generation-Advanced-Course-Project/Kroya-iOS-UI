@@ -3,6 +3,7 @@ import SwiftUI
 struct FoodonOrderView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject private var foodViewModel = FoodSellViewModel()
+    @StateObject private var guestFoodSellVM = GuestFoodOnSaleVM()
     let imageofOrder: [String] = ["SoupPic", "SaladPic", "GrillPic", "DessertPic 1"]
     let titleofOrder: [String] = ["Soup", "Salad", "Grill", "Dessert"]
     @State private var selectedOrderIndex: Int? = nil
@@ -12,7 +13,7 @@ struct FoodonOrderView: View {
         NavigationView {
             VStack {
                 // Cuisine Category Buttons
-                CuisineCategoryButtons(imageofOrder: imageofOrder, titleofOrder: titleofOrder, selectedOrderIndex: $selectedOrderIndex, isChooseCuisine: $isChooseCuisine, foodViewModel: foodViewModel)
+                CuisineCategoryButtons(imageofOrder: imageofOrder, titleofOrder: titleofOrder, selectedOrderIndex: $selectedOrderIndex, isChooseCuisine: $isChooseCuisine, foodViewModel: foodViewModel, guestFoodSellVM: guestFoodSellVM)
 
                 Spacer().frame(height: 20)
                 
@@ -23,10 +24,18 @@ struct FoodonOrderView: View {
                     .padding(.horizontal)
                 
                 // Loading Indicator or Content
-                if foodViewModel.isLoading {
-                    LoadingView()
+                if Auth.shared.hasAccessToken(){
+                    if foodViewModel.isLoading {
+                        LoadingView()
+                    } else {
+                        FoodListView(isChooseCuisine: isChooseCuisine, foodViewModel: foodViewModel)
+                    }
                 } else {
-                    FoodListView(isChooseCuisine: isChooseCuisine, foodViewModel: foodViewModel)
+                    if guestFoodSellVM.isLoading {
+                        LoadingView()
+                    } else {
+                        GuestFoodListView(isChooseCuisine: isChooseCuisine, guestFoodSellVM: guestFoodSellVM)
+                    }
                 }
             }
             .navigationTitle("Food Order")
@@ -49,6 +58,7 @@ struct FoodonOrderView: View {
     
         .onAppear {
             foodViewModel.getAllFoodSell()
+            guestFoodSellVM.getAllGuestFoodSell()
         }
         .navigationBarBackButtonHidden(true)
     }
@@ -61,18 +71,30 @@ struct CuisineCategoryButtons: View {
     @Binding var selectedOrderIndex: Int?
     @Binding var isChooseCuisine: Bool
     @ObservedObject var foodViewModel: FoodSellViewModel
+    @ObservedObject var guestFoodSellVM: GuestFoodOnSaleVM
     
     var body: some View {
         HStack(spacing: 40) {
             ForEach(0..<imageofOrder.count, id: \.self) { index in
                 Button(action: {
-                    if selectedOrderIndex == index {
-                        foodViewModel.getAllFoodSell()
-                        isChooseCuisine = false
+                    if Auth.shared.hasAccessToken(){
+                        if selectedOrderIndex == index {
+                            foodViewModel.getAllFoodSell()
+                            isChooseCuisine = false
+                        } else {
+                            selectedOrderIndex = index
+                            foodViewModel.getFoodByCuisine(cuisineId: index + 1)
+                            isChooseCuisine = true
+                        }
                     } else {
-                        selectedOrderIndex = index
-                        foodViewModel.getFoodByCuisine(cuisineId: index + 1)
-                        isChooseCuisine = true
+                        if selectedOrderIndex == index {
+                            guestFoodSellVM.getAllGuestFoodSell()
+                            isChooseCuisine = false
+                        } else {
+                            selectedOrderIndex = index
+                            guestFoodSellVM.getGuestFoodSellByCuisined(cuisineId: index + 1)
+                            isChooseCuisine = true
+                        }
                     }
                 }) {
                     VStack {
@@ -130,6 +152,37 @@ struct FoodListView: View {
                             foodId: foodSale.id,
                             itemType: "FOOD_SELL",
                             isFavorite: foodSale.isFavorite ?? false
+                        )
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, 20)
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct GuestFoodListView: View {
+    let isChooseCuisine: Bool
+    @ObservedObject var guestFoodSellVM: GuestFoodOnSaleVM
+    var body: some View {
+        ScrollView {
+            LazyVStack {
+                ForEach(isChooseCuisine ? guestFoodSellVM.GuestFoodSellByCategory : guestFoodSellVM.filteredFoodList) { guestFoodSale in
+                    NavigationLink(destination: FoodDetailView(
+                        isFavorite: guestFoodSale.isFavorite ?? false,
+                        showPrice: true,
+                        showOrderButton: true,
+                        showButtonInvoic: nil,
+                        invoiceAccept: nil,
+                        FoodId: guestFoodSale.id,
+                        ItemType: guestFoodSale.itemType
+                    )) {
+                        FoodOnSaleViewCell(
+                            foodSale: guestFoodSale,
+                            foodId: guestFoodSale.id,
+                            itemType: "FOOD_SELL",
+                            isFavorite: guestFoodSale.isFavorite ?? false
                         )
                         .frame(maxWidth: .infinity)
                         .padding(.horizontal, 20)
