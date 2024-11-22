@@ -103,19 +103,10 @@ struct FoodCheckOutView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarBackButtonHidden(true)
                 // Move NavigationLink inside ZStack
-//                NavigationLink(
-//                    destination: ReceiptView(isPresented: $isPresented, isOrderReceived: false, PurchaseId: PurchaesViewModel.Purchases?.purchaseId ?? 0),
-//                    isActive: $navigationTrigger
-//                ) {
-//                    EmptyView()
-//                }
             }
-            .navigationDestination(isPresented: $navigationTrigger, destination: {
+            .fullScreenCover(isPresented: $PurchaesViewModel.isOrderSuccess, content: {
                 ReceiptView(isPresented: $isPresented, isOrderReceived: false, PurchaseId: PurchaesViewModel.Purchases?.purchaseId ?? 0)
             })
-//            .fullScreenCover(isPresented: $PurchaesViewModel.isOrderSuccess, content: {
-//                ReceiptView(isPresented: $isPresented, isOrderReceived: false, PurchaseId: PurchaesViewModel.Purchases?.purchaseId ?? 0)
-//            })
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     HStack {

@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct Popup<Content: View>: View {
-    
+    @ObservedObject var navigationManager: NavigationManager
+
     @Binding var isPresented: Bool
     @Environment(\.dismiss) private var dismiss // Environment dismiss for navigation stack
     let content: Content
@@ -34,6 +35,7 @@ struct Popup<Content: View>: View {
                         withAnimation {
                             isPresented = false // Dismiss the popup
                             dismiss() // Dismiss ReceiptView and go back to FoodCheckOutView
+                            navigationManager.navigateBack(to: .first)
                         }
                     
                     }) {
@@ -69,5 +71,7 @@ extension Popup {
         _isPresented = isPresented
         self.dismissOnTapOutside = dismissOnTapOutside
         self.content = content()
+        self.navigationManager = NavigationManager()
+        
     }
 }

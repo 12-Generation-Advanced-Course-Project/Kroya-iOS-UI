@@ -5,18 +5,16 @@
 //  Created by Macbook on 10/19/24.
 //
 
-
-
 import SwiftUI
 
 struct NewItemFoodOrderCardView: View {
     
     @State private var isPresented = false
-    @Binding  var show3dot: Bool
+    @Binding var show3dot: Bool
     let showEllipsis: Bool
     @Environment(\.dismiss) var dismiss
     @StateObject private var orderRequestVM = OrderRequestViewModel()
-    var sellerId:Int
+    var sellerId: Int
     
     var body: some View {
         NavigationView {
@@ -35,12 +33,12 @@ struct NewItemFoodOrderCardView: View {
                 } else {
                     ScrollView {
                         LazyVStack {
-                            ForEach(orderRequestVM.ordersRequestModel) { foodSale in
-                                ItemFoodOrderCard(orderRequest: foodSale, show3dot: $show3dot)
+                            ForEach(orderRequestVM.ordersRequestModel.indices, id: \.self) { index in
+                                ItemFoodOrderCard(orderRequest: $orderRequestVM.ordersRequestModel[index], show3dot: $show3dot)
                                     .onTapGesture {
+                                        let foodSale = orderRequestVM.ordersRequestModel[index]
                                         print(foodSale.id)
                                         print(foodSale.purchaseDate ?? "")
-                                        
                                     }
                             }
                         }
@@ -48,19 +46,12 @@ struct NewItemFoodOrderCardView: View {
                     .padding(.horizontal)
                     .scrollIndicators(.hidden)
                     
-                    
                     Spacer()
                 }
             }
-            .onAppear{
-                orderRequestVM.fetchOrderForSellerById(sellerId:sellerId ?? 0)
+            .onAppear {
+                orderRequestVM.fetchOrderForSellerById(sellerId: sellerId)
             }
         }
     }
-    
-    
-    
-    
 }
-
-

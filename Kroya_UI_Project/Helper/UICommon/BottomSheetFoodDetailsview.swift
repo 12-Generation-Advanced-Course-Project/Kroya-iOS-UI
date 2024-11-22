@@ -2,7 +2,8 @@
 import SwiftUI
 
 struct BottomSheetView<Content: View>: View {
-    
+   
+
     let content: Content
     @Binding var isOpen: Bool
     @State private var navigateToCheckout = false
@@ -51,6 +52,7 @@ struct BottomSheetView<Content: View>: View {
         self.itemType = itemType
         self.FoodDetails = FoodDetails
         self.FoodDetailsId = FoodetailsId
+       
     }
     
     var body: some View {
@@ -175,6 +177,7 @@ struct BottomSheetView<Content: View>: View {
                                             Currency: sellDetails.currencyType,
                                             PhoneNumber: sellDetails.foodRecipeDTO.user.phoneNumber ?? "",
                                             ReciptentName: sellDetails.foodRecipeDTO.user.fullName
+                                        
                                         ),
                                         isActive: $navigateToCheckout
                                     ) {

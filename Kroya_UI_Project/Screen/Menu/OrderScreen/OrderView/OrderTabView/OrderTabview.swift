@@ -3,7 +3,8 @@ import SwiftUI
 
 struct OrderTabView: View {
     
-    @StateObject private var orderViewModel = OrderViewModel()
+    @Binding var searchText: String // Pass search text from parent
+    @StateObject private var orderViewModel = OrderViewModel() // Shared ViewModel
     
     @State private var isExpandedToday = true
     @State private var isExpandedYTD = false
@@ -22,7 +23,7 @@ struct OrderTabView: View {
                         // Display error message
                         Text("Error: \(orderViewModel.errorMessage)")
                             .foregroundColor(.red)
-                    } else if orderViewModel.orders.isEmpty {
+                    } else if filteredOrders.isEmpty {
                         // Display no orders message
                         Text("No orders available.")
                             .foregroundColor(.gray)
@@ -62,6 +63,17 @@ struct OrderTabView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
+    // Filter orders by search text
+    private var filteredOrders: [OrderModel] {
+        if searchText.isEmpty {
+            return orderViewModel.orders.filter { $0.foodCardType == "ORDER" }
+        }
+        return orderViewModel.orders.filter {
+            $0.foodCardType == "ORDER" &&
+            $0.name.localizedCaseInsensitiveContains(searchText)
+        }
+    }
+    
     private func groupOrdersByDate() -> [String: [OrderModel]] {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS" // Adjust to your date format if needed
@@ -72,19 +84,16 @@ struct OrderTabView: View {
         let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today)!
         let twoDaysAgo = Calendar.current.date(byAdding: .day, value: -2, to: today)!
         
-        // Filter orders with foodCardType "ORDER"
-        _ = orderViewModel.orders.filter { $0.foodCardType == "ORDER" }
-
-        for order in orderViewModel.orders {
+        for order in filteredOrders { // Use filtered orders here
             if let purchaseDateStr = order.purchaseDate,
-               let purchaseDateStr = dateFormatter.date(from: purchaseDateStr) {
-                if purchaseDateStr >= today {
+               let purchaseDate = dateFormatter.date(from: purchaseDateStr) {
+                if purchaseDate >= today {
                     // Group orders with today's date or future dates in "Today"
                     groupedOrders["Today"]?.append(order)
-                } else if Calendar.current.isDate(purchaseDateStr, inSameDayAs: yesterday) {
+                } else if Calendar.current.isDate(purchaseDate, inSameDayAs: yesterday) {
                     // Group orders with yesterday's date in "Yesterday"
                     groupedOrders["Yesterday"]?.append(order)
-                } else if purchaseDateStr <= twoDaysAgo {
+                } else if purchaseDate <= twoDaysAgo {
                     // Group orders with dates two days ago or older in "Last 2 Days"
                     groupedOrders["Last 2 Days"]?.append(order)
                 }
@@ -93,7 +102,5 @@ struct OrderTabView: View {
 
         return groupedOrders
     }
-
 }
-
 
