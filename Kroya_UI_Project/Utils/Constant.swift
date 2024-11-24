@@ -48,4 +48,7 @@ struct Constants {
     static let SalesReportUrl = "https://kroya-api-production.up.railway.app/api/v1/sale-report/"
     //Guest Category
     static let GuestCategoryUrl = "https://kroya-api-production.up.railway.app/api/v1/category/"
+    
+    // Notification
+    static let NotificationUrl = "https://kroya-api-production.up.railway.app/api/v1/notifications"
 }
