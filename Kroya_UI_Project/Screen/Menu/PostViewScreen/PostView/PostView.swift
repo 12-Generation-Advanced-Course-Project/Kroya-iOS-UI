@@ -10,14 +10,16 @@ import Combine
 import Kingfisher
 import SDWebImageSwiftUI
 struct PostViewScreen: View {
-    @State private var searchText = ""
-    @State private var selectedSegment = 0
+    
+    @State private var searchText       = ""
+    @State private var selectedSegment  = 0
     var urlImagePost: String = "https://kroya-api.up.railway.app/api/v1/fileView/"
     @Environment(\.dismiss) var dismiss
     @StateObject private  var Profile = ProfileViewModel()
     @StateObject private var userPostFood = UserFoodViewModel()
     var tabTitles = ["All", "Food on Sale", "Recipes"]
     @State var isLoading: Bool = false
+    
     var body: some View {
         ZStack{
             VStack {
@@ -31,6 +33,7 @@ struct PostViewScreen: View {
                                 .frame(width: 40, height: 40)
                                 .clipShape(Rectangle())
                                 .cornerRadius(10)
+                            
                         } else {
                             Image("user-profile") // Placeholder image
                                 .resizable()
@@ -43,7 +46,7 @@ struct PostViewScreen: View {
                             Text(Profile.userProfile?.fullName?.isEmpty == false ? Profile.userProfile?.fullName ?? "N/A" : "N/A")
                                 .customFontBoldLocalize(size: 16)
                                 .foregroundStyle(.black)
-
+                            
                             Spacer().frame(height: 5)
                             
                             // Display "N/A" if email is nil or empty
@@ -51,13 +54,12 @@ struct PostViewScreen: View {
                                 .customFontLightLocalize(size: 12)
                                 .foregroundStyle(.black)
                         }
-
                     }
-
+                    
                     Spacer()
                     Button(action: { }) {
                         VStack {
-                            Text("\(userPostFood.totalPosts)") 
+                            Text("\(userPostFood.totalPosts)")
                                 .customFontMediumLocalize(size: 14)
                                 .foregroundStyle(PrimaryColor.normal)
                             Text("Post")
@@ -68,13 +70,13 @@ struct PostViewScreen: View {
                     
                 }
                 .padding(.horizontal,20)
+                
                 Spacer().frame(height: .screenHeight * 0.01)
                 // Tab View
                 VStack(alignment: .leading) {
-                    VStack {
-                        HStack {
-                            Spacer()
-                            
+                    VStack (alignment: .center) {
+                        
+                        HStack (spacing: 80) {
                             Text(LocalizedStringKey("All"))
                                 .customFontSemiBoldLocalize(size: 16)
                                 .foregroundColor(selectedSegment == 0 ? .black.opacity(0.8) : .black.opacity(0.5))
@@ -82,16 +84,13 @@ struct PostViewScreen: View {
                                     selectedSegment = 0
                                 }
                             
-                            Spacer()
-                            
                             Text(LocalizedStringKey("Food on Sale"))
                                 .customFontSemiBoldLocalize(size: 16)
                                 .foregroundColor(selectedSegment == 1 ? .black.opacity(0.8) : .black.opacity(0.5))
+                            
                                 .onTapGesture {
                                     selectedSegment = 1
                                 }
-                            
-                            Spacer()
                             
                             Text(LocalizedStringKey("Recipes"))
                                 .customFontSemiBoldLocalize(size: 16)
@@ -99,11 +98,7 @@ struct PostViewScreen: View {
                                 .onTapGesture {
                                     selectedSegment = 2
                                 }
-                            
-                            Spacer()
                         }
-                        .padding(.top)
-                        
                         GeometryReader { geometry in
                             Divider()
                             
@@ -116,8 +111,15 @@ struct PostViewScreen: View {
                         .frame(height: 2)
                     }
                 }
+                
                 // TabView for content
                 TabView(selection: $selectedSegment) {
+                    Text(LocalizedStringKey("All"))
+                        .customFontSemiBoldLocalize(size: 16)
+                        .foregroundColor(selectedSegment == 0 ? .black.opacity(0.8) : .black.opacity(0.5))
+                        .onTapGesture {
+                            selectedSegment = 0
+                        }
                     AllUerPostFood(isSelected: selectedSegment)
                         .tag(0)
                     UserPostFoodSale(isSelected: selectedSegment)
@@ -129,29 +131,29 @@ struct PostViewScreen: View {
             }
         }
         .refreshable {
-                       await refreshPostView()
-         }.foregroundStyle(.yellow)
-        .onAppear{
-            Profile.fetchUserProfile()
-        }
-        .onDisappear{
-            Profile.fetchUserProfile()
-        }
+            await refreshPostView()
+        }.foregroundStyle(.yellow)
+            .onAppear{
+                Profile.fetchUserProfile()
+            }
+            .onDisappear{
+                Profile.fetchUserProfile()
+            }
     }
     
     private func refreshPostView() async {
-           isLoading = true // Start loading state
-           defer { isLoading = false } // Ensure state is reset after execution
-
-           // Simulate a delay for demo purposes
-           try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
-
-           // Reload data
-           await MainActor.run {
-               loadPostData()
-           }
-       }
-
+        isLoading = true // Start loading state
+        defer { isLoading = false } // Ensure state is reset after execution
+        
+        // Simulate a delay for demo purposes
+        try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
+        
+        // Reload data
+        await MainActor.run {
+            loadPostData()
+        }
+    }
+    
     private func loadPostData() {
         Profile.fetchUserProfile()
     }

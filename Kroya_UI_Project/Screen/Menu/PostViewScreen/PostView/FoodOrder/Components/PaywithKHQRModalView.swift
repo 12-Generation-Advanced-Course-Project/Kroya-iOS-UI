@@ -31,7 +31,7 @@ final class ImageRendererQR {
 struct PaywithKHQRModalView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var downloadSuccess = false
-    
+    var khqrData:String
     var body: some View {
         VStack(alignment: .leading) {
             Spacer().frame(height: 40)
@@ -50,13 +50,13 @@ struct PaywithKHQRModalView: View {
                 Spacer().frame(height: 15)
                 
                 // Display QR Code
-                QRCodeView(text: "00020101021130450016abaakhppxxx@abaa01090045514050208ABA Bank40390006abaP2P0112B7A47E5B00EA02090045514055204000053031165802KH5914OUN BONALIHENG6010Phnom Penh6304AFE1", size: 200)
+                QRCodeView(text: khqrData, size: 200)
                 
                 Spacer().frame(height: 20)
                 
                 // Button to download QR code
                 Button {
-                    savePaymentCardAsImage()  // Save payment card as PNG
+                    savePaymentCardAsImage(khrData: khqrData)  // Save payment card as PNG
                 } label: {
                     HStack {
                         Image(systemName: "arrowshape.down.circle.fill")
@@ -94,7 +94,7 @@ struct PaywithKHQRModalView: View {
     }
     
     // Function to save the displayed payment card as PNG
-    func savePaymentCardAsImage() {
+    func savePaymentCardAsImage(khrData:String) {
         withAnimation {
             downloadSuccess = true
         }
@@ -115,7 +115,7 @@ struct PaywithKHQRModalView: View {
                 Spacer().frame(height: 15)
                 
                 // QR Code
-                QRCodeView(text: "00020101021130450016abaakhppxxx@abaa01090045514050208ABA Bank40390006abaP2P0112B7A47E5B00EA02090045514055204000053031165802KH5914OUN BONALIHENG6010Phnom Penh6304AFE1", size: 200)
+                QRCodeView(text: khrData, size: 200)
               
                 Spacer()
             }
@@ -136,8 +136,4 @@ struct PaywithKHQRModalView: View {
             }
         }
     }
-}
-
-#Preview {
-    PaywithKHQRModalView()
 }

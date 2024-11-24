@@ -1,6 +1,6 @@
 import SwiftData
 import SwiftUI
-
+import Foundation
 class DraftModelData: ObservableObject {
 //    @ObservedObject var userStore: UserStore
     

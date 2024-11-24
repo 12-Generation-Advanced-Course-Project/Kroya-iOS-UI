@@ -2,8 +2,6 @@
 import SwiftUI
 
 struct BottomSheetView<Content: View>: View {
-   
-
     let content: Content
     @Binding var isOpen: Bool
     @State private var navigateToCheckout = false
@@ -166,30 +164,28 @@ struct BottomSheetView<Content: View>: View {
                                     .background(PrimaryColor.normal)
                                     .cornerRadius(UIScreen.main.bounds.width * 0.022)
                                 }
-                                .background(
-                                    NavigationLink(
-                                        destination: FoodCheckOutView(
-                                            imageName: .constant(imageName),
-                                            Foodname: sellDetails.foodRecipeDTO.name,
-                                            FoodId: sellDetails.id,
-                                            Date: sellDetails.dateCooking,
-                                            Price: sellDetails.price,
-                                            Currency: sellDetails.currencyType,
-                                            PhoneNumber: sellDetails.foodRecipeDTO.user.phoneNumber ?? "",
-                                            ReciptentName: sellDetails.foodRecipeDTO.user.fullName
-                                        
-                                        ),
-                                        isActive: $navigateToCheckout
-                                    ) {
-                                        EmptyView()
-                                    }
-                                )
+                                NavigationLink(
+                                    destination: FoodCheckOutView(
+                                        imageName: .constant(imageName),
+                                        Foodname: sellDetails.foodRecipeDTO.name,
+                                        FoodId: sellDetails.id,
+                                        Date: sellDetails.dateCooking,
+                                        Price: sellDetails.price,
+                                        Currency: sellDetails.currencyType,
+                                        PhoneNumber: sellDetails.foodRecipeDTO.user.phoneNumber ?? "",
+                                        ReciptentName: sellDetails.foodRecipeDTO.user.fullName
+                                    ),
+                                    isActive: $navigateToCheckout
+                                ) {
+                                    EmptyView()
+                                }
                             }
                         } else {
                             
                             // Current user is the owner, hide "Order" button
                             Spacer().frame(width: 0, height: 0)
                         }
+                        
                         
                     }
                     

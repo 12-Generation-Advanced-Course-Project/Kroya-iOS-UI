@@ -141,7 +141,7 @@ struct OrderCard: View {
                     .background(Color.white.cornerRadius(12))
             )
         }
-        .buttonStyle(PlainButtonStyle()) // Optional: remove the default button styling
+        .buttonStyle(PlainButtonStyle())
         
     }
     //MARK: Helper function to format date
@@ -153,7 +153,7 @@ struct OrderCard: View {
         
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone(secondsFromGMT: 0) // Ensure consistent parsing
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
         
         for format in dateFormats {
             formatter.dateFormat = format
@@ -193,4 +193,5 @@ struct OrderCard: View {
             return "at night."
         }
     }
+   
 }

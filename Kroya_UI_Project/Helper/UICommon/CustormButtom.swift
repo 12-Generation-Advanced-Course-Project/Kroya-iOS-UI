@@ -32,6 +32,7 @@ struct CustomButton: View {
                 .foregroundColor(textColor)
                 .cornerRadius(cornerRadius)
         }
+        .ignoresSafeArea(.keyboard)
     }
 }
 
