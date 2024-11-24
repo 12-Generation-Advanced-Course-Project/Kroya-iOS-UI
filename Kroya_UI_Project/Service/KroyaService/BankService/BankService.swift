@@ -9,7 +9,7 @@
 
 import SwiftUI
 import Alamofire
-
+import Foundation
 class BankService {
     
     static let shared = BankService()
@@ -61,4 +61,102 @@ class BankService {
             }
         }
     }
+    
+    // MARK: QR Collection
+    func QRCollection(QRCollectionRequest: QRCollectionRequest, completion: @escaping (Result<QRCollectionResponse<DataForQRCollection>, Error>) -> Void) {
+        guard let accessToken = Auth.shared.getAccessTokenWeBill() else {
+            let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token is missing"])
+            completion(.failure(error))
+            return
+        }
+
+        let url = "https://apidev.webill365.com/kh/api/wbi/client/v1/qr-collections"
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)",
+            "Content-Type": "application/json"
+        ]
+        
+        let parameters: [String: Any] = [
+            "payer_name": QRCollectionRequest.payername,
+            "parent_account_no": QRCollectionRequest.parentAccountNo,
+            "payment_type": QRCollectionRequest.paymentType,
+            "currency_code": QRCollectionRequest.currencyCode,
+            "amount": QRCollectionRequest.amount,
+            "remark": QRCollectionRequest.remark
+        ]
+
+        // Make the API request
+        AF.request(
+            url,
+            method: .post,
+            parameters: parameters,
+            encoding: JSONEncoding.default,
+            headers: headers
+        ).responseDecodable(of: QRCollectionResponse<DataForQRCollection>.self) { response in
+            debugPrint(response)
+            switch response.result {
+            case .success(let apiResponse):
+                // Since `status` is not optional, directly check `status.code`
+                if apiResponse.status?.code == 200 {
+                    completion(.success(apiResponse))
+                } else {
+                    let error = NSError(
+                        domain: "",
+                        code: apiResponse.status?.code ?? 404,
+                        userInfo: [NSLocalizedDescriptionKey: apiResponse.status?.message ?? "Error occurred"]
+                    )
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    //MARK: Check Status for QR Scan
+    func QRCheckStatus(QrcheckStatus: CheckStatusCodeRequest, completion: @escaping (Result<QRCollectionResponse<DataForQRCollection>, Error>) -> Void) {
+        guard let accessToken = Auth.shared.getAccessTokenWeBill() else {
+            let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token is missing"])
+            completion(.failure(error))
+            return
+        }
+        
+        let url = "https://apidev.webill365.com/kh/api/wbi/client/v1/payments/check-status"
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)",
+            "Content-Type": "application/json"
+        ]
+        
+        // Encode the request as parameters
+        let parameters: [String: Any] = [
+            "bill_no": QrcheckStatus.billNo
+        ]
+        
+        AF.request(
+            url,
+            method: .post,
+            parameters: parameters,
+            encoding: JSONEncoding.default, 
+            headers: headers
+        ).responseDecodable(of: QRCollectionResponse<DataForQRCollection>.self) { response in
+            debugPrint(response)
+            switch response.result {
+            case .success(let apiResponse):
+                if let status = apiResponse.status, status.code == 200 {
+                    completion(.success(apiResponse))
+                } else {
+                    let error = NSError(
+                        domain: "",
+                        code: apiResponse.status?.code ?? 404,
+                        userInfo: [NSLocalizedDescriptionKey: apiResponse.status?.message ?? "Error occurred"]
+                    )
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+
+
 }

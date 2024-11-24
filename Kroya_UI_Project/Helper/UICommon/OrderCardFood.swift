@@ -79,6 +79,15 @@ struct OrderCard: View {
                     
                     if order.foodCardType == "SALE" {
                         HStack {
+                            if let quantity = order.quantity {
+                                Text("\(quantity) items")
+                                    .customFontLightLocalize(size: 12)
+                                    .opacity(0.6)
+                            } else {
+                                Text("No quantity specified")
+                                    .customFontLightLocalize(size: 12)
+                                    .opacity(0.6)
+                            }
                             Text("Item selling now")
                                 .customFontLightLocalize(size: 12)
                                 .opacity(0.6)
@@ -97,8 +106,7 @@ struct OrderCard: View {
                             Spacer()
                         }
                     }
-                    
-                    
+
                     HStack(spacing: 15) {
                         Text(order.foodCardType == "ORDER" ?
                              "$\(order.totalPrice ?? 0)" : // Show totalPrice for orders
@@ -118,6 +126,10 @@ struct OrderCard: View {
                             .foregroundColor(order.foodCardType == "ORDER" ? Color.yellow : Color.green)
                     }
                 }
+            }
+            .onAppear{
+                print(order.quantity ?? "")
+                print(order.foodCardType)
             }
             .padding(.vertical, 7)
             .padding(.horizontal, 12)
@@ -180,4 +192,5 @@ struct OrderCard: View {
             return "at night."
         }
     }
+   
 }

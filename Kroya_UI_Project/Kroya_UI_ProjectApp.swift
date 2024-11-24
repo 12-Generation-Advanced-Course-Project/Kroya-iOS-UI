@@ -71,7 +71,7 @@ struct Kroya_UI_ProjectApp: App {
     private var contentView: some View {
             Group {
                 if Auth.shared.loggedIn {
-                    NavigationView {
+                    NavigationStack {
                         MainScreen(userStore: userStore, lang: $lang)
                             .environmentObject(userStore)
                             .environmentObject(Auth.shared)

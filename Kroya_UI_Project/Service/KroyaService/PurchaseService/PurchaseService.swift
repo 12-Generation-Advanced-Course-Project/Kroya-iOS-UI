@@ -335,23 +335,64 @@ class PurchaseService: ObservableObject {
         
     }
     
-//    //MARK: Update Purchase By Id and Status
-//    func PurchaseUpdateById(purchaseId:Int,newStatus:String,complete: @escaping (Result<Purchase,Error>) -> Void){
-//        guard let accessToken = Auth.shared.getAccessToken() else {
-//            let error = NSError(
-//                domain: "",
-//                code: 401,
-//                userInfo: [NSLocalizedDescriptionKey: "Access token not found."]
-//            )
-//            completion(.failure(error))
-//            return
-//        }
-//        let url = Constants.Purchase + "/order/\(purchaseId)/status"
-//        let headers: HTTPHeaders = [
-//            "Authorization": "Bearer \(accessToken)",
-//            "Content-Type": "application/json"
-//        ]
-//    }
+    //MARK: Update Purchase By Id and Status
+    func UpdatePurchaseByPurchaseId(purchaseId: Int,newStatus:String,completion: @escaping (Result<PurchaseUpdateResponse, Error>) -> Void
+    ) {
+        guard let accessToken = Auth.shared.getAccessToken() else {
+            let error = NSError(
+                domain: "",
+                code: 401,
+                userInfo: [NSLocalizedDescriptionKey: "Access token not found."]
+            )
+            completion(.failure(error))
+            return
+        }
+        let url = Constants.Purchase + "/order/\(purchaseId)/newStatus/\(newStatus)"
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)",
+            "Content-Type": "application/json"
+        ]
+        
+        AF.request(url, method: .put, headers: headers).validate().responseDecodable(of: PurchaseUpdateResponse.self) { respons in
+            
+            if let statusCode = respons.response?.statusCode {
+                // Check for 404 status code and handle it gracefully
+                if statusCode == 404 {
+                    print("Not found Purchase")
+                    completion(.failure(NSError(domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "Not found Purchase Saller."])))
+                    return
+                }
+            }
+            
+            // Pretty print the JSON response for debugging
+            if let data = respons.data {
+                do {
+                    let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+                    let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
+                    if let prettyString = String(data: prettyData, encoding: .utf8) {
+                        print("Pretty JSON Response:\n\(prettyString)")
+                    }
+                } catch {
+                    print("Failed to parse JSON response: \(error)")
+                }
+            }
+            
+            debugPrint(respons)
+            // Handle the response result
+            switch respons.result {
+            case .success(let ReceiptResponse): break
+               
+            case .failure(let error): break
+               
+                
+            }
+            
+            
+        }
+        
+    }
+       
+    
 }
 
 

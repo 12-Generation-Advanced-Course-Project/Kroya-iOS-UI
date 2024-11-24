@@ -29,3 +29,52 @@ struct WeBill365Status: Decodable {
     let code: Int?
     let message: String?
 }
+
+struct QRCollectionRequest: Codable {
+    var payername:String
+    var parentAccountNo:String
+    var paymentType:String
+    var currencyCode:String
+    var amount:Int
+    var remark:String
+    
+    enum CodingKeys: String, CodingKey {
+        case payername = "payer_name"
+        case parentAccountNo = "parent_account_no"
+        case paymentType = "payment_type"
+        case currencyCode = "currency_code"
+        case amount = "amount"
+        case remark = "remark"
+    }
+}
+
+
+struct QRCollectionResponse<T: Decodable>: Decodable {
+    let data: T?
+    let status: Status?
+}
+
+struct DataForQRCollection: Decodable{
+    var accountNo:String
+    var billNo:String
+    var khqrdata:String
+    
+    enum CodingKeys: String, CodingKey {
+        case accountNo = "account_no"
+        case billNo = "bill_no"
+        case khqrdata = "khqr_data"
+    }
+}
+
+struct Status: Decodable{
+    var code: Int
+    var message: String
+}
+
+struct CheckStatusCodeRequest: Codable {
+    var billNo: [String]
+    
+    enum CodingKeys: String, CodingKey {
+        case billNo = "bill_no"
+    }
+}

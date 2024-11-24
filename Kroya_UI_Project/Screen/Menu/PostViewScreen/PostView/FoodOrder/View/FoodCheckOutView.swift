@@ -1,4 +1,3 @@
-
 import SwiftUI
 
 struct FoodCheckOutView: View {
@@ -8,6 +7,7 @@ struct FoodCheckOutView: View {
     @State private var isPresented = false
     @Binding var imageName: String
     @State private var selectedAddress: Address?
+    @Environment(\.modelContext) private var context
     var Foodname: String
     var FoodId: Int
     var Date: String
@@ -20,12 +20,19 @@ struct FoodCheckOutView: View {
     @State private var Quantity: Int = 1
     @State private var SelectPayment: String = ""
     @State private var navigationTrigger = false
+    @State private var warningMessage: String? // For displaying warnings
+    let exchangeRateToRiel: Double = 4100
+    
+    var totalPriceInRiel: Double {
+        Double(totalPrice) * exchangeRateToRiel
+    }
+    
     var Location: String {
         selectedAddress?.addressDetail ?? ""
     }
     
     var body: some View {
-        NavigationStack{
+        NavigationStack {
             ZStack {
                 VStack {
                     List {
@@ -45,15 +52,25 @@ struct FoodCheckOutView: View {
                         .padding(.bottom, 12)
                         .padding(.top, 5)
                         .listRowSeparator(.hidden)
+                        
                         // Delivery Card Section
                         Section {
                             DeliveryCardDetailView(selectedAddress: $selectedAddress, remark: $remark)
                         }
                         .listRowInsets(EdgeInsets())
                         .listRowSeparator(.hidden)
+                        
                         // Payment Section
                         Section {
-                            PaymentButtonView(payment: $SelectPayment)
+                            PaymentButtonView(
+                                payment: $SelectPayment,
+                                PurchaesViewModel: PurchaesViewModel,
+                                amount: Int(totalPriceInRiel),
+                                remark: remark ?? "Good",
+                                Location: Location,
+                                Qty: Quantity,
+                                FoodSellId: FoodId
+                            ).environment(\.modelContext, context)
                         } header: {
                             Text(LocalizedStringKey("Payment"))
                                 .font(.customfont(.semibold, fontSize: 16))
@@ -65,18 +82,31 @@ struct FoodCheckOutView: View {
                     }
                     .listStyle(PlainListStyle())
                     .scrollContentBackground(.hidden)
+                    
+                    // Warning Message
+                    if let warningMessage = warningMessage {
+                        Text(warningMessage)
+                            .font(.customfont(.medium, fontSize: 14))
+                            .foregroundColor(.red)
+                            .padding(.vertical, 10)
+                    }
+                    
                     // Place Order Button
                     Button("Place an order") {
+                        // Validation Logic
                         guard !Location.isEmpty else {
-                            print("Error: Address not selected.")
+                            warningMessage = "Please select a delivery address."
                             return
                         }
                         guard !SelectPayment.isEmpty else {
-                            print("Error: Payment method not selected.")
+                            warningMessage = "Please select a payment method."
                             return
                         }
                         
-                        let Amount = Double(totalPrice)
+                        warningMessage = nil // Clear any previous warning
+                        
+                        let Amount = totalPriceInRiel // Convert to RIEL
+                        
                         let purchase = PurchaseRequest(
                             foodSellId: FoodId,
                             remark: remark,
@@ -85,8 +115,9 @@ struct FoodCheckOutView: View {
                             totalPrice: Amount
                         )
                         
-                        // Print debug data for verification
-                        print("Order Details: \(purchase)")
+                        // Debug: Print the details for verification
+                        print("Order Details (in RIEL): \(purchase)")
+                        
                         PurchaesViewModel.addPurchase(purchase: purchase, paymentType: SelectPayment)
                         withAnimation(.easeInOut) {
                             navigationTrigger = true
@@ -102,19 +133,15 @@ struct FoodCheckOutView: View {
                 .navigationTitle(LocalizedStringKey("Checkout"))
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarBackButtonHidden(true)
-                // Move NavigationLink inside ZStack
-//                NavigationLink(
-//                    destination: ReceiptView(isPresented: $isPresented, isOrderReceived: false, PurchaseId: PurchaesViewModel.Purchases?.purchaseId ?? 0),
-//                    isActive: $navigationTrigger
-//                ) {
-//                    EmptyView()
-//                }
             }
-//            .navigationDestination(isPresented: $navigationTrigger, destination: {
-//                ReceiptView(isPresented: $isPresented, isOrderReceived: false, PurchaseId: PurchaesViewModel.Purchases?.purchaseId ?? 0)
-//            })
             .fullScreenCover(isPresented: $PurchaesViewModel.isOrderSuccess, content: {
-                ReceiptView(isPresented: $isPresented, isOrderReceived: false, PurchaseId: PurchaesViewModel.Purchases?.purchaseId ?? 0)
+                ReceiptView(
+                    isPresented: $isPresented,
+                    isOrderReceived: false,
+                    PurchaseId: PurchaesViewModel.Purchases?.purchaseId ?? 0, dismissToRoot: {
+                        navigationTrigger = false
+                    }
+                )
             })
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -136,9 +163,9 @@ struct FoodCheckOutView: View {
                 }
             }
         }
-        
     }
 }
+
 
 // MARK: Helper functions
 private extension FoodCheckOutView {
@@ -151,6 +178,7 @@ private extension FoodCheckOutView {
         formatter.dateFormat = "dd MMM yyyy" // Output format: "21 Nov 2024"
         return formatter.string(from: date)
     }
+    
     func determineTimeOfDay(from dateString: String) -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")

@@ -2,6 +2,7 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct FoodDetailView: View {
+    @StateObject private var navigationManager = NavigationManager()
     @State var isFavorite: Bool
     @State private var currentImage: String = ""
     @State private var isBottomSheetOpen: Bool = false

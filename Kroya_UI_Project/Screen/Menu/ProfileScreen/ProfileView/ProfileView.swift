@@ -6,6 +6,7 @@ import SwiftUI
 import Kingfisher
 import SDWebImageSwiftUI
 struct ProfileView: View {
+    @StateObject private var WeBillVM = WeBill365ViewModel()
     @State private var showingCredits = false
     @State private var selectedLanguage: String? = nil
     @State private var isLogout = false
@@ -167,7 +168,7 @@ struct ProfileView: View {
                 CustomButton(title: LocalizedStringKey("Log out"), action: {
                     isLoading = true
                     authVM.logoutApp()
-                    
+                    WeBillVM.clearWeBillAccount(context: modelContext)
                 }, backgroundColor: .red, frameWidth: .screenWidth * 0.95)
                 
                 
