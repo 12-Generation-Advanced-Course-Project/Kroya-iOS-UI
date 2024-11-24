@@ -83,7 +83,7 @@ struct Kroya_UI_ProjectApp: App {
     private var contentView: some View {
         Group {
             if authVM.isLoggedIn {
-                NavigationView {
+                NavigationStack {
                     MainScreen(lang: $lang)
                         .environmentObject(userStore)
                         .environmentObject(authVM)
