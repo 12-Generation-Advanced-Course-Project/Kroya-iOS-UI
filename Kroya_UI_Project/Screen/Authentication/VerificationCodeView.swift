@@ -164,7 +164,7 @@ struct VerificationCodeView: View {
                 ProgressIndicator()
             }
         }
-        .navigationBarHidden(true)
+//        .navigationBarHidden(true)
     }
     
     // Filter input to allow only numbers

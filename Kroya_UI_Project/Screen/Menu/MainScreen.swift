@@ -7,18 +7,24 @@ struct MainScreen: View {
     @State private var isModalPresented: Bool = false
     @State private var showGuestAlert = false
     @EnvironmentObject var userStore: UserStore
-    @StateObject private var authVM: AuthViewModel
-//    @StateObject private var addressViewModel: AddressViewModel
-    @StateObject private var draftModelData: DraftModelData
+//    @StateObject private var authVM: AuthViewModel
+    @EnvironmentObject var authVM: AuthViewModel
+//    @StateObject private var draftModelData: DraftModelData
+    @StateObject private var draftModelData = DraftModelData()
     @Environment(\.modelContext) var modelContext
     @Binding var lang: String
     @State private var showLoadingOverlay = false
-    init(userStore: UserStore, lang: Binding<String>) {
-        _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
-//        _addressViewModel = StateObject(wrappedValue: AddressViewModel())
-        _draftModelData = StateObject(wrappedValue: DraftModelData(userStore: userStore))
+//    init(userStore: UserStore, lang: Binding<String>) {
+//        _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
+////        _addressViewModel = StateObject(wrappedValue: AddressViewModel())
+//        _draftModelData = StateObject(wrappedValue: DraftModelData(userStore: userStore))
+//        self._lang = lang
+//    }
+    public init(lang: Binding<String>) {
         self._lang = lang
+        _draftModelData = StateObject(wrappedValue: DraftModelData())
     }
+
     
     var body: some View {
         NavigationStack {
@@ -70,7 +76,8 @@ struct MainScreen: View {
                             }
                             .tag(3)
                         
-                        ProfileView(authVM: authVM, lang: $lang)
+//                        ProfileView(authVM: authVM, lang: $lang)
+                        ProfileView(lang: $lang)
                             .environmentObject(userStore)
                             .tabItem {
                                 VStack {
@@ -188,9 +195,12 @@ struct MainScreen: View {
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
            let rootWindow = windowScene.windows.first {
             rootWindow.rootViewController = UIHostingController(
-                rootView: LoginScreenView(userStore: userStore, lang: $lang)
+                rootView:
+//                    LoginScreenView(userStore: userStore, lang: $lang)
+                    LoginScreenView(lang: $lang)
                     .environmentObject(userStore)
-                    .environmentObject(Auth.shared)
+                    .environmentObject(authVM)
+//                    .environmentObject(Auth.shared)
 //                    .environmentObject(addressViewModel)
             )
             rootWindow.makeKeyAndVisible()
@@ -211,6 +221,6 @@ struct MainScreen: View {
     }
 }
 
-#Preview {
-    MainScreen(userStore: UserStore(), lang: .constant("en"))
-}
+//#Preview {
+//    MainScreen(userStore: UserStore(), lang: .constant("en"))
+//}

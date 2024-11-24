@@ -91,14 +91,13 @@ class ProfileViewModel: ObservableObject {
         return ""
     }
     
-    func deleteProfile() {
-        
+    func deleteProfile(completion: @escaping (Bool) -> Void) {
         let url = "https://kroya-api-production.up.railway.app/api/v1/user/delete-account"
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(Auth.shared.getAccessToken() ?? "")",
             "Accept": "*/*"
         ]
-        
+
         AF.request(url, method: .delete, headers: headers).validate().response { response in
             DispatchQueue.main.async {
                 self.isLoading = false // Stop loading indicator
@@ -108,14 +107,19 @@ class ProfileViewModel: ObservableObject {
                     self.successMessage = "Account deleted successfully."
                     self.showError = false
                     print("Account deletion success: \(response)")
+                    completion(true) // Notify success
                 case .failure(let error):
                     self.errorMessage = "Failed to delete account: \(error.localizedDescription)"
                     self.showError = true
                     print("Account deletion error: \(error)")
+                    completion(false) // Notify failure
                 }
             }
         }
     }
+
+
+
     
 }
 

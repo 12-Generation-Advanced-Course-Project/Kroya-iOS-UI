@@ -10,15 +10,23 @@ struct LoginScreenView: View {
     @State private var showingCredits = false
     @Environment(\.locale) var local
     @StateObject private var countdownTimer = CountdownTimer()
-    @Binding var lang:String
-    @StateObject private var authVM: AuthViewModel
     @EnvironmentObject var userStore: UserStore
+    @EnvironmentObject var authVM: AuthViewModel
+    @Binding var lang:String
+//    @StateObject private var authVM: AuthViewModel
+//    @EnvironmentObject var userStore: UserStore
     @State private var showLoadingOverlay = false
-//    @EnvironmentObject var addressViewModel:AddressViewModel
-    init(userStore: UserStore, lang: Binding<String>) {
-        _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
-        self._lang = lang
-    }
+    @State private var navigateToDestination = false
+//    init(userStore: UserStore, lang: Binding<String>) {
+//        _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
+//        self._lang = lang
+//    }
+    
+//    init(userStore: UserStore, lang: Binding<String>) {
+//        self.authVM = AuthViewModel(userStore: userStore) // Initialize AuthViewModel here
+//        self._lang = lang
+//    }
+
     
     
     var body: some View {
@@ -92,6 +100,7 @@ struct LoginScreenView: View {
                     .padding(.top, -70)
                     
                     Button(action: {
+                        navigateToDestination = false // Reset navigation state
                         authVM.sendOTPIfEmailNotExists(email: email)
                     }) {
                         Text("GET STARTED")
@@ -105,17 +114,26 @@ struct LoginScreenView: View {
                     }
                     .padding(.top, 10)
                     .disabled(isEmailInvalid || email.isEmpty)
+                    
                     NavigationLink(
                         destination: destinationView(),
-                        isActive: Binding(
-                            get: { authVM.isOTPSent || authVM.isEmailExist },
-                            set: { _ in }
-                        ),
-                        label: {
-                            EmptyView()
-                        }
-                    )
+                        isActive: $navigateToDestination //** Updated to use `navigateToDestination`
+                    ) {
+                        EmptyView()
+                    }
                     .hidden()
+                    
+//                    NavigationLink(
+//                        destination: destinationView(),
+//                        isActive: Binding(
+//                            get: { authVM.isOTPSent || authVM.isEmailExist },
+//                            set: { _ in }
+//                        ),
+//                        label: {
+//                            EmptyView()
+//                        }
+//                    )
+//                    .hidden()
                     
                     // Guest Login Button
                     Button(action: {
@@ -174,6 +192,23 @@ struct LoginScreenView: View {
                     LoadingOverlay()
                 }
             }
+            .onChange(of: authVM.isOTPSent || authVM.isEmailExist) { newValue in
+                print("onChange triggered: \(newValue)")
+                print("isOTPSent: \(authVM.isOTPSent), isEmailExist: \(authVM.isEmailExist)")
+                navigateToDestination = newValue
+            }
+//            .onChange(of: authVM.isOTPSent || authVM.isEmailExist) { newValue in
+//                if newValue {
+//                    navigateToDestination = true
+//                }
+//            }
+
+        }
+        .onAppear {
+//            Auth.shared.loggedIn = false // Ensure loggedIn is false
+//            navigateToDestination = false // Reset navigation state
+            // Do not reset authVM.isEmailExist or authVM.isOTPSent here
+            authVM.isLoggedIn = false
         }
     }
     
@@ -187,22 +222,25 @@ struct LoginScreenView: View {
     @ViewBuilder
     private func destinationView() -> some View {
         if authVM.isOTPSent {
-            // OTP sent, navigate to VerificationCodeView
             VerificationCodeView(authVM: authVM, lang: $lang).environmentObject(userStore)
         } else if authVM.isEmailExist {
-            // Email exists, navigate to FillPasswordScreen
-            FillPasswordScreen(authVM: authVM, email: email, lang: $lang).environmentObject(userStore)
+//            FillPasswordScreen(authVM: authVM, email: email, lang: $lang).environmentObject(userStore)
+            FillPasswordScreen(email: email, lang: $lang).environmentObject(userStore)
         } else {
             EmptyView()
         }
     }
+
+
     func navigateToMainScreen() {
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
            let rootWindow = windowScene.windows.first {
             rootWindow.rootViewController = UIHostingController(
-                rootView: MainScreen(userStore: userStore, lang: $lang)
+//                rootView: MainScreen(userStore: userStore, lang: $lang)
+                rootView: MainScreen(lang: $lang)
                     .environmentObject(userStore)
-                    .environmentObject(Auth.shared)
+                    .environmentObject(authVM)
+//                    .environmentObject(Auth.shared)
 //                    .environmentObject(addressViewModel)
             )
             rootWindow.makeKeyAndVisible()

@@ -17,7 +17,9 @@ struct UserBasicInfoView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var userStore: UserStore
     //    @EnvironmentObject var addressVM: AddressViewModel
-    @ObservedObject var authVM = AuthViewModel(userStore: UserStore())
+//    @ObservedObject var authVM = AuthViewModel(userStore: UserStore())
+    @EnvironmentObject var authVM: AuthViewModel // Use EnvironmentObject
+
     @Binding var lang: String
     @State private var showAddressSheet = false
     @State private var userInputAddress: String = ""
@@ -171,12 +173,22 @@ struct UserBasicInfoView: View {
             
             Spacer()
             
+//            // NavigationLink to MainScreen for save action
+//            NavigationLink(destination: MainScreen(userStore: userStore, lang: $lang)
+//                .environmentObject(userStore),
+//                           isActive: $authVM.isUserSave, label: {
+//                EmptyView()
+//            })
+//            .hidden()
             // NavigationLink to MainScreen for save action
-            NavigationLink(destination: MainScreen(userStore: userStore, lang: $lang)
-                .environmentObject(userStore),
-                           isActive: $authVM.isUserSave, label: {
+            NavigationLink(
+                destination: MainScreen(lang: $lang)
+                    .environmentObject(userStore)
+                    .environmentObject(authVM),
+                isActive: $authVM.isUserSave
+            ) {
                 EmptyView()
-            })
+            }
             .hidden()
             
         }
@@ -187,12 +199,22 @@ struct UserBasicInfoView: View {
             //            }
         }
         .padding(.horizontal, 20)
-                NavigationLink(destination: MainScreen(userStore: userStore, lang: $lang)
-                    .environmentObject(userStore),
-                               isActive: $isSkip) {
-                        EmptyView()
-                    }
-                    .hidden()
+//                NavigationLink(destination: MainScreen(userStore: userStore, lang: $lang)
+//                    .environmentObject(userStore),
+//                               isActive: $isSkip) {
+//                        EmptyView()
+//                    }
+//                    .hidden()
+        // NavigationLink to MainScreen for skip action
+        NavigationLink(
+            destination: MainScreen(lang: $lang)
+                .environmentObject(userStore)
+                .environmentObject(authVM),
+            isActive: $isSkip
+        ) {
+            EmptyView()
+        }
+        .hidden()
         .navigationBarHidden(true)
     }
     

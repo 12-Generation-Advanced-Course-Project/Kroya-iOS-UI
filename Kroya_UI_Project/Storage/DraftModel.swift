@@ -2,10 +2,11 @@ import SwiftData
 import SwiftUI
 
 class DraftModelData: ObservableObject {
-    @ObservedObject var userStore: UserStore
+//    @ObservedObject var userStore: UserStore
     
-    init(userStore: UserStore) {
-        self.userStore = userStore
+//    init(userStore: UserStore) {
+    init() {
+//        self.userStore = userStore
         self.ingredients = [RecipeIngredient(id: UUID().hashValue, name: "", quantity: 0, price: 0, selectedCurrency: 0)]
         self.cookingSteps = [CookingStep(id: UUID().hashValue, description: "")]
     }
