@@ -54,6 +54,8 @@ typealias ViewAccountResponse = KroyaSingleAPIResponse<ViewAccountUserFoodModel>
 // MARK: fetch purchase all
 typealias purchaseResponse = KroyaAPIResponse<OrderModel>
 typealias OrderRequestResponse = KroyaAPIResponse<OrderRequestModel>
+typealias OrderModelResponseForBuyer = KroyaAPIResponse<OrderModel>
+
 
 
 //MARK: Add Item to Favorite

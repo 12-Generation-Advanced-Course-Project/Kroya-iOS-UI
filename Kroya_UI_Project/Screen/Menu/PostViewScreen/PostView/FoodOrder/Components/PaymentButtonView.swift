@@ -56,9 +56,14 @@ struct PaymentButtonView: View {
                 selectedPaymentMethod = "KHR"
                 payment = "KHR"
                 let PaymentType = "1"
+                guard let parentAccount = Auth.shared.getParentAccount() else {
+                    let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token is missing"])
+                  
+                    return
+                }
                 let QRCollectionRequest = QRCollectionRequest(
                     payername: profileVM.userProfile?.fullName ?? "",
-                    parentAccountNo: WeBillVM.parentAccountNo,
+                    parentAccountNo: parentAccount,
                     paymentType: PaymentType,
                     currencyCode: payment,
                     amount: amount,
@@ -88,6 +93,8 @@ struct PaymentButtonView: View {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
                         print("PurchaesRequest: \(purchase)")
                         PurchaesViewModel.addPurchase(purchase: purchase, paymentType: "KHQR")
+                        WeBillVM.stopPolling()
+                    
                     }
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {

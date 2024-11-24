@@ -46,7 +46,7 @@ struct ReceiptCard: View {
                         }
                         //MARK: Price and Paid to Seller
                         VStack(alignment: .leading, spacing: 10) {
-                            Text("\(ReceiptVM.Purchases?.totalPrice ?? 0, specifier: "%.2f") USD")
+                            Text("\(ReceiptVM.Purchases?.totalPrice ?? 0, specifier: "%.2f") RIEL")
                                 .font(.system(size: 16, weight: .medium))
                                 .foregroundColor(.black)
                             
@@ -389,7 +389,7 @@ struct ReceiptCardForSuccess: View {
                         }
                         //MARK: Price and Paid to Seller
                         VStack(alignment: .leading, spacing: 10) {
-                            Text("\(ReceiptVM.Purchases?.totalPrice ?? 0, specifier: "%.2f") USD")
+                            Text("\(ReceiptVM.Purchases?.totalPrice ?? 0, specifier: "%.2f") RIEL")
                                 .font(.system(size: 16, weight: .medium))
                                 .foregroundColor(.black)
                             

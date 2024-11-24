@@ -111,7 +111,7 @@ class PurchaseService: ObservableObject {
     
     
     // MARK: Fetch All Purchases Order method
-    func getPurchaseOrder(completion: @escaping (Result<purchaseResponse, Error>) -> Void) {
+    func getPurchaseOrder(completion: @escaping (Result<OrderModelResponseForBuyer, Error>) -> Void) {
         guard let accessToken = Auth.shared.getAccessToken() else {
             let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token not found."])
             completion(.failure(error))
@@ -124,10 +124,9 @@ class PurchaseService: ObservableObject {
             "Content-Type": "application/json"
         ]
         
-        AF.request(url, method: .get, headers: headers).validate().responseDecodable(of: purchaseResponse.self) { respons in
+        AF.request(url, method: .get, headers: headers).validate().responseDecodable(of: OrderModelResponseForBuyer.self) { response in
             
-            if let statusCode = respons.response?.statusCode {
-                // Check for 404 status code and handle it gracefully
+            if let statusCode = response.response?.statusCode {
                 if statusCode == 404 {
                     print("Not found Purchase Buyer")
                     completion(.failure(NSError(domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "Not found Purchase Buyer."])))
@@ -136,7 +135,7 @@ class PurchaseService: ObservableObject {
             }
             
             // Pretty print the JSON response for debugging
-            if let data = respons.data {
+            if let data = response.data {
                 do {
                     let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
                     let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
@@ -148,8 +147,7 @@ class PurchaseService: ObservableObject {
                 }
             }
             
-            // Handle the response result
-            switch respons.result {
+            switch response.result {
             case .success(let payloads):
                 completion(.success(payloads))
             case .failure(let error):
@@ -157,7 +155,7 @@ class PurchaseService: ObservableObject {
             }
         }
     }
-    
+
     
     
     // MARK: Fetch All Purchases Order method
@@ -336,7 +334,10 @@ class PurchaseService: ObservableObject {
     }
     
     //MARK: Update Purchase By Id and Status
-    func UpdatePurchaseByPurchaseId(purchaseId: Int,newStatus:String,completion: @escaping (Result<PurchaseUpdateResponse, Error>) -> Void
+    func UpdatePurchaseByPurchaseId(
+        purchaseId: Int,
+        newStatus: String,
+        completion: @escaping (Result<PurchaseUpdateResponse, Error>) -> Void
     ) {
         guard let accessToken = Auth.shared.getAccessToken() else {
             let error = NSError(
@@ -347,25 +348,31 @@ class PurchaseService: ObservableObject {
             completion(.failure(error))
             return
         }
-        let url = Constants.Purchase + "/order/\(purchaseId)/newStatus/\(newStatus)"
+
+        // Adjust URL to match correct endpoint
+        let url = Constants.Purchase + "/orders/\(purchaseId)/status?newStatus=\(newStatus)"
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(accessToken)",
             "Content-Type": "application/json"
         ]
-        
-        AF.request(url, method: .put, headers: headers).validate().responseDecodable(of: PurchaseUpdateResponse.self) { respons in
+
+        // Debugging: Log the URL and headers
+        print("URL: \(url)")
+        print("Headers: \(headers)")
+
+        AF.request(url, method: .put, headers: headers).validate().responseDecodable(of: PurchaseUpdateResponse.self) { response in
             
-            if let statusCode = respons.response?.statusCode {
-                // Check for 404 status code and handle it gracefully
+            // Debugging: Print the response status code and raw data
+            if let statusCode = response.response?.statusCode {
+                print("Status Code: \(statusCode)")
                 if statusCode == 404 {
                     print("Not found Purchase")
-                    completion(.failure(NSError(domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "Not found Purchase Saller."])))
+                    completion(.failure(NSError(domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "Not found Purchase Seller."])))
                     return
                 }
             }
-            
-            // Pretty print the JSON response for debugging
-            if let data = respons.data {
+
+            if let data = response.data {
                 do {
                     let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
                     let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
@@ -376,22 +383,17 @@ class PurchaseService: ObservableObject {
                     print("Failed to parse JSON response: \(error)")
                 }
             }
-            
-            debugPrint(respons)
-            // Handle the response result
-            switch respons.result {
-            case .success(let ReceiptResponse): break
-               
-            case .failure(let error): break
-               
-                
+
+            // Handle response result
+            switch response.result {
+            case .success(let purchaseUpdateResponse):
+                completion(.success(purchaseUpdateResponse))
+            case .failure(let error):
+                completion(.failure(error))
             }
-            
-            
         }
-        
     }
-       
+
     
 }
 

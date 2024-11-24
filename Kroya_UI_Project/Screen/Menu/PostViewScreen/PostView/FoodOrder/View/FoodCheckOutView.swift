@@ -20,13 +20,16 @@ struct FoodCheckOutView: View {
     @State private var Quantity: Int = 1
     @State private var SelectPayment: String = ""
     @State private var navigationTrigger = false
-    @State private var warningMessage: String? // For displaying warnings
+    @State private var warningMessage: String? 
     let exchangeRateToRiel: Double = 4100
     
     var totalPriceInRiel: Double {
-        Double(totalPrice) * exchangeRateToRiel
+        if Currency.uppercased() == "RIEL" {
+            return Double(totalPrice)
+        } else {
+            return Double(totalPrice) * exchangeRateToRiel 
+        }
     }
-    
     var Location: String {
         selectedAddress?.addressDetail ?? ""
     }

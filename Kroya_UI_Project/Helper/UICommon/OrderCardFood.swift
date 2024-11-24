@@ -9,7 +9,7 @@ struct OrderCard: View {
     var isAccepted: Bool
     var isOrder: Bool
     var showIcon: Bool
-    @State private var navigateToOrderListView = false
+    @State private var navigateToOrderRequest = false
     private let urlImagePrefix = "https://kroya-api-production.up.railway.app/api/v1/fileView/"
     
     private var orderCountText: String {
@@ -17,10 +17,9 @@ struct OrderCard: View {
     }
     
     var body: some View {
-        
         NavigationLink(
             destination: OrderListView(sellerId: order.foodSellId, orderCountText: orderCountText),
-            isActive: $navigateToOrderListView
+            isActive: $navigateToOrderRequest
         ) {
             HStack {
                 // Display the first photo from the order if available using KFImage
@@ -43,25 +42,44 @@ struct OrderCard: View {
                             .fontWeight(.medium)
                             .lineLimit(1)
                         Spacer()
-                        
                         if order.foodCardType == "ORDER" {
-                            Text(
-                                order.purchaseStatusType == "ACCEPTED" ? "Accepted" :
-                                    order.purchaseStatusType == "REJECTED" ? "Rejected" :
-                                    order.purchaseStatusType == "PENDING" ? "Pending" :
-                                    "Unknown Status"
-                            )
-                            .customFontMediumLocalize(size: 15)
-                            .foregroundColor(
-                                order.purchaseStatusType == "ACCEPTED" ? .green :
-                                    order.purchaseStatusType == "REJECTED" ? .red :
-                                    order.purchaseStatusType == "PENDING" ? .orange :
-                                        .gray
-                            )
+                            if order.purchaseStatusType == "ACCEPTED" || order.purchaseStatusType == "REJECTED" {
+                                NavigationLink(
+                                    destination:
+                                        FoodDetailView(
+                                        isFavorite:  false,
+                                        showPrice: true,
+                                        showOrderButton: false,
+                                        showButtonInvoic: true,
+                                        invoiceAccept: true,
+                                        FoodId: order.foodSellId,
+                                        ItemType: order.itemType
+                                    )
+                                )
+                                 {
+                                    Text(
+                                        order.purchaseStatusType == "ACCEPTED" ? "Accepted" :
+                                            order.purchaseStatusType == "REJECTED" ? "Rejected" :
+                                            "Unknown Status"
+                                    )
+                                    .customFontMediumLocalize(size: 15)
+                                    .foregroundColor(
+                                        order.purchaseStatusType == "ACCEPTED" ? .green :
+                                            order.purchaseStatusType == "REJECTED" ? .red :
+                                                .gray
+                                    )
+                                }
+                            } else {
+                                Text(
+                                    order.purchaseStatusType == "PENDING" ? "Pending" : "Unknown Status"
+                                )
+                                .customFontMediumLocalize(size: 15)
+                                .foregroundColor(.orange)
+                            }
                         } else if order.foodCardType == "SALE" {
                             if showIcon {
                                 Button(action: {
-                                    navigateToOrderListView = true
+                                    navigateToOrderRequest = true
                                 }) {
                                     ZStack {
                                         Image(systemName: "list.clipboard")
@@ -76,6 +94,8 @@ struct OrderCard: View {
                                 }
                             }
                         }
+                        
+                        
                     }
                     
                     if order.foodCardType == "SALE" {
@@ -107,11 +127,11 @@ struct OrderCard: View {
                             Spacer()
                         }
                     }
-
+                    
                     HStack(spacing: 15) {
                         Text(order.foodCardType == "ORDER" ?
-                             "$\(order.totalPrice ?? 0)" : // Show totalPrice for orders
-                             "$\(order.price ?? 0)" // Show price for sales
+                             "៛\(order.totalPrice ?? 0)" :
+                                "៛\(order.price ?? 0)"
                         )
                         .customFontMediumLocalize(size: 15)
                         .fontWeight(.medium)
@@ -193,5 +213,5 @@ struct OrderCard: View {
             return "at night."
         }
     }
-   
+    
 }

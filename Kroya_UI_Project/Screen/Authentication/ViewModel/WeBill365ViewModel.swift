@@ -116,7 +116,7 @@ class WeBill365ViewModel: ObservableObject {
         }
 
         self.isLoading = true
-        BankService.shared.weBill365Token(clientID: clientID, clientSecret: clientSecret) { [weak self] result in
+        BankService.shared.weBill365Token(clientID: clientID, clientSecret: clientSecret, parentAccount: parentAccountNo) { [weak self] result in
             DispatchQueue.main.async {
                 self?.isLoading = false
                 switch result {

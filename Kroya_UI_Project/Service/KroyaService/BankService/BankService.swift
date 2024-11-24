@@ -15,7 +15,7 @@ class BankService {
     static let shared = BankService()
     
     // MARK: Get Token for Access into WeBill365
-    func weBill365Token(clientID: String, clientSecret: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func weBill365Token(clientID: String, clientSecret: String,parentAccount:String, completion: @escaping (Result<Void, Error>) -> Void) {
         
         let url = "https://apidev.webill365.com/kh/api/wbi/client/v1/auth/token"
         
@@ -47,7 +47,7 @@ class BankService {
             case .success(let data):
                 if let accessToken = data.data?.accessToken {
                     // Save the access token using Auth class
-                    Auth.shared.setWeBillCredentials(clientId: clientID, secretId: clientSecret, webillToken: accessToken)
+                    Auth.shared.setWeBillCredentials(clientId: clientID, secretId: clientSecret, webillToken: accessToken, parentAccount: parentAccount)
                     print("Access token retrieved and saved successfully.")
                     completion(.success(()))
                 } else {
