@@ -1,5 +1,6 @@
-import SwiftUI
 
+
+import SwiftUI
 
 struct HomeView: View {
     
@@ -13,6 +14,7 @@ struct HomeView: View {
     @StateObject private var recentSearchesData = RecentSearchesData()
     @StateObject private var PopularFoodsData =  PopularFoodVM()
     @StateObject private var favoriteVM = FavoriteVM()
+    @StateObject private var notificationVM = NotificationViewModel()
     @Environment(\.modelContext) var modelContext
     @State var isLoading: Bool = false
     var body: some View {
@@ -213,7 +215,7 @@ struct HomeView: View {
                     }
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        NavigationLink(destination: Notification()) {
+                        NavigationLink(destination: NotificationView()) {
                             ZStack {
                                 Image("notification")
                                     .resizable()
@@ -238,6 +240,7 @@ struct HomeView: View {
                             }
                         }
                     }
+                    
                 }
             }
             .refreshable {
@@ -272,5 +275,8 @@ struct HomeView: View {
            }
        }
 }
+
+
+
 
 
