@@ -13,7 +13,8 @@ struct FillPasswordScreen: View {
     @State var isPasswordVisible: Bool = false
     @State private var isPasswordValid: Bool = true
     @EnvironmentObject var userStore: UserStore
-    @ObservedObject var authVM: AuthViewModel
+//    @ObservedObject var authVM: AuthViewModel
+    @EnvironmentObject var authVM: AuthViewModel // Use EnvironmentObject
     @State var email: String
     @Binding var lang: String
     @State private var isForgetPassword = false
@@ -129,15 +130,33 @@ struct FillPasswordScreen: View {
                 Spacer()
             }
             
+//            // Navigate to MainScreen on successful login
+//            NavigationLink(destination: MainScreen(userStore: userStore,lang: $lang).navigationBarBackButtonHidden(true).environmentObject(userStore), isActive: $authVM.isLoggedIn) {
+//                EmptyView()
+//            }
+//            .hidden()
+//            if authVM.isLoading {
+//                ProgressIndicator()
+//            }
+//        } .navigationBarHidden(true)
+//    }
             // Navigate to MainScreen on successful login
-            NavigationLink(destination: MainScreen(userStore: userStore,lang: $lang).navigationBarBackButtonHidden(true).environmentObject(userStore), isActive: $authVM.isLoggedIn) {
+            NavigationLink(
+                destination: MainScreen(lang: $lang)
+                    .navigationBarBackButtonHidden(true)
+                    .environmentObject(userStore)
+                    .environmentObject(authVM),
+                isActive: $authVM.isLoggedIn
+            ) {
                 EmptyView()
             }
             .hidden()
+            
             if authVM.isLoading {
                 ProgressIndicator()
             }
-        } .navigationBarHidden(true)
+        }
+        .navigationBarHidden(true)
     }
     // Password validation function
     func validatePassword(_ password: String) {

@@ -12,7 +12,8 @@ struct ProfileView: View {
     @State private var isLogout = false
     @State private var isLoading = false
     @State private var showLogoutSuccessAlert = false
-    @ObservedObject  var authVM : AuthViewModel
+//    @ObservedObject  var authVM : AuthViewModel
+    @EnvironmentObject var authVM: AuthViewModel
     @State private var selectedAddress: Address?
     @EnvironmentObject var userStore: UserStore
     @State private var showMapSheet = false
@@ -23,6 +24,10 @@ struct ProfileView: View {
     var urlImagePrefix: String = Constants.fileupload
     @Environment(\.modelContext) var modelContext
     @Binding var lang: String
+    
+    init(lang: Binding<String>) {
+        self._lang = lang
+    }
     
     var body: some View {
         ZStack {
@@ -64,10 +69,28 @@ struct ProfileView: View {
                             isEdit.toggle()
                         }
                     
-                    NavigationLink(destination: EditingProfileView(profile: Profile,selectedAddress: $selectedAddress).environmentObject(userStore)
-                                   ,isActive: $isEdit) {
+//                    NavigationLink(
+//                        destination: EditingProfileView(
+//                            profile: Profile,
+//                            authVM: authVM,
+//                            selectedAddress: $selectedAddress
+//                        ).environmentObject(userStore)
+//                                   ,isActive: $isEdit) {
+//                        EmptyView()
+//                    }.hidden()
+                    
+                    NavigationLink(
+                        destination: EditingProfileView(
+                            profile: Profile,
+                            selectedAddress: $selectedAddress
+                        )
+                        .environmentObject(userStore),
+                        isActive: $isEdit
+                    ) {
                         EmptyView()
                     }.hidden()
+
+
                     
                 }
                 .padding(.horizontal, 10)
@@ -173,7 +196,7 @@ struct ProfileView: View {
                 
                 
                 // NavigationLink to go to LoginScreenView on logout
-                NavigationLink(destination: LoginScreenView(userStore: userStore,lang: $lang), isActive: $authVM.islogout) {
+                NavigationLink(destination: LoginScreenView(userStore: _userStore,lang: $lang), isActive: $authVM.islogout) {
                     EmptyView()
                 }.hidden()
                 

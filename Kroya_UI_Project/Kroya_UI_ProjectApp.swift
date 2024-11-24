@@ -5,7 +5,9 @@ import Network
 @main
 struct Kroya_UI_ProjectApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    @StateObject var userStore = UserStore()
+//    @StateObject var userStore = UserStore()
+    @StateObject var userStore: UserStore
+    @StateObject var authVM: AuthViewModel
     @State private var isSplashScreenActive = true
     @State private var isConnected = true
     @State var lang: String = UserDefaults.standard.string(forKey: "AppLanguage") ?? "en"
@@ -14,6 +16,13 @@ struct Kroya_UI_ProjectApp: App {
 
     init() {
         
+        // Create a local instance of UserStore
+        let userStoreInstance = UserStore()
+        // Initialize 'userStore' using the local instance
+        _userStore = StateObject(wrappedValue: userStoreInstance)
+        // Initialize 'authVM' using the same local instance
+        _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStoreInstance))
+
         // Configure the navigation bar appearance
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
@@ -54,9 +63,12 @@ struct Kroya_UI_ProjectApp: App {
                 if isSplashScreenActive {
                     SplashScreen(isSplashScreenActive: $isSplashScreenActive, lang: $lang)
                         .environmentObject(userStore)
+                        .environmentObject(authVM) // Inject into environment
                 } else {
                     if isConnected {
                         contentView
+                            .environmentObject(userStore)
+                            .environmentObject(authVM) // Inject into environment
                     } else {
                         OfflineMessageView(retryAction: checkNetworkAgain)
                     }
@@ -69,26 +81,53 @@ struct Kroya_UI_ProjectApp: App {
     }
     
     private var contentView: some View {
-            Group {
-                if Auth.shared.loggedIn {
-                    NavigationStack {
-                        MainScreen(userStore: userStore, lang: $lang)
-                            .environmentObject(userStore)
-                            .environmentObject(Auth.shared)
-                            .environment(\.locale, .init(identifier: lang))
-                            .environment(\.modelContext, modelContainer.mainContext)
-                    }
-                } else {
-                    NavigationView {
-                        LoginScreenView(userStore: userStore, lang: $lang)
-                            .environmentObject(userStore)
-                            .environmentObject(Auth.shared)
-                            .environment(\.locale, .init(identifier: lang))
-                            .environment(\.modelContext, modelContainer.mainContext)
-                    }
+        Group {
+            if authVM.isLoggedIn {
+                NavigationView {
+                    MainScreen(lang: $lang)
+                        .environmentObject(userStore)
+                        .environmentObject(authVM)
+                        .environment(\.locale, .init(identifier: lang))
+                        .environment(\.modelContext, modelContainer.mainContext)
+                }
+            } else {
+                NavigationView {
+                    LoginScreenView(lang: $lang)
+                        .environmentObject(userStore)
+                        .environmentObject(authVM)
+                        .environment(\.locale, .init(identifier: lang))
+                        .environment(\.modelContext, modelContainer.mainContext)
                 }
             }
         }
+    }
+    
+//    private var contentView: some View {
+//            Group {
+////                if Auth.shared.loggedIn {
+//                if authVM.isLoggedIn {
+//                    NavigationView {
+////                        MainScreen(userStore: userStore, lang: $lang)
+//                        MainScreen(lang: $lang)
+//                            .environmentObject(userStore)
+//                            .environmentObject(authVM) // Use authVM
+////                            .environmentObject(Auth.shared)
+//                            .environment(\.locale, .init(identifier: lang))
+//                            .environment(\.modelContext, modelContainer.mainContext)
+//                    }
+//                } else {
+//                    NavigationView {
+//                        LoginScreenView(userStore: userStore, lang: $lang)
+//                        LoginScreenView(lang: $lang)
+//                            .environmentObject(userStore)
+//                            .environmentObject(authVM) // Use authVM
+////                            .environmentObject(Auth.shared)
+//                            .environment(\.locale, .init(identifier: lang))
+//                            .environment(\.modelContext, modelContainer.mainContext)
+//                    }
+//                }
+//            }
+//        }
 
     private func setupNetworkMonitoring() {
         monitor.pathUpdateHandler = { path in
