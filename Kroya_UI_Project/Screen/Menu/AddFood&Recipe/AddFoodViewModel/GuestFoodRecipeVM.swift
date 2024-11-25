@@ -55,7 +55,7 @@ class GuestFoodRecipeVM: ObservableObject {
                 case .failure(let error):
                     self?.showError = true
                     self?.errorMessage = "Failed to load guest recipe food: \(error.localizedDescription)"
-                    print("Error: \(error)")
+                    print("Errorr: \(error)")
                 }
             }
         }
