@@ -65,7 +65,7 @@ typealias RemoveFavoriteResponse = KroyaSingleAPIResponse<String>
 typealias ReceiptResponse = KroyaSingleAPIResponse<PurchaseModel>
 
 //MARK: Add a Purchase
-//typealias AddPurchaseResponse = KroyaSingleAPIResponse<PurchaseModel>
+typealias AddPurchaseResponse = KroyaSingleAPIResponse<PurchaseModel>
 
 
 //MARK: Guest food popular
@@ -85,3 +85,12 @@ typealias NotificationResponse = KroyaAPIResponse<NotificationModel>
 typealias PurchaseUpdateResponse = KroyaAPIResponse<PurchaseModel>
 
 
+//MARK: Guest food sell
+typealias GuestFoodSellResponse = KroyaAPIResponse<FoodSellModel>
+
+//MARK: Guest food sell by cuisine id
+typealias GuestFoodSellCuisineResponse = KroyaAPIResponse<FoodSellModel>
+
+
+//MARK: Guest food Recipe
+typealias guestFoodRecipeResponse = KroyaAPIResponse<FoodRecipeModel>
