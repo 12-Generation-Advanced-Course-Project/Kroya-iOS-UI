@@ -28,6 +28,7 @@ struct FoodonRecipe: View {
                     isChooseCuisine: $isChooseCuisine,
                     recipeFoodVM: recipeViewModel,
                     guestFoodRecipeVM: guestFoodRecipeVM)
+                
                 HStack(spacing: 40) {
                     ForEach(recipeViewModel.RecipeCuisine) { cuisine in
                         Button(action: {
@@ -53,18 +54,18 @@ struct FoodonRecipe: View {
                                 }
                             }
                         }) {
-                            VStack {
-                                let imageName = cuisineImages[cuisine.cuisineName] ?? "snackPic"
-                                Image(imageName)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 60, height: 60)
-                                    .cornerRadius(12)
-                                
-                                Text(cuisine.cuisineName)
-                                    .font(.customfont(.medium, fontSize: 16))
-                                    .foregroundColor(selectedOrderIndex == cuisine.id && recipeViewModel.isChooseCuisine ? Color.yellow : Color.gray)
-                            }
+//                            VStack {
+//                                let imageName = cuisineImages[cuisine.cuisineName] ?? "snackPic"
+//                                Image(imageName)
+//                                    .resizable()
+//                                    .scaledToFill()
+//                                    .frame(width: 60, height: 60)
+//                                    .cornerRadius(12)
+//                                
+//                                Text(cuisine.cuisineName)
+//                                    .font(.customfont(.medium, fontSize: 16))
+//                                    .foregroundColor(selectedOrderIndex == cuisine.id && recipeViewModel.isChooseCuisine ? Color.yellow : Color.gray)
+//                            }
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
