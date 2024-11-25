@@ -48,4 +48,8 @@ struct Constants {
     static let SalesReportUrl = "https://kroya-api-production.up.railway.app/api/v1/sale-report/"
     //Guest Category
     static let GuestCategoryUrl = "https://kroya-api-production.up.railway.app/api/v1/category/"
+    //MARK: Connect WeBill
+    static let ConnectWeBillUrl = "https://kroya-api-production.up.railway.app/api/v1/user/connectWebill"
+    //MARK: Get Credential User WeBill Account
+    static let GetCredentialUserWeBillAccountUrl = "https://kroya-api-production.up.railway.app/api/v1/user/webill-acc-no"
 }

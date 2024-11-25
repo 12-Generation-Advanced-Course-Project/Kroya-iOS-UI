@@ -80,7 +80,6 @@ typealias GuestCategoryAllFoodById = KroyaSingleAPIResponse<PayloadCategory>
 typealias GuestCategoryResponse = KroyaAPIResponse<CategoryModel>
 
 //MARK: PurchaseUpdaeById
-
 typealias PurchaseUpdateResponse = KroyaAPIResponse<PurchaseModel>
 
 

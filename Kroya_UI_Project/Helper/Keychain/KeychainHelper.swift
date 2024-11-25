@@ -10,11 +10,12 @@ import SwiftKeychainWrapper
 
 class Auth: ObservableObject {
     struct Credentials {
-        var accessToken: String?
+        var accessToken: String?//
         var refreshToken: String?
         var email: String?
         var WebillToken: String?
         var parentAccount:String?
+        var DeviceToken: String?
     }
     
     enum KeychainKey: String {
@@ -26,6 +27,7 @@ class Auth: ObservableObject {
         case webillClientId
         case webillSecretId
         case parentAccount
+        case DeviceToken
     }
     
     static let shared: Auth = Auth()
@@ -75,6 +77,24 @@ class Auth: ObservableObject {
         keychain.removeObject(forKey: KeychainKey.parentAccount.rawValue)
         
     }
+    //MARK: Device Set
+    func setDeviceToken(DeviceToken:String){
+        keychain.set(DeviceToken, forKey: KeychainKey.DeviceToken.rawValue)
+    }
+//    //MARK: Device get
+//    func getDeviceToken() -> (DeviceToken:String?) {
+//        let DeviceToken = keychain.string(forKey: KeychainKey.DeviceToken.rawValue)
+//        return (DeviceToken)
+//    }
+//    //MARK: Clear Device Token
+//    func clearWeBillCredentials() {
+//        keychain.removeObject(forKey: KeychainKey.DeviceToken.rawValue)
+//    }
+    //Device Token for Use
+//    func getDeviceTokenForNotifi() -> String? {
+//        return getDeviceToken().DeviceToken
+//    }
+    
     func hasAccessToken() -> Bool {
         return getCredentials().accessToken != nil
     }

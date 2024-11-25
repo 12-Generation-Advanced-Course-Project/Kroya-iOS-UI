@@ -104,19 +104,16 @@ struct OrderTabView: View {
     }
 }
 
-
 struct OrderSectionForOrderTab: View {
-    
     let group: String
     let orders: [OrderModel]
-    
+
     @Binding var isExpandedToday: Bool
     @Binding var isExpandedYTD: Bool
     @Binding var isExpandedLst2Day: Bool
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            // Custom label for the DisclosureGroup
             DisclosureGroup(
                 isExpanded: bindingForGroup(),
                 content: {
@@ -127,12 +124,14 @@ struct OrderSectionForOrderTab: View {
                     } else {
                         VStack(spacing: 15) {
                             ForEach(orders, id: \.id) { order in
-                                OrderCard(
-                                    order: order,
-                                    isAccepted: order.purchaseStatusType == "Accepted",
-                                    isOrder: order.isOrderable,
-                                    showIcon: true
-                                )
+                                NavigationLink(destination: destinationView(for: order)) {
+                                    OrderCard(
+                                        order: order,
+                                        isAccepted: order.purchaseStatusType == "Accepted",
+                                        isOrder: order.isOrderable,
+                                        showIcon: true
+                                    )
+                                }
                             }
                         }
                     }
@@ -147,7 +146,7 @@ struct OrderSectionForOrderTab: View {
             .accentColor(.black)
         }
     }
-    
+
     private func bindingForGroup() -> Binding<Bool> {
         switch group {
         case "Today":
@@ -158,4 +157,27 @@ struct OrderSectionForOrderTab: View {
             return $isExpandedLst2Day
         }
     }
+
+    @ViewBuilder
+    private func destinationView(for order: OrderModel) -> some View {
+        if order.foodCardType == "ORDER" {
+            FoodDetailView(
+                isFavorite: false,
+                showPrice: false,
+                showOrderButton: false,
+                showButtonInvoic: order.purchaseStatusType == "ACCEPTED",
+                invoiceAccept: order.purchaseStatusType == "ACCEPTED",
+                FoodId: order.foodSellId,
+                ItemType: order.itemType
+            )
+        } else if order.foodCardType == "SALE" {
+            OrderListView(
+                sellerId: order.foodSellId,
+                orderCountText: "\(order.orderCount ?? 0)"
+            )
+        } else {
+            EmptyView()
+        }
+    }
 }
+

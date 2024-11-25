@@ -69,7 +69,7 @@ class BankService {
             completion(.failure(error))
             return
         }
-
+        
         let url = "https://apidev.webill365.com/kh/api/wbi/client/v1/qr-collections"
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(accessToken)",
@@ -84,7 +84,7 @@ class BankService {
             "amount": QRCollectionRequest.amount,
             "remark": QRCollectionRequest.remark
         ]
-
+        
         // Make the API request
         AF.request(
             url,
@@ -136,7 +136,7 @@ class BankService {
             url,
             method: .post,
             parameters: parameters,
-            encoding: JSONEncoding.default, 
+            encoding: JSONEncoding.default,
             headers: headers
         ).responseDecodable(of: QRCollectionResponse<DataForQRCollection>.self) { response in
             debugPrint(response)
@@ -157,6 +157,109 @@ class BankService {
             }
         }
     }
+    
+    // MARK: - Connect WeBill API Call
+    func connectWeBill(
+        request: ConnectWebillConnectRequest,
+        completion: @escaping (Result<ConnectWebillResponseData, Error>) -> Void
+    ) {
+        // Get access token
+        guard let accessToken = Auth.shared.getAccessToken() else {
+            let error = NSError(
+                domain: "",
+                code: 401,
+                userInfo: [NSLocalizedDescriptionKey: "Access token is missing"]
+            )
+            completion(.failure(error))
+            return
+        }
+        
+        // API Endpoint
+        let url = Constants.ConnectWeBillUrl
+        
+        // HTTP Headers
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)",
+            "Content-Type": "application/json"
+        ]
+        
+        // Parameters
+        let parameters: [String: Any] = [
+            "clientId": request.clientId,
+            "clientSecret": request.clientSecret,
+            "accountNo": request.accountNo
+        ]
+        
+        // API Request
+        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+            .validate()
+            .responseDecodable(of: ConnectWebillResponseData.self) { response in
+                debugPrint(response)
+                
+                switch response.result {
+                case .success(let apiResponse):
+                    if let statusCode = apiResponse.statusCode, statusCode == "200" {
+                        completion(.success(apiResponse))
+                    } else {
+                        let error = NSError(
+                            domain: "",
+                            code: Int(apiResponse.statusCode) ?? 400,
+                            userInfo: [NSLocalizedDescriptionKey: apiResponse.message]
+                        )
+                        completion(.failure(error))
+                    }
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+    }
+    
+    // MARK: - Get WeBill Credential User Account
+    func getWeBillAccountCredential(SellerId: Int, completion: @escaping (Result<ConnectWebillResponseData, Error>) -> Void) {
+        // Get access token
+        guard let accessToken = Auth.shared.getAccessToken() else {
+            let error = NSError(
+                domain: "",
+                code: 401,
+                userInfo: [NSLocalizedDescriptionKey: "Access token is missing"]
+            )
+            completion(.failure(error))
+            return
+        }
+        // API Endpoint
+        let url = Constants.GetCredentialUserWeBillAccountUrl + "/\(SellerId)"
+        
+        // HTTP Headers
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)",
+            "Content-Type": "application/json"
+        ]
+        
+        // API Request
+        AF.request(url, method: .get, encoding: JSONEncoding.default, headers: headers)
+            .validate()
+            .responseDecodable(of: ConnectWebillResponseData.self) { response in
+                debugPrint(response)
+                
+                switch response.result {
+                case .success(let apiResponse):
+                    if let statusCode = apiResponse.statusCode, statusCode == "200" {
+                        completion(.success(apiResponse))
+                    } else {
+                        let error = NSError(
+                            domain: "",
+                            code: Int(apiResponse.statusCode) ?? 400,
+                            userInfo: [NSLocalizedDescriptionKey: apiResponse.message]
+                        )
+                        completion(.failure(error))
+                    }
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+    }
 
-
+    
+    
+    
 }
