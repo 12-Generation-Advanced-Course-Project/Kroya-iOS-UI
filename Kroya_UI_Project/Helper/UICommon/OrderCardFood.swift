@@ -109,8 +109,8 @@ struct OrderCard: View {
 
                     HStack(spacing: 15) {
                         Text(order.foodCardType == "ORDER" ?
-                             "$\(order.totalPrice ?? 0)" : // Show totalPrice for orders
-                             "$\(order.price ?? 0)" // Show price for sales
+                             "៛\(order.totalPrice ?? 0)" : // Show totalPrice for orders
+                             "៛\(order.price ?? 0)" // Show price for sales
                         )
                         .customFontMediumLocalize(size: 15)
                         .fontWeight(.medium)

@@ -10,6 +10,7 @@ import Alamofire
 
 class OrderViewModel: ObservableObject {
        @Published var orders: [OrderModel] = []
+       @Published var OrderForBuyer: [OrderModelForBuyer] = []
        @Published var Purchases: PurchaseModel?
        @Published var isLoading: Bool = false
        @Published var successMessage: String = ""
@@ -30,7 +31,7 @@ class OrderViewModel: ObservableObject {
         self.startLoading()
         PurchaseService.shared.getAllPurchases { [weak self] result in
             DispatchQueue.main.async {
-                self!.endLoading()
+                self?.endLoading()
                 switch result {
                 case .success(let response):
                     if response.statusCode == "200", let payload = response.payload {
@@ -69,22 +70,26 @@ class OrderViewModel: ObservableObject {
     func fetchPurchaseOrder() {
         self.startLoading()
         PurchaseService.shared.getPurchaseOrder { [weak self] result in
+            guard let self = self else { return }
             DispatchQueue.main.async {
-                self!.endLoading()
+                self.endLoading()
                 switch result {
                 case .success(let response):
                     if response.statusCode == "200", let payload = response.payload {
-                        self?.orders = payload
-                    }else {
+                        self.orders = payload
+                    } else {
                         print("Error fetching purchase: \(response.message)")
+                        self.errorMessage = response.message
                     }
                 case .failure(let error):
-                    self?.errorMessage = "Failed to fetch purchases: \(error.localizedDescription)"
+                    self.errorMessage = "Failed to fetch purchases: \(error.localizedDescription)"
                     print("Error: \(error)")
                 }
             }
         }
     }
+
+
     // MARK: fetch purchase all
     func fetchPurchaseSale() {
         self.startLoading()
@@ -155,4 +160,31 @@ class OrderViewModel: ObservableObject {
             }
         }
     }
+    
+    func updatePurchaseStatus(purchaseId: Int, newStatus: String) {
+        startLoading()
+        PurchaseService.shared.UpdatePurchaseByPurchaseId(purchaseId: purchaseId, newStatus: newStatus) { [weak self] result in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.endLoading()
+                switch result {
+                case .success(let response):
+                    if let updatedPurchase = response.payload {
+                        self.isUpdate = true
+                        self.successMessage = "Purchase updated successfully."
+                        print("Purchase updated successfully: \(updatedPurchase)")
+                    } else {
+                        self.errorMessage = "Failed to fetch updated purchase details."
+                        self.showError = true
+                        print("Failed to fetch updated purchase details.")
+                    }
+                case .failure(let error):
+                    self.errorMessage = error.localizedDescription
+                    self.showError = true
+                    print("Failed to update purchase: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+
 }

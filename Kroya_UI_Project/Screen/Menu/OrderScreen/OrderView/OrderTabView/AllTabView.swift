@@ -126,6 +126,7 @@ struct OrderSection: View {
                                         isOrder: order.isOrderable,
                                         showIcon: true
                                     )
+                                    EmptyView()
                                 }
                             }
                         }
