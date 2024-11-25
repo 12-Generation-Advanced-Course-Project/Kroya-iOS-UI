@@ -52,14 +52,14 @@ class NotificationService {
                 }
             }
             
-//            debugPrint(respons)
-//            // Handle the response result
-//            switch respons.result {
-//            case .success(let payloads):
-//                completion(.success(payloads))
-//            case .failure(let error):
-//                completion(.failure(error))
-//            }
+            debugPrint(respons)
+            // Handle the response result
+            switch respons.result {
+            case .success(let payloads):
+                completion(.success(payloads))
+            case .failure(let error):
+                completion(.failure(error))
+            }
         }
     }
     
