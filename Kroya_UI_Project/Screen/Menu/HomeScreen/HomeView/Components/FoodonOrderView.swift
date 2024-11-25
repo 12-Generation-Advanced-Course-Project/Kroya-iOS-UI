@@ -66,11 +66,6 @@ struct FoodonOrderView: View {
            
         }
         .searchable(text: $foodViewModel.searchText, prompt: LocalizedStringKey("Search Item"))
-     
-//        .onDisappear{
-//            foodViewModel.getAllFoodSell()
-//            foodViewModel.getAllCuisines()
-//        }
         .navigationBarBackButtonHidden(true)
     }
 }
@@ -83,7 +78,7 @@ struct CuisineCategoryButtons: View {
     @Binding var selectedOrderIndex: Int?
     @Binding var isChooseCuisine: Bool
     @ObservedObject var foodViewModel: FoodSellViewModel
-
+   // @StateObject private var foodSaleViewModel = FoodSellViewModel()
     var body: some View {
         HStack(spacing: 40) {
             ForEach(0..<imageofOrder.count, id: \.self) { index in
@@ -97,7 +92,9 @@ struct CuisineCategoryButtons: View {
                         foodViewModel.getFoodByCuisine(cuisineId: index + 1)
                         isChooseCuisine = true
                     }
-                }) {
+                })
+                
+                {
                     VStack {
                         Image(imageofOrder[index])
                             .resizable()
