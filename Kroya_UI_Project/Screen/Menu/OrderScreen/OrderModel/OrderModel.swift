@@ -35,4 +35,25 @@ struct OrderModel: Identifiable, Decodable {
     
 }
 
+struct OrderModelForBuyer: Identifiable, Decodable {
+    var id: Int // Use `purchaseId` as the unique identifier
+    var foodSellId: Int
+    var name: String
+    var photo: [Photo] // Update to handle an array of photos
+    var quantity: Int
+    var totalPrice: Int
+    var dateCooking: String
+    var isOrderable: Bool
+    var itemType: String
+    var foodCardType: String
+    var purchaseStatusType: String
+    var purchaseDate: String
+  
+    enum CodingKeys: String, CodingKey {
+        case id = "purchaseId"
+        case foodSellId, name, photo, quantity, totalPrice, dateCooking, isOrderable, itemType, foodCardType, purchaseStatusType, purchaseDate
+    }
+}
+
+
 

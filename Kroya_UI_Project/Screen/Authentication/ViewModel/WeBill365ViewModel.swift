@@ -14,6 +14,7 @@ class WeBill365ViewModel: ObservableObject {
     @Published var clientSecret: String = ""
     @Published var accountNumber: String = ""
     @Published var parentAccountNo: String = ""
+    @Published var WebillAccount: ConnectWebillConnect?
     @Published var isLoading: Bool = false
     @Published var showError: Bool = false
     @Published var successMessage: String = ""
@@ -44,7 +45,7 @@ class WeBill365ViewModel: ObservableObject {
             print("Failed to load WeBill account: \(error.localizedDescription)")
         }
     }
-
+    
     // MARK: - Save WeBill Account
     func saveWeBillAccount(context: ModelContext) {
         guard let email = Auth.shared.getCredentials().email else {
@@ -73,7 +74,7 @@ class WeBill365ViewModel: ObservableObject {
             print("Failed to save WeBill account: \(error.localizedDescription)")
         }
     }
-
+    
     // MARK: - Clear WeBill Account
     func clearWeBillAccount(context: ModelContext) {
         guard let email = Auth.shared.getCredentials().email else {
@@ -97,7 +98,7 @@ class WeBill365ViewModel: ObservableObject {
             print("Failed to clear WeBill account: \(error.localizedDescription)")
         }
     }
-
+    
     // MARK: - WeBill365 AccessToken
     func fetchWeBillAccessToken(context: ModelContext, completion: @escaping (Bool) -> Void) {
         guard let email = Auth.shared.getCredentials().email else {
@@ -107,16 +108,16 @@ class WeBill365ViewModel: ObservableObject {
             completion(false)
             return
         }
-
+        
         guard !clientID.isEmpty, !clientSecret.isEmpty else {
             self.errorMessage = "Client ID and Secret ID cannot be empty."
             self.showError = true
             completion(false)
             return
         }
-
+        
         self.isLoading = true
-        BankService.shared.weBill365Token(clientID: clientID, clientSecret: clientSecret) { [weak self] result in
+        BankService.shared.weBill365Token(clientID: clientID, clientSecret: clientSecret, parentAccount: parentAccountNo) { [weak self] result in
             DispatchQueue.main.async {
                 self?.isLoading = false
                 switch result {
@@ -134,68 +135,118 @@ class WeBill365ViewModel: ObservableObject {
             }
         }
     }
-
+    
     // MARK: - Fetch QR Collection
-     func fetchQRCollection(request: QRCollectionRequest, completion: @escaping (String?) -> Void) {
-         self.isLoading = true
-         BankService.shared.QRCollection(QRCollectionRequest: request) { [weak self] result in
-             DispatchQueue.main.async {
-                 self?.isLoading = false
-                 switch result {
-                 case .success(let qrCollection):
-                     self?.qrCollectionData = qrCollection.data
-                     self?.qrCollectionStatus = qrCollection.status
-                     self?.successMessage = qrCollection.status?.message ?? ""
-                     print("QR Collection fetched successfully: \(String(describing: qrCollection.data))")
-                     completion(qrCollection.data?.billNo) // Pass the BillNo to the callback
-                 case .failure(let error):
-                     self?.errorMessage = error.localizedDescription
-                     self?.isChecktrue = false
-                     print("Failed to fetch QR collection: \(error.localizedDescription)")
-                     completion(nil) // Indicate failure
-                 }
-             }
-         }
-     }
+    func fetchQRCollection(request: QRCollectionRequest, completion: @escaping (String?) -> Void) {
+        self.isLoading = true
+        BankService.shared.QRCollection(QRCollectionRequest: request) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                switch result {
+                case .success(let qrCollection):
+                    self?.qrCollectionData = qrCollection.data
+                    self?.qrCollectionStatus = qrCollection.status
+                    self?.successMessage = qrCollection.status?.message ?? ""
+                    print("QR Collection fetched successfully: \(String(describing: qrCollection.data))")
+                    completion(qrCollection.data?.billNo) // Pass the BillNo to the callback
+                case .failure(let error):
+                    self?.errorMessage = error.localizedDescription
+                    self?.isChecktrue = false
+                    print("Failed to fetch QR collection: \(error.localizedDescription)")
+                    completion(nil) // Indicate failure
+                }
+            }
+        }
+    }
+    
+    // MARK: - Check QR Status
+    func CheckStatusQR(billNo: String) {
+        let request = CheckStatusCodeRequest(billNo: [billNo])
+        
+        self.isLoading = true
+        BankService.shared.QRCheckStatus(QrcheckStatus: request) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                switch result {
+                case .success(let qrStatusResponse):
+                    if let status = qrStatusResponse.status, status.code == 200 {
+                        self?.qrCollectionStatus = status
+                        self?.successMessage = "QR payment completed successfully."
+                        self?.isChecktrue = true
+                        self?.stopPolling() // Stop polling on success
+                        print("QR Status success: \(String(describing: qrStatusResponse.data))")
+                    } else {
+                        self?.errorMessage = qrStatusResponse.status?.message ?? "Unknown error"
+                        print("QR Status pending or failed: \(self?.errorMessage ?? "Unknown error")")
+                    }
+                case .failure(let error):
+                    self?.errorMessage = error.localizedDescription
+                    print("Failed to fetch QR status: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
+    // MARK: - Poll QR Status
+    func startPollingQRStatus(billNo: String) {
+        stopPolling() // Ensure no duplicate timers
+        pollingTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
+            self?.CheckStatusQR(billNo: billNo)
+        }
+    }
+    
+    func stopPolling() {
+        pollingTimer?.invalidate()
+        pollingTimer = nil
+    }
+    // MARK: - Connect WeBill
+    func ConnectWeBillAccount(ConnectRequest: ConnectWebillConnectRequest) {
+        self.isLoading = true
+        BankService.shared.connectWeBill(request: ConnectRequest) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                switch result {
+                case .success(let ConnectResponse):
+                    if ConnectResponse.statusCode == "200", let payload = ConnectResponse.payload {
+                        // Assign the fetched payload to the WebillAccount
+                        self?.WebillAccount = payload
+                        print("WeBill connected successfully: \(payload)")
+                    } else {
+                        // Handle failed response with the message from the API
+                        self?.errorMessage = ConnectResponse.message
+                        print("Connect WeBill Failed: \(self?.errorMessage ?? "Unknown error")")
+                    }
+                case .failure(let error):
+                    // Handle request failure
+                    self?.errorMessage = error.localizedDescription
+                    print("Failed to connect WeBill: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
 
-     // MARK: - Check QR Status
-      func CheckStatusQR(billNo: String) {
-          let request = CheckStatusCodeRequest(billNo: [billNo])
-          
-          self.isLoading = true
-          BankService.shared.QRCheckStatus(QrcheckStatus: request) { [weak self] result in
-              DispatchQueue.main.async {
-                  self?.isLoading = false
-                  switch result {
-                  case .success(let qrStatusResponse):
-                      if let status = qrStatusResponse.status, status.code == 200 {
-                          self?.qrCollectionStatus = status
-                          self?.successMessage = "QR payment completed successfully."
-                          self?.isChecktrue = true
-                          self?.stopPolling() // Stop polling on success
-                          print("QR Status success: \(String(describing: qrStatusResponse.data))")
-                      } else {
-                          self?.errorMessage = qrStatusResponse.status?.message ?? "Unknown error"
-                          print("QR Status pending or failed: \(self?.errorMessage ?? "Unknown error")")
-                      }
-                  case .failure(let error):
-                      self?.errorMessage = error.localizedDescription
-                      print("Failed to fetch QR status: \(error.localizedDescription)")
-                  }
-              }
-          }
-      }
 
-      // MARK: - Poll QR Status
-      func startPollingQRStatus(billNo: String) {
-          stopPolling() // Ensure no duplicate timers
-          pollingTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
-              self?.CheckStatusQR(billNo: billNo) // Correctly reference the method
-          }
-      }
-
-      func stopPolling() {
-          pollingTimer?.invalidate()
-          pollingTimer = nil
-      }
+    //MARK: Get Credentail WeBill
+    func fetchWeBillAccount(SellerId: Int) {
+        self.isLoading = true
+        BankService.shared.getWeBillAccountCredential(SellerId: SellerId) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                switch result {
+                case .success(let response):
+                    if let payload = response.payload {
+                        self?.WebillAccount = payload
+                        print("Fetched WeBill account details: \(payload)")
+                    } else {
+                        self?.errorMessage = response.message
+                        print("Error: \(self?.errorMessage ?? "Unknown error")")
+                    }
+                case .failure(let error):
+                    self?.errorMessage = error.localizedDescription
+                    print("Failed to fetch WeBill account details: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
 }

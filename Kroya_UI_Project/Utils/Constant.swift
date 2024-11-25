@@ -39,16 +39,30 @@ struct Constants {
     static let OrderRequestUrl = "https://kroya-api-production.up.railway.app/api/v1/purchase/orders/seller/"
     
     //Guest food popular
-    static let GuestFoodPopularUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user/foods/"
+    static let GuestFoodPopularUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user/foods"
+    
+    //MARK: Get guest food by category id
+    static let GuestFoodByCategoryIdUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user/foods/"
+    
     //MARK:  Search food by name
     static let FoodNameUrl = "https://kroya-api-production.up.railway.app/api/v1/foods/"
-//    static let GuestFoodPopularUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user/foods"
+    //Guest food sale
+    static let GuestFoodSellUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user/food-sell"
 
     //MARK: Generate Sales Report by Date
     static let SalesReportUrl = "https://kroya-api-production.up.railway.app/api/v1/sale-report/"
     //Guest Category
     static let GuestCategoryUrl = "https://kroya-api-production.up.railway.app/api/v1/category/"
+    //MARK: Connect WeBill
+    static let ConnectWeBillUrl = "https://kroya-api-production.up.railway.app/api/v1/user/connectWebill"
+    //MARK: Get Credential User WeBill Account
+    static let GetCredentialUserWeBillAccountUrl = "https://kroya-api-production.up.railway.app/api/v1/user/webill-acc-no"
     
     // Notification
     static let NotificationUrl = "https://kroya-api-production.up.railway.app/api/v1/notifications"
+    
+    //MARK: Guest food recipe
+    static let GuestFoodRecipeUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user/food-recipe"
+    static let GuestFoodRecipeByCuisineUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user/food-recipe/"
+    
 }

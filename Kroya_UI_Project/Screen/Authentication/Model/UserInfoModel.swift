@@ -59,7 +59,9 @@ struct userModel: Codable {
     var phoneNumber: String?
 }
 struct DeviceTokenModel: Codable {
-    var deviceToken: String
+    var id:Int
+    var fullName:String
+    var profileImage: String
 }
 
 struct SellerInformation: Identifiable, Codable {

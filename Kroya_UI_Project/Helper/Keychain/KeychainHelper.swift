@@ -14,6 +14,8 @@ class Auth: ObservableObject {
         var refreshToken: String?
         var email: String?
         var WebillToken: String?
+        var parentAccount:String?
+        var DeviceToken: String?
     }
     
     enum KeychainKey: String {
@@ -24,6 +26,8 @@ class Auth: ObservableObject {
         case WebillToken
         case webillClientId
         case webillSecretId
+        case parentAccount
+        case DeviceToken
     }
     
     static let shared: Auth = Auth()
@@ -44,6 +48,11 @@ class Auth: ObservableObject {
             email: keychain.string(forKey: KeychainKey.email.rawValue)
         )
     }
+    func getDeviceToken() -> Credentials {
+        return Credentials(
+            DeviceToken: keychain.string(forKey: KeychainKey.DeviceToken.rawValue)
+        )
+    }
     
     func setCredentials(accessToken: String, refreshToken: String, email: String) {
         keychain.set(accessToken, forKey: KeychainKey.accessToken.rawValue)
@@ -51,24 +60,42 @@ class Auth: ObservableObject {
         keychain.set(email, forKey: KeychainKey.email.rawValue)
     }
     // MARK: - WeBill Credentials
-    func setWeBillCredentials(clientId: String, secretId: String,webillToken:String?) {
+    func setWeBillCredentials(clientId: String, secretId: String,webillToken:String?,parentAccount:String) {
         keychain.set(clientId, forKey: KeychainKey.webillClientId.rawValue)
         keychain.set(secretId, forKey: KeychainKey.webillSecretId.rawValue)
         keychain.set(webillToken ?? "", forKey: KeychainKey.WebillToken.rawValue)
+        keychain.set(parentAccount, forKey: KeychainKey.parentAccount.rawValue)
     }
     
-    func getWeBillCredentials() -> (clientId: String?, secretId: String?, webillToken: String?) {
+    func getWeBillCredentials() -> (clientId: String?, secretId: String?, webillToken: String?,parentAccount:String?) {
         let clientId = keychain.string(forKey: KeychainKey.webillClientId.rawValue)
         let secretId = keychain.string(forKey: KeychainKey.webillSecretId.rawValue)
         let webillToken = keychain.string(forKey: KeychainKey.WebillToken.rawValue)
-        return (clientId, secretId, webillToken)
+        let parentAccount = keychain.string(forKey: KeychainKey.parentAccount.rawValue)
+        return (clientId, secretId, webillToken,parentAccount)
     }
     
     func clearWeBillCredentials() {
         keychain.removeObject(forKey: KeychainKey.webillClientId.rawValue)
         keychain.removeObject(forKey: KeychainKey.webillSecretId.rawValue)
         keychain.removeObject(forKey: KeychainKey.WebillToken.rawValue)
+        keychain.removeObject(forKey: KeychainKey.parentAccount.rawValue)
         
+    }
+    //MARK: Device Set
+    func setDeviceToken(DeviceToken:String){
+        keychain.set(DeviceToken, forKey: KeychainKey.DeviceToken.rawValue)
+    }
+    //MARK: Clear Device Token
+    func clearDeviceToken() {
+        keychain.removeObject(forKey: KeychainKey.DeviceToken.rawValue)
+    }
+    //MARK: Device Token for Use
+    func getDeviceTokenForNotifi() -> String? {
+        return getDeviceToken().DeviceToken
+    }
+    func getParentAccount() -> String? {
+        return getWeBillCredentials().parentAccount
     }
     func hasAccessToken() -> Bool {
         return getCredentials().accessToken != nil
@@ -80,6 +107,7 @@ class Auth: ObservableObject {
     func getAccessTokenWeBill() -> String? {
         return getWeBillCredentials().webillToken
     }
+    
     
     func getRefreshToken() -> String? {
         return getCredentials().refreshToken

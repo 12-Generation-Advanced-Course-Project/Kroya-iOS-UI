@@ -78,3 +78,31 @@ struct CheckStatusCodeRequest: Codable {
         case billNo = "bill_no"
     }
 }
+
+// MARK: - WeBill Connect Request
+struct ConnectWebillConnectRequest: Codable {
+    var clientId: String
+    var clientSecret: String
+    var accountNo: String
+}
+
+// MARK: - WeBill Response
+struct ConnectWebillResponse<T: Decodable>: Decodable {
+    let message: String
+    let payload: T?
+    let statusCode: String
+    let timestamp: String?
+}
+
+// MARK: - WeBill Connect Payload
+struct ConnectWebillConnect: Codable {
+    var id: Int
+    var clientId: String
+    var clientSecret: String
+    var accountNo: String
+}
+
+typealias ConnectWebillResponseData = ConnectWebillResponse<ConnectWebillConnect>
+
+
+

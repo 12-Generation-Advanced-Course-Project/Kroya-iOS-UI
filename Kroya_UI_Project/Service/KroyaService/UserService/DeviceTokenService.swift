@@ -7,7 +7,6 @@
 
 import Alamofire
 import Foundation
-
 class DeviceTokenService {
     
     static let shared = DeviceTokenService()
@@ -21,16 +20,19 @@ class DeviceTokenService {
             return
         }
         
-        let url = Constants.KroyaUrlUser + "device-token"
+        // Append deviceToken as a query parameter
+        let url = "\(Constants.KroyaUrlUser)device-token?deviceToken=\(deviceToken)"
+        
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(accessToken)",
             "Content-Type": "application/json"
         ]
-        let parameters: [String: Any] = ["deviceToken": deviceToken]
         
-        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+        // Send the request without a body
+        AF.request(url, method: .post, headers: headers)
             .validate()
             .responseDecodable(of: DeviceTokenResponse.self) { response in
+                debugPrint(response)
                 switch response.result {
                 case .success(let apiResponse):
                     if apiResponse.statusCode == "200" {

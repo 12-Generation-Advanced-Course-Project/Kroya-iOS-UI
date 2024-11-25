@@ -1,11 +1,10 @@
-
-
 import SwiftUI
 import SDWebImageSwiftUI
 
 struct ItemFoodOrderCard: View {
     
     @Binding var orderRequest: OrderRequestModel
+    @StateObject private var OrderViewmodel = OrderViewModel()
     var showEllipsis: Bool = true
     @State private var showPopover = false
     @Binding var show3dot: Bool
@@ -17,8 +16,8 @@ struct ItemFoodOrderCard: View {
     
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack(spacing: 10) {
+        VStack(alignment: .leading,spacing: 10) {
+            HStack(spacing: 5) {
                 
                 // Construct the full URL for the image
                 if let photoFilename = orderRequest.foodSellCardResponse.photo.first?.photo, let url = URL(string: urlImagePrefix + photoFilename) {
@@ -36,68 +35,90 @@ struct ItemFoodOrderCard: View {
                         .cornerRadius(8)
                 }
                 
-                VStack(alignment: .leading, spacing: 5) {
-                    HStack(spacing: 8) {
-                        // Food name
-                        Text(orderRequest.foodSellCardResponse.name)
-                            .font(.customfont(.semibold, fontSize: 16))
-                            .foregroundColor(.black)
-                            .lineLimit(1)
-                            .frame(maxWidth: .infinity)
-                        // Dynamic Status
-                        Text(orderRequest.purchaseStatusType!)
-                            .font(.customfont(.semibold, fontSize: 10))
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 4)
-                            .foregroundColor(getStatusColor(status: orderRequest.purchaseStatusType!))
-                            .background(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(getStatusColor(status: orderRequest.purchaseStatusType!).opacity(0.2))
-                            )
-                        
-                        
-                        //
-                        
-                        Spacer()
-                        
-                        // Time
-                        if let timeAgo = orderRequest.purchaseDate {
-                            Text(formatTimeAgo(from: timeAgo))
-                                .font(.customfont(.semibold, fontSize: 12))
-                                .foregroundColor(.gray)
-                            
+                VStack(alignment: .leading) {
+                    ZStack{
+                        HStack {
+                            // Food name
+                            Text(orderRequest.foodSellCardResponse.name)
+                                .font(.customfont(.semibold, fontSize: 16))
+                                .foregroundColor(.black)
+                                .multilineTextAlignment(.leading)
+                                .lineLimit(2)
                                 .frame(maxWidth: .infinity)
-                        }
-                        if showEllipsis {
-                            Button(action: {
-                                showPopover = true
-                            }, label: {
-                                Image(systemName: "ellipsis")
-                                    .rotationEffect(.degrees(90)) // Rotate to make it vertical
-                                    .font(.system(size: 18))
+                            // Dynamic Status
+                            Text(orderRequest.purchaseStatusType!)
+                                .font(.customfont(.semibold, fontSize: 8))
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 4)
+                                .foregroundColor(getStatusColor(status: orderRequest.purchaseStatusType!))
+                                .background(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .fill(getStatusColor(status: orderRequest.purchaseStatusType!).opacity(0.2))
+                                )
+                                .offset(y:-10)
+                            Spacer()
+                            if let timeAgo = orderRequest.purchaseDate {
+                                Text(formatTimeAgo(from: timeAgo))
+                                    .font(.customfont(.semibold, fontSize: 12))
                                     .foregroundColor(.gray)
-                                    .popover(isPresented: $showPopover, attachmentAnchor: .point(.topLeading), content: {
-                                        VStack(spacing: 8) {
-                                            Button("Accept", action: {
-                                                orderRequest.purchaseStatusType = "ACCEPTED" // Update the status
-                                                showPopover = false
-                                            })
-                                            .foregroundStyle(Color(hex: "#00941D"))
-                                            
-                                            Button("Reject", action: {
-                                                orderRequest.purchaseStatusType = "REJECTED" // Update the status
-                                                showPopover = false
-                                            })
-                                            .foregroundStyle(Color(hex: "#FF3B30"))
-                                        }
-                                        .frame(width: 130, height: 80)
-                                        .presentationCompactAdaptation(.popover)
-                                    })
-                            })
+                                    .frame(maxWidth: .infinity,alignment: .trailing)
+                                    .hidden()
+                                
+                            }
+                         
+                            // Time
+                        }.frame(maxWidth:.infinity,alignment: .leading)
+                     
+                        HStack{
+                            if let timeAgo = orderRequest.purchaseDate {
+                                Text(formatTimeAgo(from: timeAgo))
+                                    .font(.customfont(.semibold, fontSize: 12))
+                                    .foregroundColor(.gray)
+                                    .frame(maxWidth: .infinity,alignment: .trailing)
+                                
+                            }
+                            if showEllipsis {
+                                Button(action: {
+                                    showPopover = true
+                                }, label: {
+                                    Image(systemName: "ellipsis")
+                                        .rotationEffect(.degrees(90)) // Rotate to make it vertical
+                                        .font(.system(size: 16))
+                                        .foregroundColor(.gray)
+                                        .popover(isPresented: $showPopover, attachmentAnchor: .point(.topLeading), content: {
+                                            VStack(spacing: 8) {
+                                                Button("Accept", action: {
+                                                    orderRequest.purchaseStatusType = "ACCEPTED" // Update the status
+                                                    showPopover = false
+                                                    OrderViewmodel.updatePurchaseStatus(purchaseId: orderRequest.id, newStatus: "ACCEPTED")
+                                                    print("purcahaseId \(orderRequest.id)")
+                                                })
+                                                .foregroundStyle(Color(hex: "#00941D"))
+                                                
+                                                Button("Reject", action: {
+                                                    orderRequest.purchaseStatusType = "REJECTED" // Update the status
+                                                    showPopover = false
+                                                    OrderViewmodel.updatePurchaseStatus(purchaseId: orderRequest.id, newStatus: "REJECTED")
+                                                    print("purcahaseId \(orderRequest.id)")
+                                                })
+                                                .foregroundStyle(Color(hex: "#FF3B30"))
+                                                
+                                                Button("Pending", action: {
+                                                    orderRequest.purchaseStatusType = "PENDING" // Update the status
+                                                    showPopover = false
+                                                    OrderViewmodel.updatePurchaseStatus(purchaseId: orderRequest.id, newStatus: "PENDING")
+                                                    print("purcahaseId \(orderRequest.id)")
+                                                })
+                                                .foregroundStyle(Color.orange)
+                                            }
+                                            .frame(width: 130, height: 100)
+                                            .presentationCompactAdaptation(.popover)
+                                        })
+                                })
+                            }
                         }
-
+                        .offset(x: 10, y:-10)
                     }
-                    
                     // Item count and remarks
                     Text("\(orderRequest.quantity) items")
                         .font(.customfont(.medium, fontSize: 12))
@@ -111,6 +132,7 @@ struct ItemFoodOrderCard: View {
                 }
             }
             .padding([.horizontal, .top])
+            
             
             // Location and contact details
             HStack {
@@ -150,7 +172,7 @@ struct ItemFoodOrderCard: View {
                         Text(LocalizedStringKey("Total"))
                         Spacer()
                         //                        Text("$\(String(format: "%.2f", orderRequest.totalPrice))")
-                        Text("$\(String(format: "%.2f", Double(orderRequest.totalPrice)))")
+                        Text("៛\(String(format: "%.2f", Double(orderRequest.totalPrice)))")
                     }
                     .foregroundStyle(Color(hex: "#0A0019"))
                     .font(.customfont(.semibold, fontSize: 14))
@@ -159,7 +181,7 @@ struct ItemFoodOrderCard: View {
                         Text(LocalizedStringKey("Pay with \(orderRequest.paymentType)"))
                         Spacer()
                         //                        Text("$\(String(format: "%.2f", orderRequest.totalPrice))")
-                        Text("$\(String(format: "%.2f", Double(orderRequest.totalPrice)))")
+                        Text("៛\(String(format: "%.2f", Double(orderRequest.totalPrice)))")
                     }
                     .foregroundStyle(Color(hex: "#0A0019"))
                     .font(.customfont(.semibold, fontSize: 14))
@@ -183,14 +205,23 @@ struct ItemFoodOrderCard: View {
             return "Invalid Date"
         }
         let now = Date()
-        let minutesAgo = Int(now.timeIntervalSince(date) / 60)
+        let timeInterval = now.timeIntervalSince(date)
         
+        let minutesAgo = Int(timeInterval / 60) // Convert seconds to minutes
+        let hoursAgo = Int(timeInterval / 3600) // Convert seconds to hours
+
         if minutesAgo < 1 {
             return "Just now"
-        } else {
+        } else if minutesAgo < 60 {
             return "\(minutesAgo) m ago"
+        } else if hoursAgo < 24 {
+            return "\(hoursAgo) h ago"
+        } else {
+            let daysAgo = Int(timeInterval / (3600 * 24)) // Convert seconds to days
+            return "\(daysAgo) d ago"
         }
     }
+
     
     private func parseDate(_ dateString: String) -> Date? {
         let dateFormats = [
@@ -225,7 +256,3 @@ struct ItemFoodOrderCard: View {
 
 
 }
-
-
-
-

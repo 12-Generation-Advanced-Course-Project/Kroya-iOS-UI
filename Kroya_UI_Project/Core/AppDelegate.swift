@@ -89,10 +89,7 @@ class AppDelegate: UIResponder , UIApplicationDelegate, UNUserNotificationCenter
 extension AppDelegate: MessagingDelegate {
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         print("Received FCM Token: \(fcmToken ?? "No token")")
-        
-        if let fcmToken = fcmToken {
-            // Save FCM token in Keychain
-            Auth.shared.saveFCMToken(fcmToken)
-        }
+        //MARK: Insert Device token
+        Auth.shared.setDeviceToken(DeviceToken: fcmToken ?? "")
     }
 }

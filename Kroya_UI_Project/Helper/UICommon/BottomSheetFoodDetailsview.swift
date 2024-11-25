@@ -14,7 +14,7 @@ struct BottomSheetView<Content: View>: View {
     let minHeight: CGFloat
     let showOrderButton: Bool // Control for Food vs Recipe view
     let notificationType: Int? // Control for status from Notification
-    let showButtonInvoic : Bool // Control ler Button Invoice from Orders
+    let showButtonInvoic : Bool // Control let Button Invoice from Orders
     var invoiceAccept : Bool
     var FoodDetailsId: Int
     @GestureState private var translation: CGFloat = 0
@@ -185,8 +185,14 @@ struct BottomSheetView<Content: View>: View {
                             // Current user is the owner, hide "Order" button
                             Spacer().frame(width: 0, height: 0)
                         }
-                        
-                        
+                    }
+                    else if invoiceAccept {
+                        Text(invoiceAccept ?  LocalizedStringKey("Accepted ")  : LocalizedStringKey("Rejected") )
+                            .font(.customfont(.medium, fontSize: 16))
+                            .foregroundStyle(.white)
+                            .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.height * 0.04)
+                            .background(invoiceAccept ?  Color.green : Color.red )
+                            .cornerRadius(UIScreen.main.bounds.width * 0.022)
                     }
                     
                 }

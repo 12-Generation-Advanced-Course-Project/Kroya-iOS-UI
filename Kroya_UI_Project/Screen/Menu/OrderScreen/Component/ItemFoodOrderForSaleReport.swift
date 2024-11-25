@@ -143,7 +143,7 @@ struct ItemFoodOrderForSaleReport: View {
                         Text(LocalizedStringKey("Total"))
                         Spacer()
 //                        Text("$\(String(format: "%.2f", orderRequest.totalPrice))")
-                        Text("$\(String(format: "%.2f", Double(orderRequest.totalPrice)))")
+                        Text("៛\(String(format: "%.2f", Double(orderRequest.totalPrice)))")
                     }
                     .foregroundStyle(Color(hex: "#0A0019"))
                     .font(.customfont(.semibold, fontSize: 14))
@@ -152,7 +152,7 @@ struct ItemFoodOrderForSaleReport: View {
                         Text(LocalizedStringKey("Pay with \(orderRequest.paymentType)"))
                         Spacer()
 //                        Text("$\(String(format: "%.2f", orderRequest.totalPrice))")
-                        Text("$\(String(format: "%.2f", Double(orderRequest.totalPrice)))")
+                        Text("៛\(String(format: "%.2f", Double(orderRequest.totalPrice)))")
                     }
                     .foregroundStyle(Color(hex: "#0A0019"))
                     .font(.customfont(.semibold, fontSize: 14))
