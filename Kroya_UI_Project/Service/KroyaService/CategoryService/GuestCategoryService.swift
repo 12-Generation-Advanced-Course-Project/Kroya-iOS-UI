@@ -47,7 +47,7 @@ class GuestCategoryService {
     func getAllGuestFoodCategoryById(category: Int, completion: @escaping (Result<GuestCategoryAllFoodById, Error>) -> Void) {
         
         // Construct the URL with the category ID
-        let url = Constants.GuestFoodPopularUrl + "\(category)"
+        let url = Constants.GuestFoodByCategoryIdUrl + "\(category)"
         let headers: HTTPHeaders = [
             
             "accept" : "*/*",

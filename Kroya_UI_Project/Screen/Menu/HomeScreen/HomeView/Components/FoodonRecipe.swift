@@ -21,6 +21,13 @@ struct FoodonRecipe: View {
         NavigationView {
             VStack {
                 // Cuisine Selection Buttons
+                CuisineCategoryButtons(
+                    imageofOrder: imageofOrder,
+                    titleofOrder: titleofOrder,
+                    selectedOrderIndex: $selectedOrderIndex,
+                    isChooseCuisine: $isChooseCuisine,
+                    recipeFoodVM: recipeViewModel,
+                    guestFoodRecipeVM: guestFoodRecipeVM)
                 HStack(spacing: 40) {
                     ForEach(recipeViewModel.RecipeCuisine) { cuisine in
                         Button(action: {
@@ -180,5 +187,56 @@ struct FoodonRecipe: View {
         
         .searchable(text: $recipeViewModel.searchText, prompt: LocalizedStringKey("Search Item"))
         .navigationBarBackButtonHidden(true)
+    }
+    
+    // Separate view for Cuisine Category Buttons
+    struct CuisineCategoryButtons: View {
+        let imageofOrder: [String]
+        let titleofOrder: [String]
+        @Binding var selectedOrderIndex: Int?
+        @Binding var isChooseCuisine: Bool
+        @ObservedObject var recipeFoodVM: RecipeViewModel
+        @ObservedObject var guestFoodRecipeVM: GuestFoodRecipeVM
+        
+        var body: some View {
+            HStack(spacing: 40) {
+                ForEach(0..<imageofOrder.count, id: \.self) { index in
+                    Button(action: {
+                        if Auth.shared.hasAccessToken(){
+                            if selectedOrderIndex == index {
+                                recipeFoodVM.getAllRecipeFood()
+                                isChooseCuisine = false
+                            } else {
+                                selectedOrderIndex = index
+                                recipeFoodVM.getRecipesByCuisine(cuisineId: index + 1)
+                                isChooseCuisine = true
+                            }
+                        } else {
+                            if selectedOrderIndex == index {
+                                guestFoodRecipeVM.getAllGuestRecipeFood()
+                                isChooseCuisine = false
+                            } else {
+                                selectedOrderIndex = index
+                                guestFoodRecipeVM.getRecipesByCuisine(cuisineId: index + 1)
+                                isChooseCuisine = true
+                            }
+                        }
+                    }) {
+                        VStack {
+                            Image(imageofOrder[index])
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 60, height: 60)
+                            
+                            Text(titleofOrder[index])
+                                .font(.customfont(.medium, fontSize: 16))
+                                .foregroundColor(selectedOrderIndex == index && isChooseCuisine ? Color.yellow : Color.gray)
+                        }
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .center)
+        }
     }
 }
