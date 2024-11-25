@@ -45,11 +45,11 @@ struct AllowNotificationView: View {
                     Button(action: {
                         dismiss()
                     }) {
-                        Image(systemName: "arrow.left")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 20, height: 20)
-                            .foregroundStyle(.black)
+//                        Image(systemName: "arrow.left")
+//                            .resizable()
+//                            .scaledToFit()
+//                            .frame(width: 20, height: 20)
+//                            .foregroundStyle(.black)
                     }
                 }
             }
