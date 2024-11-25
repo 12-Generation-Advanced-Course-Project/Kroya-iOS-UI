@@ -144,18 +144,17 @@ struct HomeView: View {
                     // Scrollable Dishes
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16) { // Added spacing between food cards
-<<<<<<< HEAD
                             // Food on Sale Cards (Limited to 2)
                             ForEach(PopularFoodsData.popularFoodSell.prefix(2)) { foodSale in
                                 NavigationLink(destination:
                                                 FoodDetailView(
                                                     isFavorite: foodSale.isFavorite ?? false, showPrice: true, // Always false for recipes
-                                                showOrderButton: true, // Always false for recipes
-                                                showButtonInvoic: nil, // Not applicable
-                                                invoiceAccept: nil, // Not applicable
-                                                FoodId: foodSale.id,
-                                                ItemType: foodSale.itemType
-                                            )
+                                                    showOrderButton: true, // Always false for recipes
+                                                    showButtonInvoic: nil, // Not applicable
+                                                    invoiceAccept: nil, // Not applicable
+                                                    FoodId: foodSale.id,
+                                                    ItemType: foodSale.itemType
+                                                )
                                 ) {
                                     FoodOnSaleViewCell(
                                         foodSale: foodSale,
@@ -172,12 +171,12 @@ struct HomeView: View {
                                 NavigationLink(destination:
                                                 FoodDetailView(
                                                     isFavorite: recipe.isFavorite ?? false, showPrice: false, // Always false for recipes
-                                                showOrderButton: false, // Always false for recipes
-                                                showButtonInvoic: nil, // Not applicable
-                                                invoiceAccept: nil, // Not applicable
-                                                FoodId: recipe.id,
-                                                ItemType: recipe.itemType
-                                            )
+                                                    showOrderButton: false, // Always false for recipes
+                                                    showButtonInvoic: nil, // Not applicable
+                                                    invoiceAccept: nil, // Not applicable
+                                                    FoodId: recipe.id,
+                                                    ItemType: recipe.itemType
+                                                )
                                 ) {
                                     RecipeViewCell(
                                         recipe: recipe,
@@ -186,189 +185,191 @@ struct HomeView: View {
                                         isFavorite: recipe.isFavorite ?? false
                                     )
                                     .frame(width: 350)
-=======
-                            if Auth.shared.hasAccessToken(){
-                                // Food on Sale Cards (Limited to 2)
-                                ForEach(foodSellViemModel.FoodOnSale) { foodSale in
-                                    NavigationLink(destination:
-                                                    FoodDetailView(
-                                                        isFavorite: foodSale.isFavorite ?? false, showPrice: true, // Always false for recipes
-                                                    showOrderButton: true, // Always false for recipes
-                                                    showButtonInvoic: nil, // Not applicable
-                                                    invoiceAccept: nil, // Not applicable
-                                                    FoodId: foodSale.id,
-                                                    ItemType: foodSale.itemType
+                                    if Auth.shared.hasAccessToken(){
+                                        // Food on Sale Cards (Limited to 2)
+                                        ForEach(foodSellViemModel.FoodOnSale) { foodSale in
+                                            NavigationLink(destination:
+                                                            FoodDetailView(
+                                                                isFavorite: foodSale.isFavorite ?? false, showPrice: true, // Always false for recipes
+                                                                showOrderButton: true, // Always false for recipes
+                                                                showButtonInvoic: nil, // Not applicable
+                                                                invoiceAccept: nil, // Not applicable
+                                                                FoodId: foodSale.id,
+                                                                ItemType: foodSale.itemType
+                                                            )
+                                            ) {
+                                                FoodOnSaleViewCell(
+                                                    foodSale: foodSale,
+                                                    foodId: foodSale.id,
+                                                    itemType: "FOOD_SELL",
+                                                    isFavorite: foodSale.isFavorite ?? false
                                                 )
-                                    ) {
-                                        FoodOnSaleViewCell(
-                                            foodSale: foodSale,
-                                            foodId: foodSale.id,
-                                            itemType: "FOOD_SELL",
-                                            isFavorite: foodSale.isFavorite ?? false
-                                        )
-                                        .frame(width: 350)
+                                                .frame(width: 350)
+                                            }
+                                        }
+                                        
+                                        // Recipe/Food Cards from AddNewFoodVM (Limited to 2)
+                                        ForEach(recipeViewModel.RecipeFood) { recipe in
+                                            NavigationLink(destination:
+                                                            FoodDetailView(
+                                                                isFavorite: recipe.isFavorite ?? false, showPrice: false, // Always false for recipes
+                                                                showOrderButton: false, // Always false for recipes
+                                                                showButtonInvoic: nil, // Not applicable
+                                                                invoiceAccept: nil, // Not applicable
+                                                                FoodId: recipe.id,
+                                                                ItemType: recipe.itemType
+                                                            )
+                                            ) {
+                                                RecipeViewCell(
+                                                    recipe: recipe,
+                                                    foodId: recipe.id,
+                                                    itemType: "FOOD_RECIPE",
+                                                    isFavorite: recipe.isFavorite ?? false
+                                                )
+                                                .frame(width: 350)
+                                            }
+                                        }
+                                    } else {
+                                        // Food on Sale Cards (Limited to 2)
+                                        ForEach(guestFoodSellVM.GuestFoodOnSale.prefix(3)) { foodSale in
+                                            NavigationLink(destination:
+                                                            FoodDetailView(
+                                                                isFavorite: foodSale.isFavorite ?? false, showPrice: true, // Always false for recipes
+                                                                showOrderButton: true, // Always false for recipes
+                                                                showButtonInvoic: nil, // Not applicable
+                                                                invoiceAccept: nil, // Not applicable
+                                                                FoodId: foodSale.id,
+                                                                ItemType: foodSale.itemType
+                                                            )
+                                            ) {
+                                                FoodOnSaleViewCell(
+                                                    foodSale: foodSale,
+                                                    foodId: foodSale.id,
+                                                    itemType: "FOOD_SELL",
+                                                    isFavorite: foodSale.isFavorite ?? false
+                                                )
+                                                .frame(width: 350)
+                                            }
+                                        }
+                                        
+                                        // Recipe/Food Cards from AddNewFoodVM (Limited to 2)
+                                        ForEach(guestFoodRecipeVM.GuestFoodRecipe.prefix(3)) { recipe in
+                                            NavigationLink(destination:
+                                                            FoodDetailView(
+                                                                isFavorite: recipe.isFavorite ?? false, showPrice: false, // Always false for recipes
+                                                                showOrderButton: false, // Always false for recipes
+                                                                showButtonInvoic: nil, // Not applicable
+                                                                invoiceAccept: nil, // Not applicable
+                                                                FoodId: recipe.id,
+                                                                ItemType: recipe.itemType
+                                                            )
+                                            ) {
+                                                RecipeViewCell(
+                                                    recipe: recipe,
+                                                    foodId: recipe.id,
+                                                    itemType: "FOOD_RECIPE",
+                                                    isFavorite: recipe.isFavorite ?? false
+                                                )
+                                                .frame(width: 350)
+                                            }
+                                        }
                                     }
                                 }
-                                
-                                // Recipe/Food Cards from AddNewFoodVM (Limited to 2)
-                                ForEach(recipeViewModel.RecipeFood) { recipe in
-                                    NavigationLink(destination:
-                                                    FoodDetailView(
-                                                        isFavorite: recipe.isFavorite ?? false, showPrice: false, // Always false for recipes
-                                                    showOrderButton: false, // Always false for recipes
-                                                    showButtonInvoic: nil, // Not applicable
-                                                    invoiceAccept: nil, // Not applicable
-                                                    FoodId: recipe.id,
-                                                    ItemType: recipe.itemType
-                                                )
-                                    ) {
-                                        RecipeViewCell(
-                                            recipe: recipe,
-                                            foodId: recipe.id,
-                                            itemType: "FOOD_RECIPE",
-                                            isFavorite: recipe.isFavorite ?? false
-                                        )
-                                        .frame(width: 350)
-                                    }
-                                }
-                            } else {
-                                // Food on Sale Cards (Limited to 2)
-                                ForEach(guestFoodSellVM.GuestFoodOnSale.prefix(3)) { foodSale in
-                                    NavigationLink(destination:
-                                                    FoodDetailView(
-                                                        isFavorite: foodSale.isFavorite ?? false, showPrice: true, // Always false for recipes
-                                                    showOrderButton: true, // Always false for recipes
-                                                    showButtonInvoic: nil, // Not applicable
-                                                    invoiceAccept: nil, // Not applicable
-                                                    FoodId: foodSale.id,
-                                                    ItemType: foodSale.itemType
-                                                )
-                                    ) {
-                                        FoodOnSaleViewCell(
-                                            foodSale: foodSale,
-                                            foodId: foodSale.id,
-                                            itemType: "FOOD_SELL",
-                                            isFavorite: foodSale.isFavorite ?? false
-                                        )
-                                        .frame(width: 350)
-                                    }
-                                }
-                                
-                                // Recipe/Food Cards from AddNewFoodVM (Limited to 2)
-                                ForEach(guestFoodRecipeVM.GuestFoodRecipe.prefix(3)) { recipe in
-                                    NavigationLink(destination:
-                                                    FoodDetailView(
-                                                        isFavorite: recipe.isFavorite ?? false, showPrice: false, // Always false for recipes
-                                                    showOrderButton: false, // Always false for recipes
-                                                    showButtonInvoic: nil, // Not applicable
-                                                    invoiceAccept: nil, // Not applicable
-                                                    FoodId: recipe.id,
-                                                    ItemType: recipe.itemType
-                                                )
-                                    ) {
-                                        RecipeViewCell(
-                                            recipe: recipe,
-                                            foodId: recipe.id,
-                                            itemType: "FOOD_RECIPE",
-                                            isFavorite: recipe.isFavorite ?? false
-                                        )
-                                        .frame(width: 350)
-                                    }
->>>>>>> 0dd4d10 (fetch guest popular on view and guest food recipe)
-                                }
+                                .padding(.horizontal)
                             }
                         }
-                        .padding(.horizontal)
-                    }
-                }
-                .padding(.top, 16) // Added padding to top
-                .navigationTitle("")
-                .navigationBarBackButtonHidden(true)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Image("KroyaYellowLogo")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 73, height: 73)
-                            .offset(x: -10)
-                    }
-                    
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        NavigationLink(destination:
-                                        SearchScreen(recentSearchesData: recentSearchesData)
-                            .environment(\.modelContext, modelContext)
-                        ) {
-                            Image("ico_search")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 24, height: 24)
-                                .foregroundColor(.black)
-                        }
-                    }
-                    
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        NavigationLink(destination: NotificationView()) {
-                            ZStack {
-                                Image("notification")
+                        .padding(.top, 16) // Added padding to top
+                        .navigationTitle("")
+                        .navigationBarBackButtonHidden(true)
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Image("KroyaYellowLogo")
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 24, height: 24)
-                                    .foregroundColor(.black)
-                                
-                                // Notification Badge
-                                if notification.count > 0 {
-                                    Text("\(notification.count)")
-                                        .font(.customfont(.semibold, fontSize: 12))
-                                        .foregroundColor(.white)
-                                        .padding(5)
-                                        .background(Color.red)
-                                        .clipShape(Circle())
-                                        .overlay(
-                                            Circle()
-                                                .stroke(Color.white, lineWidth: 1)
-                                        )
-                                        .offset(x: 10, y: -10)
+                                    .frame(width: 73, height: 73)
+                                    .offset(x: -10)
+                            }
+                            
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                NavigationLink(destination:
+                                                SearchScreen(recentSearchesData: recentSearchesData)
+                                    .environment(\.modelContext, modelContext)
+                                ) {
+                                    Image("ico_search")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 24, height: 24)
+                                        .foregroundColor(.black)
                                 }
                             }
+                            
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                NavigationLink(destination: NotificationView()) {
+                                    ZStack {
+                                        Image("notification")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 24, height: 24)
+                                            .foregroundColor(.black)
+                                        
+                                        // Notification Badge
+                                        if notification.count > 0 {
+                                            Text("\(notification.count)")
+                                                .font(.customfont(.semibold, fontSize: 12))
+                                                .foregroundColor(.white)
+                                                .padding(5)
+                                                .background(Color.red)
+                                                .clipShape(Circle())
+                                                .overlay(
+                                                    Circle()
+                                                        .stroke(Color.white, lineWidth: 1)
+                                                )
+                                                .offset(x: 10, y: -10)
+                                        }
+                                    }
+                                }
+                            }
+                            
                         }
                     }
-                    
+                    .refreshable {
+                        await refreshData() // Calls the refresh logic
+                    }
+                    .onAppear {
+                        loadData()
+                    }
                 }
-            }
-            .refreshable {
-                           await refreshData() // Calls the refresh logic
-            }
-            .onAppear {
-                loadData()
             }
         }
     }
-    // MARK: - Fetch Data Logic
-      private func loadData() {
-          categoryVM.fetchAllCategory()
-          recipeViewModel.getAllRecipeFood()
-          foodSellViemModel.getAllFoodSell()
-          recentSearchesData.loadSearches(from: modelContext)
-          PopularFoodsData.getAllPopular()
-          favoriteVM.getAllFavoriteFood()
-          guestCategoryVM.fetchAllGuestCategory()
-          guestFoodSellVM.getAllGuestFoodSell()
-          guestFoodRecipeVM.getAllGuestRecipeFood()
-          
-      }
-    private func refreshData() async {
-           isLoading = true // Start loading state
-           defer { isLoading = false } // Ensure state is reset after execution
+            
+            // MARK: - Fetch Data Logic
+            private func loadData() {
+                categoryVM.fetchAllCategory()
+                recipeViewModel.getAllRecipeFood()
+                foodSellViemModel.getAllFoodSell()
+                recentSearchesData.loadSearches(from: modelContext)
+                PopularFoodsData.getAllPopular()
+                favoriteVM.getAllFavoriteFood()
+                guestCategoryVM.fetchAllGuestCategory()
+                guestFoodSellVM.getAllGuestFoodSell()
+                guestFoodRecipeVM.getAllGuestRecipeFood()
+                
+            }
+            private func refreshData() async {
+                isLoading = true // Start loading state
+                defer { isLoading = false } // Ensure state is reset after execution
+                
+                // Simulate a delay for demo purposes
+                try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
+                
+                // Reload data
+                await MainActor.run {
+                    loadData()
+                }
+            }
+        }
 
-           // Simulate a delay for demo purposes
-           try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
-
-           // Reload data
-           await MainActor.run {
-               loadData()
-           }
-       }
-}
 
 
 

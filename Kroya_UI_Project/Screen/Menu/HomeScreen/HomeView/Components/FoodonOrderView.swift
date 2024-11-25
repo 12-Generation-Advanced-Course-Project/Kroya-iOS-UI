@@ -18,16 +18,10 @@ struct FoodonOrderView: View {
                     titleofOrder: titleofOrder,
                     selectedOrderIndex: $selectedOrderIndex,
                     isChooseCuisine: $isChooseCuisine,
-<<<<<<< HEAD
-                    foodViewModel: foodViewModel
+                    foodViewModel: foodViewModel,
+                    guestFoodSellVM: guestFoodSellVM
                 )
                 .frame(maxWidth: .infinity, alignment: .center)
-                
-=======
-                    foodViewModel: foodViewModel,
-                    guestFoodSellVM: guestFoodSellVM)
-
->>>>>>> 0dd4d10 (fetch guest popular on view and guest food recipe)
                 Spacer().frame(height: 20)
                 
                 Text("All")

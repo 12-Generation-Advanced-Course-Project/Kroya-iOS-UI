@@ -16,7 +16,7 @@ struct FoodonRecipe: View {
         "Grill": "GrillPic",
         "Dessert": "DessertPic 1"
     ]
-    
+    @State var isChooseCuisine = false
     var body: some View {
         NavigationView {
             VStack {
