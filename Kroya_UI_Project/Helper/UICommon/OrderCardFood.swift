@@ -11,7 +11,6 @@ struct OrderCard: View {
     var showIcon: Bool
     @State private var navigateToOrderListView = false
     private let urlImagePrefix = "https://kroya-api-production.up.railway.app/api/v1/fileView/"
-    
     private var orderCountText: String {
         "\(order.orderCount ?? 0)" // Safely unwrap and convert to string
     }

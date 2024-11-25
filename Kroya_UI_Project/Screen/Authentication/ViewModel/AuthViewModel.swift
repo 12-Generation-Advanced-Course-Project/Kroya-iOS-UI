@@ -23,7 +23,14 @@ class AuthViewModel: ObservableObject {
     @Published var islogout: Bool = false
     @Published var isUserSave: Bool = false
     
-    @ObservedObject var userStore: UserStore
+//    @ObservedObject var userStore: UserStore
+//    init(userStore: UserStore) {
+//        self.userStore = userStore
+//        self.isLoggedIn = Auth.shared.loggedIn
+//    }
+    
+    var userStore: UserStore // Changed to a regular property
+
     init(userStore: UserStore) {
         self.userStore = userStore
         self.isLoggedIn = Auth.shared.loggedIn
@@ -32,6 +39,8 @@ class AuthViewModel: ObservableObject {
     
     // MARK: Check if email exists, and send OTP if it doesn't
     func sendOTPIfEmailNotExists(email: String) {
+        self.isEmailExist = false // Reset state
+        self.isOTPSent = false // Reset state
         self.isLoading = true
         let normalizedEmail = email
         print("Checking if email exists: \(normalizedEmail)")
@@ -207,18 +216,27 @@ class AuthViewModel: ObservableObject {
                 switch result {
                 case .success(let response):
                     if response.statusCode == "200", let token = response.payload, let Email = response.payload {
-                        // Save tokens using Auth class
+//                        // Save tokens using Auth class
+//                        let accessToken = token.access_token
+//                        let refreshToken = token.refresh_token
+//                        let email = Email.email ?? ""
+//                        
+//                        // Update userStore and state
+//                        self?.userStore.setUser(email: email, accesstoken: accessToken, refreshtoken: refreshToken)
+//                        Auth.shared.setCredentials(accessToken: accessToken, refreshToken: refreshToken, email: email)
+//                       
+//                        self?.successMessage = "Successfully logged in"
+//                        self?.showError = false
+//                        Auth.shared.loggedIn = true
+                        // Save tokens
                         let accessToken = token.access_token
                         let refreshToken = token.refresh_token
-                        let email = Email.email ?? ""
-                        
-                        // Update userStore and state
                         self?.userStore.setUser(email: email, accesstoken: accessToken, refreshtoken: refreshToken)
                         Auth.shared.setCredentials(accessToken: accessToken, refreshToken: refreshToken, email: email)
-                       
+                        
                         self?.successMessage = "Successfully logged in"
                         self?.showError = false
-                        Auth.shared.loggedIn = true
+                        self?.isLoggedIn = true // Update isLoggedIn in AuthViewModel
                         
                         // Check if FCM token is available and send it to the backend
                         if let fcmToken = Auth.shared.getFCMToken() {
@@ -297,10 +315,33 @@ class AuthViewModel: ObservableObject {
     }
     
     
-    // MARK: Logout Email Account
+//    // MARK: Logout Email Account
+//    func logoutApp() {
+//        isLoading = true
+//        Auth.shared.logout()
+//        print("Tokens and access token deleted from Keychain.")
+//        if let email = userStore.user?.email {
+//            print("This email is logged out: \(email)")
+//        } else {
+//            print("No email found")
+//        }
+//        // Clear the user-related data from UserStore
+//        userStore.clearUser()
+//        // Reset app state after logout
+//        isOTPVerified = false
+//        isRegistered = false
+//        // Simulate a delay to show the progress indicator (optional)
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+//            self.isLoading = false
+//        }
+//        islogout = true
+//    }
+    
     func logoutApp() {
         isLoading = true
         Auth.shared.logout()
+        // Update state
+        self.isLoggedIn = false // Update isLoggedIn in AuthViewModel
         print("Tokens and access token deleted from Keychain.")
         if let email = userStore.user?.email {
             print("This email is logged out: \(email)")
@@ -309,17 +350,29 @@ class AuthViewModel: ObservableObject {
         }
         // Clear the user-related data from UserStore
         userStore.clearUser()
-        // Reset app state after logout
+        // Reset other states as necessary
         isOTPVerified = false
         isRegistered = false
-        // Simulate a delay to show the progress indicator (optional)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+        showError = false
+        successMessage = ""
+        errorMessage = ""
+        // Stop loading indicator
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.isLoading = false
         }
-        islogout = true
     }
+
+
     
-  
+    func resetState() {
+        // Only reset what is necessary
+        showError = false
+        successMessage = ""
+        errorMessage = ""
+        isOTPVerified = false
+        isRegistered = false
+    }
+
 
     
     
