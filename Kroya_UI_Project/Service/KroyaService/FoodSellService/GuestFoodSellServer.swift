@@ -73,7 +73,7 @@ class GuestFoodSellService{
                     
                 case .success(let apiResponse):
                     
-                    print("data apiResponse  ==> \(apiResponse)")
+                    print("Data apiResponse  ==> \(apiResponse)")
                     if apiResponse.statusCode == "200" {
                         print("Fetched guest food popular data successfully.")
                         completion(.success(apiResponse))
