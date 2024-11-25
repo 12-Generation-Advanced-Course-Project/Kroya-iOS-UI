@@ -31,7 +31,7 @@ class OrderViewModel: ObservableObject {
         self.startLoading()
         PurchaseService.shared.getAllPurchases { [weak self] result in
             DispatchQueue.main.async {
-                self!.endLoading()
+                self?.endLoading()
                 switch result {
                 case .success(let response):
                     if response.statusCode == "200", let payload = response.payload {

@@ -56,7 +56,7 @@ struct SaleReportView: View {
                 )
 
                 Spacer()
-                Text("$\(String(format: "%.2f", Double(saleReportVM.totalMonthlySales)))")
+                Text("៛\(String(format: "%.2f", Double(saleReportVM.totalMonthlySales)))")
                     .font(.customfont(.semibold, fontSize: 18))
                     .foregroundStyle(PrimaryColor.normalHover)
             }
@@ -119,7 +119,7 @@ struct SaleReportView: View {
                     .font(.customfont(.semibold, fontSize: 18))
                     .foregroundStyle(.white)
                 Spacer()
-                Text("$\(String(format: "%.2f", Double(saleReportVM.totalDailySales)))")
+                Text("៛\(String(format: "%.2f", Double(saleReportVM.totalDailySales)))")
                     .font(.customfont(.semibold, fontSize: 18))
                     .foregroundStyle(.white)
             }

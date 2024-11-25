@@ -198,7 +198,7 @@ class BankService {
                 
                 switch response.result {
                 case .success(let apiResponse):
-                    if let statusCode = apiResponse.statusCode, statusCode == "200" {
+                    if apiResponse.statusCode == "200" {
                         completion(.success(apiResponse))
                     } else {
                         let error = NSError(
@@ -213,6 +213,7 @@ class BankService {
                 }
             }
     }
+
     
     // MARK: - Get WeBill Credential User Account
     func getWeBillAccountCredential(SellerId: Int, completion: @escaping (Result<ConnectWebillResponseData, Error>) -> Void) {
@@ -243,7 +244,7 @@ class BankService {
                 
                 switch response.result {
                 case .success(let apiResponse):
-                    if let statusCode = apiResponse.statusCode, statusCode == "200" {
+                    if apiResponse.statusCode == "200" {
                         completion(.success(apiResponse))
                     } else {
                         let error = NSError(

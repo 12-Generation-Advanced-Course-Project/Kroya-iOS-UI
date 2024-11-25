@@ -146,7 +146,7 @@ class PurchaseService: ObservableObject {
                     print("Failed to convert response data to pretty JSON: \(error)")
                 }
             }
-            
+           
             switch response.result {
             case .success(let payloads):
                 completion(.success(payloads))

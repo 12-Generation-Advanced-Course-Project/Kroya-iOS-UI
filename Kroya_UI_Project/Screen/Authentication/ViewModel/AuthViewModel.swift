@@ -173,18 +173,24 @@ class AuthViewModel: ObservableObject {
                         Auth.shared.isRegistering = true
                         
                         // Add the FCM device token if it exists
-                        if let fcmToken = Auth.shared.getFCMToken() {
-                            DeviceTokenService.shared.addDeviceToken(deviceToken: fcmToken) { result in
-                                switch result {
-                                case .success:
-                                    print("Device token saved successfully.")
-                                case .failure(let error):
-                                    print("Failed to save device token: \(error.localizedDescription)")
-                                }
-                            }
-                        } else {
-                            print("FCM token is not available.")
+                        guard let DeviceToken = Auth.shared.getDeviceTokenForNotifi() else {
+                            let error = NSError(
+                                domain: "",
+                                code: 401,
+                                userInfo: [NSLocalizedDescriptionKey: "Access token is missing"]
+                            )
+                            return
                         }
+                        // Example usage
+                        DeviceTokenService.shared.addDeviceToken(deviceToken: DeviceToken) { result in
+                            switch result {
+                            case .success:
+                                print("Device token added successfully.")
+                            case .failure(let error):
+                                print("Failed to add device token: \(error.localizedDescription)")
+                            }
+                        }
+
                         
                         completion() // Trigger navigation check
                     } else {
@@ -216,18 +222,7 @@ class AuthViewModel: ObservableObject {
                 switch result {
                 case .success(let response):
                     if response.statusCode == "200", let token = response.payload, let Email = response.payload {
-//                        // Save tokens using Auth class
-//                        let accessToken = token.access_token
-//                        let refreshToken = token.refresh_token
-//                        let email = Email.email ?? ""
-//                        
-//                        // Update userStore and state
-//                        self?.userStore.setUser(email: email, accesstoken: accessToken, refreshtoken: refreshToken)
-//                        Auth.shared.setCredentials(accessToken: accessToken, refreshToken: refreshToken, email: email)
-//                       
-//                        self?.successMessage = "Successfully logged in"
-//                        self?.showError = false
-//                        Auth.shared.loggedIn = true
+
                         // Save tokens
                         let accessToken = token.access_token
                         let refreshToken = token.refresh_token
@@ -239,17 +234,21 @@ class AuthViewModel: ObservableObject {
                         self?.isLoggedIn = true // Update isLoggedIn in AuthViewModel
                         
                         // Check if FCM token is available and send it to the backend
-                        if let fcmToken = Auth.shared.getFCMToken() {
-                            DeviceTokenService.shared.addDeviceToken(deviceToken: fcmToken) { result in
-                                switch result {
-                                case .success:
-                                    print("Device token saved successfully.")
-                                case .failure(let error):
-                                    print("Failed to save device token: \(error.localizedDescription)")
-                                }
+                        guard let DeviceToken = Auth.shared.getDeviceTokenForNotifi() else {
+                            let error = NSError(
+                                domain: "",
+                                code: 401,
+                                userInfo: [NSLocalizedDescriptionKey: "Access token is missing"]
+                            )
+                            return
+                        }
+                        DeviceTokenService.shared.addDeviceToken(deviceToken: DeviceToken) { result in
+                            switch result {
+                            case .success:
+                                print("Device token added successfully.")
+                            case .failure(let error):
+                                print("Failed to add device token: \(error.localizedDescription)")
                             }
-                        } else {
-                            print("FCM token is not available.")
                         }
                     } else if response.statusCode == "002" {
                         self?.showError = true

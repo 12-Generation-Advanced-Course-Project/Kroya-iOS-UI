@@ -202,18 +202,18 @@ class WeBill365ViewModel: ObservableObject {
     // MARK: - Connect WeBill
     func ConnectWeBillAccount(ConnectRequest: ConnectWebillConnectRequest) {
         self.isLoading = true
-        BankService.shared.connectWeBill(WeBillConnectRequest: ConnectRequest) { [weak self] result in
+        BankService.shared.connectWeBill(request: ConnectRequest) { [weak self] result in
             DispatchQueue.main.async {
                 self?.isLoading = false
                 switch result {
                 case .success(let ConnectResponse):
-                    if let statusCode = ConnectResponse.statusCode, statusCode == "200", let payload = ConnectResponse.payload {
-                        
+                    if ConnectResponse.statusCode == "200", let payload = ConnectResponse.payload {
+                        // Assign the fetched payload to the WebillAccount
                         self?.WebillAccount = payload
                         print("WeBill connected successfully: \(payload)")
                     } else {
-                        
-                        self?.errorMessage = ConnectResponse.message ?? "Unknown error"
+                        // Handle failed response with the message from the API
+                        self?.errorMessage = ConnectResponse.message
                         print("Connect WeBill Failed: \(self?.errorMessage ?? "Unknown error")")
                     }
                 case .failure(let error):
@@ -224,6 +224,8 @@ class WeBill365ViewModel: ObservableObject {
             }
         }
     }
+
+
     //MARK: Get Credentail WeBill
     func fetchWeBillAccount(SellerId: Int) {
         self.isLoading = true
@@ -236,7 +238,7 @@ class WeBill365ViewModel: ObservableObject {
                         self?.WebillAccount = payload
                         print("Fetched WeBill account details: \(payload)")
                     } else {
-                        self?.errorMessage = response.message ?? "Failed to fetch account details"
+                        self?.errorMessage = response.message
                         print("Error: \(self?.errorMessage ?? "Unknown error")")
                     }
                 case .failure(let error):

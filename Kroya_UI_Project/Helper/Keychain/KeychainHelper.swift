@@ -10,7 +10,7 @@ import SwiftKeychainWrapper
 
 class Auth: ObservableObject {
     struct Credentials {
-        var accessToken: String?//
+        var accessToken: String?
         var refreshToken: String?
         var email: String?
         var WebillToken: String?
@@ -48,6 +48,11 @@ class Auth: ObservableObject {
             email: keychain.string(forKey: KeychainKey.email.rawValue)
         )
     }
+    func getDeviceToken() -> Credentials {
+        return Credentials(
+            DeviceToken: keychain.string(forKey: KeychainKey.DeviceToken.rawValue)
+        )
+    }
     
     func setCredentials(accessToken: String, refreshToken: String, email: String) {
         keychain.set(accessToken, forKey: KeychainKey.accessToken.rawValue)
@@ -81,20 +86,17 @@ class Auth: ObservableObject {
     func setDeviceToken(DeviceToken:String){
         keychain.set(DeviceToken, forKey: KeychainKey.DeviceToken.rawValue)
     }
-//    //MARK: Device get
-//    func getDeviceToken() -> (DeviceToken:String?) {
-//        let DeviceToken = keychain.string(forKey: KeychainKey.DeviceToken.rawValue)
-//        return (DeviceToken)
-//    }
-//    //MARK: Clear Device Token
-//    func clearWeBillCredentials() {
-//        keychain.removeObject(forKey: KeychainKey.DeviceToken.rawValue)
-//    }
-    //Device Token for Use
-//    func getDeviceTokenForNotifi() -> String? {
-//        return getDeviceToken().DeviceToken
-//    }
-    
+    //MARK: Clear Device Token
+    func clearDeviceToken() {
+        keychain.removeObject(forKey: KeychainKey.DeviceToken.rawValue)
+    }
+    //MARK: Device Token for Use
+    func getDeviceTokenForNotifi() -> String? {
+        return getDeviceToken().DeviceToken
+    }
+    func getParentAccount() -> String? {
+        return getWeBillCredentials().parentAccount
+    }
     func hasAccessToken() -> Bool {
         return getCredentials().accessToken != nil
     }
@@ -105,9 +107,7 @@ class Auth: ObservableObject {
     func getAccessTokenWeBill() -> String? {
         return getWeBillCredentials().webillToken
     }
-    func getParentAccount() -> String? {
-        return getWeBillCredentials().parentAccount
-    }
+    
     
     func getRefreshToken() -> String? {
         return getCredentials().refreshToken

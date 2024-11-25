@@ -1,4 +1,5 @@
 
+
 import SwiftUI
 
 struct OrderTabView: View {
@@ -32,9 +33,9 @@ struct OrderTabView: View {
                         let groupedOrders = groupOrdersByDate()
                         ForEach(arrayDays, id: \.self) { group in
                             if let orders = groupedOrders[group], !orders.isEmpty {
-                                OrderSectionForOrderTab(group: group, orders: orders, isExpandedToday: $isExpandedToday, isExpandedYTD: $isExpandedYTD, isExpandedLst2Day: $isExpandedLst2Day)
+                                OrderSection(group: group, orders: orders, isExpandedToday: $isExpandedToday, isExpandedYTD: $isExpandedYTD, isExpandedLst2Day: $isExpandedLst2Day)
                             } else {
-                                OrderSectionForOrderTab(group: group, orders: [], isExpandedToday: $isExpandedToday, isExpandedYTD: $isExpandedYTD, isExpandedLst2Day: $isExpandedLst2Day)
+                                OrderSection(group: group, orders: [], isExpandedToday: $isExpandedToday, isExpandedYTD: $isExpandedYTD, isExpandedLst2Day: $isExpandedLst2Day)
                             }
                         }
                     }
@@ -103,81 +104,3 @@ struct OrderTabView: View {
         return groupedOrders
     }
 }
-
-struct OrderSectionForOrderTab: View {
-    let group: String
-    let orders: [OrderModel]
-
-    @Binding var isExpandedToday: Bool
-    @Binding var isExpandedYTD: Bool
-    @Binding var isExpandedLst2Day: Bool
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            DisclosureGroup(
-                isExpanded: bindingForGroup(),
-                content: {
-                    if orders.isEmpty {
-                        Text("No orders available for \(group).")
-                            .foregroundColor(.gray)
-                            .padding(.vertical, 5)
-                    } else {
-                        VStack(spacing: 15) {
-                            ForEach(orders, id: \.id) { order in
-                                NavigationLink(destination: destinationView(for: order)) {
-                                    OrderCard(
-                                        order: order,
-                                        isAccepted: order.purchaseStatusType == "Accepted",
-                                        isOrder: order.isOrderable,
-                                        showIcon: true
-                                    )
-                                }
-                            }
-                        }
-                    }
-                },
-                label: {
-                    Text(group)
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(.black)
-                        .padding(.vertical, 5)
-                }
-            )
-            .accentColor(.black)
-        }
-    }
-
-    private func bindingForGroup() -> Binding<Bool> {
-        switch group {
-        case "Today":
-            return $isExpandedToday
-        case "Yesterday":
-            return $isExpandedYTD
-        default:
-            return $isExpandedLst2Day
-        }
-    }
-
-    @ViewBuilder
-    private func destinationView(for order: OrderModel) -> some View {
-        if order.foodCardType == "ORDER" {
-            FoodDetailView(
-                isFavorite: false,
-                showPrice: false,
-                showOrderButton: false,
-                showButtonInvoic: order.purchaseStatusType == "ACCEPTED",
-                invoiceAccept: order.purchaseStatusType == "ACCEPTED",
-                FoodId: order.foodSellId,
-                ItemType: order.itemType
-            )
-        } else if order.foodCardType == "SALE" {
-            OrderListView(
-                sellerId: order.foodSellId,
-                orderCountText: "\(order.orderCount ?? 0)"
-            )
-        } else {
-            EmptyView()
-        }
-    }
-}
-
