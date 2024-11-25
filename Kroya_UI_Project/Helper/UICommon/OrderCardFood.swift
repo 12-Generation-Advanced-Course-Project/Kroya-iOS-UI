@@ -12,7 +12,6 @@ struct OrderCard: View {
     @Binding var navigateToOrderRequest: Bool
     @Binding var navigateToFoodDetails: Bool
     private let urlImagePrefix = "https://kroya-api-production.up.railway.app/api/v1/fileView/"
-    
     private var orderCountText: String {
         "\(order.orderCount ?? 0)"
     }

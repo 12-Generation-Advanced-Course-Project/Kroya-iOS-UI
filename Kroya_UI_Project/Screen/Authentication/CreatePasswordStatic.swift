@@ -7,7 +7,8 @@ struct CreatePasswordStatic: View {
     @State private var isPasswordVisible2 = false
     @State private var errorMessage = ""
     @State private var showPopupMessage = false
-    @StateObject var userStore = UserStore()
+//    @StateObject var userStore = UserStore()
+    @EnvironmentObject var userStore: UserStore // Use EnvironmentObject
     @Environment(\.dismiss) var dismiss
     @State private var isNavigating = false
     @Binding var lang: String
@@ -100,14 +101,25 @@ struct CreatePasswordStatic: View {
                     .transition(.scale)
             }
             
-            NavigationLink(destination:  MainScreen(userStore: userStore, lang: $lang).navigationBarBackButtonHidden(true), isActive: $isNavigating) {
+            NavigationLink(
+                destination: MainScreen(lang: $lang)
+                    .navigationBarBackButtonHidden(true),
+                isActive: $isNavigating
+            ) {
                 EmptyView()
             }
             .hidden()
-
         }
         .navigationBarHidden(true)
-       // .navigationBarBackButtonHidden(true)
+            
+//            NavigationLink(destination:  MainScreen(userStore: userStore, lang: $lang).navigationBarBackButtonHidden(true), isActive: $isNavigating) {
+//                EmptyView()
+//            }
+//            .hidden()
+//
+//        }
+//        .navigationBarHidden(true)
+//       // .navigationBarBackButtonHidden(true)
       
     }
     

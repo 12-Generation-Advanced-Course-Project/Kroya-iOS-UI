@@ -114,11 +114,17 @@ struct CreatePasswordView: View {
                     .transition(.scale)
             }
             
-            NavigationLink(destination: UserBasicInfoView(authVM: authVM, lang: $lang)
-                .environmentObject(userStore)
-//                .environmentObject(addressViewModel)
-              
-                           , isActive: $isNavigating) {
+//            NavigationLink(destination: UserBasicInfoView(authVM: authVM, lang: $lang)
+//                .environmentObject(userStore)
+////                .environmentObject(addressViewModel)
+//              
+//                           , isActive: $isNavigating) {
+//                EmptyView()
+//            }
+//            .hidden()
+            NavigationLink(destination: UserBasicInfoView(lang: $lang)
+                .environmentObject(userStore),
+                isActive: $isNavigating) {
                 EmptyView()
             }
             .hidden()

@@ -85,7 +85,7 @@ struct SearchScreen: View {
                                         .font(.customfont(.semibold, fontSize: geometry.size.width * 0.045))
                                         .foregroundColor(.black)
                                     
-                                    ForEach(Array(recentSearchesData.recentSearches.enumerated()), id: \.offset) { index, search in
+                                    ForEach(Array(recentSearchesData.recentSearches.enumerated().suffix(5).reversed()), id: \.offset) { index, search in
                                         Button(action: {
                                             navigateTo(search)
                                         }) {

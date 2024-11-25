@@ -20,27 +20,27 @@ struct EditingProfileView: View {
     @State private var selectedImages: [UIImage] = []
     @State private var isUpdating: Bool = false
     @ObservedObject var profile: ProfileViewModel
+//    @ObservedObject var authVM: AuthViewModel
+    @EnvironmentObject var authVM: AuthViewModel
     @State private var isDeleteAccSheet: Bool = false
     @Environment(\.dismiss) var dismiss
     @Binding var selectedAddress: Address?
     @State private var imagefile: String = ""
-    //    @EnvironmentObject var addressVM: AddressViewModel
     @EnvironmentObject var userStore: UserStore
     @State private var isPasswordVisible = false
     @Environment(\.locale) var locale
     @State private var showAddressSheet = false
+    @State private var navigateToLogin = false
+    @State private var showSuccessPopup = false
+    
+    init(profile: ProfileViewModel, selectedAddress: Binding<Address?>) {
+        self.profile = profile
+        self._selectedAddress = selectedAddress
+    }
+    
     var body: some View {
         ZStack {
             VStack(spacing: 10) {
-                //                HStack {
-                //                    Text(LocalizedStringKey("Edit Profile"))
-                //                        .font(.customfont(.bold, fontSize: 18))
-                //                        .opacity(0.84)
-                //                        .padding(.bottom, 20)
-                //                }
-                //                .frame(maxWidth: .infinity)
-                
-                // Profile Image and Edit Icon
                 ZStack(alignment: .bottomTrailing) {
                     if selectedImages.isEmpty {
                         if let profileImageUrl = profile.userProfile?.profileImage, !profileImageUrl.isEmpty {
@@ -287,24 +287,46 @@ struct EditingProfileView: View {
                         isDeleteAccSheet.toggle()
                     }
                     .sheet(isPresented: $isDeleteAccSheet) {
-                        DeleteAccountDialog()
-                            .presentationDetents([.fraction(0.30)])
-                            .presentationDragIndicator(.visible)
+                        DeleteAccountDialog(
+                            profile: profile,
+//                            authVM: authVM,
+                            onAccountDeleted: {
+                                withAnimation {
+                                    navigateToLogin = true // Trigger navigation
+                                }
+                            }
+                        )
+                        .presentationDetents([.fraction(0.30)])
+                        .presentationDragIndicator(.visible)
+                        .environmentObject(authVM)
                     }
+                
+                // Navigation to LoginScreenView
+//                NavigationLink(
+//                    destination: LoginScreenView(userStore: userStore, lang: .constant("en")),
+//                    isActive: $navigateToLogin // Observe dedicated navigation state
+//                ) {
+//                    EmptyView()
+//                }
+//                .hidden()
+                
+                NavigationLink(
+                    destination: LoginScreenView(lang: .constant("en")),
+                    isActive: $navigateToLogin
+                ) {
+                    EmptyView()
+                }
+                .hidden()
                 
                 Spacer()
             }
             .onAppear {
                 loadProfileData()
-                //                addressVM.fetchAllAddresses()
-                //                let lastaddress = addressVM.addresses.last
-                //                                selectedAddress = lastaddress
                 profile.fetchUserProfile()
             }
             .onDisappear{
                 profile.fetchUserProfile()
                 loadProfileData()
-                //                addressVM.fetchAllAddresses()
             }
             .sheet(isPresented: $showImagePicker) {
                 ImagePicker { selectedImages, filenames in
@@ -320,8 +342,6 @@ struct EditingProfileView: View {
                     }
                 }
             }
-            
-            
         }
         .navigationTitle(LocalizedStringKey("Edit Profile"))
         .navigationBarTitleDisplayMode(.inline)
@@ -370,7 +390,12 @@ struct EditingProfileView: View {
 
 struct DeleteAccountDialog: View {
     @Environment(\.dismiss) var dismiss
-    @ObservedObject var profile: ProfileViewModel = ProfileViewModel()
+    @ObservedObject var profile: ProfileViewModel
+//    @ObservedObject var authVM: AuthViewModel
+    @EnvironmentObject var authVM: AuthViewModel // Use EnvironmentObject
+    var onAccountDeleted: () -> Void
+    @State private var isDeleting = false //** State to manage progress on delete button
+    
     var body: some View {
         VStack(alignment: .center) {
             HStack {
@@ -382,27 +407,56 @@ struct DeleteAccountDialog: View {
                     .padding(.vertical)
             }
             VStack {
-                CustomButton(title: "Delete",
-                             action: {
-                    profile.deleteProfile()
-                }, backgroundColor: .red, frameHeight: 55,cornerRadius: 16,frameWidth: .screenWidth * 0.9)
+                // Delete Button
+                CustomButton(
+                    title: isDeleting ? "" : "Delete", //** Hide text when deleting
+                    action: {
+                        isDeleting = true //** Start progress animation
+                        profile.deleteProfile { success in
+                            if success {
+                                print("Account deleted successfully. Logging out...")
+                                authVM.logoutApp()
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                    isDeleting = false //** Stop progress animation
+                                    onAccountDeleted()
+                                    dismiss()
+                                }
+                            } else {
+                                isDeleting = false //** Stop progress animation
+                                print("Failed to delete account.")
+                            }
+                        }
+                    },
+                    backgroundColor: .red,
+                    frameHeight: 55,
+                    cornerRadius: 16,
+                    frameWidth: .screenWidth * 0.9
+                )
+                .overlay(
+                    isDeleting ? ProgressView().scaleEffect(0.8) : nil //** Show ProgressView
+                )
                 
-                CustomButton(title: "Cancel", action: {print("Cancel Account Clicked")
-                    dismiss()
-                }, backgroundColor: .white,textColor: .black, frameHeight: 55,cornerRadius: 16,frameWidth: .screenWidth * 0.9).overlay {
-                    RoundedRectangle(cornerRadius: 16).stroke(Color.black.opacity(0.4), lineWidth: 0.5)
+                // Cancel Button
+                CustomButton(
+                    title: "Cancel",
+                    action: {
+                        dismiss()
+                    },
+                    backgroundColor: .white,
+                    textColor: .black,
+                    frameHeight: 55,
+                    cornerRadius: 16,
+                    frameWidth: .screenWidth * 0.9
+                )
+                .overlay {
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color.black.opacity(0.4), lineWidth: 0.5)
                 }
             }
             .padding()
         }
-        .padding(.top,5)
+        .padding(.top, 5)
         .background(Color.white)
         .cornerRadius(20)
     }
-    
-    
-}
-
-#Preview {
-    EditingProfileView(profile: ProfileViewModel(), selectedAddress: .constant(nil))
 }
