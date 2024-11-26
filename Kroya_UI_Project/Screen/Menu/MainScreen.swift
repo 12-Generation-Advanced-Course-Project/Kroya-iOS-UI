@@ -14,6 +14,8 @@ struct MainScreen: View {
     @Environment(\.modelContext) var modelContext
     @Binding var lang: String
     @State private var showLoadingOverlay = false
+    // hengly 26/11/24
+    var sellerId:Int
 //    init(userStore: UserStore, lang: Binding<String>) {
 //        _authVM = StateObject(wrappedValue: AuthViewModel(userStore: userStore))
 ////        _addressViewModel = StateObject(wrappedValue: AddressViewModel())
@@ -22,6 +24,8 @@ struct MainScreen: View {
 //    }
     public init(lang: Binding<String>) {
         self._lang = lang
+        // hengly 26/11/24
+        self.sellerId = 0
         _draftModelData = StateObject(wrappedValue: DraftModelData())
     }
 
@@ -32,7 +36,8 @@ struct MainScreen: View {
             ZStack {
                 VStack(spacing: 10) {
                     TabView(selection: $selectedTab) {
-                        HomeView()
+                        // hengly 26/11/24
+                        HomeView( sellerId: sellerId)
                             .tabItem {
                                 VStack {
                                     Image(selectedTab == 1 ? "icon-home-Color" : "ico-home")
