@@ -119,15 +119,10 @@ struct OrderSection: View {
                     } else {
                         VStack(spacing: 15) {
                             ForEach(orders, id: \.id) { order in
-                                NavigationLink(destination: OrderListView(sellerId: orders.first!.foodSellId)) {
-                                    OrderCard(
-                                        order: order,
-                                        isAccepted: order.purchaseStatusType == "Accepted",
-                                        isOrder: order.isOrderable,
-                                        showIcon: true
-                                    )
-                                    EmptyView()
-                                }
+                                OrderCard(
+                                    order: order,
+                                    showIcon: true
+                                )
                             }
                         }
                     }

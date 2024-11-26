@@ -17,7 +17,7 @@ struct ReceiptView: View {
     @ObservedObject var viewModel = ReceiptViewModel()
     var isOrderReceived: Bool
     var PurchaseId:Int
-    let dismissToRoot: () -> Void
+  
 
     var body: some View {
         NavigationView {
@@ -91,6 +91,7 @@ struct ReceiptView: View {
                 
             }
         }
+        .navigationBarBackButtonHidden(true)
         .navigationViewStyle(.stack)
 
         
