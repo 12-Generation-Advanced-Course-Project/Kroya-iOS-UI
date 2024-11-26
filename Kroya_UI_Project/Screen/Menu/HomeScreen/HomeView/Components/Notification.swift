@@ -114,14 +114,14 @@ struct NotificationView: View {
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                VStack(alignment: .leading, spacing: 5) {
+                VStack(alignment: .leading, spacing: 5){
                     Text("Notifications")
                         .fontWeight(.semibold)
                     HStack {
                         Text(LocalizedStringKey("You have"))
                         Text("\(viewModel.todayNotificationCount) Notifications")
                             .foregroundStyle(.yellow)
-                        Text(LocalizedStringKey("new"))
+                        Text(LocalizedStringKey("Today"))
                     }
                     .font(.custom("HelveticaNeue-Regular", size: 12))
                     .foregroundStyle(.black.opacity(0.6))
@@ -131,8 +131,15 @@ struct NotificationView: View {
             }
         }
         .padding(.vertical, 12)
+        
         .onAppear {
             viewModel.fetchNotifications()
         }
     }
 }
+
+
+
+
+
+
