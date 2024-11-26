@@ -19,6 +19,9 @@ struct HomeView: View {
     @StateObject private var notificationVM = NotificationViewModel()
     @Environment(\.modelContext) var modelContext
     @State var isLoading: Bool = false
+    // hengly 26/11/24
+    var sellerId:Int
+    
     var body: some View {
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
@@ -303,8 +306,9 @@ struct HomeView: View {
                                 }
                             }
                             
+                            // hengly 26/11/24
                             ToolbarItem(placement: .navigationBarTrailing) {
-                                NavigationLink(destination: NotificationView()) {
+                                NavigationLink(destination: NotificationView(sellerId: sellerId)) {
                                     ZStack {
                                         Image("notification")
                                             .resizable()
@@ -340,34 +344,36 @@ struct HomeView: View {
             }
         }
     }
-            
-            // MARK: - Fetch Data Logic
-            private func loadData() {
-                categoryVM.fetchAllCategory()
-                recipeViewModel.getAllRecipeFood()
-                foodSellViemModel.getAllFoodSell()
-                recentSearchesData.loadSearches(from: modelContext)
-                PopularFoodsData.getAllPopular()
-                favoriteVM.getAllFavoriteFood()
-                guestCategoryVM.fetchAllGuestCategory()
-                guestFoodSellVM.getAllGuestFoodSell()
-                guestFoodRecipeVM.getAllGuestRecipeFood()
-                notificationVM.fetchNotifications()
-                
-            }
-            private func refreshData() async {
-                isLoading = true // Start loading state
-                defer { isLoading = false } // Ensure state is reset after execution
-                
-                // Simulate a delay for demo purposes
-                try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
-                
-                // Reload data
-                await MainActor.run {
-                    loadData()
-                }
-            }
+    
+    // MARK: - Fetch Data Logic
+    private func loadData() {
+        categoryVM.fetchAllCategory()
+        recipeViewModel.getAllRecipeFood()
+        foodSellViemModel.getAllFoodSell()
+        recentSearchesData.loadSearches(from: modelContext)
+        PopularFoodsData.getAllPopular()
+        favoriteVM.getAllFavoriteFood()
+        guestCategoryVM.fetchAllGuestCategory()
+        guestFoodSellVM.getAllGuestFoodSell()
+        guestFoodRecipeVM.getAllGuestRecipeFood()
+        notificationVM.fetchNotifications()
+        
+    }
+    private func refreshData() async {
+        isLoading = true // Start loading state
+        defer { isLoading = false } // Ensure state is reset after execution
+        
+        // Simulate a delay for demo purposes
+        try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
+        
+        // Reload data
+        await MainActor.run {
+            loadData()
         }
+    }
+}
+
+
 
 
 
