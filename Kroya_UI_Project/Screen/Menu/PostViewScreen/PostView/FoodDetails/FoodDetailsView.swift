@@ -14,11 +14,12 @@ struct FoodDetailView: View {
     @StateObject private var favoriteVM = FavoriteVM()
     var showPrice: Bool
     var showOrderButton: Bool
-    var showButtonInvoic: Bool?
-    var invoiceAccept: Bool?
+    var showButtonInvoic: String?
+    var invoiceAccept: String?
     var notificationType: Int?
     var FoodId: Int
     var ItemType: String
+    var PurchaseId: Int?
     @State private var refreshID = UUID()
     @Environment(\.dismiss) var dismiss
     var body: some View {
@@ -85,7 +86,7 @@ struct FoodDetailView: View {
                 }
                 
                 // Bottom Sheet Content
-                BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.67, showOrderButton: showOrderButton, notificationType: notificationType, showButtonInvoic: showButtonInvoic ?? false, invoiceAccept: invoiceAccept ?? false, FoodetailsId: FoodId,itemType: ItemType, FoodDetails: FoodDetailsVM)
+                BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.67, showOrderButton: showOrderButton, notificationType: notificationType, showButtonInvoic: showButtonInvoic ?? "", invoiceAccept: invoiceAccept ?? "", FoodetailsId: FoodId,itemType: ItemType, FoodDetails: FoodDetailsVM, PurchaseId:PurchaseId ?? 0)
                    {
                     ContentView(showPrice: showPrice, isShowPopup: $isShowPopup,itemType: ItemType, FoodId: FoodId, FoodDetails: FoodDetailsVM)
                         .padding(.horizontal, 10)
