@@ -1,10 +1,3 @@
-//
-//  NewView.swift
-//  Kroya_UI_Project
-//
-//  Created by Macbook on 10/19/24.
-//
-
 import SwiftUI
 
 struct NewItemFoodOrderCardView: View {
@@ -19,7 +12,7 @@ struct NewItemFoodOrderCardView: View {
     var body: some View {
         NavigationView {
             VStack {
-                // Loading Indicator or Content
+                // Loading Indicator
                 if orderRequestVM.isLoading {
                     ZStack {
                         Color.white
@@ -30,7 +23,16 @@ struct NewItemFoodOrderCardView: View {
                             .scaleEffect(2)
                             .offset(y: -80)
                     }
-                } else {
+                }
+                // No Data Case
+                else if orderRequestVM.ordersRequestModel.isEmpty {
+                    Text("No Order Request")
+                        .font(.system(size: 18, weight: .medium))
+                        .foregroundColor(.gray)
+                        .padding(.top, 50) // Adds spacing from the top
+                }
+                // Display Orders
+                else {
                     ScrollView {
                         LazyVStack {
                             ForEach(orderRequestVM.ordersRequestModel.indices, id: \.self) { index in

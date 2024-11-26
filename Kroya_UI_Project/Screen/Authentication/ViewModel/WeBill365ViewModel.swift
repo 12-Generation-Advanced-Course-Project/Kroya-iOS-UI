@@ -22,6 +22,7 @@ class WeBill365ViewModel: ObservableObject {
     @Published var qrCollectionData: DataForQRCollection? = nil
     @Published var qrCollectionStatus: Status? = nil
     @Published var isChecktrue: Bool = false
+    @Published var isConnect: Bool = false
     private var pollingTimer: Timer?
     // MARK: - Load WeBill Account
     func loadWeBillAccount(context: ModelContext) {
@@ -100,7 +101,7 @@ class WeBill365ViewModel: ObservableObject {
     }
     
     // MARK: - WeBill365 AccessToken
-    func fetchWeBillAccessToken(context: ModelContext, completion: @escaping (Bool) -> Void) {
+    func fetchWeBillAccessToken(completion: @escaping (Bool) -> Void) {
         guard let email = Auth.shared.getCredentials().email else {
             print("No user email found. Cannot fetch WeBill access token.")
             self.errorMessage = "User not logged in."
@@ -123,7 +124,7 @@ class WeBill365ViewModel: ObservableObject {
                 switch result {
                 case .success():
                     print("Access token retrieved and saved successfully.")
-                    self?.saveWeBillAccount(context: context)
+                  
                     self?.successMessage = "Access token retrieved and saved successfully."
                     completion(true)
                 case .failure(let error):
@@ -200,7 +201,7 @@ class WeBill365ViewModel: ObservableObject {
         pollingTimer = nil
     }
     // MARK: - Connect WeBill
-    func ConnectWeBillAccount(ConnectRequest: ConnectWebillConnectRequest) {
+    func ConnectWeBillAccount(context: ModelContext,ConnectRequest: ConnectWebillConnectRequest ,completion: @escaping (Bool) -> Void) {
         self.isLoading = true
         BankService.shared.connectWeBill(request: ConnectRequest) { [weak self] result in
             DispatchQueue.main.async {
@@ -210,6 +211,8 @@ class WeBill365ViewModel: ObservableObject {
                     if ConnectResponse.statusCode == "200", let payload = ConnectResponse.payload {
                         // Assign the fetched payload to the WebillAccount
                         self?.WebillAccount = payload
+                        self?.saveWeBillAccount(context: context)
+                        self?.isConnect = true
                         print("WeBill connected successfully: \(payload)")
                     } else {
                         // Handle failed response with the message from the API
@@ -248,5 +251,28 @@ class WeBill365ViewModel: ObservableObject {
             }
         }
     }
+    // MARK: - Disconnect WeBill Account
+    func DisconnectWeBillaccount(context: ModelContext) {
+        self.isLoading = true // Show loading indicator
+        
+        BankService.shared.disConnectWeBillAccount { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false // Stop loading indicator
+                
+                switch result {
+                case .success(let response):
+                    print("WeBill Disconnected Successfully: \(response.message)")
+                    self?.successMessage = "WeBill Disconnected Successfully"
+                    self?.clearWeBillAccount(context: context)
+                    self?.isConnect = false
+                case .failure(let error):
+                    print("Failed to Disconnect WeBill: \(error.localizedDescription)")
+                    self?.errorMessage = "Failed to Disconnect WeBill: \(error.localizedDescription)"
+                    self?.showError = true
+                }
+            }
+        }
+    }
+
     
 }

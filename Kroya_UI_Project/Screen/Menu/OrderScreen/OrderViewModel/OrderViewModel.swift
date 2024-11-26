@@ -100,9 +100,9 @@ class OrderViewModel: ObservableObject {
                 case .success(let response):
                     if response.statusCode == "200", let payload = response.payload {
                         self?.orders = payload
-                    }else {
-                        print("Error fetching purchase: \(response.message)")
+                        print("Fetched Orders: \(payload.map { $0.name })")
                     }
+
                 case .failure(let error):
                     self?.errorMessage = "Failed to fetch purchases: \(error.localizedDescription)"
                     print("Error: \(error)")

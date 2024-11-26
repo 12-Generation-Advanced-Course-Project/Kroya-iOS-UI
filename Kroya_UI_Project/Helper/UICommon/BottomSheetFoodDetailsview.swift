@@ -184,7 +184,7 @@ struct BottomSheetView<Content: View>: View {
                                 }
                             }
                         } else {
-                            
+                            EmptyView()
                             // Current user is the owner, hide "Order" button
                             Spacer().frame(width: 0, height: 0)
                         }
@@ -217,6 +217,7 @@ struct BottomSheetView<Content: View>: View {
                                 )
                         }
                     }
+                 
                     
                 }
             }.onAppear{

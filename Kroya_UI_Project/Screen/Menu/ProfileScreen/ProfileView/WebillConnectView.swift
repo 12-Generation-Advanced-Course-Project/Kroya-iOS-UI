@@ -11,7 +11,7 @@ import Combine
 struct WebillConnectView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) private var context
-    @StateObject private var webillConnect = WeBill365ViewModel()
+    @ObservedObject  var webillConnect : WeBill365ViewModel
   
     @State private var showMessage = false
     @State private var clientIDError: String? = nil
@@ -230,11 +230,12 @@ struct WebillConnectView: View {
             accountNumberError = "Account Number cannot be empty."
             hasError = true
         }
-
+         let ConnectRequest = ConnectWebillConnectRequest(clientId: webillConnect.clientID, clientSecret: webillConnect.clientSecret, accountNo: webillConnect.parentAccountNo)
+         print("This is + \(ConnectRequest)")
         // If no errors, proceed with API call
         if !hasError {
             isClearingAccount = false // Mark that we are not clearing the account
-            webillConnect.fetchWeBillAccessToken(context: context) { success in
+            webillConnect.ConnectWeBillAccount(context: context,ConnectRequest:ConnectRequest ) { success in
                 if success {
                     showMessage = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
