@@ -7,6 +7,7 @@ struct ResultSearchView: View {
     @Environment(\.dismiss) var dismiss
     var menuName: String
     var foodName: String
+    var guestFoodName: String
     @Environment(\.modelContext) var modelContext
     @StateObject private var listFoodRecipe = FoodListVM()
     //@StateObject private var searchFood = SearchVM()
@@ -43,11 +44,11 @@ struct ResultSearchView: View {
                 .padding(.top, 5)
                 
                 TabView(selection: $selectedSegment) {
-                    AllFoodTab(isSelected: selectedSegment, foodName: foodName)
+                    AllFoodTab(isSelected: selectedSegment, foodName: foodName, guestFoodName: guestFoodName)
                         .tag(0)
-                    ListFoodSaleTabView(iSselected: selectedSegment, foodName: foodName)
+                    ListFoodSaleTabView(iSselected: selectedSegment, foodName: foodName, guestFoodName: guestFoodName)
                         .tag(1)
-                    ListFoodRecipeTab(foodName: foodName, iSselected: selectedSegment)
+                    ListFoodRecipeTab(foodName: foodName, guestFoodName: guestFoodName, iSselected: selectedSegment)
                         .tag(2)
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))

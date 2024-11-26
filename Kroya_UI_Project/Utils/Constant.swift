@@ -65,4 +65,11 @@ struct Constants {
     static let GuestFoodRecipeUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user/food-recipe"
     static let GuestFoodRecipeByCuisineUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user/food-recipe/"
     
+    
+    //MARK: Guest Search All Food
+    static let GuestSearchAllFoodUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user"
+    
+    //MARK: Guest Search All Food By Name
+    static let GuestSearchAllFoodByNameUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user/foods/"
+    
 }

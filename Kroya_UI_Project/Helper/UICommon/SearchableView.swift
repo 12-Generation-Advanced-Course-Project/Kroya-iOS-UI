@@ -133,7 +133,7 @@ struct SearchScreen: View {
                                             }
                                         }
                                     }
-
+                                    
                                 }
                             } else {
                                 // Filtered results
@@ -172,13 +172,22 @@ struct SearchScreen: View {
                 }
             }
             .background(
-                NavigationLink(
-                    destination: ResultSearchView(isTabBarHidden: .constant(true), menuName: selectedMenuName, foodName: searchText, recentSearchesData: recentSearchesData),
-                    isActive: $navigateToResult
-                ) {
-                    EmptyView()
+                // Use an empty view with navigation logic to trigger the navigation
+                Button(action: {
+                    navigateToResult = true
+                }) {
+                    EmptyView() // Or any other view you want to trigger the navigation
                 }
             )
+            .navigationDestination(isPresented: $navigateToResult) {
+                ResultSearchView(
+                    isTabBarHidden: .constant(true),
+                    menuName: selectedMenuName,
+                    foodName: searchText,
+                    guestFoodName: searchText,
+                    recentSearchesData: recentSearchesData
+                )
+            }
         }
         .onAppear{
             PopularFoodsData.getAllPopular()
