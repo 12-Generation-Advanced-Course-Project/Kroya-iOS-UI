@@ -55,20 +55,36 @@ struct FoodOnSaleViewCell: View {
 
                     Spacer()
 
-                    // Favorite Button
-                    // Updated Favorite Button Logic
-                    Button(action: {
-                        isFavorite.toggle()
-                        favoriteVM.toggleFavorite(foodId: foodSale.id, itemType: foodSale.itemType, isCurrentlyFavorite: !isFavorite)
-                    }) {
-                        Circle()
-                            .fill(isFavorite ? Color.red : Color.white.opacity(0.5))
-                            .frame(width: 30, height: 30)
-                            .overlay(
-                                Image(systemName: "heart.fill")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 16))
-                            )
+                    if Auth.shared.hasAccessToken(){
+                        // Favorite Button
+                        // Updated Favorite Button Logic
+                        Button(action: {
+                            isFavorite.toggle()
+                            favoriteVM.toggleFavorite(foodId: foodSale.id, itemType: foodSale.itemType, isCurrentlyFavorite: !isFavorite)
+                        }) {
+                            Circle()
+                                .fill(isFavorite ? Color.red : Color.white.opacity(0.5))
+                                .frame(width: 30, height: 30)
+                                .overlay(
+                                    Image(systemName: "heart.fill")
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 16))
+                                )
+                        }
+                    } else {
+                        // Favorite Button
+                        Button(action: {
+                            isFavorite.toggle() // Toggle locally for UI responsiveness
+                        }) {
+                            Circle()
+                                .fill( Color.white.opacity(0.5))
+                                .frame(width: 30, height: 30)
+                                .overlay(
+                                    Image(systemName: "heart.fill")
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 16))
+                                )
+                        }
                     }
 
                 }

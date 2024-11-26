@@ -120,6 +120,8 @@ class FoodSellViewModel: ObservableObject {
                     }
                 case .failure(let error):
                     self?.handleError("Failed to search foods: \(error.localizedDescription)")
+                    self?.showError = true
+                    self?.errorMessage = "Failed to load food : \(error.localizedDescription)"
                 }
             }
         }
