@@ -1,5 +1,3 @@
-
-
 import SwiftUI
 
 struct NotificationView: View {
@@ -8,38 +6,40 @@ struct NotificationView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView{
-                VStack {
-                    Text("New")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.system(size: 14, weight: .semibold))
-                        .padding(.leading, 15)
-                    
-                    ForEach(viewModel.notifications) { notification in
-                        NotificationComponent(notification: notification)
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    // New Notifications
+                    if !viewModel.newNotifications.isEmpty {
+                        Text("New")
+                            .font(.system(size: 16, weight: .semibold))
+                            .padding(.leading, 4)
+                        
+                        ForEach(viewModel.newNotifications) { notification in
+                            NotificationComponent(notification: notification)
+                        }
                     }
                     
-                    Text("Older")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.system(size: 14, weight: .semibold))
-                        .padding(.leading, 15)
-                    ForEach(viewModel.notifications) { notification in
-                        NotificationComponent(notification: notification)
+                    // Older Notifications
+                    if !viewModel.olderNotifications.isEmpty {
+                        Text("Older")
+                            .font(.system(size: 16, weight: .semibold))
+                            .padding(.leading, 4)
+                        
+                        ForEach(viewModel.olderNotifications) { notification in
+                            NotificationComponent(notification: notification)
+                        }
                     }
-                    
                 }
                 .padding(.top, 20)
-               
-               
+                .padding(.horizontal, 10)
             }
             .scrollIndicators(.hidden)
-            
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                VStack(alignment: .leading, spacing: 10){
+                VStack(alignment: .leading, spacing: 5){
                     Text("Notifications")
-                        .font(.system(size: 16, weight: .semibold))
+                        .fontWeight(.semibold)
                     HStack {
                         Text(LocalizedStringKey("You have"))
                         Text("\(viewModel.notifications.count) Notifications")
@@ -53,10 +53,10 @@ struct NotificationView: View {
                 .padding(.leading, -20)
             }
         }
+        .padding(.vertical, 12)
+
         .onAppear {
             viewModel.fetchNotifications()
         }
     }
 }
-
-

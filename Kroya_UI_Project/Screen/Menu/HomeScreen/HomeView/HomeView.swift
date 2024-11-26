@@ -312,20 +312,18 @@ struct HomeView: View {
                                             .frame(width: 24, height: 24)
                                             .foregroundColor(.black)
                                         
-                                        // Notification Badge
-                                        if notification.count > 0 {
-                                            Text("\(notification.count)")
-                                                .font(.customfont(.semibold, fontSize: 12))
-                                                .foregroundColor(.white)
-                                                .padding(5)
-                                                .background(Color.red)
-                                                .clipShape(Circle())
-                                                .overlay(
-                                                    Circle()
-                                                        .stroke(Color.white, lineWidth: 1)
-                                                )
-                                                .offset(x: 10, y: -10)
-                                        }
+                                        // Badge Count
+                                        Text("\(notificationVM.notifications.count)")
+                                            .font(.system(size: 12, weight: .semibold))
+                                            .foregroundColor(.white)
+                                            .padding(5)
+                                            .background(notificationVM.notifications.isEmpty ? Color.red : Color.red)
+                                            .clipShape(Circle())
+                                            .overlay(
+                                                Circle()
+                                                    .stroke(Color.white, lineWidth: 1)
+                                            )
+                                            .offset(x: 10, y: -12)
                                     }
                                 }
                             }
@@ -333,7 +331,7 @@ struct HomeView: View {
                         }
                     }
                     .refreshable {
-                        await refreshData() // Calls the refresh logic
+                        await refreshData()
                     }
                     .onAppear {
                         loadData()
@@ -354,6 +352,7 @@ struct HomeView: View {
                 guestCategoryVM.fetchAllGuestCategory()
                 guestFoodSellVM.getAllGuestFoodSell()
                 guestFoodRecipeVM.getAllGuestRecipeFood()
+                notificationVM.fetchNotifications()
                 
             }
             private func refreshData() async {
