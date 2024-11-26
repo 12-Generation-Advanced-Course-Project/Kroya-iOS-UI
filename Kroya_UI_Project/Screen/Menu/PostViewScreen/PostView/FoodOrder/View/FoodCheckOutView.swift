@@ -141,9 +141,7 @@ struct FoodCheckOutView: View {
                 ReceiptView(
                     isPresented: $isPresented,
                     isOrderReceived: false,
-                    PurchaseId: PurchaesViewModel.Purchases?.purchaseId ?? 0, dismissToRoot: {
-                        navigationTrigger = false
-                    }
+                    PurchaseId: PurchaesViewModel.Purchases?.purchaseId ?? 0
                 )
             })
             .toolbar {

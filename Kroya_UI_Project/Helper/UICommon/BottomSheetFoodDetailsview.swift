@@ -14,9 +14,10 @@ struct BottomSheetView<Content: View>: View {
     let minHeight: CGFloat
     let showOrderButton: Bool // Control for Food vs Recipe view
     let notificationType: Int? // Control for status from Notification
-    let showButtonInvoic : Bool // Control let Button Invoice from Orders
-    var invoiceAccept : Bool
+    let showButtonInvoic : String // Control let Button Invoice from Orders
+    var invoiceAccept : String
     var FoodDetailsId: Int
+    var PurchaseId: Int
     @GestureState private var translation: CGFloat = 0
     @State private var imageName: String = ""
     private var offset: CGFloat {
@@ -32,11 +33,12 @@ struct BottomSheetView<Content: View>: View {
         minHeight: CGFloat,
         showOrderButton: Bool = true,
         notificationType: Int? = nil,
-        showButtonInvoic: Bool = false,
-        invoiceAccept: Bool = false,
+        showButtonInvoic: String,
+        invoiceAccept: String,
         FoodetailsId: Int,
         itemType: String,
         FoodDetails: FoodDetailsViewModel,
+        PurchaseId: Int,
         @ViewBuilder content: () -> Content
     ) {
         self.content = content()
@@ -50,6 +52,7 @@ struct BottomSheetView<Content: View>: View {
         self.itemType = itemType
         self.FoodDetails = FoodDetails
         self.FoodDetailsId = FoodetailsId
+        self.PurchaseId = PurchaseId
        
     }
     
@@ -186,13 +189,33 @@ struct BottomSheetView<Content: View>: View {
                             Spacer().frame(width: 0, height: 0)
                         }
                     }
-                    else if invoiceAccept {
-                        Text(invoiceAccept ?  LocalizedStringKey("Accepted ")  : LocalizedStringKey("Rejected") )
-                            .font(.customfont(.medium, fontSize: 16))
-                            .foregroundStyle(.white)
-                            .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.height * 0.04)
-                            .background(invoiceAccept ?  Color.green : Color.red )
-                            .cornerRadius(UIScreen.main.bounds.width * 0.022)
+                    if showButtonInvoic == "true" {
+                        Button {
+                            if invoiceAccept == "ACCEPTED"{
+                                navigateToReceipt = true
+                            }
+                        } label: {
+                            Text(invoiceAccept == "ACCEPTED" ? LocalizedStringKey("Invoice") : LocalizedStringKey("Invoice"))
+                                .font(.customfont(.medium, fontSize: 16))
+                                .foregroundStyle(.white)
+                                .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.height * 0.04)
+                                .background(invoiceAccept == "ACCEPTED" ? Color.green : Color.red)
+                                .cornerRadius(UIScreen.main.bounds.width * 0.022)
+                                .background(
+                                    NavigationLink(
+                                        destination:
+                                            ReceiptView(
+                                                  isPresented: $isPresented,
+                                                  isOrderReceived: false,
+                                                  PurchaseId:PurchaseId ?? 0
+                                            ),
+                                        isActive: $navigateToReceipt
+                                    ) {
+                                        EmptyView()
+                                    }
+                               
+                                )
+                        }
                     }
                     
                 }
