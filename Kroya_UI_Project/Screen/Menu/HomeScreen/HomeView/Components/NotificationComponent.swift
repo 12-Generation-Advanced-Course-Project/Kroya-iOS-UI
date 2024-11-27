@@ -179,11 +179,12 @@ struct NotificationComponent: View {
             FoodDetailView(
                 isFavorite: false,
                 showPrice: true,
-                showOrderButton: true,
-                showButtonInvoic: nil,
-                invoiceAccept: nil,
+                showOrderButton: false,
+                showButtonInvoic: "true",
+                invoiceAccept: "ACCEPTED",
                 FoodId: notification.foodSellID,
-                ItemType: notification.itemType
+                ItemType: notification.itemType,
+                PurchaseId: notification.purchaseID
             )
         } else {
             Text("Unknown destination")

@@ -94,8 +94,5 @@ struct ReceiptView: View {
         .navigationBarBackButtonHidden(true)
         .navigationViewStyle(.stack)
 
-        
-        
-        
     }
 }
