@@ -108,14 +108,12 @@
 
 
 
-
 import SwiftUI
 import SDWebImageSwiftUI
 
 struct NotificationComponent: View {
     
     let notification: NotificationModel
-    @StateObject private var orderRequestVM = OrderRequestViewModel()
     var sellerId:Int
     private let urlImagePrefix = "https://kroya-api-production.up.railway.app/api/v1/fileView/"
     
@@ -193,36 +191,36 @@ struct NotificationComponent: View {
     
     
      //MARK: - Helper Functions
-        private func formatTimeAgo(from dateString: String) -> String {
-            guard let date = parseDate(dateString) else {
-                return "Invalid Date"
-            }
-    
-            let now = Date()
-            let timeInterval = now.timeIntervalSince(date)
-    
-            let calendar = Calendar.current
-            let todayStart = calendar.startOfDay(for: now)
-            let yesterdayStart = calendar.date(byAdding: .day, value: -1, to: todayStart)!
-    
-            let minutesAgo = Int(timeInterval / 60) // Convert seconds to minutes
-            let hoursAgo = Int(timeInterval / 3600) // Convert seconds to hours
-    
-            if calendar.isDateInToday(date) {
-                if minutesAgo < 1 {
-                    return "Just now"
-                } else if minutesAgo < 60 {
-                    return "\(minutesAgo) m ago"
-                } else {
-                    return "\(hoursAgo) h ago"
-                }
-            } else if calendar.isDate(date, inSameDayAs: yesterdayStart) {
-                return formatDateToDDMMYY(date)
-            } else {
-                return formatDateToDDMMYY(date)
-            }
+    private func formatTimeAgo(from dateString: String) -> String {
+        guard let date = parseDate(dateString) else {
+            return "Invalid Date"
         }
-    
+        
+        let now = Date()
+        let timeInterval = now.timeIntervalSince(date)
+        
+        let calendar = Calendar.current
+        let todayStart = calendar.startOfDay(for: now)
+        
+        let minutesAgo = Int(timeInterval / 60) // Convert seconds to minutes
+        let hoursAgo = Int(timeInterval / 3600) // Convert seconds to hours
+        
+        // Check if date is today
+        if calendar.isDateInToday(date) {
+            if minutesAgo < 1 {
+                return "Just now"
+            } else if minutesAgo < 60 {
+                return "\(minutesAgo) m ago"
+            } else {
+                return "\(hoursAgo) h ago"
+            }
+        } else if date >= todayStart {
+            return "Later Today"
+        } else {
+            return formatDateToDDMMYY(date)
+        }
+    }
+
         private func parseDate(_ dateString: String) -> Date? {
             let dateFormats = [
                 "yyyy-MM-dd'T'HH:mm:ss.SSS",
@@ -249,3 +247,6 @@ struct NotificationComponent: View {
         }
    
 }
+
+
+
