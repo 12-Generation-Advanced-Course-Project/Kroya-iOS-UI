@@ -24,6 +24,7 @@ struct ProfileView: View {
     var urlImagePrefix: String = Constants.fileupload
     @Environment(\.modelContext) var modelContext
     @Binding var lang: String
+    @State private var isUpdatingLocation = false // Add this state to track loading
     
     init(lang: Binding<String>) {
         self._lang = lang
@@ -169,6 +170,53 @@ struct ProfileView: View {
                         .onTapGesture {
                             showMapSheet.toggle()
                         }
+                        .sheet(isPresented: Binding<Bool>(
+                            get: { showMapSheet || isUpdatingLocation }, // Keep the sheet open while loading
+                            set: { newValue in
+                                if !isUpdatingLocation { showMapSheet = newValue } // Allow dismiss only if not loading
+                            }
+                        )) {
+                            ZStack {
+                                NavigationStack {
+                                    AddressView(
+                                        onAddressSelected: { selected in
+                                            // Handle selected address
+                                            selectedAddress = selected
+                                            
+                                            // Start showing the loading indicator
+                                            isUpdatingLocation = true
+                                            
+                                            // Simulate location update with a delay for testing
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                                Profile.updateLocation(location: selected.addressDetail) { success in
+                                                    isUpdatingLocation = false
+                                                    if success {
+                                                        print("Location updated successfully.")
+                                                        showMapSheet = false // Close the sheet after loading
+                                                    } else {
+                                                        print("Failed to update location.")
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        isFromEditingProfileView: true
+                                    )
+                                }
+                                
+                                // Loading indicator overlay
+                                if isUpdatingLocation {
+                                    ZStack {
+                                        Color.black.opacity(0.4)
+                                            .ignoresSafeArea()
+                                        ProgressView("Updating location...")
+                                            .padding()
+                                            .background(Color.white)
+                                            .cornerRadius(10)
+                                    }
+                                }
+                            }
+                        }
+
                     NavigationLink {
                         AllowNotificationView()
                     } label: {
