@@ -62,6 +62,8 @@
 //}
 
 
+
+
 import SwiftUI
 
 struct NotificationView: View {
@@ -82,7 +84,8 @@ struct NotificationView: View {
                         ForEach(viewModel.newNotifications) { notification in
                             NotificationComponent(notification: notification, sellerId: sellerId)
                         }
-                    } else if viewModel.newNotifications.isEmpty && viewModel.olderNotifications.isEmpty {
+                    } else if viewModel.newNotifications.isEmpty {
+                        Text("New")
                         Text("Empty Notification")
                             .font(.system(size: 14))
                             .foregroundColor(.gray)
@@ -99,7 +102,8 @@ struct NotificationView: View {
                         ForEach(viewModel.olderNotifications) { notification in
                             NotificationComponent(notification: notification, sellerId: sellerId)
                         }
-                    } else if viewModel.newNotifications.isEmpty && viewModel.olderNotifications.isEmpty {
+                    } else if viewModel.olderNotifications.isEmpty {
+                        Text("Older")
                         Text("Empty Notification")
                             .font(.system(size: 14))
                             .foregroundColor(.gray)
@@ -121,7 +125,7 @@ struct NotificationView: View {
                         Text(LocalizedStringKey("You have"))
                         Text("\(viewModel.todayNotificationCount) Notifications")
                             .foregroundStyle(.yellow)
-                        Text(LocalizedStringKey("Today"))
+                        Text(LocalizedStringKey("new"))
                     }
                     .font(.custom("HelveticaNeue-Regular", size: 12))
                     .foregroundStyle(.black.opacity(0.6))
@@ -137,9 +141,5 @@ struct NotificationView: View {
         }
     }
 }
-
-
-
-
 
 

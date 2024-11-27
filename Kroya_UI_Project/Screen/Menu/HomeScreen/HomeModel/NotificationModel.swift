@@ -28,5 +28,5 @@ struct NotificationModel: Identifiable, Codable {
         case foodSellID = "foodSellId"
         case description, isRead, foodPhoto, itemType, foodCardType, createdDate
     }
-}
+}                                                                                                                                                                                                                      
 

@@ -39,7 +39,7 @@ struct OrderListView: View {
                             .frame(width: 16)
                             .padding([.bottom, .leading], 12)
                             .overlay(
-                                Text(orderCountText!)
+                                Text(orderCountText ?? "0")
                                     .customFontSemiBoldLocalize(size: 10)
                                     .foregroundColor(.white)
                                     .padding([.bottom, .leading], 12)
@@ -50,6 +50,9 @@ struct OrderListView: View {
         }
     }
 }
+
+
+
 
 
 
