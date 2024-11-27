@@ -27,6 +27,7 @@ struct SaleModalView: View {
     @State private var showLoadingOverlay = false
     @State private var showSuccessPopup = false
     @State private var showAddressSheet = false
+    @StateObject private var keyboardResponder = KeyboardResponder()
     var body: some View {
         ZStack{
             VStack{
@@ -271,6 +272,12 @@ struct SaleModalView: View {
                         }
                         
                     }
+                    .simultaneousGesture(
+                        TapGesture().onEnded {
+                            hideKeyboard()
+                        }
+                    )
+                    .padding(.bottom, min(keyboardResponder.currentHeight, 0))
                     .padding()
                 }
                 Spacer()
@@ -312,8 +319,10 @@ struct SaleModalView: View {
                     .disabled(draftModelData.isForSale && showError)
                     
                 }
+               
                 .padding()
             }
+            .ignoresSafeArea(.keyboard)
             // Loading Overlay
             if showLoadingOverlay {
                 LoadingOverlay()

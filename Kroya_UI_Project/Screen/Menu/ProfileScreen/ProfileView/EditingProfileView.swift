@@ -20,7 +20,6 @@ struct EditingProfileView: View {
     @State private var selectedImages: [UIImage] = []
     @State private var isUpdating: Bool = false
     @ObservedObject var profile: ProfileViewModel
-//    @ObservedObject var authVM: AuthViewModel
     @EnvironmentObject var authVM: AuthViewModel
     @State private var isDeleteAccSheet: Bool = false
     @Environment(\.dismiss) var dismiss
@@ -32,7 +31,7 @@ struct EditingProfileView: View {
     @State private var showAddressSheet = false
     @State private var navigateToLogin = false
     @State private var showSuccessPopup = false
-    
+    @StateObject private var keyboardResponder = KeyboardResponder()
     init(profile: ProfileViewModel, selectedAddress: Binding<Address?>) {
         self.profile = profile
         self._selectedAddress = selectedAddress
@@ -40,308 +39,317 @@ struct EditingProfileView: View {
     
     var body: some View {
         ZStack {
-            VStack(spacing: 10) {
-                ZStack(alignment: .bottomTrailing) {
-                    if selectedImages.isEmpty {
-                        if let profileImageUrl = profile.userProfile?.profileImage, !profileImageUrl.isEmpty {
-                            WebImage(url:URL(string: Constants.fileupload + "\(profileImageUrl)"))
+            ScrollView(.vertical, showsIndicators: false){
+                VStack(spacing: 10) {
+                    ZStack(alignment: .bottomTrailing) {
+                        if selectedImages.isEmpty {
+                            if let profileImageUrl = profile.userProfile?.profileImage, !profileImageUrl.isEmpty {
+                                WebImage(url:URL(string: Constants.fileupload + "\(profileImageUrl)"))
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 94, height: 94)
+                                    .clipShape(Circle())
+                            } else {
+                                Circle()
+                                    .fill(Color(hex:  "F4F5F7"))
+                                    .frame(width: 94, height: 94)
+                                    .overlay(
+                                        Image(systemName: "person.fill")
+                                            .resizable()
+                                            .frame(width: 50, height: 50)
+                                            .foregroundColor(.white)
+                                    )
+                            }
+                        } else {
+                            Image(uiImage: selectedImages.last!)
                                 .resizable()
                                 .scaledToFill()
-                                .frame(width: 94, height: 94)
+                                .frame(width: 100, height: 100)
                                 .clipShape(Circle())
-                        } else {
-                            Circle()
-                                .fill(Color(hex:  "F4F5F7"))
-                                .frame(width: 94, height: 94)
-                                .overlay(
-                                    Image(systemName: "person.fill")
-                                        .resizable()
-                                        .frame(width: 50, height: 50)
-                                        .foregroundColor(.white)
-                                )
+                                .overlay(Circle().stroke(Color.gray, lineWidth: 1))
                         }
-                    } else {
-                        Image(uiImage: selectedImages.last!)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 100, height: 100)
-                            .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.gray, lineWidth: 1))
-                    }
-                    
-                    Button(action: {
-                        showImagePicker = true
-                    }) {
-                        Circle()
-                            .fill(Color.yellow)
-                            .frame(width: 33, height: 33)
-                            .overlay(
-                                Image("ico_pen")
-                                    .foregroundColor(.white)
-                                    .font(.customfont(.medium, fontSize: 20))
-                            )
-                    }
-                }
-                .padding(.top, 20)
-                // Personal Info Section
-                VStack(alignment: .leading) {
-                    Text("Personal info")
-                        .foregroundStyle(Color(hex: "#0A0019"))
-                        .opacity(0.6)
-                        .font(.customfont(.regular, fontSize: 14))
-                        .padding(.trailing,25)
-                        .padding(.vertical,10)
-                        .background(Color.white.opacity(0.2))
-                    
-                    // Full Name Label and TextField
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text(LocalizedStringKey("Full name"))
-                                .frame(width: locale.identifier == "ko" ? 80 : locale.identifier == "km-KH" ? 90 : 80, alignment: .leading)
-                                .font(.customfont(.medium, fontSize: 16))
-                                .foregroundColor(.black.opacity(0.8))
-                            
-                            TextField("Enter your full name", text: $userInputName)
-                                .padding()
-                                .foregroundColor(.black)
-                                .cornerRadius(8)
-                                .font(.customfont(.medium, fontSize: 16))
-                            
-                        }
-                        .padding(.leading, 16)
-                        .background(Color(hex: "F4F5F7"))
-                        .cornerRadius(8)
-                    }
-                    
-                    // Email Label and TextField (disabled)
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text(LocalizedStringKey("Email"))
-                                .frame(width: locale.identifier == "ko" ? 80 : locale.identifier == "km-KH" ? 90 : 80, alignment: .leading)
-                                .font(.customfont(.medium, fontSize: 16))
-                                .foregroundColor(.black.opacity(0.8))
-                            
-                            TextField("Enter your email", text: $userInputEmail)
-                                .padding()
-                                .foregroundColor(.black.opacity(0.5))
-                                .cornerRadius(8)
-                                .font(.customfont(.medium, fontSize: 16))
-                                .disabled(true)
-                            
-                            
-                        }
-                        .padding(.leading, 16)
-                        .background(Color(hex: "F4F5F7"))
-                        .cornerRadius(8)
-                    }
-                    
-                    
-                    // Mobile Label and TextField
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text(LocalizedStringKey("Mobile"))
-                                .frame(width: locale.identifier == "ko" ? 80 : locale.identifier == "km-KH" ? 90 : 80, alignment: .leading)
-                                .font(.customfont(.medium, fontSize: 16))
-                                .foregroundColor(.black.opacity(0.8))
-                            
-                            TextField("Enter your mobile number", text: $userInputContact)
-                                .padding()
-                                .foregroundColor(.black)
-                                .cornerRadius(8)
-                            
-                                .font(.customfont(.medium, fontSize: 16))
-                        }
-                        .padding(.leading, 16)
-                        .background(Color(hex: "F4F5F7"))
-                        .cornerRadius(8)
-                    }
-                    
-                    // Password Label and SecureField
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text(LocalizedStringKey("Password"))
-                                .frame(width: locale.identifier == "ko" ? 80 : locale.identifier == "km-KH" ? 90 : 80, alignment: .leading)
-                                .font(.customfont(.medium, fontSize: 16))
-                                .foregroundColor(.black.opacity(0.8))
-                            
-                            // Toggleable password field
-                            (isPasswordVisible ? AnyView(TextField("Enter your password", text: $userInputPassword)) : AnyView(SecureField("Enter your password", text: $userInputPassword)))
-                                .padding()
-                                .foregroundColor(.black)
-                                .cornerRadius(8)
-                                .font(.customfont(.medium, fontSize: 16))
-                                .disabled(true)
-                            
-                        }
-                        .padding(.leading, 16)
-                        .background(Color(hex: "F4F5F7"))
-                        .cornerRadius(8)
-                    }
-                    
-                    
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text("Address")
-                                .frame(width: locale.identifier == "ko" ? 80 : locale.identifier == "km-KH" ? 90 : 80, alignment: .leading)
-                                .font(.customfont(.medium, fontSize: 16))
-                                .foregroundColor(.black.opacity(0.8))
-                            
-                            Text(userInputAddress.isEmpty ? "Enter your address" : userInputAddress)
-                                .padding()
-                                .foregroundColor(.black.opacity(userInputAddress.isEmpty ? 0.3 : 1.0))
-                                .font(.customfont(.medium, fontSize: 16))
-                                .background(Color(hex: "F4F5F7"))
-                                .cornerRadius(8)
-                                .onTapGesture {
-                                    showAddressSheet = true
-                                    print("Tapped on address field. showAddressSheet is now \(showAddressSheet)")
-                                }
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .padding(.leading, 16)
-                        .background(Color(hex: "F4F5F7"))
-                        .cornerRadius(8)
-                        .sheet(isPresented: $showAddressSheet) {
-                            NavigationStack {
-                                AddressView(
-                                    onAddressSelected: { selected in
-                                        // Handle selected address
-                                        selectedAddress = selected
-                                        userInputAddress = selectedAddress?.addressDetail ?? ""
-                                        print("userInputAddress: " + userInputAddress)
-                                        print("Updated userInputAddress with selectedAddress.specificLocation: \(selectedAddress?.addressDetail)")
-                                    },
-                                    isFromEditingProfileView: true // Pass true to indicate this view is coming from EditingProfileView
-                                )
-                            }
-                        }
-                    }
-                }
-                .padding(.horizontal, 20)
-                
-                
-                Spacer()
-                // Save Button
-                CustomButton(title: "Save", action: {
-                    print("Save tapped!")
-                    isUpdating = true
-                    if let selectedImage = selectedImages.last {
-                        // Upload the selected image
-                        if let imageData = selectedImage.jpegData(compressionQuality: 0.2) {
-                            let imageExtension = detectImageFormat(data: imageData)
-                            let imageName = "\(UUID().uuidString).\(imageExtension)"
-                            print("Generated Image Name: \(imageName)")
-                            self.imagefile = "\(imageName)"
-                            
-                            // Upload the image and update profile
-                            ImageUploadViewModel().uploadFile(image: imageData) { uploadedImageUrl in
-                                print("Uploaded Image URL: \(uploadedImageUrl)")
-                                if let imageFileName = uploadedImageUrl.split(separator: "/").last {
-                                    profile.updateUserProfile(
-                                        fullName: userInputName,
-                                        phoneNumber: userInputContact,
-                                        address: userInputAddress,
-                                        profileImage: String(imageFileName)
-                                    ) { success in
-                                        isUpdating = false
-                                        if success {
-                                            print("Profile updated successfully.")
-                                            dismiss()
-                                        } else {
-                                            print("Failed to update profile.")
-                                        }
-                                    }
-                                } else {
-                                    print("Failed to extract image file name from URL.")
-                                    isUpdating = false
-                                }
-                            }
-                        }
-                    } else {
-                        // Update profile without changing the image
-                        profile.updateUserProfile(
-                            fullName: userInputName,
-                            phoneNumber: userInputContact,
-                            address: userInputAddress,
-                            profileImage: profile.userProfile?.profileImage ?? ""
-                        ) { success in
-                            isUpdating = false
-                            if success {
-                                print("Profile updated successfully.")
-                                dismiss()
-                            } else {
-                                print("Failed to update profile.")
-                            }
-                        }
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        dismiss()
-                    }
-                    
-                }, backgroundColor: PrimaryColor.normal, frameHeight: 55,frameWidth: .screenWidth * 0.9)
-                Text(LocalizedStringKey("Delete Account?"))
-                    .font(.customfont(.medium, fontSize: 18))
-                    .foregroundStyle(.red)
-                    .padding()
-                    .onTapGesture {
-                        isDeleteAccSheet.toggle()
-                    }
-                    .sheet(isPresented: $isDeleteAccSheet) {
-                        DeleteAccountDialog(
-                            profile: profile,
-//                            authVM: authVM,
-                            onAccountDeleted: {
-                                withAnimation {
-                                    navigateToLogin = true // Trigger navigation
-                                }
-                            }
-                        )
-                        .presentationDetents([.fraction(0.30)])
-                        .presentationDragIndicator(.visible)
-                        .environmentObject(authVM)
-                    }
-                
-                // Navigation to LoginScreenView
-//                NavigationLink(
-//                    destination: LoginScreenView(userStore: userStore, lang: .constant("en")),
-//                    isActive: $navigateToLogin // Observe dedicated navigation state
-//                ) {
-//                    EmptyView()
-//                }
-//                .hidden()
-                
-                NavigationLink(
-                    destination: LoginScreenView(lang: .constant("en")),
-                    isActive: $navigateToLogin
-                ) {
-                    EmptyView()
-                }
-                .hidden()
-                
-                Spacer()
-            }
-            .onAppear {
-                loadProfileData()
-                profile.fetchUserProfile()
-            }
-            .onDisappear{
-                profile.fetchUserProfile()
-                loadProfileData()
-            }
-            .sheet(isPresented: $showImagePicker) {
-                ImagePicker { selectedImages, filenames in
-                    for (index, filename) in filenames.enumerated() {
-                        // Handle each filename and associated UIImage
-                        print("Selected image filename: \(filename)")
                         
-                        // Append each selected image to the list
-                        if index < selectedImages.count {
-                            let uiImage = selectedImages[index]
-                            self.selectedImages.append(uiImage)
+                        Button(action: {
+                            showImagePicker = true
+                        }) {
+                            Circle()
+                                .fill(Color.yellow)
+                                .frame(width: 33, height: 33)
+                                .overlay(
+                                    Image("ico_pen")
+                                        .foregroundColor(.white)
+                                        .font(.customfont(.medium, fontSize: 20))
+                                )
+                        }
+                    }
+                    .padding(.top, 20)
+                    // Personal Info Section
+                    VStack(alignment: .leading) {
+                        Text("Personal info")
+                            .foregroundStyle(Color(hex: "#0A0019"))
+                            .opacity(0.6)
+                            .font(.customfont(.regular, fontSize: 14))
+                            .padding(.trailing,25)
+                            .padding(.vertical,10)
+                            .background(Color.white.opacity(0.2))
+                        
+                        // Full Name Label and TextField
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Text(LocalizedStringKey("Full name"))
+                                    .frame(width: locale.identifier == "ko" ? 80 : locale.identifier == "km-KH" ? 90 : 80, alignment: .leading)
+                                    .font(.customfont(.medium, fontSize: 16))
+                                    .foregroundColor(.black.opacity(0.8))
+                                
+                                TextField("Enter your full name", text: $userInputName)
+                                    .padding()
+                                    .foregroundColor(.black)
+                                    .cornerRadius(8)
+                                    .font(.customfont(.medium, fontSize: 16))
+                                
+                            }
+                            .padding(.leading, 16)
+                            .background(Color(hex: "F4F5F7"))
+                            .cornerRadius(8)
+                        }
+                        
+                        // Email Label and TextField (disabled)
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Text(LocalizedStringKey("Email"))
+                                    .frame(width: locale.identifier == "ko" ? 80 : locale.identifier == "km-KH" ? 90 : 80, alignment: .leading)
+                                    .font(.customfont(.medium, fontSize: 16))
+                                    .foregroundColor(.black.opacity(0.8))
+                                
+                                TextField("Enter your email", text: $userInputEmail)
+                                    .padding()
+                                    .foregroundColor(.black.opacity(0.5))
+                                    .cornerRadius(8)
+                                    .font(.customfont(.medium, fontSize: 16))
+                                    .disabled(true)
+                                
+                                
+                            }
+                            .padding(.leading, 16)
+                            .background(Color(hex: "F4F5F7"))
+                            .cornerRadius(8)
+                        }
+                        
+                        
+                        // Mobile Label and TextField
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Text(LocalizedStringKey("Mobile"))
+                                    .frame(width: locale.identifier == "ko" ? 80 : locale.identifier == "km-KH" ? 90 : 80, alignment: .leading)
+                                    .font(.customfont(.medium, fontSize: 16))
+                                    .foregroundColor(.black.opacity(0.8))
+                                
+                                TextField("Enter your mobile number", text: $userInputContact)
+                                    .padding()
+                                    .foregroundColor(.black)
+                                    .cornerRadius(8)
+                                
+                                    .font(.customfont(.medium, fontSize: 16))
+                            }
+                            .padding(.leading, 16)
+                            .background(Color(hex: "F4F5F7"))
+                            .cornerRadius(8)
+                        }
+                        
+                        // Password Label and SecureField
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Text(LocalizedStringKey("Password"))
+                                    .frame(width: locale.identifier == "ko" ? 80 : locale.identifier == "km-KH" ? 90 : 80, alignment: .leading)
+                                    .font(.customfont(.medium, fontSize: 16))
+                                    .foregroundColor(.black.opacity(0.8))
+                                
+                                // Toggleable password field
+                                (isPasswordVisible ? AnyView(TextField("Enter your password", text: $userInputPassword)) : AnyView(SecureField("Enter your password", text: $userInputPassword)))
+                                    .padding()
+                                    .foregroundColor(.black)
+                                    .cornerRadius(8)
+                                    .font(.customfont(.medium, fontSize: 16))
+                                    .disabled(true)
+                                
+                            }
+                            .padding(.leading, 16)
+                            .background(Color(hex: "F4F5F7"))
+                            .cornerRadius(8)
+                        }
+                        
+                        
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Text("Address")
+                                    .frame(width: locale.identifier == "ko" ? 80 : locale.identifier == "km-KH" ? 90 : 80, alignment: .leading)
+                                    .font(.customfont(.medium, fontSize: 16))
+                                    .foregroundColor(.black.opacity(0.8))
+                                
+                                Text(userInputAddress.isEmpty ? "Enter your address" : userInputAddress)
+                                    .padding()
+                                    .foregroundColor(.black.opacity(userInputAddress.isEmpty ? 0.3 : 1.0))
+                                    .font(.customfont(.medium, fontSize: 16))
+                                    .background(Color(hex: "F4F5F7"))
+                                    .cornerRadius(8)
+                                    .onTapGesture {
+                                        showAddressSheet = true
+                                        print("Tapped on address field. showAddressSheet is now \(showAddressSheet)")
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            .padding(.leading, 16)
+                            .background(Color(hex: "F4F5F7"))
+                            .cornerRadius(8)
+                            .sheet(isPresented: $showAddressSheet) {
+                                NavigationStack {
+                                    AddressView(
+                                        onAddressSelected: { selected in
+                                            // Handle selected address
+                                            selectedAddress = selected
+                                            userInputAddress = selectedAddress?.addressDetail ?? ""
+                                            print("userInputAddress: " + userInputAddress)
+                                            print("Updated userInputAddress with selectedAddress.specificLocation: \(selectedAddress?.addressDetail)")
+                                        },
+                                        isFromEditingProfileView: true // Pass true to indicate this view is coming from EditingProfileView
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                    
+                    
+                    Spacer()
+                    // Save Button
+                    CustomButton(title: "Save", action: {
+                        print("Save tapped!")
+                        isUpdating = true
+                        if let selectedImage = selectedImages.last {
+                            // Upload the selected image
+                            if let imageData = selectedImage.jpegData(compressionQuality: 0.2) {
+                                let imageExtension = detectImageFormat(data: imageData)
+                                let imageName = "\(UUID().uuidString).\(imageExtension)"
+                                print("Generated Image Name: \(imageName)")
+                                self.imagefile = "\(imageName)"
+                                
+                                // Upload the image and update profile
+                                ImageUploadViewModel().uploadFile(image: imageData) { uploadedImageUrl in
+                                    print("Uploaded Image URL: \(uploadedImageUrl)")
+                                    if let imageFileName = uploadedImageUrl.split(separator: "/").last {
+                                        profile.updateUserProfile(
+                                            fullName: userInputName,
+                                            phoneNumber: userInputContact,
+                                            address: userInputAddress,
+                                            profileImage: String(imageFileName)
+                                        ) { success in
+                                            isUpdating = false
+                                            if success {
+                                                print("Profile updated successfully.")
+                                                dismiss()
+                                            } else {
+                                                print("Failed to update profile.")
+                                            }
+                                        }
+                                    } else {
+                                        print("Failed to extract image file name from URL.")
+                                        isUpdating = false
+                                    }
+                                }
+                            }
+                        } else {
+                            // Update profile without changing the image
+                            profile.updateUserProfile(
+                                fullName: userInputName,
+                                phoneNumber: userInputContact,
+                                address: userInputAddress,
+                                profileImage: profile.userProfile?.profileImage ?? ""
+                            ) { success in
+                                isUpdating = false
+                                if success {
+                                    print("Profile updated successfully.")
+                                    dismiss()
+                                } else {
+                                    print("Failed to update profile.")
+                                }
+                            }
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            dismiss()
+                        }
+                        
+                    }, backgroundColor: PrimaryColor.normal, frameHeight: 55,frameWidth: .screenWidth * 0.9)
+                    Text(LocalizedStringKey("Delete Account?"))
+                        .font(.customfont(.medium, fontSize: 18))
+                        .foregroundStyle(.red)
+                        .padding()
+                        .onTapGesture {
+                            isDeleteAccSheet.toggle()
+                        }
+                        .sheet(isPresented: $isDeleteAccSheet) {
+                            DeleteAccountDialog(
+                                profile: profile,
+    //                            authVM: authVM,
+                                onAccountDeleted: {
+                                    withAnimation {
+                                        navigateToLogin = true // Trigger navigation
+                                    }
+                                }
+                            )
+                            .presentationDetents([.fraction(0.30)])
+                            .presentationDragIndicator(.visible)
+                            .environmentObject(authVM)
+                        }
+                    
+                    // Navigation to LoginScreenView
+    //                NavigationLink(
+    //                    destination: LoginScreenView(userStore: userStore, lang: .constant("en")),
+    //                    isActive: $navigateToLogin // Observe dedicated navigation state
+    //                ) {
+    //                    EmptyView()
+    //                }
+    //                .hidden()
+                    
+                    NavigationLink(
+                        destination: LoginScreenView(lang: .constant("en")),
+                        isActive: $navigateToLogin
+                    ) {
+                        EmptyView()
+                    }
+                    .hidden()
+                    
+                    Spacer()
+                }
+                .onAppear {
+                    loadProfileData()
+                    profile.fetchUserProfile()
+                }
+                .onDisappear{
+                    profile.fetchUserProfile()
+                    loadProfileData()
+                }
+                .sheet(isPresented: $showImagePicker) {
+                    ImagePicker { selectedImages, filenames in
+                        for (index, filename) in filenames.enumerated() {
+                            // Handle each filename and associated UIImage
+                            print("Selected image filename: \(filename)")
+                            
+                            // Append each selected image to the list
+                            if index < selectedImages.count {
+                                let uiImage = selectedImages[index]
+                                self.selectedImages.append(uiImage)
+                            }
                         }
                     }
                 }
+
             }
+            .simultaneousGesture(
+                TapGesture().onEnded {
+                    hideKeyboard()
+                }
+            )
+            .padding(.bottom, min(keyboardResponder.currentHeight, 0))
         }
         .navigationTitle(LocalizedStringKey("Edit Profile"))
         .navigationBarTitleDisplayMode(.inline)

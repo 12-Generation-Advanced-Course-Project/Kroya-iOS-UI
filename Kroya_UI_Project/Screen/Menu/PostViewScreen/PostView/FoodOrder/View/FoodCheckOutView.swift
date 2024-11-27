@@ -22,7 +22,7 @@ struct FoodCheckOutView: View {
     @State private var navigationTrigger = false
     @State private var warningMessage: String? 
     let exchangeRateToRiel: Double = 4100
-    
+    @StateObject private var keyboardResponder = KeyboardResponder()
     var totalPriceInRiel: Double {
         if Currency.uppercased() == "RIEL" {
             return Double(totalPrice)
@@ -132,6 +132,12 @@ struct FoodCheckOutView: View {
                     .foregroundColor(.white)
                     .cornerRadius(12)
                 }
+                .simultaneousGesture(
+                    TapGesture().onEnded {
+                        hideKeyboard()
+                    }
+                )
+                .padding(.bottom, min(keyboardResponder.currentHeight, 0))
                 .padding(.horizontal)
                 .navigationTitle(LocalizedStringKey("Checkout"))
                 .navigationBarTitleDisplayMode(.inline)
@@ -144,6 +150,7 @@ struct FoodCheckOutView: View {
                     PurchaseId: PurchaesViewModel.Purchases?.purchaseId ?? 0
                 )
             })
+            .ignoresSafeArea(.keyboard)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     HStack {

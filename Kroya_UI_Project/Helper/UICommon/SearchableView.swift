@@ -18,7 +18,7 @@ struct SearchScreen: View {
         "Khor",
         "Somlor Jab Chay"
     ]
-    
+    @StateObject private var keyboardResponder = KeyboardResponder()
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
@@ -170,6 +170,12 @@ struct SearchScreen: View {
                     }
                     .padding(.horizontal, geometry.size.width * 0.05)
                 }
+                .simultaneousGesture(
+                    TapGesture().onEnded {
+                        hideKeyboard()
+                    }
+                )
+                .padding(.bottom, min(keyboardResponder.currentHeight, 0))
             }
             .background(
                 NavigationLink(
