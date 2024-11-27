@@ -16,7 +16,8 @@ struct HomeView: View {
     @StateObject private var recentSearchesData = RecentSearchesData()
     @StateObject private var PopularFoodsData =  PopularFoodVM()
     @StateObject private var favoriteVM = FavoriteVM()
-    @StateObject private var notificationVM = NotificationViewModel()
+//    @StateObject private var notificationVM = NotificationViewModel()
+    @StateObject private var viewModel = NotificationViewModel()
     @Environment(\.modelContext) var modelContext
     @State var isLoading: Bool = false
     // hengly 26/11/24
@@ -317,11 +318,11 @@ struct HomeView: View {
                                             .foregroundColor(.black)
                                         
                                         // Badge Count
-                                        Text("\(notificationVM.notifications.count)")
+                                        Text("\(viewModel.todayNotificationCount)")
                                             .font(.system(size: 12, weight: .semibold))
                                             .foregroundColor(.white)
                                             .padding(5)
-                                            .background(notificationVM.notifications.isEmpty ? Color.red : Color.red)
+                                            .background(viewModel.notifications.isEmpty ? Color.red : Color.red)
                                             .clipShape(Circle())
                                             .overlay(
                                                 Circle()
@@ -356,7 +357,7 @@ struct HomeView: View {
         guestCategoryVM.fetchAllGuestCategory()
         guestFoodSellVM.getAllGuestFoodSell()
         guestFoodRecipeVM.getAllGuestRecipeFood()
-        notificationVM.fetchNotifications()
+        viewModel.fetchNotifications()
         
     }
     private func refreshData() async {
