@@ -144,7 +144,7 @@ struct LoadingView: View {
             ProgressView()
                 .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
                 .scaleEffect(2)
-                .offset(y: -50)
+                .offset(y: 180)
         }
     }
 }
@@ -196,13 +196,21 @@ struct FoodListView: View {
         
 }
 
+
 struct GuestFoodListView: View {
     let isChooseCuisine: Bool
     @ObservedObject var guestFoodSellVM: GuestFoodOnSaleVM
     var body: some View {
+        if guestFoodSellVM.filteredFoodList.isEmpty {
+            Text("No Food Sell Available!")
+                .font(.title3)
+                .foregroundColor(.gray)
+                .padding()
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+        } else {
         ScrollView {
             LazyVStack {
-                ForEach(isChooseCuisine ? guestFoodSellVM.GuestFoodSellByCategory : guestFoodSellVM.filteredFoodList) { guestFoodSale in
+                ForEach(guestFoodSellVM.filteredFoodList) { guestFoodSale in
                     NavigationLink(destination: FoodDetailView(
                         isFavorite: guestFoodSale.isFavorite ?? false,
                         showPrice: true,
@@ -224,5 +232,6 @@ struct GuestFoodListView: View {
                 }
             }
         }
+         }
     }
 }
