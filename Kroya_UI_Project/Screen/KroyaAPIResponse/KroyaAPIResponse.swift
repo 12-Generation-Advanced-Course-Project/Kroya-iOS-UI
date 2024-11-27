@@ -94,3 +94,10 @@ typealias GuestFoodSellCuisineResponse = KroyaAPIResponse<FoodSellModel>
 
 //MARK: Guest food Recipe
 typealias guestFoodRecipeResponse = KroyaAPIResponse<FoodRecipeModel>
+
+
+//MARK: Guest Search All Food
+typealias guestSearchAllFoodResponse = KroyaSingleAPIResponse<FoodListPayload>
+
+//MARK: Guest Search All Food By Name
+typealias guestSearchAllFoodByNameResponse = KroyaSingleAPIResponse<FoodListPayload>
