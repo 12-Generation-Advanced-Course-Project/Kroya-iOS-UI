@@ -12,7 +12,6 @@ struct ProfileView: View {
     @State private var isLogout = false
     @State private var isLoading = false
     @State private var showLogoutSuccessAlert = false
-//    @ObservedObject  var authVM : AuthViewModel
     @EnvironmentObject var authVM: AuthViewModel
     @State private var selectedAddress: Address?
     @EnvironmentObject var userStore: UserStore
@@ -24,6 +23,8 @@ struct ProfileView: View {
     var urlImagePrefix: String = Constants.fileupload
     @Environment(\.modelContext) var modelContext
     @Binding var lang: String
+    @State private var showAlertWeBill = false
+    @State private var isUpdatingLocation = false // Add this state to track loading
     
     init(lang: Binding<String>) {
         self._lang = lang
@@ -129,7 +130,7 @@ struct ProfileView: View {
                     }
                 }
                 Spacer().frame(height: .screenHeight * 0.03)
-                NavigationLink(destination: WebillConnectView().environment(\.modelContext, modelContext)) {
+                NavigationLink(destination: WebillConnectView(webillConnect: WeBillVM).environment(\.modelContext, modelContext)) {
                     VStack(alignment: .leading) {
                         Text("Payment Method")
                             .customFontMediumLocalize(size: 14)
@@ -140,10 +141,17 @@ struct ProfileView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 25, height: 25)
-                            Text("Connected")
-                                .customFontMediumLocalize(size: 16)
-                                .foregroundStyle(.black)
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                            if WeBillVM.isConnect {
+                                Text("Connected")
+                                    .customFontMediumLocalize(size: 16)
+                                    .foregroundStyle(.black)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            } else {
+                                Text("Connect with ")
+                                    .customFontMediumLocalize(size: 16)
+                                    .foregroundStyle(.black)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
                             Spacer()
                             Text("weBill365")
                                 .customFontMediumLocalize(size: 14)
@@ -158,6 +166,13 @@ struct ProfileView: View {
                         .background(Color(hex: "#F4F5F7"))
                         .cornerRadius(15)
                     }
+                    .onTapGesture {
+                        if WeBillVM.isConnect == true {
+                            withAnimation{
+                                showAlertWeBill = true
+                            }
+                        }
+                    }
                 }
                 
                 Spacer().frame(height: .screenHeight * 0.03)
@@ -169,6 +184,53 @@ struct ProfileView: View {
                         .onTapGesture {
                             showMapSheet.toggle()
                         }
+                        .sheet(isPresented: Binding<Bool>(
+                            get: { showMapSheet || isUpdatingLocation }, // Keep the sheet open while loading
+                            set: { newValue in
+                                if !isUpdatingLocation { showMapSheet = newValue } // Allow dismiss only if not loading
+                            }
+                        )) {
+                            ZStack {
+                                NavigationStack {
+                                    AddressView(
+                                        onAddressSelected: { selected in
+                                            // Handle selected address
+                                            selectedAddress = selected
+                                            
+                                            // Start showing the loading indicator
+                                            isUpdatingLocation = true
+                                            
+                                            // Simulate location update with a delay for testing
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                                Profile.updateLocation(location: selected.addressDetail) { success in
+                                                    isUpdatingLocation = false
+                                                    if success {
+                                                        print("Location updated successfully.")
+                                                        showMapSheet = false // Close the sheet after loading
+                                                    } else {
+                                                        print("Failed to update location.")
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        isFromEditingProfileView: true
+                                    )
+                                }
+                                
+                                // Loading indicator overlay
+                                if isUpdatingLocation {
+                                    ZStack {
+                                        Color.black.opacity(0.4)
+                                            .ignoresSafeArea()
+                                        ProgressView("Updating location...")
+                                            .padding()
+                                            .background(Color.white)
+                                            .cornerRadius(10)
+                                    }
+                                }
+                            }
+                        }
+
                     NavigationLink {
                         AllowNotificationView()
                     } label: {
@@ -208,6 +270,19 @@ struct ProfileView: View {
             .padding(.horizontal, 10)
             if isLoading {
                 ProgressIndicator()
+            }
+            if showAlertWeBill {
+                WeBillDisconnect(
+                    onCancel: { showAlertWeBill = false },
+                    onYes: {
+                        isLoading = true
+                        showAlertWeBill = false
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+//                            showLoadingOverlay = false
+                            WeBillVM.DisconnectWeBillaccount(context: modelContext)
+                        }
+                    }
+                )
             }
         }
         .onAppear {

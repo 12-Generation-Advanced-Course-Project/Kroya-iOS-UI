@@ -89,6 +89,36 @@ class ProfileService {
                 }
             }
     }
+    
+    func updateLocation(location: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let accessToken = Auth.shared.getAccessToken() else {
+            let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token not found."])
+            completion(.failure(error))
+            return
+        }
+
+        let url = Constants.KroyaUrlUser + "edit-profile"
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)",
+            "Content-Type": "application/json"
+        ]
+
+        let parameters: [String: Any] = [
+            "location": location
+        ]
+
+        AF.request(url, method: .put, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+            .validate(statusCode: 200..<300)
+            .response { response in
+                switch response.result {
+                case .success:
+                    completion(.success(()))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+    }
+
 
 }
 

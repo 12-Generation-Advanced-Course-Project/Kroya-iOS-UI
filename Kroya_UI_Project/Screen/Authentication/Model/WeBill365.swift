@@ -103,6 +103,7 @@ struct ConnectWebillConnect: Codable {
 }
 
 typealias ConnectWebillResponseData = ConnectWebillResponse<ConnectWebillConnect>
+typealias DisconnectWeBillAccountResponse = ConnectWebillResponse<String>
 
 
 

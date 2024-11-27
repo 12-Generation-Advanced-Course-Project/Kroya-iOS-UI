@@ -9,7 +9,6 @@ import Foundation
 
 // MARK: - Payload
 struct OrderModel: Identifiable, Decodable {
-    
     var id = UUID()
     var foodSellId  : Int
     let name: String
