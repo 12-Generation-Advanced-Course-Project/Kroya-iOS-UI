@@ -47,9 +47,10 @@ class OrderRequestService: ObservableObject {
                     print("Failed to convert response data to pretty JSON: \(error)")
                 }
             }
-            
+            debugPrint(response)
             // Handle the response result
             switch response.result {
+                
             case .success(let apiResponse):
                 if let statusCode = Int(apiResponse.statusCode), statusCode == 200 {
                     completion(.success(apiResponse))

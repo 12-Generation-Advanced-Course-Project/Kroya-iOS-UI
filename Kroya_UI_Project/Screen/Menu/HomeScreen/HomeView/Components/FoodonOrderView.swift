@@ -8,58 +8,66 @@ struct FoodonOrderView: View {
     let titleofOrder: [String] = ["Soup", "Salad", "Grill", "Dessert"]
     @State private var selectedOrderIndex: Int? = nil
     @State var isChooseCuisine = false
-
+    @StateObject private var keyboardResponder = KeyboardResponder()
     var body: some View {
         NavigationView {
-            VStack {
-                // Cuisine Category Buttons
-                CuisineCategoryButtons(
-                    imageofOrder: imageofOrder,
-                    titleofOrder: titleofOrder,
-                    selectedOrderIndex: $selectedOrderIndex,
-                    isChooseCuisine: $isChooseCuisine,
-                    foodViewModel: foodViewModel,
-                    guestFoodSellVM: guestFoodSellVM
-                )
-                .frame(maxWidth: .infinity, alignment: .center)
-                Spacer().frame(height: 20)
-                
-                Text("All")
-                    .font(.customfont(.bold, fontSize: 16))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .foregroundStyle(.black.opacity(0.8))
-                    .padding(.horizontal)
-                
-                // Loading Indicator or Content
-                if Auth.shared.hasAccessToken(){
-                    if foodViewModel.isLoading {
-                        LoadingView()
+            ScrollView(.vertical,showsIndicators: false){
+                VStack {
+                    // Cuisine Category Buttons
+                    CuisineCategoryButtons(
+                        imageofOrder: imageofOrder,
+                        titleofOrder: titleofOrder,
+                        selectedOrderIndex: $selectedOrderIndex,
+                        isChooseCuisine: $isChooseCuisine,
+                        foodViewModel: foodViewModel,
+                        guestFoodSellVM: guestFoodSellVM
+                    )
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    Spacer().frame(height: 20)
+                    
+                    Text("All")
+                        .font(.customfont(.bold, fontSize: 16))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .foregroundStyle(.black.opacity(0.8))
+                        .padding(.horizontal)
+                    
+                    // Loading Indicator or Content
+                    if Auth.shared.hasAccessToken(){
+                        if foodViewModel.isLoading {
+                            LoadingView()
+                        } else {
+                            FoodListView(isChooseCuisine: isChooseCuisine, foodViewModel: foodViewModel)
+                        }
                     } else {
-                        FoodListView(isChooseCuisine: isChooseCuisine, foodViewModel: foodViewModel)
+                        if guestFoodSellVM.isLoading {
+                            LoadingView()
+                        } else {
+                            GuestFoodListView(isChooseCuisine: isChooseCuisine, guestFoodSellVM: guestFoodSellVM)
+                        }
                     }
-                } else {
-                    if guestFoodSellVM.isLoading {
-                        LoadingView()
-                    } else {
-                        GuestFoodListView(isChooseCuisine: isChooseCuisine, guestFoodSellVM: guestFoodSellVM)
+                }
+                .navigationTitle("Food Order")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: {
+                            dismiss()
+                        }) {
+                            Image(systemName: "arrow.left")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 20, height: 20)
+                                .foregroundColor(.black)
+                        }
                     }
                 }
             }
-            .navigationTitle("Food Order")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Image(systemName: "arrow.left")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 20, height: 20)
-                            .foregroundColor(.black)
-                    }
+            .simultaneousGesture(
+                TapGesture().onEnded {
+                    hideKeyboard()
                 }
-            }
+            )
+            .padding(.bottom, min(keyboardResponder.currentHeight, 0))
             
         }
         .onAppear {
@@ -136,7 +144,7 @@ struct LoadingView: View {
             ProgressView()
                 .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
                 .scaleEffect(2)
-                .offset(y: -50)
+                .offset(y: 180)
         }
     }
 }
@@ -188,13 +196,21 @@ struct FoodListView: View {
         
 }
 
+
 struct GuestFoodListView: View {
     let isChooseCuisine: Bool
     @ObservedObject var guestFoodSellVM: GuestFoodOnSaleVM
     var body: some View {
+        if guestFoodSellVM.filteredFoodList.isEmpty {
+            Text("No Food Sell Available!")
+                .font(.title3)
+                .foregroundColor(.gray)
+                .padding()
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+        } else {
         ScrollView {
             LazyVStack {
-                ForEach(isChooseCuisine ? guestFoodSellVM.GuestFoodSellByCategory : guestFoodSellVM.filteredFoodList) { guestFoodSale in
+                ForEach(guestFoodSellVM.filteredFoodList) { guestFoodSale in
                     NavigationLink(destination: FoodDetailView(
                         isFavorite: guestFoodSale.isFavorite ?? false,
                         showPrice: true,
@@ -216,5 +232,6 @@ struct GuestFoodListView: View {
                 }
             }
         }
+         }
     }
 }

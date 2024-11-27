@@ -12,7 +12,7 @@ struct RecipeModalView: View {
     @ObservedObject var draftModelData: DraftModelData
     @Environment(\.modelContext) var modelContext
     @State var showDraftAlert: Bool = false
-
+    @StateObject private var keyboardResponder = KeyboardResponder()
 
     var body: some View {
         VStack {
@@ -100,9 +100,13 @@ struct RecipeModalView: View {
                     Spacer()
                 }
             }
+            .simultaneousGesture(
+                TapGesture().onEnded {
+                    hideKeyboard()
+                }
+            )
+            .padding(.bottom, min(keyboardResponder.currentHeight, 0))
             .padding(.horizontal, 20)
-            
-            // Global validation error message
             if showValidationError {
                 Text("Please fill in all required fields before proceeding.")
                     .foregroundColor(.red)

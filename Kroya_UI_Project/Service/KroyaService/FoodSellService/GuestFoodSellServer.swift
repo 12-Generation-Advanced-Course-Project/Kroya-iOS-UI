@@ -48,7 +48,7 @@ class GuestFoodSellService{
     //MARK: Guest get food sell by cuisine id
     func getFoodSellByCuisine(cuisine: Int, completion: @escaping (Result<GuestFoodSellCuisineResponse, Error>) -> Void) {
         
-        let url = "\(Constants.FoodSellCategoryUrl)\(cuisine)"
+        let url = "\(Constants.guestSeelCuisine)\(cuisine)"
         let headers: HTTPHeaders = [
             
             "accept" : "*/*",

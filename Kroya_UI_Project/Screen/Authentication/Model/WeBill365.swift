@@ -107,3 +107,21 @@ typealias DisconnectWeBillAccountResponse = ConnectWebillResponse<String>
 
 
 
+// MARK: - Get Credientail User
+struct SellerCredentials : Codable {
+    let message: String
+        let payload: Payload
+        let statusCode, timestamp: String
+    }
+
+    // MARK: - Payload
+    struct Payload: Codable {
+        let id: Int
+        let clientID, clientSecret, accountNo: String
+
+        enum CodingKeys: String, CodingKey {
+            case id
+            case clientID = "clientId"
+            case clientSecret, accountNo
+        }
+    }
