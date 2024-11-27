@@ -1,14 +1,18 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
+
 struct NotificationComponent: View {
-    
-    var notification: NotificationModel
+    let notification: NotificationModel
+    let sellerId: Int
     private let urlImagePrefix = "https://kroya-api-production.up.railway.app/api/v1/fileView/"
     
+    @State private var isActive: Bool = false
+
     var body: some View {
-        VStack{
+        VStack(alignment: .leading) {
             HStack(alignment: .center, spacing: 8) {
+                // Image Section
                 ZStack(alignment: .topLeading) {
                     if let url = URL(string: urlImagePrefix + notification.foodPhoto) {
                         WebImage(url: url)
@@ -25,24 +29,74 @@ struct NotificationComponent: View {
                     }
                 }
                 
-                VStack(alignment: .leading, spacing: 2) {                     Text(notification.description)
-                        .font(.system(size: 14, weight: .medium))
+                // Text Section
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(notification.description)
+                        .font(.system(size: 14))
+                        .foregroundColor(.black)
+                        .multilineTextAlignment(.leading)
                     
                     Text(formatTimeAgo(from: notification.createdDate))
                         .font(.system(size: 12))
                         .foregroundColor(.gray)
+                        .multilineTextAlignment(.leading)
                 }
                 
                 Spacer()
                 
-                Circle()
-                    .fill(Color.yellow)
-                    .frame(width: 8, height: 8)
+                // Yellow indicator for unread notifications
+                if !notification.isRead {
+                    Circle()
+                        .fill(Color.yellow)
+                        .frame(width: 10, height: 10)
+                }
             }
+            Divider()
+                .padding(.top, 4)
         }
-        .padding(.horizontal, 4)
-        Divider()
-            .padding(.horizontal, 4)
+        .padding(.horizontal, 8)
+        .background(
+            NavigationLink(
+                destination: getDestinationView(),
+                isActive: $isActive,
+                label: { EmptyView() }
+            )
+            .hidden()
+        )
+        .onTapGesture {
+            markNotificationAsRead()
+            isActive = true
+        }
+    }
+    
+    // MARK: - Destination View
+    @ViewBuilder
+    private func getDestinationView() -> some View {
+        switch notification.foodCardType {
+        case "SALE":
+            OrderListView(sellerId: sellerId, orderCountText: "5")
+        case "ORDER":
+            FoodDetailView(
+                isFavorite: false,
+                showPrice: true,
+                showOrderButton: false,
+                showButtonInvoic: "true",
+                invoiceAccept: "ACCEPTED",
+                FoodId: notification.foodSellId,
+                ItemType: notification.itemType,
+                PurchaseId: notification.purchaseID
+            )
+        default:
+            Text("Unknown destination")
+        }
+    }
+    
+    // MARK: - Mark Notification as Read
+    private func markNotificationAsRead() {
+        if !notification.isRead {
+            print("Notification marked as read for ID: \(notification.notificationID)") // Debug log
+            // Add API call here if needed to persist the state
+        }
     }
     
     // MARK: - Helper Functions
@@ -56,11 +110,11 @@ struct NotificationComponent: View {
         
         let calendar = Calendar.current
         let todayStart = calendar.startOfDay(for: now)
-        let yesterdayStart = calendar.date(byAdding: .day, value: -1, to: todayStart)!
         
         let minutesAgo = Int(timeInterval / 60) // Convert seconds to minutes
         let hoursAgo = Int(timeInterval / 3600) // Convert seconds to hours
-
+        
+        // Check if date is today
         if calendar.isDateInToday(date) {
             if minutesAgo < 1 {
                 return "Just now"
@@ -69,13 +123,13 @@ struct NotificationComponent: View {
             } else {
                 return "\(hoursAgo) h ago"
             }
-        } else if calendar.isDate(date, inSameDayAs: yesterdayStart) {
-            return formatDateToDDMMYY(date)
+        } else if date >= todayStart {
+            return "Later Today"
         } else {
             return formatDateToDDMMYY(date)
         }
     }
-
+    
     private func parseDate(_ dateString: String) -> Date? {
         let dateFormats = [
             "yyyy-MM-dd'T'HH:mm:ss.SSS",
@@ -101,8 +155,3 @@ struct NotificationComponent: View {
         return formatter.string(from: date)
     }
 }
-
-
-
-
-

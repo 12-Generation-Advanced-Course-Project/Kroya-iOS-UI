@@ -199,6 +199,8 @@ class PurchaseService: ObservableObject {
             // Handle the response result
             switch respons.result {
             case .success(let payloads):
+                print("Raw API Response: \(String(describing: String(data: respons.data ?? Data(), encoding: .utf8)))")
+
                 completion(.success(payloads))
             case .failure(let error):
                 completion(.failure(error))

@@ -17,9 +17,9 @@ struct UserBasicInfoView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var userStore: UserStore
     //    @EnvironmentObject var addressVM: AddressViewModel
-//    @ObservedObject var authVM = AuthViewModel(userStore: UserStore())
+    //    @ObservedObject var authVM = AuthViewModel(userStore: UserStore())
     @EnvironmentObject var authVM: AuthViewModel // Use EnvironmentObject
-
+    
     @Binding var lang: String
     @State private var showAddressSheet = false
     @State private var userInputAddress: String = ""
@@ -119,8 +119,9 @@ struct UserBasicInfoView: View {
                     .sheet(isPresented: $showAddressSheet) {
                         NavigationStack {
                             AddressView(
-                                onAddressSelected: { selectedAddress in
-                                    userInputAddress = selectedAddress.addressDetail
+                                onAddressSelected: { selected in
+                                    selectedAddress = selected
+                                    userInputAddress = selectedAddress?.addressDetail ?? ""
                                     print("Selected address: \(selectedAddress)")
                                 },
                                 isFromEditingProfileView: true
@@ -173,13 +174,13 @@ struct UserBasicInfoView: View {
             
             Spacer()
             
-//            // NavigationLink to MainScreen for save action
-//            NavigationLink(destination: MainScreen(userStore: userStore, lang: $lang)
-//                .environmentObject(userStore),
-//                           isActive: $authVM.isUserSave, label: {
-//                EmptyView()
-//            })
-//            .hidden()
+            //            // NavigationLink to MainScreen for save action
+            //            NavigationLink(destination: MainScreen(userStore: userStore, lang: $lang)
+            //                .environmentObject(userStore),
+            //                           isActive: $authVM.isUserSave, label: {
+            //                EmptyView()
+            //            })
+            //            .hidden()
             // NavigationLink to MainScreen for save action
             NavigationLink(
                 destination: MainScreen(lang: $lang)
@@ -199,12 +200,12 @@ struct UserBasicInfoView: View {
             //            }
         }
         .padding(.horizontal, 20)
-//                NavigationLink(destination: MainScreen(userStore: userStore, lang: $lang)
-//                    .environmentObject(userStore),
-//                               isActive: $isSkip) {
-//                        EmptyView()
-//                    }
-//                    .hidden()
+        //                NavigationLink(destination: MainScreen(userStore: userStore, lang: $lang)
+        //                    .environmentObject(userStore),
+        //                               isActive: $isSkip) {
+        //                        EmptyView()
+        //                    }
+        //                    .hidden()
         // NavigationLink to MainScreen for skip action
         NavigationLink(
             destination: MainScreen(lang: $lang)
@@ -228,14 +229,14 @@ struct UserBasicInfoView: View {
         }
         
         isLoading = true
-        //           authVM.saveUserInfo(
-        //               email: userStore.user?.email ?? "No Email",
-        //               userName: textName,
-        //               phoneNumber: phoneNumber,
-        //               address: addressVM.selectedAddress?.specificLocation ?? "No Address",
-        //               accessToken: userStore.user?.accesstoken ?? "",
-        //               refreshToken: userStore.user?.refreshtoken ?? ""
-        //           )
+        authVM.saveUserInfo(
+            email: userStore.user?.email ?? "No Email",
+            userName: textName,
+            phoneNumber: phoneNumber,
+            address: userInputAddress,
+            accessToken: userStore.user?.accesstoken ?? "",
+            refreshToken: userStore.user?.refreshtoken ?? ""
+        )
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             isLoading = false

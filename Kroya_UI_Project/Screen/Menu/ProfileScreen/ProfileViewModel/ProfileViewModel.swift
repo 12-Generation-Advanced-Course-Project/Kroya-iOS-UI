@@ -118,6 +118,26 @@ class ProfileViewModel: ObservableObject {
         }
     }
 
+    func updateLocation(location: String, completion: @escaping (Bool) -> Void) {
+        self.isLoading = true
+        
+        ProfileService.shared.updateLocation(location: location) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                switch result {
+                case .success:
+                    self?.userProfile?.location = location
+                    self?.successMessage = "Location updated successfully."
+                    self?.showError = false
+                    completion(true)
+                case .failure(let error):
+                    self?.errorMessage = "Failed to update location: \(error.localizedDescription)"
+                    self?.showError = true
+                    completion(false)
+                }
+            }
+        }
+    }
 
 
     

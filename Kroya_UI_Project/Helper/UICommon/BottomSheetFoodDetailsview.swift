@@ -1,4 +1,5 @@
 
+
 import SwiftUI
 
 struct BottomSheetView<Content: View>: View {
@@ -53,7 +54,7 @@ struct BottomSheetView<Content: View>: View {
         self.FoodDetails = FoodDetails
         self.FoodDetailsId = FoodetailsId
         self.PurchaseId = PurchaseId
-       
+        
     }
     
     var body: some View {
@@ -94,136 +95,133 @@ struct BottomSheetView<Content: View>: View {
             }
         }
     }
-    
-    
     private var indicator: some View {
-       
-            VStack(spacing: 10) {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color(hex: "#D0DBEA"))
-                    .frame(width: 40, height: 5)
-                    .padding(.top, 22)
-                    .onTapGesture {
-                        // Toggle the state when the user taps the bar
-                        withAnimation(.spring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.5)) {
-                            self.isOpen.toggle()
-                        }
+        VStack(spacing: 10) {
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color(hex: "#D0DBEA"))
+                .frame(width: 40, height: 5)
+                .padding(.top, 22)
+                .onTapGesture {
+                    // Toggle the state when the user taps the bar
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.5)) {
+                        self.isOpen.toggle()
                     }
-                HStack {
-                    if itemType == "FOOD_RECIPE" {
-                        if let recipeDetails = FoodDetails.foodRecipeDetail {
-                            Text(recipeDetails.name)
-                                .font(.customfont(.bold, fontSize: 20))
-                        } else {
-                            ProgressView()
-                                .frame(height: .screenHeight * 0.4)
-                                .edgesIgnoringSafeArea(.top)
-                        }
-                    } else if itemType == "FOOD_SELL" {
-                        if let sellDetails = FoodDetails.foodSellDetail {
-                            Text(sellDetails.foodRecipeDTO.name)
-                                .font(.customfont(.bold, fontSize: 20))
-                        } else {
-                            ProgressView()
-                                .frame(height: .screenHeight * 0.4)
-                                .edgesIgnoringSafeArea(.top)
-                        }
+                }
+            HStack {
+                if itemType == "FOOD_RECIPE" {
+                    if let recipeDetails = FoodDetails.foodRecipeDetail {
+                        Text(recipeDetails.name)
+                            .font(.customfont(.bold, fontSize: 20))
+                    } else {
+                        ProgressView()
+                            .frame(height: .screenHeight * 0.4)
+                            .edgesIgnoringSafeArea(.top)
                     }
+                } else if itemType == "FOOD_SELL" {
+                    if let sellDetails = FoodDetails.foodSellDetail {
+                        Text(sellDetails.foodRecipeDTO.name)
+                            .font(.customfont(.bold, fontSize: 20))
+                    } else {
+                        ProgressView()
+                            .frame(height: .screenHeight * 0.4)
+                            .edgesIgnoringSafeArea(.top)
+                    }
+                }
+                
+                Spacer()
+                //MARK: Show Accept or Reject from Notification
+                if let notificationType = notificationType {
+                    Text(notificationType == 1 ? LocalizedStringKey("Rejected") : LocalizedStringKey("Accepted "))
+                        .font(.customfont(.medium, fontSize: 16))
+                        .foregroundStyle(.white)
+                        .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.height * 0.04)
+                        .background(notificationType == 1 ?  Color.red : Color(hex: "#00BD4E") )
+                        .cornerRadius(UIScreen.main.bounds.width * 0.022)
+                }
+                // MARK: Show Order Button if User is not the Food Owner
+                if showOrderButton {
+                    // Extract Food Owner ID and Current User ID
+                    let foodOwnerID = FoodDetails.foodRecipeDetail?.user.id
+                    ?? FoodDetails.foodSellDetail?.foodRecipeDTO.user.id
+                    ?? 0
+                    let currentUserID = Profile.userProfile?.id ?? 0
                     
-                    Spacer()
-                    //MARK: Show Accept or Reject from Notification
-                    if let notificationType = notificationType {
-                        Text(notificationType == 1 ? LocalizedStringKey("Rejected") : LocalizedStringKey("Accepted "))
+                    // Show Order button only if Current User is NOT the Owner
+                    if currentUserID != foodOwnerID {
+                        if let sellDetails = FoodDetails.foodSellDetail {
+                            let imageName = sellDetails.foodRecipeDTO.photo.first?.photo ?? ""
+                            
+                            Button(action: {
+                                navigateToCheckout = true
+                            }) {
+                                HStack {
+                                    Text("Order")
+                                        .font(.customfont(.medium, fontSize: 16))
+                                        .foregroundStyle(.white)
+                                    Image(systemName: "plus")
+                                        .resizable()
+                                        .frame(width: 14, height: 14)
+                                        .foregroundStyle(.white)
+                                }
+                                .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.height * 0.04)
+                                .background(PrimaryColor.normal)
+                                .cornerRadius(UIScreen.main.bounds.width * 0.022)
+                            }
+                            
+                            // Navigation to FoodCheckOutView
+                            NavigationLink(
+                                destination: FoodCheckOutView(
+                                    imageName: .constant(imageName),
+                                    Foodname: sellDetails.foodRecipeDTO.name,
+                                    FoodId: sellDetails.id,
+                                    Date: sellDetails.dateCooking,
+                                    Price: sellDetails.price,
+                                    Currency: sellDetails.currencyType,
+                                    PhoneNumber: sellDetails.foodRecipeDTO.user.phoneNumber ?? "",
+                                    ReciptentName: sellDetails.foodRecipeDTO.user.fullName
+                                ),
+                                isActive: $navigateToCheckout
+                            ) {
+                                EmptyView()
+                            }
+                        }
+                    }
+                }
+                
+                if showButtonInvoic == "true" {
+                    Button(action: {
+                        if invoiceAccept == "ACCEPTED" {
+                            print("Invoice button clicked")
+                            navigateToReceipt = true
+                        }
+                    }) {
+                        Text("Invoice")
                             .font(.customfont(.medium, fontSize: 16))
                             .foregroundStyle(.white)
                             .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.height * 0.04)
-                            .background(notificationType == 1 ?  Color.red : Color(hex: "#00BD4E") )
+                            .background(invoiceAccept == "ACCEPTED" ? Color.green : Color.red)
                             .cornerRadius(UIScreen.main.bounds.width * 0.022)
                     }
-                    // MARK: Show Order Button if User is not the Food Owner
-                    if showOrderButton {
-                        let foodOwnerID = ((FoodDetails.foodRecipeDetail?.user.id ?? FoodDetails.foodSellDetail?.foodRecipeDTO.user.id ?? 0) != 0) || (FoodDetailsId != 0) ? (FoodDetails.foodRecipeDetail?.user.id ?? FoodDetails.foodSellDetail?.foodRecipeDTO.user.id ?? 0) : 0
-                        let currentUserID = Profile.userProfile?.id ?? 0
-                        
-                        if currentUserID != foodOwnerID {
-                            // Current user is NOT the owner, show "Order" button
-                            if let sellDetails = FoodDetails.foodSellDetail {
-                                let imageName = sellDetails.foodRecipeDTO.photo.first?.photo ?? ""
-                                Button(action: {
-                                    navigateToCheckout = true
-                                    print("\(foodOwnerID)")
-                                    print("\(currentUserID)")
-                                }) {
-                                    HStack {
-                                        Text("Order")
-                                            .font(.customfont(.medium, fontSize: 16))
-                                            .foregroundStyle(.white)
-                                        Image(systemName: "plus")
-                                            .resizable()
-                                            .frame(width: 14, height: 14)
-                                            .foregroundStyle(.white)
-                                    }
-                                    .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.height * 0.04)
-                                    .background(PrimaryColor.normal)
-                                    .cornerRadius(UIScreen.main.bounds.width * 0.022)
-                                }
-                                NavigationLink(
-                                    destination: FoodCheckOutView(
-                                        imageName: .constant(imageName),
-                                        Foodname: sellDetails.foodRecipeDTO.name,
-                                        FoodId: sellDetails.id,
-                                        Date: sellDetails.dateCooking,
-                                        Price: sellDetails.price,
-                                        Currency: sellDetails.currencyType,
-                                        PhoneNumber: sellDetails.foodRecipeDTO.user.phoneNumber ?? "",
-                                        ReciptentName: sellDetails.foodRecipeDTO.user.fullName
-                                    ),
-                                    isActive: $navigateToCheckout
-                                ) {
-                                    EmptyView()
-                                }
-                            }
-                        } else {
-                            
-                            // Current user is the owner, hide "Order" button
-                            Spacer().frame(width: 0, height: 0)
-                        }
+
+                    // Use NavigationLink outside the Button
+                    NavigationLink(
+                        destination: ReceiptView(
+                            isPresented: $isPresented,
+                            isOrderReceived: false,
+                            PurchaseId: PurchaseId
+                        ),
+                        isActive: $navigateToReceipt
+                    ) {
+                        EmptyView() // Keeps it invisible
                     }
-                    if showButtonInvoic == "true" {
-                        Button {
-                            if invoiceAccept == "ACCEPTED"{
-                                navigateToReceipt = true
-                            }
-                        } label: {
-                            Text(invoiceAccept == "ACCEPTED" ? LocalizedStringKey("Invoice") : LocalizedStringKey("Invoice"))
-                                .font(.customfont(.medium, fontSize: 16))
-                                .foregroundStyle(.white)
-                                .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.height * 0.04)
-                                .background(invoiceAccept == "ACCEPTED" ? Color.green : Color.red)
-                                .cornerRadius(UIScreen.main.bounds.width * 0.022)
-                                .background(
-                                    NavigationLink(
-                                        destination:
-                                            ReceiptView(
-                                                  isPresented: $isPresented,
-                                                  isOrderReceived: false,
-                                                  PurchaseId:PurchaseId ?? 0
-                                            ),
-                                        isActive: $navigateToReceipt
-                                    ) {
-                                        EmptyView()
-                                    }
-                               
-                                )
-                        }
-                    }
-                    
                 }
-            }.onAppear{
-                Profile.fetchUserProfile()
+
             }
-            .padding(.horizontal, 10)
-            .padding(.top, 12)
+        }.onAppear{
+            Profile.fetchUserProfile()
+        }
+        .padding(.horizontal, 10)
+        .padding(.top, 12)
         
     }
 }

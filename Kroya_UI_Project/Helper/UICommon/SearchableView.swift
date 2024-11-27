@@ -18,7 +18,7 @@ struct SearchScreen: View {
         "Khor",
         "Somlor Jab Chay"
     ]
-    
+    @StateObject private var keyboardResponder = KeyboardResponder()
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
@@ -133,7 +133,7 @@ struct SearchScreen: View {
                                             }
                                         }
                                     }
-
+                                    
                                 }
                             } else {
                                 // Filtered results
@@ -170,15 +170,30 @@ struct SearchScreen: View {
                     }
                     .padding(.horizontal, geometry.size.width * 0.05)
                 }
+                .simultaneousGesture(
+                    TapGesture().onEnded {
+                        hideKeyboard()
+                    }
+                )
+                .padding(.bottom, min(keyboardResponder.currentHeight, 0))
             }
             .background(
-                NavigationLink(
-                    destination: ResultSearchView(isTabBarHidden: .constant(true), menuName: selectedMenuName, foodName: searchText, recentSearchesData: recentSearchesData),
-                    isActive: $navigateToResult
-                ) {
-                    EmptyView()
+                // Use an empty view with navigation logic to trigger the navigation
+                Button(action: {
+                    navigateToResult = true
+                }) {
+                    EmptyView() // Or any other view you want to trigger the navigation
                 }
             )
+            .navigationDestination(isPresented: $navigateToResult) {
+                ResultSearchView(
+                    isTabBarHidden: .constant(true),
+                    menuName: selectedMenuName,
+                    foodName: searchText,
+                    guestFoodName: searchText,
+                    recentSearchesData: recentSearchesData
+                )
+            }
         }
         .onAppear{
             PopularFoodsData.getAllPopular()

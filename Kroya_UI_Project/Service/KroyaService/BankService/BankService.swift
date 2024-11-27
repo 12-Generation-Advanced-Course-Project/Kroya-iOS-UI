@@ -259,8 +259,50 @@ class BankService {
                 }
             }
     }
+    // MARK: - Disconnect WeBill Account
+    func disConnectWeBillAccount(completion: @escaping (Result<DisconnectWeBillAccountResponse, Error>) -> Void) {
+        guard let accessToken = Auth.shared.getAccessToken() else {
+            let error = NSError(
+                domain: "",
+                code: 401,
+                userInfo: [NSLocalizedDescriptionKey: "Access token is missing"]
+            )
+            completion(.failure(error))
+            return
+        }
+        
+        // API Endpoint
+        let url = Constants.KroyaUrlUser + "disconnectWebill"
+        
+        // HTTP Headers
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)",
+            "Content-Type": "application/json"
+        ]
+        
+        // API Request
+        AF.request(url, method: .delete, headers: headers)
+            .validate()
+            .responseDecodable(of: DisconnectWeBillAccountResponse.self) { response in
+                debugPrint(response)
+                
+                switch response.result {
+                case .success(let apiResponse):
+                    if apiResponse.statusCode == "200" {
+                        completion(.success(apiResponse))
+                    } else {
+                        let error = NSError(
+                            domain: "",
+                            code: Int(apiResponse.statusCode) ?? 400,
+                            userInfo: [NSLocalizedDescriptionKey: apiResponse.message]
+                        )
+                        completion(.failure(error))
+                    }
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+    }
 
-    
-    
     
 }

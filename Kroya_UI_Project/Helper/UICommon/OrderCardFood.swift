@@ -12,7 +12,22 @@ struct OrderCard: View {
     private var orderCountText: String {
         "\(order.orderCount ?? 0)" // Safely unwrap and convert to string
     }
-    
+    private func getDisplayText(for dateString: String?) -> String {
+           guard let dateString = dateString, let orderDate = parseDate(dateString) else {
+               return "Invalid date" // Fallback for invalid or missing date
+           }
+           
+           let now = Date()
+           let differenceInSeconds = now.timeIntervalSince(orderDate)
+           let oneDayInSeconds: TimeInterval = 24 * 60 * 60 // 24 hours in seconds
+           
+           if differenceInSeconds < oneDayInSeconds {
+               return "Item selling now"
+           } else {
+               return formatDate(dateString) // Format and return the date as MM-dd-yyyy
+           }
+       }
+       
     var body: some View {
         HStack {
             // Display the first photo from the order if available using KFImage
@@ -37,7 +52,6 @@ struct OrderCard: View {
                     
                     Spacer()
                     
-                    // Status or Icon
                     // Status or Icon
                     if order.foodCardType == "ORDER" {
                         Group {
@@ -84,11 +98,10 @@ struct OrderCard: View {
                         }
                     }
                 }
-                
                 if order.foodCardType == "SALE" {
                     HStack {
-                        if let quantity = order.quantity {
-                            Text("\(quantity) items")
+                        if let quantity = order.orderCount {
+                            Text("\(quantity) \(quantity == 1 ? "item" : "items")")
                                 .font(.system(size: 12, weight: .light))
                                 .opacity(0.6)
                         } else {
@@ -96,14 +109,31 @@ struct OrderCard: View {
                                 .font(.system(size: 12, weight: .light))
                                 .opacity(0.6)
                         }
-                        Text("Item selling now")
-                            .font(.system(size: 12, weight: .light))
-                            .opacity(0.6)
+                        
+                        if let dateCooking = order.dateCooking, let parsedDate = parseDate(dateCooking) {
+                            let currentDate = Date()
+                            let differenceInSeconds = currentDate.timeIntervalSince(parsedDate)
+                            let hours = differenceInSeconds / 3600
+                            
+                            if hours > 24 {
+                                Text(formatDate(dateCooking)) // Show formatted date (e.g., "11-26-2024")
+                                    .font(.system(size: 12, weight: .light))
+                                    .opacity(0.6)
+                            } else {
+                                Text("Item selling now") // Show this text if it's within 24 hours
+                                    .font(.system(size: 12, weight: .light))
+                                    .opacity(0.6)
+                            }
+                        } else {
+                            Text("Invalid date") // Fallback in case `dateCooking` is not parsable
+                                .font(.system(size: 12, weight: .light))
+                                .opacity(0.6)
+                        }
                     }
                 } else if order.foodCardType == "ORDER" {
                     HStack {
                         if let quantity = order.quantity {
-                            Text("\(quantity) items")
+                            Text("\(quantity) \(quantity == 1 ? "item" : "items")") // Singular or plural
                                 .font(.system(size: 12, weight: .light))
                                 .opacity(0.6)
                         } else {
@@ -114,6 +144,7 @@ struct OrderCard: View {
                         Spacer()
                     }
                 }
+
                 
                 HStack(spacing: 15) {
                     Text(order.foodCardType == "ORDER" ?

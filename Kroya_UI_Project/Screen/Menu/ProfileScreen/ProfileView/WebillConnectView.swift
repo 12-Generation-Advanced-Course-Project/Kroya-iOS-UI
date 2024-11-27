@@ -11,8 +11,8 @@ import Combine
 struct WebillConnectView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) private var context
-    @StateObject private var webillConnect = WeBill365ViewModel()
-  
+    @ObservedObject  var webillConnect : WeBill365ViewModel
+    @StateObject private var keyboardResponder = KeyboardResponder()
     @State private var showMessage = false
     @State private var clientIDError: String? = nil
     @State private var secretIDError: String? = nil
@@ -21,145 +21,155 @@ struct WebillConnectView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                VStack(spacing: 15) {
-                    // Navigation Bar
-                    HStack {
-                        Button(action: {
-                            dismiss()
-                        }) {
-                            Image(systemName: "arrow.left")
+                VStack{
+                    ScrollView(.vertical,showsIndicators: false){
+                        VStack(spacing: 15) {
+                            // Navigation Bar
+                            HStack {
+                                Button(action: {
+                                    dismiss()
+                                }) {
+                                    Image(systemName: "arrow.left")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 23, height: 23)
+                                        .foregroundColor(.black)
+                                }
+                                Spacer()
+                            }
+
+                            // Title
+                            Image("webill365_logo")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 23, height: 23)
-                                .foregroundColor(.black)
-                        }
-                        Spacer()
-                    }
-
-                    // Title
-                    Image("webill365_logo")
-                        .resizable()
-                        .scaledToFit()
-                        .clipped()
-                        .frame(width: 119, height: 20)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-
-                    // Description
-                    HStack {
-                        Text("Connect to WeBill365 account for e-payment")
-                            .font(.customfont(.medium, fontSize: 15))
-                            .padding([.bottom, .top], 5)
-                            .foregroundStyle(Color(hex: "#737A86"))
-                        Spacer()
-                    }
-
-                    // Client ID Field
-                    Group {
-                        HStack {
-                            Text("Client ID")
-                                .font(.customfont(.medium, fontSize: 14))
-                                .foregroundStyle(Color(hex: "#0A0019"))
-                                .opacity(0.7)
+                                .clipped()
+                                .frame(width: 119, height: 20)
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        ClientIdTextField(
-                            iconName: "lock",
-                            placeholder: "Enter your Client ID",
-                            text: $webillConnect.clientID,
-                            isSecure: false
-                        )
-                        .onChange(of: webillConnect.clientID) { newValue in
-                            if !newValue.isEmpty {
-                                clientIDError = nil
+
+                            // Description
+                            HStack {
+                                Text("Connect to WeBill365 account for e-payment")
+                                    .font(.customfont(.medium, fontSize: 15))
+                                    .padding([.bottom, .top], 5)
+                                    .foregroundStyle(Color(hex: "#737A86"))
+                                Spacer()
                             }
-                        }
-                        if let error = clientIDError {
-                            Text(error)
-                                .font(.customfont(.regular, fontSize: 12))
-                                .foregroundColor(.red)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.horizontal, 5)
-                        }
-                    }
 
-                    // Secret ID Field
-                    Group {
-                        HStack {
-                            Text("Secret ID")
-                                .font(.customfont(.medium, fontSize: 14))
-                                .foregroundStyle(Color(hex: "#0A0019"))
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .opacity(0.7)
-                        }
-                        PasswordField(
-                            iconName: "lock",
-                            placeholder: "Enter your Secret ID",
-                            text: $webillConnect.clientSecret,
-                            isSecure: true,
-                            frameWidth: UIScreen.main.bounds.width * 0.9
-                        )
-                        .onChange(of: webillConnect.clientSecret) { newValue in
-                            if !newValue.isEmpty {
-                                secretIDError = nil
+                            // Client ID Field
+                            Group {
+                                HStack {
+                                    Text("Client ID")
+                                        .font(.customfont(.medium, fontSize: 14))
+                                        .foregroundStyle(Color(hex: "#0A0019"))
+                                        .opacity(0.7)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                }
+                                ClientIdTextField(
+                                    iconName: "lock",
+                                    placeholder: "Enter your Client ID",
+                                    text: $webillConnect.clientID,
+                                    isSecure: false
+                                )
+                                .onChange(of: webillConnect.clientID) { newValue in
+                                    if !newValue.isEmpty {
+                                        clientIDError = nil
+                                    }
+                                }
+                                if let error = clientIDError {
+                                    Text(error)
+                                        .font(.customfont(.regular, fontSize: 12))
+                                        .foregroundColor(.red)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(.horizontal, 5)
+                                }
                             }
-                        }
-                        if let error = secretIDError {
-                            Text(error)
-                                .font(.customfont(.regular, fontSize: 12))
-                                .foregroundColor(.red)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.horizontal, 5)
-                        }
-                    }
 
-                    // Account Number Field
-                    Group {
-                        HStack {
-                            Text("Account Number")
-                                .font(.customfont(.medium, fontSize: 14))
-                                .foregroundStyle(Color(hex: "#0A0019"))
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .opacity(0.7)
-                        }
-                        PasswordField(
-                            iconName: "lock",
-                            placeholder: "Enter Account Number",
-                            text: $webillConnect.parentAccountNo,
-                            isSecure: true,
-                            frameWidth: UIScreen.main.bounds.width * 0.9
-                        )
-                        .onChange(of: webillConnect.parentAccountNo) { newValue in
-                            if !newValue.isEmpty {
-                                accountNumberError = nil
+                            // Secret ID Field
+                            Group {
+                                HStack {
+                                    Text("Secret ID")
+                                        .font(.customfont(.medium, fontSize: 14))
+                                        .foregroundStyle(Color(hex: "#0A0019"))
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .opacity(0.7)
+                                }
+                                PasswordField(
+                                    iconName: "lock",
+                                    placeholder: "Enter your Secret ID",
+                                    text: $webillConnect.clientSecret,
+                                    isSecure: true,
+                                    frameWidth: UIScreen.main.bounds.width * 0.9
+                                )
+                                .onChange(of: webillConnect.clientSecret) { newValue in
+                                    if !newValue.isEmpty {
+                                        secretIDError = nil
+                                    }
+                                }
+                                if let error = secretIDError {
+                                    Text(error)
+                                        .font(.customfont(.regular, fontSize: 12))
+                                        .foregroundColor(.red)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(.horizontal, 5)
+                                }
                             }
+
+                            // Account Number Field
+                            Group {
+                                HStack {
+                                    Text("Account Number")
+                                        .font(.customfont(.medium, fontSize: 14))
+                                        .foregroundStyle(Color(hex: "#0A0019"))
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .opacity(0.7)
+                                }
+                                PasswordField(
+                                    iconName: "lock",
+                                    placeholder: "Enter Account Number",
+                                    text: $webillConnect.parentAccountNo,
+                                    isSecure: true,
+                                    frameWidth: UIScreen.main.bounds.width * 0.9
+                                )
+                                .onChange(of: webillConnect.parentAccountNo) { newValue in
+                                    if !newValue.isEmpty {
+                                        accountNumberError = nil
+                                    }
+                                }
+                                if let error = accountNumberError {
+                                    Text(error)
+                                        .font(.customfont(.regular, fontSize: 12))
+                                        .foregroundColor(.red)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(.horizontal, 5)
+                                }
+                            }
+
+                            Spacer()
+
+                            // Save Button
+                            CustomButton(
+                                title: "Save",
+                                action: {
+                                    validateAndSubmit()
+                                },
+                                backgroundColor: PrimaryColor.normal,
+                                frameHeight: 55,
+                                frameWidth: UIScreen.main.bounds.width * 0.9
+                            )
                         }
-                        if let error = accountNumberError {
-                            Text(error)
-                                .font(.customfont(.regular, fontSize: 12))
-                                .foregroundColor(.red)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.horizontal, 5)
+                        .ignoresSafeArea(.keyboard)
+                        .navigationBarHidden(true)
+                        .padding(.horizontal, 20)
+                        .onAppear {
+                            webillConnect.loadWeBillAccount(context: context)
                         }
                     }
-
-                    Spacer()
-
-                    // Save Button
-                    CustomButton(
-                        title: "Save",
-                        action: {
-                            validateAndSubmit()
-                        },
-                        backgroundColor: PrimaryColor.normal,
-                        frameHeight: 55,
-                        frameWidth: UIScreen.main.bounds.width * 0.9
+                    .simultaneousGesture(
+                        TapGesture().onEnded {
+                            hideKeyboard()
+                        }
                     )
-                }
-                .ignoresSafeArea(.keyboard)
-                .navigationBarHidden(true)
-                .padding(.horizontal, 20)
-                .onAppear {
-                    webillConnect.loadWeBillAccount(context: context)
+                    .padding(.bottom, min(keyboardResponder.currentHeight, 0))
                 }
 
                 // Loading Indicator
@@ -230,11 +240,12 @@ struct WebillConnectView: View {
             accountNumberError = "Account Number cannot be empty."
             hasError = true
         }
-
+         let ConnectRequest = ConnectWebillConnectRequest(clientId: webillConnect.clientID, clientSecret: webillConnect.clientSecret, accountNo: webillConnect.parentAccountNo)
+         print("This is + \(ConnectRequest)")
         // If no errors, proceed with API call
         if !hasError {
             isClearingAccount = false // Mark that we are not clearing the account
-            webillConnect.fetchWeBillAccessToken(context: context) { success in
+            webillConnect.ConnectWeBillAccount(context: context,ConnectRequest:ConnectRequest ) { success in
                 if success {
                     showMessage = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
