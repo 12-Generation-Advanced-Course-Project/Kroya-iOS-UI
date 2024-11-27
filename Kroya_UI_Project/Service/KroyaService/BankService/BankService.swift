@@ -19,10 +19,14 @@ class BankService {
         
         let url = "https://apidev.webill365.com/kh/api/wbi/client/v1/auth/token"
         
+        print("Client : \(clientID) and SecretID : \(clientSecret)")
+        let trimmedClientID = clientID.trimmingCharacters(in: .whitespacesAndNewlines)
+            let trimmedClientSecret = clientSecret.trimmingCharacters(in: .whitespacesAndNewlines)
+        
         // Parameters
         let parameters: [String: Any] = [
-            "client_id": clientID,
-            "client_secret": clientSecret
+            "client_id": trimmedClientID,
+            "client_secret": trimmedClientSecret
         ]
         
         // Headers
@@ -39,7 +43,6 @@ class BankService {
             encoding: JSONEncoding.default,
             headers: headers
         )
-        .validate(statusCode: 200..<300)
         .responseDecodable(of: WeBill365Response.self) { response in
             // Handle the response
             debugPrint(response)
@@ -284,6 +287,48 @@ class BankService {
         AF.request(url, method: .delete, headers: headers)
             .validate()
             .responseDecodable(of: DisconnectWeBillAccountResponse.self) { response in
+                debugPrint(response)
+                
+                switch response.result {
+                case .success(let apiResponse):
+                    if apiResponse.statusCode == "200" {
+                        completion(.success(apiResponse))
+                    } else {
+                        let error = NSError(
+                            domain: "",
+                            code: Int(apiResponse.statusCode) ?? 400,
+                            userInfo: [NSLocalizedDescriptionKey: apiResponse.message]
+                        )
+                        completion(.failure(error))
+                    }
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+    }
+    
+    func getSellerCredientail(sellerId: Int? ,completion: @escaping (Result<SellerCredentials, Error>) -> Void){
+        guard let accessToken = Auth.shared.getAccessToken() else {
+            let error = NSError(
+                domain: "",
+                code: 401,
+                userInfo: [NSLocalizedDescriptionKey: "Access token is missing"]
+            )
+            completion(.failure(error))
+            return
+        }
+        
+        let url = Constants.KroyaUrlUser + "webill-acc-no/\(sellerId!)"
+        
+        // HTTP Headers
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)",
+            "Content-Type": "application/json"
+        ]
+        
+        AF.request(url, method: .get, headers: headers)
+            .validate()
+            .responseDecodable(of: SellerCredentials.self) { response in
                 debugPrint(response)
                 
                 switch response.result {
