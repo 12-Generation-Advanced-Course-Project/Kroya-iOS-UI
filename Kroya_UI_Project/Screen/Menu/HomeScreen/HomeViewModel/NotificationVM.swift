@@ -90,6 +90,7 @@ class NotificationViewModel: ObservableObject {
                 case .success(let response):
                     if response.statusCode == "200", let payload = response.payload {
                         self?.notifications = payload
+                        print("Fetched Notifications: \(payload)") // Debug
                         self?.filterNotifications()
                     } else {
                         self?.errorMessage = response.message
@@ -100,6 +101,7 @@ class NotificationViewModel: ObservableObject {
             }
         }
     }
+
     
 //    private func filterNotifications() {
 //        let today = Calendar.current.startOfDay(for: Date())
@@ -131,6 +133,8 @@ class NotificationViewModel: ObservableObject {
             return date < today 
         }
     }
+    
+    
 
     
 }
