@@ -90,7 +90,7 @@ struct FoodonRecipe: View {
                                 ProgressView()
                                     .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
                                     .scaleEffect(2)
-                                    .offset(y: -50)
+                                    .offset(y: 180)
                             }
                         } else {
                             ScrollView {
@@ -130,7 +130,7 @@ struct FoodonRecipe: View {
                                 ProgressView()
                                     .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
                                     .scaleEffect(2)
-                                    .offset(y: -50)
+                                    .offset(y: 180)
                             }
                         } else {
                             ScrollView {

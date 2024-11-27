@@ -308,37 +308,6 @@ struct HomeView: View {
             }
         }
     }
-            
-            // MARK: - Fetch Data Logic
-            private func loadData() {
-                categoryVM.fetchAllCategory()
-                recipeViewModel.getAllRecipeFood()
-                foodSellViemModel.getAllFoodSell()
-                recentSearchesData.loadSearches(from: modelContext)
-                PopularFoodsData.getAllPopular()
-                favoriteVM.getAllFavoriteFood()
-                guestCategoryVM.fetchAllGuestCategory()
-                guestPopularFoodsData.getAllGuestPopular()
-              //  guestFoodSellVM.getAllGuestFoodSell()
-                guestFoodRecipeVM.getAllGuestRecipeFood()
-                notificationVM.fetchNotifications()
-                
-            }
-            private func refreshData() async {
-                isLoading = true // Start loading state
-                defer { isLoading = false } // Ensure state is reset after execution
-                
-                // Simulate a delay for demo purposes
-                try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
-                
-                // Reload data
-                await MainActor.run {
-                    loadData()
-                }
-            }
-        }
-    }
-    
     // MARK: - Fetch Data Logic
     private func loadData() {
         categoryVM.fetchAllCategory()
@@ -365,7 +334,9 @@ struct HomeView: View {
             loadData()
         }
     }
-}
+        
+        }
+ 
 
 
 
