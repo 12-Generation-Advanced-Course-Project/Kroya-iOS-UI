@@ -89,15 +89,19 @@ class NotificationService: ObservableObject {
             "Authorization": "Bearer \(accessToken)",
             "Content-Type": "application/json"
         ]
-        
+      
         AF.request(url, method: .get, headers: headers).validate().responseDecodable(of: NotificationResponse.self) { response in
+            debugPrint(response)
             switch response.result {
             case .success(let jsonData):
+                print("Response Payload: \(jsonData)") // Debug: Print the entire response
                 completion(.success(jsonData))
             case .failure(let error):
+                print("Error: \(error.localizedDescription)") // Debug: Print error details
                 completion(.failure(error))
             }
         }
+
     }
 
 }

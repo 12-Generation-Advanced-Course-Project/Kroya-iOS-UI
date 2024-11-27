@@ -90,6 +90,7 @@ class NotificationViewModel: ObservableObject {
                 case .success(let response):
                     if response.statusCode == "200", let payload = response.payload {
                         self?.notifications = payload
+                        print("Fetched Notifications: \(payload)") // Debug
                         self?.filterNotifications()
                     } else {
                         self?.errorMessage = response.message
@@ -100,18 +101,40 @@ class NotificationViewModel: ObservableObject {
             }
         }
     }
+
+    
+//    private func filterNotifications() {
+//        let today = Calendar.current.startOfDay(for: Date())
+//        
+//        newNotifications = notifications.filter { notification in
+//            guard let date = parseDate(from: notification.createdDate) else { return false }
+//            return Calendar.current.isDateInToday(date)
+//        }
+//        
+//        olderNotifications = notifications.filter { notification in
+//            guard let date = parseDate(from: notification.createdDate) else { return false }
+//            return date < today
+//        }
+//    }
+    
     
     private func filterNotifications() {
         let today = Calendar.current.startOfDay(for: Date())
         
+        // New Notifications: Today and Future
         newNotifications = notifications.filter { notification in
             guard let date = parseDate(from: notification.createdDate) else { return false }
-            return Calendar.current.isDateInToday(date)
+            return date >= today
         }
         
+        // Older Notifications: Past
         olderNotifications = notifications.filter { notification in
             guard let date = parseDate(from: notification.createdDate) else { return false }
-            return date < today
+            return date < today 
         }
     }
+    
+    
+
+    
 }
