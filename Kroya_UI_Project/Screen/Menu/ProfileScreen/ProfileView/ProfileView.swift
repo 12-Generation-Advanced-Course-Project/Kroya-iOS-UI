@@ -130,7 +130,10 @@ struct ProfileView: View {
                     }
                 }
                 Spacer().frame(height: .screenHeight * 0.03)
-                NavigationLink(destination: WebillConnectView(webillConnect: WeBillVM).environment(\.modelContext, modelContext)) {
+                
+                NavigationLink{
+                    WebillConnectView(webillConnect: WeBillVM).environment(\.modelContext, modelContext)
+                }label: {
                     VStack(alignment: .leading) {
                         Text("Payment Method")
                             .customFontMediumLocalize(size: 14)
@@ -166,6 +169,8 @@ struct ProfileView: View {
                         .background(Color(hex: "#F4F5F7"))
                         .cornerRadius(15)
                     }
+                }
+                  
                     .onTapGesture {
                         if WeBillVM.isConnect == true {
                             withAnimation{
@@ -173,7 +178,6 @@ struct ProfileView: View {
                             }
                         }
                     }
-                }
                 
                 Spacer().frame(height: .screenHeight * 0.03)
                 VStack(alignment: .leading) {

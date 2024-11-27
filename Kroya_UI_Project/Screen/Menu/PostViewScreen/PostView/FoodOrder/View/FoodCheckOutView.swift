@@ -23,6 +23,8 @@ struct FoodCheckOutView: View {
     @State private var warningMessage: String? 
     let exchangeRateToRiel: Double = 4100
     
+    let sellerId : Int
+    
     var totalPriceInRiel: Double {
         if Currency.uppercased() == "RIEL" {
             return Double(totalPrice)
@@ -72,7 +74,7 @@ struct FoodCheckOutView: View {
                                 remark: remark ?? "Good",
                                 Location: Location,
                                 Qty: Quantity,
-                                FoodSellId: FoodId
+                                FoodSellId: sellerId
                             ).environment(\.modelContext, context)
                         } header: {
                             Text(LocalizedStringKey("Payment"))
