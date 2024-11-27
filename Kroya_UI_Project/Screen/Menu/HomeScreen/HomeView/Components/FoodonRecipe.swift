@@ -29,47 +29,6 @@ struct FoodonRecipe: View {
                     recipeFoodVM: recipeViewModel,
                     guestFoodRecipeVM: guestFoodRecipeVM)
                 
-                HStack(spacing: 40) {
-                    ForEach(recipeViewModel.RecipeCuisine) { cuisine in
-                        Button(action: {
-                            if Auth.shared.hasAccessToken(){
-                                if selectedOrderIndex == cuisine.id {
-                                    recipeViewModel.getAllRecipeFood()
-                                    isChooseCuisine = false
-                                    selectedOrderIndex = nil
-                                } else {
-                                    selectedOrderIndex = cuisine.id
-                                    recipeViewModel.getRecipesByCuisine(cuisineId: cuisine.id)
-                                    isChooseCuisine = true
-                                }
-                            }else {
-                                if selectedOrderIndex == cuisine.id {
-                                    guestFoodRecipeVM.getAllGuestRecipeFood()
-                                    isChooseCuisine = false
-                                    selectedOrderIndex = nil
-                                } else {
-                                    selectedOrderIndex = cuisine.id
-                                    guestFoodRecipeVM.getRecipesByCuisine(cuisineId: cuisine.id)
-                                    isChooseCuisine = true
-                                }
-                            }
-                        }) {
-//                            VStack {
-//                                let imageName = cuisineImages[cuisine.cuisineName] ?? "snackPic"
-//                                Image(imageName)
-//                                    .resizable()
-//                                    .scaledToFill()
-//                                    .frame(width: 60, height: 60)
-//                                    .cornerRadius(12)
-//                                
-//                                Text(cuisine.cuisineName)
-//                                    .font(.customfont(.medium, fontSize: 16))
-//                                    .foregroundColor(selectedOrderIndex == cuisine.id && recipeViewModel.isChooseCuisine ? Color.yellow : Color.gray)
-//                            }
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                    }
-                }
                 .frame(maxWidth: .infinity, alignment: .center)
                 
                 Spacer().frame(height: 20)

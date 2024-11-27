@@ -185,6 +185,7 @@ struct SearchScreen: View {
         }
         .ignoresSafeArea(.keyboard)
         .navigationBarBackButtonHidden(true)
+        .navigationBarHidden(true)
     }
     
     private func performSearchCommit() {
