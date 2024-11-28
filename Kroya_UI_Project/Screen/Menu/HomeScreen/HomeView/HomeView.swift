@@ -17,7 +17,7 @@ struct HomeView: View {
     @StateObject private var PopularFoodsData =  PopularFoodVM()
     @StateObject private var guestPopularFoodsData =  GuestPopularFoodVM()
     @StateObject private var favoriteVM = FavoriteVM()
-//    @StateObject private var notificationVM = NotificationViewModel()
+    //    @StateObject private var notificationVM = NotificationViewModel()
     @StateObject private var viewModel = NotificationViewModel()
     @Environment(\.modelContext) var modelContext
     @State var isLoading: Bool = false
@@ -134,7 +134,7 @@ struct HomeView: View {
                         NavigationLink {
                             ViewAllPopularDishesView()
                         } label: {
-                            HStack(spacing: 10){
+                            HStack(spacing: 10) {
                                 Text(LocalizedStringKey("View all"))
                                     .foregroundStyle(PrimaryColor.normal)
                                     .customFontSemiBoldLocalize(size: 16)
@@ -149,103 +149,107 @@ struct HomeView: View {
                     // Scrollable Dishes
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16) {
-                            if Auth.shared.hasAccessToken(){
-                                ForEach(PopularFoodsData.popularFoodSell.prefix(3)) { foodSale in
-                                    NavigationLink(destination:
-                                                    FoodDetailView(
-                                                        isFavorite: foodSale.isFavorite ?? false, showPrice: true, // Always false for recipes
-                                                        showOrderButton: true, // Always false for recipes
-                                                        showButtonInvoic: nil, // Not applicable
-                                                        invoiceAccept: nil, // Not applicable
-                                                        FoodId: foodSale.id,
-                                                        ItemType: foodSale.itemType
-                                                    )
-                                    ) {
+                                if PopularFoodsData.isLoading {
+                                    // Placeholder Loading State
+                                    ForEach(0..<max(1, PopularFoodsData.popularFoodSell.count)) { _ in
                                         FoodOnSaleViewCell(
-                                            foodSale: foodSale,
-                                            foodId: foodSale.id,
+                                            foodSale: .placeholder, // Placeholder model
+                                            foodId: 0,
                                             itemType: "FOOD_SELL",
-                                            isFavorite: foodSale.isFavorite ?? false
+                                            isFavorite: false
                                         )
-                                      //  .frame(width: 360)
+                                        .redacted(reason: .placeholder)
                                     }
-                                }
-                                
-                                // Recipe/Food Cards from AddNewFoodVM (Limited to 2)
-                                ForEach(PopularFoodsData.popularFoodRecipe.prefix(3)) { recipe in
-                                    NavigationLink(destination:
-                                                    FoodDetailView(
-                                                        isFavorite: recipe.isFavorite ?? false, showPrice: false, // Always false for recipes
-                                                        showOrderButton: false, // Always false for recipes
-                                                        showButtonInvoic: nil, // Not applicable
-                                                        invoiceAccept: nil, // Not applicable
-                                                        FoodId: recipe.id,
-                                                        ItemType: recipe.itemType
-                                                    )
-                                    ) {
-                                        RecipeViewCell(
-                                            recipe: recipe,
-                                            foodId: recipe.id,
-                                            itemType: "FOOD_RECIPE",
-                                            isFavorite: recipe.isFavorite ?? false
-                                        )
-                                       // .frame(width: 360)
-                                    }
-                                }
-                                
-                                
-                            }else {
-                                
-                                
-                                ForEach( guestPopularFoodsData.guestPopularFoodSell.prefix(3)) { foodSale in
-                                    NavigationLink(destination:
-                                                    FoodDetailView(
-                                                        isFavorite: foodSale.isFavorite ?? false, showPrice: true, // Always false for recipes
-                                                        showOrderButton: true, // Always false for recipes
-                                                        showButtonInvoic: nil, // Not applicable
-                                                        invoiceAccept: nil, // Not applicable
-                                                        FoodId: foodSale.id,
-                                                        ItemType: foodSale.itemType
-                                                    )
-                                    ) {
-                                        FoodOnSaleViewCell(
-                                            foodSale: foodSale,
-                                            foodId: foodSale.id,
-                                            itemType: "FOOD_SELL",
-                                            isFavorite: foodSale.isFavorite ?? false
-                                        )
-                                        //.frame(width: 360)
-                                    }
-                                }
-                                
-                                // Recipe/Food Cards from AddNewFoodVM (Limited to 2)
-                                ForEach( guestPopularFoodsData.guestPopularFoodRecipe.prefix(3)) { recipe in
-                                    NavigationLink(destination:
-                                                    FoodDetailView(
-                                                        isFavorite: recipe.isFavorite ?? false, showPrice: false, // Always false for recipes
-                                                        showOrderButton: false, // Always false for recipes
-                                                        showButtonInvoic: nil, // Not applicable
-                                                        invoiceAccept: nil, // Not applicable
-                                                        FoodId: recipe.id,
-                                                        ItemType: recipe.itemType
-                                                    )
-                                    ) {
-                                        RecipeViewCell(
-                                            recipe: recipe,
-                                            foodId: recipe.id,
-                                            itemType: "FOOD_RECIPE",
-                                            isFavorite: recipe.isFavorite ?? false
-                                        )
-                                       // .frame(width: 360)
-                                    }
-                                }
-                                
-                                
+                                } else {
+                                    if Auth.shared.hasAccessToken() {
+                                        // Render Food Sale Items
+                                        ForEach(PopularFoodsData.popularFoodSell.prefix(3)) { foodSale in
+                                            NavigationLink(destination:
+                                                            FoodDetailView(
+                                                                isFavorite: foodSale.isFavorite ?? false, showPrice: true,
+                                                                showOrderButton: true,
+                                                                showButtonInvoic: nil,
+                                                                invoiceAccept: nil,
+                                                                FoodId: foodSale.id,
+                                                                ItemType: foodSale.itemType
+                                                            )
+                                            ) {
+                                                FoodOnSaleViewCell(
+                                                    foodSale: foodSale,
+                                                    foodId: foodSale.id,
+                                                    itemType: "FOOD_SELL",
+                                                    isFavorite: foodSale.isFavorite ?? false
+                                                )
+                                            }
+                                        }
 
-                                .padding(.horizontal)
+                                        // Render Recipe Items
+                                        ForEach(PopularFoodsData.popularFoodRecipe.prefix(3)) { recipe in
+                                            NavigationLink(destination:
+                                                            FoodDetailView(
+                                                                isFavorite: recipe.isFavorite ?? false, showPrice: false,
+                                                                showOrderButton: false,
+                                                                showButtonInvoic: nil,
+                                                                invoiceAccept: nil,
+                                                                FoodId: recipe.id,
+                                                                ItemType: recipe.itemType
+                                                            )
+                                            ) {
+                                                RecipeViewCell(
+                                                    recipe: recipe,
+                                                    foodId: recipe.id,
+                                                    itemType: "FOOD_RECIPE",
+                                                    isFavorite: recipe.isFavorite ?? false
+                                                )
+                                            }
+                                        }
+                                    } else {
+                                        // Guest Access - Render Guest Items
+                                        ForEach(guestPopularFoodsData.guestPopularFoodSell.prefix(3)) { foodSale in
+                                            NavigationLink(destination:
+                                                            FoodDetailView(
+                                                                isFavorite: foodSale.isFavorite ?? false, showPrice: true,
+                                                                showOrderButton: true,
+                                                                showButtonInvoic: nil,
+                                                                invoiceAccept: nil,
+                                                                FoodId: foodSale.id,
+                                                                ItemType: foodSale.itemType
+                                                            )
+                                            ) {
+                                                FoodOnSaleViewCell(
+                                                    foodSale: foodSale,
+                                                    foodId: foodSale.id,
+                                                    itemType: "FOOD_SELL",
+                                                    isFavorite: foodSale.isFavorite ?? false
+                                                )
+                                            }
+                                        }
+
+                                        ForEach(guestPopularFoodsData.guestPopularFoodRecipe.prefix(3)) { recipe in
+                                            NavigationLink(destination:
+                                                            FoodDetailView(
+                                                                isFavorite: recipe.isFavorite ?? false, showPrice: false,
+                                                                showOrderButton: false,
+                                                                showButtonInvoic: nil,
+                                                                invoiceAccept: nil,
+                                                                FoodId: recipe.id,
+                                                                ItemType: recipe.itemType
+                                                            )
+                                            ) {
+                                                RecipeViewCell(
+                                                    recipe: recipe,
+                                                    foodId: recipe.id,
+                                                    itemType: "FOOD_RECIPE",
+                                                    isFavorite: recipe.isFavorite ?? false
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
                             }
+                            .padding(.horizontal)
                         }
-                        .padding(.top, 16) // Added padding to top
+                        .padding(.top, 16) // Added padding to t
                         .navigationTitle("")
                         .navigationBarBackButtonHidden(true)
                         .toolbar {
@@ -307,7 +311,7 @@ struct HomeView: View {
                 }
             }
         }
-    }
+    
     // MARK: - Fetch Data Logic
     private func loadData() {
         categoryVM.fetchAllCategory()
@@ -334,9 +338,10 @@ struct HomeView: View {
             loadData()
         }
     }
-        
-        }
- 
+    
+}
+
+
 
 
 

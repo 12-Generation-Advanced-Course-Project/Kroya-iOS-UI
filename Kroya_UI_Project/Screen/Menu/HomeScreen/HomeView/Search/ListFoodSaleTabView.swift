@@ -68,7 +68,8 @@ struct ListFoodSaleTabView: View {
                             ForEach(guestSearchFoodSale.guestSearchFoodSell) { foodSale in
                                 NavigationLink(destination:
                                                 FoodDetailView(
-                                                    isFavorite: foodSale.isFavorite ?? false, showPrice: true,
+                                                    isFavorite: foodSale.isFavorite ?? false,
+                                                    showPrice: true,
                                                     showOrderButton: true,
                                                     showButtonInvoic: nil,
                                                     invoiceAccept: nil,

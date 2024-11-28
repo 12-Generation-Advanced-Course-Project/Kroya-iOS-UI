@@ -243,18 +243,22 @@ struct WebillConnectView: View {
          let ConnectRequest = ConnectWebillConnectRequest(clientId: webillConnect.clientID, clientSecret: webillConnect.clientSecret, accountNo: webillConnect.parentAccountNo)
          print("This is + \(ConnectRequest)")
         // If no errors, proceed with API call
-        if !hasError {
-            isClearingAccount = false // Mark that we are not clearing the account
-            webillConnect.ConnectWeBillAccount(context: context,ConnectRequest:ConnectRequest ) { success in
-                if success {
-                    showMessage = true
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                        showMessage = false
-                        dismiss()
-                    }
-                }
-            }
-        }
+         if !hasError {
+             isClearingAccount = false // Mark that we are not clearing the account
+             webillConnect.fetchWeBillAccessToken(context: context){ isConnect in
+                 print(isConnect)
+                 print("Success in fetching access token")
+                 webillConnect.ConnectWeBillAccount(ConnectRequest:ConnectRequest ) { success in
+                     if success {
+                         showMessage = true
+                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                             showMessage = false
+                             dismiss()
+                         }
+                     }
+                 }
+             }
+         }
     }
   
     
@@ -265,7 +269,7 @@ struct WebillConnectView: View {
 struct LoadingViewForWebill: View {
     var body: some View {
         ZStack {
-            Color.black.opacity(0.3)
+            Color.clear
                 .edgesIgnoringSafeArea(.all)
             ProgressView()
                 .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))

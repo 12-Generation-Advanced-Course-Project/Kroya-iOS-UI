@@ -7,9 +7,9 @@
 
 import SwiftUI
 class SaleReportVM: ObservableObject {
-    @Published var totalMonthlySales: Int = 0
-    @Published var totalDailySales: Int = 0
-    @Published var totalDailyOrders: Int = 0
+    @Published var totalMonthlySales: Double = 0
+    @Published var totalDailySales: Double = 0
+    @Published var totalDailyOrders: Double = 0
     @Published var purchaseResponses: [OrderRequestModel] = []
     @Published var isLoading: Bool = false
     @Published var showError: Bool = false

@@ -265,3 +265,50 @@ extension View {
     }
 }
 
+
+extension FoodSellModel {
+    static var placeholder: FoodSellModel {
+        FoodSellModel(
+            id: 0,
+            photo: [],
+            name: "Loading...",
+            dateCooking: nil,
+            price: 0.0,
+            currencyType: "",
+            averageRating: nil,
+            totalRaters: nil,
+            isFavorite: nil,
+            itemType: "",
+            isOrderable: false
+        )
+    }
+}
+
+extension OrderModel {
+    static var placeholder: OrderModel {
+        return OrderModel(
+            id: UUID(),
+            foodSellId: 0,
+            name: "Loading...",
+            price: nil,
+            orderCount: nil,
+            photo: [],
+            dateCooking: nil,
+            isOrderable: false,
+            itemType: "FOOD_SELL",
+            foodCardType: "ORDER",
+            purchaseID: nil,
+            quantity: nil,
+            totalPrice: nil,
+            purchaseStatusType: nil,
+            purchaseDate: nil
+        )
+    }
+}
+
+extension Address {
+    static var placeholder: Address {
+        Address(id: 0, addressDetail: "Loading...", specificLocation: "Loading...", tag: "Loading", latitude: 0, longitude: 0)
+    }
+}
+

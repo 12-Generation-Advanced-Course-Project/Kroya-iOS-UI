@@ -101,7 +101,7 @@ class WeBill365ViewModel: ObservableObject {
     }
     
     // MARK: - WeBill365 AccessToken
-    func fetchWeBillAccessToken(completion: @escaping (Bool) -> Void) {
+    func fetchWeBillAccessToken(context: ModelContext,completion: @escaping (Bool) -> Void) {
         guard let email = Auth.shared.getCredentials().email else {
             print("No user email found. Cannot fetch WeBill access token.")
             self.errorMessage = "User not logged in."
@@ -124,7 +124,7 @@ class WeBill365ViewModel: ObservableObject {
                 switch result {
                 case .success():
                     print("Access token retrieved and saved successfully.")
-                  
+                    self?.saveWeBillAccount(context: context)
                     self?.successMessage = "Access token retrieved and saved successfully."
                     completion(true)
                 case .failure(let error):
@@ -201,7 +201,7 @@ class WeBill365ViewModel: ObservableObject {
         pollingTimer = nil
     }
     // MARK: - Connect WeBill
-    func ConnectWeBillAccount(context: ModelContext,ConnectRequest: ConnectWebillConnectRequest ,completion: @escaping (Bool) -> Void) {
+    func ConnectWeBillAccount(ConnectRequest: ConnectWebillConnectRequest ,completion: @escaping (Bool) -> Void) {
         self.isLoading = true
         BankService.shared.connectWeBill(request: ConnectRequest) { [weak self] result in
             DispatchQueue.main.async {
@@ -211,7 +211,7 @@ class WeBill365ViewModel: ObservableObject {
                     if ConnectResponse.statusCode == "200", let payload = ConnectResponse.payload {
                         // Assign the fetched payload to the WebillAccount
                         self?.WebillAccount = payload
-                        self?.saveWeBillAccount(context: context)
+                    
                         self?.isConnect = true
                         print("WeBill connected successfully: \(payload)")
                     } else {

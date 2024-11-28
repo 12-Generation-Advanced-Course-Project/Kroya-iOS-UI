@@ -4,6 +4,7 @@ import SDWebImageSwiftUI
 struct FoodDetailView: View {
     @StateObject private var navigationManager = NavigationManager()
     @State var isFavorite: Bool
+    @State private var isFavoriteupdate: Bool = false
     @State private var currentImage: String = ""
     @State private var isBottomSheetOpen: Bool = false
     @State private var isShowPopup: Bool = false
@@ -50,12 +51,19 @@ struct FoodDetailView: View {
                                     }
                                     Spacer()
                                     Button(action: {
-                                        let newFavoriteStatus = !determineFavoriteStatus()
-                                        isFavorite = newFavoriteStatus
-                                        favoriteVM.toggleFavorite(foodId: FoodId, itemType: ItemType, isCurrentlyFavorite: !newFavoriteStatus)
+                                        // Toggle the favorite status using the current value from the FoodDetailsVM
+                                        if let currentFavoriteStatus = FoodDetailsVM.foodSellDetail?.isFavorite {
+                                            let newFavoriteStatus = !currentFavoriteStatus
+                                            // Update the server via the ViewModel
+                                            favoriteVM.toggleFavorite(foodId: FoodId, itemType: ItemType, isCurrentlyFavorite: currentFavoriteStatus)
+                                            // Reflect the change locally
+                                            isFavoriteupdate = newFavoriteStatus
+                                            // Update the FoodDetailsVM data
+                                            FoodDetailsVM.foodSellDetail?.isFavorite = newFavoriteStatus
+                                        }
                                     }) {
                                         Circle()
-                                            .fill(isFavorite ? Color.red : Color.white.opacity(0.5))
+                                            .fill(isFavoriteupdate ? Color.red : Color.white.opacity(0.5))
                                             .frame(width: screenWidth * 0.07, height: screenHeight * 0.07)
                                             .overlay(
                                                 Image(systemName: "heart.fill")
@@ -63,11 +71,12 @@ struct FoodDetailView: View {
                                                     .font(.system(size: 18))
                                             )
                                     }
-                                    .shadow(color: isFavorite ? Color.red.opacity(0.5) : Color.gray.opacity(0.5), radius: 4, x: 0, y: 4)
+                                    .shadow(color: isFavoriteupdate ? Color.red.opacity(0.5) : Color.gray.opacity(0.5), radius: 4, x: 0, y: 4)
                                     .onAppear {
-                                        // Set the initial state of `isFavorite` when the view appears
-                                        isFavorite = determineFavoriteStatus()
+                                        // Synchronize the UI state with the ViewModel
+                                        isFavoriteupdate = FoodDetailsVM.foodSellDetail?.isFavorite ?? false
                                     }
+
                                 }
                                 .padding(.horizontal, screenWidth * 0.045)
                                 .offset(y: -screenHeight * 0.18)

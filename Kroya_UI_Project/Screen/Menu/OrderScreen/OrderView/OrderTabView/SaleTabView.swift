@@ -13,7 +13,10 @@ struct SaleTabView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 8) {
                     if orderViewModel.isLoading {
-                        loadingView
+                        ForEach(0..<max(1, orderViewModel.orders.count)) { _ in
+                            OrderCard(order: .placeholder, showIcon: true)
+                                .redacted(reason: .placeholder)
+                        }
                     } else if filteredOrders.isEmpty {
                         Text("No orders available.").foregroundColor(.gray)
                     } else {

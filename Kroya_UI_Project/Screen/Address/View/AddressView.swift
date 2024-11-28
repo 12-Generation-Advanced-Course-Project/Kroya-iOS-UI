@@ -90,8 +90,3 @@ struct AddressView: View {
     }
 }
 
-extension Address {
-    static var placeholder: Address {
-        Address(id: 0, addressDetail: "Loading...", specificLocation: "Loading...", tag: "Loading", latitude: 0, longitude: 0)
-    }
-}

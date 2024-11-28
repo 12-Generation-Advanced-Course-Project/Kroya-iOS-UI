@@ -18,7 +18,7 @@ struct FoodSellDetails: Decodable {
     let location: String
     let status: String?
     let itemType: String
-    let isFavorite: Bool
+    var isFavorite: Bool
     let isOrderable: Bool
     let ratingPercentages: RatingPercentages?
 }

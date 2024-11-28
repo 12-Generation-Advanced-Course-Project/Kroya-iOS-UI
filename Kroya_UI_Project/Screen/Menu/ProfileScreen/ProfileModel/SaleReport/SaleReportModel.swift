@@ -8,13 +8,12 @@
 import Foundation
 
 struct SaleReportModel: Decodable {
-    let totalMonthlySales: Int
+    let totalMonthlySales: Double
     let dailySaleReport: DailySaleReport
-    
 }
 // MARK: - DailySaleReport
 struct DailySaleReport: Codable {
-    let totalSales: Int
-    let totalOrders: Int
+    let totalSales: Double
+    let totalOrders: Double
     let purchaseResponses: [OrderRequestModel]
 }

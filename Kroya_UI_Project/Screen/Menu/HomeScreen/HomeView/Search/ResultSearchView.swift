@@ -79,6 +79,7 @@ struct ResultSearchView: View {
             if !menuName.isEmpty {
                 recentSearchesData.saveSearch(menuName, in: modelContext)
             }
+            listFoodRecipe.searchFoodByName(foodName: menuName)
         }
         .navigationBarBackButtonHidden(true)
     }

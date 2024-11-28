@@ -14,75 +14,71 @@ struct CategoryFoodRecipeTab: View {
     @StateObject private var favoriteFoodRecipe = FavoriteVM()
     var body: some View {
         if Auth.shared.hasAccessToken(){
-            ZStack {
-                VStack {
-                    if categoryVM.FoodRecipByCategory.isEmpty && !categoryVM.isLoading {
-                        ZStack {
-                            Color.white
-                                .edgesIgnoringSafeArea(.all)
-                                .opacity(0.8) // Adjust opacity for a translucent background
-                            
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
-                                .scaleEffect(2)
-                                .offset(y: -50)
+            VStack {
+                if categoryVM.FoodRecipByCategory.isEmpty && !categoryVM.isLoading {
+                    ScrollView{
+                        ForEach(0..<10) { _ in
+                            FoodOnSaleViewCell(
+                                foodSale: .placeholder, // Placeholder model
+                                foodId: 0,
+                                itemType: "FOOD_RECIPE",
+                                isFavorite: false
+                            )
+                            .redacted(reason: .placeholder)
                         }
-                    } else {
-                        ScrollView(showsIndicators: false) {
-                            LazyVStack(spacing: 8) {
-                                ForEach(categoryVM.FoodRecipByCategory) { recipe in
-                                    NavigationLink(destination: recipeDetailDestination(for: recipe)) {
-                                        RecipeViewCell(
-                                            recipe: recipe,
-                                            foodId: recipe.id ?? 0,
-                                            itemType: "FOOD_RECIPE",
-                                            isFavorite: recipe.isFavorite ?? false
-                                        )
-                                        .frame(maxWidth: .infinity)
-                                        .padding(.horizontal, 20)
-                                    }
+                    }
+                } else {
+                    ScrollView(showsIndicators: false) {
+                        LazyVStack(spacing: 8) {
+                            ForEach(categoryVM.FoodRecipByCategory) { recipe in
+                                NavigationLink(destination: recipeDetailDestination(for: recipe)) {
+                                    RecipeViewCell(
+                                        recipe: recipe,
+                                        foodId: recipe.id ?? 0,
+                                        itemType: "FOOD_RECIPE",
+                                        isFavorite: recipe.isFavorite ?? false
+                                    )
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.horizontal, 20)
                                 }
                             }
                         }
                     }
                 }
-                .padding(.top, 8)
             }
+            .padding(.top, 8)
         } else {
-            ZStack {
-                VStack {
-                    if guestCategoryVM.guestFoodRecipByCategory.isEmpty && !guestCategoryVM.isLoading {
-                        ZStack {
-                            Color.white
-                                .edgesIgnoringSafeArea(.all)
-                                .opacity(0.8) // Adjust opacity for a translucent background
-                            
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
-                                .scaleEffect(2)
-                                .offset(y: -50)
-                        }
-                    } else {
-                        ScrollView(showsIndicators: false) {
-                            LazyVStack(spacing: 8) {
-                                ForEach(guestCategoryVM.guestFoodRecipByCategory) { recipe in
-                                    NavigationLink(destination: recipeDetailDestination(for: recipe)) {
-                                        RecipeViewCell(
-                                            recipe: recipe,
-                                            foodId: recipe.id ?? 0,
-                                            itemType: "FOOD_RECIPE",
-                                            isFavorite: recipe.isFavorite ?? false
-                                        )
-                                        .frame(maxWidth: .infinity)
-                                        .padding(.horizontal, 20)
-                                    }
+            VStack {
+                if guestCategoryVM.guestFoodRecipByCategory.isEmpty && !guestCategoryVM.isLoading {
+                    ForEach(0..<max(1, guestCategoryVM.guestFoodRecipByCategory.count)) { _ in
+                        FoodOnSaleViewCell(
+                            foodSale: .placeholder, // Placeholder model
+                            foodId: 0,
+                            itemType: "FOOD_RECIPE",
+                            isFavorite: false
+                        )
+                        .redacted(reason: .placeholder)
+                    }
+                } else {
+                    ScrollView(showsIndicators: false) {
+                        LazyVStack(spacing: 8) {
+                            ForEach(guestCategoryVM.guestFoodRecipByCategory) { recipe in
+                                NavigationLink(destination: recipeDetailDestination(for: recipe)) {
+                                    RecipeViewCell(
+                                        recipe: recipe,
+                                        foodId: recipe.id ?? 0,
+                                        itemType: "FOOD_RECIPE",
+                                        isFavorite: recipe.isFavorite ?? false
+                                    )
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.horizontal, 20)
                                 }
                             }
                         }
                     }
                 }
-                .padding(.top, 8)
             }
+            .padding(.top, 8)
         }
     }
 

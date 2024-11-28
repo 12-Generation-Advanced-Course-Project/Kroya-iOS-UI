@@ -34,13 +34,13 @@ struct FoodonOrderView: View {
                     // Loading Indicator or Content
                     if Auth.shared.hasAccessToken(){
                         if foodViewModel.isLoading {
-                            LoadingView()
+                            RedactedFoodListView()
                         } else {
                             FoodListView(isChooseCuisine: isChooseCuisine, foodViewModel: foodViewModel)
                         }
                     } else {
                         if guestFoodSellVM.isLoading {
-                            LoadingView()
+                            RedactedFoodListView()
                         } else {
                             GuestFoodListView(isChooseCuisine: isChooseCuisine, guestFoodSellVM: guestFoodSellVM)
                         }
@@ -149,6 +149,22 @@ struct LoadingView: View {
     }
 }
 
+struct RedactedFoodListView: View {
+    var body: some View {
+        ScrollView{
+            ForEach(0..<10) { _ in
+                FoodOnSaleViewCell(
+                    foodSale: .placeholder, // Placeholder model
+                    foodId: 0,
+                    itemType: "FOOD_SELL",
+                    isFavorite: false
+                )
+                .redacted(reason: .placeholder)
+                .padding(.horizontal, 20)
+            }
+        }
+    }
+}
 
 // Separate view for the Food List
 struct FoodListView: View {
@@ -156,35 +172,26 @@ struct FoodListView: View {
     @ObservedObject var foodViewModel: FoodSellViewModel
 
     var body: some View {
-        if foodViewModel.filteredFoodList.isEmpty {
-            // Show message when no food is found
-            Text("No Food Sell Available!")
-                .font(.title3)
-                .foregroundColor(.gray)
-                .padding()
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-        } else {
-            ScrollView {
-                LazyVStack {
-                    ForEach(foodViewModel.filteredFoodList) { foodSale in
-                        NavigationLink(destination: FoodDetailView(
-                            isFavorite: foodSale.isFavorite ?? false,
-                            showPrice: true,
-                            showOrderButton: true,
-                            showButtonInvoic: nil,
-                            invoiceAccept: nil,
-                            FoodId: foodSale.id,
-                            ItemType: foodSale.itemType
-                        )) {
-                            FoodOnSaleViewCell(
-                                foodSale: foodSale,
-                                foodId: foodSale.id,
-                                itemType: "FOOD_SELL",
-                                isFavorite: foodSale.isFavorite ?? false
-                            )
-                            .frame(maxWidth: .infinity)
-                            .padding(.horizontal, 20)
-                        }
+        ScrollView {
+            LazyVStack {
+                ForEach(foodViewModel.filteredFoodList) { foodSale in
+                    NavigationLink(destination: FoodDetailView(
+                        isFavorite: foodSale.isFavorite ?? false,
+                        showPrice: true,
+                        showOrderButton: true,
+                        showButtonInvoic: nil,
+                        invoiceAccept: nil,
+                        FoodId: foodSale.id,
+                        ItemType: foodSale.itemType
+                    )) {
+                        FoodOnSaleViewCell(
+                            foodSale: foodSale,
+                            foodId: foodSale.id,
+                            itemType: "FOOD_SELL",
+                            isFavorite: foodSale.isFavorite ?? false
+                        )
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, 20)
                     }
                 }
             }
@@ -195,43 +202,50 @@ struct FoodListView: View {
        
         
 }
-
-
+// Guest Food List View
 struct GuestFoodListView: View {
     let isChooseCuisine: Bool
     @ObservedObject var guestFoodSellVM: GuestFoodOnSaleVM
+
     var body: some View {
         if guestFoodSellVM.filteredFoodList.isEmpty {
-            Text("No Food Sell Available!")
-                .font(.title3)
-                .foregroundColor(.gray)
-                .padding()
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            NoFoodAvailableView()
         } else {
-        ScrollView {
-            LazyVStack {
-                ForEach(guestFoodSellVM.filteredFoodList) { guestFoodSale in
-                    NavigationLink(destination: FoodDetailView(
-                        isFavorite: guestFoodSale.isFavorite ?? false,
-                        showPrice: true,
-                        showOrderButton: true,
-                        showButtonInvoic: nil,
-                        invoiceAccept: nil,
-                        FoodId: guestFoodSale.id,
-                        ItemType: guestFoodSale.itemType
-                    )) {
-                        FoodOnSaleViewCell(
-                            foodSale: guestFoodSale,
-                            foodId: guestFoodSale.id,
-                            itemType: "FOOD_SELL",
-                            isFavorite: guestFoodSale.isFavorite ?? false
-                        )
-                        .frame(maxWidth: .infinity)
-                        .padding(.horizontal, 20)
+            ScrollView {
+                LazyVStack {
+                    ForEach(guestFoodSellVM.filteredFoodList) { guestFoodSale in
+                        NavigationLink(destination: FoodDetailView(
+                            isFavorite: guestFoodSale.isFavorite ?? false,
+                            showPrice: true,
+                            showOrderButton: true,
+                            showButtonInvoic: nil,
+                            invoiceAccept: nil,
+                            FoodId: guestFoodSale.id,
+                            ItemType: guestFoodSale.itemType
+                        )) {
+                            FoodOnSaleViewCell(
+                                foodSale: guestFoodSale,
+                                foodId: guestFoodSale.id,
+                                itemType: "FOOD_SELL",
+                                isFavorite: guestFoodSale.isFavorite ?? false
+                            )
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal, 20)
+                        }
                     }
                 }
             }
         }
-         }
+    }
+}
+
+// No Food Available View
+struct NoFoodAvailableView: View {
+    var body: some View {
+        Text("No Food Sell Available!")
+            .font(.title3)
+            .foregroundColor(.gray)
+            .padding()
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
     }
 }

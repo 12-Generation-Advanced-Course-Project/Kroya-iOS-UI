@@ -56,18 +56,6 @@ struct FoodonRecipe: View {
                                     }
                                 }
                             }) {
-    //                            VStack {
-    //                                let imageName = cuisineImages[cuisine.cuisineName] ?? "snackPic"
-    //                                Image(imageName)
-    //                                    .resizable()
-    //                                    .scaledToFill()
-    //                                    .frame(width: 60, height: 60)
-    //                                    .cornerRadius(12)
-    //
-    //                                Text(cuisine.cuisineName)
-    //                                    .font(.customfont(.medium, fontSize: 16))
-    //                                    .foregroundColor(selectedOrderIndex == cuisine.id && recipeViewModel.isChooseCuisine ? Color.yellow : Color.gray)
-    //                            }
                             }
                             .buttonStyle(PlainButtonStyle())
                         }
@@ -83,15 +71,7 @@ struct FoodonRecipe: View {
                         .padding(.horizontal)
                     if Auth.shared.hasAccessToken(){
                         if recipeViewModel.isLoading {
-                            ZStack {
-                                Color.white
-                                    .edgesIgnoringSafeArea(.all)
-                                
-                                ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
-                                    .scaleEffect(2)
-                                    .offset(y: 180)
-                            }
+                            RedactedFoodListView()
                         } else {
                             ScrollView {
                                 LazyVStack {
@@ -123,15 +103,7 @@ struct FoodonRecipe: View {
                         }
                     } else {
                         if guestFoodRecipeVM.isLoading {
-                            ZStack {
-                                Color.white
-                                    .edgesIgnoringSafeArea(.all)
-                                
-                                ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
-                                    .scaleEffect(2)
-                                    .offset(y: 180)
-                            }
+                            RedactedFoodListView()
                         } else {
                             ScrollView {
                                 LazyVStack {

@@ -14,9 +14,14 @@ struct OrderTabView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 8) {
-                    // Display loading state
+                  
                     if orderViewModel.isLoading {
-                        loadingView
+                        // Show placeholder rows
+                        ForEach(0..<max(1, orderViewModel.orders.count)) { _ in
+                            OrderCard(order: .placeholder, showIcon: true)
+                                .redacted(reason: .placeholder)
+                        }
+
                     } else if !orderViewModel.errorMessage.isEmpty {
                         // Display error message
                         Text("Error: \(orderViewModel.errorMessage)")
@@ -134,3 +139,4 @@ struct OrderTabView: View {
         return nil
     }
 }
+
