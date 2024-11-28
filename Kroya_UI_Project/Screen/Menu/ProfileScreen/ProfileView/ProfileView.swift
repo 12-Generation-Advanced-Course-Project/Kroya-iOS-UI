@@ -38,18 +38,18 @@ struct ProfileView: View {
                         HStack {
                             if let profileImageUrl = Profile.userProfile?.profileImage, !profileImageUrl.isEmpty {
                                 WebImage(url:URL(string: "\(urlImagePrefix)\(profileImageUrl)"))
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 40, height: 40)
-                                .clipShape(Rectangle())
-                                .cornerRadius(10)
-                        } else {
-                            Image("user-profile") // Placeholder image
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 40, height: 40)
-                                .foregroundColor(.white)
-                        }
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 40, height: 40)
+                                    .clipShape(Rectangle())
+                                    .cornerRadius(10)
+                            } else {
+                                Image("user-profile") // Placeholder image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 40, height: 40)
+                                    .foregroundColor(.white)
+                            }
                             
                             VStack(alignment: .leading) {
                                 Text(Profile.userProfile?.fullName ?? "")
@@ -71,15 +71,15 @@ struct ProfileView: View {
                                 isEdit.toggle()
                             }
                         
-    //                    NavigationLink(
-    //                        destination: EditingProfileView(
-    //                            profile: Profile,
-    //                            authVM: authVM,
-    //                            selectedAddress: $selectedAddress
-    //                        ).environmentObject(userStore)
-    //                                   ,isActive: $isEdit) {
-    //                        EmptyView()
-    //                    }.hidden()
+                        //                    NavigationLink(
+                        //                        destination: EditingProfileView(
+                        //                            profile: Profile,
+                        //                            authVM: authVM,
+                        //                            selectedAddress: $selectedAddress
+                        //                        ).environmentObject(userStore)
+                        //                                   ,isActive: $isEdit) {
+                        //                        EmptyView()
+                        //                    }.hidden()
                         
                         NavigationLink(
                             destination: EditingProfileView(
@@ -91,8 +91,8 @@ struct ProfileView: View {
                         ) {
                             EmptyView()
                         }.hidden()
-
-
+                        
+                        
                         
                     }
                     .padding(.horizontal, 10)
@@ -131,7 +131,10 @@ struct ProfileView: View {
                         }
                     }
                     Spacer().frame(height: .screenHeight * 0.03)
-                    NavigationLink(destination: WebillConnectView(webillConnect: WeBillVM).environment(\.modelContext, modelContext)) {
+                    // WeBill connection status
+                    NavigationLink(
+                        destination: WebillConnectView(webillConnect: WeBillVM).environment(\.modelContext, modelContext)
+                    ) {
                         VStack(alignment: .leading) {
                             Text("Payment Method")
                                 .customFontMediumLocalize(size: 14)
@@ -142,18 +145,15 @@ struct ProfileView: View {
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 25, height: 25)
-                                if WeBillVM.isConnect {
-                                    Text("Connected")
-                                        .customFontMediumLocalize(size: 16)
-                                        .foregroundStyle(.black)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                } else {
-                                    Text("Connect with ")
-                                        .customFontMediumLocalize(size: 16)
-                                        .foregroundStyle(.black)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                }
+                                
+                                // Dynamic text based on connection status
+                                Text(WeBillVM.isConnect ? "Connected" : "Connect with")
+                                    .customFontMediumLocalize(size: 16)
+                                    .foregroundStyle(.black)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                
                                 Spacer()
+                                
                                 Text("weBill365")
                                     .customFontMediumLocalize(size: 14)
                                     .foregroundStyle(.black.opacity(0.75))
@@ -167,13 +167,6 @@ struct ProfileView: View {
                             .background(Color(hex: "#F4F5F7"))
                             .cornerRadius(15)
                         }
-    //                    .onTapGesture {
-    //                        if WeBillVM.isConnect == true {
-    //                            withAnimation{
-    //                                showAlertWeBill = true
-    //                            }
-    //                        }
-    //                    }
                     }
                     
                     Spacer().frame(height: .screenHeight * 0.03)
@@ -231,7 +224,7 @@ struct ProfileView: View {
                                     }
                                 }
                             }
-
+                        
                         NavigationLink {
                             AllowNotificationView()
                         } label: {
@@ -271,7 +264,7 @@ struct ProfileView: View {
                 })
                 .padding(.horizontal, 10)
             }
-          
+            
             .simultaneousGesture(
                 TapGesture().onEnded {
                     hideKeyboard()
@@ -288,7 +281,7 @@ struct ProfileView: View {
                         isLoading = true
                         showAlertWeBill = false
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-//                            showLoadingOverlay = false
+                            //                            showLoadingOverlay = false
                             WeBillVM.DisconnectWeBillaccount(context: modelContext)
                         }
                     }
