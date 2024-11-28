@@ -101,3 +101,6 @@ typealias guestSearchAllFoodResponse = KroyaSingleAPIResponse<FoodListPayload>
 
 //MARK: Guest Search All Food By Name
 typealias guestSearchAllFoodByNameResponse = KroyaSingleAPIResponse<FoodListPayload>
+
+//MARK: Get All List food Name
+typealias listFoodNameResponse = KroyaSingleAPIResponse<ListNameFood>

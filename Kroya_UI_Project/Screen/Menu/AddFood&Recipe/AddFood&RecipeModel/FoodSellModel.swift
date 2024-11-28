@@ -33,5 +33,3 @@ struct FoodSellModel: Identifiable, Codable {
 
 
 
-
-

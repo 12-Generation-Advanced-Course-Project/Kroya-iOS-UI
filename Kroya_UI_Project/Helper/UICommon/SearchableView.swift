@@ -10,14 +10,7 @@ struct SearchScreen: View {
     @State private var selectedMenuName = ""
     @StateObject private var PopularFoodsData =  PopularFoodVM()
     @StateObject private var listFood = FoodListVM()
-    let suggestedForYou = [
-        "Somlor Mju Krerng",
-        "Cha Ju Eam",
-        "Tongyum",
-        "Somlor Kari",
-        "Khor",
-        "Somlor Jab Chay"
-    ]
+    @StateObject private var foodNames = ListFoodName()
     @StateObject private var keyboardResponder = KeyboardResponder()
     var body: some View {
         NavigationStack {
@@ -138,9 +131,12 @@ struct SearchScreen: View {
                             } else {
                                 // Filtered results
                                 let combinedResults = Array(
-                                    Set((recentSearchesData.recentSearches + suggestedForYou).filter { $0.localizedCaseInsensitiveContains(searchText) })
+                                    Set((recentSearchesData.recentSearches +  foodNames.allFoodName).filter { $0.localizedCaseInsensitiveContains(searchText) })
                                 )
-                                
+//                                let combinedResults = Array(
+//                                    Set((recentSearchesData.recentSearches + foodNames.allFoodName).filter { $0.localizedCaseInsensitiveContains(searchText) })
+//                                )
+
                                 if combinedResults.isEmpty {
                                     Text("This food is not found")
                                         .font(.customfont(.medium, fontSize: geometry.size.width * 0.04))
@@ -158,6 +154,7 @@ struct SearchScreen: View {
                                                     Text(result)
                                                         .font(.customfont(.medium, fontSize: geometry.size.width * 0.04))
                                                         .foregroundColor(.black.opacity(0.60))
+                                                    
                                                 }
                                                 Divider()
                                             }
@@ -167,6 +164,7 @@ struct SearchScreen: View {
                             }
                         }
                         .frame(maxWidth: .infinity)
+
                     }
                     .padding(.horizontal, geometry.size.width * 0.05)
                 }
@@ -197,6 +195,7 @@ struct SearchScreen: View {
         }
         .onAppear{
             PopularFoodsData.getAllPopular()
+            foodNames.getAllListFoodName()
         }
         .ignoresSafeArea(.keyboard)
         .navigationBarBackButtonHidden(true)
@@ -217,3 +216,5 @@ struct SearchScreen: View {
     }
     
 }
+
+

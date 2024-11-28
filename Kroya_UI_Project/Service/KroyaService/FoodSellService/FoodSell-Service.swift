@@ -251,6 +251,54 @@ class FoodSellService {
         }
     }
     
+    
+    // MARK: Get ALll name food
+    func fetchAllFoodName(completion: @escaping (Result< listFoodNameResponse, Error>) -> Void) {
+        guard let accessToken = Auth.shared.getAccessToken() else {
+            let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token not found."])
+            completion(.failure(error))
+            return
+        }
+        let url = Constants.allFoodName
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(accessToken)"
+        ]
+        
+        AF.request(url, method: .get, headers: headers).validate()
+            .responseDecodable(of: listFoodNameResponse.self) { response in
+                if let data = response.data {
+                    do {
+                        let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+                        let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
+                        if let prettyString = String(data: prettyData, encoding: .utf8) {
+                            print("Pretty JSON Response(Food Name):\n\(prettyString)")
+                        }
+                    } catch {
+                        print("Failed to convert response data to pretty JSON: \(error)")
+                    }
+                } else {
+                    print("No response data available")
+                }
+                
+                switch response.result{
+                case .success(let apiResponse):
+                    if let statusCode = Int(apiResponse.statusCode), statusCode == 200 {
+                        print("Retrieved Food name successfully.")
+                        print("Food Name:\(String(describing: apiResponse.payload))")
+                        
+                        completion(.success(apiResponse))
+                    } else {
+                        print("Failed to retrieve Food name: ")
+                        let error = NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: apiResponse.message])
+                        completion(.failure(error))
+                    }
+                case .failure(let error):
+                    print("Request failed with error: \(error)")
+                    completion(.failure(error))
+                }
+            }
+    }
+    
 }
 
 
