@@ -201,7 +201,7 @@ class WeBill365ViewModel: ObservableObject {
         pollingTimer = nil
     }
     // MARK: - Connect WeBill
-    func ConnectWeBillAccount(ConnectRequest: ConnectWebillConnectRequest ,completion: @escaping (Bool) -> Void) {
+    func ConnectWeBillAccount(ConnectRequest: ConnectWebillConnectRequest, completion: @escaping (Bool) -> Void) {
         self.isLoading = true
         BankService.shared.connectWeBill(request: ConnectRequest) { [weak self] result in
             DispatchQueue.main.async {
@@ -209,24 +209,33 @@ class WeBill365ViewModel: ObservableObject {
                 switch result {
                 case .success(let ConnectResponse):
                     if ConnectResponse.statusCode == "200", let payload = ConnectResponse.payload {
-                        // Assign the fetched payload to the WebillAccount
+                        // Successfully connected
                         self?.WebillAccount = payload
-                    
                         self?.isConnect = true
                         print("WeBill connected successfully: \(payload)")
+                        completion(true)
+                    } else if ConnectResponse.statusCode == "409" {
+                        // Handle already connected scenario
+                        self?.isConnect = true
+                        self?.successMessage = "Account is already connected."
+                        print("Account already connected. Status code 409.")
+                        completion(true)
                     } else {
-                        // Handle failed response with the message from the API
+                        // Handle other unsuccessful scenarios
                         self?.errorMessage = ConnectResponse.message
-                        print("Connect WeBill Failed: \(self?.errorMessage ?? "Unknown error")")
+                        print("Connect WeBill failed: \(self?.errorMessage ?? "Unknown error")")
+                        completion(false)
                     }
                 case .failure(let error):
                     // Handle request failure
                     self?.errorMessage = error.localizedDescription
                     print("Failed to connect WeBill: \(error.localizedDescription)")
+                    completion(false)
                 }
             }
         }
     }
+
 
 
     //MARK: Get Credentail WeBill
@@ -273,6 +282,47 @@ class WeBill365ViewModel: ObservableObject {
             }
         }
     }
+
+    func connectWeBill() {
+        let connectRequest = ConnectWebillConnectRequest(clientId: clientID, clientSecret: clientSecret, accountNo: parentAccountNo)
+        ConnectWeBillAccount(ConnectRequest: connectRequest) { success in
+            DispatchQueue.main.async {
+                if success {
+                    self.isConnect = true
+                    UserDefaults.standard.set(true, forKey: "isWeBillConnected")
+                } else {
+                    // Handle failure case
+                    self.isConnect = false
+                }
+            }
+        }
+    }
+
+    // This is just an example, replace it with the actual function or connection logic
+    func someConnectionFunction(completion: @escaping (Bool) -> Void) {
+       
+        DispatchQueue.global().async {
+            // Simulate a success after some delay
+            sleep(2)
+            DispatchQueue.main.async {
+                completion(true)
+            }
+        }
+    }
+
+    // Function to load the persisted connection status when the app starts
+       func loadConnectionStatus() {
+           if let savedStatus = UserDefaults.standard.value(forKey: "isWeBillConnected") as? Bool {
+               self.isConnect = savedStatus
+           }
+       }
+
+       // Disconnect function (example)
+       func disconnectWeBill() {
+           self.isConnect = false
+           // Remove connection status from UserDefaults
+           UserDefaults.standard.removeObject(forKey: "isWeBillConnected")
+       }
 
     
 }

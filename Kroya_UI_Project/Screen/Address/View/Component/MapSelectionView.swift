@@ -181,6 +181,7 @@ struct AddressInputView: View {
                                 }
                             }
                         }
+                        .frame(maxWidth: .infinity)
                         .padding(.top, 7)
                         
                         if let error = validationError, error == "Please select a tag for this location." {

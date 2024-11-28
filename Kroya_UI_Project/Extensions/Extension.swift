@@ -268,7 +268,7 @@ extension View {
 
 extension FoodSellModel {
     static var placeholder: FoodSellModel {
-        FoodSellModel(
+        return FoodSellModel(
             id: 0,
             photo: [],
             name: "Loading...",
@@ -308,7 +308,41 @@ extension OrderModel {
 
 extension Address {
     static var placeholder: Address {
-        Address(id: 0, addressDetail: "Loading...", specificLocation: "Loading...", tag: "Loading", latitude: 0, longitude: 0)
+        return Address(id: 0, addressDetail: "Loading...", specificLocation: "Loading...", tag: "Loading", latitude: 0, longitude: 0)
     }
 }
 
+extension OrderRequestModel {
+    static var placeholder: OrderRequestModel {
+        return OrderRequestModel(
+            id: 0,
+            foodSellCardResponse: FoodSellModel.placeholder,
+            remark: "Loading...",
+            location: "Loading...",
+            paymentType: "Loading...",
+            purchaseStatusType: nil,
+            quantity: 0,
+            totalPrice: 0.0,
+            purchaseDate: nil,
+            buyerInformation: BuyerInformationModel.placeholder
+        )
+    }
+}
+
+extension Photo {
+    static var placeholder: Photo {
+        return Photo(photo: "placeholder.jpg")
+    }
+}
+
+extension BuyerInformationModel {
+    static var placeholder: BuyerInformationModel {
+        return BuyerInformationModel(
+            userId: 0,
+            fullName: "Loading...",
+            phoneNumber: "Loading...",
+            profileImage: "placeholder.jpg",
+            location: "Loading..."
+        )
+    }
+}

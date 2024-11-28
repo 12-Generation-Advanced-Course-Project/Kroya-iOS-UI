@@ -6,57 +6,67 @@ struct FavoriteRecipesTabView: View {
     @Binding var searchText : String
     var body: some View {
         VStack {
-            if filteredFoodRecipe.isEmpty && !favoriteFoodRecipe.isLoading{
-                Text("No Favorite Food Recipe Found!")
-                    .font(.title3)
-                    .foregroundColor(.gray)
-                    .padding()
+            if favoriteFoodRecipe.isLoading {
+                ScrollView{
+                    ForEach(0..<favoriteFoodRecipe.favoriteFoodRecipe.count) { _ in
+                        FoodOnSaleViewCell(
+                            foodSale: .placeholder, // Placeholder model
+                            foodId: 0,
+                            itemType: "FOOD_SELL",
+                            isFavorite: false
+                        )
+                        .redacted(reason: .placeholder)
+                        .padding(.horizontal, 20)
+                    }
+                }
             } else {
-                ScrollView(showsIndicators: false) {
-                    LazyVStack(spacing: 8) {
-                        ForEach(filteredFoodRecipe) { favorite in
-                            NavigationLink(destination:
-                                            FoodDetailView(
-                                                isFavorite: favorite.isFavorite ?? false , showPrice: false,
-                                                showOrderButton: false,
-                                                showButtonInvoic: nil,
-                                                invoiceAccept: nil,
-                                                FoodId: favorite.id,
-                                                ItemType: favorite.itemType
-                                            )
-                            ) {
-                                RecipeViewCell(
-                                    recipe: favorite,
-                                    foodId: favorite.id,
-                                    itemType: "FOOD_RECIPE",
-                                    isFavorite: favorite.isFavorite ?? false
-                                )
-                                .frame(maxWidth: .infinity)
-                                .padding(.horizontal, 20)
-                               
-                            }
-                               
+                if filteredFoodRecipe.isEmpty{
+                    Text("No Favorite Food Recipe Found!")
+                        .font(.title3)
+                        .foregroundColor(.gray)
+                        .padding()
+                } else {
+                    ScrollView(showsIndicators: false) {
+                        LazyVStack(spacing: 8) {
+                            ForEach(filteredFoodRecipe) { favorite in
+                                NavigationLink(destination:
+                                                FoodDetailView(
+                                                    isFavorite: favorite.isFavorite ?? false , showPrice: false,
+                                                    showOrderButton: false,
+                                                    showButtonInvoic: nil,
+                                                    invoiceAccept: nil,
+                                                    FoodId: favorite.id,
+                                                    ItemType: favorite.itemType
+                                                )
+                                ) {
+                                    RecipeViewCell(
+                                        recipe: favorite,
+                                        foodId: favorite.id,
+                                        itemType: "FOOD_RECIPE",
+                                        isFavorite: favorite.isFavorite ?? false
+                                    )
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.horizontal, 20)
+                                   
+                                }
+                                .onChange(of: favorite.isFavorite) { newValue in
+                                    if newValue == false {
+                                        refreshFavorites()
+                                        // Remove the card directly
+                                        removeCardFromList(favorite)
+                                    }
+                                }
+                                   
+                                }
                             }
                         }
-                    }
-                .overlay(
-                    Group {
-                        if favoriteFoodRecipe.isLoading {
-                            Color.white
-                                .edgesIgnoringSafeArea(.all)
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
-                                .scaleEffect(2)
-                        }
-                    }
-                )
+                 
+                }
             }
         }
         .padding(.top, 8)
         .onAppear {
-            if favoriteFoodRecipe.favoriteFoodRecipe.isEmpty {
                 favoriteFoodRecipe.getAllFavoriteFood()
-            }
         }
     }
     // MARK: - Filtered Results
@@ -65,6 +75,16 @@ struct FavoriteRecipesTabView: View {
             return favoriteFoodRecipe.favoriteFoodRecipe
         } else {
             return favoriteFoodRecipe.favoriteFoodRecipe.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+        }
+    }
+    // MARK: - Refresh Favorites
+    private func refreshFavorites() {
+        favoriteFoodRecipe.getAllFavoriteFood()
+    }
+    private func removeCardFromList(_ item: FoodRecipeModel) {
+        // Update the data source to remove the unfavorited item
+        if let index = favoriteFoodRecipe.favoriteFoodRecipe.firstIndex(where: { $0.id == item.id }) {
+            favoriteFoodRecipe.favoriteFoodRecipe.remove(at: index)
         }
     }
 }

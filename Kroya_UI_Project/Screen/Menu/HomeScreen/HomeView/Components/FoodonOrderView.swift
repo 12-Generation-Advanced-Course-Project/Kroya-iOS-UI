@@ -172,29 +172,36 @@ struct FoodListView: View {
     @ObservedObject var foodViewModel: FoodSellViewModel
 
     var body: some View {
-        ScrollView {
-            LazyVStack {
-                ForEach(foodViewModel.filteredFoodList) { foodSale in
-                    NavigationLink(destination: FoodDetailView(
-                        isFavorite: foodSale.isFavorite ?? false,
-                        showPrice: true,
-                        showOrderButton: true,
-                        showButtonInvoic: nil,
-                        invoiceAccept: nil,
-                        FoodId: foodSale.id,
-                        ItemType: foodSale.itemType
-                    )) {
-                        FoodOnSaleViewCell(
-                            foodSale: foodSale,
-                            foodId: foodSale.id,
-                            itemType: "FOOD_SELL",
-                            isFavorite: foodSale.isFavorite ?? false
-                        )
-                        .frame(maxWidth: .infinity)
-                        .padding(.horizontal, 20)
+        if !foodViewModel.filteredFoodList.isEmpty {
+            ScrollView {
+                LazyVStack {
+                    ForEach(foodViewModel.filteredFoodList) { foodSale in
+                        NavigationLink(destination: FoodDetailView(
+                            isFavorite: foodSale.isFavorite ?? false,
+                            showPrice: true,
+                            showOrderButton: true,
+                            showButtonInvoic: nil,
+                            invoiceAccept: nil,
+                            FoodId: foodSale.id,
+                            ItemType: foodSale.itemType
+                        )) {
+                            FoodOnSaleViewCell(
+                                foodSale: foodSale,
+                                foodId: foodSale.id,
+                                itemType: "FOOD_SELL",
+                                isFavorite: foodSale.isFavorite ?? false
+                            )
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal, 20)
+                        }
                     }
                 }
             }
+            
+        } else {
+            Text(LocalizedStringKey("No Food Sell Available"))
+                .foregroundColor(.gray)
+                .padding(.top)
         }
         
            

@@ -178,7 +178,9 @@ struct BottomSheetView<Content: View>: View {
                                     Price: sellDetails.price,
                                     Currency: sellDetails.currencyType,
                                     PhoneNumber: sellDetails.foodRecipeDTO.user.phoneNumber ?? "",
-                                    ReciptentName: sellDetails.foodRecipeDTO.user.fullName, sellerId: sellDetails.foodRecipeDTO.user.id
+                                    ReciptentName: sellDetails.foodRecipeDTO.user.fullName,
+                                    SellerId: sellDetails.foodRecipeDTO.user.id
+                                
                                 ),
                                 isActive: $navigateToCheckout
                             ) {
