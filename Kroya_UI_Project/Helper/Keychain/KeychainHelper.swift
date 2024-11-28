@@ -94,9 +94,19 @@ class Auth: ObservableObject {
     func getDeviceTokenForNotifi() -> String? {
         return getDeviceToken().DeviceToken
     }
+    //MARK: Get parent Account
     func getParentAccount() -> String? {
         return getWeBillCredentials().parentAccount
     }
+    //MARK: Get Client Id
+    func getClientId() -> String? {
+        return getWeBillCredentials().clientId
+    }
+    //MARK: Get Secret
+    func getSecret() -> String? {
+        return getWeBillCredentials().secretId
+    }
+    
     func hasAccessToken() -> Bool {
         return getCredentials().accessToken != nil
     }

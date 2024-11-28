@@ -8,55 +8,63 @@ struct FavoriteFoodOnSaleTabView: View {
 
     var body: some View {
         VStack {
-            if filteredFoodSell.isEmpty && !favoriteFoodSale.isLoading {
-                Text("No Favorite Food Sell Found!")
-                    .font(.title3)
-                    .foregroundColor(.gray)
-                    .padding()
+            if favoriteFoodSale.isLoading {
+                ScrollView{
+                    ForEach(0..<favoriteFoodSale.favoriteFoodSell.count) { _ in
+                        FoodOnSaleViewCell(
+                            foodSale: .placeholder, // Placeholder model
+                            foodId: 0,
+                            itemType: "FOOD_SELL",
+                            isFavorite: false
+                        )
+                        .redacted(reason: .placeholder)
+                        .padding(.horizontal, 20)
+                    }
+                }
+
             } else {
-                ScrollView(showsIndicators: false) {
-                    LazyVStack(spacing: 8) {
-                        ForEach(filteredFoodSell, id: \.id) { favorite in
-                            NavigationLink(destination:
-                                FoodDetailView(
-                                    isFavorite: favorite.isFavorite ?? false,
-                                    showPrice: false,
-                                    showOrderButton: false,
-                                    showButtonInvoic: nil,
-                                    invoiceAccept: nil,
-                                    FoodId: favorite.id,
-                                    ItemType: favorite.itemType
-                                )
-                            ) {
-                                FoodOnSaleViewCell(
-                                    foodSale: favorite,
-                                    foodId: favorite.id,
-                                    itemType: "FOOD_SELL",
-                                    isFavorite: favorite.isFavorite ?? isFavorite
-                                )
-                                .frame(maxWidth: .infinity)
-                                .padding(.horizontal, 20)
-                            }
-                            .onChange(of: favorite.isFavorite) { newValue in
-                                if newValue == false {
-                                    // Remove the card directly
-                                    removeCardFromList(favorite)
+                if filteredFoodSell.isEmpty {
+                    Text("No Favorite Food Sell Found!")
+                        .font(.title3)
+                        .foregroundColor(.gray)
+                        .padding()
+                } else {
+                    ScrollView(showsIndicators: false) {
+                        LazyVStack(spacing: 8) {
+                            ForEach(filteredFoodSell, id: \.id) { favorite in
+                                NavigationLink(destination:
+                                    FoodDetailView(
+                                        isFavorite: favorite.isFavorite ?? false,
+                                        showPrice: false,
+                                        showOrderButton: false,
+                                        showButtonInvoic: nil,
+                                        invoiceAccept: nil,
+                                        FoodId: favorite.id,
+                                        ItemType: favorite.itemType
+                                    )
+                                ) {
+                                    FoodOnSaleViewCell(
+                                        foodSale: favorite,
+                                        foodId: favorite.id,
+                                        itemType: "FOOD_SELL",
+                                        isFavorite: favorite.isFavorite ?? isFavorite
+                                    )
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.horizontal, 20)
+                                }
+                                .onChange(of: favorite.isFavorite) { newValue in
+                                   
+                                    if newValue == false {
+                                        refreshFavorites()
+                                        // Remove the card directly
+                                        removeCardFromList(favorite)
+                                    }
                                 }
                             }
                         }
                     }
+                   
                 }
-                .overlay(
-                    Group {
-                        if favoriteFoodSale.isLoading {
-                            Color.white
-                                .edgesIgnoringSafeArea(.all)
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
-                                .scaleEffect(2)
-                        }
-                    }
-                )
             }
         }
         .padding(.top, 8)

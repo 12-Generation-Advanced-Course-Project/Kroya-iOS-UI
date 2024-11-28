@@ -127,19 +127,28 @@ struct SaleReportView: View {
             .frame(maxWidth: .infinity)
             .background(PrimaryColor.normalHover)
             
-            if !saleReportVM.purchaseResponses.isEmpty {
-                ScrollView {
-                    LazyVStack {
-                        ForEach(saleReportVM.purchaseResponses) { order in
-                            ItemFoodOrderForSaleReport(orderRequest: order, show3dot: $show3dot)
-                        }
+            if saleReportVM.isLoading {
+                ScrollView{
+                    ForEach(0..<10) { _ in
+                        ItemFoodOrderForSaleReport(orderRequest: .placeholder, show3dot: $show3dot)
+                            .redacted(reason: .placeholder)
                     }
-                    .padding(.horizontal)
                 }
             } else {
-                Text(LocalizedStringKey("No items sold on this day"))
-                    .foregroundColor(.gray)
-                    .padding(.top)
+                if !saleReportVM.purchaseResponses.isEmpty {
+                    ScrollView {
+                        LazyVStack {
+                            ForEach(saleReportVM.purchaseResponses) { order in
+                                ItemFoodOrderForSaleReport(orderRequest: order, show3dot: $show3dot)
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
+                } else {
+                    Text(LocalizedStringKey("No items sold on this day"))
+                        .foregroundColor(.gray)
+                        .padding(.top)
+                }
             }
 
             Spacer()

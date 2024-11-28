@@ -63,7 +63,8 @@ struct PaymentButtonView: View {
 //                        print("Seller Credentials: \(sellerCredentials)")
                         BankService.shared.weBill365Token(clientID: sellerCredentials.payload.clientID, clientSecret: sellerCredentials.payload.clientSecret , parentAccount: sellerCredentials.payload.accountNo) {  result in
                             switch result {
-                            case .success(let data):
+                            case .success(_):
+                                
                                 let QRCollectionRequest = QRCollectionRequest(
                                                     payername: profileVM.userProfile?.fullName ?? "",
                                                     parentAccountNo: sellerCredentials.payload.accountNo,

@@ -74,6 +74,7 @@ import SwiftUI
 struct WeBillDisconnect: View {
     var onCancel: () -> Void
     var onYes: () -> Void
+
     var body: some View {
         ZStack {
             Color.black.opacity(0.5)
@@ -91,7 +92,7 @@ struct WeBillDisconnect: View {
                     .padding(.horizontal, 10)
                 Spacer().frame(height: 20)
                 HStack(spacing: 10) {
-                  
+                    // Cancel button action
                     Button(action: {
                         onCancel()
                     }) {
@@ -103,6 +104,7 @@ struct WeBillDisconnect: View {
                             .cornerRadius(10)
                     }
                     
+                    // Confirm (Yes) button action
                     Button(action: {
                         onYes()
                     }) {
@@ -114,7 +116,7 @@ struct WeBillDisconnect: View {
                             .cornerRadius(10)
                     }
                 }
-                .frame(maxWidth: .infinity,alignment: .trailing)
+                .frame(maxWidth: .infinity, alignment: .trailing)
             }
             .padding()
             .background(Color.white)

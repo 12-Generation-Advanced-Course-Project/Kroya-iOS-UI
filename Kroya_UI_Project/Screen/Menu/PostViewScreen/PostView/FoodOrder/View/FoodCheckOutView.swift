@@ -4,6 +4,7 @@ struct FoodCheckOutView: View {
     @Environment(\.dismiss) var dismiss
     @State private var isReceiptActive = false
     @StateObject private var PurchaesViewModel = OrderViewModel()
+    
     @State private var isPresented = false
     @Binding var imageName: String
     @State private var selectedAddress: Address?
@@ -15,6 +16,7 @@ struct FoodCheckOutView: View {
     var Currency: String
     var PhoneNumber: String
     var ReciptentName: String
+    var SellerId: Int
     @State private var remark: String? = ""
     @State private var totalPrice: Int = 0
     @State private var Quantity: Int = 1
@@ -23,8 +25,7 @@ struct FoodCheckOutView: View {
     @State private var warningMessage: String? 
     let exchangeRateToRiel: Double = 4100
     @StateObject private var keyboardResponder = KeyboardResponder()
-    
-    let sellerId : Int
+ 
     
     var totalPriceInRiel: Double {
         if Currency.uppercased() == "RIEL" {
@@ -75,7 +76,7 @@ struct FoodCheckOutView: View {
                                 remark: remark ?? "Good",
                                 Location: Location,
                                 Qty: Quantity,
-                                FoodSellId: sellerId
+                                FoodSellId: SellerId
                             ).environment(\.modelContext, context)
                         } header: {
                             Text(LocalizedStringKey("Payment"))
