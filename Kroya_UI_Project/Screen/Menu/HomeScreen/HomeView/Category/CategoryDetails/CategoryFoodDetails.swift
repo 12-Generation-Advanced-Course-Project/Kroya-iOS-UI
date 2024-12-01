@@ -15,7 +15,7 @@ struct CategoryFoodDetails: View {
     @StateObject private var guestCategoryVM = GuestCategoryVM()
     @State private var selectedSegment = 0
     @Environment(\.dismiss) var dismiss
-
+    
     var body: some View {
         VStack {
             VStack {
@@ -31,7 +31,7 @@ struct CategoryFoodDetails: View {
                                 categoryVM.fetchAllCategoryById(categoryId: category.id) // Ensure data is fetched
                             }else{
                                 selectedSegment = 0
-                                guestCategoryVM.fetchAllfoodByCategoryId(categoryId: category.id) // Ensure data is fetched
+                                //                                guestCategoryVM.fetchAllfoodByCategoryId(categoryId: category.id) // Ensure data is fetched
                             }
                         }
                     Spacer()
@@ -45,13 +45,13 @@ struct CategoryFoodDetails: View {
                                 categoryVM.fetchAllCategoryById(categoryId: category.id) // Ensure data is fetched
                             } else {
                                 selectedSegment = 1
-                                guestCategoryVM.fetchAllfoodByCategoryId(categoryId: category.id) // Ensure data is fetched
+                                //                                guestCategoryVM.fetchAllfoodByCategoryId(categoryId: category.id) // Ensure data is fetched
                             }
                         }
                     Spacer()
                 }
                 .padding(.top)
-
+                
                 // Underline indicator for selected tab
                 GeometryReader { geometry in
                     Divider()
@@ -64,7 +64,7 @@ struct CategoryFoodDetails: View {
                 .frame(height: 2)
             }
             .padding(.top, 5)
-
+            
             // Tab View Content
             TabView(selection: $selectedSegment) {
                 CategoryFoodSaleTab(categoryVM: categoryVM, guestCategoryVM: guestCategoryVM)
@@ -74,26 +74,16 @@ struct CategoryFoodDetails: View {
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         }
-//        .onAppear {
-//            if Auth.shared.hasAccessToken(){
-//                // Fetch data for the selected category
-//                categoryVM.fetchAllCategoryById(categoryId: category.id)
-//            } else {
-//                // Fetch data for the selected category
-//                guestCategoryVM.fetchAllfoodByCategoryId(categoryId: category.id)
-//            }
-//        }
         .onAppear {
-                print("Selected Category ID: \(category.id)")
-                if Auth.shared.hasAccessToken() {
-                    categoryVM.fetchAllCategoryById(categoryId: category.id) // Call without closure
-                    print("Selected Categoryuser ID: \(category.id)")
-                } else {
-                    guestCategoryVM.fetchAllfoodByCategoryId(categoryId: category.id)
-                    print("Selected Categoryguest ID: \(category.id)")// Call without closure
-                }
+            print("Selected Category ID: \(category.id)")
+            if Auth.shared.hasAccessToken() {
+                categoryVM.fetchAllCategoryById(categoryId: category.id)
+                print("Selected Categoryuser ID: \(category.id)")
+            } else {
+                print("Selected Categoryguest ID: \(category.id)")
             }
-
+        }
+        
         .navigationBarBackButtonHidden(true)
         .navigationTitle(category.title.rawValue)
         .navigationBarTitleDisplayMode(.inline)

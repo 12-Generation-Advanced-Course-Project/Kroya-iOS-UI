@@ -28,12 +28,6 @@ class CuisineService {
                         print("Cuisines retrieved successfully.")
                         completiion(.success(apiResponse))
                         
-                    } else {
-                        
-                        print("Failed to retrieved cuisines")
-                        let error = NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: apiResponse.message])
-                        completiion(.failure(error))
-                        
                     }
                 case .failure(let error):
                     print("Request failed with error: \(error)")

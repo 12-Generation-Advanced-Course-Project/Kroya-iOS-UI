@@ -24,20 +24,6 @@ class FoodSellService {
         
         AF.request(url, method: .get, headers: headers).validate()
             .responseDecodable(of:foodSellResponse.self) { response in
-                if let data = response.data {
-                    do {
-                        let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-                        let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-                        if let prettyString = String(data: prettyData, encoding: .utf8) {
-                            print("Pretty JSON Response:\n\(prettyString)")
-                        }
-                    } catch {
-                        print("Failed to convert response data to pretty JSON: \(error)")
-                    }
-                } else {
-                    print("No response data available")
-                }
-                
                 switch response.result{
                 case .success(let apiResponse):
                     if let statusCode = Int(apiResponse.statusCode), statusCode == 200 {
@@ -72,18 +58,6 @@ class FoodSellService {
         ]
         
         AF.request(url, method: .get, headers: headers).validate().responseDecodable(of: foodSellResponse.self) { response in
-            if let data = response.data {
-                do {
-                    let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-                    let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-                    if let Response = String(data: prettyData, encoding: .utf8) {
-                        print("JSON Response:\n\(Response)")
-                    }
-                } catch {
-                    print("Failed to convert response data to pretty JSON: \(error)")
-                }
-            }
-            
             // Handle the result
             switch response.result {
             case .success(let apiResponse):
@@ -104,11 +78,10 @@ class FoodSellService {
         _ foodSellRequest: FoodSellRequest,
         foodRecipeId: Int,
         currencyType: String,
-        completion: @escaping (Result<SaveFoodSellResponse, Error>) -> Void
+        completion: @escaping (Result<SaveFoodSellResponse, NetworkError>) -> Void
     ) {
         guard let accessToken = Auth.shared.getAccessToken() else {
-            let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token not found."])
-            completion(.failure(error))
+            completion(.failure(.noAccessToken))
             return
         }
         
@@ -118,7 +91,6 @@ class FoodSellService {
             "Content-Type": "application/json"
         ]
         
-        // Construct request body from FoodSellRequest model
         let parameters: [String: Any] = [
             "dateCooking": foodSellRequest.dateCooking,
             "amount": foodSellRequest.amount,
@@ -131,20 +103,6 @@ class FoodSellService {
             .validate()
             .responseDecodable(of: SaveFoodSellResponse.self) { response in
                 debugPrint(response)
-                
-                if let data = response.data {
-                    do {
-                        let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-                        let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-                        if let prettyString = String(data: prettyData, encoding: .utf8) {
-                            print("Pretty JSON Response:\n\(prettyString)")
-                        }
-                    } catch {
-                        print("Failed to convert response data to pretty JSON: \(error)")
-                    }
-                }
-                
-                // Handle response result
                 switch response.result {
                 case .success(let apiResponse):
                     if let statusCode = Int(apiResponse.statusCode), statusCode == 201 {
@@ -152,15 +110,28 @@ class FoodSellService {
                         completion(.success(apiResponse))
                     } else {
                         print("Failed to create food sell.")
-                        let error = NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: apiResponse.message])
-                        completion(.failure(error))
+                        completion(.failure(.serverError(message: apiResponse.message)))
                     }
+                    
                 case .failure(let error):
-                    print("Request failed with error: \(error)")
-                    completion(.failure(error))
+                    if let afError = error.asAFError {
+                        switch afError {
+                        case .sessionTaskFailed(let underlyingError):
+                            if (underlyingError as? URLError)?.code == .timedOut {
+                                completion(.failure(.timeout))
+                            } else if (underlyingError as? URLError)?.code == .notConnectedToInternet {
+                                completion(.failure(.connectionLost))
+                            } else {
+                                completion(.failure(.unexpectedError(underlyingError)))
+                            }
+                        default:
+                            completion(.failure(.unexpectedError(error)))
+                        }
+                    }
                 }
             }
     }
+
     
     
     

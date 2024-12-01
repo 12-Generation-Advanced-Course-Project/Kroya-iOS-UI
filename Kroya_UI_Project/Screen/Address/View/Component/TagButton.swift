@@ -17,7 +17,7 @@ struct TagButton: View {
                     .foregroundColor(isSelected ? .white : .black)
                     .font(.system(size: 13, weight: .medium))
             }
-            .padding(.horizontal, 13)
+            .frame(maxWidth: .infinity)
             .padding(.vertical, 8)
             .background(isSelected ? Color.yellow : Color.clear)
             .cornerRadius(7)

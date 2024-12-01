@@ -8,12 +8,13 @@
 import SwiftData
 import SwiftUI
 
-
 @Model
-class RecentSearchesModel{
-    var title:String
-    init(title: String) {
+class RecentSearchesModel {
+    var title: String
+    var email: String
+
+    init(title: String, email: String) {
         self.title = title
+        self.email = email
     }
 }
-

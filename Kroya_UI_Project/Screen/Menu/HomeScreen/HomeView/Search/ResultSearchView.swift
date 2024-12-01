@@ -76,10 +76,10 @@ struct ResultSearchView: View {
         }
         .onAppear {
             // Only save non-empty search terms
-            if !menuName.isEmpty {
-                recentSearchesData.saveSearch(menuName, in: modelContext)
-            }
-            listFoodRecipe.searchFoodByName(foodName: menuName)
+//            if !menuName.isEmpty {
+//                recentSearchesData.saveSearch(menuName, in: modelContext)
+//            }
+           
         }
         .navigationBarBackButtonHidden(true)
     }

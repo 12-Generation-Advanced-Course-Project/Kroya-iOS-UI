@@ -4,6 +4,7 @@ import SwiftUI
 struct FavoriteRecipesTabView: View {
     @StateObject private var favoriteFoodRecipe = FavoriteVM()
     @Binding var searchText : String
+    @State private var refreshID = UUID()
     var body: some View {
         VStack {
             if favoriteFoodRecipe.isLoading {
@@ -39,31 +40,30 @@ struct FavoriteRecipesTabView: View {
                                                     ItemType: favorite.itemType
                                                 )
                                 ) {
-                                    RecipeViewCell(
+                                    RecipeViewCellForTest(
                                         recipe: favorite,
                                         foodId: favorite.id,
                                         itemType: "FOOD_RECIPE",
-                                        isFavorite: favorite.isFavorite ?? false
+                                        isFavorite: favorite.isFavorite ?? false,
+                                        onFavoritechange: {
+                                          
+                                            favoriteFoodRecipe.getAllFavoriteFood()
+                                            refreshID = UUID()
+                                           
+                                        }
                                     )
+                                  
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
                                    
                                 }
-                                .onChange(of: favorite.isFavorite) { newValue in
-                                    if newValue == false {
-                                        refreshFavorites()
-                                        // Remove the card directly
-                                        removeCardFromList(favorite)
-                                    }
-                                }
-                                   
                                 }
                             }
-                        }
-                 
+                        }.id(refreshID)
                 }
             }
         }
+        
         .padding(.top, 8)
         .onAppear {
                 favoriteFoodRecipe.getAllFavoriteFood()
@@ -77,14 +77,10 @@ struct FavoriteRecipesTabView: View {
             return favoriteFoodRecipe.favoriteFoodRecipe.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
         }
     }
-    // MARK: - Refresh Favorites
-    private func refreshFavorites() {
-        favoriteFoodRecipe.getAllFavoriteFood()
-    }
     private func removeCardFromList(_ item: FoodRecipeModel) {
-        // Update the data source to remove the unfavorited item
         if let index = favoriteFoodRecipe.favoriteFoodRecipe.firstIndex(where: { $0.id == item.id }) {
             favoriteFoodRecipe.favoriteFoodRecipe.remove(at: index)
         }
     }
+
 }

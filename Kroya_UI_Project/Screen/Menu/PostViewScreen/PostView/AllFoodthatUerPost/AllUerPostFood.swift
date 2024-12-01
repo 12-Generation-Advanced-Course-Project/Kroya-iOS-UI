@@ -60,9 +60,7 @@ struct AllUerPostFood: View {
             )
         }
         .onAppear {
-            if allFoodUserPost.userPostFoodSale.isEmpty || allFoodUserPost.userPostRecipeFood.isEmpty {
-                allFoodUserPost.getAllUserFood()
-            }
+            allFoodUserPost.getAllUserFood()
         }
     }
     

@@ -32,24 +32,6 @@ class SaleReportService {
         print("Access Token: \(accessToken)")
         
         AF.request(url, method: .get, headers: headers).validate().responseDecodable(of: SaleReportResponse.self) { response in
-            if let statusCode = response.response?.statusCode, statusCode == 401 {
-                print("Unauthorized: Please check the token.")
-                completion(.failure(NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Unauthorized: Invalid or expired token."])))
-                return
-            }
-            
-            if let data = response.data {
-                do {
-                    let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-                    let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-                    if let prettyString = String(data: prettyData, encoding: .utf8) {
-                        print("Pretty JSON Response:\n\(prettyString)")
-                    }
-                } catch {
-                    print("Failed to convert response data to JSON: \(error)")
-                }
-            }
-            
             switch response.result {
             case .success(let payload):
                 completion(.success(payload))

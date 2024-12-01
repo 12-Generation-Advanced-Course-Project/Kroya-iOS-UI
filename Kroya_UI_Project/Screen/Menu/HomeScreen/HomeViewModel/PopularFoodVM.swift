@@ -12,28 +12,24 @@ class PopularFoodVM: ObservableObject {
     @Published var popularFoodSell: [FoodSellModel] = []
     @Published var popularFood: [PopularPayload] = []
     @Published var isLoading: Bool = false
-    
     @Published var successMessage: String = ""
     @Published var showError: Bool = false
     @Published var errorMessage: String = ""
-    
-    
     //MARK: Computed property to get all popular food names
     var popularFoodNames: [String] {
         let recipeNames = popularFoodRecipe.map { $0.name }
         let sellNames = popularFoodSell.map { $0.name }
         return recipeNames + sellNames
     }
-    private func startLoading(){
+   func startLoading(){
         isLoading = true
     }
     
-    private func endLoading(){
+   func endLoading(){
         isLoading = false
     }
     
     //MARK: - get All Popular
-    
     func getAllPopular() {
         startLoading()
         Foods_Service.shared.fetchAllPopular { [weak self] result in
@@ -58,6 +54,4 @@ class PopularFoodVM: ObservableObject {
             }
         }
     }
-    
-    
 }

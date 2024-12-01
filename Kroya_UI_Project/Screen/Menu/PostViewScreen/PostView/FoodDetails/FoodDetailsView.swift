@@ -97,14 +97,21 @@ struct FoodDetailView: View {
                 // Bottom Sheet Content
                 BottomSheetView(isOpen: $isBottomSheetOpen, maxHeight: .screenHeight * 1, minHeight: .screenHeight * 0.67, showOrderButton: showOrderButton, notificationType: notificationType, showButtonInvoic: showButtonInvoic ?? "", invoiceAccept: invoiceAccept ?? "", FoodetailsId: FoodId,itemType: ItemType, FoodDetails: FoodDetailsVM, PurchaseId:PurchaseId ?? 0)
                    {
-                    ContentView(showPrice: showPrice, isShowPopup: $isShowPopup,itemType: ItemType, FoodId: FoodId, FoodDetails: FoodDetailsVM)
+                       ContentView(showPrice: showPrice, isShowPopup: $isShowPopup,itemType: ItemType, FoodId: FoodId, FoodDetails: FoodDetailsVM,  onFeedbackChange: {
+                           FoodDetailsVM.fetchFoodDetails(id: FoodId, itemType: ItemType)
+                           refreshID = UUID()
+                       })
+                        .id(refreshID)
                         .padding(.horizontal, 10)
                     
                    }
                    .edgesIgnoringSafeArea(.all)
                 
                 if isShowPopup {
-                    PopupReview(isReviewPopupOpen: $isShowPopup, FeedbackVM: FeedbackVM, ItemType: ItemType, FoodId: FoodId)
+                    PopupReview(isReviewPopupOpen: $isShowPopup, FeedbackVM: FeedbackVM, ItemType: ItemType, FoodId: FoodId,onFeedbackSubmit: {
+                        FoodDetailsVM.fetchFoodDetails(id: FoodId, itemType: ItemType)
+                        refreshID = UUID()
+                    })
                         .background(Color.black.opacity(0.5))
                         .edgesIgnoringSafeArea(.all)
                 }

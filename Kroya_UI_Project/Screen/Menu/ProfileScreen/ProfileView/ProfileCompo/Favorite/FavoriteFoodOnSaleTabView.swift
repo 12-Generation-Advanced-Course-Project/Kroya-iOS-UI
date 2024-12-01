@@ -5,7 +5,7 @@ struct FavoriteFoodOnSaleTabView: View {
     @StateObject private var favoriteFoodSale = FavoriteVM()
     @Binding var searchText: String
     @State private var isFavorite: Bool = false
-
+    @State private var refreshID = UUID()
     var body: some View {
         VStack {
             if favoriteFoodSale.isLoading {
@@ -43,26 +43,23 @@ struct FavoriteFoodOnSaleTabView: View {
                                         ItemType: favorite.itemType
                                     )
                                 ) {
-                                    FoodOnSaleViewCell(
+                                    FoodOnSaleViewCellForTest(
                                         foodSale: favorite,
                                         foodId: favorite.id,
                                         itemType: "FOOD_SELL",
-                                        isFavorite: favorite.isFavorite ?? isFavorite
+                                        isFavorite: favorite.isFavorite ?? isFavorite,
+                                        onFavoritechange: {
+                                            favoriteFoodSale.getAllFavoriteFood()
+                                            refreshID = UUID()
+                                        }
                                     )
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 20)
                                 }
-                                .onChange(of: favorite.isFavorite) { newValue in
-                                   
-                                    if newValue == false {
-                                        refreshFavorites()
-                                        // Remove the card directly
-                                        removeCardFromList(favorite)
-                                    }
-                                }
                             }
                         }
                     }
+                    .id(refreshID)
                    
                 }
             }

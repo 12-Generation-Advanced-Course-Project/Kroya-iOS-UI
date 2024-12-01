@@ -1,5 +1,3 @@
-
-
 import SwiftUI
 
 struct CreatePasswordView: View {
@@ -68,12 +66,12 @@ struct CreatePasswordView: View {
                         Text(errorMessage)
                             .foregroundColor(.red)
                             .font(.caption)
-                            .frame(maxWidth: .infinity,alignment: .leading)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     } else {
                         Text("")
                             .foregroundColor(.red)
                             .font(.caption)
-                            .frame(maxWidth: .infinity,alignment: .leading)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
                 .padding(.horizontal, 6)
@@ -86,9 +84,7 @@ struct CreatePasswordView: View {
                             return
                         }
                         authVM.register(email, password) {
-                            authVM.isRegistered = true
                             showPopupMessage = true
-                            
                             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                 showPopupMessage = false
                                 isNavigating = true
@@ -108,26 +104,24 @@ struct CreatePasswordView: View {
                 Spacer()
             }
             .padding(.horizontal, 20)
-          
-            if showPopupMessage {
+            
+            // Popup Message
+            if showPopupMessage{
                 PopupMessage()
                     .transition(.scale)
+                    .animation(.easeInOut, value: showPopupMessage)
             }
             
-//            NavigationLink(destination: UserBasicInfoView(authVM: authVM, lang: $lang)
-//                .environmentObject(userStore)
-////                .environmentObject(addressViewModel)
-//              
-//                           , isActive: $isNavigating) {
-//                EmptyView()
-//            }
-//            .hidden()
-            NavigationLink(destination: UserBasicInfoView(lang: $lang)
-                .environmentObject(userStore),
-                isActive: $isNavigating) {
+            // Navigation Link
+            NavigationLink(
+                destination: UserBasicInfoView(lang: $lang).environmentObject(userStore),
+                isActive: $isNavigating
+            ) {
                 EmptyView()
             }
             .hidden()
+            
+            // Progress Indicator
             if authVM.isLoading {
                 ProgressIndicator()
             }

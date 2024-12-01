@@ -35,13 +35,25 @@ class Foods_Service {
                 if apiResponse.statusCode == "200" {
                     print("Fetched popular data successfully.")
                     completion(.success(apiResponse))
-                } else {
-                    let error = NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: apiResponse.message])
-                    completion(.failure(error))
                 }
             case .failure(let error):
-                print("Request Popular failed with error: \(error)")
-                completion(.failure(error))
+                if let afError = error.asAFError, let urlError = afError.underlyingError as? URLError {
+                    switch urlError.code {
+                    case .timedOut:
+                        print("Request timed out")
+                        completion(.failure(NetworkError.timeout))
+                    case .notConnectedToInternet:
+                        print("No internet connection")
+                        completion(.failure(NetworkError.connectionLost))
+                    default:
+                        print("Unexpected network error: \(urlError.localizedDescription)")
+                        completion(.failure(NetworkError.unexpectedError(urlError)))
+                    }
+                } else {
+                    print("Request failed with error: \(error)")
+                    completion(.failure(NetworkError.unexpectedError(error)))
+                }
+
             }
         }
     }
@@ -92,8 +104,22 @@ class Foods_Service {
                 }
                 
             case .failure(let error):
-                print("Request Food Details failed with error: \(error)")
-                completion(.failure(error))
+                if let afError = error.asAFError, let urlError = afError.underlyingError as? URLError {
+                    switch urlError.code {
+                    case .timedOut:
+                        print("Request timed out")
+                        completion(.failure(NetworkError.timeout))
+                    case .notConnectedToInternet:
+                        print("No internet connection")
+                        completion(.failure(NetworkError.connectionLost))
+                    default:
+                        print("Unexpected network error: \(urlError.localizedDescription)")
+                        completion(.failure(NetworkError.unexpectedError(urlError)))
+                    }
+                } else {
+                    print("Request failed with error: \(error)")
+                    completion(.failure(NetworkError.unexpectedError(error)))
+                }
             }
         }
     }
@@ -125,8 +151,22 @@ class Foods_Service {
                     completion(.failure(error))
                 }
             case .failure(let error):
-                print("Request food list failed with error: \(error)")
-                completion(.failure(error))
+                if let afError = error.asAFError, let urlError = afError.underlyingError as? URLError {
+                    switch urlError.code {
+                    case .timedOut:
+                        print("Request timed out")
+                        completion(.failure(NetworkError.timeout))
+                    case .notConnectedToInternet:
+                        print("No internet connection")
+                        completion(.failure(NetworkError.connectionLost))
+                    default:
+                        print("Unexpected network error: \(urlError.localizedDescription)")
+                        completion(.failure(NetworkError.unexpectedError(urlError)))
+                    }
+                } else {
+                    print("Request failed with error: \(error)")
+                    completion(.failure(NetworkError.unexpectedError(error)))
+                }
             }
         }
     }
@@ -170,7 +210,23 @@ class Foods_Service {
                     completion(.failure(error))
                 }
             case .failure(let error):
-                completion(.failure(error))
+                if let afError = error.asAFError, let urlError = afError.underlyingError as? URLError {
+                    switch urlError.code {
+                    case .timedOut:
+                        print("Request timed out")
+                        completion(.failure(NetworkError.timeout))
+                    case .notConnectedToInternet:
+                        print("No internet connection")
+                        completion(.failure(NetworkError.connectionLost))
+                    default:
+                        print("Unexpected network error: \(urlError.localizedDescription)")
+                        completion(.failure(NetworkError.unexpectedError(urlError)))
+                    }
+                } else {
+                    print("Request failed with error: \(error)")
+                    completion(.failure(NetworkError.unexpectedError(error)))
+                }
+
             }
         }
     }

@@ -6,71 +6,83 @@
 //
 
 struct Constants {
-    
-    static let KroyaUrlAuth = "https://kroya-api-production.up.railway.app/api/v1/auth/"
-    static let KroyaUrlUser = "https://kroya-api-production.up.railway.app/api/v1/user/"
-//    static let GoogleMapsAPIkeys = "AIzaSyCMUPCDeGjXm5kBNpFa-JosXCOur4SvlI8"
-    static let KroyaAddress = "https://kroya-api-production.up.railway.app/api/v1/address/"
-    static let fileupload = "https://kroya-api-production.up.railway.app/api/v1/fileView/"
-    static let FoodRecipeUrl = "https://kroya-api-production.up.railway.app/api/v1/food-recipe/"
-    static let CuisineUrl = "https://kroya-api-production.up.railway.app/api/v1/cuisine/"
-    static let CategoryUrl = "https://kroya-api-production.up.railway.app/api/v1/category/"
-    static let FoodRecipeByCategoryUrl = "https://kroya-api-production.up.railway.app/api/v1/food-recipe/cuisine/"
-    static let SearchFoodRecipeByNameUrl = "https://kroya-api-production.up.railway.app/api/v1/food-recipe/search/"
-    static let UserFoodUrl = "https://kroya-api-production.up.railway.app/api/v1/user/"
-    
-    //Food Sell
-    static let FoodSellUrl = "https://kroya-api-production.up.railway.app/api/v1/food-sell/"
-    static let FoodSellCategoryUrl = "https://kroya-api-production.up.railway.app/api/v1/food-sell/cuisine/"
-    static let guestSeelCuisine = "https://kroya-api-production.up.railway.app/api/v1/guest-user/food-sell/"
-   //Popular
-    static let PopularDishes = "https://kroya-api-production.up.railway.app/api/v1/foods/"
-    static let FoodsUrl = "https://kroya-api-production.up.railway.app/api/v1/foods/"
-    //FeedBack
-    static let FeedBack = "https://kroya-api-production.up.railway.app/api/v1/feedback"
-  //Favorite
-    static let FavoriteFoodUrl = "https://kroya-api-production.up.railway.app/api/v1/favorite/"
+    // Base URL for the API
+    static let baseURL = "https://kroya-api-production.up.railway.app/api/v1/"
  
-    //Purchasee
-    static let PurchaseeUrl = "https://kroya-api-production.up.railway.app/api/v1/purchase/"
-    static let SearchPurchaseeByNameUrl = "https://kroya-api-production.up.railway.app/api/v1/purchase/search/"
-    static let PurchaseOrderUrl = "https://kroya-api-production.up.railway.app/api/v1/purchase/orders/"
-    static let PurchaseSalesUrl = "https://kroya-api-production.up.railway.app/api/v1/purchase/seller/"
-    static let Purchase = "https://kroya-api-production.up.railway.app/api/v1/purchase"
-    static let OrderRequestUrl = "https://kroya-api-production.up.railway.app/api/v1/purchase/orders/seller/"
-    
-    //Guest food popular
-    static let GuestFoodPopularUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user/foods"
-    
-    //MARK: Get guest food by category id
-    static let GuestFoodByCategoryIdUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user/foods/"
-    
-    //MARK:  Search food by name
-    static let FoodNameUrl = "https://kroya-api-production.up.railway.app/api/v1/foods/"
-    //Guest food sale
-    static let GuestFoodSellUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user/food-sell"
+    // Address URLs
+     static let AddressListUrl = "\(baseURL)address/list"
+     static let AddressCreateUrl = "\(baseURL)address/create"
+     static let AddressDeleteUrl = "\(baseURL)address/delete/"
+     static let AddressByIdUrl = "\(baseURL)address/"
+     static let AddressUpdateUrl = "\(baseURL)address/update/"
 
-    //MARK: Generate Sales Report by Date
-    static let SalesReportUrl = "https://kroya-api-production.up.railway.app/api/v1/sale-report/"
-    //Guest Category
-    static let GuestCategoryUrl = "https://kroya-api-production.up.railway.app/api/v1/category/"
-    //MARK: Connect WeBill
-    static let ConnectWeBillUrl = "https://kroya-api-production.up.railway.app/api/v1/user/connectWebill"
-    //MARK: Get Credential User WeBill Account
-    static let GetCredentialUserWeBillAccountUrl = "https://kroya-api-production.up.railway.app/api/v1/user/webill-acc-no"
-    
-    // Notification
-    static let NotificationUrl = "https://kroya-api-production.up.railway.app/api/v1/notifications"
-    
-    //MARK: Guest food recipe
-    static let GuestFoodRecipeUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user/food-recipe"
-    static let GuestFoodRecipeByCuisineUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user/food-recipe/"
-    
-    
-    //MARK: Guest Search All Food
-    static let GuestSearchAllFoodUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user"
-    
-    //MARK: Guest Search All Food By Name
-    static let GuestSearchAllFoodByNameUrl = "https://kroya-api-production.up.railway.app/api/v1/guest-user/foods/"
-    
+    // Auth
+    static let KroyaUrlAuth = "\(baseURL)auth/"
+    static let KroyaUrlUser = "\(baseURL)user/"
+    static let KroyaAddress = "\(baseURL)address/"
+    static let fileupload = "\(baseURL)fileView/"
+    static let FoodRecipeUrl = "\(baseURL)food-recipe/"
+    static let CuisineUrl = "\(baseURL)cuisine/"
+    static let CategoryUrl = "\(baseURL)category/"
+    static let FoodRecipeByCategoryUrl = "\(baseURL)food-recipe/cuisine/"
+    static let SearchFoodRecipeByNameUrl = "\(baseURL)food-recipe/search/"
+    static let UserFoodUrl = "\(baseURL)user/"
+
+    // Food Sell
+    static let FoodSellUrl = "\(baseURL)food-sell/"
+    static let FoodSellCategoryUrl = "\(baseURL)food-sell/cuisine/"
+    static let guestSeelCuisine = "\(baseURL)guest-user/food-sell/"
+
+    // Popular Dishes
+    static let PopularDishes = "\(baseURL)foods/"
+    static let FoodsUrl = "\(baseURL)foods/"
+
+    // Feedback
+    static let FeedBack = "\(baseURL)feedback"
+
+    // Favorite
+    static let FavoriteFoodUrl = "\(baseURL)favorite/"
+
+    // Purchase
+    static let PurchaseeUrl = "\(baseURL)purchase/"
+    static let SearchPurchaseeByNameUrl = "\(baseURL)purchase/search/"
+    static let PurchaseOrderUrl = "\(baseURL)purchase/orders/"
+    static let PurchaseSalesUrl = "\(baseURL)purchase/seller/"
+    static let Purchase = "\(baseURL)purchase"
+    static let OrderRequestUrl = "\(baseURL)purchase/orders/seller/"
+
+    // Guest food popular
+    static let GuestFoodPopularUrl = "\(baseURL)guest-user/foods"
+
+    // Guest food by category
+    static let GuestFoodByCategoryIdUrl = "\(baseURL)guest-user/foods/"
+
+    // Search food by name
+    static let FoodNameUrl = "\(baseURL)foods/"
+
+    // Guest food sell
+    static let GuestFoodSellUrl = "\(baseURL)guest-user/food-sell"
+
+    // Sales Report
+    static let SalesReportUrl = "\(baseURL)sale-report/"
+
+    // Guest Category
+    static let GuestCategoryUrl = "\(baseURL)category/"
+
+    // WeBill Integration
+    static let ConnectWeBillUrl = "\(baseURL)user/connectWebill"
+    static let GetCredentialUserWeBillAccountUrl = "\(baseURL)user/webill-acc-no"
+
+    // Notifications
+    static let NotificationUrl = "\(baseURL)notifications"
+
+    // Guest food recipe
+    static let GuestFoodRecipeUrl = "\(baseURL)guest-user/food-recipe"
+    static let GuestFoodRecipeByCuisineUrl = "\(baseURL)guest-user/food-recipe/"
+
+    // Guest Search All Food
+    static let GuestSearchAllFoodUrl = "\(baseURL)guest-user"
+
+    // Guest Search All Food By Name
+    static let GuestSearchAllFoodByNameUrl = "\(baseURL)guest-user/foods/"
 }

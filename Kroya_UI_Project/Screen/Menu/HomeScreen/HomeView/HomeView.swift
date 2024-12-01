@@ -18,7 +18,7 @@ struct HomeView: View {
     @StateObject private var guestPopularFoodsData =  GuestPopularFoodVM()
     @StateObject private var favoriteVM = FavoriteVM()
     //    @StateObject private var notificationVM = NotificationViewModel()
-    @StateObject private var viewModel = NotificationViewModel()
+    @StateObject private var NotifiviewModel = NotificationViewModel()
     @Environment(\.modelContext) var modelContext
     @State var isLoading: Bool = false
     // hengly 26/11/24
@@ -151,9 +151,9 @@ struct HomeView: View {
                         HStack(spacing: 16) {
                                 if PopularFoodsData.isLoading {
                                     // Placeholder Loading State
-                                    ForEach(0..<max(1, PopularFoodsData.popularFoodSell.count)) { _ in
+                                    ForEach(0..<4) { _ in
                                         FoodOnSaleViewCell(
-                                            foodSale: .placeholder, // Placeholder model
+                                            foodSale: .placeholder,
                                             foodId: 0,
                                             itemType: "FOOD_SELL",
                                             isFavorite: false
@@ -285,11 +285,11 @@ struct HomeView: View {
                                             .foregroundColor(.black)
                                         
                                         // Badge Count
-                                        Text("\(viewModel.todayNotificationCount)")
+                                        Text("\(NotifiviewModel.todayNotificationCount)")
                                             .font(.system(size: 12, weight: .semibold))
                                             .foregroundColor(.white)
                                             .padding(5)
-                                            .background(viewModel.notifications.isEmpty ? Color.red : Color.red)
+                                            .background(NotifiviewModel.notifications.isEmpty ? Color.red : Color.red)
                                             .clipShape(Circle())
                                             .overlay(
                                                 Circle()
@@ -306,6 +306,7 @@ struct HomeView: View {
                         await refreshData()
                     }
                     .onAppear {
+                        recentSearchesData.loadSearches(from: modelContext)
                         loadData()
                     }
                 }
@@ -315,17 +316,18 @@ struct HomeView: View {
     // MARK: - Fetch Data Logic
     private func loadData() {
         categoryVM.fetchAllCategory()
-        recipeViewModel.getAllRecipeFood()
-        foodSellViemModel.getAllFoodSell()
-        recentSearchesData.loadSearches(from: modelContext)
+//        recipeViewModel.getAllRecipeFood()
+//        foodSellViemModel.getAllFoodSell()
+      
         PopularFoodsData.getAllPopular()
         favoriteVM.getAllFavoriteFood()
-        guestCategoryVM.fetchAllGuestCategory()
-        guestFoodSellVM.getAllGuestFoodSell()
-        guestFoodRecipeVM.getAllGuestRecipeFood()
-        viewModel.fetchNotifications()
+//        guestCategoryVM.fetchAllGuestCategory()
+//        guestFoodSellVM.getAllGuestFoodSell()
+//        guestFoodRecipeVM.getAllGuestRecipeFood()
+        NotifiviewModel.fetchNotifications()
         
     }
+  
     private func refreshData() async {
         isLoading = true // Start loading state
         defer { isLoading = false } // Ensure state is reset after execution

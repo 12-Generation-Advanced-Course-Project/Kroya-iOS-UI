@@ -26,163 +26,168 @@ struct LoginScreenView: View {
 //        self.authVM = AuthViewModel(userStore: userStore) // Initialize AuthViewModel here
 //        self._lang = lang
 //    }
-
-    
-    
+    @StateObject private var keyboardResponder = KeyboardResponder()
     var body: some View {
         NavigationStack{
-            
             ZStack {
-                VStack(spacing: 0) {
-                    ZStack {
-                        Image("image background")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(height: 260)
-                        
-                            .overlay(alignment: .topTrailing){
-                                Button(action:{
-                                    showingCredits = true
-                                }){
-                                    if local.identifier == "km-KH" {
-                                        Image("Khmer")
-                                    }else if local.identifier == "en"{
-                                        Image("English")
+                ScrollView(.vertical,showsIndicators: false){
+                    VStack(spacing: 0) {
+                        ZStack {
+                            Image("image background")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(height: 260)
+                            
+                                .overlay(alignment: .topTrailing){
+                                    Button(action:{
+                                        showingCredits = true
+                                    }){
+                                        if local.identifier == "km-KH" {
+                                            Image("Khmer")
+                                        }else if local.identifier == "en"{
+                                            Image("English")
+                                        }
+                                        else{
+                                            Image("Korean")
+                                        }
                                     }
-                                    else{
-                                        Image("Korean")
+                                    .padding()
+                                    .sheet(isPresented: $showingCredits) {
+                                        ChangeLanguageView(lang: $lang)
                                     }
+                                    
                                 }
+                            
+                        }
+                        Image("KroyaYellowLogo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 180, height: 180)
+                            .offset(y: -25)
+                        
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Email")
+                                .foregroundStyle(.black.opacity(0.5))
+                                .font(.customfont(.regular, fontSize: 14))
+                            InputField(
+                                iconName: "mail.fill",
+                                placeholder: "example@gmail.com",
+                                text: $email,
+                                frameWidth: .screenWidth * 0.9,
+                                colorBorder: .white,
+                                isMultiline: false
+                            )
+                            .keyboardType(.emailAddress)
+                            .onChange(of: email, perform: { newValue in
+                                validateEmail(email: newValue) // Call validation function on email change
+                            })
+                            
+                            if isEmailInvalid {
+                                HStack{
+                                    Image(systemName: "exclamationmark.circle")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .foregroundStyle(.red)
+                                        .frame(width: 12, height: 10)
+                                    Text(LocalizedStringKey("Please enter a valid email address."))
+                                        .font(.caption)
+                                        .foregroundColor(.red)
+                                }
+                            }
+                        }
+                        .padding()
+                        .padding(.top, -70)
+                        
+                        Button(action: {
+                            navigateToDestination = false // Reset navigation state
+                            authVM.sendOTPIfEmailNotExists(email: email)
+                        }) {
+                            Text("GET STARTED")
+                                .font(.customfont(.semibold, fontSize: 16))
+                                .frame(maxWidth: .infinity)
                                 .padding()
-                                .sheet(isPresented: $showingCredits) {
-                                    ChangeLanguageView(lang: $lang)
+                                .background(Color.yellow)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                                .padding(.horizontal)
+                        }
+                        .padding(.top, 10)
+                        .disabled(isEmailInvalid || email.isEmpty)
+                        
+                        NavigationLink(
+                            destination: destinationView(),
+                            isActive: $navigateToDestination //** Updated to use `navigateToDestination`
+                        ) {
+                            EmptyView()
+                        }
+                        .hidden()
+                        
+                        //                    NavigationLink(
+                        //                        destination: destinationView(),
+                        //                        isActive: Binding(
+                        //                            get: { authVM.isOTPSent || authVM.isEmailExist },
+                        //                            set: { _ in }
+                        //                        ),
+                        //                        label: {
+                        //                            EmptyView()
+                        //                        }
+                        //                    )
+                        //                    .hidden()
+                        
+                        // Guest Login Button
+                        Button(action: {
+                            // Guest login action without token
+                            Auth.shared.loggedIn = true
+                            showLoadingOverlay = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                showLoadingOverlay = false
+                                navigateToMainScreen()
+                            }
+                        }) {
+                            Text("Login as guest")
+                                .font(.customfont(.bold, fontSize: 12))
+                                .foregroundColor(.black.opacity(0.6))
+                        }
+                        .padding(.top, 15)
+                        
+                        Spacer()
+                        
+                        // Terms and Privacy Policy Text
+                        VStack(spacing: 2) {
+                            Text("By clicking “ GET STARTED ” you agreed to our")
+                                .font(.customfont(.regular, fontSize: 12))
+                            
+                            HStack {
+                                Button(action: {
+                                    // Terms of Service action
+                                }) {
+                                    Text("Terms of Service")
+                                        .underline()
+                                        .foregroundColor(PrimaryColor.normal)
                                 }
                                 
-                            }
-                        
-                    }
-                    Image("KroyaYellowLogo")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 180, height: 180)
-                        .offset(y: -25)
-                    
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Email")
-                            .foregroundStyle(.black.opacity(0.5))
-                            .font(.customfont(.regular, fontSize: 14))
-                        InputField(
-                            iconName: "mail.fill",
-                            placeholder: "example@gmail.com",
-                            text: $email,
-                            frameWidth: .screenWidth * 0.9,
-                            colorBorder: .white,
-                            isMultiline: false
-                        )
-                        .keyboardType(.emailAddress)
-                        .onChange(of: email, perform: { newValue in
-                            validateEmail(email: newValue) // Call validation function on email change
-                        })
-                        
-                        if isEmailInvalid {
-                            HStack{
-                                Image(systemName: "exclamationmark.circle")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .foregroundStyle(.red)
-                                    .frame(width: 12, height: 10)
-                                Text(LocalizedStringKey("Please enter a valid email address."))
-                                    .font(.caption)
-                                    .foregroundColor(.red)
+                                Text("and")
+                                
+                                Button(action: {
+                                    // Privacy action
+                                }) {
+                                    Text("Privacy")
+                                        .underline()
+                                        .foregroundColor(PrimaryColor.normal)
+                                }
                             }
                         }
+                        .font(.customfont(.regular, fontSize: 12))
+                        .padding(.bottom, 20)
                     }
-                    .padding()
-                    .padding(.top, -70)
-                    
-                    Button(action: {
-                        navigateToDestination = false // Reset navigation state
-                        authVM.sendOTPIfEmailNotExists(email: email)
-                    }) {
-                        Text("GET STARTED")
-                            .font(.customfont(.semibold, fontSize: 16))
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.yellow)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .padding(.horizontal)
-                    }
-                    .padding(.top, 10)
-                    .disabled(isEmailInvalid || email.isEmpty)
-                    
-                    NavigationLink(
-                        destination: destinationView(),
-                        isActive: $navigateToDestination //** Updated to use `navigateToDestination`
-                    ) {
-                        EmptyView()
-                    }
-                    .hidden()
-                    
-//                    NavigationLink(
-//                        destination: destinationView(),
-//                        isActive: Binding(
-//                            get: { authVM.isOTPSent || authVM.isEmailExist },
-//                            set: { _ in }
-//                        ),
-//                        label: {
-//                            EmptyView()
-//                        }
-//                    )
-//                    .hidden()
-                    
-                    // Guest Login Button
-                    Button(action: {
-                        // Guest login action without token
-                        Auth.shared.loggedIn = true
-                        showLoadingOverlay = true
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                            showLoadingOverlay = false
-                            navigateToMainScreen()
-                        }
-                    }) {
-                        Text("Login as guest")
-                            .font(.customfont(.bold, fontSize: 12))
-                            .foregroundColor(.black.opacity(0.6))
-                    }
-                    .padding(.top, 15)
-                    
-                    Spacer()
-                    
-                    // Terms and Privacy Policy Text
-                    VStack(spacing: 2) {
-                        Text("By clicking “ GET STARTED ” you agreed to our")
-                            .font(.customfont(.regular, fontSize: 12))
-                        
-                        HStack {
-                            Button(action: {
-                                // Terms of Service action
-                            }) {
-                                Text("Terms of Service")
-                                    .underline()
-                                    .foregroundColor(PrimaryColor.normal)
-                            }
-                            
-                            Text("and")
-                            
-                            Button(action: {
-                                // Privacy action
-                            }) {
-                                Text("Privacy")
-                                    .underline()
-                                    .foregroundColor(PrimaryColor.normal)
-                            }
-                        }
-                    }
-                    .font(.customfont(.regular, fontSize: 12))
-                    .padding(.bottom, 20)
+                    .navigationBarHidden(true)
                 }
-                .navigationBarHidden(true)
+                .simultaneousGesture(
+                    TapGesture().onEnded {
+                        hideKeyboard()
+                    }
+                )
+                .padding(.bottom, min(keyboardResponder.currentHeight, 0))
                 
                 // Show Progress Indicator while loading
                 if authVM.isLoading {

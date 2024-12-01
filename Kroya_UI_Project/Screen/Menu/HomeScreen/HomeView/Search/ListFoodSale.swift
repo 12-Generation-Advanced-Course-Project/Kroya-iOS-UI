@@ -55,9 +55,7 @@ struct ListFoodSale: View {
             )
         }
         .onAppear {
-            if popularFoodVM.popularFoodSell.isEmpty || popularFoodVM.popularFoodRecipe.isEmpty {
-                popularFoodVM.getAllPopular()
-            }
+            popularFoodVM.getAllPopular()
         }
     }
     

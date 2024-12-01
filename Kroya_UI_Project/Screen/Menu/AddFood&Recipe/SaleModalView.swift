@@ -89,13 +89,14 @@ struct SaleModalView: View {
                                             Text("Cook date")
                                                 .customFontLightLocalize(size: 15)
                                                 .foregroundStyle(.black.opacity(0.6))
-                                                .frame(minWidth: 100, alignment: .leading)
+                                                .frame(minWidth: 40, alignment: .leading)
                                             Spacer()
                                             TextField("", text: $formattedDate)
-                                                .customFontMediumLocalize(size: 15)
+                                                .customFontMediumLocalize(size: 13)
                                                 .multilineTextAlignment(.leading)
                                                 .foregroundStyle(.gray.opacity(0.8))
                                                 .disabled(true)
+                                                .frame(maxWidth: .infinity)
                                             
                                             Button {
                                                 isDatePickerVisible.toggle()
@@ -110,15 +111,17 @@ struct SaleModalView: View {
                                                         DatePicker(
                                                             selection: $draftModelData.cookDate,
                                                             in: Date()...,
-                                                            displayedComponents: .date
+                                                            displayedComponents: [.date, .hourAndMinute]
                                                         ) {
                                                             
                                                         }
                                                         .fixedSize()
                                                         .labelsHidden()
+                                                        .datePickerStyle(.compact)
                                                         .colorMultiply(.clear)
                                                         .onChange(of: draftModelData.cookDate) { newDate in
-                                                            formattedDate = newDate.formatted(.dateTime.day().month().year())
+                                                            formattedDate = newDate.formatted(.dateTime.day().month().year().hour())
+                                                            validateDetailsFields()
                                                         }
                                                         
                                                     }
@@ -133,17 +136,18 @@ struct SaleModalView: View {
                                         HStack {
                                             Text("Amount")
                                                 .customFontLightLocalize(size: 15)
-                                                .foregroundStyle(.black.opacity(0.6))
-                                                .frame(maxWidth: 120, alignment: .leading)
+                                                .foregroundStyle(.black.opacity(0.8))
+                                                .frame(maxWidth: 90, alignment: .leading)
                                             TextField("", value: $draftModelData.amount, format: .number)
-                                                .customFontMediumLocalize(size: 15)
+                                                .customFontMediumLocalize(size: 13)
                                                 .multilineTextAlignment(.leading)
                                                 .keyboardType(.numberPad)
                                                 .foregroundStyle(.gray.opacity(0.8))
                                                 .frame(maxWidth: .infinity, alignment: .leading)
                                                 .onChange(of: draftModelData.amount) { _ in
-                                                    validateFields()
+                                                    validateDetailsFields()
                                                 }
+
                                         }
                                         .padding(.horizontal)
                                         Divider()
@@ -152,8 +156,8 @@ struct SaleModalView: View {
                                         HStack {
                                             Text("Price")
                                                 .customFontLightLocalize(size: 16)
-                                                .foregroundStyle(.black.opacity(0.6))
-                                                .frame(maxWidth: 120, alignment: .leading)
+                                                .foregroundStyle(.black.opacity(0.8))
+                                                .frame(maxWidth: 90, alignment: .leading)
                                             
                                             TextField(getCurrencyPlaceholder(), text: Binding(
                                                 get: {
@@ -168,15 +172,14 @@ struct SaleModalView: View {
                                                     draftModelData.price = price
                                                 }
                                             ))
-                                            .customFontMediumLocalize(size: 15)
+                                            .customFontMediumLocalize(size: 13)
                                             .multilineTextAlignment(.leading)
                                             .keyboardType(.decimalPad)
                                             .foregroundStyle(.gray.opacity(0.8))
                                             .onChange(of: draftModelData.price) { _ in
-                                                validateFields()
-                                                // Save draft whenever price changes
-                                                draftModelData.saveDraft(in: modelContext)
+                                                validateDetailsFields()
                                             }
+
                                             
                                             Picker("", selection: $ingret.selectedCurrency) {
                                                 ForEach(0..<displayCurrencies.count) { index in
@@ -200,19 +203,23 @@ struct SaleModalView: View {
                                             Text("Location")
                                                 .customFontLightLocalize(size: 15)
                                                 .foregroundStyle(.black.opacity(0.8))
-                                                .frame(maxWidth: 120, alignment: .leading)
+                                                .frame(maxWidth: 90, alignment: .leading)
                                             
                                             Button {
                                                 // Open the address selection sheet
                                                 showAddressSheet.toggle()
                                             } label: {
                                                 Text(draftModelData.location.isEmpty ? "Choose Location" : draftModelData.location)
-                                                    .customFontMediumLocalize(size: 15)
+                                                    .customFontMediumLocalize(size: 13)
                                                     .multilineTextAlignment(.leading)
                                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                                    .foregroundStyle(draftModelData.location.isEmpty ? .gray.opacity(0.8) : .black)
+                                                    .foregroundStyle(draftModelData.location.isEmpty ? .gray.opacity(0.8) : .gray.opacity(0.8))
                                                     .padding(.vertical, 8)
                                                     .lineLimit(2)
+                                                    .onChange(of: draftModelData.location) { _ in
+                                                        validateDetailsFields() // Validate fields whenever location changes
+                                                    }
+
                                             }
                                             .buttonStyle(PlainButtonStyle())
                                         }
@@ -247,7 +254,7 @@ struct SaleModalView: View {
                                                 Image(systemName: "exclamationmark.triangle.fill")
                                                     .foregroundColor(.red)
                                                 Text("Detail information cannot be empty")
-                                                    .customFontLightLocalize(size: 10)
+                                                    .customFontLightLocalize(size: 8)
                                                     .foregroundColor(.red)
                                             }
                                         }
@@ -255,13 +262,13 @@ struct SaleModalView: View {
                                         VStack {
                                             HStack{
                                                 Text("Ingredient ")
-                                                    .customFontMediumLocalize(size: 13)
+                                                    .customFontMediumLocalize(size: 10)
                                                     .foregroundColor(.black.opacity(0.4))
                                                 Text("\(totalRiels, specifier: "%.2f") ៛")
                                                     .foregroundStyle(.yellow)
-                                                    .customFontMediumLocalize(size: 13)
+                                                    .customFontMediumLocalize(size: 11)
                                                 Text("(\(totalUSD, specifier: "%.2f")$)")
-                                                    .customFontMediumLocalize(size: 13)
+                                                    .customFontMediumLocalize(size: 11)
                                                     .foregroundColor(.black.opacity(0.4))
                                             }
                                         }
@@ -295,13 +302,11 @@ struct SaleModalView: View {
                             )
                             .foregroundColor(.black)
                     }
-                    //MARK: Buttom Post-FoodRecipe and FoodSell
+                    
+                    // Post Button
                     Button(action: {
                         if draftModelData.isForSale {
-                            validateFields()
-                            if !showError {
-                                uploadImagesAndPostRecipe()
-                            }
+                            uploadImagesAndPostRecipe()
                         } else {
                             uploadImagesAndPostRecipe()
                         }
@@ -313,13 +318,11 @@ struct SaleModalView: View {
                             .foregroundColor(.white)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .fill(showError ? Color.gray.opacity(0.3) : PrimaryColor.normal)
+                                    .fill(canPost ? PrimaryColor.normal : Color.gray.opacity(0.3))
                             )
                     }
-                    .disabled(draftModelData.isForSale && showError)
-                    
+                    .disabled(!canPost)
                 }
-               
                 .padding()
             }
             .ignoresSafeArea(.keyboard)
@@ -382,6 +385,11 @@ struct SaleModalView: View {
         }
         draftModelData.price = ingret.price
         validateFields()
+    }
+    private func formatDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy" // Specify the desired format
+        return formatter.string(from: date)
     }
 
     //MARK: Logic for Add Food as Recipe
@@ -493,6 +501,35 @@ struct SaleModalView: View {
             showError = false
         }
     }
+    private func validateDetailsFields() {
+        showError = draftModelData.foodName.isEmpty ||
+                    draftModelData.descriptionText.isEmpty ||
+                    draftModelData.selectedImages.isEmpty ||
+                    draftModelData.selectedLevel == nil ||
+                    draftModelData.selectedCuisineId == nil ||
+                    draftModelData.selectedCategoryId == nil ||
+                    draftModelData.duration <= 0 ||
+                    draftModelData.amount <= 0 ||
+                    draftModelData.price <= 0 ||
+                    draftModelData.location.isEmpty ||
+                    draftModelData.cookDate < Date()
+    }
+    
+    private var canPost: Bool {
+        !draftModelData.foodName.isEmpty &&                // Food name must be filled
+        !draftModelData.descriptionText.isEmpty &&         // Description must be filled
+        !draftModelData.selectedImages.isEmpty &&          // At least one image must be selected
+        draftModelData.selectedLevel != nil &&             // Level must be selected
+        draftModelData.selectedCuisineId != nil &&         // Cuisine ID must be selected
+        draftModelData.selectedCategoryId != nil &&        // Category ID must be selected
+        draftModelData.duration > 0 &&                     // Duration must be greater than 0
+        draftModelData.amount > 0 &&                       // Amount must be greater than 0
+        draftModelData.price > 0 &&                        // Price must be greater than 0
+        !draftModelData.location.isEmpty &&                // Location must not be empty
+        draftModelData.cookDate >= Date()                  // Cook date must not be in the past
+    }
+
+
 
     private func getCurrencyPlaceholder() -> String {
         return ingret.selectedCurrency == 0 ? "0" : "0.00"

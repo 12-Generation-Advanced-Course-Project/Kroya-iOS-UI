@@ -68,7 +68,9 @@ class DraftModelData: ObservableObject {
                 existingDraft.descriptionText = descriptionText
                 existingDraft.selectedLevel = selectedLevel
                 existingDraft.selectedCuisine = selectedCuisine
+                existingDraft.selectedCuisineId = selectedCuisineId
                 existingDraft.selectedCategory = selectedCategory
+                existingDraft.selectedCategoryId = selectedCategoryId
                 existingDraft.duration = duration
                 existingDraft.amount = amount
                 existingDraft.price = price
@@ -89,7 +91,9 @@ class DraftModelData: ObservableObject {
                     descriptionText: descriptionText,
                     selectedLevel: selectedLevel,
                     selectedCuisine: selectedCuisine,
+                    selectedCuisineId: selectedCuisineId,
                     selectedCategory: selectedCategory,
+                    selectedCategoryId: selectedCategoryId,
                     duration: duration,
                     amount: amount,
                     price: price,
@@ -141,7 +145,9 @@ class DraftModelData: ObservableObject {
                 self.descriptionText = draft.descriptionText
                 self.selectedLevel = draft.selectedLevel
                 self.selectedCuisine = draft.selectedCuisine
+                self.selectedCuisineId = draft.selectedCuisineId
                 self.selectedCategory = draft.selectedCategory
+                self.selectedCategoryId = draft.selectedCategoryId
                 self.duration = draft.duration
                 self.amount = draft.amount
                 self.price = draft.price
@@ -190,7 +196,9 @@ class DraftModelData: ObservableObject {
         descriptionText = ""
         selectedLevel = nil
         selectedCuisine = nil
+        selectedCuisineId = 0
         selectedCategory = nil
+        selectedCategoryId = 0
         duration = 5
         ingredients = [RecipeIngredient(id: UUID().hashValue, name: "", quantity: 0, price: 0, selectedCurrency: 0)]
         cookingSteps = [CookingStep(id: UUID().hashValue, description: "")]
@@ -220,6 +228,8 @@ class DraftModelData: ObservableObject {
     func toFoodRecipeRequest() -> FoodRecipeRequest? {
         let cuisineId = selectedCuisineId ?? 0
         let categoryId = selectedCategoryId ?? 0
+        print(categoryId)
+        print(cuisineId)
         // Extract only file names from URLs
         let photoArray = selectedImageNames.compactMap { urlString -> String? in
             return URL(string: urlString)?.lastPathComponent
@@ -244,18 +254,18 @@ class DraftModelData: ObservableObject {
             description: descriptionText,
             durationInMinutes: Int(duration),
             level: selectedLevel ?? "",
-            cuisineId: cuisineId,
-            categoryId: categoryId,
+            cuisineId: selectedCuisineId ?? 0,
+            categoryId: selectedCategoryId ?? 0,
             ingredients: ingredients.map {
                 FoodRecipeRequest.Ingredient(
-                    name: $0.name ?? "",
-                    quantity: $0.quantity ?? 0,
-                    price: $0.price ?? 0
+                    name: $0.name,
+                    quantity: $0.quantity,
+                    price: $0.price
                 )
             },
             cookingSteps: cookingSteps.map {
                 FoodRecipeRequest.CookingStep(
-                    description: $0.description ?? ""
+                    description: $0.description
                 )
             }
         )

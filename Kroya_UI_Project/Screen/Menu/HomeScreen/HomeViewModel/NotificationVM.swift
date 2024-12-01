@@ -61,15 +61,6 @@ class NotificationViewModel: ObservableObject {
     @Published var olderNotifications: [NotificationModel] = []
     @Published var isLoading: Bool = false
     @Published var errorMessage: String = ""
-
-//    // Helper to parse dates
-//    private func parseDate(from string: String) -> Date? {
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
-//        formatter.timeZone = .current
-//        return formatter.date(from: string)
-//    }
-    
     // Computed property to count today's notifications
       var todayNotificationCount: Int {
           newNotifications.count

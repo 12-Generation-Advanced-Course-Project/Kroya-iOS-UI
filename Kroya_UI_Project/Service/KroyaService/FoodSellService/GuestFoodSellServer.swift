@@ -58,17 +58,6 @@ class GuestFoodSellService{
         
         AF.request(url, method: .get, headers: headers).validate()
             .responseDecodable(of: GuestFoodSellCuisineResponse.self) { response in
-                if let data = response.data {
-                    do {
-                        let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-                        let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-                        if let prettyString = String(data: prettyData, encoding: .utf8) {
-                            print("Pretty JSON Response:\n\(prettyString)")
-                        }
-                    } catch {
-                        print("Failed to convert response data to pretty JSON: \(error)")
-                    }
-                }
                 switch response.result {
                     
                 case .success(let apiResponse):
@@ -102,19 +91,6 @@ class GuestFoodSellService{
         
         AF.request(url, method: .get, headers: headers).validate()
             .responseDecodable(of: CuisineResponse.self) { response in
-                // Print response data for debugging
-                if let data = response.data {
-                    do {
-                        let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-                        let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-                        if let prettyString = String(data: prettyData, encoding: .utf8) {
-                            print("Pretty JSON Response:\n\(prettyString)")
-                        }
-                    } catch {
-                        print("Failed to convert response data to pretty JSON: \(error)")
-                    }
-                }
-                
                 // Handle the result
                 switch response.result {
                 case .success(let apiResponse):

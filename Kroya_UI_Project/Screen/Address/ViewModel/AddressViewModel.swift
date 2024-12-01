@@ -10,7 +10,7 @@ class AddressViewModel: ObservableObject {
 
     func fetchAddresses() {
         isLoading = true // Start loading before the request
-        let url = "https://kroya-api-production.up.railway.app/api/v1/address/list"
+        let url = Constants.AddressListUrl // Use constant for URL
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(Auth.shared.getAccessToken() ?? "")",
             "Accept": "application/json"
@@ -44,7 +44,7 @@ class AddressViewModel: ObservableObject {
     }
     
     func saveAddress(_ address: Address, completion: @escaping (Result<Void, Error>) -> Void) {
-        let url = "https://kroya-api-production.up.railway.app/api/v1/address/create"
+        let url = Constants.AddressCreateUrl // Use constant for URL
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(Auth.shared.getAccessToken() ?? "")",
             "Content-Type": "application/json"
@@ -61,7 +61,7 @@ class AddressViewModel: ObservableObject {
     }
     
     func deleteAddress(id: Int) {
-        let url = "https://kroya-api-production.up.railway.app/api/v1/address/delete/\(id)"
+        let url = "\(Constants.AddressDeleteUrl)\(id)" // Use constant for URL
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(Auth.shared.getAccessToken() ?? "")",
             "Accept": "*/*"
@@ -85,7 +85,7 @@ class AddressViewModel: ObservableObject {
     }
     
     func fetchAddressById(id: Int, completion: @escaping (Result<Address, Error>) -> Void) {
-        let url = "https://kroya-api-production.up.railway.app/api/v1/address/\(id)"
+        let url = "\(Constants.AddressByIdUrl)\(id)" // Use constant for URL
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(Auth.shared.getAccessToken() ?? "")",
             "Accept": "application/json"
@@ -114,7 +114,7 @@ class AddressViewModel: ObservableObject {
     }
     
     func updateAddress(_ address: Address, completion: @escaping (Result<Void, Error>) -> Void) {
-        let url = "https://kroya-api-production.up.railway.app/api/v1/address/update/\(address.id)"
+        let url = "\(Constants.AddressUpdateUrl)\(address.id)" // Use constant for URL
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(Auth.shared.getAccessToken() ?? "")",
             "Content-Type": "application/json"

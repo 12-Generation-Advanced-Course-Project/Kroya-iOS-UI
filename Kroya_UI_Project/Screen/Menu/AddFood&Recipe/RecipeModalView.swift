@@ -260,22 +260,27 @@ private func validateAndProceed() {
         navigateToNextView = true
     }
 }
-//MARK: Function to calculate the total in Riels and USD across all ingredients
-private func calculateTotal(ingredients: [RecipeIngredient]) -> (totalRiels: Double, totalUSD: Double) {
-    let conversionRate = 4100.0
-    var totalRiels: Double = 0.0
-    var totalUSD: Double = 0.0
-    
-    for ingredient in ingredients {
-        let totalForIngredient = ingredient.price * (ingredient.quantity)
-        if ingredient.selectedCurrency == 0 {
-            totalRiels += totalForIngredient
-            totalUSD += totalForIngredient / conversionRate
-        } else {
-            totalUSD += totalForIngredient
-            totalRiels += totalForIngredient * conversionRate
+    // MARK: Function to calculate the total in Riels and USD across all ingredients
+    private func calculateTotal(ingredients: [RecipeIngredient]) -> (totalRiels: Double, totalUSD: Double) {
+        let conversionRate = 4100.0 // Conversion rate from Riels to USD
+        var totalRiels: Double = 0.0
+        var totalUSD: Double = 0.0
+
+        for ingredient in ingredients {
+            // Calculate total price based on selected currency
+            let totalForIngredient = ingredient.price * ingredient.quantity
+            
+            if ingredient.selectedCurrency == 0 { // Riels
+                totalRiels += totalForIngredient
+                totalUSD += totalForIngredient / conversionRate
+            } else { // USD
+                totalUSD += totalForIngredient
+                totalRiels += totalForIngredient * conversionRate
+            }
         }
+
+        return (totalRiels, totalUSD)
     }
-    return (totalRiels, totalUSD)
-}
+
+
 }

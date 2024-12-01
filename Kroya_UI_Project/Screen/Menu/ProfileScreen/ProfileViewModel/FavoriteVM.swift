@@ -16,11 +16,11 @@ class FavoriteVM: ObservableObject {
     @Published var showError: Bool = false
     @Published var errorMessage: String = ""
     
-    private func startLoading() {
+  func startLoading() {
         isLoading = true
     }
     
-    private func endLoading() {
+func endLoading() {
         isLoading = false
     }
     

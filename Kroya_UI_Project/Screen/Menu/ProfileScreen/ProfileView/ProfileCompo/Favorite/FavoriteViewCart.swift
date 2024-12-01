@@ -4,7 +4,7 @@ struct FavoriteViewCart: View {
     @Environment(\.dismiss) var dismiss
     @State private var searchText = ""
     @StateObject private var favorite = FavoriteVM()
-    
+   
     var body: some View {
         VStack(spacing: 0) {
             // Segment Header

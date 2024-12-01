@@ -37,8 +37,22 @@ class GuestCategoryService {
                         completion(.failure(error))
                     }
                 case .failure(let error):
-                    print("Request failed with error: \(error)")
-                    completion(.failure(error))
+                    if let afError = error.asAFError, let urlError = afError.underlyingError as? URLError {
+                        switch urlError.code {
+                        case .timedOut:
+                            print("Request timed out")
+                            completion(.failure(NetworkError.timeout))
+                        case .notConnectedToInternet:
+                            print("No internet connection")
+                            completion(.failure(NetworkError.connectionLost))
+                        default:
+                            print("Unexpected network error: \(urlError.localizedDescription)")
+                            completion(.failure(NetworkError.unexpectedError(urlError)))
+                        }
+                    } else {
+                        print("Request failed with error: \(error)")
+                        completion(.failure(NetworkError.unexpectedError(error)))
+                    }
                 }
             }
     }
@@ -91,8 +105,22 @@ class GuestCategoryService {
                     completion(.failure(error))
                 }
             case .failure(let error):
-                print("Request failed with error: \(error)")
-                completion(.failure(error))
+                if let afError = error.asAFError, let urlError = afError.underlyingError as? URLError {
+                    switch urlError.code {
+                    case .timedOut:
+                        print("Request timed out")
+                        completion(.failure(NetworkError.timeout))
+                    case .notConnectedToInternet:
+                        print("No internet connection")
+                        completion(.failure(NetworkError.connectionLost))
+                    default:
+                        print("Unexpected network error: \(urlError.localizedDescription)")
+                        completion(.failure(NetworkError.unexpectedError(urlError)))
+                    }
+                } else {
+                    print("Request failed with error: \(error)")
+                    completion(.failure(NetworkError.unexpectedError(error)))
+                }
             }
         }
     }

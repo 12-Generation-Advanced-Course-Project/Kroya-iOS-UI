@@ -15,6 +15,7 @@ struct ContentView: View {
     @State private var navigateToCheckout = false
     @State private var selectedRating: Int = 0
     @State private var currentStep = 1
+    @State private var descriptionText: String = ""
     var showPrice: Bool
     @Environment(\.dismiss) var dismiss
     @Binding var isShowPopup: Bool
@@ -22,13 +23,13 @@ struct ContentView: View {
     @State private var isExpanded = false
     @State private var isReviewExpanded = false
     @State private var isReviewPopupOpen : Bool = false
-    @State private var descriptionText: String = ""
     @State private var isDescriptionExpanded = false
     var itemType: String
     var FoodId:Int
     @ObservedObject var FoodDetails: FoodDetailsViewModel
     @StateObject private var FeedbackVM = FeedbackViewModel()
     @StateObject private  var Profile =  ProfileViewModel()
+    @StateObject private var keyboardResponder = KeyboardResponder()
     // Dummy data for rating percentages
     let ratingsPercentage: [CGFloat] = [0.9, 0.7, 0.5, 0.3, 0.1]
     // MARK: Timer Logic
@@ -37,6 +38,7 @@ struct ContentView: View {
     @State private var autoSubmitTimer: Timer?
     @State private var refreshID = UUID()
     @State private var checkedIngredients: [Int: Bool] = [:]
+    var onFeedbackChange: () -> Void
     var body: some View {
         GeometryReader { geometry in
             let screenHeight = geometry.size.height
@@ -284,7 +286,7 @@ struct ContentView: View {
                                 }
                             }
                         }
-
+                        
                         
                         //MARK: Ratings & Review
                         Text("Ratings & Review")
@@ -435,7 +437,7 @@ struct ContentView: View {
                                 .foregroundColor(Color.gray)
                         }
                     }
-
+                    
                     // MARK: Write a Review button
                     if Profile.userProfile?.id != foodOwnerID {
                         HStack {
@@ -460,6 +462,7 @@ struct ContentView: View {
                             .padding(.bottom, 50)
                             
                         }
+                        
                     }
                 }
                 

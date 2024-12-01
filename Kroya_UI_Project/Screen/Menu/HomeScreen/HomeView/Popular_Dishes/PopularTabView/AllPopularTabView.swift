@@ -106,14 +106,14 @@ struct AllPopularTabView: View {
         }
         .onAppear {
             if Auth.shared.hasAccessToken(){
-                if popularFoodVM.popularFoodSell.isEmpty || popularFoodVM.popularFoodRecipe.isEmpty {
-                    self.popularFoodVM.getAllPopular()
-                }
-            }else{
-                if guestPopularFood.guestPopularFoodSell.isEmpty || guestPopularFood.guestPopularFoodRecipe.isEmpty {
-                    self.guestPopularFood.getAllGuestPopular()
-                }
+                self.popularFoodVM.getAllPopular()
+                
             }
+//            else{
+//                if guestPopularFood.guestPopularFoodSell.isEmpty || guestPopularFood.guestPopularFoodRecipe.isEmpty {
+//                    self.guestPopularFood.getAllGuestPopular()
+//                }
+//            }
         }
     }
     

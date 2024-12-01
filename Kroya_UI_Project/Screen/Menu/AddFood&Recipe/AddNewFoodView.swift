@@ -236,7 +236,7 @@ struct AddFoodView: View {
                                         } else {
                                             // Select
                                             draftModelData.selectedCuisine = data.cuisineName
-                                            draftModelData.selectedCuisineId = data.id
+                                            draftModelData.selectedCuisineId = data.id // Assign the ID
                                         }
                                     }
                                 }

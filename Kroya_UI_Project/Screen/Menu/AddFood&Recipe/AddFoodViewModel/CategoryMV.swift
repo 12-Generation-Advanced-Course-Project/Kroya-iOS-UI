@@ -22,33 +22,35 @@ class CategoryMV: ObservableObject {
     @Published var errorMessage: String = ""
     
     // MARK: - Helper Methods for Loading State
-    private func startLoading() {
+  func startLoading() {
         isLoading = true
     }
     
-    private func endLoading() {
+ func endLoading() {
         isLoading = false
     }
     
-    func fetchAllCategory() {
-          CategoryService.shared.getAllCategory { [weak self] result in
-              DispatchQueue.main.async {
-                  switch result {
-                  case .success(let response):
-                      if response.statusCode == "200", let payload = response.payload {
-                          self?.categoryShowModel = payload
-                          self?.displayCategories = self?.mapCategories(payload) ?? []
-                          // Fetch data for each category after loading all categories
-//                          self?.fetchDataForAllCategories()
-                      } else {
-                          print("Error fetching categories: \(response.message)")
-                      }
-                  case .failure(let error):
-                      print("Request failed with error: \(error.localizedDescription)")
-                  }
-              }
-          }
-      }
+    func fetchAllCategory(completion: (() -> Void)? = nil) {
+        CategoryService.shared.getAllCategory { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let response):
+                    if response.statusCode == "200", let payload = response.payload {
+                        self?.categoryShowModel = payload
+                        self?.displayCategories = self?.mapCategories(payload) ?? []
+                        completion?()  // Notify that category data is loaded
+                    } else {
+                        self?.showError = true
+                        self?.errorMessage = response.message
+                    }
+                case .failure(let error):
+                    self?.showError = true
+                    self?.errorMessage = "Failed to load categories: \(error.localizedDescription)"
+                }
+            }
+        }
+    }
+
 
     
     // Mapping function to convert API category names to local Category objects
@@ -73,19 +75,6 @@ class CategoryMV: ObservableObject {
             }
         }
     }
-
-    
-    
-//      //Fetch data for each category by looping through each category ID
-//       private func fetchDataForAllCategories() {
-//           for category in categoryShowModel {
-//               fetchAllCategoryById(categoryId: category.id)
-//           }
-//       }
-//       
-
-    
-    
     // MARK: Get all Category by Id
     func fetchAllCategoryById(categoryId: Int) {
         CategoryService.shared.getAllCategoryById(category: categoryId) { [weak self] result in

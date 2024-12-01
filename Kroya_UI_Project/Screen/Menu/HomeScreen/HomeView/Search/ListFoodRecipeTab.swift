@@ -56,43 +56,44 @@ struct ListFoodRecipeTab: View {
                         }
                     )
                 }
-            }else{
-                if guestSearchFood.guestSearchFoodRecipe.isEmpty && !guestSearchFood.isloading {
-                    Text("No Recipes Found")
-                        .font(.title3)
-                        .foregroundColor(.gray)
-                        .padding()
-                } else {
-                    ScrollView(showsIndicators: false) {
-                        LazyVStack(spacing: 8) {
-                            ForEach(guestSearchFood.guestSearchFoodRecipe) { recipe in
-                                NavigationLink(destination: recipeDetailDestination(for: recipe)) {
-                                    RecipeViewCell(
-                                        recipe: recipe,
-                                        foodId: recipe.id,
-                                        itemType: "FOOD_RECIPE",
-                                        isFavorite: recipe.isFavorite ?? false
-                                    )
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.horizontal, 20)
-                                }
-                            }
-                        }
-                    }
-                    .overlay(
-                        Group {
-                            if guestSearchFood.isloading {
-                                Color.white
-                                    .edgesIgnoringSafeArea(.all)
-                                
-                                ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
-                                    .scaleEffect(2)
-                            }
-                        }
-                    )
-                }
             }
+//            else{
+//                if guestSearchFood.guestSearchFoodRecipe.isEmpty && !guestSearchFood.isloading {
+//                    Text("No Recipes Found")
+//                        .font(.title3)
+//                        .foregroundColor(.gray)
+//                        .padding()
+//                } else {
+//                    ScrollView(showsIndicators: false) {
+//                        LazyVStack(spacing: 8) {
+//                            ForEach(guestSearchFood.guestSearchFoodRecipe) { recipe in
+//                                NavigationLink(destination: recipeDetailDestination(for: recipe)) {
+//                                    RecipeViewCell(
+//                                        recipe: recipe,
+//                                        foodId: recipe.id,
+//                                        itemType: "FOOD_RECIPE",
+//                                        isFavorite: recipe.isFavorite ?? false
+//                                    )
+//                                    .frame(maxWidth: .infinity)
+//                                    .padding(.horizontal, 20)
+//                                }
+//                            }
+//                        }
+//                    }
+//                    .overlay(
+//                        Group {
+//                            if guestSearchFood.isloading {
+//                                Color.white
+//                                    .edgesIgnoringSafeArea(.all)
+//                                
+//                                ProgressView()
+//                                    .progressViewStyle(CircularProgressViewStyle(tint: PrimaryColor.normal))
+//                                    .scaleEffect(2)
+//                            }
+//                        }
+//                    )
+//                }
+//            }
         }
         .padding(.top, 8)
         .navigationBarBackButtonHidden(true)
@@ -102,9 +103,9 @@ struct ListFoodRecipeTab: View {
                     listFoodRecipe.searchFoodByName(foodName: foodName)
                 }
             }else{
-                if guestSearchFood.guestSearchFoodRecipe.isEmpty {
-                    guestSearchFood.getGuestSearchFoodByName(guestFoodName: guestFoodName)
-                }
+//                if guestSearchFood.guestSearchFoodRecipe.isEmpty {
+//                    guestSearchFood.getGuestSearchFoodByName(guestFoodName: guestFoodName)
+//                }
             }
         }
     }

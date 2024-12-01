@@ -27,29 +27,6 @@ class PurchaseService: ObservableObject {
         ]
         
         AF.request(url, method: .get, headers: headers).validate().responseDecodable(of: purchaseResponse.self) { respons in
-            
-            if let statusCode = respons.response?.statusCode {
-                // Check for 404 status code and handle it gracefully
-                if statusCode == 404 {
-                    print("Not found Purchase")
-                    completion(.failure(NSError(domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "Not found Purchase."])))
-                    return
-                }
-            }
-            
-            // Pretty print the JSON response for debugging
-            if let data = respons.data {
-                do {
-                    let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-                    let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-                    if let prettyString = String(data: prettyData, encoding: .utf8) {
-                        print("Pretty JSON Response:\n\(prettyString)")
-                    }
-                } catch {
-                    print("Failed to convert response data to pretty JSON: \(error)")
-                }
-            }
-            
             debugPrint(respons)
             // Handle the response result
             switch respons.result {
@@ -80,20 +57,6 @@ class PurchaseService: ObservableObject {
         ]
         
         AF.request(url, method: .get, headers: headers).validate().responseDecodable(of: purchaseResponse.self) { response in
-            // Print response data for debugging
-            if let data = response.data {
-                do {
-                    let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-                    let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-                    if let prettyString = String(data: prettyData, encoding: .utf8) {
-                        print("Pretty JSON Response:\n\(prettyString)")
-                    }
-                } catch {
-                    print("Failed to convert response data to pretty JSON: \(error)")
-                }
-            }
-            
-            // Handle the result
             switch response.result {
             case .success(let apiResponse):
                 if let statusCode = Int(apiResponse.statusCode), statusCode == 200 {
@@ -125,28 +88,6 @@ class PurchaseService: ObservableObject {
         ]
         
         AF.request(url, method: .get, headers: headers).validate().responseDecodable(of: OrderModelResponseForBuyer.self) { response in
-            
-            if let statusCode = response.response?.statusCode {
-                if statusCode == 404 {
-                    print("Not found Purchase Buyer")
-                    completion(.failure(NSError(domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "Not found Purchase Buyer."])))
-                    return
-                }
-            }
-            
-            // Pretty print the JSON response for debugging
-            if let data = response.data {
-                do {
-                    let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-                    let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-                    if let prettyString = String(data: prettyData, encoding: .utf8) {
-                        print("Pretty JSON Response:\n\(prettyString)")
-                    }
-                } catch {
-                    print("Failed to convert response data to pretty JSON: \(error)")
-                }
-            }
-           
             switch response.result {
             case .success(let payloads):
                 completion(.success(payloads))
@@ -173,28 +114,6 @@ class PurchaseService: ObservableObject {
         ]
         
         AF.request(url, method: .get, headers: headers).validate().responseDecodable(of: purchaseResponse.self) { respons in
-            
-            if let statusCode = respons.response?.statusCode {
-                // Check for 404 status code and handle it gracefully
-                if statusCode == 404 {
-                    print("Not found Purchase Saller")
-                    completion(.failure(NSError(domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "Not found Purchase Saller."])))
-                    return
-                }
-            }
-            
-            // Pretty print the JSON response for debugging
-            if let data = respons.data {
-                do {
-                    let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-                    let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-                    if let prettyString = String(data: prettyData, encoding: .utf8) {
-                        print("Pretty JSON Response:\n\(prettyString)")
-                    }
-                } catch {
-                    print("Failed to convert response data to pretty JSON: \(error)")
-                }
-            }
             debugPrint(respons)
             // Handle the response result
             switch respons.result {
@@ -288,29 +207,6 @@ class PurchaseService: ObservableObject {
         ]
         
         AF.request(url, method: .get, headers: headers).validate().responseDecodable(of: ReceiptResponse.self) { respons in
-            
-            if let statusCode = respons.response?.statusCode {
-                // Check for 404 status code and handle it gracefully
-                if statusCode == 404 {
-                    print("Not found Purchase")
-                    completion(.failure(NSError(domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "Not found Purchase Saller."])))
-                    return
-                }
-            }
-            
-            // Pretty print the JSON response for debugging
-            if let data = respons.data {
-                do {
-                    let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-                    let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-                    if let prettyString = String(data: prettyData, encoding: .utf8) {
-                        print("Pretty JSON Response:\n\(prettyString)")
-                    }
-                } catch {
-                    print("Failed to parse JSON response: \(error)")
-                }
-            }
-            
             debugPrint(respons)
             // Handle the response result
             switch respons.result {
@@ -363,30 +259,6 @@ class PurchaseService: ObservableObject {
         print("Headers: \(headers)")
 
         AF.request(url, method: .put, headers: headers).validate().responseDecodable(of: PurchaseUpdateResponse.self) { response in
-            
-            // Debugging: Print the response status code and raw data
-            if let statusCode = response.response?.statusCode {
-                print("Status Code: \(statusCode)")
-                if statusCode == 404 {
-                    print("Not found Purchase")
-                    completion(.failure(NSError(domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "Not found Purchase Seller."])))
-                    return
-                }
-            }
-
-            if let data = response.data {
-                do {
-                    let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-                    let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-                    if let prettyString = String(data: prettyData, encoding: .utf8) {
-                        print("Pretty JSON Response:\n\(prettyString)")
-                    }
-                } catch {
-                    print("Failed to parse JSON response: \(error)")
-                }
-            }
-
-            // Handle response result
             switch response.result {
             case .success(let purchaseUpdateResponse):
                 completion(.success(purchaseUpdateResponse))

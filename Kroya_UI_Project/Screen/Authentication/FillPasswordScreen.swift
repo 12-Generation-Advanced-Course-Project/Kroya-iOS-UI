@@ -19,8 +19,10 @@ struct FillPasswordScreen: View {
     @Binding var lang: String
     @State private var isForgetPassword = false
     @Environment(\.locale) var locale
+    @StateObject private var keyboardResponder = KeyboardResponder()
     var body: some View {
         ZStack {
+            ScrollView(.vertical,showsIndicators: false){
             VStack {
                 HStack {
                     Button(action: {
@@ -78,13 +80,13 @@ struct FillPasswordScreen: View {
                                     .font(.caption)
                                     .foregroundColor(.red)
                                     .font(.customfont(.regular, fontSize: 10))
-
+                                
                             }
                             .offset(y:-10)
                         }
                         
                         // Forgot Password
-//                        NavigationLink(destination: VerificationCodeStatic(lang: $lang)){
+                        //                        NavigationLink(destination: VerificationCodeStatic(lang: $lang)){
                         Button(action: {
                             isForgetPassword = true
                             print("Forget Password clicked") // Debugging statement
@@ -97,7 +99,7 @@ struct FillPasswordScreen: View {
                                 .padding(.top, 5)
                         }
                         .frame(minHeight: 50, alignment: .top)
-
+                        
                         NavigationLink(destination: VerificationCodeStatic(lang: $lang), isActive: $isForgetPassword) {
                             EmptyView()
                         }
@@ -129,6 +131,13 @@ struct FillPasswordScreen: View {
                 
                 Spacer()
             }
+        }
+            .simultaneousGesture(
+                TapGesture().onEnded {
+                    hideKeyboard()
+                }
+            )
+            .padding(.bottom, min(keyboardResponder.currentHeight, 0))
             
 //            // Navigate to MainScreen on successful login
 //            NavigationLink(destination: MainScreen(userStore: userStore,lang: $lang).navigationBarBackButtonHidden(true).environmentObject(userStore), isActive: $authVM.isLoggedIn) {

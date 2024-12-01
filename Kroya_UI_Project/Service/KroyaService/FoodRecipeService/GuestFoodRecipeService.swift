@@ -46,10 +46,6 @@ class GuestFoodRecipeService {
                     if let statusCode = Int(apiResponse.statusCode), statusCode == 200 {
                         print("Get guest foodRecipe successfully.")
                         completion(.success(apiResponse))
-                    } else {
-                        print("Failed to retrieve guest food recipes.")
-                        let error = NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: apiResponse.message])
-                        completion(.failure(error))
                     }
                 case .failure(let error):
                     print("Request failed with error: \(error)")
@@ -75,26 +71,11 @@ class GuestFoodRecipeService {
         AF.request(url, method: .get, headers: headers).validate()
             .responseDecodable(of: guestFoodRecipeResponse.self) { response in
             // Print response data for debugging
-            if let data = response.data {
-                do {
-                    let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-                    let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-                    if let prettyString = String(data: prettyData, encoding: .utf8) {
-                        print("Pretty JSON Response:\n\(prettyString)")
-                    }
-                } catch {
-                    print("Failed to convert response data to pretty JSON: \(error)")
-                }
-            }
-            
             // Handle the result
             switch response.result {
             case .success(let apiResponse):
                 if let statusCode = Int(apiResponse.statusCode), statusCode == 200 {
                     completion(.success(apiResponse))
-                } else {
-                    let error = NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: apiResponse.message])
-                    completion(.failure(error))
                 }
             case .failure(let error):
                 completion(.failure(error))

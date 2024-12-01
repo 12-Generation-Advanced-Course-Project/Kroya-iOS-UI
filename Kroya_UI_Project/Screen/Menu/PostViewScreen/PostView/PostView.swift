@@ -135,9 +135,7 @@ struct PostViewScreen: View {
         }.foregroundStyle(.yellow)
             .onAppear{
                 Profile.fetchUserProfile()
-            }
-            .onDisappear{
-                Profile.fetchUserProfile()
+                userPostFood.getAllUserFood()
             }
     }
     

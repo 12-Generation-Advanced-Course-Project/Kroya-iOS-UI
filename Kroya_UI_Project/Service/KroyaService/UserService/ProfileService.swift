@@ -21,7 +21,7 @@ class ProfileService {
         
         AF.request(url, method: .get, headers: headers).validate()
             .responseDecodable(of: UserProfileResponse.self) { response in
-                debugPrint(response)
+           
                 switch response.result{
                 case .success(let apiResponse):
                     if let statusCode = Int(apiResponse.statusCode), statusCode == 200 {

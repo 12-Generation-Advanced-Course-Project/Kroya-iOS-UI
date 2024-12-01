@@ -40,3 +40,11 @@ class NetworkUtils {
         .shadow(radius: 10)
     }
 }
+
+enum NetworkError: Error {
+    case noAccessToken
+    case timeout
+    case connectionLost
+    case serverError(message: String)
+    case unexpectedError(Error)
+}

@@ -26,7 +26,7 @@ class CategoryService {
         
         AF.request(url, method: .get, headers: headers).validate()
             .responseDecodable(of: CategoryResponses.self) { response in
-                debugPrint(response)
+             
                 switch response.result {
                 case .success(let apiResponse):
                     if apiResponse.statusCode == "200" {
@@ -37,8 +37,22 @@ class CategoryService {
                         completion(.failure(error))
                     }
                 case .failure(let error):
-                    print("Request failed with error: \(error)")
-                    completion(.failure(error))
+                    if let afError = error.asAFError, let urlError = afError.underlyingError as? URLError {
+                        switch urlError.code {
+                        case .timedOut:
+                            print("Request timed out")
+                            completion(.failure(NetworkError.timeout))
+                        case .notConnectedToInternet:
+                            print("No internet connection")
+                            completion(.failure(NetworkError.connectionLost))
+                        default:
+                            print("Unexpected network error: \(urlError.localizedDescription)")
+                            completion(.failure(NetworkError.unexpectedError(urlError)))
+                        }
+                    } else {
+                        print("Request failed with error: \(error)")
+                        completion(.failure(NetworkError.unexpectedError(error)))
+                    }
                 }
             }
     }
@@ -57,30 +71,6 @@ class CategoryService {
         let headers: HTTPHeaders = ["Authorization": "Bearer \(accessToken)"]
         
         AF.request(url, method: .get, headers: headers).validate().responseDecodable(of: getAllFoodCategoryResponse.self) { response in
-            
-            if let statusCode = response.response?.statusCode {
-                // Check for 404 status code and handle it gracefully
-                if statusCode == 404 {
-                    print("No foods found for the specified category ID.")
-                    completion(.failure(NSError(domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "No foods found for the specified category ID."])))
-                    return
-                }
-            }
-            
-            // Pretty print the JSON response for debugging
-            if let data = response.data {
-                do {
-                    let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-                    let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-                    if let prettyString = String(data: prettyData, encoding: .utf8) {
-                        print("Pretty JSON Response:\n\(prettyString)")
-                    }
-                } catch {
-                    print("Failed to convert response data to pretty JSON: \(error)")
-                }
-            }
-            
-            // Handle the response result
             switch response.result {
             case .success(let apiResponse):
                 if let statusCode = Int(apiResponse.statusCode), statusCode == 200 {
@@ -90,8 +80,22 @@ class CategoryService {
                     completion(.failure(error))
                 }
             case .failure(let error):
-                print("Request failed with error: \(error)")
-                completion(.failure(error))
+                if let afError = error.asAFError, let urlError = afError.underlyingError as? URLError {
+                    switch urlError.code {
+                    case .timedOut:
+                        print("Request timed out")
+                        completion(.failure(NetworkError.timeout))
+                    case .notConnectedToInternet:
+                        print("No internet connection")
+                        completion(.failure(NetworkError.connectionLost))
+                    default:
+                        print("Unexpected network error: \(urlError.localizedDescription)")
+                        completion(.failure(NetworkError.unexpectedError(urlError)))
+                    }
+                } else {
+                    print("Request failed with error: \(error)")
+                    completion(.failure(NetworkError.unexpectedError(error)))
+                }
             }
         }
     }

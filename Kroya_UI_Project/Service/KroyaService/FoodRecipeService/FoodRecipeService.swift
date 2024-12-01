@@ -97,9 +97,6 @@ class FoodRecipeService {
             case .success(let apiResponse):
                 if let statusCode = Int(apiResponse.statusCode), statusCode == 200 {
                     completion(.success(apiResponse))
-                } else {
-                    let error = NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: apiResponse.message])
-                    completion(.failure(error))
                 }
             case .failure(let error):
                 completion(.failure(error))
@@ -142,9 +139,6 @@ class FoodRecipeService {
             case .success(let apiResponse):
                 if let statusCode = Int(apiResponse.statusCode), statusCode == 200 {
                     completion(.success(apiResponse))
-                } else {
-                    let error = NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: apiResponse.message])
-                    completion(.failure(error))
                 }
             case .failure(let error):
                 completion(.failure(error))
@@ -170,18 +164,6 @@ class FoodRecipeService {
         AF.request(url, method: .post, parameters: foodRecipe, encoder: JSONParameterEncoder.default, headers: headers)
             .validate()
             .responseDecodable(of: SavefoodRecipeResponse.self) { response in
-               
-                                if let data = response.data {
-                                    do {
-                                        let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-                                        let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-                                        if let prettyString = String(data: prettyData, encoding: .utf8) {
-                                            print("Pretty JSON Response For Post Food-Recipe:\n\(prettyString)")
-                                        }
-                                    } catch {
-                                        print("Failed to convert response data to pretty JSON: \(error)")
-                                    }
-                                }
                 switch response.result {
                 case .success(let saveResponse):
                     if let recipeId = saveResponse.payload?.id{
@@ -214,26 +196,10 @@ class FoodRecipeService {
 
         AF.request(url, method: .get, headers: headers).validate().responseDecodable(of: CuisineResponse.self) { response in
             // Print response data for debugging
-            if let data = response.data {
-                do {
-                    let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-                    let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-                    if let prettyString = String(data: prettyData, encoding: .utf8) {
-                        print("Pretty JSON Response:\n\(prettyString)")
-                    }
-                } catch {
-                    print("Failed to convert response data to pretty JSON: \(error)")
-                }
-            }
-
-            // Handle the result
             switch response.result {
             case .success(let apiResponse):
                 if let statusCode = Int(apiResponse.statusCode), statusCode == 200 {
                     completion(.success(apiResponse))
-                } else {
-                    let error = NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: apiResponse.message])
-                    completion(.failure(error))
                 }
             case .failure(let error):
                 completion(.failure(error))

@@ -29,20 +29,6 @@ class UserFoodService {
         
         AF.request(url, method: .get , headers:  headers).validate()
             .responseDecodable(of: userFoodResponse.self){ response in
-                if let data = response.data {
-                    do {
-                        let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-                        let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
-                        if let prettyString = String(data: prettyData, encoding: .utf8) {
-                            print("Get all user food JSON Response:\n\(prettyString)")
-                        }
-                    } catch {
-                        print("Failed to convert response get all user food  to JSON: \(error)")
-                    }
-                } else {
-                    print("No response all food data available")
-                }
-                debugPrint(response)
                 switch response.result {
                 case .success(let apiResponse):
                     if apiResponse.statusCode == "200" {
