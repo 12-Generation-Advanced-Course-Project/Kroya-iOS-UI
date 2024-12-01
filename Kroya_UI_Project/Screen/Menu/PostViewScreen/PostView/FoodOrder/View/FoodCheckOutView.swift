@@ -4,7 +4,7 @@ struct FoodCheckOutView: View {
     @Environment(\.dismiss) var dismiss
     @State private var isReceiptActive = false
     @StateObject private var PurchaesViewModel = OrderViewModel()
-    
+    @StateObject private var WeBillVM = WeBill365ViewModel()
     @State private var isPresented = false
     @Binding var imageName: String
     @State private var selectedAddress: Address?
@@ -17,6 +17,7 @@ struct FoodCheckOutView: View {
     var PhoneNumber: String
     var ReciptentName: String
     var SellerId: Int
+    var Sellername:String
     @State private var remark: String? = ""
     @State private var totalPrice: Int = 0
     @State private var Quantity: Int = 1
@@ -25,8 +26,7 @@ struct FoodCheckOutView: View {
     @State private var warningMessage: String? 
     let exchangeRateToRiel: Double = 4100
     @StateObject private var keyboardResponder = KeyboardResponder()
- 
-    
+    @State private var isNoConnectWeBill = false
     var totalPriceInRiel: Double {
         if Currency.uppercased() == "RIEL" {
             return Double(totalPrice)
@@ -71,12 +71,19 @@ struct FoodCheckOutView: View {
                         Section {
                             PaymentButtonView(
                                 payment: $SelectPayment,
+                                WeBillVM: WeBillVM,
                                 PurchaesViewModel: PurchaesViewModel,
                                 amount: Int(totalPriceInRiel),
                                 remark: remark ?? "Good",
                                 Location: Location,
                                 Qty: Quantity,
-                                FoodSellId: SellerId
+                                SellerId: SellerId,
+                                SellerName: Sellername,
+                                ParentAccountFromSeller: WeBillVM.WebillAccount?.accountNo ?? "",
+                                ClientId: WeBillVM.WebillAccount?.clientId ?? "",
+                                SecretId: WeBillVM.WebillAccount?.clientSecret ?? "",
+                                FoodId: FoodId,
+                                isNoConnectWeBill: $isNoConnectWeBill
                             ).environment(\.modelContext, context)
                         } header: {
                             Text(LocalizedStringKey("Payment"))
@@ -146,6 +153,18 @@ struct FoodCheckOutView: View {
                 .navigationTitle(LocalizedStringKey("Checkout"))
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarBackButtonHidden(true)
+                if WeBillVM.isLoading {
+                    ProgressView("Loading Payment Info...")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(Color.black.opacity(0.3))
+                }
+                if isNoConnectWeBill {
+                    isNoConnectWebill(onYes: {
+                        withAnimation{
+                            isNoConnectWeBill = false
+                        }
+                    })
+                }
             }
             .fullScreenCover(isPresented: $PurchaesViewModel.isOrderSuccess, content: {
                 ReceiptView(
@@ -154,6 +173,9 @@ struct FoodCheckOutView: View {
                     PurchaseId: PurchaesViewModel.Purchases?.purchaseId ?? 0
                 )
             })
+            .onAppear{
+                WeBillVM.fetchWeBillAccount(SellerId: SellerId)
+            }
             .ignoresSafeArea(.keyboard)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

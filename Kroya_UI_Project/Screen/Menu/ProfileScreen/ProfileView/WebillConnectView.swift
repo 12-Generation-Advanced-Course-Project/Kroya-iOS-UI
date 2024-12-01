@@ -21,7 +21,7 @@ struct WebillConnectView: View {
     @State private var secretIDError: String? = nil
     @State private var accountNumberError: String? = nil
     @State private var showDisconnectAlert = false
-
+    @Binding var isConnect: String
     var body: some View {
         NavigationStack {
             ZStack {
@@ -144,13 +144,6 @@ struct WebillConnectView: View {
                                         .padding(.horizontal, 5)
                                 }
                             }
-
-
-     
-
-                               
-                            
-
                         }
                         .ignoresSafeArea(.keyboard)
                         .navigationBarHidden(true)
@@ -207,25 +200,21 @@ struct WebillConnectView: View {
                             showDisconnectAlert = false
                         },
                         onYes: {
-                            if isAccountDisconnected() {
-                                isDisconnected = true
-                            } else {
-                                disconnectAccount()
-                                showDisconnectAlert = false
-                            }
+                            disconnectAccount()
+                            showDisconnectAlert = false
                            
                         }
                     )
                 }
-                if isDisconnected {
-                    SuccessMessageForWeBill(
-                        imageName: "delete 1",
-                        message: "You have already disconnected your webill account",
-                        title: "Try again",
-                        color: .red
-                    )
-                    .transition(.opacity)
-                }
+//                if isDisconnected {
+//                    SuccessMessageForWeBill(
+//                        imageName: "delete 1",
+//                        message: "You have already disconnected your webill account",
+//                        title: "Try again",
+//                        color: .red
+//                    )
+//                    .transition(.opacity)
+//                }
 
                 // Error Alert
                 if showError {
@@ -260,11 +249,13 @@ struct WebillConnectView: View {
                 if isAccessTokenFetched {
                     webillConnect.ConnectWeBillAccount(ConnectRequest: connectRequest) { isConnected in
                         if isConnected {
+                            isConnect = "Connected"
                             webillConnect.isConnect = true
                             successMessage = webillConnect.successMessage.isEmpty ? "WeBill365 account connected successfully." : webillConnect.successMessage
                             showSuccessAndDismiss()
                         } else {
                             webillConnect.isConnect = false
+                            isConnect = "Connect with"
                             showConnectionError()
                         }
                     }
@@ -280,46 +271,9 @@ struct WebillConnectView: View {
 
     // MARK: - Disconnect Logic
     func disconnectAccount() {
-        guard let clientId = Auth.shared.getClientId(), !clientId.isEmpty else {
-            let error = NSError(
-                domain: "",
-                code: 401,
-                userInfo: [NSLocalizedDescriptionKey: "Client ID is missing or account already disconnected."]
-            )
-            showError(error)
-            return
-        }
-        
-        guard let secretID = Auth.shared.getSecret(), !secretID.isEmpty else {
-            _ = NSError(
-                domain: "",
-                code: 401,
-                userInfo: [NSLocalizedDescriptionKey: "Secret ID is missing."]
-            )
-            return
-        }
-        
-        guard let parentAccountNo = Auth.shared.getParentAccount(), !parentAccountNo.isEmpty else {
-            _ = NSError(
-                domain: "",
-                code: 401,
-                userInfo: [NSLocalizedDescriptionKey: "Parent account number is missing."]
-            )
-            return
-        }
-        
-        // Assuming there's a way to check if the account is already disconnected:
-        if isAccountDisconnected() {
-            _ = NSError(
-                domain: "",
-                code: 400,
-                userInfo: [NSLocalizedDescriptionKey: "Account is already disconnected."]
-            )
-            return
-        }
         webillConnect.DisconnectWeBillaccount(context: context)
         webillConnect.clearWeBillAccount(context: context)
-        
+        isConnect = "Connect with"
         successMessage = "WeBill365 account disconnected successfully."
         showifuserAlreadyDisconnect()
     }

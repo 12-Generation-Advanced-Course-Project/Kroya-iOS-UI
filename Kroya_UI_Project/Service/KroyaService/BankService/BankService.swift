@@ -17,8 +17,7 @@ class BankService {
     // MARK: Get Token for Access into WeBill365
     func weBill365Token(clientID: String, clientSecret: String,parentAccount:String, completion: @escaping (Result<Void, Error>) -> Void) {
         
-        let url = "https://apidev.webill365.com/kh/api/wbi/client/v1/auth/token"
-        
+        let url = "https://api.webill365.com/kh/api/wbi/client/v1/auth/token"
         print("Client : \(clientID) and SecretID : \(clientSecret)")
         let trimmedClientID = clientID.trimmingCharacters(in: .whitespacesAndNewlines)
             let trimmedClientSecret = clientSecret.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -50,7 +49,7 @@ class BankService {
             case .success(let data):
                 if let accessToken = data.data?.accessToken {
                     // Save the access token using Auth class
-                    Auth.shared.setWeBillCredentials(clientId: clientID, secretId: clientSecret, webillToken: accessToken, parentAccount: parentAccount)
+//                    Auth.shared.setWeBillCredentials(clientId: clientID, secretId: clientSecret, webillToken: accessToken, parentAccount: parentAccount)
                     print("Access token retrieved and saved successfully.")
                     completion(.success(()))
                 } else {
@@ -65,27 +64,75 @@ class BankService {
         }
     }
     
+    // MARK: Get Token for Access into WeBill365
+    func weBill365TokenFromSeller(clientID: String, clientSecret: String, completion: @escaping (Bool) -> Void) {
+        let url = "https://api.webill365.com/kh/api/wbi/client/v1/auth/token"
+        print("Client : \(clientID) and SecretID : \(clientSecret)")
+        let trimmedClientID = clientID.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedClientSecret = clientSecret.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        // Parameters
+        let parameters: [String: Any] = [
+            "client_id": trimmedClientID,
+            "client_secret": trimmedClientSecret
+        ]
+        
+        // Headers
+        let headers: HTTPHeaders = [
+            "Content-Type": "application/json",
+            "accept": "*/*"
+        ]
+        
+        // Alamofire Request
+        AF.request(
+            url,
+            method: .post,
+            parameters: parameters,
+            encoding: JSONEncoding.default,
+            headers: headers
+        )
+        .responseDecodable(of: WeBill365Response.self) { response in
+            debugPrint(response) // Debugging the response
+            switch response.result {
+            case .success(let data):
+                if let accessToken = data.data?.accessToken {
+                    Auth.shared.setWebillToken(webillToken: accessToken) // Save the token
+                    print("Access token retrieved and saved successfully.")
+                    completion(true)
+                } else {
+                    let errorMessage = data.status?.message ?? "Failed to retrieve access token."
+                    print("Error: \(errorMessage)")
+                    completion(false)
+                }
+            case .failure(let error):
+                print("Request failed with error: \(error)")
+                completion(false)
+            }
+        }
+    }
+
     // MARK: QR Collection
-    func QRCollection(QRCollectionRequest: QRCollectionRequest, completion: @escaping (Result<QRCollectionResponse<DataForQRCollection>, Error>) -> Void) {
+    func QuickBills(quickBillsRequest: QuickBillsRequest, completion: @escaping (Result<QRCollectionResponse<DataForQRCollection>, Error>) -> Void) {
         guard let accessToken = Auth.shared.getAccessTokenWeBill() else {
             let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token is missing"])
             completion(.failure(error))
             return
         }
-        
-        let url = "https://apidev.webill365.com/kh/api/wbi/client/v1/qr-collections"
+        let url = "https://api.webill365.com/kh/api/wbi/client/v1/quick-bills"
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(accessToken)",
             "Content-Type": "application/json"
         ]
         
         let parameters: [String: Any] = [
-            "payer_name": QRCollectionRequest.payername,
-            "parent_account_no": QRCollectionRequest.parentAccountNo,
-            "payment_type": QRCollectionRequest.paymentType,
-            "currency_code": QRCollectionRequest.currencyCode,
-            "amount": QRCollectionRequest.amount,
-            "remark": QRCollectionRequest.remark
+            "account_name": quickBillsRequest.accountName,
+            "payment_type": quickBillsRequest.paymentType,
+            "currency_code": quickBillsRequest.currencyCode,
+            "issue_datetime": quickBillsRequest.issueDatetime,
+            "payment_term": quickBillsRequest.paymentTerm,
+            "parent_account_no": quickBillsRequest.parentAccountNo,
+            "amount" : quickBillsRequest.amount,
+            "remark": quickBillsRequest.remark
         ]
         
         // Make the API request
@@ -117,50 +164,44 @@ class BankService {
     }
     
     //MARK: Check Status for QR Scan
-    func QRCheckStatus(QrcheckStatus: CheckStatusCodeRequest, completion: @escaping (Result<QRCollectionResponse<DataForQRCollection>, Error>) -> Void) {
+    func QRCheckStatus(QrcheckStatus: CheckStatusCodeRequest, completion: @escaping (Result<CheckingStatus<[DataForQRCollection]>, Error>) -> Void) {
         guard let accessToken = Auth.shared.getAccessTokenWeBill() else {
             let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token is missing"])
             completion(.failure(error))
             return
         }
-        
-        let url = "https://apidev.webill365.com/kh/api/wbi/client/v1/payments/check-status"
+
+        let url = "https://api.webill365.com/kh/api/wbi/client/v1/payments/check-status"
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(accessToken)",
             "Content-Type": "application/json"
         ]
-        
-        // Encode the request as parameters
+
         let parameters: [String: Any] = [
             "bill_no": QrcheckStatus.billNo
         ]
-        
+
         AF.request(
             url,
             method: .post,
             parameters: parameters,
             encoding: JSONEncoding.default,
             headers: headers
-        ).responseDecodable(of: QRCollectionResponse<DataForQRCollection>.self) { response in
+        ).responseDecodable(of: CheckingStatus<[DataForQRCollection]>.self) { response in
             debugPrint(response)
             switch response.result {
             case .success(let apiResponse):
                 if let status = apiResponse.status, status.code == 200 {
                     completion(.success(apiResponse))
-                } else {
-                    let error = NSError(
-                        domain: "",
-                        code: apiResponse.status?.code ?? 404,
-                        userInfo: [NSLocalizedDescriptionKey: apiResponse.status?.message ?? "Error occurred"]
-                    )
-                    completion(.failure(error))
                 }
             case .failure(let error):
+                print("Failed to fetch QR status: \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }
     }
-    
+
+
     // MARK: - Connect WeBill API Call
     func connectWeBill(
         request: ConnectWebillConnectRequest,

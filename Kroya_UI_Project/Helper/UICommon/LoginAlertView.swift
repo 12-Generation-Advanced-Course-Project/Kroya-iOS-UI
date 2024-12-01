@@ -126,3 +126,47 @@ struct WeBillDisconnect: View {
         }
     }
 }
+
+struct isNoConnectWebill: View {
+   
+    var onYes: () -> Void
+
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.2)
+                .edgesIgnoringSafeArea(.all)
+            
+            VStack(alignment:.leading,spacing: 10) {
+                Text("Notice")
+                    .customFontBoldLocalize(size: 20)
+                    .foregroundColor(.black)
+                    .padding(.horizontal, 10)
+                Text("You're able to pay with cash only.")
+                    .customFontMediumLocalize(size: 15)
+                    .foregroundColor(.gray)
+                    .multilineTextAlignment(.leading)
+                    .padding(.horizontal, 10)
+                Spacer().frame(height: 20)
+                HStack(spacing: 10) {
+                    // Confirm (Yes) button action
+                    Button(action: {
+                        onYes()
+                    }) {
+                        Text("Ok")
+                            .customFontSemiBoldLocalize(size: 15)
+                            .foregroundColor(.white)
+                            .frame(width: 85,height: 45)
+                            .background(PrimaryColor.normal)
+                            .cornerRadius(10)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+            .padding()
+            .background(Color.white)
+            .cornerRadius(15)
+            .shadow(radius: 10)
+            .padding(.horizontal, 15)
+        }
+    }
+}

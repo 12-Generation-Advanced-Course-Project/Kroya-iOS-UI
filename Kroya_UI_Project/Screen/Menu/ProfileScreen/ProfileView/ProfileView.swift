@@ -29,7 +29,7 @@ struct ProfileView: View {
     init(lang: Binding<String>) {
         self._lang = lang
     }
-    
+    @State private var isConnect:String = "Connect with"
     var body: some View {
         ZStack {
             ScrollView(.vertical,showsIndicators: false){
@@ -133,7 +133,7 @@ struct ProfileView: View {
                     Spacer().frame(height: .screenHeight * 0.03)
                     // WeBill connection status
                     NavigationLink(
-                        destination: WebillConnectView(webillConnect: WeBillVM).environment(\.modelContext, modelContext)
+                        destination: WebillConnectView(webillConnect: WeBillVM, isConnect: $isConnect).environment(\.modelContext, modelContext)
                     ) {
                         VStack(alignment: .leading) {
                             Text("Payment Method")
@@ -147,7 +147,7 @@ struct ProfileView: View {
                                     .frame(width: 25, height: 25)
                                 
                                 // Dynamic text based on connection status
-                                Text(WeBillVM.isConnect ? "Connected" : "Connect with")
+                                Text(WeBillVM.Connected)
                                     .customFontMediumLocalize(size: 16)
                                     .foregroundStyle(.black)
                                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -290,6 +290,10 @@ struct ProfileView: View {
         }
         .onAppear {
             Profile.fetchUserProfile()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                WeBillVM.fetchWeBillAccount(SellerId: Profile.userProfile?.id ?? 0)
+            })
+           
             //            addressVM.fetchAllAddresses()
             //            selectedAddress = addressVM.selectedAddress
         }

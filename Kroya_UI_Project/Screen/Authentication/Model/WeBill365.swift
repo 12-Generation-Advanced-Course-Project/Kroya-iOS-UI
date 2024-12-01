@@ -30,19 +30,23 @@ struct WeBill365Status: Decodable {
     let message: String?
 }
 
-struct QRCollectionRequest: Codable {
-    var payername:String
-    var parentAccountNo:String
+struct QuickBillsRequest: Codable {
+    var accountName:String
     var paymentType:String
     var currencyCode:String
+    var issueDatetime:String
+    var paymentTerm:String
+    var parentAccountNo:String
     var amount:Int
     var remark:String
     
     enum CodingKeys: String, CodingKey {
-        case payername = "payer_name"
-        case parentAccountNo = "parent_account_no"
+        case accountName = "account_name"
         case paymentType = "payment_type"
         case currencyCode = "currency_code"
+        case issueDatetime = "issue_datetime"
+        case paymentTerm = "payment_term"
+        case parentAccountNo = "parent_account_no"
         case amount = "amount"
         case remark = "remark"
     }
@@ -54,22 +58,28 @@ struct QRCollectionResponse<T: Decodable>: Decodable {
     let status: Status?
 }
 
-struct DataForQRCollection: Decodable{
-    var accountNo:String
-    var billNo:String
-    var khqrdata:String
-    
+struct DataForQRCollection: Decodable {
+    var billNo: String
+    var accountNo: String
+    var khqrdata: String
+
     enum CodingKeys: String, CodingKey {
-        case accountNo = "account_no"
         case billNo = "bill_no"
+        case accountNo = "account_no"
         case khqrdata = "khqr_data"
     }
 }
 
-struct Status: Decodable{
-    var code: Int
-    var message: String
+struct Status: Decodable {
+    let code: Int
+    let message: String
 }
+
+struct CheckingStatus<T: Decodable>: Decodable {
+    let data: [T]?
+    let status: Status?
+}
+
 
 struct CheckStatusCodeRequest: Codable {
     var billNo: [String]

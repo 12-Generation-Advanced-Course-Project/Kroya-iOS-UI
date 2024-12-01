@@ -66,6 +66,10 @@ class Auth: ObservableObject {
         keychain.set(webillToken ?? "", forKey: KeychainKey.WebillToken.rawValue)
         keychain.set(parentAccount, forKey: KeychainKey.parentAccount.rawValue)
     }
+    //MARK: WebillToken only
+    func setWebillToken(webillToken:String?) {
+        keychain.set(webillToken ?? "", forKey: KeychainKey.WebillToken.rawValue)
+    }
     
     func getWeBillCredentials() -> (clientId: String?, secretId: String?, webillToken: String?,parentAccount:String?) {
         let clientId = keychain.string(forKey: KeychainKey.webillClientId.rawValue)
@@ -117,6 +121,7 @@ class Auth: ObservableObject {
     func getAccessTokenWeBill() -> String? {
         return getWeBillCredentials().webillToken
     }
+    
     
     
     func getRefreshToken() -> String? {

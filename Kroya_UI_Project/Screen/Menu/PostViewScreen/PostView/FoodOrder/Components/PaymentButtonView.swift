@@ -12,16 +12,22 @@ struct PaymentButtonView: View {
     @State private var selectedPaymentMethod: String? = nil
     @Binding var payment: String
     @StateObject private var profileVM = ProfileViewModel()
-    @StateObject private var WeBillVM = WeBill365ViewModel()
+    @ObservedObject  var WeBillVM : WeBill365ViewModel
     @ObservedObject var PurchaesViewModel: OrderViewModel
     @StateObject private var User = UserStore()
     @Environment(\.modelContext) private var context
     var amount: Int
     var remark: String
-    var Location:String
-    var Qty:Int
-    var FoodSellId:Int
-    @State private var responseCredientail : SellerCredentials?
+    var Location: String
+    var Qty: Int
+    var SellerId: Int
+    var SellerName: String
+    var ParentAccountFromSeller: String
+    var ClientId: String
+    var SecretId: String
+    var FoodId:Int
+    @State private var responseCredientail: SellerCredentials?
+    @Binding var isNoConnectWeBill: Bool
     var body: some View {
         HStack(spacing: 10) {
             // Pay with cash button
@@ -54,114 +60,66 @@ struct PaymentButtonView: View {
             
             // Pay with KHQR button
             Button(action: {
+                
                 selectedPaymentMethod = "KHR"
                 payment = "KHR"
                 let PaymentType = "1"
-                BankService.shared.getSellerCredientail(sellerId: FoodSellId) { result in
-                    switch result {
-                    case .success(let sellerCredentials):
-//                        print("Seller Credentials: \(sellerCredentials)")
-                        BankService.shared.weBill365Token(clientID: sellerCredentials.payload.clientID, clientSecret: sellerCredentials.payload.clientSecret , parentAccount: sellerCredentials.payload.accountNo) {  result in
-                            switch result {
-                            case .success(_):
-                                
-                                let QRCollectionRequest = QRCollectionRequest(
-                                                    payername: profileVM.userProfile?.fullName ?? "",
-                                                    parentAccountNo: sellerCredentials.payload.accountNo,
-                                                    paymentType: PaymentType,
-                                                    currencyCode: payment,
-                                                    amount: amount,
-                                                    remark: remark
-                                                )
-                                WeBillVM.fetchQRCollection(request: QRCollectionRequest) { billNo in
-                                                    guard let billNo = billNo else {
-                                                        print("Failed to generate QR or missing BillNo.")
-                                                        isShowingQRModal = false
-                                                        return
-                                                    }
-                                                    isShowingQRModal = true
-                                                    print("Starting QR status polling for BillNo: \(billNo)")
-                                                    WeBillVM.startPollingQRStatus(billNo: WeBillVM.qrCollectionData?.billNo ?? "")
-                                
-                                                    //MARK: Wait 10 Sec then Request Purchase
-                                                    let purchase = PurchaseRequest(
-                                                        foodSellId: FoodSellId,
-                                                        remark: remark,
-                                                        location: Location,
-                                                        quantity: Qty,
-                                                        totalPrice: Double(amount)
-                                                    )
-                                
-                                                    // Debug: Print the details for verification
-                                                    DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-                                                        print("PurchaesRequest: \(purchase)")
-                                                        PurchaesViewModel.addPurchase(purchase: purchase, paymentType: "KHQR")
-                                                        WeBillVM.stopPolling()
-                                                    
-                                                    }
-                                                }
-//                                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-//                                                    isShowingQRModal = true
-//                                                }
-                                
-                                break
-                            case .failure(let error):
-                                print("Error: \(error.localizedDescription)")
-                                // Handle error   
+                
+                let currentDateTime = getCurrentDateTime()
+                let QuickBills = QuickBillsRequest(
+                    accountName: SellerName,
+                    paymentType: PaymentType,
+                    currencyCode: payment,
+                    issueDatetime: currentDateTime,
+                    paymentTerm: "7",
+                    parentAccountNo: ParentAccountFromSeller,
+                    amount: amount,
+                    remark: remark
+                )
+                print("QuickBills Request: \(QuickBills)")
+                
+                BankService.shared.weBill365TokenFromSeller(clientID: ClientId, clientSecret: SecretId) { success in
+                    guard success else {
+                        print("Failed to retrieve token from seller.")
+                        isNoConnectWeBill = true
+                        return
+                    }
+                    
+                    WeBillVM.QuickBillsWebill(request: QuickBills) { billNo in
+                        guard let billNo = billNo else {
+                            print("Failed to generate QR or missing BillNo.")
+                            return
+                        }
+                        print("Starting QR status polling for BillNo: \(billNo)")
+                        
+                        // Start polling for QR status
+                        WeBillVM.startPollingQRStatus(billNo: billNo) { isSuccess in
+                            if isSuccess {
+                                // If QR payment is successful, proceed with purchase
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                    let purchase = PurchaseRequest(
+                                        foodSellId: FoodId,
+                                        remark: remark,
+                                        location: Location,
+                                        quantity: Qty,
+                                        totalPrice: Double(amount)
+                                    )
+                                    print("Purchase Request: \(purchase)")
+                                    PurchaesViewModel.addPurchase(purchase: purchase, paymentType: "KHQR")
+                                    WeBillVM.stopPolling()
+                                }
+                            } else {
+                                print("QR payment failed or still pending.")
                             }
                         }
-                    case .failure(let error):
-                        print("Error: \(error.localizedDescription)")
-                        // Handle error
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        isShowingQRModal = true
                     }
                 }
+                
                
-                
-                
-//                guard let parentAccount = Auth.shared.getParentAccount() else {
-//                    let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token is missing"])
-//                    return
-//                }
-//                let QRCollectionRequest = QRCollectionRequest(
-//                    payername: profileVM.userProfile?.fullName ?? "",
-//                    parentAccountNo: parentAccount,
-//                    paymentType: PaymentType,
-//                    currencyCode: payment,
-//                    amount: amount,
-//                    remark: remark
-//                )
-//                
-//                print("QRCollectionRequest: \(QRCollectionRequest)")
-//                
-//                WeBillVM.fetchQRCollection(request: QRCollectionRequest) { billNo in
-//                    guard let billNo = billNo else {
-//                        print("Failed to generate QR or missing BillNo.")
-//                        return
-//                    }
-//                    print("Starting QR status polling for BillNo: \(billNo)")
-//                    WeBillVM.startPollingQRStatus(billNo: WeBillVM.qrCollectionData?.billNo ?? "")
-//                    
-//                    //MARK: Wait 10 Sec then Request Purchase
-//                    let purchase = PurchaseRequest(
-//                        foodSellId: FoodSellId,
-//                        remark: remark,
-//                        location: Location,
-//                        quantity: Qty,
-//                        totalPrice: Double(amount)
-//                    )
-//                    
-//                    // Debug: Print the details for verification
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-//                        print("PurchaesRequest: \(purchase)")
-//                        PurchaesViewModel.addPurchase(purchase: purchase, paymentType: "KHQR")
-//                        WeBillVM.stopPolling()
-                    
-//                    }
-//                }
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-//                    isShowingQRModal = true
-//                }
-//                isShowingQRModal = true
+              
             }) {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack {
@@ -187,16 +145,28 @@ struct PaymentButtonView: View {
                         .stroke(selectedPaymentMethod == "KHR" ? Color.yellow : Color(red: 0.836, green: 0.875, blue: 0.924), lineWidth: 2)
                 )
             }
-            .buttonStyle(PlainButtonStyle()) // Remove default button style
+            .buttonStyle(PlainButtonStyle())
             .sheet(isPresented: $isShowingQRModal) {
                 PaywithKHQRModalView(khqrData: WeBillVM.qrCollectionData?.khqrdata ?? "")
                     .presentationDetents([.fraction(0.70)])
                     .presentationDragIndicator(.visible)
             }
+
+
         }
         .onAppear {
             profileVM.fetchUserProfile()
             WeBillVM.loadWeBillAccount(context: context)
+           
         }
     }
+    
+    // MARK: Helper Function for Current DateTime
+    private func getCurrentDateTime() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMddHHmmss"
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        return formatter.string(from: Date())
+    }
+
 }
