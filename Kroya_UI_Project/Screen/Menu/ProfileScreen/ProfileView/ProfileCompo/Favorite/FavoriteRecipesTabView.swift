@@ -5,6 +5,7 @@ struct FavoriteRecipesTabView: View {
     @StateObject private var favoriteFoodRecipe = FavoriteVM()
     @Binding var searchText : String
     @State private var refreshID = UUID()
+    var onFavoritechange: () -> Void
     var body: some View {
         VStack {
             if favoriteFoodRecipe.isLoading {
@@ -47,9 +48,7 @@ struct FavoriteRecipesTabView: View {
                                         isFavorite: favorite.isFavorite ?? false,
                                         onFavoritechange: {
                                           
-                                            favoriteFoodRecipe.getAllFavoriteFood()
-                                            refreshID = UUID()
-                                           
+                                            onFavoritechange()
                                         }
                                     )
                                   

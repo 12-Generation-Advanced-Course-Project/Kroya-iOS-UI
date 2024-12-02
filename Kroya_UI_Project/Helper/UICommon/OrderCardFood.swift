@@ -145,14 +145,25 @@ struct OrderCard: View {
                     }
                 }
 
-                
                 HStack(spacing: 15) {
-                    Text(order.foodCardType == "ORDER" ?
-                         "៛\(order.totalPrice ?? 0)" : // Show totalPrice for orders
-                         "៛\(order.price ?? 0)" // Show price for sales
-                    )
-                    .font(.system(size: 15, weight: .medium))
+                    // For ORDER
+                    if order.foodCardType == "ORDER" {
+                        Text("៛\(Int(order.totalPrice ?? 0))")
+                            .font(.system(size: 15, weight: .medium))
+                    }
                     
+                    // For SALE
+                    if order.foodCardType == "SALE" {
+                        if order.currencyType == "RIEL" {
+                            Text("៛\(Int(order.price ?? 0))")
+                                .font(.system(size: 15, weight: .medium))
+                        } else {
+                            Text("៛\(Int((order.price ?? 0) * 4100))")
+                                .font(.system(size: 15, weight: .medium))
+                        }
+                    }
+
+                    // FoodCardType Label
                     Text(order.foodCardType)
                         .font(.system(size: 12, weight: .medium))
                         .padding(.horizontal, 8)
@@ -163,6 +174,7 @@ struct OrderCard: View {
                         )
                         .foregroundColor(order.foodCardType == "ORDER" ? Color.yellow : Color.green)
                 }
+
             }
         }
         .background(

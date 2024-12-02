@@ -28,6 +28,7 @@ struct PaymentButtonView: View {
     var FoodId:Int
     @State private var responseCredientail: SellerCredentials?
     @Binding var isNoConnectWeBill: Bool
+    @State var WarningMessage : String
     var body: some View {
         HStack(spacing: 10) {
             // Pay with cash button
@@ -60,7 +61,11 @@ struct PaymentButtonView: View {
             
             // Pay with KHQR button
             Button(action: {
-                
+                guard !Location.isEmpty else {
+                       WarningMessage = "Please select a delivery address."
+                       return
+                   }
+                   
                 selectedPaymentMethod = "KHR"
                 payment = "KHR"
                 let PaymentType = "1"
@@ -117,9 +122,6 @@ struct PaymentButtonView: View {
                         isShowingQRModal = true
                     }
                 }
-                
-               
-              
             }) {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack {
@@ -147,7 +149,11 @@ struct PaymentButtonView: View {
             }
             .buttonStyle(PlainButtonStyle())
             .sheet(isPresented: $isShowingQRModal) {
-                PaywithKHQRModalView(khqrData: WeBillVM.qrCollectionData?.khqrdata ?? "")
+                PaywithKHQRModalView(
+                    SellerName: SellerName,
+                    totalAmount: amount,
+                    khqrData: WeBillVM.qrCollectionData?.khqrdata ?? ""
+                   )
                     .presentationDetents([.fraction(0.70)])
                     .presentationDragIndicator(.visible)
             }

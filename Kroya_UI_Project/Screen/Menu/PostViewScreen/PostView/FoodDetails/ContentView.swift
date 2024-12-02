@@ -365,13 +365,16 @@ struct ContentView: View {
                                         .font(.system(size: .screenWidth * 0.05))
                                         .foregroundColor(star <= FeedbackVM.selectedRating ? .yellow : .gray)
                                         .onTapGesture {
+                                      
                                             if !FeedbackVM.isFeedbackLocked {
                                                 FeedbackVM.selectedRating = star
                                                 cancelAutoSubmitTimer()
                                                 startAutoSubmitTimer()
+                                               
                                             } else {
                                                 print("Rating already submitted; cannot modify.")
                                             }
+                                           
                                         }
                                 }
                             }
@@ -582,7 +585,7 @@ struct ContentView: View {
                     foodId: FoodDetails.foodSellDetail?.id ?? FoodDetails.foodRecipeDetail?.id ?? 0
                 ) { success, message in
                     print(message) // Handle success or error message
-                    
+                    onFeedbackChange()
                     if success {
                         // Fetch the latest feedback
                         FeedbackVM.getFeedback(

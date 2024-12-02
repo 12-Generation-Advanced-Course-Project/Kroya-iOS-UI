@@ -125,7 +125,7 @@ struct PopupReview: View {
                                 .opacity(0.8)
                         }
                         
-                        // Post Button
+                         //Post Button
                         Button(action: {
                             FeedbackVM.commentText = description // Set the comment text
                             FeedbackVM.submitFeedback(itemType: ItemType, foodId: FoodId) { success, message in
@@ -158,11 +158,69 @@ struct PopupReview: View {
                                 .cornerRadius(10)
                                 .foregroundColor(.white)
                         }
+//                        Button(action: {
+//                            // Check if feedback is already submitted (rating exists, but comment is empty)
+//                            if let existingFeedback = FeedbackVM.feedback,
+//                               existingFeedback.ratingValue != nil && existingFeedback.commentText?.isEmpty ?? true {
+//                                // Feedback exists with a rating but no comment
+//                                print("Rating already provided, you can now add a comment.")
+//                            } else if FeedbackVM.isFeedbackLocked {
+//                                // If the feedback is locked (both rating and comment are submitted), prevent further modifications
+//                                print("Feedback is already submitted, cannot modify.")
+//                                showWarning = true  // Show a warning that feedback can't be modified
+//                                return
+//                            }
+//                            
+//                            // Check if the user has selected a rating or written a review
+//                            guard FeedbackVM.selectedRating > 0 || !description.isEmpty else {
+//                                // Show a warning if neither a rating nor a review is provided
+//                                showWarning = true
+//                                return
+//                            }
+//                            
+//                            // Clear any previous warning if rating or review is provided
+//                            showWarning = false
+//                            
+//                            // Proceed with setting the comment text and submitting feedback
+//                            FeedbackVM.commentText = description // Set the comment text
+//                            
+//                            // Submit feedback based on the current state of rating and comment
+//                            FeedbackVM.submitFeedback(itemType: ItemType, foodId: FoodId) { success, message in
+//                                if success {
+//                                    print("Feedback submitted successfully!")
+//                                    isReviewPopupOpen = false
+//                                    // Fetch the updated food details after feedback submission
+//                                    onFeedbackSubmit()
+//                                    FoodDetailsVM.fetchFoodDetails(id: FoodId, itemType: ItemType)
+//                                } else {
+//                                    print("Error submitting feedback: \(message)")
+//                                }
+//                            }
+//                            
+//                            // Fetch the updated feedback to pre-fill the comment text if needed
+//                            FeedbackVM.getFeedback(itemType: ItemType, foodId: FoodId) { success, message in
+//                                if success {
+//                                    print("Feedback loaded successfully!")
+//                                    description = FeedbackVM.commentText // Pre-fill the comment text if it exists
+//                                } else {
+//                                    print("Error loading feedback: \(message)")
+//                                }
+//                            }
+//                        }) {
+//                            Text("Post")
+//                                .frame(width: 100, height: 45)
+//                                .font(.customfont(.semibold, fontSize: 16))
+//                                .background(Color.yellow)
+//                                .cornerRadius(10)
+//                                .foregroundColor(.white)
+//                        }
+
+
                     }
                 }
               
             }
-            .frame(maxHeight: .screenHeight * 0.6)
+            .frame(maxHeight: .screenHeight * 0.58)
             .simultaneousGesture(
                 TapGesture().onEnded {
                     hideKeyboard()

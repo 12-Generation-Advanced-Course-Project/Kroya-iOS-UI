@@ -24,12 +24,13 @@ struct OrderModel: Identifiable, Decodable {
     let totalPrice: Double?
     let purchaseStatusType: String?
     let purchaseDate: String?
+    let currencyType: String?
 
     enum CodingKeys: String, CodingKey {
         case foodSellId = "foodSellId"
         case name, price, orderCount, photo, dateCooking, isOrderable, itemType, foodCardType
         case purchaseID = "purchaseId"
-        case quantity, totalPrice, purchaseStatusType, purchaseDate
+        case quantity, totalPrice, purchaseStatusType, purchaseDate, currencyType
     }
 }
 

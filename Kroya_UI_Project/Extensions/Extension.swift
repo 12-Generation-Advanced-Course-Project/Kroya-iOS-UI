@@ -301,7 +301,8 @@ extension OrderModel {
             quantity: nil,
             totalPrice: nil,
             purchaseStatusType: nil,
-            purchaseDate: nil
+            purchaseDate: nil,
+            currencyType: nil
         )
     }
 }

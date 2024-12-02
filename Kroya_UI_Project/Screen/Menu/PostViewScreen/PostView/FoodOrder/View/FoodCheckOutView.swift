@@ -18,6 +18,7 @@ struct FoodCheckOutView: View {
     var ReciptentName: String
     var SellerId: Int
     var Sellername:String
+    var AmountItem: Int
     @State private var remark: String? = ""
     @State private var totalPrice: Int = 0
     @State private var Quantity: Int = 1
@@ -37,7 +38,7 @@ struct FoodCheckOutView: View {
     var Location: String {
         selectedAddress?.addressDetail ?? ""
     }
-    
+    @State private var WarningMessage: String?
     var body: some View {
         NavigationStack {
             ZStack {
@@ -52,7 +53,8 @@ struct FoodCheckOutView: View {
                                 imageName: $imageName,
                                 currency: Currency,
                                 totalPrice: $totalPrice,
-                                quantity: $Quantity
+                                quantity: $Quantity,
+                                amountItem: AmountItem
                             )
                         }
                         .listRowInsets(EdgeInsets())
@@ -83,7 +85,8 @@ struct FoodCheckOutView: View {
                                 ClientId: WeBillVM.WebillAccount?.clientId ?? "",
                                 SecretId: WeBillVM.WebillAccount?.clientSecret ?? "",
                                 FoodId: FoodId,
-                                isNoConnectWeBill: $isNoConnectWeBill
+                                isNoConnectWeBill: $isNoConnectWeBill,
+                                WarningMessage: WarningMessage ?? "Please select a delivery address."
                             ).environment(\.modelContext, context)
                         } header: {
                             Text(LocalizedStringKey("Payment"))
@@ -104,7 +107,13 @@ struct FoodCheckOutView: View {
                             .foregroundColor(.red)
                             .padding(.vertical, 10)
                     }
-                    
+                    if let warningMessage = WarningMessage {
+                        Text(warningMessage)
+                            .font(.customfont(.medium, fontSize: 14))
+                            .foregroundColor(.red)
+                            .padding(.vertical, 10)
+                    }
+                   
                     // Place Order Button
                     Button("Place an order") {
                         // Validation Logic
@@ -160,6 +169,10 @@ struct FoodCheckOutView: View {
                 }
                 if isNoConnectWeBill {
                     isNoConnectWebill(onYes: {
+                        guard !Location.isEmpty else {
+                            warningMessage = "Please select a delivery address."
+                            return
+                        }
                         withAnimation{
                             isNoConnectWeBill = false
                         }

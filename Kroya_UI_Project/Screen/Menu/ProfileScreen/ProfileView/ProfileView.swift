@@ -290,7 +290,7 @@ struct ProfileView: View {
         }
         .onAppear {
             Profile.fetchUserProfile()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
                 WeBillVM.fetchWeBillAccount(SellerId: Profile.userProfile?.id ?? 0)
             })
            

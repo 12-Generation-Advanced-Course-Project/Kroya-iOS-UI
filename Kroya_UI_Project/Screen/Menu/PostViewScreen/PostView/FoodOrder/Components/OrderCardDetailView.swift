@@ -23,7 +23,8 @@ struct OrderCardDetailView: View {
     var currency: String
     @Binding var totalPrice: Int
     @Binding var quantity: Int
-
+    var amountItem: Int
+    @State private var showLimitAlert = false
     var body: some View {
         VStack {
             // Header Section
@@ -90,13 +91,18 @@ struct OrderCardDetailView: View {
                         .padding(.horizontal, 10)
 
                     Button(action: {
-                        viewModel.incrementQuantity()
-                        updateBindings()
+                        // Check if the quantity is less than amountItem before incrementing
+                        if viewModel.quantity <= amountItem {
+                            viewModel.incrementQuantity()
+                            updateBindings()
+                        } else {
+                            showLimitAlert = true
+                        }
                     }) {
                         Image(systemName: "plus.circle.fill")
                             .resizable()
                             .frame(width: 20, height: 20)
-                            .foregroundColor(.yellow)
+                            .foregroundColor(viewModel.quantity <= amountItem ? .yellow : .yellow.opacity(0.3))
                     }
                     .buttonStyle(PlainButtonStyle())
                 }

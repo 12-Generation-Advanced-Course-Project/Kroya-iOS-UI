@@ -31,6 +31,8 @@ final class ImageRendererQR {
 struct PaywithKHQRModalView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var downloadSuccess = false
+    var SellerName:String
+    var totalAmount:Int
     var khqrData:String
     var body: some View {
         VStack(alignment: .leading) {
@@ -47,8 +49,17 @@ struct PaywithKHQRModalView: View {
                 Text("Download this QR Code for payment")
                     .font(.customfont(.medium, fontSize: 14))
                     .foregroundStyle(.black.opacity(0.8))
-                Spacer().frame(height: 15)
-                
+                Spacer().frame(height: 20)
+                VStack(alignment: .leading,spacing: 10){
+                    Text(SellerName)
+                        .font(.customfont(.bold, fontSize: 15))
+                        .foregroundStyle(.black.opacity(0.8))
+                    Text("៛\(totalAmount)")
+                        .font(.customfont(.bold, fontSize: 15))
+                        .foregroundStyle(.black.opacity(0.8))
+                }
+                .padding(.horizontal,80)
+                .frame(maxWidth: .infinity,alignment: .leading)
                 // Display QR Code
                 QRCodeView(text: khqrData, size: 200)
                 

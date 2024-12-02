@@ -10,7 +10,7 @@ struct ResultSearchView: View {
     var guestFoodName: String
     @Environment(\.modelContext) var modelContext
     @StateObject private var listFoodRecipe = FoodListVM()
-    //@StateObject private var searchFood = SearchVM()
+   // @StateObject private var searchFood = SearchVM()
     @ObservedObject var recentSearchesData: RecentSearchesData
     var body: some View {
         NavigationView {
@@ -76,10 +76,10 @@ struct ResultSearchView: View {
         }
         .onAppear {
             // Only save non-empty search terms
-//            if !menuName.isEmpty {
-//                recentSearchesData.saveSearch(menuName, in: modelContext)
-//            }
-           
+            if !menuName.isEmpty {
+                recentSearchesData.saveSearch(menuName, in: modelContext)
+            }
+            listFoodRecipe.searchFoodByName(foodName: menuName)
         }
         .navigationBarBackButtonHidden(true)
     }

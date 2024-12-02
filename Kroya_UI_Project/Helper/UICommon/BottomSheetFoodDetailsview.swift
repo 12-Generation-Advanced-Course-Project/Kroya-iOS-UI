@@ -180,7 +180,8 @@ struct BottomSheetView<Content: View>: View {
                                     PhoneNumber: sellDetails.foodRecipeDTO.user.phoneNumber ?? "",
                                     ReciptentName: sellDetails.foodRecipeDTO.user.fullName,
                                     SellerId: sellDetails.foodRecipeDTO.user.id,
-                                    Sellername: sellDetails.foodRecipeDTO.user.fullName
+                                    Sellername: sellDetails.foodRecipeDTO.user.fullName,
+                                    AmountItem: sellDetails.amount
                                 ),
                                 isActive: $navigateToCheckout
                             ) {
@@ -190,11 +191,14 @@ struct BottomSheetView<Content: View>: View {
                     }
                 }
                 
-                if showButtonInvoic == "true" {
+                else if showButtonInvoic == "true" {
                     Button(action: {
                         if invoiceAccept == "ACCEPTED" {
                             print("Invoice button clicked")
-                            navigateToReceipt = true
+                            // Explicitly delay the state change to ensure it propagates correctly
+                            DispatchQueue.main.async {
+                                navigateToReceipt = true
+                            }
                         }
                     }) {
                         Text("Invoice")
@@ -203,23 +207,24 @@ struct BottomSheetView<Content: View>: View {
                             .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.height * 0.04)
                             .background(invoiceAccept == "ACCEPTED" ? Color.green : Color.red)
                             .cornerRadius(UIScreen.main.bounds.width * 0.022)
+                           
+                      
                     }
 
-                    // Use NavigationLink outside the Button
-                    NavigationLink(
-                        destination: ReceiptView(
-                            isPresented: $isPresented,
-                            isOrderReceived: false,
-                            PurchaseId: PurchaseId
-                        ),
-                        isActive: $navigateToReceipt
-                    ) {
-                        EmptyView() // Keeps it invisible
-                    }
+                 
                 }
 
+
             }
-        }.onAppear{
+        }
+        .navigationDestination(isPresented: $navigateToReceipt, destination: {
+            ReceiptView(
+                isPresented: $isPresented,
+                isOrderReceived: false,
+                PurchaseId: PurchaseId
+            )
+        })
+        .onAppear{
             Profile.fetchUserProfile()
         }
         .padding(.horizontal, 10)

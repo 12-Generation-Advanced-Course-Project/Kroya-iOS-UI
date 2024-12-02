@@ -4,7 +4,7 @@ struct FavoriteViewCart: View {
     @Environment(\.dismiss) var dismiss
     @State private var searchText = ""
     @StateObject private var favorite = FavoriteVM()
-   
+    @State private var refreshID = UUID()
     var body: some View {
         VStack(spacing: 0) {
             // Segment Header
@@ -47,11 +47,20 @@ struct FavoriteViewCart: View {
             
             // TabView Content
             TabView(selection: $selectedSegment) {
-                FavoriteFoodOnSaleTabView(searchText: $searchText) // Pass searchText as Binding
-                    .tag(0)
+                FavoriteFoodOnSaleTabView(searchText: $searchText, onFavoritechange: {
+                    favorite.getAllFavoriteFood()
+                    refreshID = UUID()
+                })
+                .id(refreshID)
+                .tag(0)
                 
-                FavoriteRecipesTabView(searchText: $searchText) // Pass searchText as Binding
-                    .tag(1)
+                FavoriteRecipesTabView(searchText: $searchText, onFavoritechange: {
+                    favorite.getAllFavoriteFood()
+                    refreshID = UUID()
+                   
+                })
+                .id(refreshID)
+                .tag(1)
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         }
