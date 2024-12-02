@@ -146,10 +146,24 @@ struct ReceiptCard: View {
                                 VStack(alignment: .leading) {
                                     Text(ReceiptVM.Purchases?.foodSellCardResponse.sellerInformation?.fullName ?? "")
                                         .font(.system(size: 16, weight: .medium))
-                                        .padding(.trailing,35)
-                                    Text("\(ReceiptVM.Purchases?.foodSellCardResponse.sellerInformation?.phoneNumber ?? "")")
-                                        .font(.system(size: 16, weight: .medium))
+                                        .padding(.trailing, 35)
+
+                                    if let phoneNumber = ReceiptVM.Purchases?.foodSellCardResponse.sellerInformation?.phoneNumber, !phoneNumber.isEmpty {
+                                        Button(action: {
+                                            makePhoneCall(to: phoneNumber)
+                                        }) {
+                                            Text(phoneNumber)
+                                                .font(.system(size: 16, weight: .medium))
+                                                .foregroundColor(.yellow)
+                                                .underline() // Add underline to indicate it's a link
+                                        }
+                                    } else {
+                                        Text("No phone number available")
+                                            .font(.system(size: 16, weight: .medium))
+                                            .foregroundColor(.gray)
+                                    }
                                 }
+
                                 Spacer()
                                 Image(systemName: "phone.fill")
                                     .resizable()
@@ -272,6 +286,21 @@ struct ReceiptCard: View {
                 complete(false)
             }
         }
+    }
+
+    private func makePhoneCall(to phoneNumber: String) {
+        let sanitizedNumber = sanitizePhoneNumber(phoneNumber)
+        let formattedNumber = "tel://\(sanitizedNumber)"
+        if let url = URL(string: formattedNumber), UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+        } else {
+            print("Error: Unable to make a phone call.")
+        }
+    }
+
+    private func sanitizePhoneNumber(_ phoneNumber: String) -> String {
+        // Remove all characters except digits
+        return phoneNumber.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
     }
 
 
