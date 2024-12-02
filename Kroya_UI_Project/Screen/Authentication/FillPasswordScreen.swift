@@ -86,10 +86,10 @@ struct FillPasswordScreen: View {
                         }
                         
                         // Forgot Password
-                        //                        NavigationLink(destination: VerificationCodeStatic(lang: $lang)){
                         Button(action: {
-                            isForgetPassword = true
-                            print("Forget Password clicked") // Debugging statement
+                            authVM.sendOTPForReset(email: email){ Success in
+                                
+                            }
                         }) {
                             Text(LocalizedStringKey("Forget Password?"))
                                 .foregroundStyle(.black.opacity(0.8))
@@ -99,11 +99,8 @@ struct FillPasswordScreen: View {
                                 .padding(.top, 5)
                         }
                         .frame(minHeight: 50, alignment: .top)
-                        
-                        NavigationLink(destination: VerificationCodeStatic(lang: $lang), isActive: $isForgetPassword) {
-                            EmptyView()
-                        }
-                        .hidden()
+
+
                     }
                     
                 }
@@ -157,6 +154,11 @@ struct FillPasswordScreen: View {
                     .environmentObject(authVM),
                 isActive: $authVM.isLoggedIn
             ) {
+                EmptyView()
+            }
+            .hidden()
+            
+            NavigationLink(destination: VerificationCodeStatic(emailUser: email, authVM: authVM, lang: $lang), isActive: $authVM.isOTPSendForreset) {
                 EmptyView()
             }
             .hidden()

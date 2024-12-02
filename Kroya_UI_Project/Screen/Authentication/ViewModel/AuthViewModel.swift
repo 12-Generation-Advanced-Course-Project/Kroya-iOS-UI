@@ -22,6 +22,11 @@ class AuthViewModel: ObservableObject {
     @Published var countdownTimer: Timer?
     @Published var islogout: Bool = false
     @Published var isUserSave: Bool = false
+    @Published var isResetpassword : Bool = false
+    @Published var isOTPVerifiedForReset : Bool = false
+    @Published var isOTPSendForreset : Bool = false
+    
+    
     
 //    @ObservedObject var userStore: UserStore
 //    init(userStore: UserStore) {
@@ -92,7 +97,7 @@ class AuthViewModel: ObservableObject {
         self.isLoading = true
         print("Sending OTP to: \(email)")
         
-        AuthService.shared.sendOTP(email) { [weak self] result in
+        AuthService.shared.sendOTPForSet(email) { [weak self] result in
             DispatchQueue.main.async {
                 self?.isLoading = false
                 switch result {
@@ -102,6 +107,29 @@ class AuthViewModel: ObservableObject {
                     self?.showError = false
                     self?.isRegistered = false
                     self?.isOTPVerified = false
+                    
+                    completion(true)
+                case .failure(let error):
+                    self?.showError = true
+                    self?.errorMessage = error.localizedDescription
+                    print("Error sending OTP: \(error.localizedDescription)")
+                    completion(false)
+                }
+            }
+        }
+    }
+    
+    func sendOTPForReset(email: String, completion: @escaping (Bool) -> Void) {
+        self.isLoading = true
+        print("Sending OTP to: \(email)")
+        AuthService.shared.sendOTPForSet(email) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                switch result {
+                case .success(_):
+                    self?.successMessage = "OTP sent successfully. Please check your email."
+                    self?.isOTPSendForreset = true
+                    self?.showError = false
                     completion(true)
                 case .failure(let error):
                     self?.showError = true
@@ -114,12 +142,10 @@ class AuthViewModel: ObservableObject {
     }
     
     
-    
     // MARK: VerifyOTPcode
     func verifyOTPcode(_ email: String, _ code: String,completion: @escaping() -> Void) {
         self.isLoading = true
         print("Verifying OTP code: \(code)")
-        
         AuthService.shared.VerifyOTPCode(email, code) { [weak self] result in
             DispatchQueue.main.async {
                 self?.isLoading = false
@@ -131,12 +157,46 @@ class AuthViewModel: ObservableObject {
                         self?.showError = false
                         self?.isOTPVerified = true
                         self?.errorMessage = ""
+                      
+                        
                         self?.userStore.setUser(email: email)
                         self?.isRegistered = false
                     } else {
                         self?.showError = true
                         self?.errorMessage = response.message
                         self?.isOTPVerified = false
+                     
+                        
+                        print("OTP verification failed: \(response.message)")
+                    }
+                case .failure(let error):
+                    self?.showError = true
+                    self?.errorMessage = error.localizedDescription
+                    print("Error verifying OTP: \(error)")
+                }
+            }
+        }
+    }
+    
+    //MARK: For Reset Password
+    func verifyOTPcodeForResetPassword(_ email: String, _ code: String) {
+        self.isLoading = true
+        print("Verifying OTP code: \(code)")
+        AuthService.shared.VerifyOTPCodeForReset(email, code) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                switch result {
+                case .success(let response):
+                    if response.statusCode == "200" {
+                        print("OTP verified successfully.")
+                        self?.successMessage = "OTP verified successfully."
+                        self?.showError = false
+                        self?.isOTPVerifiedForReset = true
+                  
+                    } else {
+                        self?.showError = true
+                        self?.errorMessage = response.message
+                        self?.isOTPVerifiedForReset = false
                         
                         print("OTP verification failed: \(response.message)")
                     }
@@ -195,7 +255,7 @@ class AuthViewModel: ObservableObject {
                         completion() // Trigger navigation check
                     } else {
                         print("Error: \(response.message)")
-                        self?.isOTPVerified = false
+//                        self?.isOTPVerified = false
                         self?.showError = true
                         self?.successMessage = response.message
                         completion()
@@ -372,9 +432,38 @@ class AuthViewModel: ObservableObject {
         isRegistered = false
     }
 
+    // MARK: - Reset Password
+    func resetPassword(email: String, newPassword: String, completion: @escaping (Bool, String) -> Void) {
+        isLoading = true
+        print("Resetting password for email: \(email)")
+        
+        AuthService.shared.resetPassword(email: email, newPassword: newPassword) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                switch result {
+                case .success(let response):
+                    if response.statusCode == "200" {
+                        self?.successMessage = response.message
+                        self?.showError = false
+                        self?.isResetpassword = true
+                        print("Password reset successfully: \(response.message)")
+                        completion(true, response.message) // Success case
+                    } else {
+                        self?.showError = true
+                        self?.errorMessage = response.message
+                        print("Failed to reset password: \(response.message)")
+                        completion(false, response.message) // Failure case
+                    }
+                case .failure(let error):
+                    self?.showError = true
+                    self?.isResetpassword = false
+                    self?.errorMessage = error.localizedDescription
+                    print("Error resetting password: \(error.localizedDescription)")
+                    completion(false, error.localizedDescription) // Failure case
+                }
+            }
+        }
+    }
 
-    
-    
-    
     
 }

@@ -12,6 +12,7 @@ struct ResultSearchView: View {
     @StateObject private var listFoodRecipe = FoodListVM()
    // @StateObject private var searchFood = SearchVM()
     @ObservedObject var recentSearchesData: RecentSearchesData
+    @State private var hasAppeared = false
     var body: some View {
         NavigationView {
             VStack {
@@ -75,11 +76,13 @@ struct ResultSearchView: View {
             }
         }
         .onAppear {
-            // Only save non-empty search terms
-            if !menuName.isEmpty {
-                recentSearchesData.saveSearch(menuName, in: modelContext)
+            if !hasAppeared { // Ensure this block runs only once
+                hasAppeared = true
+                if !menuName.isEmpty {
+                    recentSearchesData.saveSearch(menuName, in: modelContext)
+                }
+//                listFoodRecipe.searchFoodByName(foodName: menuName)
             }
-            listFoodRecipe.searchFoodByName(foodName: menuName)
         }
         .navigationBarBackButtonHidden(true)
     }

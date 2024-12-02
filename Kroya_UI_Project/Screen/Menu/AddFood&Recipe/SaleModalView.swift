@@ -120,7 +120,7 @@ struct SaleModalView: View {
                                                         .datePickerStyle(.compact)
                                                         .colorMultiply(.clear)
                                                         .onChange(of: draftModelData.cookDate) { newDate in
-                                                            formattedDate = newDate.formatted(.dateTime.day().month().year().hour())
+                                                            formattedDate = newDate.formatted(.dateTime.day().month().year().hour().minute())
                                                             validateDetailsFields()
                                                         }
                                                         

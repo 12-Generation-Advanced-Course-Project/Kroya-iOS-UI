@@ -218,7 +218,7 @@ struct FoodOnSaleViewCellForTest: View {
                         .cornerRadius(15, corners: [.topLeft, .topRight])
                         .clipped()
                 } else {
-                    Image(systemName: "photo")
+                    Image(.placholder)
                         .resizable()
                         .scaledToFill()
                         .frame(height: 160)

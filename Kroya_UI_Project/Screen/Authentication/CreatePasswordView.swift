@@ -10,7 +10,6 @@ struct CreatePasswordView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var userStore: UserStore
     @ObservedObject var authVM: AuthViewModel
-//    @StateObject var addressViewModel = AddressViewModel()
     @State private var isNavigating = false
 
     @Binding var lang: String
@@ -78,7 +77,7 @@ struct CreatePasswordView: View {
                 
                 // CREATE PASSWORD Button
                 Button(action: {
-                    if validatePassword() {
+                    if validatePasswordFields() {
                         guard let email = userStore.user?.email else {
                             print("Error: Email is missing")
                             return
@@ -106,7 +105,7 @@ struct CreatePasswordView: View {
             .padding(.horizontal, 20)
             
             // Popup Message
-            if showPopupMessage{
+            if showPopupMessage {
                 PopupMessage()
                     .transition(.scale)
                     .animation(.easeInOut, value: showPopupMessage)
@@ -130,21 +129,24 @@ struct CreatePasswordView: View {
     }
     
     // Password validation logic
-    func validatePassword() -> Bool {
-        guard !password.isEmpty, !confirmPassword.isEmpty else {
+    private func validatePasswordFields() -> Bool {
+        if password.isEmpty || confirmPassword.isEmpty {
             errorMessage = "Please fill in both fields."
             return false
-        }
-        guard password == confirmPassword else {
+        } else if password != confirmPassword {
             errorMessage = "Passwords do not match."
             return false
-        }
-        guard password.count >= 8 else {
-            errorMessage = "Password should be at least 8 characters."
+        } else if !isValidPassword(password) {
+            errorMessage = "Password must be at least 8 characters and include a special character."
             return false
         }
-        
-        errorMessage = ""
+        errorMessage = "" // Clear the error if validation passes
         return true
+    }
+
+    // Regex-based Password Validation
+    private func isValidPassword(_ password: String) -> Bool {
+        let regex = #"^(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$"#
+        return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: password)
     }
 }

@@ -222,6 +222,34 @@ class FoodSellService {
         }
     }
     
+    func fetchAllFoodName(completion: @escaping (Result< listFoodNameResponse, Error>) -> Void) {
+            guard let accessToken = Auth.shared.getAccessToken() else {
+                let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Access token not found."])
+                completion(.failure(error))
+                return
+            }
+            let url = Constants.allFoodName
+            let headers: HTTPHeaders = [
+                "Authorization": "Bearer \(accessToken)"
+            ]
+            
+            AF.request(url, method: .get, headers: headers).validate()
+                .responseDecodable(of: listFoodNameResponse.self) { response in
+                   
+                    switch response.result{
+                    case .success(let apiResponse):
+                        if let statusCode = Int(apiResponse.statusCode), statusCode == 200 {
+                            print("Retrieved Food name successfully.")
+                            print("Food Name:\(String(describing: apiResponse.payload))")
+                            
+                            completion(.success(apiResponse))
+                        }
+                    case .failure(let error):
+                        print("Request failed with error: \(error)")
+                        completion(.failure(error))
+                    }
+                }
+        }
     
     
 }

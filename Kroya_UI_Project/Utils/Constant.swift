@@ -85,4 +85,5 @@ struct Constants {
 
     // Guest Search All Food By Name
     static let GuestSearchAllFoodByNameUrl = "\(baseURL)guest-user/foods/"
+    static let allFoodName = "https://kroya-api-production.up.railway.app/api/v1/guest-user/foods/food-name-all"
 }

@@ -23,7 +23,7 @@ struct RecipeViewCell: View {
                         .clipped()
                 } else {
                     // Placeholder image when no URL is available
-                    Image(systemName: "photo")
+                    Image("placholder")
                         .resizable()
                         .scaledToFill()
                         .frame(height: 160)

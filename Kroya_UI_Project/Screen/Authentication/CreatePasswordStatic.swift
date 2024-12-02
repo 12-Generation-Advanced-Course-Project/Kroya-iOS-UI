@@ -7,12 +7,12 @@ struct CreatePasswordStatic: View {
     @State private var isPasswordVisible2 = false
     @State private var errorMessage = ""
     @State private var showPopupMessage = false
-//    @StateObject var userStore = UserStore()
-    @EnvironmentObject var userStore: UserStore // Use EnvironmentObject
+    @EnvironmentObject var userStore: UserStore
     @Environment(\.dismiss) var dismiss
-    @State private var isNavigating = false
+    @State private var isgoMainscreen = false
     @Binding var lang: String
-
+    @ObservedObject var authVM: AuthViewModel
+    var Email: String
     var body: some View {
         ZStack {
             VStack(alignment: .leading, spacing: 20) {
@@ -31,7 +31,7 @@ struct CreatePasswordStatic: View {
                 }
                 
                 // Title
-                Text("Create new password")
+                Text("Reset password")
                     .font(.title3)
                     .fontWeight(.semibold)
                 
@@ -44,8 +44,11 @@ struct CreatePasswordStatic: View {
                             placeholder: "Input your password",
                             text: $password,
                             isSecure: !isPasswordVisible1,
-                            frameWidth: .infinity
+                            frameWidth: .infinity // Makes the width adapt to available space
                         )
+                        .onChange(of: password) { _ in
+                            validatePasswordFields()
+                        }
                     }
                     
                     VStack(alignment: .leading, spacing: 5) {
@@ -57,33 +60,38 @@ struct CreatePasswordStatic: View {
                             isSecure: !isPasswordVisible2,
                             frameWidth: .infinity
                         )
+                        .onChange(of: confirmPassword) { _ in
+                            validatePasswordFields()
+                        }
                     }
                     
+                    // Error message display
                     if !errorMessage.isEmpty {
                         Text(errorMessage)
                             .foregroundColor(.red)
                             .font(.caption)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     } else {
-                        Text("")
-                            .foregroundColor(.red)
+                        Text("") // Placeholder to maintain layout consistency
                             .font(.caption)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
                 .padding(.horizontal, 6)
+                
+                // Reset Password Button
                 Button(action: {
-                    if validatePassword() {
-    
-                        showPopupMessage = true
-                        
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            showPopupMessage = false
-                            isNavigating = true
+                    if validatePasswordFields() {
+                        authVM.register(Email, password) {
+                            showPopupMessage = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                showPopupMessage = false
+                                isgoMainscreen = true
+                            }
                         }
                     }
                 }) {
-                    Text("CREATE PASSWORD")
+                    Text("CREATE NEW PASSWORD")
                         .font(.customfont(.semibold, fontSize: 16))
                         .padding()
                         .frame(maxWidth: .infinity)
@@ -95,51 +103,40 @@ struct CreatePasswordStatic: View {
                 Spacer()
             }
             .padding(.horizontal, 20)
-          
-            if showPopupMessage {
-                PopupMessage()
-                    .transition(.scale)
-            }
             
             NavigationLink(
                 destination: MainScreen(lang: $lang)
-                    .navigationBarBackButtonHidden(true),
-                isActive: $isNavigating
+                    .environmentObject(userStore)
+                    .environmentObject(authVM),
+                isActive: $isgoMainscreen
             ) {
                 EmptyView()
             }
             .hidden()
         }
         .navigationBarHidden(true)
-            
-//            NavigationLink(destination:  MainScreen(userStore: userStore, lang: $lang).navigationBarBackButtonHidden(true), isActive: $isNavigating) {
-//                EmptyView()
-//            }
-//            .hidden()
-//
-//        }
-//        .navigationBarHidden(true)
-//       // .navigationBarBackButtonHidden(true)
-      
     }
     
     // Password validation logic
-    func validatePassword() -> Bool {
-        guard !password.isEmpty, !confirmPassword.isEmpty else {
+    // Validation Function
+    private func validatePasswordFields() -> Bool {
+        if password.isEmpty || confirmPassword.isEmpty {
             errorMessage = "Please fill in both fields."
             return false
-        }
-        guard password == confirmPassword else {
+        } else if password != confirmPassword {
             errorMessage = "Passwords do not match."
             return false
-        }
-        guard password.count >= 8 else {
-            errorMessage = "Password should be at least 8 characters."
+        } else if !isValidPassword(password) {
+            errorMessage = "Password must be at least 8 characters and include a special character."
             return false
         }
-        
-        errorMessage = ""
+        errorMessage = "" // Clear the error if validation passes
         return true
     }
-}
 
+    // Regex-based Password Validation
+    private func isValidPassword(_ password: String) -> Bool {
+        let regex = #"^(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$"#
+        return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: password)
+    }
+}
