@@ -398,7 +398,8 @@ struct FoodonRecipe: View {
             
         }
         
-        .searchable(text: $recipeViewModel.searchText, prompt: LocalizedStringKey("Search Item"))
+        .searchable(text:Auth.shared.hasAccessToken() ? $recipeViewModel.searchText : $guestFoodRecipeVM.searchText, prompt: LocalizedStringKey("Search Item"))
+                .navigationBarBackButtonHidden(true)
         .navigationBarBackButtonHidden(true)
     }
     
