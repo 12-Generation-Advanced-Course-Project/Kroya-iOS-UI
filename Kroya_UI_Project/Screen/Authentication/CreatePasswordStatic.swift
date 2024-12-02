@@ -117,8 +117,7 @@ struct CreatePasswordStatic: View {
         .navigationBarHidden(true)
     }
     
-    // Password validation logic
-    // Validation Function
+  
     private func validatePasswordFields() -> Bool {
         if password.isEmpty || confirmPassword.isEmpty {
             errorMessage = "Please fill in both fields."

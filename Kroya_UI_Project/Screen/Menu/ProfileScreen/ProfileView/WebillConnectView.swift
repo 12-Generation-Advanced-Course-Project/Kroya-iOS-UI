@@ -260,7 +260,6 @@ struct WebillConnectView: View {
                         }
                     }
                 } else {
-                    clearInputs()
                     webillConnect.isConnect = false
                     showTokenError()
                 }
@@ -272,7 +271,6 @@ struct WebillConnectView: View {
     // MARK: - Disconnect Logic
     func disconnectAccount() {
         webillConnect.DisconnectWeBillaccount(context: context)
-        webillConnect.clearWeBillAccount(context: context)
         isConnect = "Connect with"
         successMessage = "WeBill365 account disconnected successfully."
         showifuserAlreadyDisconnect()

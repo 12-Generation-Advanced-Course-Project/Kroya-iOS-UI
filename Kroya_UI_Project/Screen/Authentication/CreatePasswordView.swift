@@ -39,26 +39,32 @@ struct CreatePasswordView: View {
                 // New Password and Confirm Password Fields
                 VStack(spacing: 15) {
                     VStack(alignment: .leading, spacing: 5) {
-                        Text("New password ") + Text("*").foregroundStyle(.red)
-                        PasswordField(
-                            iconName: "lock",
-                            placeholder: "Input your password",
-                            text: $password,
-                            isSecure: !isPasswordVisible1,
-                            frameWidth: .infinity // Makes the width adapt to available space
-                        )
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text("Confirm new password ") + Text("*").foregroundStyle(.red)
-                        PasswordField(
-                            iconName: "lock",
-                            placeholder: "Confirm your password",
-                            text: $confirmPassword,
-                            isSecure: !isPasswordVisible2,
-                            frameWidth: .infinity
-                        )
-                    }
+                          Text("New password ") + Text("*").foregroundStyle(.red)
+                          PasswordField(
+                              iconName: "lock",
+                              placeholder: "Input your password",
+                              text: $password,
+                              isSecure: !isPasswordVisible1,
+                              frameWidth: .infinity
+                          )
+                          .onChange(of: password) { _ in
+                              validatePasswordFields()
+                          }
+                      }
+                      
+                      VStack(alignment: .leading, spacing: 5) {
+                          Text("Confirm new password ") + Text("*").foregroundStyle(.red)
+                          PasswordField(
+                              iconName: "lock",
+                              placeholder: "Confirm your password",
+                              text: $confirmPassword,
+                              isSecure: !isPasswordVisible2,
+                              frameWidth: .infinity
+                          )
+                          .onChange(of: confirmPassword) { _ in
+                              validatePasswordFields()
+                          }
+                      }
                     
                     // Error message display
                     if !errorMessage.isEmpty {
