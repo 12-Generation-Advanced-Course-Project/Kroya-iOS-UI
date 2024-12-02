@@ -75,7 +75,7 @@ struct FoodonOrderView: View {
             foodViewModel.getAllFoodSell()
             guestFoodSellVM.getAllGuestFoodSell()
         }
-        .searchable(text: $foodViewModel.searchText, prompt: LocalizedStringKey("Search Item"))
+        .searchable(text: Auth.shared.hasAccessToken() ? $foodViewModel.searchText : $guestFoodSellVM.searchText, prompt: LocalizedStringKey("Search Item"))
         .navigationBarBackButtonHidden(true)
     }
 }
