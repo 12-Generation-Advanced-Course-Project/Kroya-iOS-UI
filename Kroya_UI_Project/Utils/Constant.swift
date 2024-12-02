@@ -36,6 +36,7 @@ struct Constants {
     // Popular Dishes
     static let PopularDishes = "\(baseURL)foods/"
     static let FoodsUrl = "\(baseURL)foods/"
+    static let FoodsUrlForGuest = "\(baseURL)guest-user/foods/"
 
     // Feedback
     static let FeedBack = "\(baseURL)feedback"

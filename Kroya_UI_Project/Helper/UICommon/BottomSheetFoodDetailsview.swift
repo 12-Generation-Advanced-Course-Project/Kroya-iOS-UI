@@ -56,7 +56,17 @@ struct BottomSheetView<Content: View>: View {
         self.PurchaseId = PurchaseId
         
     }
-    
+    @State private var showOrderNotAllowedPopup = false
+    @State private var isDeadlinePassed = false
+
+    // Helper function to check if the cooking date deadline has passed
+    private func hasDeadlinePassed(_ dateString: String?) -> Bool {
+        guard let dateString = dateString, let date = parseDate(dateString) else {
+            return false
+        }
+        return date < Date()
+    }
+
     var body: some View {
         NavigationStack{
             GeometryReader { geometry in
@@ -151,8 +161,17 @@ struct BottomSheetView<Content: View>: View {
                         if let sellDetails = FoodDetails.foodSellDetail {
                             let imageName = sellDetails.foodRecipeDTO.photo.first?.photo ?? ""
                             
+                            
                             Button(action: {
-                                navigateToCheckout = true
+                                
+                                // Check if the deadline has passed
+                                if hasDeadlinePassed(sellDetails.dateCooking) {
+                                    // Show popup message if deadline has passed
+                                    showOrderNotAllowedPopup = true
+                                } else {
+                                    // Navigate to the checkout if deadline has not passed
+                                    navigateToCheckout = true
+                                }
                             }) {
                                 HStack {
                                     Text("Order")
@@ -207,14 +226,14 @@ struct BottomSheetView<Content: View>: View {
                             .frame(width: UIScreen.main.bounds.width * 0.25, height: UIScreen.main.bounds.height * 0.04)
                             .background(invoiceAccept == "ACCEPTED" ? Color.green : Color.red)
                             .cornerRadius(UIScreen.main.bounds.width * 0.022)
-                           
-                      
+                        
+                        
                     }
-
-                 
+                    
+                    
                 }
-
-
+                
+                
             }
         }
         .navigationDestination(isPresented: $navigateToReceipt, destination: {
@@ -227,6 +246,13 @@ struct BottomSheetView<Content: View>: View {
         .onAppear{
             Profile.fetchUserProfile()
         }
+        .alert(isPresented: $showOrderNotAllowedPopup) {
+               Alert(
+                   title: Text("Order Not Allowed"),
+                   message: Text("This Food is expired can not available for order."),
+                   dismissButton: .default(Text("OK"))
+               )
+           }
         .padding(.horizontal, 10)
         .padding(.top, 12)
         
@@ -283,3 +309,35 @@ private func determineTimeOfDay(from dateString: String) -> String {
     }
 }
 
+
+struct ToastView: View {
+    let message: String
+    var duration: Double = 2.0 // Duration in seconds
+    @Binding var isShowing: Bool
+
+    var body: some View {
+        if isShowing {
+            VStack {
+                Spacer()
+                Text(message)
+                    .font(.customfont(.semibold, fontSize: 14))
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.black.opacity(0.8))
+                    .cornerRadius(10)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 30)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                            withAnimation {
+                                isShowing = false
+                            }
+                        }
+                    }
+            }
+            .animation(.easeInOut, value: isShowing)
+        }
+    }
+}

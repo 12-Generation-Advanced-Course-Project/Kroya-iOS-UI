@@ -321,9 +321,9 @@ struct HomeView: View {
       
         PopularFoodsData.getAllPopular()
         favoriteVM.getAllFavoriteFood()
-//        guestCategoryVM.fetchAllGuestCategory()
-//        guestFoodSellVM.getAllGuestFoodSell()
-//        guestFoodRecipeVM.getAllGuestRecipeFood()
+        guestCategoryVM.fetchAllGuestCategory()
+        guestFoodSellVM.getAllGuestFoodSell()
+        guestFoodRecipeVM.getAllGuestRecipeFood()
         NotifiviewModel.fetchNotifications()
         
     }

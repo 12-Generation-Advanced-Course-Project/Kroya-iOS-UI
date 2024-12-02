@@ -96,7 +96,7 @@ struct PopularSellTab: View {
                 
             } else{
                 
-//                self.guestPopularFood.getAllGuestPopular()
+                self.guestPopularFood.getAllGuestPopular()
             }
         }
       

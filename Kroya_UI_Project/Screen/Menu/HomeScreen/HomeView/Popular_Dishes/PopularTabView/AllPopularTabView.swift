@@ -109,11 +109,11 @@ struct AllPopularTabView: View {
                 self.popularFoodVM.getAllPopular()
                 
             }
-//            else{
-//                if guestPopularFood.guestPopularFoodSell.isEmpty || guestPopularFood.guestPopularFoodRecipe.isEmpty {
-//                    self.guestPopularFood.getAllGuestPopular()
-//                }
-//            }
+            else{
+                if guestPopularFood.guestPopularFoodSell.isEmpty || guestPopularFood.guestPopularFoodRecipe.isEmpty {
+                    self.guestPopularFood.getAllGuestPopular()
+                }
+            }
         }
     }
     

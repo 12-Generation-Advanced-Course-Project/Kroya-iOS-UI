@@ -96,7 +96,7 @@ struct PopularRecipeTab: View {
             if Auth.shared.hasAccessToken(){
                 self.popularRecipe.getAllPopular()
             }else{
-//                self.guestFoodPopular.getAllGuestPopular()
+                self.guestFoodPopular.getAllGuestPopular()
             }
         }
     }

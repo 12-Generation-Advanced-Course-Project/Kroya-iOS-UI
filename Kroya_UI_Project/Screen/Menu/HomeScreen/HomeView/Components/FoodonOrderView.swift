@@ -40,9 +40,9 @@ struct FoodonOrderView: View {
                         }
                     } else {
                         if guestFoodSellVM.isLoading {
-//                            RedactedFoodListView()
+                            RedactedFoodListView()
                         } else {
-//                            GuestFoodListView(isChooseCuisine: isChooseCuisine, guestFoodSellVM: guestFoodSellVM)
+                            GuestFoodListView(isChooseCuisine: isChooseCuisine, guestFoodSellVM: guestFoodSellVM)
                         }
                     }
                 }
@@ -73,7 +73,7 @@ struct FoodonOrderView: View {
         .onAppear {
             foodViewModel.getAllCuisines()
             foodViewModel.getAllFoodSell()
-//            guestFoodSellVM.getAllGuestFoodSell()
+            guestFoodSellVM.getAllGuestFoodSell()
         }
         .searchable(text: $foodViewModel.searchText, prompt: LocalizedStringKey("Search Item"))
         .navigationBarBackButtonHidden(true)
