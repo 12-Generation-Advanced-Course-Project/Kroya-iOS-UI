@@ -7,9 +7,9 @@ struct FoodOnSaleViewCell: View {
     var itemType: String
     @State var isFavorite: Bool
     @StateObject private var favoriteVM = FavoriteVM()
- 
+    @State private var isFavoriteupdate: Bool = false
 
-    private let urlImagePrefix = "https://kroya-api-production.up.railway.app/api/v1/fileView/"
+    private let urlImagePrefix = "http://35.247.138.88:8080/api/v1/fileView/"
 
     var body: some View {
         VStack {
@@ -44,7 +44,7 @@ struct FoodOnSaleViewCell: View {
                             .font(.system(size: 12, weight: .medium))
                             .foregroundColor(.black)
 
-                        Text("(\(String(describing: foodSale.totalRaters ?? 0))+)")
+                        Text("(\(foodSale.totalRaters ?? 0)+)")
                             .font(.system(size: 12))
                             .foregroundColor(.gray)
                     }
@@ -55,15 +55,13 @@ struct FoodOnSaleViewCell: View {
 
                     Spacer()
 
-                    if Auth.shared.hasAccessToken(){
+                    if Auth.shared.hasAccessToken() {
                         // Favorite Button
-                        // Updated Favorite Button Logic
                         Button(action: {
-                            isFavorite.toggle()
-                            favoriteVM.toggleFavorite(foodId: foodSale.id, itemType: foodSale.itemType, isCurrentlyFavorite: !isFavorite)
+                            toggleFavoriteStatus()
                         }) {
                             Circle()
-                                .fill(isFavorite ? Color.red : Color.white.opacity(0.5))
+                                .fill(isFavoriteupdate ? Color.red : Color.white.opacity(0.5))
                                 .frame(width: 30, height: 30)
                                 .overlay(
                                     Image(systemName: "heart.fill")
@@ -71,13 +69,17 @@ struct FoodOnSaleViewCell: View {
                                         .font(.system(size: 16))
                                 )
                         }
+                        .shadow(color: isFavoriteupdate ? Color.red.opacity(0.5) : Color.gray.opacity(0.5), radius: 4, x: 0, y: 4)
+                        .onAppear {
+                            isFavoriteupdate = foodSale.isFavorite ?? false
+                        }
                     } else {
-                        // Favorite Button
+                        // Favorite Button for unauthenticated users
                         Button(action: {
                             isFavorite.toggle() // Toggle locally for UI responsiveness
                         }) {
                             Circle()
-                                .fill( Color.white.opacity(0.5))
+                                .fill(Color.white.opacity(0.5))
                                 .frame(width: 30, height: 30)
                                 .overlay(
                                     Image(systemName: "heart.fill")
@@ -86,14 +88,12 @@ struct FoodOnSaleViewCell: View {
                                 )
                         }
                     }
-
                 }
                 .padding(.top, 20)
                 .padding(.horizontal, 10)
             }
             .frame(height: 140)
             .onAppear {
-                // Fetch the favorite state on appear
                 favoriteVM.getAllFavoriteFood()
             }
 
@@ -111,11 +111,10 @@ struct FoodOnSaleViewCell: View {
                 }
 
                 HStack(spacing: 10) {
-                    // update cuurncy symbol
+                    // Price
                     Text("\(currencySymbol(for: foodSale.currencyType ?? "")) \(String(format: "%.2f", foodSale.price))")
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(.yellow)
-
 
                     HStack(spacing: 4) {
                         Image(.motorbike)
@@ -141,29 +140,61 @@ struct FoodOnSaleViewCell: View {
                 .stroke(Color(hex: "#E6E6E6"), lineWidth: 0.8)
         }
     }
+
     // MARK: - Helper Functions
-    private func currencySymbol(for currencyType: String) -> String {
-        switch currencyType {
-        case "DOLLAR":
-            return "$"
-        case "RIEL":
-            return "៛"
-        default:
-            return ""
+    private func toggleFavoriteStatus() {
+        guard let currentFavoriteStatus = foodSale.isFavorite else { return }
+        let newFavoriteStatus = !currentFavoriteStatus
+        isFavoriteupdate = newFavoriteStatus
+
+        favoriteVM.toggleFavorite(foodId: foodId, itemType: itemType, isCurrentlyFavorite: currentFavoriteStatus)
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            if favoriteVM.showError {
+                isFavoriteupdate = currentFavoriteStatus
+            }
         }
     }
 
-    // Helper functions for date and time remain unchanged
-    private func parseDate(_ dateString: String) -> Date? {
-        let dateFormats = [
-            "yyyy-MM-dd'T'HH:mm:ss.SSS",  // With milliseconds
-            "yyyy-MM-dd'T'HH:mm:ss"       // Without milliseconds
-        ]
-        
+    private func currencySymbol(for currencyType: String) -> String {
+        switch currencyType {
+        case "DOLLAR": return "$"
+        case "RIEL": return "៛"
+        default: return ""
+        }
+    }
+
+    private func formatDate(_ dateString: String) -> String {
+        let dateFormats = ["yyyy-MM-dd'T'HH:mm:ss.SSS", "yyyy-MM-dd'T'HH:mm:ss"]
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
-        
+        for format in dateFormats {
+            formatter.dateFormat = format
+            if let date = formatter.date(from: dateString) {
+                formatter.dateFormat = "dd MMM yyyy"
+                return formatter.string(from: date)
+            }
+        }
+        return "Invalid Date"
+    }
+
+    private func determineTimeOfDay(from dateString: String) -> String {
+        guard let date = parseDate(dateString) else { return "at current time." }
+        let hour = Calendar.current.component(.hour, from: date)
+        switch hour {
+        case 5..<12: return "in the morning."
+        case 12..<17: return "in the afternoon."
+        case 17..<21: return "in the evening."
+        default: return "at night."
+        }
+    }
+
+    private func parseDate(_ dateString: String) -> Date? {
+        let dateFormats = ["yyyy-MM-dd'T'HH:mm:ss.SSS", "yyyy-MM-dd'T'HH:mm:ss"]
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
         for format in dateFormats {
             formatter.dateFormat = format
             if let date = formatter.date(from: dateString) {
@@ -171,28 +202,6 @@ struct FoodOnSaleViewCell: View {
             }
         }
         return nil
-    }
-
-    private func formatDate(_ dateString: String) -> String {
-        guard let date = parseDate(dateString) else { return "Invalid Date" }
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd MMM yyyy"
-        return formatter.string(from: date)
-    }
-
-    private func determineTimeOfDay(from dateString: String) -> String {
-        guard let date = parseDate(dateString) else { return "at current time." }
-        let hour = Calendar.current.component(.hour, from: date)
-        switch hour {
-        case 5..<12:
-            return "in the morning."
-        case 12..<17:
-            return "in the afternoon."
-        case 17..<21:
-            return "in the evening."
-        default:
-            return "at night."
-        }
     }
 }
 

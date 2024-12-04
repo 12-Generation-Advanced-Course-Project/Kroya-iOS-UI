@@ -51,20 +51,11 @@ struct FoodDetailView: View {
                                     }
                                     Spacer()
                                     Button(action: {
-                                        // Toggle the favorite status using the current value from the FoodDetailsVM
-                                        if let currentFavoriteStatus = FoodDetailsVM.foodSellDetail?.isFavorite {
-                                            let newFavoriteStatus = !currentFavoriteStatus
-                                            // Update the server via the ViewModel
-                                            favoriteVM.toggleFavorite(foodId: FoodId, itemType: ItemType, isCurrentlyFavorite: currentFavoriteStatus)
-                                            // Reflect the change locally
-                                            isFavoriteupdate = newFavoriteStatus
-                                            // Update the FoodDetailsVM data
-                                            FoodDetailsVM.foodSellDetail?.isFavorite = newFavoriteStatus
-                                        }
+                                        toggleFavoriteStatus()
                                     }) {
                                         Circle()
                                             .fill(isFavoriteupdate ? Color.red : Color.white.opacity(0.5))
-                                            .frame(width: screenWidth * 0.07, height: screenHeight * 0.07)
+                                            .frame(width: UIScreen.main.bounds.width * 0.07, height: UIScreen.main.bounds.height * 0.07)
                                             .overlay(
                                                 Image(systemName: "heart.fill")
                                                     .foregroundColor(.white)
@@ -73,7 +64,6 @@ struct FoodDetailView: View {
                                     }
                                     .shadow(color: isFavoriteupdate ? Color.red.opacity(0.5) : Color.gray.opacity(0.5), radius: 4, x: 0, y: 4)
                                     .onAppear {
-                                        // Synchronize the UI state with the ViewModel
                                         isFavoriteupdate = FoodDetailsVM.foodSellDetail?.isFavorite ?? false
                                     }
 
@@ -148,7 +138,23 @@ struct FoodDetailView: View {
             .navigationBarBackButtonHidden(true)
         }
     }
-    
+    func toggleFavoriteStatus() {
+        guard let currentFavoriteStatus = FoodDetailsVM.foodSellDetail?.isFavorite else { return }
+
+        let newFavoriteStatus = !currentFavoriteStatus
+        isFavoriteupdate = newFavoriteStatus
+        FoodDetailsVM.foodSellDetail?.isFavorite = newFavoriteStatus
+
+        favoriteVM.toggleFavorite(foodId: FoodId, itemType: ItemType, isCurrentlyFavorite: currentFavoriteStatus)
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            if favoriteVM.showError {
+                isFavoriteupdate = currentFavoriteStatus
+                FoodDetailsVM.foodSellDetail?.isFavorite = currentFavoriteStatus
+            }
+        }
+    }
+
     func determineFavoriteStatus() -> Bool {
         if ItemType == "FOOD_RECIPE" {
             return favoriteVM.favoriteFoodRecipe.contains(where: { $0.id == FoodId })

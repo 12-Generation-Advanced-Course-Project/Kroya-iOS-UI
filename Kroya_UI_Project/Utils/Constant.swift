@@ -7,14 +7,14 @@
 
 struct Constants {
     // Base URL for the API
-    static let baseURL = "https://kroya-api-production.up.railway.app/api/v1/"
+    static let baseURL = "http://35.247.138.88:8080/api/v1/"
  
     // Address URLs
-     static let AddressListUrl = "\(baseURL)address/list"
-     static let AddressCreateUrl = "\(baseURL)address/create"
-     static let AddressDeleteUrl = "\(baseURL)address/delete/"
-     static let AddressByIdUrl = "\(baseURL)address/"
-     static let AddressUpdateUrl = "\(baseURL)address/update/"
+    static let AddressListUrl = "\(baseURL)address/list"
+    static let AddressCreateUrl = "\(baseURL)address/create"
+    static let AddressDeleteUrl = "\(baseURL)address/delete/"
+    static let AddressByIdUrl = "\(baseURL)address/"
+    static let AddressUpdateUrl = "\(baseURL)address/update/"
 
     // Auth
     static let KroyaUrlAuth = "\(baseURL)auth/"
@@ -86,5 +86,5 @@ struct Constants {
 
     // Guest Search All Food By Name
     static let GuestSearchAllFoodByNameUrl = "\(baseURL)guest-user/foods/"
-    static let allFoodName = "https://kroya-api-production.up.railway.app/api/v1/guest-user/foods/food-name-all"
+    static let allFoodName = "\(baseURL)guest-user/foods/food-name-all"
 }

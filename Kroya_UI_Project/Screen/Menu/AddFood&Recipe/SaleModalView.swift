@@ -42,6 +42,7 @@ struct SaleModalView: View {
                                     Button(action: {
                                         draftModelData.isForSale = true
                                         isAvailableForSale = true
+                                        validateFields() // Trigger validation when enabling "Yes"
                                     }) {
                                         Text("Yes")
                                             .customFontSemiBoldLocalize(size: 16)
@@ -56,9 +57,10 @@ struct SaleModalView: View {
                                             .cornerRadius(12)
                                     }
                                     .padding(.horizontal, 5)
-                                    
+
                                     Button(action: {
                                         draftModelData.isForSale = false
+                                        showError = false // Clear error when choosing "No"
                                     }) {
                                         Text("No")
                                             .customFontSemiBoldLocalize(size: 16)
@@ -73,6 +75,7 @@ struct SaleModalView: View {
                                             .cornerRadius(12)
                                     }
                                     .padding(.horizontal, 5)
+
                                 }
                                 .padding(.vertical, 20)
                             }
@@ -111,7 +114,7 @@ struct SaleModalView: View {
                                                         DatePicker(
                                                             selection: $draftModelData.cookDate,
                                                             in: Date()...,
-                                                            displayedComponents: [.date, .hourAndMinute]
+                                                            displayedComponents: [.date,.hourAndMinute]
                                                         ) {
                                                             
                                                         }
@@ -306,8 +309,13 @@ struct SaleModalView: View {
                     // Post Button
                     Button(action: {
                         if draftModelData.isForSale {
-                            uploadImagesAndPostRecipe()
+                            if canPost {
+                                uploadImagesAndPostRecipe()
+                            } else {
+                                showError = true // Trigger error message if validation fails
+                            }
                         } else {
+                            // Directly post since validation is not required
                             uploadImagesAndPostRecipe()
                         }
                     }) {
@@ -321,7 +329,8 @@ struct SaleModalView: View {
                                     .fill(canPost ? PrimaryColor.normal : Color.gray.opacity(0.3))
                             )
                     }
-                    .disabled(!canPost)
+                    .disabled(!canPost && draftModelData.isForSale)
+
                 }
                 .padding()
             }
@@ -515,18 +524,26 @@ struct SaleModalView: View {
                     draftModelData.cookDate < Date()
     }
     
+    
     private var canPost: Bool {
-        !draftModelData.foodName.isEmpty &&                // Food name must be filled
-        !draftModelData.descriptionText.isEmpty &&         // Description must be filled
-        !draftModelData.selectedImages.isEmpty &&          // At least one image must be selected
-        draftModelData.selectedLevel != nil &&             // Level must be selected
-        draftModelData.selectedCuisineId != nil &&         // Cuisine ID must be selected
-        draftModelData.selectedCategoryId != nil &&        // Category ID must be selected
-        draftModelData.duration > 0 &&                     // Duration must be greater than 0
-        draftModelData.amount > 0 &&                       // Amount must be greater than 0
-        draftModelData.price > 0 &&                        // Price must be greater than 0
-        !draftModelData.location.isEmpty &&                // Location must not be empty
-        draftModelData.cookDate >= Date()                  // Cook date must not be in the past
+        if draftModelData.isForSale {
+            // Perform validation for sale details
+            return
+            !draftModelData.foodName.isEmpty &&                // Food name must be filled
+            !draftModelData.descriptionText.isEmpty &&         // Description must be filled
+            !draftModelData.selectedImages.isEmpty &&          // At least one image must be selected
+            draftModelData.selectedLevel != nil &&             // Level must be selected
+            draftModelData.selectedCuisineId != nil &&         // Cuisine ID must be selected
+            draftModelData.selectedCategoryId != nil &&        // Category ID must be selected
+            draftModelData.duration > 0 &&                     // Duration must be greater than 0
+            draftModelData.amount > 0 &&                       // Amount must be greater than 0
+            draftModelData.price > 0 &&                        // Price must be greater than 0
+            !draftModelData.location.isEmpty &&                // Location must not be empty
+            draftModelData.cookDate >= Date()
+        } else {
+            // Allow post without sale validation
+            return true
+        }
     }
 
 

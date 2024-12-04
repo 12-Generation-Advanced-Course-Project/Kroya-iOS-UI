@@ -20,7 +20,7 @@ struct ProfileView: View {
     @State private var isgotoBill = false
     @State private var isEdit: Bool = false
     @State private var addressToUpdate: Address? = nil
-    var urlImagePrefix: String = Constants.fileupload
+    var urlImagePrefix: String =  "http://35.247.138.88:8080/api/v1/fileView/"
     @Environment(\.modelContext) var modelContext
     @Binding var lang: String
     @State private var showAlertWeBill = false

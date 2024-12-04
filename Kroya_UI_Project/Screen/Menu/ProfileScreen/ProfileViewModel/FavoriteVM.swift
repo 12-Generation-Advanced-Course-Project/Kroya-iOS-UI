@@ -79,8 +79,8 @@ func endLoading() {
         } else {
             createFavoriteFood(foodId: foodId, itemType: itemType)
         }
-        getAllFavoriteFood() // Refresh the favorites list
     }
+
 
     func createFavoriteFood(foodId: Int, itemType: String) {
         FavoriteService.shared.saveFavoriteFood(foodId: foodId, itemType: itemType) { [weak self] result in

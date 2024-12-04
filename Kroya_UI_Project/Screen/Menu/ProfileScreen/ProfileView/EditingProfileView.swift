@@ -44,7 +44,7 @@ struct EditingProfileView: View {
                     ZStack(alignment: .bottomTrailing) {
                         if selectedImages.isEmpty {
                             if let profileImageUrl = profile.userProfile?.profileImage, !profileImageUrl.isEmpty {
-                                WebImage(url:URL(string: Constants.fileupload + "\(profileImageUrl)"))
+                                WebImage(url:URL(string:  "http://35.247.138.88:8080/api/v1/fileView/" + "\(profileImageUrl)"))
                                     .resizable()
                                     .scaledToFill()
                                     .frame(width: 94, height: 94)

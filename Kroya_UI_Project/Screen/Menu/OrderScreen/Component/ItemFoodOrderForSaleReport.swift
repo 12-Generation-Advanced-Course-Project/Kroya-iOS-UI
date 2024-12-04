@@ -18,7 +18,7 @@ struct ItemFoodOrderForSaleReport: View {
     @Binding var show3dot: Bool
     let Keyaccept = "Accept"
     let Keyreject = "Reject"
-    private let urlImagePrefix = "https://kroya-api-production.up.railway.app/api/v1/fileView/"
+    private let urlImagePrefix = "http://35.247.138.88:8080/api/v1/fileView/"
 
     
     var body: some View {

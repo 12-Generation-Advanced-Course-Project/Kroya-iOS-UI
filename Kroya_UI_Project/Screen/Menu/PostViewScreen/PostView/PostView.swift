@@ -26,7 +26,7 @@ struct PostViewScreen: View {
                 HStack {
                     HStack {
                         if let profileImageUrl = Profile.userProfile?.profileImage, !profileImageUrl.isEmpty,
-                           let imageUrl = URL(string: Constants.fileupload + profileImageUrl) {
+                           let imageUrl = URL(string:  "http://35.247.138.88:8080/api/v1/fileView/" + profileImageUrl) {
                             WebImage(url: imageUrl)
                                 .resizable()
                                 .scaledToFill()
